@@ -6,4 +6,5 @@ Goal|Date
 ---|---
 VITA program starts | 1/?/17
 Data Form Live | 2/1/17
-## 
+## Vision Statement
+The VITA Team will assist LincolnVITA through software that facilitates automated scheduling.
