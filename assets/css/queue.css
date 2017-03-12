@@ -1,0 +1,94 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Bebas Neue';
+  font-weight: 700;
+}
+.header {
+  height: 100px;
+  width: 100vw;
+  border-bottom: 1px solid #515150;
+  position: fixed;
+  font-size: 48px;
+}
+.vita-volunteer-count {
+  display: inline;
+  position: absolute;
+  top: 50%;
+  left: 32px;
+  transform: translateY(-50%);
+  color: #515150;
+}
+.vita-header-curtain {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin-right: -50%;
+  transform: translateX(-50%);
+  height: 150px;
+  width: 400px;
+}
+.vita-exit-fullscreen {
+  position: absolute;
+  top: 50%;
+  right: 32px;
+  transform: translateY(-50%);
+  height: 40px;
+  width: 40px;
+}
+.vita-exit-fullscreen:hover {
+  cursor: pointer;
+}
+.vita-queue-wrapper {
+  height: calc(100vh - 100px);
+  width: 100vw;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  overflow-y: hidden;
+}
+.vita-queue-header,
+.vita-queue {
+  width: 800px;
+  margin-right: -50%;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+}
+.vita-queue-header {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  font-size: 48px;
+  color: #d00000;
+  padding: 0 24px;
+}
+.vita-queue {
+  position: absolute;
+  top: 175px;
+  left: 50%;
+  font-size: 40px;
+  color: #515150;
+}
+.vita-queue-header-position,
+.vita-queue-header-name,
+.vita-queue-entry-position,
+.vita-queue-entry-name {
+  float: left;
+}
+.vita-queue-header-wait,
+.vita-queue-entry-wait {
+  float: right;
+}
+.vita-queue-entry {
+  border: 1px solid #515150;
+  height: 68px;
+  width: 100%;
+  padding: 12px 24px;
+  box-sizing: border-box;
+  margin-bottom: 18px;
+}
+.vita-queue-header-position,
+.vita-queue-entry-position {
+  width: 100px;
+}
