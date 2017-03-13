@@ -1,8 +1,6 @@
 -- VITA Project
 -- UNL CSE Ambassadors 2017
 
-use jcowman;
-
 drop table if exists appointment_question_answer;
 drop table if exists appointment;
 drop table if exists location;
@@ -121,6 +119,35 @@ insert into appointment_question_answer (appointment_id, question_id, answer_id)
 	((select id from appointment where timestamp="05-22-2017 05:30:34"),
     (select id from question where str="Can you speak fluent English?"),
     (select id from answer where str="Yes" and question_id=(select id from question where str="Can you speak fluent English?")));
+
+insert into appointment (date, time, location_id, timestamp) values ("06-01-2017", "12:45", 5, "05-23-2017 11:09:14");
+insert into answer (str, question_id) values ("Kathy Stevens", (select id from question where str="Name"));
+insert into appointment_question_answer (appointment_id, question_id, answer_id) values
+ 	 ((select id from appointment where timestamp="05-23-2017 11:09:14"),
+     (select id from question where str="Name"),
+     (select id from answer where str="Kathy Stevens" and question_id=(select id from question where str="Name")));
+insert into answer (str, question_id) values ("kstev89@gmail.com", (select id from question where str="Email Address"));
+insert into appointment_question_answer (appointment_id, question_id, answer_id) values
+	((select id from appointment where timestamp="05-23-2017 11:09:14"),
+    (select id from question where str="Email Address"),
+    (select id from answer where str="kstev89@gmail.com" and question_id=(select id from question where str="Email Address")));
+insert into appointment_question_answer (appointment_id, question_id, answer_id) values
+	((select id from appointment where timestamp="05-23-2017 11:09:14"),
+    (select id from question where str="Are you a pharmacist?"),
+    (select id from answer where str="Yes" and question_id=(select id from question where str="Are you a pharmacist?")));
+insert into appointment_question_answer (appointment_id, question_id, answer_id) values
+	((select id from appointment where timestamp="05-23-2017 11:09:14"),
+    (select id from question where str="Indicate your military status"),
+    (select id from answer where str="Active Reserve" and question_id=(select id from question where str="Indicate your military status")));
+insert into appointment_question_answer (appointment_id, question_id, answer_id) values
+	((select id from appointment where timestamp="05-23-2017 11:09:14"),
+    (select id from question where str="Can you speak fluent English?"),
+    (select id from answer where str="No" and question_id=(select id from question where str="Can you speak fluent English?")));
+insert into answer (str, question_id) values ("Spanish", (select id from question where str="If no, what is your strongest language?"));
+insert into appointment_question_answer (appointment_id, question_id, answer_id) values
+	((select id from appointment where timestamp="05-23-2017 11:09:14"),
+    (select id from question where str="If no, what is your strongest language?"),
+    (select id from answer where str="Spanish" and question_id=(select id from question where str="If no, what is your strongest language?")));
     
 -- -- test queries -- --
 select * from question;
@@ -132,3 +159,12 @@ select * from appointment_question_answer;
 -- all answers for an appointment
 select q.str as question, a.str as answer from appointment_question_answer aqa join answer a on aqa.answer_id=a.id 
 	join question q on aqa.question_id = q.id where appointment_id = 1;
+    
+select q.str as question, a.str as answer from appointment_question_answer aqa join answer a on aqa.answer_id=a.id 
+	join question q on aqa.question_id = q.id where appointment_id = 2;
+
+-- active questions
+select id, str from question where archive=false;
+
+-- required questions
+select id, str from question where required=true;
