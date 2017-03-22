@@ -20,12 +20,12 @@
 			</div>
 			<div class='vita-queue'>
 				<?php
-					$servername = 'localhost';
+					$server_name = 'localhost';
 					$username = 'username';
 					$password = 'password';
-					$dbname = 'myDB';
+					$db_name = 'myDB';
 
-					$conn = new mysqli($servername, $username, $password, $dbname);
+					$conn = new mysqli($server_name, $username, $password, $db_name);
 					if ($conn->connect_error) {
 						die('Unable to connect to queue');
 					}
@@ -38,16 +38,16 @@
 
 					for ($i = 0; $i < $results.length; $i++) {
 						$appointment = $results[i];
-						$currentDateTime = new DateTime();
+						$current_date_time = new DateTime();
 						//TODO the below might get stored differently in database, might need to rework
-						$appointmentDateTime = DateTime.createFromFormat('Y-m-d H:i:s', $appointment.date . ' ' . $appointment.time);
-						$timeDifference = $currentDateTime.diff($appointmentDateTime);
-						$waitTime = $timeDifference.i + ($timeDifference.h * 60);
+						$appointment_date_time = DateTime.createFromFormat('Y-m-d H:i:s', $appointment.date . ' ' . $appointment.time);
+						$time_difference = $current_date_time.diff($appointment_date_time);
+						$wait_time = $time_difference.i + ($time_difference.h * 60);
 
 						echo "<div class='vita-queue-entry'>
 								<div class='vita-queue-entry-position'>" . ($i + 1) . "</div>
 								<div class='vita-queue-entry-name'>" . $appointment.firstName . " " . substr($appointment.lastName, 0, 1) . ".</div>
-								<div class='vita-queue-entry-wait'>" . $waitTime . " Minutes</div>
+								<div class='vita-queue-entry-wait'>" . $wait_time . " Minutes</div>
 							</div>";
 					}
 				?>
