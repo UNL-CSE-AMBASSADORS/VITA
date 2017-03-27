@@ -30,7 +30,7 @@
 						die('Unable to connect to queue');
 					}
 
-		 			//TODO make this handle multiple locations.
+		 			//TODO make this handle multiple locations if necessary
 					$stmt = $conn->prepare('SELECT id, time, firstName, lastName FROM appointment
 						where (date = getdate() && archived = 0)');
 					$stmt->execute();
