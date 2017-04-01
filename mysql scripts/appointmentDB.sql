@@ -17,13 +17,13 @@ create table question (
 	id integer primary key not null auto_increment,
     str varchar(255) not null,
     required boolean default true,
-    archive boolean default false
+    archived boolean default false
 );
 
 create table answer (
 	id integer primary key not null auto_increment,
     str varchar(255) not null,
-    archive boolean default false,
+    archived boolean default false,
     question_id integer not null,
     foreign key (question_id) references question(id)
 );
@@ -35,7 +35,7 @@ create table appointment (
     location_id int not null,
     foreign key (location_id) references location(id),
     timestamp varchar(255) not null,
-    archive boolean default false
+    archived boolean default false
 );
 
 create table appointment_question_answer (
@@ -164,7 +164,7 @@ select q.str as question, a.str as answer from appointment_question_answer aqa j
 	join question q on aqa.question_id = q.id where appointment_id = 2;
 
 -- active questions
-select id, str from question where archive=false;
+select id, str from question where archived=false;
 
 -- required questions
 select id, str from question where required=true;
