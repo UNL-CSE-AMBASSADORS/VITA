@@ -30,11 +30,10 @@ create table answer (
 
 create table appointment (
 	id integer primary key not null auto_increment,
-    date varchar(255) not null,
-    time varchar(255) not null,
+    scheduled_time datetime not null,
     location_id int not null,
     foreign key (location_id) references location(id),
-    timestamp varchar(255) not null,
+    created_at timestamp default current_timestamp on update current_timestamp,
     archived boolean default false
 );
 
@@ -45,7 +44,8 @@ create table appointment_question_answer (
     question_id int not null,
     foreign key (question_id) references question(id),
     answer_id int not null,
-    foreign key(answer_id) references answer(id)
+    foreign key(answer_id) references answer(id),
+    created_at timestamp default current_timestamp on update current_timestamp
 );
 
 -- -- seed data -- --
@@ -87,68 +87,69 @@ insert into location (title, address) values ("Orange", "8 Scofield Road");
 insert into location (title, address) values ("Yellow", "591 Oak Avenue");
 
 -- sample appointment with answers
-insert into appointment (date, time, location_id, timestamp) values ("05-28-2017", "16:30", 1, "05-22-2017 05:30:34");
+
+insert into appointment (scheduled_time, location_id) values ("2017-05-28 16:30:00", 1);
 insert into answer (str, question_id) values ("Ralph Schmidt", (select id from question where str="Name"));
 insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
+	((select id from appointment where scheduled_time="2017-05-28 16:30:00" and location_id=1),
     (select id from question where str="Name"),
     (select id from answer where str="Ralph Schmidt" and question_id=(select id from question where str="Name")));
 insert into answer (str, question_id) values ("ralphman@gmail.com", (select id from question where str="Email Address"));
 insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
+	((select id from appointment where scheduled_time="2017-05-28 16:30:00" and location_id=1),
     (select id from question where str="Email Address"),
     (select id from answer where str="ralphman@gmail.com" and question_id=(select id from question where str="Email Address")));
 insert into answer (str, question_id) values ("(753) 875-3165", (select id from question where str="Phone Number"));
 insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
+	((select id from appointment where scheduled_time="2017-05-28 16:30:00" and location_id=1),
     (select id from question where str="Phone Number"),
     (select id from answer where str="(753) 875-3165" and question_id=(select id from question where str="Phone Number")));
 insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
+	((select id from appointment where scheduled_time="2017-05-28 16:30:00" and location_id=1),
     (select id from question where str="Are you a pharmacist?"),
     (select id from answer where str="No" and question_id=(select id from question where str="Are you a pharmacist?")));
 insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
+	((select id from appointment where scheduled_time="2017-05-28 16:30:00" and location_id=1),
     (select id from question where str="How often do you gamble?"),
     (select id from answer where str="Occasionally" and question_id=(select id from question where str="How often do you gamble?")));
 insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
+	((select id from appointment where scheduled_time="2017-05-28 16:30:00" and location_id=1),
     (select id from question where str="Indicate your military status"),
     (select id from answer where str="None" and question_id=(select id from question where str="Indicate your military status")));
 insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
+	((select id from appointment where scheduled_time="2017-05-28 16:30:00" and location_id=1),
     (select id from question where str="Can you speak fluent English?"),
     (select id from answer where str="Yes" and question_id=(select id from question where str="Can you speak fluent English?")));
 
-insert into appointment (date, time, location_id, timestamp) values ("06-01-2017", "12:45", 5, "05-23-2017 11:09:14");
+insert into appointment (scheduled_time, location_id) values ("2017-06-01 12:45", 5);
 insert into answer (str, question_id) values ("Kathy Stevens", (select id from question where str="Name"));
 insert into appointment_question_answer (appointment_id, question_id, answer_id) values
- 	 ((select id from appointment where timestamp="05-23-2017 11:09:14"),
+ 	 ((select id from appointment where scheduled_time="2017-06-01 12:45" and location_id=5),
      (select id from question where str="Name"),
      (select id from answer where str="Kathy Stevens" and question_id=(select id from question where str="Name")));
 insert into answer (str, question_id) values ("kstev89@gmail.com", (select id from question where str="Email Address"));
 insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-23-2017 11:09:14"),
+	((select id from appointment where scheduled_time="2017-06-01 12:45" and location_id=5),
     (select id from question where str="Email Address"),
     (select id from answer where str="kstev89@gmail.com" and question_id=(select id from question where str="Email Address")));
 insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-23-2017 11:09:14"),
+	((select id from appointment where scheduled_time="2017-06-01 12:45" and location_id=5),
     (select id from question where str="Are you a pharmacist?"),
     (select id from answer where str="Yes" and question_id=(select id from question where str="Are you a pharmacist?")));
 insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-23-2017 11:09:14"),
+	((select id from appointment where scheduled_time="2017-06-01 12:45" and location_id=5),
     (select id from question where str="Indicate your military status"),
     (select id from answer where str="Active Reserve" and question_id=(select id from question where str="Indicate your military status")));
 insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-23-2017 11:09:14"),
+	((select id from appointment where scheduled_time="2017-06-01 12:45" and location_id=5),
     (select id from question where str="Can you speak fluent English?"),
     (select id from answer where str="No" and question_id=(select id from question where str="Can you speak fluent English?")));
 insert into answer (str, question_id) values ("Spanish", (select id from question where str="If no, what is your strongest language?"));
 insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-23-2017 11:09:14"),
+	((select id from appointment where scheduled_time="2017-06-01 12:45" and location_id=5),
     (select id from question where str="If no, what is your strongest language?"),
     (select id from answer where str="Spanish" and question_id=(select id from question where str="If no, what is your strongest language?")));
-    
+
 -- -- test queries -- --
 select * from question;
 select * from answer;
