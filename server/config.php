@@ -1,8 +1,6 @@
 <?
 
 try {
-	require_once 'Login.class.php';
-
 	$db_user = 'root';
 	$db_pass = 'root';
 
