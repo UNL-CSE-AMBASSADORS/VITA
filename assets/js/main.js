@@ -36,13 +36,14 @@ var PasswordResetControls = function(){
 					email: email,
 					password: password,
 					vpassword: vpassword
-				}
-			}).done(function(){
-				if(r.success){
-					$("#reset_password_form, #reset_password_info").hide();
-					$("#reset_password_success").fadeIn();
-				}else{
-					alert(r.error);
+				},
+				success: function(response){
+					if(response.success){
+						$("#reset_password_form, #reset_password_info").hide();
+						$("#reset_password_success").fadeIn();
+					}else{
+						alert(response.error);
+					}
 				}
 			});
 		}else{
@@ -92,12 +93,13 @@ var LoginControls = function(){
 					callback: 'login',
 					email: email,
 					password: password
-				}
-			}).done(function(){
-				if(r.success){
-					window.location = r.redirect;
-				}else{
-					alert(r.error);
+				},
+				success: function(response){
+					if(response.success){
+						window.location = response.redirect;
+					}else{
+						alert(response.error);
+					}
 				}
 			});
 		}else{
@@ -121,13 +123,14 @@ var LoginControls = function(){
 				data: {
 					callback: 'register',
 					email: email
-				}
-			}).done(function(){
-				if(r.success){
-					$("#register_form, #register_info").hide();
-					$("#register_success").fadeIn();
-				}else{
-					alert(r.error);
+				},
+				success: function(response){
+					if(response.success){
+						$("#register_form, #register_info").hide();
+						$("#register_success").fadeIn();
+					}else{
+						alert(response.error);
+					}
 				}
 			});
 		}
