@@ -1,6 +1,8 @@
 <!doctype html>
 <html class="no-js" lang="">
     <head>
+        <title>Queue Test</title>
+
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title></title>
@@ -10,22 +12,64 @@
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
 
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/main.css">
-        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+        <link rel="stylesheet" href="../assets/css/normalize.css">
+        <link rel="stylesheet" href="../assets/css/main.css">
+        <link rel='stylesheet' href='../assets/css/queue.css'>
+
+        <script src="../assets/js/vendor/modernizr-2.8.3.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- Add your site or application content here -->
-        <p>Hello world! This is HTML5 Boilerplate.</p>
+		<div class='header'>
+			<div class='vita-volunteer-count'>Volunteers on duty: 0</div>
+			<img class='vita-header-curtain' src='../assets/res/QueueCurtain.svg'>
+			<img class='vita-exit-fullscreen' src='../assets/res/GenericExit.svg' onclick='alert("This ought to close the window")'>
+		</div>
+
+
+		<div class='vita-queue-wrapper'>
+			<div class='vita-queue-header'>
+				<div class='vita-queue-header-position'>#</div>
+				<div class='vita-queue-header-name'>Name</div>
+				<div class='vita-queue-header-wait'>Wait Time</div>
+			</div>
+			<div class='vita-queue'>
+                <!-- Appointment data dynamically injected through js -->
+			</div>
+		</div>
 
         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
-        <script src="js/plugins.js"></script>
-        <script src="js/main.js"></script>
+        <script>window.jQuery || document.write('<script src="../assets/js/jquery-3.1.1.min.js"><\/script>')</script>
+        <script src="../assets/js/plugins.js"></script>
+        <script src="../assets/js/main.js"></script>
+
+        <?
+            require '../server/config.php';
+        	$conn = $DB_CONN;
+
+        	//TODO make this handle multiple locations if necessary
+        	$stmt = $conn->prepare('SELECT id, time, firstName, lastName FROM appointment
+        		where (date = getdate() && archived = 0)');
+        	$stmt->execute();
+        	$results = $stmt->fetchAll();
+
+        	// We must only display the first letter of the last name, we do this server-side since we can't disclose the data client-side
+        	$appointments = [];
+        	foreach($results as $result) {
+        		$result['lastName'] = substr($result['lastName'], 0, 1);
+        		$appointments[] = $result;
+        	}
+
+        	echo json_encode($appointments);
+
+        	$stmt->close();
+        	$conn->close();
+        ?>
+
+        <script src='../assets/js/queue.js'></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
