@@ -46,16 +46,9 @@
         <script src="../assets/js/plugins.js"></script>
         <script src="../assets/js/main.js"></script>
 
-        <?php
-        	$server_name = 'localhost';
-        	$username = 'username';
-        	$password = 'password';
-        	$db_name = 'myDB';
-
-        	$conn = new mysqli($server_name, $username, $password, $db_name);
-        	if ($conn->connect_error) {
-        		die('Unable to connect to queue');
-        	}
+        <?
+            require '../server/config.php';
+        	$conn = $DB_CONN;
 
         	//TODO make this handle multiple locations if necessary
         	$stmt = $conn->prepare('SELECT id, time, firstName, lastName FROM appointment
