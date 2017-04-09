@@ -1,4 +1,4 @@
-<?
+<?php
 
 try {
 	$db_user = 'root';
