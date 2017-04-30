@@ -37,6 +37,7 @@ class Login
 
 	## How long tokens are active
 	public $TOKEN_THRESHOLD = 30;
+	public $LOGIN_THRESHOLD = 5;
 
 	
 	function __construct($conn, $database, $name, $login_url, $register_url, $noreply_email, $contact_email = ""){
@@ -82,8 +83,8 @@ class Login
 			$stmt = $this->conn->prepare(
 				"SELECT 
 					u.userId, u.email, 
-					l.password, l.failed_login_count, 
-					CASE WHEN DATE_ADD(l.lockout_time, INTERVAL 30 MINUTE) > CURRENT_TIMESTAMP THEN 1 ELSE 0 END AS locked_out          
+					l.password, l.failedLoginCount as failed_login_count, 
+					CASE WHEN DATE_ADD(l.lockoutTime, INTERVAL 30 MINUTE) > CURRENT_TIMESTAMP THEN 1 ELSE 0 END AS locked_out          
 				FROM ".$this->database.".login l
 					INNER JOIN ".$this->database.".user u ON u.userId = l.userId
 				WHERE u.archived = 0 
@@ -99,7 +100,7 @@ class Login
 			## Get User Info
 			$row = $results[0];
 
-			$userId = $row['id'];
+			$userId = $row['userId'];
 
 			$dbemail = strtolower($row['email']);
 			$dbpassword = $row['password'];
@@ -107,7 +108,7 @@ class Login
 			$failed_login_count = $row['failed_login_count'];
 
 			## Unlock Account If Needed
-			if(!$locked_out && $failed_login_count >= LOGIN_THRESHOLD){
+			if(!$locked_out && $failed_login_count >= $this->LOGIN_THRESHOLD){
 				$stmt = $this->conn->prepare(
 					"UPDATE ".$this->database.".login l
 					SET failed_login_count = 0 
@@ -118,7 +119,7 @@ class Login
 
 
 			## If Not Locked Out
-			if($failed_login_count < LOGIN_THRESHOLD ){
+			if($failed_login_count < $this->LOGIN_THRESHOLD ){
 				## Check Credentials
 				if(($email === $dbemail)  && password_verify($password, $dbpassword)){
 
@@ -457,17 +458,17 @@ class Login
 
 			if(count($results) != 1){
 
-				throw new Exception("There was an error processing your request.");
+				throw new Exception("There was an error processing your request. 010");
 
 			}
 
 			## Make Sure User ID Is Associated With Provided Email
 			$row = $results[0];
 			$reset_userId = $row['userId'];
-			$stmt = $this->conn->prepare("SELECT userId, email as email, first_name 
-				FROM ".$this->database.".user 
-				WHERE archived = 0 
-					AND email = ?");
+			$stmt = $this->conn->prepare("SELECT u.userId, u.email as email, u.firstName as first_name 
+				FROM ".$this->database.".user u
+				WHERE u.archived = 0 
+					AND u.email = ?");
 			$stmt->execute(array($email));
 			$row = $stmt->fetch();
 			$userId = $row['userId'];
@@ -476,7 +477,7 @@ class Login
 
 			## Check That User ID's Match From Each Table
 			if($reset_userId != $userId){
-				throw new Exception("There was an error processing your request.");
+				throw new Exception("There was an error processing your request. 020");
 			}
 
 			## At This Point It Is Okay To Reset The Password

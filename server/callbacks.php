@@ -41,6 +41,6 @@ function register($params){
 function passwordReset($params){
 	$LOGIN = getLoginClass();
 
-	print $LOGIN->passwordReset($params['email'], $params['password']);
+	print $LOGIN->passwordReset($params['email'], $params['token'], $params['password'], $params['vpassword']);
 	exit;
 }
