@@ -1,5 +1,5 @@
 <footer>
-	<script src='/assets/js/jquery-3.1.1.min.js'></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
         (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
