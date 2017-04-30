@@ -4,7 +4,7 @@ $(document).ready(function() {
 
 var loadQueue = function() {
     $.post({
-        url: 'assets/server/queue.php',
+        url: '../server/queue.php',
         dataType: 'json',
         success: function(result) {
             $('.vita-queue').html(""); // Clear any data in the queue right now
