@@ -1,134 +1,436 @@
 -- VITA Project
 -- UNL CSE Ambassadors 2017
 
-use jcowman;
+DROP TABLE IF EXISTS AppointmentQuestionAnswer;
+DROP TABLE IF EXISTS Appointment;
+DROP TABLE IF EXISTS Location;
+DROP TABLE IF EXISTS Answer;
+DROP TABLE IF EXISTS Question;
 
-drop table if exists appointment_question_answer;
-drop table if exists appointment;
-drop table if exists location;
-drop table if exists answer;
-drop table if exists question;
-
-create table location (
-	id integer primary key not null auto_increment,
-    title varchar(255),
-    address varchar(255)
+CREATE TABLE Location (
+	locationId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    title VARCHAR(255),
+    address VARCHAR(255)
 );
 
-create table question (
-	id integer primary key not null auto_increment,
-    str varchar(255) not null,
-    required boolean default true,
-    archive boolean default false
+CREATE TABLE Question (
+	questionId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    string VARCHAR(255) NOT NULL,
+    required BOOLEAN DEFAULT TRUE,
+    archived BOOLEAN DEFAULT FALSE
 );
 
-create table answer (
-	id integer primary key not null auto_increment,
-    str varchar(255) not null,
-    archive boolean default false,
-    question_id integer not null,
-    foreign key (question_id) references question(id)
+CREATE TABLE Answer (
+	answerId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    string VARCHAR(255) NOT NULL,
+    archived BOOLEAN DEFAULT FALSE,
+    questionId INTEGER NOT NULL,
+    FOREIGN KEY (questionId) REFERENCES Question(questionId)
 );
 
-create table appointment (
-	id integer primary key not null auto_increment,
-    date varchar(255) not null,
-    time varchar(255) not null,
-    location_id int not null,
-    foreign key (location_id) references location(id),
-    timestamp varchar(255) not null,
-    archive boolean default false
+CREATE TABLE Appointment (
+	appointmentId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    scheduledTime DATETIME NOT NULL,
+    locationId INTEGER NOT NULL,
+    FOREIGN KEY (locationId) REFERENCES Location(locationId),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    archived BOOLEAN DEFAULT FALSE
 );
 
-create table appointment_question_answer (
-	id integer primary key not null auto_increment,
-    appointment_id int not null,
-    foreign key (appointment_id) references appointment(id),
-    question_id int not null,
-    foreign key (question_id) references question(id),
-    answer_id int not null,
-    foreign key(answer_id) references answer(id)
+CREATE TABLE AppointmentQuestionAnswer (
+	appointmentQuestionAnswerId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    appointmentId INTEGER NOT NULL,
+    FOREIGN KEY (appointmentId) REFERENCES Appointment(appointmentId),
+    questionId INTEGER NOT NULL,
+    FOREIGN KEY (questionId) REFERENCES Question(questionId),
+    answerId INTEGER NOT NULL,
+    FOREIGN KEY(answerId) REFERENCES Answer(answerId),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- -- seed data -- --
 
 -- sample questions with choices, if applicable
-insert into question (str, required) values ("Name", true);
-insert into question (str, required) values ("Email Address", true);
-insert into question (str, required) values ("Phone Number", false);
+INSERT INTO Question (string, required) 
+	VALUES ("Name", TRUE);
+	
+INSERT INTO Question (string, required) 
+	VALUES ("Email Address", TRUE);
+	
+INSERT INTO Question (string, required) 
+	VALUES ("Phone Number", FALSE);
 
-insert into question (str, required) values ("Are you a pharmacist?", false);
-insert into answer (str, question_id) values ("Yes", (select id from question where str="Are you a pharmacist?"));
-insert into answer (str, question_id) values ("No", (select id from question where str="Are you a pharmacist?"));
+INSERT INTO Question (string, required) 
+	VALUES ("Are you a pharmacist?", FALSE);
+	
+INSERT INTO Answer (string, questionId) 
+	VALUES ("Yes", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Are you a pharmacist?"));
+		
+INSERT INTO Answer (string, questionId) 
+	VALUES ("No", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Are you a pharmacist?"));
 
-insert into question (str, required) values ("How often do you gamble?", false);
-insert into answer (str, question_id) values ("Frequently", (select id from question where str="How often do you gamble?"));
-insert into answer (str, question_id) values ("Occasionally", (select id from question where str="How often do you gamble?"));
-insert into answer (str, question_id) values ("Rarely", (select id from question where str="How often do you gamble?"));
-insert into answer (str, question_id) values ("Never", (select id from question where str="How often do you gamble?"));
+INSERT INTO Question (string, required) 
+	VALUES ("How often do you gamble?", FALSE);
+	
+INSERT INTO Answer (string, questionId) 
+	VALUES ("Frequently", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="How often do you gamble?"));
+		
+INSERT INTO Answer (string, questionId) 
+	VALUES ("Occasionally", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="How often do you gamble?"));
+		
+INSERT INTO Answer (string, questionId) 
+	VALUES ("Rarely", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="How often do you gamble?"));
+		
+INSERT INTO Answer (string, questionId) 
+	VALUES ("Never", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="How often do you gamble?"));
 
-insert into question (str, required) values ("Indicate your military status", false);
-insert into answer (str, question_id) values ("Active Duty", (select id from question where str="Indicate your military status"));
-insert into answer (str, question_id) values ("Active Reserve", (select id from question where str="Indicate your military status"));
-insert into answer (str, question_id) values ("Disabled Veterans", (select id from question where str="Indicate your military status"));
-insert into answer (str, question_id) values ("Inactive Reserve", (select id from question where str="Indicate your military status"));
-insert into answer (str, question_id) values ("None", (select id from question where str="Indicate your military status"));
+INSERT INTO Question (string, required) 
+	VALUES ("Indicate your military status", FALSE);
+	
+INSERT INTO Answer (string, questionId) 
+	VALUES ("Active Duty", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Indicate your military status"));
+		
+INSERT INTO Answer (string, questionId) 
+	VALUES ("Active Reserve", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Indicate your military status"));
+		
+INSERT INTO Answer (string, questionId) 
+	VALUES ("Disabled Veterans", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Indicate your military status"));
+		
+INSERT INTO Answer (string, questionId) 
+	VALUES ("Inactive Reserve", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Indicate your military status"));
+		
+INSERT INTO Answer (string, questionId) 
+	VALUES ("None", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Indicate your military status"));
 
-insert into question (str, required) values ("Can you speak fluent English?", true);
-insert into answer (str, question_id) values ("Yes", (select id from question where str="Can you speak fluent English?"));
-insert into answer (str, question_id) values ("No", (select id from question where str="Can you speak fluent English?"));
+INSERT INTO Question (string, required) 
+	VALUES ("Can you speak fluent English?", TRUE);
+	
+INSERT INTO Answer (string, questionId) 
+	VALUES ("Yes", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Can you speak fluent English?"));
+		
+INSERT INTO Answer (string, questionId) 
+	VALUES ("No", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Can you speak fluent English?"));
 
-insert into question (str, required) values ("If no, what is your strongest language?", false);
+INSERT INTO Question (string, required) 
+	VALUES ("If no, what is your strongest language?", FALSE);
 
 -- sample locations
-insert into location (title, address) values ("Teal", "5696 Lotheville Court");
-insert into location (title, address) values ("Red", "9 Utah Court");
-insert into location (title, address) values ("Turquoise", "71499 Buhler Trail");
-insert into location (title, address) values ("Green", "02122 Prairieview Place");
-insert into location (title, address) values ("Orange", "8 Scofield Road");
-insert into location (title, address) values ("Yellow", "591 Oak Avenue");
+INSERT INTO Location (title, address) 
+	VALUES ("Teal", "5696 Lotheville Court");
+	
+INSERT INTO Location (title, address) 
+	VALUES ("Red", "9 Utah Court");
+	
+INSERT INTO Location (title, address) 
+	VALUES ("Turquoise", "71499 Buhler Trail");
+	
+INSERT INTO Location (title, address) 
+	VALUES ("Green", "02122 Prairieview Place");
+	
+INSERT INTO Location (title, address) 
+	VALUES ("Orange", "8 Scofield Road");
+	
+INSERT INTO Location (title, address) 
+	VALUES ("Yellow", "591 Oak Avenue");
 
 -- sample appointment with answers
-insert into appointment (date, time, location_id, timestamp) values ("05-28-2017", "16:30", 1, "05-22-2017 05:30:34");
-insert into answer (str, question_id) values ("Ralph Schmidt", (select id from question where str="Name"));
-insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
-    (select id from question where str="Name"),
-    (select id from answer where str="Ralph Schmidt" and question_id=(select id from question where str="Name")));
-insert into answer (str, question_id) values ("ralphman@gmail.com", (select id from question where str="Email Address"));
-insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
-    (select id from question where str="Email Address"),
-    (select id from answer where str="ralphman@gmail.com" and question_id=(select id from question where str="Email Address")));
-insert into answer (str, question_id) values ("(753) 875-3165", (select id from question where str="Phone Number"));
-insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
-    (select id from question where str="Phone Number"),
-    (select id from answer where str="(753) 875-3165" and question_id=(select id from question where str="Phone Number")));
-insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
-    (select id from question where str="Are you a pharmacist?"),
-    (select id from answer where str="No" and question_id=(select id from question where str="Are you a pharmacist?")));
-insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
-    (select id from question where str="How often do you gamble?"),
-    (select id from answer where str="Occasionally" and question_id=(select id from question where str="How often do you gamble?")));
-insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
-    (select id from question where str="Indicate your military status"),
-    (select id from answer where str="None" and question_id=(select id from question where str="Indicate your military status")));
-insert into appointment_question_answer (appointment_id, question_id, answer_id) values
-	((select id from appointment where timestamp="05-22-2017 05:30:34"),
-    (select id from question where str="Can you speak fluent English?"),
-    (select id from answer where str="Yes" and question_id=(select id from question where str="Can you speak fluent English?")));
-    
+
+INSERT INTO Appointment (scheduledTime, locationId) 
+	VALUES ("2017-05-28 16:30:00", 1);
+	
+INSERT INTO Answer (string, questionId) 
+	VALUES ("Ralph Schmidt", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Name"));
+		
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) 
+	VALUES(
+	(SELECT appointmentId 
+		FROM Appointment 
+		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Name"),
+	(SELECT answerId 
+		FROM Answer 
+		WHERE string="Ralph Schmidt" AND questionId=
+		(SELECT questionId 
+			FROM Question 
+			WHERE string="Name")));
+
+INSERT INTO Answer (string, questionId) 
+	VALUES ("ralphman@gmail.com", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Email Address"));
+	
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) 
+	VALUES(
+	(SELECT appointmentId 
+		FROM Appointment 
+		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId = 1),
+    (SELECT questionId 
+		FROM Question 
+		WHERE string = "Email Address"),
+    (SELECT answerId 
+		FROM Answer 
+		WHERE string = "ralphman@gmail.com" AND questionId = 
+		(SELECT questionId 
+			FROM Question 
+			WHERE string = "Email Address")));
+	
+INSERT INTO Answer (string, questionId) 
+	VALUES ("(753) 875-3165", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Phone Number"));
+
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) 
+	VALUES(
+	(SELECT appointmentId 
+		FROM Appointment 
+		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
+    (SELECT questionId 
+		FROM Question 
+		WHERE string="Phone Number"),
+    (SELECT answerId 
+		FROM Answer 
+		WHERE string="(753) 875-3165" AND questionId=
+		(SELECT questionId 
+			FROM Question 
+			WHERE string="Phone Number")));
+
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) 
+	VALUES (
+	(SELECT appointmentId 
+		FROM Appointment 
+		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
+    (SELECT questionId 
+		FROM Question 
+		WHERE string="Are you a pharmacist?"),
+    (SELECT answerId 
+		FROM Answer 
+		WHERE string="No" AND questionId=
+		(SELECT questionId 
+			FROM Question 
+			WHERE string="Are you a pharmacist?")));
+
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) 
+	VALUES(
+	(SELECT appointmentId 
+		FROM Appointment 
+		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
+    (SELECT questionId 
+		FROM Question 
+		WHERE string="How often do you gamble?"),
+    (SELECT answerId 
+		FROM Answer 
+		WHERE string="Occasionally" AND questionId=
+		(SELECT questionId 
+			FROM Question 
+			WHERE string="How often do you gamble?")));
+
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) 
+	VALUES(
+	(SELECT appointmentId 
+		FROM Appointment 
+		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
+    (SELECT questionId 
+		FROM Question 
+		WHERE string="Indicate your military status"),
+    (SELECT answerId 
+		FROM Answer 
+		WHERE string="None" AND questionId=
+		(SELECT questionId 
+			FROM Question 
+			WHERE string="Indicate your military status")));
+
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) 
+	VALUES(
+	(SELECT appointmentId 
+		FROM Appointment 
+		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
+    (SELECT questionId 
+		FROM Question 
+		WHERE string="Can you speak fluent English?"),
+    (SELECT answerId 
+		FROM Answer 
+		WHERE string="Yes" AND questionId=
+		(SELECT questionId 
+			FROM Question 
+			WHERE string="Can you speak fluent English?")));
+
+INSERT INTO Appointment (scheduledTime, locationId) 
+	VALUES ("2017-06-01 12:45", 5);
+
+INSERT INTO Answer (string, questionId) 
+	VALUES ("Kathy Stevens", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Name"));
+
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) 
+	VALUES(
+	(SELECT appointmentId 
+		FROM Appointment 
+		WHERE scheduledTime="2017-06-01 12:45" AND locationId=5),
+    (SELECT questionId 
+		FROM Question 
+		WHERE string="Name"),
+    (SELECT answerId 
+		FROM Answer 
+		WHERE string="Kathy Stevens" AND questionId=
+		(SELECT questionId 
+			FROM Question 
+			WHERE string="Name")));
+
+INSERT INTO Answer (string, questionId) 
+	VALUES ("kstev89@gmail.com", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="Email Address"));
+
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) 
+	VALUES(
+	(SELECT appointmentId 
+		FROM Appointment 
+		WHERE scheduledTime="2017-06-01 12:45" AND locationId=5),
+    (SELECT questionId 
+		FROM Question 
+		WHERE string="Email Address"),
+    (SELECT answerId 
+		FROM Answer 
+		WHERE string="kstev89@gmail.com" AND questionId=
+		(SELECT questionId 
+			FROM Question 
+			WHERE string="Email Address")));
+
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) 
+	VALUES(
+	(SELECT appointmentId 
+		FROM Appointment 
+		WHERE scheduledTime="2017-06-01 12:45" AND locationId=5),
+    (SELECT questionId 
+		FROM Question 
+		WHERE string="Are you a pharmacist?"),
+    (SELECT answerId 
+		FROM Answer 
+		WHERE string="Yes" AND questionId=
+		(SELECT questionId 
+			FROM Question 
+			WHERE string="Are you a pharmacist?")));
+
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) 
+	VALUES(
+	(SELECT appointmentId 
+		FROM Appointment 
+		WHERE scheduledTime="2017-06-01 12:45" AND locationId=5),
+    (SELECT questionId 
+		FROM Question 
+		WHERE string="Indicate your military status"),
+    (SELECT answerId 
+		FROM Answer 
+		WHERE string="Active Reserve" AND questionId=
+		(SELECT questionId 
+			FROM Question 
+			WHERE string="Indicate your military status")));
+
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) VALUES
+	((SELECT appointmentId 
+		FROM Appointment 
+		WHERE scheduledTime="2017-06-01 12:45" AND locationId=5),
+    (SELECT questionId 
+		FROM Question 
+		WHERE string="Can you speak fluent English?"),
+    (SELECT answerId 
+		FROM Answer 
+		WHERE string="No" AND questionId=
+			(SELECT questionId 
+				FROM Question 
+				WHERE string="Can you speak fluent English?")));
+
+INSERT INTO Answer (string, questionId) 
+	VALUES ("Spanish", 
+	(SELECT questionId 
+		FROM Question 
+		WHERE string="If no, what is your strongest language?"));
+
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) VALUES
+	((SELECT appointmentId 
+		FROM Appointment 
+		WHERE scheduledTime="2017-06-01 12:45" AND locationId=5),
+    (SELECT questionId 
+		FROM Question 
+		WHERE string="If no, what is your strongest language?"),
+    (SELECT answerId 
+		FROM Answer 
+		WHERE string="Spanish" AND questionId=
+			(SELECT questionId 
+				FROM Question 
+				WHERE string="If no, what is your strongest language?")));
+
 -- -- test queries -- --
-select * from question;
-select * from answer;
-select * from location;
-select * from appointment;
-select * from appointment_question_answer;
+SELECT * FROM Question;
+SELECT * FROM Answer;
+SELECT * FROM Location;
+SELECT * FROM Appointment;
+SELECT * FROM AppointmentQuestionAnswer;
 
 -- all answers for an appointment
-select q.str as question, a.str as answer from appointment_question_answer aqa join answer a on aqa.answer_id=a.id 
-	join question q on aqa.question_id = q.id where appointment_id = 1;
+SELECT Question.string AS question, Answer.string AS answer 
+	FROM AppointmentQuestionAnswer AQA 
+	JOIN Answer ON AQA.answerId=Answer.answerId 
+	JOIN Question ON AQA.questionId = Question.questionId 
+	WHERE appointmentId = 1;
+    
+SELECT Question.string AS question, Answer.string AS answer 
+	FROM AppointmentQuestionAnswer AQA 
+	JOIN Answer ON AQA.answerId=Answer.answerId 
+	JOIN Question ON AQA.questionId = Question.questionId 
+	WHERE appointmentId = 2;
+
+-- active questions
+SELECT questionId, string FROM Question WHERE archived=FALSE;
+
+-- required questions
+SELECT questionId, string FROM Question WHERE required=TRUE;
