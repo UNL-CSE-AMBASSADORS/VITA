@@ -73,14 +73,6 @@
           <label class="vita-form-label vita-form-required" for="zip">Zip / Postal Code</label>
         </div>
 
-        <!--
-        <div class="vita-form-textfield">
-          <input class="" type="text" name="country" id="country" required>
-          <span class="vita-form-bar"></span>
-          <label class="vita-form-label vita-form-required" for="country">Country</label>
-        </div>
-        -->
-
         <h2 class="vita-form-subheading">Background Information</h2>
 
         <div class="vita-form-select">
