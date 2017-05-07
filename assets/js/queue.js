@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    loadQueue();
     window.setInterval(loadQueue, 5 * 1000);
 });
 
@@ -11,10 +12,10 @@ var loadQueue = function() {
 
             for(var i = 0; i < result.length; i++) {
                 var appointment = result[i];
+
                 var currentTime = new Date();
-                // TODO: This might get stored differently in database, might need to work
-                var appointmentTime = Date.parse(appointment.date + ' ' + appointment.time);
-                var timeDifference = appointmentTime.getTime() - currentTime.getTime();
+                var appointmentTime = Date.parse(appointment.scheduledTime);
+                var timeDifference = appointmentTime - currentTime;
                 var waitTime = Math.round(timeDifference / (60 * 1000));
 
                 $('.vita-queue').append("<div class='vita-queue-entry'>" +

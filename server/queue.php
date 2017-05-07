@@ -3,8 +3,12 @@
 	$conn = $DB_CONN;
 
 	// TODO make this handle multiple locations, if necessary
-	$stmt = $conn->prepare('SELECT id, time, firstName, lastName FROM Appointment
-		WHERE (date = getdate() && archived = 0)');
+	$stmt = $conn->prepare('SELECT DISTINCT appointmentId, scheduledTime
+		FROM Appointment
+		WHERE (Appointment.scheduledTime >= NOW() AND Appointment.scheduledTime < DATE_ADD(CURDATE(), INTERVAL 1 DAY))
+			AND Appointment.archived = FALSE
+		ORDER BY Appointment.scheduledTime ASC');
+
 	$stmt->execute();
 	$results = $stmt->fetchAll();
 
@@ -12,11 +16,33 @@
 	// We do this server-side since we can't disclose the data client-side
 	$appointments = [];
 	foreach ($results as $result) {
-		$result['lastName'] = substr($result['lastName'], 0, 1);
+		$firstNameStmt = $conn->prepare('SELECT Answer.string AS firstName
+			FROM AppointmentQuestionAnswer AS AQA
+			JOIN Answer ON AQA.answerId = Answer.answerId
+			JOIN Question ON Answer.questionId = Question.questionId
+			WHERE Question.tag = "first_name" AND AQA.appointmentId = ?');
+
+		$lastNameStmt = $conn->prepare('SELECT Answer.string AS lastName
+			FROM AppointmentQuestionAnswer AS AQA
+			JOIN Answer on AQA.answerId = Answer.answerId
+			JOIN Question ON Answer.questionId = Question.questionId
+			WHERE Question.tag = "last_name" AND AQA.appointmentId = ?');
+
+		$firstNameStmt->execute(array($result['appointmentId']));
+		$lastNameStmt->execute(array($result['appointmentId']));
+
+		$firstNameResult = $firstNameStmt->fetch();
+		$lastNameResult = $lastNameStmt->fetch();
+
+		$result['firstName'] = $firstNameResult['firstName'];
+		$result['lastName'] = substr($lastNameResult['lastName'], 0, 1);
+
 		$appointments[] = $result;
+
+		$firstNameStmt = null;
+		$lastNameStmt = null;
 	}
 
 	echo json_encode($appointments);
 
-	$stmt->close();
-	$conn->close();
+	$stmt = null;
