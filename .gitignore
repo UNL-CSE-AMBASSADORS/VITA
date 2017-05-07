@@ -1,2 +1,2 @@
 *.styl
-config.php
+server/config.php
