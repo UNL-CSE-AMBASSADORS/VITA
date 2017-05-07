@@ -1,4 +1,11 @@
 <?php
+	define('PROD', false);
+
+	if(!PROD){
+		error_reporting(E_ALL);
+		ini_set('display_errors', 1);
+	}
+
 	try {
 		$db_user = 'root';
 		$db_pass = 'root';
