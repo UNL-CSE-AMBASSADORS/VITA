@@ -184,6 +184,97 @@ INSERT INTO Location (title, address)
 	VALUES ("Yellow", "591 Oak Avenue");
 
 -- sample appointment with answers
+
+INSERT INTO Appointment (scheduledTime, locationId)
+	VALUES ("2017-05-07 23:59:59", 1);
+    
+INSERT INTO Answer (string, questionId)
+	VALUES ("Test",
+    (SELECT questionId
+		FROM Question
+        WHERE tag="first_name"));
+        
+INSERT INTO Answer (string, questionId)
+	VALUES ("McTesterson",
+	(SELECT questionId
+		FROM Question
+        WHERE tag="last_name"));
+        
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId)
+	VALUES(
+    (SELECT appointmentId
+		FROM Appointment
+        WHERE scheduledTime="2017-05-07 23:59:59" AND locationId=1),
+	(SELECT questionId
+		FROM Question
+        WHERE tag="first_name"),
+	(SELECT answerId
+		FROM Answer
+        WHERE string="Test" AND questionId=
+		(SELECT questionId
+			FROM Question
+            WHERE tag="first_name")));
+            
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId)
+	VALUES(
+    (SELECT appointmentId
+		FROM Appointment
+        WHERE scheduledTime="2017-05-07 23:59:59" AND locationId=1),
+	(SELECT questionId
+		FROM Question
+        WHERE tag="last_name"),
+	(SELECT answerId
+		FROM Answer
+        WHERE string="McTesterson" AND questionId=
+        (SELECT questionId
+			FROM Question
+            WHERE tag="last_name")));
+
+INSERT INTO Appointment (scheduledTime, locationId)
+	VALUES ("2017-05-07 12:30:00", 1);
+    
+INSERT INTO Answer (string, questionId)
+	VALUES ("Tony",
+    (SELECT questionId
+		FROM Question
+        WHERE tag="first_name"));
+        
+INSERT INTO Answer (string, questionId)
+	VALUES ("Constanza",
+	(SELECT questionId
+		FROM Question
+        WHERE tag="last_name"));
+        
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId)
+	VALUES(
+    (SELECT appointmentId
+		FROM Appointment
+        WHERE scheduledTime="2017-05-07 12:30:00" AND locationId=1),
+	(SELECT questionId
+		FROM Question
+        WHERE tag="first_name"),
+	(SELECT answerId
+		FROM Answer
+        WHERE string="Tony" AND questionId=
+		(SELECT questionId
+			FROM Question
+            WHERE tag="first_name")));
+            
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId)
+	VALUES(
+    (SELECT appointmentId
+		FROM Appointment
+        WHERE scheduledTime="2017-05-07 12:30:00" AND locationId=1),
+	(SELECT questionId
+		FROM Question
+        WHERE tag="last_name"),
+	(SELECT answerId
+		FROM Answer
+        WHERE string="Constanza" AND questionId=
+        (SELECT questionId
+			FROM Question
+            WHERE tag="last_name")));
+
 INSERT INTO Appointment (scheduledTime, locationId) 
 	VALUES ("2017-05-28 16:30:00", 1);
 	
