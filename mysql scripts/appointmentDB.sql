@@ -19,6 +19,7 @@ CREATE TABLE Question (
     inputType VARCHAR(255) NOT NULL,
     placeholder VARCHAR(255) NOT NULL,
     tag VARCHAR(255) NOT NULL,
+    subheading VARCHAR(255) NOT NULL,
     required BOOLEAN DEFAULT TRUE,
     archived BOOLEAN DEFAULT FALSE
 );
@@ -54,32 +55,32 @@ CREATE TABLE AppointmentQuestionAnswer (
 -- -- seed data -- --
 
 -- sample questions with choices, if applicable
-INSERT INTO Question (string, inputType, placeholder, tag, required) 
-	VALUES ("First Name", "text", "First Name", "first_name", TRUE);
+INSERT INTO Question (string, inputType, placeholder, tag, subheading, required) 
+	VALUES ("First Name", "text", "First Name", "first_name", "Contact Information", TRUE);
 
-INSERT INTO Question (string, inputType, placeholder, tag, required)
-	VALUES ("Last Name", "text", "Last Name", "last_name", TRUE);
+INSERT INTO Question (string, inputType, placeholder, tag, subheading, required) 
+	VALUES ("Last Name", "text", "Last Name", "last_name", "Contact Information", TRUE);
 	
-INSERT INTO Question (string, inputType, placeholder, tag, required) 
-	VALUES ("Email Address", "email", "example@example.com", "email", TRUE);
+INSERT INTO Question (string, inputType, placeholder, tag, subheading, required) 
+	VALUES ("Email Address", "email", "example@example.com", "email", "Contact Information", TRUE);
 	
-INSERT INTO Question (string, inputType, placeholder, tag, required) 
-	VALUES ("Phone Number", "text", "402-555-1234", "phone_number", FALSE);
+INSERT INTO Question (string, inputType, placeholder, tag, subheading, required) 
+	VALUES ("Phone Number", "text", "402-555-1234", "phone_number", "Contact Information", FALSE);
 
-INSERT INTO Question (string, inputType, placeholder, tag, required) 
-	VALUES ("Are you a pharmacist?", "select", "No", "pharmacist", FALSE);
+INSERT INTO Question (string, inputType, placeholder, tag, subheading, required) 
+	VALUES ("Are you a pharmacist?", "select", "No", "pharmacist", "Personal Information", FALSE);
 	
-INSERT INTO Question (string, inputType, placeholder, tag, required) 
-	VALUES ("How often do you gamble?", "select", "Never", "gamble", FALSE);
+INSERT INTO Question (string, inputType, placeholder, tag, subheading, required) 
+	VALUES ("How often do you gamble?", "select", "Never", "gamble", "Personal Information", FALSE);
     
-INSERT INTO Question (string, inputType, placeholder, tag, required) 
-	VALUES ("Indicate your military status", "select", "None", "military_status", FALSE);
+INSERT INTO Question (string, inputType, placeholder, tag, subheading, required) 
+	VALUES ("Indicate your military status", "select", "None", "military_status", "Personal Information", FALSE);
 
-INSERT INTO Question (string, inputType, placeholder, tag, required) 
-	VALUES ("Can you speak fluent English?", "select", "Yes", "fluent_english", TRUE);
+INSERT INTO Question (string, inputType, placeholder, tag, subheading, required) 
+	VALUES ("Can you speak fluent English?", "select", "Yes", "fluent_english", "Language Information", TRUE);
 
-INSERT INTO Question (string, inputType, placeholder, tag, required) 
-	VALUES ("If no, what is your strongest language?", "text", "Spanish, German, French, etc.", "strongest_language", FALSE);
+INSERT INTO Question (string, inputType, placeholder, tag, subheading, required) 
+	VALUES ("If no, what is your strongest language?", "text", "Spanish, German, French, etc.", "strongest_language", "Language Information", FALSE);
     
 -- Sample answer data
     
