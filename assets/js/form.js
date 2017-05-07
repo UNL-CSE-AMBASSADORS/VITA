@@ -66,7 +66,6 @@ function newSelect(containingClass, id, label, questionId, hint, required) {
         hintMessage +
         "</div>");
 
-  }
 }
 
 function addOptions(containingClass, id, questionId) {
