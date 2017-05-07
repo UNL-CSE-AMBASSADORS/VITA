@@ -18,19 +18,35 @@ $(document).ready(function() {
 
 var loadQuestions = function() {
   $.getScript('/assets/js/form.js', function() {
-    // alert('Load was performed.');
   });
 
-  $.getJSON( '/server/form.php', function(result) {
-    alert('Load was performed.');
+  $.getJSON({
+    url: '/server/form.php?retrieve=questions',
+    success: function(result) {
+      var containingClass = 'vita-signup-form';
+      $('.' + containingClass).html(""); // Clear any data in the form right now
 
-    $('.vita-signup-form').html(""); // Clear any data in the form right now
+      startForm(containingClass, 'vitaSignupForm');
+      newFormTitle(containingClass, 'Sign Up for a VITA Appointment');
 
-    $('.vita-signup-form').append("<div></div>");
+      var currentSubheading = result[0].subheading;
+      for(var i = 0; i < result.length; i++) {
+        if (result[i].subheading != currentSubheading) {
+          newSubheading(containingClass, result[i].subheading);
+          currentSubheading = result[i].subheading;
+        }
+        if (result[i].inputType.toLowerCase() == "text" || result[i].inputType.toLowerCase() == "email") {
+          newTextField(containingClass, 'vita' + result[i].questionId, result[i].string, result[i].required);
+        } else if (result[i].inputType.toLowerCase() == "select") {
+          newSelect(containingClass, 'vita' + result[i].questionId, result[i].string, result[i].questionId, result[i].required);
+        } else {
+          $('.' + containingClass + ' form').append("<div>" + result[i].inputType + "</div>");
+        }
+      }
 
-    startFormTag('vita-signup-form', 'vitaSignupForm');
-    endFormTag('vita-signup-form');
-
+      submitButton(containingClass);
+      endForm(containingClass);
+    }
   });
 
 }

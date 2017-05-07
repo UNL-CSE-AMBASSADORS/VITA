@@ -11,8 +11,8 @@
   ?>
   </head>
   <body>
-    <div class="vita-signup-form">
-      <p>test</p>
+    <div class="vita-form-container vita-signup-form">
+      <p>Loading...</p>
     </div>
     <?php
       require_once "../server/footer.php";

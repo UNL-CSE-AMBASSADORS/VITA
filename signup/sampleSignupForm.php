@@ -104,8 +104,8 @@
       	</div>
 
         <div class="vita-form-select">
-          <label for="military" class="vita-form-label vita-form-required">Indicate your military status</label>
-          <select id="military" class="required">
+          <label for="military" class="vita-form-label">Indicate your military status</label>
+          <select id="military">
       			<option>None</option>
       			<option>Active Duty</option>
             <option>Active Reserve</option>

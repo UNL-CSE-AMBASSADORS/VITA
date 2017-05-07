@@ -2,34 +2,38 @@
 	require 'config.php';
 	$conn = $DB_CONN;
 
-	// echo "<script>console.log( 'Pre-Load' );</script>";
+	$retrieve = $_GET['retrieve'];
 
+	if ($retrieve == "questions") {
+		// TODO make this handle multiple locations, if necessary
+		$questionStatement = $conn->prepare('SELECT questionId, string, inputType, placeholder, tag, subheading, required, archived FROM Question
+			WHERE (archived != true)
+			ORDER BY subheading');
+		$questionStatement->execute();
+		$results = $questionStatement->fetchAll();
 
-	// $table = $_REQUEST['table'];
+		$questions = [];
+		foreach ($results as $result) {
+			$questions[] = $result;
+		}
 
-	// TODO make this handle multiple locations, if necessary
-	// $subheadingStatement = $conn->prepare('SELECT subheading FROM Question GROUP BY subheading');
-	// $subheadingStatement->execute();
-	// $subheadings = $subheadingStatement->fetchAll();
+		echo json_encode($questions);
 
-	// $questionStatement = $conn->prepare('SELECT questionId, string, inputType, placeholder, tag, subheading, required, archived FROM Question
-	// 	WHERE (archived != true)');
-	// $questionStatement->execute();
-	// $questions = $questionStatement->fetchAll();
+		$questionStatement = null;
+	} else if ($retrieve == "options") {
+		$questionId = $_REQUEST['questionId'];
 
-	// We must only display the first letter of the last name
-	// We do this server-side since we can't disclose the data client-side
-	// $groupedQuestions = [][];
-	// foreach ($results as $result) {
-	// 	$groupedQuestions[$result['subheading']][] = $result;
-	// }
+		$optionsStatement = $conn->prepare('SELECT answerId, string, archived FROM Answer
+			WHERE questionId = ' . $questionId);
+		$optionsStatement->execute();
+		$results = $optionsStatement->fetchAll();
 
-	// echo "<script>console.log( 'Array: " . $groupedQuestions . "' );</script>";
-	// echo "<script>console.log( 'JSON Encoded Array: " . json_encode($groupedQuestions) . "' );</script>";
+		$options = [];
+		foreach ($results as $result) {
+			$options[] = $result;
+		}
 
-	$subheadings = array("1", "2", "3");
-	echo json_encode($subheadings);
+		// $options = array("1","2","3");
 
-	// $subheadingStatement->close();
-	// $questionStatement->close();
-	$conn->close();
+		echo json_encode($options);
+	}
