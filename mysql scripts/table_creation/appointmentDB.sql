@@ -34,7 +34,9 @@ CREATE TABLE Question (
 
 CREATE TABLE UserAnswer (
 	userAnswerId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    string VARCHAR(255) NOT NULL
+    string VARCHAR(255) NOT NULL,
+    questionId INTEGER NOT NULL,
+    FOREIGN KEY (questionId) REFERENCES Question(questionId)
 );
 
 CREATE TABLE PossibleAnswer (

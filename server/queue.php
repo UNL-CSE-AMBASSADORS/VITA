@@ -16,16 +16,16 @@
 	// We do this server-side since we can't disclose the data client-side
 	$appointments = [];
 	foreach ($results as $result) {
-		$firstNameStmt = $conn->prepare('SELECT Answer.string AS firstName
+		$firstNameStmt = $conn->prepare('SELECT UserAnswer.string AS firstName
 			FROM AppointmentQuestionAnswer AS AQA
-			JOIN Answer ON AQA.answerId = Answer.answerId
-			JOIN Question ON Answer.questionId = Question.questionId
+			JOIN UserAnswer ON AQA.userAnswerId = UserAnswer.userAnswerId
+			JOIN Question ON UserAnswer.questionId = Question.questionId
 			WHERE Question.tag = "first_name" AND AQA.appointmentId = ?');
 
-		$lastNameStmt = $conn->prepare('SELECT Answer.string AS lastName
+		$lastNameStmt = $conn->prepare('SELECT UserAnswer.string AS lastName
 			FROM AppointmentQuestionAnswer AS AQA
-			JOIN Answer on AQA.answerId = Answer.answerId
-			JOIN Question ON Answer.questionId = Question.questionId
+			JOIN UserAnswer on AQA.userAnswerId = UserAnswer.userAnswerId
+			JOIN Question ON UserAnswer.questionId = Question.questionId
 			WHERE Question.tag = "last_name" AND AQA.appointmentId = ?');
 
 		$firstNameStmt->execute(array($result['appointmentId']));

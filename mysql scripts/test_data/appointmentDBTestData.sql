@@ -171,14 +171,90 @@ INSERT INTO Location (title, address)
 INSERT INTO Location (title, address) 
 	VALUES ("Yellow", "591 Oak Avenue");
 
--- Sample Appointments With Answers
+-- sample appointment with answers
 
--- Start Sample Appointment 1
+INSERT INTO Appointment (scheduledTime, locationId)
+	VALUES ("2017-05-07 23:59:59", 1);
+    
+INSERT INTO UserAnswer (string, questionId)
+	VALUES ("Test",
+    (SELECT questionId
+		FROM question
+        WHERE tag="first_name"));
+SET @lastUserAnswerId = LAST_INSERT_ID();
+        
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
+	VALUES(
+    (SELECT appointmentId
+		FROM Appointment
+        WHERE scheduledTime="2017-05-07 23:59:59" AND locationId=1),
+	(SELECT questionId
+		FROM Question
+        WHERE tag="first_name"),
+	@lastUserAnswerId);
+            
+INSERT INTO UserAnswer (string, questionId)
+	VALUES ("McTesterson",
+    (SELECT questionId
+		FROM question
+        WHERE tag="last_name"));
+SET @lastUserAnswerId = LAST_INSERT_ID();
+            
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
+	VALUES(
+    (SELECT appointmentId
+		FROM Appointment
+        WHERE scheduledTime="2017-05-07 23:59:59" AND locationId=1),
+	(SELECT questionId
+		FROM Question
+        WHERE tag="last_name"),
+	@lastUserAnswerId);
+
+INSERT INTO Appointment (scheduledTime, locationId)
+	VALUES ("2017-05-07 19:30:00", 1);
+    
+INSERT INTO UserAnswer (string, questionId)
+	VALUES ("Tony",
+    (SELECT questionId
+		FROM question
+        WHERE tag="first_name"));
+SET @lastUserAnswerId = LAST_INSERT_ID();
+        
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
+	VALUES(
+    (SELECT appointmentId
+		FROM Appointment
+        WHERE scheduledTime="2017-05-07 19:30:00" AND locationId=1),
+	(SELECT questionId
+		FROM Question
+        WHERE tag="first_name"),
+	@lastUserAnswerId);
+            
+INSERT INTO UserAnswer (string, questionId)
+	VALUES ("Constanza",
+    (SELECT questionId
+		FROM question
+        WHERE tag="last_name"));
+SET @lastUserAnswerId = LAST_INSERT_ID();
+            
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
+	VALUES(
+    (SELECT appointmentId
+		FROM Appointment
+        WHERE scheduledTime="2017-05-07 19:30:00" AND locationId=1),
+	(SELECT questionId
+		FROM Question
+        WHERE tag="last_name"),
+	@lastUserAnswerId);
+
 INSERT INTO Appointment (scheduledTime, locationId) 
 	VALUES ("2017-05-28 16:30:00", 1);
 	
-INSERT INTO UserAnswer (string) 
-	VALUES ("Ralph");
+INSERT INTO UserAnswer (string, questionId) 
+	VALUES ("Ralph",
+    (SELECT questionId
+		FROM question
+        WHERE tag="first_name"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId) 
@@ -191,8 +267,11 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 		WHERE tag="first_name"),
 	@lastUserAnswerId);
 
-INSERT INTO UserAnswer (string)
-	VALUES ("Schmidt");
+INSERT INTO UserAnswer (string, questionId)
+	VALUES ("Schmidt",
+    (SELECT questionId
+		FROM question
+        WHERE tag="last_name"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
@@ -202,11 +281,14 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
         WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
 	(SELECT questionId
 		FROM Question
-        WHERE string="Last Name"),
+        WHERE tag="last_name"),
 	@lastUserAnswerId);
 
-INSERT INTO UserAnswer (string) 
-	VALUES ("ralphman@gmail.com");
+INSERT INTO UserAnswer (string, questionId) 
+	VALUES ("ralphman@gmail.com",
+    (SELECT questionId
+		FROM question
+        WHERE tag="email"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 	
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId) 
@@ -216,11 +298,14 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId = 1),
     (SELECT questionId 
 		FROM Question 
-		WHERE string = "Email Address"),
+		WHERE tag="email"),
     @lastUserAnswerId);
 	
-INSERT INTO UserAnswer (string) 
-	VALUES ("(753) 875-3165");
+INSERT INTO UserAnswer (string, questionId) 
+	VALUES ("(753) 875-3165",
+    (SELECT questionId
+		FROM question
+        WHERE tag="phone_number"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId) 
@@ -230,11 +315,14 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
     (SELECT questionId 
 		FROM Question 
-		WHERE string="Phone Number"),
+		WHERE tag="phone_number"),
     @lastUserAnswerId);
 
-INSERT INTO UserAnswer (string)
-	VALUES ("No");
+INSERT INTO UserAnswer (string, questionId)
+	VALUES ("No",
+    (SELECT questionId
+		FROM question
+        WHERE tag="pharmacist"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId) 
@@ -244,11 +332,14 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
     (SELECT questionId 
 		FROM Question 
-		WHERE string="Are you a pharmacist?"),
+		WHERE tag="pharmacist"),
     @lastUserAnswerId);
 
-INSERT INTO UserAnswer (string)
-	VALUES ("Occasionally");
+INSERT INTO UserAnswer (string, questionId)
+	VALUES ("Occasionally",
+    (SELECT questionId
+		FROM question
+        WHERE tag="gamble"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId) 
@@ -258,11 +349,14 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
     (SELECT questionId 
 		FROM Question 
-		WHERE string="How often do you gamble?"),
+		WHERE tag="gamble"),
     @lastUserAnswerId);
 
-INSERT INTO UserAnswer (string)
-	VALUES ("None");
+INSERT INTO UserAnswer (string, questionId)
+	VALUES ("None",
+    (SELECT questionId
+		FROM question
+        WHERE tag="military_status"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId) 
@@ -272,11 +366,14 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
     (SELECT questionId 
 		FROM Question 
-		WHERE string="Indicate your military status"),
+		WHERE tag="military_status"),
     @lastUserAnswerId);
             
-INSERT INTO UserAnswer (string)
-	VALUES ("Yes");
+INSERT INTO UserAnswer (string, questionId)
+	VALUES ("Yes",
+    (SELECT questionId
+		FROM question
+        WHERE tag="fluent_english"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId) 
@@ -288,14 +385,15 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 		FROM Question 
 		WHERE tag="fluent_english"),
     @lastUserAnswerId);
--- End Sample Appointment 1
 
--- Start Sample Appointment 2
 INSERT INTO Appointment (scheduledTime, locationId) 
 	VALUES ("2017-06-01 12:45", 5);
 
-INSERT INTO UserAnswer (string) 
-	VALUES ("Kathy");
+INSERT INTO UserAnswer (string, questionId) 
+	VALUES ("Kathy",
+    (SELECT questionId
+		FROM question
+        WHERE tag="first_name"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 	
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId) 
@@ -308,8 +406,11 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 		WHERE tag="first_name"),
     @lastUserAnswerId);
 
-INSERT INTO UserAnswer (string)
-	VALUES ("Stevens");
+INSERT INTO UserAnswer (string, questionId)
+	VALUES ("Stevens",
+    (SELECT questionId
+		FROM question
+        WHERE tag="last_name"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
       
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
@@ -322,8 +423,11 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
         WHERE tag="last_name"),
 	@lastUserAnswerId);
 
-INSERT INTO UserAnswer (string) 
-	VALUES ("kstev89@gmail.com");
+INSERT INTO UserAnswer (string, questionId) 
+	VALUES ("kstev89@gmail.com",
+    (SELECT questionId
+		FROM question
+        WHERE tag="email"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId) 
@@ -336,8 +440,11 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 		WHERE tag="email"),
     @lastUserAnswerId);
     
-INSERT INTO UserAnswer (string)
-	VALUES ("Yes");
+INSERT INTO UserAnswer (string, questionId)
+	VALUES ("Yes",
+    (SELECT questionId
+		FROM question
+        WHERE tag="pharmacist"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId) 
@@ -350,8 +457,11 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 		WHERE tag="pharmacist"),
     @lastUserAnswerId);
 
-INSERT INTO UserAnswer (string)
-	VALUES ("Active Reserve");
+INSERT INTO UserAnswer (string, questionId)
+	VALUES ("Active Reserve",
+    (SELECT questionId
+		FROM question
+        WHERE tag="military_status"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId) 
@@ -364,8 +474,11 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 		WHERE tag="military_status"),
     @lastUserAnswerId);
     
-INSERT INTO UserAnswer (string)
-	VALUES ("No");
+INSERT INTO UserAnswer (string, questionId)
+	VALUES ("No",
+    (SELECT questionId
+		FROM question
+        WHERE tag="fluent_english"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId) 
@@ -378,8 +491,11 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 		WHERE tag="fluent_english"),
     @lastUserAnswerId);
 
-INSERT INTO UserAnswer (string) 
-	VALUES ("Spanish");
+INSERT INTO UserAnswer (string, questionId) 
+	VALUES ("Spanish",
+    (SELECT questionId
+		FROM question
+        WHERE tag="strongest_language"));
 SET @lastUserAnswerId = LAST_INSERT_ID();
 
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId) 
@@ -391,8 +507,6 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 		FROM Question 
 		WHERE tag="strongest_language"),
     @lastUserAnswerId);
--- End Sample Appointment 2    
-
 
 -- -- test queries -- --
 SELECT * FROM Question;
