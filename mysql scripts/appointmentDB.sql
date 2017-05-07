@@ -16,6 +16,9 @@ CREATE TABLE Location (
 CREATE TABLE Question (
 	questionId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
     string VARCHAR(255) NOT NULL,
+    inputType VARCHAR(255) NOT NULL,
+    placeholder VARCHAR(255) NOT NULL,
+    tag VARCHAR(255) NOT NULL,
     required BOOLEAN DEFAULT TRUE,
     archived BOOLEAN DEFAULT FALSE
 );
@@ -51,18 +54,35 @@ CREATE TABLE AppointmentQuestionAnswer (
 -- -- seed data -- --
 
 -- sample questions with choices, if applicable
-INSERT INTO Question (string, required) 
-	VALUES ("Name", TRUE);
-	
-INSERT INTO Question (string, required) 
-	VALUES ("Email Address", TRUE);
-	
-INSERT INTO Question (string, required) 
-	VALUES ("Phone Number", FALSE);
+INSERT INTO Question (string, inputType, placeholder, tag, required) 
+	VALUES ("First Name", "text", "First Name", "first_name", TRUE);
 
-INSERT INTO Question (string, required) 
-	VALUES ("Are you a pharmacist?", FALSE);
+INSERT INTO Question (string, inputType, placeholder, tag, required)
+	VALUES ("Last Name", "text", "Last Name", "last_name", TRUE);
 	
+INSERT INTO Question (string, inputType, placeholder, tag, required) 
+	VALUES ("Email Address", "email", "example@example.com", "email", TRUE);
+	
+INSERT INTO Question (string, inputType, placeholder, tag, required) 
+	VALUES ("Phone Number", "text", "402-555-1234", "phone_number", FALSE);
+
+INSERT INTO Question (string, inputType, placeholder, tag, required) 
+	VALUES ("Are you a pharmacist?", "select", "No", "pharmacist", FALSE);
+	
+INSERT INTO Question (string, inputType, placeholder, tag, required) 
+	VALUES ("How often do you gamble?", "select", "Never", "gamble", FALSE);
+    
+INSERT INTO Question (string, inputType, placeholder, tag, required) 
+	VALUES ("Indicate your military status", "select", "None", "military_status", FALSE);
+
+INSERT INTO Question (string, inputType, placeholder, tag, required) 
+	VALUES ("Can you speak fluent English?", "select", "Yes", "fluent_english", TRUE);
+
+INSERT INTO Question (string, inputType, placeholder, tag, required) 
+	VALUES ("If no, what is your strongest language?", "text", "Spanish, German, French, etc.", "strongest_language", FALSE);
+    
+-- Sample answer data
+    
 INSERT INTO Answer (string, questionId) 
 	VALUES ("Yes", 
 	(SELECT questionId 
@@ -74,9 +94,6 @@ INSERT INTO Answer (string, questionId)
 	(SELECT questionId 
 		FROM Question 
 		WHERE string="Are you a pharmacist?"));
-
-INSERT INTO Question (string, required) 
-	VALUES ("How often do you gamble?", FALSE);
 	
 INSERT INTO Answer (string, questionId) 
 	VALUES ("Frequently", 
@@ -101,9 +118,6 @@ INSERT INTO Answer (string, questionId)
 	(SELECT questionId 
 		FROM Question 
 		WHERE string="How often do you gamble?"));
-
-INSERT INTO Question (string, required) 
-	VALUES ("Indicate your military status", FALSE);
 	
 INSERT INTO Answer (string, questionId) 
 	VALUES ("Active Duty", 
@@ -134,9 +148,6 @@ INSERT INTO Answer (string, questionId)
 	(SELECT questionId 
 		FROM Question 
 		WHERE string="Indicate your military status"));
-
-INSERT INTO Question (string, required) 
-	VALUES ("Can you speak fluent English?", TRUE);
 	
 INSERT INTO Answer (string, questionId) 
 	VALUES ("Yes", 
@@ -149,9 +160,6 @@ INSERT INTO Answer (string, questionId)
 	(SELECT questionId 
 		FROM Question 
 		WHERE string="Can you speak fluent English?"));
-
-INSERT INTO Question (string, required) 
-	VALUES ("If no, what is your strongest language?", FALSE);
 
 -- sample locations
 INSERT INTO Location (title, address) 
@@ -173,15 +181,20 @@ INSERT INTO Location (title, address)
 	VALUES ("Yellow", "591 Oak Avenue");
 
 -- sample appointment with answers
-
 INSERT INTO Appointment (scheduledTime, locationId) 
 	VALUES ("2017-05-28 16:30:00", 1);
 	
 INSERT INTO Answer (string, questionId) 
-	VALUES ("Ralph Schmidt", 
+	VALUES ("Ralph", 
 	(SELECT questionId 
 		FROM Question 
-		WHERE string="Name"));
+		WHERE string="First Name"));
+        
+INSERT INTO Answer (string, questionId)
+	VALUES ("Schmidt",
+    (SELECT questionId
+		FROM Question
+        WHERE string="Last Name"));
 		
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) 
 	VALUES(
@@ -190,13 +203,28 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId)
 		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
 	(SELECT questionId 
 		FROM Question 
-		WHERE string="Name"),
+		WHERE string="First Name"),
 	(SELECT answerId 
 		FROM Answer 
-		WHERE string="Ralph Schmidt" AND questionId=
+		WHERE ((string="Ralph" AND questionId=
 		(SELECT questionId 
 			FROM Question 
-			WHERE string="Name")));
+			WHERE string="First Name")))));
+
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId)
+	VALUES(
+    (SELECT appointmentId
+		FROM Appointment
+        WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
+	(SELECT questionId
+		FROM Question
+        WHERE string="Last Name"),
+	(SELECT answerId
+		FROM Answer
+        WHERE (string="Schmidt" AND questionId=
+        (SELECT questionId
+			FROM Question
+			WHERE string="Last Name"))));
 
 INSERT INTO Answer (string, questionId) 
 	VALUES ("ralphman@gmail.com", 
@@ -304,10 +332,16 @@ INSERT INTO Appointment (scheduledTime, locationId)
 	VALUES ("2017-06-01 12:45", 5);
 
 INSERT INTO Answer (string, questionId) 
-	VALUES ("Kathy Stevens", 
+	VALUES ("Kathy", 
 	(SELECT questionId 
 		FROM Question 
-		WHERE string="Name"));
+		WHERE string="First Name"));
+	
+INSERT INTO Answer (string, questionId)
+	VALUES ("Stevens",
+    (SELECT questionId
+		FROM Question
+        WHERE string="Last Name"));
 
 INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId) 
 	VALUES(
@@ -316,13 +350,28 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId)
 		WHERE scheduledTime="2017-06-01 12:45" AND locationId=5),
     (SELECT questionId 
 		FROM Question 
-		WHERE string="Name"),
+		WHERE string="First Name"),
     (SELECT answerId 
 		FROM Answer 
-		WHERE string="Kathy Stevens" AND questionId=
+		WHERE string="Kathy" AND questionId=
 		(SELECT questionId 
 			FROM Question 
-			WHERE string="Name")));
+			WHERE string="First Name")));
+                
+INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, answerId)
+	VALUES(
+    (SELECT appointmentId
+		FROM Appointment
+		WHERE scheduledTime="2017-06-01 12:45" AND locationId=5),
+	(SELECT questionId
+		FROM Question
+        WHERE string="Last Name"),
+	(SELECT answerId
+		FROM Answer
+        WHERE string="Stevens" AND questionId=
+        (SELECT questionId
+			FROM Question
+            WHERE string="Last Name")));
 
 INSERT INTO Answer (string, questionId) 
 	VALUES ("kstev89@gmail.com", 
