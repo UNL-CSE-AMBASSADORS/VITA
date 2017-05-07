@@ -10,6 +10,32 @@ $(document).ready(function() {
     }
   });
 
+  // validateForm();
+
+  loadQuestions();
+
+});
+
+var loadQuestions = function() {
+  $.getScript('/assets/js/form.js', function() {
+    // alert('Load was performed.');
+  });
+
+  $.getJSON( '/server/form.php', function(result) {
+    alert('Load was performed.');
+
+    $('.vita-signup-form').html(""); // Clear any data in the form right now
+
+    $('.vita-signup-form').append("<div></div>");
+
+    startFormTag('vita-signup-form', 'vitaSignupForm');
+    endFormTag('vita-signup-form');
+
+  });
+
+}
+
+var validateForm = function() {
   $("#vitaSignupForm").validate({
     rules: {
       firstName: "required",
@@ -44,4 +70,4 @@ $(document).ready(function() {
       }
     }
   });
-});
+}
