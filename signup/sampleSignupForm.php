@@ -90,6 +90,7 @@
       			<option>Yes</option>
       		</select>
       		<div class="vita-form-select__arrow"></div>
+          <span class="vita-form-hint">(Street address, P.O. box, company name, c/o)</span>
       	</div>
 
         <div class="vita-form-select">
@@ -163,7 +164,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
     <script src='../assets/js/boilerplate.js'></script>
-		<script src='../assets/js/main.js'></script>
     <script src="../assets/js/signup.js"></script>
   </body>
 </html>

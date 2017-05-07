@@ -18,44 +18,56 @@ function newSubheading(containingClass, subheading) {
   $("." + containingClass + " form").append("<h2 class='vita-form-subheading'>" + subheading + "</h2>");
 }
 
-function newTextField(containingClass, id, label, required) {
+function newTextField(containingClass, id, label, inputType, hint, required) {
+  var hintMessage = "";
+  if (hint != null && hint != "") {
+    hintMessage = "<span class='vita-form-hint'>" + hint + "</span>";
+  }
   if (required == true) {
     // Required TextField
-    $("." + containingClass + " form").append("<div class='vita-form-textfield'> <input class='' type='text' name='" + id + "' id='" + id + "' required>" +
+    $("." + containingClass + " form").append("<div class='vita-form-textfield'> <input class='' type='" + inputType + "' name='" + id + "' id='" + id + "' required>" +
           "<span class='vita-form-bar'></span>" +
           "<label class='vita-form-label vita-form-required' for='" + id + "'>" + label + "</label>" +
+          hintMessage +
           "</div>");
   } else {
     // Optional Textfield
-    $("." + containingClass + " form").append("<div class='vita-form-textfield'> <input class='' type='text' name='" + id + "' id='" + id + "'>" +
+    $("." + containingClass + " form").append("<div class='vita-form-textfield'> <input class='' type='" + inputType + "' name='" + id + "' id='" + id + "'>" +
           "<span class='vita-form-bar'></span>" +
           "<label class='vita-form-label' for='" + id + "'>" + label + "</label>" +
+          hintMessage +
           "</div>");
   }
 }
 
-function newSelect(containingClass, id, label, questionId, required) {
+function newSelect(containingClass, id, label, questionId, hint, required) {
+  var hintMessage = "";
+  if (hint != null && hint != "") {
+    hintMessage = "<span class='vita-form-hint'>" + hint + "</span>";
+  }
   if (required == true) {
     // Required Select
-    $("." + containingClass + " form").append("<div class='vita-form-select'>" +
+    $("." + containingClass + " form").append("<div class='vita-form-select' id='" + id + "-container'>" +
           "<label for='" + id + "' class='vita-form-label vita-form-required'>" + label + "</label>" +
           "<select id='" + id + "' class='required'>");
 
     addOptions(containingClass, id, questionId);
 
-    $("." + containingClass + " form").append("</select>" +
+    $("." + containingClass + " form #" + id + "-container").append("</select>" +
   	      "<div class='vita-form-select__arrow'></div>" +
+          hintMessage +
           "</div>");
   } else {
     // Optional Select
-    $("." + containingClass + " form").append("<div class='vita-form-select'>" +
+    $("." + containingClass + " form").append("<div class='vita-form-select' id='" + id + "-container'>" +
           "<label for='" + id + "' class='vita-form-label'>" + label + "</label>" +
           "<select id='" + id + "'>");
 
     addOptions(containingClass, id, questionId);
 
-    $("." + containingClass + " form").append("</select>" +
+    $("." + containingClass + " form #" + id + "-container").append("</select>" +
   	      "<div class='vita-form-select__arrow'></div>" +
+          hintMessage +
           "</div>");
   }
 }

@@ -14,6 +14,10 @@
 
 		$questions = [];
 		foreach ($results as $result) {
+			$result["errorMessage"] = "Sample error message.";
+			$result["validationType"] = "email";
+			$result["hint"] = "(Sample Hint)";
+
 			$questions[] = $result;
 		}
 
@@ -33,7 +37,7 @@
 			$options[] = $result;
 		}
 
-		// $options = array("1","2","3");
-
 		echo json_encode($options);
+
+		$optionsStatement = null;
 	}
