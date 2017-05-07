@@ -7,7 +7,7 @@ var loadQueue = function() {
         url: '../server/queue.php',
         dataType: 'json',
         success: function(result) {
-            $('.vita-queue').html(""); // Clear any data in the queue right now
+            $('.vita-queue').html("2"); // Clear any data in the queue right now
 
             for(var i = 0; i < result.length; i++) {
                 var appointment = result[i];

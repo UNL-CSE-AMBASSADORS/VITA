@@ -1,6 +1,8 @@
 -- VITA Project
 -- UNL CSE Ambassadors 2017
 
+use vita;
+
 DROP TABLE IF EXISTS AppointmentQuestionAnswer;
 DROP TABLE IF EXISTS Appointment;
 DROP TABLE IF EXISTS Location;
