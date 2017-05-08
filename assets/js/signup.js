@@ -21,7 +21,8 @@ var loadQuestions = function() {
       var messages = [];
 
       // Open form tag
-      startForm(containingClass, 'vitaSignupForm');
+      var formId = 'vitaSignupForm';
+      startForm(containingClass, formId);
       newFormTitle(containingClass, 'Sign Up for a VITA Appointment');
 
       // For each question in the form
@@ -46,7 +47,7 @@ var loadQuestions = function() {
         }
         // Select
         else if (result[i].inputType.toLowerCase() == "select") {
-          newSelect(containingClass, id, result[i].string, result[i].questionId, result[i].hint, result[i].required);
+          newSelect(containingClass, formId, id, result[i].string, result[i].questionId, result[i].hint, result[i].required);
           if (result[i].required || result[i].validationType != null) {
             rules[id] = questionRules(result[i]);
           }
@@ -77,6 +78,27 @@ var loadQuestions = function() {
         } else {
           $label = $(this).closest(".vita-form-textfield").find(".vita-form-label").removeClass( "vita-form-label__floating" );
         }
+      });
+
+      $('#vitaSignupForm').submit(function() {
+        if (!$(this).valid()) {
+          return false;
+        }
+
+        var data = $(this).serialize();
+
+        // AJAX Code To Submit Form.
+  			$.ajax({
+  				type: "post",
+  				url: "/server/signup.php",
+  				data: data,
+  				cache: false,
+  				success: function(submitResponse){
+            alert(submitResponse);
+            // alert('Your message has been sent.');
+  				}
+  			});
+        return false;
       });
     }
   });
