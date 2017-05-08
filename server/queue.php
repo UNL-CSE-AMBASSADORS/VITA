@@ -12,22 +12,22 @@
 	$stmt->execute();
 	$results = $stmt->fetchAll();
 
+	$firstNameStmt = $conn->prepare('SELECT Answer.string AS firstName
+		FROM AppointmentQuestionAnswer AS AQA
+		JOIN Answer ON AQA.answerId = Answer.answerId
+		JOIN Question ON Answer.questionId = Question.questionId
+		WHERE Question.tag = "first_name" AND AQA.appointmentId = ?');
+
+	$lastNameStmt = $conn->prepare('SELECT Answer.string AS lastName
+		FROM AppointmentQuestionAnswer AS AQA
+		JOIN Answer on AQA.answerId = Answer.answerId
+		JOIN Question ON Answer.questionId = Question.questionId
+		WHERE Question.tag = "last_name" AND AQA.appointmentId = ?');
+
 	// We must only display the first letter of the last name
 	// We do this server-side since we can't disclose the data client-side
 	$appointments = [];
 	foreach ($results as $result) {
-		$firstNameStmt = $conn->prepare('SELECT UserAnswer.string AS firstName
-			FROM AppointmentQuestionAnswer AS AQA
-			JOIN UserAnswer ON AQA.userAnswerId = UserAnswer.userAnswerId
-			JOIN Question ON UserAnswer.questionId = Question.questionId
-			WHERE Question.tag = "first_name" AND AQA.appointmentId = ?');
-
-		$lastNameStmt = $conn->prepare('SELECT UserAnswer.string AS lastName
-			FROM AppointmentQuestionAnswer AS AQA
-			JOIN UserAnswer on AQA.userAnswerId = UserAnswer.userAnswerId
-			JOIN Question ON UserAnswer.questionId = Question.questionId
-			WHERE Question.tag = "last_name" AND AQA.appointmentId = ?');
-
 		$firstNameStmt->execute(array($result['appointmentId']));
 		$lastNameStmt->execute(array($result['appointmentId']));
 
@@ -38,11 +38,10 @@
 		$result['lastName'] = substr($lastNameResult['lastName'], 0, 1);
 
 		$appointments[] = $result;
-
-		$firstNameStmt = null;
-		$lastNameStmt = null;
 	}
 
 	echo json_encode($appointments);
 
+	$firstNameStmt = null;
+	$lastNameStmt = null;
 	$stmt = null;
