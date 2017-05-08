@@ -1,17 +1,5 @@
 $(document).ready(function() {
-  //Since non-required fields are "valid" when they are empty, we need an
-  //alternate way to keep labels raised when there is content in their
-  //associated input field
-  $( ".vita-form-textfield input" ).focusout(function() {
-    if($.trim($(this).val()).length > 0) {
-      $label = $(this).closest(".vita-form-textfield").find(".vita-form-label").addClass( "vita-form-label__floating" );
-    } else {
-      $label = $(this).closest(".vita-form-textfield").find(".vita-form-label").removeClass( "vita-form-label__floating" );
-    }
-  });
-
   loadQuestions();
-  validateForm();
 
   // to be deleted at a later point
   validateSampleForm();
@@ -79,6 +67,17 @@ var loadQuestions = function() {
       validationObject["rules"] = rules;
       validationObject["messages"] = messages;
       validateForm(validationObject);
+
+      //Since non-required fields are "valid" when they are empty, we need an
+      //alternate way to keep labels raised when there is content in their
+      //associated input field
+      $( ".vita-form-textfield input" ).focusout(function() {
+        if($.trim($(this).val()).length > 0) {
+          $label = $(this).closest(".vita-form-textfield").find(".vita-form-label").addClass( "vita-form-label__floating" );
+        } else {
+          $label = $(this).closest(".vita-form-textfield").find(".vita-form-label").removeClass( "vita-form-label__floating" );
+        }
+      });
     }
   });
 

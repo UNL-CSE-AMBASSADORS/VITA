@@ -15,7 +15,7 @@
 		$questions = [];
 		foreach ($results as $result) {
 			$result["errorMessage"] = "Sample error message.";
-			$result["validationType"] = "email";
+			$result["validationType"] = null;
 			$result["hint"] = "(Sample Hint)";
 
 			$questions[] = $result;
