@@ -1,5 +1,5 @@
-function startForm(containingClass, id) {
-  $('.' + containingClass).append("<form class='cmxform' id=" + id + " method='post' action='' autocomplete='off'>");
+function startForm(containingClass, id, url) {
+  $('.' + containingClass).append("<form class='cmxform' id=" + id + " method='post' action='" + url + "' autocomplete='off'>");
 }
 
 function endForm(containingClass, id) {

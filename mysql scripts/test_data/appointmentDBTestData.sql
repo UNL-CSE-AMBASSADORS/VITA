@@ -26,7 +26,7 @@ INSERT INTO Question (string, tag, required, questionInformationId)
 		WHERE placeholder="example@example.com"));
     
 INSERT INTO QuestionInformation (inputType, placeholder, subheading, validationType, hint, errorMessage)
-	VALUES ("text", "402-555-1234", "Contact Information", "phoneNumberUS", NULL, NULL);
+	VALUES ("text", "402-555-1234", "Contact Information", "phoneUS", NULL, NULL);
     
 INSERT INTO Question (string, tag, required, questionInformationId) 
 	VALUES ("Phone Number", "phone_number", FALSE,

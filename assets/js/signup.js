@@ -22,7 +22,7 @@ var loadQuestions = function() {
 
       // Open form tag
       var formId = 'vitaSignupForm';
-      startForm(containingClass, formId);
+      startForm(containingClass, formId, "/");
       newFormTitle(containingClass, 'Sign Up for a VITA Appointment');
 
       // For each question in the form
@@ -33,8 +33,8 @@ var loadQuestions = function() {
           newSubheading(containingClass, result[i].subheading);
           currentSubheading = result[i].subheading;
         }
-        // Add the question to the form
-        var id = 'vita' + result[i].questionId;
+        // Set the css id to match the tag from the question table, which will also be in the answer table
+        var id = result[i].tag;
         // Textfield
         if (result[i].inputType.toLowerCase() == "text" || result[i].inputType.toLowerCase() == "email") {
           newTextField(containingClass, id, result[i].string, result[i].inputType, result[i].hint, result[i].required);
@@ -80,12 +80,14 @@ var loadQuestions = function() {
         }
       });
 
+      // Form submission
       $('#vitaSignupForm').submit(function() {
         if (!$(this).valid()) {
           return false;
         }
 
         var data = $(this).serialize();
+        console.log(data);
 
         // AJAX Code To Submit Form.
   			$.ajax({
@@ -98,7 +100,7 @@ var loadQuestions = function() {
             // alert('Your message has been sent.');
   				}
   			});
-        return false;
+        return true;
       });
     }
   });
@@ -111,13 +113,18 @@ var questionRules = function(question) {
     rule["required"] = true;
   }
   if (question.validationType != null) {
+    // There should really be some form of validation for the validationType
+    // One option would be to make a new table with all of the possible validation types
+    // which would be both a foreign key for the validationType field in the questionInformation table
+    // and a way to validate at this point too. If the validationType has a typo for any
+    // given field, the front-end form validation fails to run at all for any of the fields.
     rule[question.validationType] = true;
   }
   return rule;
 }
 
 var questionMessage = function(question) {
-  var id = 'vita' + question.questionId;
+  var id = question.tag;
   var message = [];
   if (question.errorMessage != null) {
     message[id] = question.errorMessage;
