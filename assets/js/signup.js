@@ -11,7 +11,7 @@ var loadQuestions = function() {
   });
 
   $.getJSON({
-    url: '/server/form.php?retrieve=questions',
+    url: '/server/form.php?retrieve=questions&subheadings[]=Contact Information&subheadings[]=Language Information&subheadings[]=Background Information',
     success: function(result) {
       var containingClass = 'vita-signup-form';
       $('.' + containingClass).html(""); // Clear any data in the form right now
