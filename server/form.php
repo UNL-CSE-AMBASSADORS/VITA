@@ -38,8 +38,8 @@
 		$questionId = $_REQUEST['questionId'];
 
 		$optionsStatement = $conn->prepare('SELECT possibleAnswerId, string, archived FROM PossibleAnswer
-			WHERE questionId = ' . $questionId);
-		$optionsStatement->execute();
+			WHERE questionId = ?');
+		$optionsStatement->execute(array($questionId));
 		$results = $optionsStatement->fetchAll();
 
 		$options = [];
