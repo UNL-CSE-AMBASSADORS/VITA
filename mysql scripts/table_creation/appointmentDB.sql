@@ -3,10 +3,9 @@
 
 USE vita;
 
-DROP TABLE IF EXISTS AppointmentQuestionAnswer;
+DROP TABLE IF EXISTS Answer;
 DROP TABLE IF EXISTS Appointment;
 DROP TABLE IF EXISTS Location;
-DROP TABLE IF EXISTS UserAnswer;
 DROP TABLE IF EXISTS PossibleAnswer;
 DROP TABLE IF EXISTS Question;
 DROP TABLE IF EXISTS QuestionInformation;
@@ -32,13 +31,6 @@ CREATE TABLE Question (
 	CONSTRAINT uniqueTag unique index(tag)
 );
 
-CREATE TABLE UserAnswer (
-	userAnswerId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    string VARCHAR(255) NOT NULL,
-    questionId INTEGER NOT NULL,
-    FOREIGN KEY (questionId) REFERENCES Question(questionId)
-);
-
 CREATE TABLE PossibleAnswer (
 	possibleAnswerId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
     string VARCHAR(255) NOT NULL,
@@ -62,13 +54,12 @@ CREATE TABLE Appointment (
     archived BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE AppointmentQuestionAnswer (
-	appointmentQuestionAnswerId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+CREATE TABLE Answer (
+	answerId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	string VARCHAR(255) NOT NULL,
     appointmentId INTEGER NOT NULL,
     FOREIGN KEY (appointmentId) REFERENCES Appointment(appointmentId),
     questionId INTEGER NOT NULL,
     FOREIGN KEY (questionId) REFERENCES Question(questionId),
-    userAnswerId INTEGER NOT NULL,
-    FOREIGN KEY(userAnswerId) REFERENCES UserAnswer(userAnswerId),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
