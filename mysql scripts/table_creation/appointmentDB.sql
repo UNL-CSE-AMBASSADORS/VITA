@@ -9,10 +9,10 @@ DROP TABLE IF EXISTS Location;
 DROP TABLE IF EXISTS UserAnswer;
 DROP TABLE IF EXISTS PossibleAnswer;
 DROP TABLE IF EXISTS Question;
-DROP TABLE IF EXISTS QuestionAccessories;
+DROP TABLE IF EXISTS QuestionInformation;
 
-CREATE TABLE QuestionAccessories (
-	questionAccessoriesId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+CREATE TABLE QuestionInformation (
+	questionInformationId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
     inputType VARCHAR(255) NOT NULL,
     placeholder VARCHAR(255) NOT NULL,
     subheading VARCHAR(255) NOT NULL,
@@ -27,8 +27,8 @@ CREATE TABLE Question (
     tag VARCHAR(255) NOT NULL,
     required BOOLEAN DEFAULT TRUE,
     archived BOOLEAN DEFAULT FALSE,
-    questionAccessoriesId INTEGER NOT NULL,
-    FOREIGN KEY (questionAccessoriesId) REFERENCES QuestionAccessories(questionAccessoriesId),
+    questionInformationId INTEGER NOT NULL,
+    FOREIGN KEY (questionInformationId) REFERENCES QuestionInformation(questionInformationId),
 	CONSTRAINT uniqueTag unique index(tag)
 );
 

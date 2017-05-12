@@ -1,76 +1,76 @@
 USE vita;
 
 -- sample questions with choices, if applicable
-INSERT INTO QuestionAccessories (inputType, placeholder, subheading, validationType, hint, errorMessage)
+INSERT INTO QuestionInformation (inputType, placeholder, subheading, validationType, hint, errorMessage)
 	VALUES ("text", "First Name", "Contact Information", NULL, NULL, NULL);
     
-INSERT INTO Question (string, tag, required, questionAccessoriesId) 
+INSERT INTO Question (string, tag, required, questionInformationId) 
 	VALUES ("First Name", "first_name", TRUE, 
-    (SELECT questionAccessoriesId FROM QuestionAccessories
+    (SELECT questionInformationId FROM QuestionInformation
 		WHERE placeholder="First Name"));
 
-INSERT INTO QuestionAccessories (inputType, placeholder, subheading, validationType, hint, errorMessage)
+INSERT INTO QuestionInformation (inputType, placeholder, subheading, validationType, hint, errorMessage)
 	VALUES ("text", "Last Name", "Contact Information", NULL, NULL, NULL);
     
-INSERT INTO Question (string, tag, required, questionAccessoriesId) 
+INSERT INTO Question (string, tag, required, questionInformationId) 
 	VALUES ("Last Name", "last_name", TRUE,
-	(SELECT questionAccessoriesId FROM QuestionAccessories
+	(SELECT questionInformationId FROM QuestionInformation
 		WHERE placeholder="Last Name"));
     
-INSERT INTO QuestionAccessories (inputType, placeholder, subheading, validationType, hint, errorMessage)
+INSERT INTO QuestionInformation (inputType, placeholder, subheading, validationType, hint, errorMessage)
 	VALUES ("email", "example@example.com", "Contact Information", "email", NULL, NULL);
     
-INSERT INTO Question (string, tag, required, questionAccessoriesId) 
+INSERT INTO Question (string, tag, required, questionInformationId) 
 	VALUES ("Email Address", "email", TRUE,
-	(SELECT questionAccessoriesId FROM QuestionAccessories
+	(SELECT questionInformationId FROM QuestionInformation
 		WHERE placeholder="example@example.com"));
     
-INSERT INTO QuestionAccessories (inputType, placeholder, subheading, validationType, hint, errorMessage)
+INSERT INTO QuestionInformation (inputType, placeholder, subheading, validationType, hint, errorMessage)
 	VALUES ("text", "402-555-1234", "Contact Information", "phoneNumberUS", NULL, NULL);
     
-INSERT INTO Question (string, tag, required, questionAccessoriesId) 
+INSERT INTO Question (string, tag, required, questionInformationId) 
 	VALUES ("Phone Number", "phone_number", FALSE,
-    (SELECT questionAccessoriesId FROM QuestionAccessories
+    (SELECT questionInformationId FROM QuestionInformation
 		WHERE placeholder="402-555-1234"));
 	
-INSERT INTO QuestionAccessories (inputType, placeholder, subheading, validationType, hint, errorMessage)
+INSERT INTO QuestionInformation (inputType, placeholder, subheading, validationType, hint, errorMessage)
 	VALUES ("select", "No", "Background Information", NULL, NULL, NULL);
     
-INSERT INTO Question (string, tag, required, questionAccessoriesId) 
+INSERT INTO Question (string, tag, required, questionInformationId) 
 	VALUES ("Are you a pharmacist?", "pharmacist", FALSE,
-    (SELECT questionAccessoriesId FROM QuestionAccessories
+    (SELECT questionInformationId FROM QuestionInformation
 		WHERE inputType="select" AND placeholder="No" AND subheading="Background Information"));
 	
-INSERT INTO QuestionAccessories (inputType, placeholder, subheading, validationType, hint, errorMessage)
+INSERT INTO QuestionInformation (inputType, placeholder, subheading, validationType, hint, errorMessage)
 	VALUES ("select", "Never", "Background Information", NULL, NULL, NULL);
     
-INSERT INTO Question (string, tag, required, questionAccessoriesId) 
+INSERT INTO Question (string, tag, required, questionInformationId) 
 	VALUES ("How often do you gamble?", "gamble", FALSE, 
-    (SELECT questionAccessoriesId FROM QuestionAccessories
+    (SELECT questionInformationId FROM QuestionInformation
 		WHERE inputType="select" AND placeholder="Never" AND subheading="Background Information"));
     
-INSERT INTO QuestionAccessories (inputType, placeholder, subheading, validationType, hint, errorMessage)
+INSERT INTO QuestionInformation (inputType, placeholder, subheading, validationType, hint, errorMessage)
 	VALUES ("select", "None", "Background Information", NULL, NULL, NULL);
     
-INSERT INTO Question (string, tag, required, questionAccessoriesId) 
+INSERT INTO Question (string, tag, required, questionInformationId) 
 	VALUES ("Indicate your military status", "military_status", FALSE,
-    (SELECT questionAccessoriesId FROM QuestionAccessories
+    (SELECT questionInformationId FROM QuestionInformation
 		WHERE inputType="select" AND placeholder="None" AND subheading="Background Information"));
         
-INSERT INTO QuestionAccessories (inputType, placeholder, subheading, validationType, hint, errorMessage)
+INSERT INTO QuestionInformation (inputType, placeholder, subheading, validationType, hint, errorMessage)
 	VALUES ("select", "Yes", "Language Information", NULL, NULL, NULL);
 
-INSERT INTO Question (string, tag, required, questionAccessoriesId) 
+INSERT INTO Question (string, tag, required, questionInformationId) 
 	VALUES ("Can you speak fluent English?", "fluent_english", TRUE,
-    (SELECT questionAccessoriesId FROM QuestionAccessories
+    (SELECT questionInformationId FROM QuestionInformation
 		WHERE inputType="select" AND placeholder="Yes" AND subheading="Language Information"));
 
-INSERT INTO QuestionAccessories (inputType, placeholder, subheading, validationType, hint, errorMessage)
+INSERT INTO QuestionInformation (inputType, placeholder, subheading, validationType, hint, errorMessage)
 	VALUES ("text", "Spanish, German, French, etc.", "Language Information", NULL, NULL, NULL);
 
-INSERT INTO Question (string, tag, required, questionAccessoriesId) 
+INSERT INTO Question (string, tag, required, questionInformationId) 
 	VALUES ("If no, what is your strongest language?", "strongest_language", FALSE,
-    (SELECT questionAccessoriesId FROM QuestionAccessories
+    (SELECT questionInformationId FROM QuestionInformation
 		WHERE inputType="text" AND placeholder="Spanish, German, French, etc." AND subheading="Language Information"));
     
 -- Sample Possible Answer data
@@ -510,7 +510,7 @@ INSERT INTO AppointmentQuestionAnswer (appointmentId, questionId, userAnswerId)
 
 -- -- test queries -- --
 SELECT * FROM Question;
-SELECT * FROM QuestionAccessories;
+SELECT * FROM QuestionInformation;
 SELECT * FROM UserAnswer;
 SELECT * FROM PossibleAnswer;
 SELECT * FROM Location;
