@@ -13,16 +13,14 @@
 	$results = $stmt->fetchAll();
 
 	$firstNameStmt = $conn->prepare('SELECT Answer.string AS firstName
-		FROM AppointmentQuestionAnswer AS AQA
-		JOIN Answer ON AQA.answerId = Answer.answerId
+		FROM Answer
 		JOIN Question ON Answer.questionId = Question.questionId
-		WHERE Question.tag = "first_name" AND AQA.appointmentId = ?');
+		WHERE Question.tag = "first_name" AND Answer.appointmentId = ?');
 
 	$lastNameStmt = $conn->prepare('SELECT Answer.string AS lastName
-		FROM AppointmentQuestionAnswer AS AQA
-		JOIN Answer on AQA.answerId = Answer.answerId
+		FROM Answer
 		JOIN Question ON Answer.questionId = Question.questionId
-		WHERE Question.tag = "last_name" AND AQA.appointmentId = ?');
+		WHERE Question.tag = "last_name" AND Answer.appointmentId = ?');
 
 	// We must only display the first letter of the last name
 	// We do this server-side since we can't disclose the data client-side
