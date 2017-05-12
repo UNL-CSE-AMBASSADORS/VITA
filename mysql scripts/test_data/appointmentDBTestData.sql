@@ -199,13 +199,13 @@ INSERT INTO Answer (string, appointmentId, questionId)
 SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 3 HOUR);
 
 INSERT INTO Appointment (scheduledTime, locationId)
-	VALUES ("2017-05-07 19:30:00", 1);
+	VALUES (@appointmentTime, 1);
         
 INSERT INTO Answer (string, appointmentId, questionId)
 	VALUES("Tony",
     (SELECT appointmentId
 		FROM Appointment
-        WHERE scheduledTime="2017-05-07 19:30:00" AND locationId=1),
+        WHERE scheduledTime=@appointmentTime AND locationId=1),
 	(SELECT questionId
 		FROM Question
         WHERE tag="first_name"));
@@ -214,7 +214,7 @@ INSERT INTO Answer (string, appointmentId, questionId)
 	VALUES("Constanza",
     (SELECT appointmentId
 		FROM Appointment
-        WHERE scheduledTime="2017-05-07 19:30:00" AND locationId=1),
+        WHERE scheduledTime=@appointmentTime AND locationId=1),
 	(SELECT questionId
 		FROM Question
         WHERE tag="last_name"));
