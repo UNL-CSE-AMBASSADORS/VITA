@@ -24,11 +24,7 @@
 		foreach ($subheadings as $subheading) {
 			$questionStatement->execute(array($subheading));
 
-			$results = $questionStatement->fetchAll();
-
-			foreach ($results as $result) {
-				$questions[] = $result;
-			}
+			$questions = array_merge($questions, $questionStatement->fetchAll());
 		}
 
 		echo json_encode($questions);
@@ -40,12 +36,7 @@
 		$optionsStatement = $conn->prepare('SELECT possibleAnswerId, string, archived FROM PossibleAnswer
 			WHERE questionId = ?');
 		$optionsStatement->execute(array($questionId));
-		$results = $optionsStatement->fetchAll();
-
-		$options = [];
-		foreach ($results as $result) {
-			$options[] = $result;
-		}
+		$options = $optionsStatement->fetchAll();
 
 		echo json_encode($options);
 
