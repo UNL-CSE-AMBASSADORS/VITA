@@ -1,5 +1,5 @@
-function startForm(containingClass, id) {
-  $('.' + containingClass).append("<form class='cmxform' id=" + id + " method='get' action='' autocomplete='off'>");
+function startForm(containingClass, id, url) {
+  $('.' + containingClass).append("<form class='cmxform' id=" + id + " method='post' action='" + url + "' autocomplete='off'>");
 }
 
 function endForm(containingClass, id) {
@@ -40,7 +40,7 @@ function newTextField(containingClass, id, label, inputType, hint, required) {
         "</div>");
 }
 
-function newSelect(containingClass, id, label, questionId, hint, required) {
+function newSelect(containingClass, formId, id, label, questionId, hint, required) {
   // Prepare optional components
   var hintMessage = "";
   if (hint != null && hint != "") {
@@ -57,7 +57,7 @@ function newSelect(containingClass, id, label, questionId, hint, required) {
   // Add the element
   $("." + containingClass + " form").append("<div class='vita-form-select' id='" + id + "-container'>" +
         "<label for='" + id + "' class='vita-form-label" + requiredVitaClass + "'>" + label + "</label>" +
-        "<select id='" + id + "'" + requiredClass + "'>");
+        "<select id='" + id + "'" + requiredClass + " name='" + id + "' form='" + formId + "'>");
 
   addOptions(containingClass, id, questionId);
 

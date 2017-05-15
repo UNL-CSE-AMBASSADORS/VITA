@@ -5,20 +5,26 @@
 	$retrieve = $_GET['retrieve'];
 
 	if ($retrieve == "questions") {
-		// TODO make this handle multiple locations, if necessary
-		$questionStatement = $conn->prepare('SELECT questionId, string, inputType, placeholder, tag, subheading, required, archived FROM Question
-			WHERE (archived != true)
+		$subheadings = [];
+		if (isset($_GET['subheadings'])) {
+			$getSubheadings = $_GET['subheadings'];
+			if (is_array($getSubheadings)) {
+				$subheadings = $getSubheadings;
+			} else {
+				$subheadings[] = $getSubheadings;
+			}
+		}
+
+		$questionStatement = $conn->prepare('SELECT questionId, string, tag, required, archived, inputType, placeholder, subheading, validationType, hint, errorMessage FROM Question q
+			JOIN QuestionInformation qi on qi.questionInformationId = q.questionInformationId
+      WHERE (archived != true) and (qi.subheading = ?)
 			ORDER BY subheading');
-		$questionStatement->execute();
-		$results = $questionStatement->fetchAll();
 
 		$questions = [];
-		foreach ($results as $result) {
-			$result["errorMessage"] = "Sample error message.";
-			$result["validationType"] = "email";
-			$result["hint"] = "(Sample Hint)";
+		foreach ($subheadings as $subheading) {
+			$questionStatement->execute(array($subheading));
 
-			$questions[] = $result;
+			$questions = array_merge($questions, $questionStatement->fetchAll());
 		}
 
 		echo json_encode($questions);
@@ -27,15 +33,10 @@
 	} else if ($retrieve == "options") {
 		$questionId = $_REQUEST['questionId'];
 
-		$optionsStatement = $conn->prepare('SELECT answerId, string, archived FROM Answer
-			WHERE questionId = ' . $questionId);
-		$optionsStatement->execute();
-		$results = $optionsStatement->fetchAll();
-
-		$options = [];
-		foreach ($results as $result) {
-			$options[] = $result;
-		}
+		$optionsStatement = $conn->prepare('SELECT possibleAnswerId, string, archived FROM PossibleAnswer
+			WHERE questionId = ?');
+		$optionsStatement->execute(array($questionId));
+		$options = $optionsStatement->fetchAll();
 
 		echo json_encode($options);
 
