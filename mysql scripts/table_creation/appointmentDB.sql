@@ -39,7 +39,8 @@ CREATE TABLE Client (
 	clientId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
     firstName VARCHAR(255) NOT NULL,
     lastName VARCHAR(255) NOT NULL,
-    emailAddress VARCHAR(255) NOT NULL
+    emailAddress VARCHAR(255) NOT NULL,
+    languages VARCHAR(255)
 );
 
 CREATE TABLE Appointment (
