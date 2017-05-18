@@ -8,10 +8,10 @@ DROP TABLE IF EXISTS Appointment;
 DROP TABLE IF EXISTS Client;
 DROP TABLE IF EXISTS Location;
 DROP TABLE IF EXISTS PossibleAnswer;
-DROP TABLE IF EXISTS Question;
+DROP TABLE IF EXISTS LitmusQuestion;
 
-CREATE TABLE Question (
-	questionId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+CREATE TABLE LitmusQuestion (
+	litmusQuestionId INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
     string VARCHAR(255) NOT NULL,
 	orderIndex INTEGER NOT NULL,
     tag VARCHAR(255) NOT NULL,
@@ -25,8 +25,8 @@ CREATE TABLE PossibleAnswer (
     string VARCHAR(255) NOT NULL,
     orderIndex INTEGER NOT NULL,
     archived BOOLEAN DEFAULT FALSE,
-    questionId INTEGER NOT NULL,
-    FOREIGN KEY (questionId) REFERENCES Question(questionId)
+    litmusQuestionId INTEGER NOT NULL,
+    FOREIGN KEY (litmusQuestionId) REFERENCES LitmusQuestion(litmusQuestionId)
 );
 
 CREATE TABLE Location (
@@ -60,7 +60,7 @@ CREATE TABLE Answer (
     FOREIGN KEY (possibleAnswerId) REFERENCES PossibleAnswer(possibleAnswerId),
     appointmentId INTEGER NOT NULL,
     FOREIGN KEY (appointmentId) REFERENCES Appointment(appointmentId),
-    questionId INTEGER NOT NULL,
-    FOREIGN KEY (questionId) REFERENCES Question(questionId),
+    litmusQuestionId INTEGER NOT NULL,
+    FOREIGN KEY (litmusQuestionId) REFERENCES LitmusQuestion(litmusQuestionId),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
