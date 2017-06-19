@@ -297,9 +297,9 @@ label.error {
 }
 
 .vita-form-select__arrow {
-	position: absolute;
-  top: 33px;
-	right: 15px;
+	position: relative;
+  bottom: 21px;
+	left: calc(100% - 21px);
 	width: 0;
 	height: 0;
 	pointer-events: none;

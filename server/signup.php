@@ -26,14 +26,16 @@ function requiredSelection($question, $options) {
 	$selectInput = '
       <div class="vita-form-select">
         <label for="'.$question['tag'].'" class="vita-form-label vita-form-required">'.$question['string'].'</label>
-        <select id="'.$question['tag'].'" class="required" name="'.$question['litmusQuestionId'].'">';
+        <div>
+          <select id="'.$question['tag'].'" class="required" name="'.$question['litmusQuestionId'].'">';
 	foreach	($options as $option)	{
 		$selectInput .= '
-          <option value="'.$option['orderIndex'].'">'.$option['string'].'</option>';
+            <option value="'.$option['orderIndex'].'">'.$option['string'].'</option>';
 	}
 	$selectInput .= '
-        </select>
-        <div class="vita-form-select__arrow"></div>
+          </select>
+          <div class="vita-form-select__arrow"></div>
+        </div>
       </div>';
 	echo $selectInput;
 }
