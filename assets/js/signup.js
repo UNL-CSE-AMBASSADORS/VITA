@@ -1,8 +1,16 @@
 $(document).ready(function() {
-  loadQuestions();
+  // loadQuestions();
 
   // to be deleted at a later point
-  validateSampleForm();
+  validateSignupForm();
+
+  // Since non-required fields are "valid" when they are empty, we need an
+  // alternate way to keep labels raised when there is content in their
+  // associated input field
+  $(".vita-form-textfield input").blur(function() {
+    var isBlank = $.trim($(this).val()).length > 0;
+    $label = $(this).siblings(".vita-form-label").toggleClass( "vita-form-label__floating", isBlank );
+  });
 
 });
 
@@ -102,7 +110,7 @@ var loadQuestions = function() {
 
 };
 
-var questionRules = function(question) {
+function questionRules(question) {
   var rule = [];
   if (question.required == true) {
     rule["required"] = true;
@@ -131,8 +139,53 @@ var validateForm = function(validationObject) {
   $("#vitaSignupForm").validate(validationObject);
 };
 
+function validateSignupForm() {
+  $("#vitaSignupForm").validate({
+    rules: {
+      "firstName": "required",
+      "lastName": "required",
+      email: {
+        required: true,
+        email: true
+      },
+      phone: {
+        required: true,
+        phoneUS: true
+      }
+    },
+    messages: {
+      email: {
+        required: "We need your email address to confirm your appointment",
+        email: "Your email address must be in the format of name@domain.com"
+      }
+    }
+  });
+}
+
+// Form submission
+$('#vitaSignupForm').submit(function(e) {
+  if (!$(this).valid()) {
+    return false;
+  }
+
+  // AJAX Code To Submit Form.
+  $.ajax({
+    url: "/server/signup.php",
+    type: "post",
+    dataType: 'json',
+    data: $(this).serialize(),
+    cache: false,
+    success: function(submitResponse){
+      console.log(submitResponse);
+      window.location = "/";
+    }
+  });
+
+  return true;
+});
+
 // To be deleted at a later point
-var validateSampleForm = function() {
+function validateSampleForm() {
   var validationString = '{ "rules": {' +
   '    "firstName": "required",' +
   '    "lastName": "required",' +
