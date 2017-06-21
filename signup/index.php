@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="no-js" lang="">
 <head>
-  <title>Signup Test</title>
+  <title>VITA Appointment Signup</title>
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/form.css">
@@ -39,14 +39,14 @@
         <label class="vita-form-label vita-form-required" for="phone">Phone Number</label>
       </div>
 
-      <h2 class="vita-form-subheading">Background Information</h2>
+      <h2 class="vita-form-subheading">Appointment Information</h2>
 
       <?php
         require_once "../server/signup.php";
         getLitmusQuestions();
       ?>
 
-      <input type="submit" value="Submit" class="submit vita-form-button background-primary">
+      <input type="submit" value="Submit" class="submit vita-form-button vita-background-primary">
     </form>
   </div>
   <?php
