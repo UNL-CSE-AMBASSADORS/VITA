@@ -30,7 +30,7 @@ function requiredSelection($question, $options) {
           <select id="'.$question['tag'].'" class="required" name="'.$question['litmusQuestionId'].'">';
 	foreach	($options as $option)	{
 		$selectInput .= '
-            <option value="'.$option['orderIndex'].'">'.$option['string'].'</option>';
+            <option value="'.$option['possibleAnswerId'].'">'.$option['string'].'</option>';
 	}
 	$selectInput .= '
           </select>
