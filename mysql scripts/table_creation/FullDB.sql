@@ -26,7 +26,7 @@ CREATE TABLE LitmusQuestion (
     tag VARCHAR(255) NOT NULL,
     required BOOLEAN NOT NULL DEFAULT TRUE,
     archived BOOLEAN NOT NULL DEFAULT FALSE,
-    followUpTo INTEGER UNSIGNED NOT NULL,
+    followUpTo INTEGER UNSIGNED NULL,
     FOREIGN KEY(followUpTo) REFERENCES Litmusquestion(litmusQuestionId),
 	CONSTRAINT uniqueTag UNIQUE INDEX(tag)
 );
