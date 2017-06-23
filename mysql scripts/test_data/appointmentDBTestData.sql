@@ -61,8 +61,48 @@ INSERT INTO UserAbility (userId, abilityId)
 
 
 -- privileges
-INSERT INTO Privilege (tag, 
+INSERT INTO Privilege (name, description, tag)
+	VALUES ("Add Site", "Has the privilege to create a new VITA site on the add site page", "add_site");
+SET @privilege_addSiteId = LAST_INSERT_ID();
+    
+INSERT INTO Privilege (name, description, tag)
+	VALUES ("Edit Site Information", "Has the privilege to edit the information associated with sites", "edit_site_information");
+SET @privilege_editSiteInformationId = LAST_INSERT_ID();
+
+INSERT INTO Privilege (name, description, tag)
+	VALUES ("Can Take Client off of Queue", "Has the privilege to take clients off of the queue", "pop_client_off_queue");
+SET @privilege_popClientOffQueueId = LAST_INSERT_ID();
 -- end privileges
+
+
+-- user privileges
+INSERT INTO UserPrivilege (userId, privilegeId)
+	VALUES (@user_volunteer1Id, @privilege_popClientOffQueueId);
+    
+INSERT INTO UserPrivilege (userId, privilegeId)
+	VALUES (@user_volunteer2Id, @privilege_popClientOffQueueId);
+    
+INSERT INTO UserPrivilege (userId, privilegeId)
+	VALUES (@user_siteAdmin1Id, @privilege_addSiteId);
+    
+INSERT INTO UserPrivilege (userId, privilegeId)
+	VALUES (@user_siteAdmin1Id, @privilege_editSiteInformationId);
+    
+INSERT INTO UserPrivilege (userId, privilegeId)
+	VALUES (@user_receptionist1Id, @privilege_popClientOffQueueId);
+    
+INSERT INTO UserPrivilege (userId, privilegeId)
+	VALUES (@user_reviewer1Id, @privilege_popClientOffQueueId);
+-- end user privileges
+
+
+
+-- site
+
+-- end site
+
+
+
 
 -- sample questions with choices, if applicable
 INSERT INTO LitmusQuestion (string, orderIndex, tag)
