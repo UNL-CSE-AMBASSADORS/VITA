@@ -1,5 +1,69 @@
 USE vita;
 
+-- users
+INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes, archived)
+	VALUES ("Preparer", "McPreparer", "preparer@test.test", "555-123-4567", true, false);
+SET @user_preparer1Id = LAST_INSERT_ID();
+
+INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes, arhcived)
+	VALUES ("Preparer2", "MacPreparer2", "preparer2@test.test", "555-902-7563", true, false);
+SET @user_preparer2Id = LAST_INSERT_ID();
+
+INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes, archived)
+	VALUES ("Reviewer", "McReviewer", "reviewer@test.test", "555-952-7319", false, false);
+SET @user_reviewer1Id = LAST_INSERT_ID();
+
+INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes, archived)
+	VALUES ("Receptionist", "McReceptionist", "receptionist@test.test", "555-987-6543", false, false);
+SET @user_receptionist1Id = LAST_INSERT_ID();
+
+INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes, archived)
+	VALUES ("SiteAdmin", "McSiteAdmin", "siteadmin@test.test", "555-019-2837", false, false);
+SET @user_siteAdmin1Id = LAST_INSERT_ID();
+-- end users
+
+
+
+-- abilities
+INSERT INTO Ability (abilityName, tag)
+	VALUES ("Basic Certification", "basic_certification");
+SET @ability_basicCertificationId = LAST_INSERT_ID();
+
+INSERT INTO Ability (abilityName, tag)
+	VALUES ("International Certification", "international_certification");
+SET @ability_internationalCertificationId = LAST_INSERT_ID();
+
+INSERT INTO Ability (abilityName, tag)
+	VALUES ("Military Certification", "military_certification");
+SET @ability_militaryCertificationId = LAST_INSERT_ID();
+
+INSERT INTO Ability (abilityName, tag)
+	VALUES ("Spanish-Speaking", "spanish_speaking");
+SET @ability_spanishSpeakingId = LAST_INSERT_ID();
+-- end abilities
+
+
+
+-- user abilities
+INSERT INTO UserAbility (userId, abilityId)
+	VALUES (@user_volunteer1Id, @ability_basicCertificationId);
+
+INSERT INTO UserAbility (userId, abilityId)
+	VALUES (@user_volunteer1Id, @ability_internationalCertificationId);
+    
+INSERT INTO UserAbility (userId, abilityId)
+	VALUES (@user_volunteer2Id, @ability_basicCertificationId);
+    
+INSERT INTO UserAbility (userId, abilityId)
+	VALUES (@user_volunteer2Id, @ability_spanishSpeakingId);
+-- end user abilities
+
+
+
+-- privileges
+INSERT INTO Privilege (tag, 
+-- end privileges
+
 -- sample questions with choices, if applicable
 INSERT INTO LitmusQuestion (string, orderIndex, tag)
 	VALUES ("Are you a phamacist?", 1, "pharmacist");
@@ -220,30 +284,3 @@ INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 		FROM Appointment 
 		WHERE scheduledTime="2017-06-01 12:45" AND locationId=5),
     @fluentEnglishLitmusQuestionId);
-
--- -- test queries -- --
-SELECT * FROM LitmusQuestion;
-SELECT * FROM PossibleAnswer;
-SELECT * FROM Location;
-SELECT * FROM Client;
-SELECT * FROM Appointment;
-SELECT * FROM Answer;
-
--- all answers for an appointment
-SELECT LitmusQuestion.string AS question, PossibleAnswer.string as answer 
-	FROM Answer
-	JOIN LitmusQuestion ON Answer.litmusQuestionId = LitmusQuestion.litmusQuestionId
-    JOIN PossibleAnswer ON Answer.possibleAnswerId = PossibleAnswer.possibleAnswerId
-	WHERE appointmentId = 1;
-    
-SELECT LitmusQuestion.string AS question, PossibleAnswer.string as answer 
-	FROM Answer 
-	JOIN LitmusQuestion ON Answer.litmusQuestionId = LitmusQuestion.litmusQuestionId
-    JOIN PossibleAnswer ON Answer.possibleAnswerId = PossibleAnswer.possibleAnswerId
-	WHERE appointmentId = 3;
-
--- active questions
-SELECT litmusQuestionId, string FROM LitmusQuestion WHERE archived=FALSE;
-
--- required questions
-SELECT litmusQuestionId, string FROM LitmusQuestion WHERE required=TRUE;
