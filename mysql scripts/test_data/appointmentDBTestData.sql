@@ -1,43 +1,64 @@
 USE vita;
 
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE Answer;
+TRUNCATE ServicedAppointment;
+TRUNCATE Appointment;
+TRUNCATE Client;
+TRUNCATE UserShift;
+TRUNCATE Shift;
+TRUNCATE Site;
+TRUNCATE PossibleAnswer;
+TRUNCATE LitmusQuestion;
+
+TRUNCATE UserPrivilege;
+TRUNCATE Privilege;
+TRUNCATE UserAbility;
+TRUNCATE Ability;
+TRUNCATE Login;
+TRUNCATE PasswordReset;
+TRUNCATE LoginHistory;
+TRUNCATE User;
+SET FOREIGN_KEY_CHECKS = 1;
+
 -- users
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes, archived)
-	VALUES ("Preparer", "McPreparer", "preparer@test.test", "555-123-4567", true, false);
+INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
+	VALUES ("Preparer", "McPreparer", "preparer@test.test", "555-123-4567", true);
 SET @user_preparer1Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes, arhcived)
-	VALUES ("Preparer2", "MacPreparer2", "preparer2@test.test", "555-902-7563", true, false);
+INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
+	VALUES ("Preparer2", "MacPreparer2", "preparer2@test.test", "555-902-7563", true);
 SET @user_preparer2Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes, archived)
-	VALUES ("Reviewer", "McReviewer", "reviewer@test.test", "555-952-7319", false, false);
+INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
+	VALUES ("Reviewer", "McReviewer", "reviewer@test.test", "555-952-7319", false);
 SET @user_reviewer1Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes, archived)
-	VALUES ("Receptionist", "McReceptionist", "receptionist@test.test", "555-987-6543", false, false);
+INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
+	VALUES ("Receptionist", "McReceptionist", "receptionist@test.test", "555-987-6543", false);
 SET @user_receptionist1Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes, archived)
-	VALUES ("SiteAdmin", "McSiteAdmin", "siteadmin@test.test", "555-019-2837", false, false);
+INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
+	VALUES ("SiteAdmin", "McSiteAdmin", "siteadmin@test.test", "555-019-2837", false);
 SET @user_siteAdmin1Id = LAST_INSERT_ID();
 -- end users
 
 
 
 -- abilities
-INSERT INTO Ability (abilityName, tag)
+INSERT INTO Ability (name, tag)
 	VALUES ("Basic Certification", "basic_certification");
 SET @ability_basicCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (abilityName, tag)
+INSERT INTO Ability (name, tag)
 	VALUES ("International Certification", "international_certification");
 SET @ability_internationalCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (abilityName, tag)
+INSERT INTO Ability (name, tag)
 	VALUES ("Military Certification", "military_certification");
 SET @ability_militaryCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (abilityName, tag)
+INSERT INTO Ability (name, tag)
 	VALUES ("Spanish-Speaking", "spanish_speaking");
 SET @ability_spanishSpeakingId = LAST_INSERT_ID();
 -- end abilities
@@ -46,16 +67,16 @@ SET @ability_spanishSpeakingId = LAST_INSERT_ID();
 
 -- user abilities
 INSERT INTO UserAbility (userId, abilityId)
-	VALUES (@user_volunteer1Id, @ability_basicCertificationId);
+	VALUES (@user_preparer1Id, @ability_basicCertificationId);
 
 INSERT INTO UserAbility (userId, abilityId)
-	VALUES (@user_volunteer1Id, @ability_internationalCertificationId);
+	VALUES (@user_preparer1Id, @ability_internationalCertificationId);
     
 INSERT INTO UserAbility (userId, abilityId)
-	VALUES (@user_volunteer2Id, @ability_basicCertificationId);
+	VALUES (@user_preparer2Id, @ability_basicCertificationId);
     
 INSERT INTO UserAbility (userId, abilityId)
-	VALUES (@user_volunteer2Id, @ability_spanishSpeakingId);
+	VALUES (@user_preparer2Id, @ability_spanishSpeakingId);
 -- end user abilities
 
 
@@ -75,12 +96,13 @@ SET @privilege_popClientOffQueueId = LAST_INSERT_ID();
 -- end privileges
 
 
+
 -- user privileges
 INSERT INTO UserPrivilege (userId, privilegeId)
-	VALUES (@user_volunteer1Id, @privilege_popClientOffQueueId);
+	VALUES (@user_preparer1Id, @privilege_popClientOffQueueId);
     
 INSERT INTO UserPrivilege (userId, privilegeId)
-	VALUES (@user_volunteer2Id, @privilege_popClientOffQueueId);
+	VALUES (@user_preparer2Id, @privilege_popClientOffQueueId);
     
 INSERT INTO UserPrivilege (userId, privilegeId)
 	VALUES (@user_siteAdmin1Id, @privilege_addSiteId);
@@ -98,229 +120,289 @@ INSERT INTO UserPrivilege (userId, privilegeId)
 
 
 -- site
+INSERT INTO Site (title, address, phoneNumber, appointmentOnly)
+	VALUES ("Test Site", "1234 Test Ave. Lincoln, NE 86722", "555-203-2032", false);
+SET @site_site1Id = LAST_INSERT_ID();
 
+INSERT INTO Site (title, address, phoneNumber, appointmentOnly)
+	VALUES ("My new new site", "5656 Test test. Lincoln, NE 83747", "555-111-2345", false);
+SET @site_site2Id = LAST_INSERT_ID();
+
+INSERT INTO Site (title, address, phoneNumber, appointmentOnly)
+	VALUES ("No walkins site", "9876 Test St. Lincoln, NE 29384", "555-999-8888", true);
+SET @site_site3Id = LAST_INSERT_ID();
 -- end site
 
 
 
+-- shift
+SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
+SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 1 HOUR);
+INSERT INTO Shift (startTime, endTime, siteId)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id);
+SET @shift_site1Shift1Id = LAST_INSERT_ID();
 
--- sample questions with choices, if applicable
-INSERT INTO LitmusQuestion (string, orderIndex, tag)
-	VALUES ("Are you a phamacist?", 1, "pharmacist");
-    
-INSERT INTO LitmusQuestion (string, orderIndex, tag)
-	VALUES ("How often do you gamble?", 2, "gamble");
-    
-INSERT INTO LitmusQuestion (string, orderIndex, tag)
-	VALUES ("Indicate your military status", 3, "military_status");
-    
-INSERT INTO LitmusQuestion (string, orderIndex, tag)
-	VALUES ("Can you speak fluent English?", 4, "fluent_english");
-    
--- Sample Possible Answer data
-INSERT INTO PossibleAnswer (string, orderIndex, litmusQuestionId) 
-	VALUES ("Yes", 1,
-	(SELECT litmusQuestionId 
-		FROM LitmusQuestion 
-		WHERE tag="pharmacist"));
-		
-INSERT INTO PossibleAnswer (string, orderIndex, litmusQuestionId) 
-	VALUES ("No", 2,
-	(SELECT litmusQuestionId 
-		FROM LitmusQuestion 
-		WHERE tag="pharmacist"));
-	
-INSERT INTO PossibleAnswer (string, orderIndex, litmusQuestionId) 
-	VALUES ("Frequently", 1,
-	(SELECT litmusQuestionId 
-		FROM LitmusQuestion 
-		WHERE tag="gamble"));
-		
-INSERT INTO PossibleAnswer (string, orderIndex, litmusQuestionId) 
-	VALUES ("Occasionally", 2,
-	(SELECT litmusQuestionId 
-		FROM LitmusQuestion 
-		WHERE tag="gamble"));
-		
-INSERT INTO PossibleAnswer (string, orderIndex, litmusQuestionId) 
-	VALUES ("Rarely", 3,
-	(SELECT litmusQuestionId 
-		FROM LitmusQuestion 
-		WHERE tag="gamble"));
-		
-INSERT INTO PossibleAnswer (string, orderIndex, litmusQuestionId) 
-	VALUES ("Never", 4,
-	(SELECT litmusQuestionId 
-		FROM LitmusQuestion 
-		WHERE tag="gamble"));
-	
-INSERT INTO PossibleAnswer (string, orderIndex, litmusQuestionId) 
-	VALUES ("Active Duty", 1,
-	(SELECT litmusQuestionId 
-		FROM LitmusQuestion 
-		WHERE tag="military_status"));
-		
-INSERT INTO PossibleAnswer (string, orderIndex, litmusQuestionId) 
-	VALUES ("Active Reserve", 2,
-	(SELECT litmusQuestionId 
-		FROM LitmusQuestion 
-		WHERE tag="military_status"));
-		
-INSERT INTO PossibleAnswer (string, orderIndex, litmusQuestionId) 
-	VALUES ("Disabled Veterans", 3,
-	(SELECT litmusQuestionId 
-		FROM LitmusQuestion 
-		WHERE tag="military_status"));
-		
-INSERT INTO PossibleAnswer (string, orderIndex, litmusQuestionId) 
-	VALUES ("Inactive Reserve", 4,
-	(SELECT litmusQuestionId 
-		FROM LitmusQuestion 
-		WHERE tag="military_status"));
-		
-INSERT INTO PossibleAnswer (string, orderIndex, litmusQuestionId) 
-	VALUES ("None", 5,
-	(SELECT litmusQuestionId 
-		FROM LitmusQuestion 
-		WHERE tag="military_status"));
-	
-INSERT INTO PossibleAnswer (string, orderIndex, litmusQuestionId) 
-	VALUES ("Yes", 1,
-	(SELECT litmusQuestionId 
-		FROM LitmusQuestion 
-		WHERE tag="fluent_english"));
-		
-INSERT INTO PossibleAnswer (string, orderIndex, litmusQuestionId) 
-	VALUES ("No", 2,
-	(SELECT litmusQuestionId 
-		FROM LitmusQuestion 
-		WHERE tag="fluent_english"));
+SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
+SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
+INSERT INTO Shift (startTime, endTime, siteId)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id);
+SET @shift_site1Shift2Id = LAST_INSERT_ID();
 
--- sample locations
-INSERT INTO Location (title, address) 
-	VALUES ("Teal", "5696 Lotheville Court");
-	
-INSERT INTO Location (title, address) 
-	VALUES ("Red", "9 Utah Court");
-	
-INSERT INTO Location (title, address) 
-	VALUES ("Turquoise", "71499 Buhler Trail");
-	
-INSERT INTO Location (title, address) 
-	VALUES ("Green", "02122 Prairieview Place");
-	
-INSERT INTO Location (title, address) 
-	VALUES ("Orange", "8 Scofield Road");
-	
-INSERT INTO Location (title, address) 
-	VALUES ("Yellow", "591 Oak Avenue");
+SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
+SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 4 HOUR);
+INSERT INTO Shift (startTime, endTime, siteId)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id);
+SET @shift_site2Shift1Id = LAST_INSERT_ID();
 
--- sample appointment with answers
+SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 3 DAY);
+SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 2 HOUR);
+INSERT INTO Shift (startTime, endTime, siteId)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id);
+SET @shift_site2Shift2Id = LAST_INSERT_ID();
+
+SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
+SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
+INSERT INTO Shift (startTime, endTime, siteId)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id);
+SET @shift_site2Shift3Id = LAST_INSERT_ID();
+-- end shift
+
+
+
+-- user shift
+INSERT INTO UserShift (userId, shiftId)
+	VALUES (@user_preparer1Id, @shift_site1Shift1Id);
+
+INSERT INTO UserShift (userId, shiftId)
+	VALUES (@user_preparer1Id, @shift_site1Shift2Id);
+
+INSERT INTO UserShift (userId, shiftId)
+	VALUES (@user_preparer2Id, @shift_site1Shift2Id);
+
+INSERT INTO UserShift (userId, shiftId)
+	VALUES (@user_preparer2Id, @shift_site2Shift3Id);
+    
+INSERT INTO UserShift (userId, shiftId)
+	VALUES (@user_receptionist1Id, @shift_site1Shift1Id);
+
+INSERT INTO UserShift (userId, shiftId)
+	VALUES (@user_receptionist1Id, @shift_site1Shift2Id);
+
+INSERT INTO UserShift (userId, shiftId)
+	VALUES (@user_reviewer1Id, @shift_site2Shift1Id);
+
+INSERT INTO UserShift (userId, shiftId)
+	VALUES (@user_reviewer1Id, @shift_site2Shift2Id);
+    
+INSERT INTO UserShift (userId, shiftId)
+	VALUES (@user_reviewer1Id, @shift_site2Shift3Id);
+-- end user shift
+
+
+
+-- client
+INSERT INTO Client (firstName, lastName, emailAddress)
+	VALUES ("Clienty", "McClientFace", "clientmcclientface@test.test");
+SET @client_client1Id = LAST_INSERT_ID();
 
 INSERT INTO Client (firstName, lastName, emailAddress)
-	VALUES ("Test", "McTesterson", "test_mctesterson@test.test");
-SET @clientId = LAST_INSERT_ID();
+	VALUES ("Barry", "Tester", "barrytester@test.test");
+SET @client_client2Id = LAST_INSERT_ID();
 
-SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 2 HOUR);
-
-INSERT INTO Appointment (scheduledTime, clientId, locationId)
-	VALUES (@appointmentTime, @clientId, 1);
-
-
-INSERT INTO Client (firstName, lastName, emailAddress) 
-	VALUES ("Big Tony", "Constanza", "big.tony.constanza@test.test");
-SET @clientId = LAST_INSERT_ID();
-
-SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 3 HOUR);
-
-INSERT INTO Appointment (scheduledTime, clientId, locationId)
-	VALUES (@appointmentTime, @clientId, 1);
-        
 INSERT INTO Client (firstName, lastName, emailAddress)
-	VALUES ("Ralph", "Schmidt", "ralphman@test.test");
-SET @clientId = LAST_INSERT_ID();
+	VALUES ("Frank", "UnderTest", "frankundertest@test.test");
+SET @client_client3Id = LAST_INSERT_ID();
+
+INSERT INTO Client (firstName, lastName, emailAddress)
+	VALUES ("Laura", "McTest", "lauramctest@test.test");
+SET @client_client4Id = LAST_INSERT_ID();
+
+INSERT INTO Client (firstName, lastName, emailAddress)
+	VALUES ("DoneBoy", "DoneTest", "doneboydonetest@test.test");
+SET @client_client5Id = LAST_INSERT_ID();
+-- end client
+
+
+
+-- appointment
+SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site1Shift1Id), INTERVAL 0 MINUTE);
+INSERT INTO Appointment (scheduledTime, clientId, siteId)
+	VALUES (@appointmentTime, @client_client1Id, @site_site1Id);
+SET @appointment_appointment1Id = LAST_INSERT_ID();
+
+SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site1Shift2Id), INTERVAL 30 MINUTE);
+INSERT INTO Appointment (scheduledTime, clientId, siteId)
+	VALUES (@appointmentTime, @client_client2Id, @site_site1Id);
+SET @appointment_appointment2Id = LAST_INSERT_ID();
+
+SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site2Shift1Id), INTERVAL 0 MINUTE);
+INSERT INTO Appointment (scheduledTime, clientId, siteId)
+	VALUES (@appointmentTime, @client_client3Id, @site_site2Id);
+SET @appointment_appointment3Id = LAST_INSERT_ID();
+
+SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site2Shift2Id), INTERVAL 30 MINUTE);
+INSERT INTO Appointment (scheduledTime, clientId, siteId)
+	VALUES (@appointmentTime, @client_client4Id, @site_site2Id);
+SET @appointment_appointment4Id = LAST_INSERT_ID();
+
+-- Already serviced appointment
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL -1 DAY);
+INSERT INTO Appointment (scheduledTime, clientId, siteId)
+	VALUES (@appointmentTime, @client_client5Id, @site_site1Id);
+SET @appointment_appointment5Id = LAST_INSERT_ID();
+-- end appointment
+
+
+
+-- serviced appointment
+SET @startTime = DATE_ADD((SELECT scheduledTime FROM Appointment WHERE appointmentId = @appointment_appointment5Id), INTERVAL 5 MINUTE);
+SET @endTime = DATE_ADD(@startTime, INTERVAL 37 MINUTE);
+INSERT INTO ServicedAppointment (startTime, endTime, userId, appointmentId)
+	VALUES (@startTime, @endTime, @user_preparer1Id, @appointment_appointment5Id);
+-- end serviced appointment
+
+
+
+-- litmus question
+INSERT INTO LitmusQuestion (text, orderIndex, tag, required, followUpTo)
+	VALUES ("Will you require a Depreciation Schedule?", 1, "depreciation_schedule", true, NULL);
+SET @litmusQuestion_litmusQuestion1Id = LAST_INSERT_ID();
+
+INSERT INTO LitmusQuestion (text, orderIndex, tag, required, followUpTo)
+	VALUES ("Will you require a Schedule F (Farm)?", 2, "schedule_f", true, NULL);
+SET @litmusQuestion_litmusQuestion2Id = LAST_INSERT_ID();
+
+INSERT INTO LitmusQuestion (text, orderIndex, tag, required, followUpTo)
+	VALUES ("Are you self-employed or own a home-based business?", 3, "self_employed", true, NULL);
+SET @litmusQuestion_litmusQuestion3Id = LAST_INSERT_ID();
+
+INSERT INTO LitmusQuestion (text, orderIndex, tag, required, followUpTo)
+	VALUES ("Does your home-based business or self-employment have a net loss?", 4, "net_loss", false, @litmusQuestion_litmusQuestion3Id);
+SET @litmusQuestion_litmusQuestion4Id = LAST_INSERT_ID();
+
+INSERT INTO LitmusQuestion (text, orderIndex, tag, required, followUpTo)
+	VALUES ("Does your home-based business or self-employment have more than $10,000 in expenses?", 5, "more_than_10000_expenses", false, @litmusQuestion_litmusQuestion3Id);
+SET @litmusQuestion_litmusQuestion5Id = LAST_INSERT_ID();
+
+INSERT INTO LitmusQuestion (text, orderIndex, tag, required, followUpTo)
+	VALUES ("Will your return have casualty losses?",  6, "casualty_losses", true, NULL);
+SET @litmusQuestion_litmusQuestion6Id = LAST_INSERT_ID();
+-- end litmus question
+
+
+
+-- possible answer
+INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
+	VALUES ("Yes", 1, @litmusQuestion_litmusQuestion1Id);
+SET @possibleAnswer_question1YesId = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
+	VALUES ("No", 2, @litmusQuestion_litmusQuestion1Id);
+SET @possibleAnswer_question1NoId = LAST_INSERT_ID();
+
+
+INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
+	VALUES ("Yes", 1, @litmusQuestion_litmusQuestion2Id);
+SET @possibleAnswer_question2YesId = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
+	VALUES ("No", 2, @litmusQuestion_litmusQuestion2Id);
+SET @possibleAnswer_question2NoId = LAST_INSERT_ID();
+
+
+INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
+	VALUES ("Yes", 1, @litmusQuestion_litmusQuestion3Id);
+SET @possibleAnswer_question3YesId = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
+	VALUES ("No", 2, @litmusQuestion_litmusQuestion3Id);
+SET @possibleAnswer_question3NoId = LAST_INSERT_ID();
+
+
+INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
+	VALUES ("Yes", 1, @litmusQuestion_litmusQuestion4Id);
+SET @possibleAnswer_question4YesId = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
+	VALUES ("No", 2, @litmusQuestion_litmusQuestion4Id);
+SET @possibleAnswer_question4NoId = LAST_INSERT_ID();
+
+
+INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
+	VALUES ("Yes", 1, @litmusQuestion_litmusQuestion5Id);
+SET @possibleAnswer_question5YesId = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
+	VALUES ("No", 2, @litmusQuestion_litmusQuestion5Id);
+SET @possibleAnswer_question5NoId = LAST_INSERT_ID();
+
+
+INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
+	VALUES ("Yes", 1, @litmusQuestion_litmusQuestion6Id);
+SET @possibleAnswer_question6YesId = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
+	VALUES ("No", 2, @litmusQuestion_litmusQuestion6Id);
+SET @possibleAnswer_question6NoId = LAST_INSERT_ID();
+-- end possible answer
+
+
+
+-- answer
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question1YesId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion1Id);
+
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question2NoId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion2Id);
     
-INSERT INTO Appointment (scheduledTime, clientId, locationId) 
-	VALUES ("2017-05-28 16:30:00", @clientId, 1);
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question3NoId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion3Id);
+    
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question6NoId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion6Id);
+    
 
-SET @pharmacistLitmusQuestionId = (SELECT litmusQuestionId FROM LitmusQuestion WHERE tag="pharmacist");
-SET @gambleLitmusQuestionId = (SELECT litmusQuestionId FROM LitmusQuestion WHERE tag="gamble");
-SET @militaryStatusLitmusQuestionId = (SELECT litmusQuestionId FROM LitmusQuestion WHERE tag="military_status");
-SET @fluentEnglishLitmusQuestionId = (SELECT litmusQuestionId FROM LitmusQuestion WHERE tag="fluent_english");
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question1NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion1Id);
 
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId) 
-	VALUES (
-    (SELECT possibleAnswerId
-		FROM PossibleAnswer
-        WHERE litmusQuestionId=@pharmacistLitmusQuestionId AND string="Yes"),
-	(SELECT appointmentId 
-		FROM Appointment 
-		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
-    @pharmacistLitmusQuestionId);
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question2YesId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion2Id);
+    
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question3YesId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion3Id);
+    
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question4NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion4Id);
 
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId) 
-	VALUES(
-    (SELECT possibleAnswerId
-		FROM PossibleAnswer
-		WHERE litmusQuestionId=@gambleLitmusQuestionId AND string="Never"),
-	(SELECT appointmentId 
-		FROM Appointment 
-		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
-    @gambleLitmusQuestionId);
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question5NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion5Id);
+    
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question6NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion6Id);
+    
 
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId) 
-	VALUES(
-    (SELECT possibleAnswerId
-		FROM PossibleAnswer
-        WHERE litmusQuestionId=@militaryStatusLitmusQuestionId AND string="None"),
-	(SELECT appointmentId 
-		FROM Appointment 
-		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
-    @militaryStatusLitmusQuestionId);
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question1NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion1Id);
+    
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question2NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion2Id);
+    
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question3NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion3Id);
+    
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question6NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion6Id);
+    
 
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId) 
-	VALUES(
-    (SELECT possibleAnswerId
-		FROM PossibleAnswer
-        WHERE litmusQuestionId=@fluentEnglishLitmusQuestionId AND string="Yes"),
-	(SELECT appointmentId 
-		FROM Appointment 
-		WHERE scheduledTime="2017-05-28 16:30:00" AND locationId=1),
-    @fluentEnglishLitmusQuestionId);
-
-INSERT INTO Client (firstName, lastName, emailAddress)
-	VALUES ("Kathy", "Stevens", "kstev89@test.test");
-SET @clientId = LAST_INSERT_ID();
-
-INSERT INTO Appointment (scheduledTime, clientId, locationId) 
-	VALUES ("2017-06-01 12:45", @clientId, 5);
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId) 
-	VALUES(
-    (SELECT possibleAnswerId
-		FROM PossibleAnswer
-        WHERE litmusQuestionId=@pharmacistLitmusQuestionId AND string="Yes"),
-	(SELECT appointmentId 
-		FROM Appointment 
-		WHERE scheduledTime="2017-06-01 12:45" AND locationId=5),
-    @pharmacistLitmusQuestionId);
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId) 
-	VALUES(
-    (SELECT possibleAnswerId
-		FROM PossibleAnswer
-        WHERE litmusQuestionId=@militaryStatusLitmusQuestionId AND string="Active Reserve"),
-	(SELECT appointmentId 
-		FROM Appointment 
-		WHERE scheduledTime="2017-06-01 12:45" AND locationId=5),
-    @militaryStatusLitmusQuestionId);
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId) 
-	VALUES (
-    (SELECT possibleAnswerId
-		FROM PossibleAnswer
-        WHERE litmusQuestionId=@fluentEnglishLitmusQuestionId AND string="No"),
-    (SELECT appointmentId 
-		FROM Appointment 
-		WHERE scheduledTime="2017-06-01 12:45" AND locationId=5),
-    @fluentEnglishLitmusQuestionId);
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question1YesId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion1Id);
+    
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question2YesId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion2Id);
+    
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question3NoId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion3Id);
+    
+INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
+	VALUES (@possibleAnswer_question6YesId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion6Id);
+-- end answer
