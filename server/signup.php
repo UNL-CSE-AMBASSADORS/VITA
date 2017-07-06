@@ -4,7 +4,7 @@ function getLitmusQuestions() {
   require 'config.php';
 	$conn = $DB_CONN;
 
-  $queryStatement = $conn->prepare('SELECT lq.litmusQuestionId, pa.possibleAnswerId, pa.string AS possibleAnswerText,
+  $queryStatement = $conn->prepare('SELECT lq.litmusQuestionId, pa.possibleAnswerId, pa.text AS possibleAnswerText,
         lq.string AS litmusQuestionText, lq.required, lq.tag
         FROM PossibleAnswer pa
         JOIN LitmusQuestion lq ON pa.litmusQuestionId = lq.litmusQuestionId
