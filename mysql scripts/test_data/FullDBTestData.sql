@@ -46,20 +46,20 @@ SET @user_siteAdmin1Id = LAST_INSERT_ID();
 
 
 -- abilities
-INSERT INTO Ability (name, tag)
-	VALUES ("Basic Certification", "basic_certification");
+INSERT INTO Ability (name, tag, description)
+	VALUES ("Basic Certification", "basic_certification", "Has finished the basic certification requirements");
 SET @ability_basicCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (name, tag)
-	VALUES ("International Certification", "international_certification");
+INSERT INTO Ability (name, tag, description)
+	VALUES ("International Certification", "international_certification", "Has completed the international certification requirements");
 SET @ability_internationalCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (name, tag)
-	VALUES ("Military Certification", "military_certification");
+INSERT INTO Ability (name, tag, description)
+	VALUES ("Military Certification", "military_certification", "Has completed the military certification requirements");
 SET @ability_militaryCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (name, tag)
-	VALUES ("Spanish-Speaking", "spanish_speaking");
+INSERT INTO Ability (name, tag, description)
+	VALUES ("Spanish-Speaking", "spanish_speaking", "Can speak fluent Spanish");
 SET @ability_spanishSpeakingId = LAST_INSERT_ID();
 -- end abilities
 
@@ -98,38 +98,38 @@ SET @privilege_popClientOffQueueId = LAST_INSERT_ID();
 
 
 -- user privileges
-INSERT INTO UserPrivilege (userId, privilegeId)
-	VALUES (@user_preparer1Id, @privilege_popClientOffQueueId);
+INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
+	VALUES (@user_preparer1Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
     
-INSERT INTO UserPrivilege (userId, privilegeId)
-	VALUES (@user_preparer2Id, @privilege_popClientOffQueueId);
+INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
+	VALUES (@user_preparer2Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
     
-INSERT INTO UserPrivilege (userId, privilegeId)
-	VALUES (@user_siteAdmin1Id, @privilege_addSiteId);
+INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
+	VALUES (@user_siteAdmin1Id, @privilege_addSiteId, @user_siteAdmin1Id);
     
-INSERT INTO UserPrivilege (userId, privilegeId)
-	VALUES (@user_siteAdmin1Id, @privilege_editSiteInformationId);
+INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
+	VALUES (@user_siteAdmin1Id, @privilege_editSiteInformationId, @user_siteAdmin1Id);
     
-INSERT INTO UserPrivilege (userId, privilegeId)
-	VALUES (@user_receptionist1Id, @privilege_popClientOffQueueId);
+INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
+	VALUES (@user_receptionist1Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
     
-INSERT INTO UserPrivilege (userId, privilegeId)
-	VALUES (@user_reviewer1Id, @privilege_popClientOffQueueId);
+INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
+	VALUES (@user_reviewer1Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
 -- end user privileges
 
 
 
 -- site
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly)
-	VALUES ("Test Site", "1234 Test Ave. Lincoln, NE 86722", "555-203-2032", false);
+INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
+	VALUES ("Test Site", "1234 Test Ave. Lincoln, NE 86722", "555-203-2032", false, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_site1Id = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly)
-	VALUES ("My new new site", "5656 Test test. Lincoln, NE 83747", "555-111-2345", false);
+INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
+	VALUES ("My new new site", "5656 Test test. Lincoln, NE 83747", "555-111-2345", false, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_site2Id = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly)
-	VALUES ("No walkins site", "9876 Test St. Lincoln, NE 29384", "555-999-8888", true);
+INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
+	VALUES ("No walkins site", "9876 Test St. Lincoln, NE 29384", "555-999-8888", true, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_site3Id = LAST_INSERT_ID();
 -- end site
 
@@ -138,32 +138,32 @@ SET @site_site3Id = LAST_INSERT_ID();
 -- shift
 SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 1 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @shift_site1Shift1Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @shift_site1Shift2Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 4 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @shift_site2Shift1Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 3 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 2 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @shift_site2Shift2Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @shift_site2Shift3Id = LAST_INSERT_ID();
 -- end shift
 
