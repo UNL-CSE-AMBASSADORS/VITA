@@ -1,0 +1,25 @@
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  font-family: 'Tungsten A','Tungsten B','Oswald','Arial Narrow',Arial,sans-serif;
+}
+
+h1 {
+  font-size: 2em;
+}
+h2 {
+  font-size: 1.5em;
+}
+h3 {
+  font-size: 1.17em;
+}
+h4 {
+  font-size: 1em;
+}
+h5 {
+  font-size: 0.83em;
+  text-transform: uppercase;
+}
+h6 {
+  font-size: 0.67em;
+  text-transform: uppercase;
+}
