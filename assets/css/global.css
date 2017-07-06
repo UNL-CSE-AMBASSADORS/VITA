@@ -1,0 +1,29 @@
+@import '/assets/css/headings.css';
+@import '/assets/css/buttons.css';
+
+html {
+	font-size: 18px;
+	font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+}
+
+body {
+	margin: 0;
+	background-color: #FEFDFA;
+}
+
+div.vita-body-container {
+	max-width: 960px;
+	width: calc(100% - 20px);
+	margin: 0 auto;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+div.vita-body-container .vita-block-highlight {
+	width: 100%;
+	margin-left: -10px;
+	margin-right: -10px;
+	padding: 15px 10px;
+	background-color: #333;
+	color: #FEFDFA;
+}
