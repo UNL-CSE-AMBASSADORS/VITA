@@ -4,10 +4,13 @@
 	require_once 'server/header.php';
 ?>
 	<body>
-	
-		<script src="assets/js/main.js"></script>
+		<div>
+			VITA Home Page
+		</div>
+		<!-- TODO -->
 	<?php
 		require_once 'server/footer.php';
+		require_once "components/nav.php";
 	?>
 	</body>
 </html>

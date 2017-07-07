@@ -11,9 +11,7 @@
   ?>
 </head>
 <body>
-  <?php
-    require_once "../components/nav.php";
-  ?>
+
   <div class="vita-form-container vita-signup-form">
     <form class="cmxform" id="vitaSignupForm" method="post" action="" autocomplete="off">
       <h1 class="vita-form-title">Sign Up for a VITA Appointment</h1>
@@ -54,8 +52,8 @@
   </div>
   <?php
     require_once "../server/footer.php";
+    require_once "../components/nav.php";
   ?>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
   <script src='../assets/js/boilerplate.js'></script>
