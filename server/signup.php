@@ -5,7 +5,7 @@ function getLitmusQuestions() {
 	$conn = $DB_CONN;
 
   $queryStatement = $conn->prepare('SELECT lq.litmusQuestionId, pa.possibleAnswerId, pa.text AS possibleAnswerText,
-        lq.string AS litmusQuestionText, lq.required, lq.tag
+        lq.text AS litmusQuestionText, lq.required, lq.tag
         FROM PossibleAnswer pa
         JOIN LitmusQuestion lq ON pa.litmusQuestionId = lq.litmusQuestionId
         WHERE lq.archived = FALSE AND pa.archived = FALSE
