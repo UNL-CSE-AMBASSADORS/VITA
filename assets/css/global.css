@@ -2,28 +2,28 @@
 @import '/assets/css/buttons.css';
 
 html {
-	font-size: 18px;
 	font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+	font-size: 18px;
 }
 
 body {
-	margin: 0;
 	background-color: #FEFDFA;
+	margin: 0;
 }
 
 div.vita-body-container {
+	margin: 2rem auto;
 	max-width: 960px;
-	width: calc(100% - 20px);
-	margin: 0 auto;
 	padding-left: 10px;
 	padding-right: 10px;
+	width: calc(100% - 20px);
 }
 
 div.vita-body-container .vita-block-highlight {
-	width: 100%;
+	background-color: #333;
+	color: #FEFDFA;
 	margin-left: -10px;
 	margin-right: -10px;
 	padding: 15px 10px;
-	background-color: #333;
-	color: #FEFDFA;
+	width: 100%;
 }

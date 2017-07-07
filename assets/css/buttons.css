@@ -2,7 +2,7 @@
 /* Based on the UNL WDN Style Sheet: http://wdn.unl.edu/buttons */
 .vita-form-button, .vita-form-button-xl {
   border: none;
-  border-radius: 3px;
+  border-radius: 4px;
   color: #fff;
   cursor: pointer;
   padding: 1.069em 1.333em 1em;
@@ -14,13 +14,13 @@
   font-weight: 400;
   font-style: normal;
   line-height: 1;
-  font-size: .75rem;
+  font-size: .75em;
   transition: background-color .3s ease-out;
   background-color: #4a3b13;
 }
 
 .vita-form-button-xl {
-  font-size: 1rem;
+  font-size: 1em;
 }
 
 .vita-background-primary {
