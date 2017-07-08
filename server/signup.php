@@ -4,33 +4,42 @@ function getLitmusQuestions() {
   require 'config.php';
 	$conn = $DB_CONN;
 
-	$questionStatement = $conn->prepare('SELECT litmusQuestionId, string, orderIndex, tag, required FROM LitmusQuestion
-        WHERE archived = FALSE
-      	ORDER BY orderIndex');
-  $questionStatement->execute();
-  $questions = $questionStatement->fetchAll();
+  $queryStatement = $conn->prepare('SELECT lq.litmusQuestionId, pa.possibleAnswerId, pa.text AS possibleAnswerText,
+        lq.string AS litmusQuestionText, lq.required, lq.tag
+        FROM PossibleAnswer pa
+        JOIN LitmusQuestion lq ON pa.litmusQuestionId = lq.litmusQuestionId
+        WHERE lq.archived = FALSE AND pa.archived = FALSE
+        ORDER BY lq.orderIndex, pa.orderIndex');
+  $queryStatement->execute();
+  $resultSet = $queryStatement->fetchAll();
 
-  $optionStatement = $conn->prepare('SELECT possibleAnswerId, string, orderIndex from PossibleAnswer
-        WHERE litmusQuestionId = ?
-        AND archived = FALSE
-        ORDER BY orderIndex');
-
-  foreach ($questions as $question) {
-    $optionStatement->execute(array($question['litmusQuestionId']));
-    $options = $optionStatement->fetchAll();
-    requiredSelection($question, $options);
+  $currentQuestionStartIndex = 0;
+  for ($i = 0; $i < sizeof($resultSet); $i++) {
+    if ($resultSet[$currentQuestionStartIndex]['litmusQuestionId'] != $resultSet[$i]['litmusQuestionId']) {
+      addSelection(array_slice($resultSet, $currentQuestionStartIndex, $i - $currentQuestionStartIndex));
+      $currentQuestionStartIndex = $i;
+    }
   }
+  addSelection(array_slice($resultSet, $currentQuestionStartIndex));
+
 }
 
-function requiredSelection($question, $options) {
-	$selectInput = '
+function addSelection($questionOptions) {
+  $vitaFormRequired = "";
+  $requiredClass = "";
+  if ($questionOptions[0]['required'] == true) {
+    $vitaFormRequired = "vita-form-required";
+    $requiredClass = 'class="required"';
+  }
+
+  $selectInput = '
       <div class="vita-form-select">
-        <label for="'.$question['tag'].'" class="vita-form-label vita-form-required">'.$question['string'].'</label>
+        <label for="'.$questionOptions[0]['tag'].'" class="vita-form-label '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
         <div>
-          <select id="'.$question['tag'].'" class="required" name="'.$question['litmusQuestionId'].'">';
-	foreach	($options as $option)	{
-		$selectInput .= '
-            <option value="'.$option['orderIndex'].'">'.$option['string'].'</option>';
+          <select id="'.$questionOptions[0]['tag'].'" '.$requiredClass.' name="'.$questionOptions[0]['litmusQuestionId'].'">';
+	foreach	($questionOptions as $option)	{
+  	$selectInput .= '
+            <option value="'.$option['possibleAnswerId'].'">'.$option['possibleAnswerText'].'</option>';
 	}
 	$selectInput .= '
           </select>
