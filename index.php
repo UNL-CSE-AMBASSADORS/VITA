@@ -27,14 +27,9 @@
 		<h2>Volunteers</h2>
 		<h3>How to Get Started</h3>
 		<p>Getting started is easy! Register below for any of our volunteer positions. Sign up ends December 4th.  If you are uncomfortable with actually handling tax returns, there are still opportunities for you.  The Lincoln Tax Coalition is always in need of greeters and interpreters.  Apply for the volunteer position that works best for you.</p>
+
 		<a class="vita-form-button vita-background-primary" href="/login">Volunteer login</a>
 
-		<!-- <h1>Heading 1</h1>
-		<h2>Heading 2</h2>
-		<h3>Heading 3</h3>
-		<h4>Heading 4</h4>
-		<h5>Heading 5</h5>
-		<h6>Heading 6</h6> -->
 	</div>
 	<?php
 		require_once 'server/footer.php';
