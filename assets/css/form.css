@@ -116,21 +116,17 @@ label.vita-form-required::after {
   line-height: 1em;
 }
 
-input.error ~ .vita-form-hint {
-  top: 16px;
-}
-
 /* ERRORS ================================= */
 label.error {
   font-size: 14px;
   position: absolute;
   color: red;
   left: 0;
-  top: 42px;
+  bottom: -16px;
   line-height: 1em;
 }
 
-/* CHECKBOXS/RADIO BUTTONS ================================= */
+/* CHECKBOXS/RADIO ================================= */
 /* Source: https://kyusuf.com/post/completely-css-custom-checkbox-radio-buttons-and-select-boxes */
 .vita-form-control {
 	font-size: 18px;
@@ -282,9 +278,40 @@ label.error {
 	border-top-color: #ccc;
 }
 
+/* RADIO BUTTONS ================================= */
+.vita-form-radio {
+	position: relative;
+	display: inline-block;
+	margin-bottom: 32px;
+	width: 100%;
+}
+
+.vita-form-radio div .vita-form-radio-label {
+  border-radius: 4px;
+  margin: 3px 0;
+  min-width: 45px;
+  padding: 5px 10px;
+}
+
+.vita-form-radio .ui-state-active,
+.vita-form-radio .ui-widget-content .ui-state-active,
+.vita-form-radio .ui-widget-header .ui-state-active,
+.vita-form-radio a.ui-button:active,
+.vita-form-radio .ui-button:active,
+.vita-form-radio .ui-button.ui-state-active:hover {
+  background-color: #d00000;
+  border: 1px solid #d00000;
+  color: white;
+}
+
+.vita-form-radio .ui-visual-focus {
+  box-shadow: 0 0 5px -1px #000;
+}
+
+
 /* BUTTONS ================================= */
 /* Based on the UNL WDN Style Sheet: http://wdn.unl.edu/buttons */
-.vita-form-button {
+/*.vita-form-button {
     border: none;
     border-radius: 3px;
     color: #fff;
@@ -306,4 +333,4 @@ label.error {
 .background-primary {
     background-color: #d00000;
     color: #fff;
-}
+}*/
