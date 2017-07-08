@@ -10,9 +10,13 @@
 <body>
 	<div class="vita-body-container">
 		<img id="main-banner" src="/assets/res/VITA-Coalition-Web-Banner.png" alt="Lincoln VITA Coalition">
+	</div>
 
+	<div class="vita-body-container full-width dark">
 		<p class="vita-block-highlight">Qualified students and community members can have their tax return prepared AT NO CHARGE by qualified student and community volunteers.</p>
+	</div>
 
+	<div class="vita-body-container">
 		<h2>Who qualifies to receive assistance?</h2>
 		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi aliquet vitae lectus non auctor. Suspendisse quis lacus neque. Integer nibh sem, vulputate et rhoncus suscipit, consequat id est. Vivamus efficitur, nibh vitae finibus sodales, elit sem viverra quam, vel fringilla ligula sapien a tellus. Suspendisse ac velit facilisis, vestibulum neque vitae, convallis metus. Maecenas dignissim iaculis accumsan. Nunc vulputate felis quis ullamcorper fermentum. Mauris mauris massa, molestie at congue vitae, accumsan sed lorem. Nam at rutrum ante.</p>
 

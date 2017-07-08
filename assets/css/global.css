@@ -11,19 +11,31 @@ body {
 	background-color: #FEFDFA;
 }
 
-div.vita-body-container {
-	max-width: 960px;
-	width: calc(100% - 20px);
-	margin: 0 auto;
-	padding-left: 10px;
-	padding-right: 10px;
+p {
+	line-height: 1.5;
 }
 
-div.vita-body-container .vita-block-highlight {
-	width: 100%;
-	margin-left: -10px;
-	margin-right: -10px;
-	padding: 15px 10px;
+div.vita-body-container {
+	margin: 0 auto;
+	max-width: 960px;
+	width: calc(100% - 20px);
+}
+
+div.vita-body-container.full-width.dark {
 	background-color: #333;
 	color: #FEFDFA;
+}
+
+div.vita-body-container.full-width {
+	max-width: none;
+	padding: 15px 0;
+	width: 100%;
+}
+
+div.vita-body-container.full-width * {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 960px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
