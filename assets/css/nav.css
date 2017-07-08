@@ -1,0 +1,91 @@
+body {
+  padding-top: 3rem;
+}
+
+header#vita-nav {
+  width: 100%;
+  min-height: 3rem;
+  position: absolute;
+  box-shadow: 0 2px 5px rgba(0,0,0,.26);
+  top: 0;
+  background: #d00000; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(135deg, #d00000 0%, #900000 100%); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(135deg, #d00000 0%, #900000 100%); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(135deg, #d00000 0%, #900000 100%); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(135deg, #d00000 0%, #900000 100%); /* Standard syntax */
+  z-index: 100;
+}
+
+header#vita-nav nav a {
+  line-height: 3rem;
+  height: 3rem;
+  display: block;
+  text-decoration: none;
+  color: #ddd;
+  padding: 0 10px;
+}
+
+header#vita-nav nav.closed a + a { /* Using this as opposed to :not(:first-child) because it has support back through CSS2 */
+  display: none;
+}
+
+header#vita-nav nav a:focus {
+  color: white;
+  background-color: rgba(0,0,0,.15);
+  outline: none;
+}
+
+#vita-menu-toggle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  line-height: 3rem;
+  height: 3rem;
+  width: 3rem;
+  cursor: pointer;
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+}
+
+#vita-menu-toggle:active {
+  background-color: rgba(0,0,0,.15);
+}
+
+#vita-menu-toggle .material-icons {
+  height: 3rem;
+  line-height: 3rem;
+  width: 3rem;
+  text-align: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+@media (min-width: 600px) {
+  header#vita-nav nav {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0.5rem 0;
+  }
+
+  header#vita-nav nav a {
+    line-height: 2rem;
+    height: 2rem;
+    border-radius: 4px;
+  }
+
+  header#vita-nav nav a, header#vita-nav nav.closed a + a {
+    display: inline-block;
+  }
+
+  header#vita-nav nav a:hover {
+    color: white;
+    background-color: rgba(0,0,0,.15);
+    outline: none;
+  }
+
+  #vita-menu-toggle {
+    display: none;
+  }
+}
