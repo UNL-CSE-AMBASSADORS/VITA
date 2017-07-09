@@ -1,94 +1,155 @@
-html,
-body {
+@font-face {
+  font-family: Verdana;
+  src: url(../res/fonts/verdana.ttf);
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Bebas_Neue;
+  src: url(../res/fonts/bebas_neue_bold.ttf);
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Bebas_Neue;
+  src: url(../res/fonts/bebas_neue_regular.ttf);
+  font-weight: regular;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Bebas_Neue;
+  src: url(../res/fonts/bebas_neue_book.ttf);
+  font-weight: book;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Bebas_Neue;
+  src: url(../res/fonts/bebas_neue_light.ttf);
+  font-weight: light;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Bebas_Neue;
+  src: url(../res/fonts/bebas_neue_thin.ttf);
+  font-weight: thin;
+  font-style: normal;
+}
+
+html, body {
   margin: 0;
   padding: 0;
-  font-family: 'Bebas Neue';
-  font-weight: 700;
 }
-.vita-header {
-  height: 100px;
-  width: 100vw;
-  border-bottom: 1px solid #515150;
-  position: fixed;
-  font-size: 48px;
+
+.section {
+  position: relative;
 }
-.vita-volunteer-count {
-  display: inline;
-  position: absolute;
-  top: 50%;
-  left: 32px;
-  transform: translateY(-50%);
-  color: #515150;
-}
-.vita-header-curtain {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  margin-right: -50%;
-  transform: translateX(-50%);
-  height: 150px;
-  width: 400px;
-}
-.vita-exit-fullscreen {
-  position: absolute;
-  top: 50%;
-  right: 32px;
-  transform: translateY(-50%);
-  height: 40px;
-  width: 40px;
-}
-.vita-exit-fullscreen:hover {
-  cursor: pointer;
-}
-.vita-queue-wrapper {
-  height: calc(100vh - 100px);
-  width: 100vw;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  overflow-y: hidden;
-}
-.vita-queue-header,
-.vita-queue {
-  width: 800px;
-  margin-right: -50%;
-  transform: translateX(-50%);
-  box-sizing: border-box;
-}
-.vita-queue-header {
-  position: absolute;
-  top: 100px;
-  left: 50%;
-  font-size: 48px;
-  color: #d00000;
-  padding: 0 24px;
-}
-.vita-queue {
-  position: absolute;
-  top: 175px;
-  left: 50%;
-  font-size: 40px;
-  color: #515150;
-}
-.vita-queue-header-position,
-.vita-queue-header-name,
-.vita-queue-entry-position,
-.vita-queue-entry-name {
+
+.wrpr-left {
+  height: 100%;
+  position: relative;
   float: left;
 }
-.vita-queue-header-wait,
-.vita-queue-entry-wait {
+
+.wrpr-right {
+  height: 100%;
+  position: relative;
   float: right;
 }
-.vita-queue-entry {
-  border: 1px solid #515150;
-  height: 68px;
-  width: 100%;
-  padding: 12px 24px;
-  box-sizing: border-box;
-  margin-bottom: 18px;
+
+.flex {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
 }
-.vita-queue-header-position,
-.vita-queue-entry-position {
-  width: 100px;
+
+.nav-bar {
+  height: 72px;
+  background: #212121;
+  color: #FFFFFF;
+  font-size: 24px;
+  font-family: Verdana;
+}
+
+.menu-icon-wrpr {
+  width: 72px;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-icon {
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+}
+
+.page-lbl-wrpr {
+  width: 256px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.site-lbl-wrpr {
+  margin-right: 24px;
+  width: 512px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.dashboard {
+  height: 128px;
+  background: #F7F7F7;
+}
+
+.volunteers-wrpr, .queue-size-wrpr, .clock-wrpr {
+  width: 256px;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0 64px;
+  color: #212121;
+}
+
+.volunteers, .queue-size {
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.volunteers-lbl, .queue-size-lbl {
+  font-family: Verdana;
+  font-size: 32px;
+}
+
+.volunteers-count, .queue-size-count {
+  font-family: Bebas_Neue;
+  font-size: 64px;
+  font-weight: bold;
+}
+
+.clock {
+  align-items: center;
+  justify-content: center;
+}
+
+.clock-time {
+  font-family: Bebas_Neue;
+  font-size: 96px;
+  font-weight: bold;
+}
+
+.clock-period {
+  font-family: Bebas_Neue;
+  font-size: 32px;
+  font-weight: bold;
+  margin: 0 8px;
+}
+
+.inactive-period {
+  opacity: 0.15;
 }
