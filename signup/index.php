@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="no-js" lang="">
 <head>
-  <title>Signup Test</title>
+  <title>Signup for an Appointment</title>
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/form.css">
