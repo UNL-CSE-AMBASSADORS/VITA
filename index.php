@@ -33,6 +33,7 @@
 	</div>
 	<?php
 		require_once 'server/footer.php';
+		require_once "components/nav.php";
 	?>
 </body>
 </html>
