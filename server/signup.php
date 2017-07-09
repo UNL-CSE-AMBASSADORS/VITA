@@ -64,7 +64,7 @@ function addRadioSelection($questionOptions) {
 	foreach	($questionOptions as $option)	{
   	$selectInput .= '
               <label class="vita-form-radio-label" for="'.$option['possibleAnswerId'].'">'.$option['possibleAnswerText'].'</label>
-              <input type="radio" id="'.$option['possibleAnswerId'].'" '.$requiredClass.' name="'.$questionOptions[0]['litmusQuestionId'].'">
+              <input type="radio" id="'.$option['possibleAnswerId'].'" value="'.$option['possibleAnswerId'].'" '.$requiredClass.' name="'.$questionOptions[0]['litmusQuestionId'].'">
           ';
 	}
 	$selectInput .= '
