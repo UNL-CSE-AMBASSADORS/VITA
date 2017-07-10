@@ -18,6 +18,34 @@ h3.vita-form-subheading {
   font-size: 16px;
   margin-top: 0;
 }
+.vita-form-container {
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  margin: 30px 0;
+  padding: 10px 10px 50px;
+  display: block;
+  box-shadow: 0px 3px 15px -5px black;
+  border-radius: 3px;
+  min-width: 285px;
+}
+
+@media (min-width: 600px) {
+  .vita-form-container {
+    margin: 30px 30px;
+  }
+}
+
+@media (min-width: 960px) {
+  .vita-form-container {
+    max-width: 720px;
+    margin: 30px auto;
+  }
+}
+
+.vita-form-container form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
 /* TEXTFIELD ======================================= */
 .vita-form-textfield {
