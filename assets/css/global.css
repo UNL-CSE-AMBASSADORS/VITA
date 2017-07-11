@@ -2,13 +2,13 @@
 @import '/assets/css/buttons.css';
 
 html {
-	font-size: 18px;
 	font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+	font-size: 112.5%;
 }
 
 body {
-	margin: 0;
 	background-color: #FEFDFA;
+	margin: 0;
 }
 
 p {
@@ -16,9 +16,20 @@ p {
 }
 
 div.vita-body-container {
-	margin: 0 auto;
+	margin: 2rem auto;
 	max-width: 960px;
+	padding-left: 10px;
+	padding-right: 10px;
 	width: calc(100% - 20px);
+}
+
+div.vita-body-container .vita-block-highlight {
+	background-color: #333;
+	color: #FEFDFA;
+	margin-left: -10px;
+	margin-right: -10px;
+	padding: 15px 10px;
+	width: 100%;
 }
 
 div.vita-body-container.full-width.dark {
