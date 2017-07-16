@@ -71,10 +71,10 @@ INSERT INTO UserAbility (userId, abilityId)
 
 INSERT INTO UserAbility (userId, abilityId)
 	VALUES (@user_preparer1Id, @ability_internationalCertificationId);
-    
+	
 INSERT INTO UserAbility (userId, abilityId)
 	VALUES (@user_preparer2Id, @ability_basicCertificationId);
-    
+	
 INSERT INTO UserAbility (userId, abilityId)
 	VALUES (@user_preparer2Id, @ability_spanishSpeakingId);
 -- end user abilities
@@ -85,7 +85,7 @@ INSERT INTO UserAbility (userId, abilityId)
 INSERT INTO Privilege (name, description, tag)
 	VALUES ("Add Site", "Has the privilege to create a new VITA site on the add site page", "add_site");
 SET @privilege_addSiteId = LAST_INSERT_ID();
-    
+	
 INSERT INTO Privilege (name, description, tag)
 	VALUES ("Edit Site Information", "Has the privilege to edit the information associated with sites", "edit_site_information");
 SET @privilege_editSiteInformationId = LAST_INSERT_ID();
@@ -100,19 +100,19 @@ SET @privilege_popClientOffQueueId = LAST_INSERT_ID();
 -- user privileges
 INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
 	VALUES (@user_preparer1Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
-    
+	
 INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
 	VALUES (@user_preparer2Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
-    
+	
 INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
 	VALUES (@user_siteAdmin1Id, @privilege_addSiteId, @user_siteAdmin1Id);
-    
+	
 INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
 	VALUES (@user_siteAdmin1Id, @privilege_editSiteInformationId, @user_siteAdmin1Id);
-    
+	
 INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
 	VALUES (@user_receptionist1Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
-    
+	
 INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
 	VALUES (@user_reviewer1Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
 -- end user privileges
@@ -181,7 +181,7 @@ INSERT INTO UserShift (userId, shiftId)
 
 INSERT INTO UserShift (userId, shiftId)
 	VALUES (@user_preparer2Id, @shift_site2Shift3Id);
-    
+	
 INSERT INTO UserShift (userId, shiftId)
 	VALUES (@user_receptionist1Id, @shift_site1Shift1Id);
 
@@ -193,7 +193,7 @@ INSERT INTO UserShift (userId, shiftId)
 
 INSERT INTO UserShift (userId, shiftId)
 	VALUES (@user_reviewer1Id, @shift_site2Shift2Id);
-    
+	
 INSERT INTO UserShift (userId, shiftId)
 	VALUES (@user_reviewer1Id, @shift_site2Shift3Id);
 -- end user shift
@@ -354,55 +354,55 @@ INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question2NoId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion2Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question3NoId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion3Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question6NoId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion6Id);
-    
+	
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question1NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion1Id);
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question2YesId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion2Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question3YesId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion3Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question4NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion4Id);
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question5NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion5Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question6NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion6Id);
-    
+	
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question1NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion1Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question2NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion2Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question3NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion3Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question6NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion6Id);
-    
+	
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question1YesId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion1Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question2YesId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion2Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question3NoId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion3Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question6YesId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion6Id);
 -- end answer

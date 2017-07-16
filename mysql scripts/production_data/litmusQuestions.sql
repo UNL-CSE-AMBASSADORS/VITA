@@ -1,5 +1,9 @@
 USE vita;
 
+-- ===============================================
+-- NOTE: This file will not have more added to it until closer to release date
+-- ===============================================
+
 -- Litmus questions
 
 -- Question 1
@@ -102,7 +106,7 @@ INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
 INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId) 
 	VALUES ("Yes", 2, @lastInsertId);
 -- End Question 9
-    
+	
 -- Question 10
 INSERT INTO LitmusQuestion (text, orderIndex, tag)
 	VALUES ("Will your return involve a current bankruptcy?", 10, "current_bankruptcy");
