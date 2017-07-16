@@ -81,6 +81,12 @@ html, body {
   display: flex;
 }
 
+.box {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
 .nav-bar {
   height: 72px;
   background: #212121;
