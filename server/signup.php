@@ -5,7 +5,7 @@ function getLitmusQuestions() {
 	$conn = $DB_CONN;
 
   $queryStatement = $conn->prepare('SELECT lq.litmusQuestionId, pa.possibleAnswerId, pa.text AS possibleAnswerText,
-        lq.string AS litmusQuestionText, lq.required, lq.tag
+        lq.text AS litmusQuestionText, lq.required, lq.tag
         FROM PossibleAnswer pa
         JOIN LitmusQuestion lq ON pa.litmusQuestionId = lq.litmusQuestionId
         WHERE lq.archived = FALSE AND pa.archived = FALSE
@@ -16,11 +16,11 @@ function getLitmusQuestions() {
   $currentQuestionStartIndex = 0;
   for ($i = 0; $i < sizeof($resultSet); $i++) {
     if ($resultSet[$currentQuestionStartIndex]['litmusQuestionId'] != $resultSet[$i]['litmusQuestionId']) {
-      addSelection(array_slice($resultSet, $currentQuestionStartIndex, $i - $currentQuestionStartIndex));
+      addRadioSelection(array_slice($resultSet, $currentQuestionStartIndex, $i - $currentQuestionStartIndex));
       $currentQuestionStartIndex = $i;
     }
   }
-  addSelection(array_slice($resultSet, $currentQuestionStartIndex));
+  addRadioSelection(array_slice($resultSet, $currentQuestionStartIndex));
 
 }
 
@@ -44,6 +44,30 @@ function addSelection($questionOptions) {
 	$selectInput .= '
           </select>
           <div class="vita-form-select__arrow"></div>
+        </div>
+      </div>';
+	echo $selectInput;
+}
+
+function addRadioSelection($questionOptions) {
+  $vitaFormRequired = "";
+  $requiredClass = "";
+  if ($questionOptions[0]['required'] == true) {
+    $vitaFormRequired = "vita-form-required";
+    $requiredClass = 'class="required"';
+  }
+
+  $selectInput = '
+      <div class="vita-form-radio">
+        <label for="'.$questionOptions[0]['tag'].'" class="vita-form-label vita-form-label__floating '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
+        <div>';
+	foreach	($questionOptions as $option)	{
+  	$selectInput .= '
+              <label class="vita-form-radio-label" for="'.$option['possibleAnswerId'].'">'.$option['possibleAnswerText'].'</label>
+              <input type="radio" id="'.$option['possibleAnswerId'].'" value="'.$option['possibleAnswerId'].'" '.$requiredClass.' name="'.$questionOptions[0]['litmusQuestionId'].'">
+          ';
+	}
+	$selectInput .= '
         </div>
       </div>';
 	echo $selectInput;

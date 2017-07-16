@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="no-js" lang="">
 <head>
-  <title>Signup Test</title>
+  <title>VITA Appointment Signup</title>
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/form.css">
@@ -11,7 +11,7 @@
   ?>
 </head>
 <body>
-  <div class="vita-form-container vita-signup-form">
+  <div class="vita-body-container">
     <form class="cmxform" id="vitaSignupForm" method="post" action="" autocomplete="off">
       <h1 class="vita-form-title">Sign Up for a VITA Appointment</h1>
 
@@ -39,23 +39,25 @@
         <label class="vita-form-label vita-form-required" for="phone">Phone Number</label>
       </div>
 
-      <h2 class="vita-form-subheading">Background Information</h2>
+      <h2 class="vita-form-subheading">Appointment Information</h2>
 
       <?php
         require_once "../server/signup.php";
         getLitmusQuestions();
       ?>
 
-      <input type="submit" value="Submit" class="submit vita-form-button background-primary">
+      <input type="submit" value="Submit" class="submit vita-form-button vita-background-primary">
     </form>
   </div>
   <?php
     require_once "../server/footer.php";
+    require_once "../components/nav.php";
   ?>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
   <script src='../assets/js/boilerplate.js'></script>
   <script src="../assets/js/signup.js"></script>
+  <script src="../assets/js/form.js"></script>
 </body>
 </html>

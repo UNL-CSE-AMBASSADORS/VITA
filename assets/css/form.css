@@ -2,6 +2,22 @@ body {
   background-color: #FEFDFA;
 }
 
+/* HEADINGS ======================================= */
+.vita-form-title {
+  color: #474746;
+  line-height: 1;
+  margin: 0;
+  padding: 1em 0 1em 0;
+}
+
+.vita-form-subheading {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+h3.vita-form-subheading {
+  font-size: 16px;
+  margin-top: 0;
+}
 .vita-form-container {
   font-family: 'Roboto', 'Helvetica Neue', sans-serif;
   margin: 30px 0;
@@ -29,28 +45,6 @@ body {
   width: 100%;
   display: flex;
   flex-direction: column;
-}
-
-/* HEADINGS ======================================= */
-.vita-form-title {
-  font-size: 3.157rem;
-  font-weight: 400;
-  color: #474746;
-  font-family: 'Tungsten A','Tungsten B','Oswald','Arial Narrow',Arial,sans-serif;
-  font-weight: 600;
-  font-style: normal;
-  line-height: 1;
-  margin: 1em 0 1rem 0;
-}
-
-.vita-form-subheading {
-  margin-top: 16px;
-  margin-bottom: 16px;
-  font-size: 18px;
-}
-h3.vita-form-subheading {
-  font-size: 16px;
-  margin-top: 0;
 }
 
 /* TEXTFIELD ======================================= */
@@ -150,21 +144,17 @@ label.vita-form-required::after {
   line-height: 1em;
 }
 
-input.error ~ .vita-form-hint {
-  top: 16px;
-}
-
 /* ERRORS ================================= */
 label.error {
   font-size: 14px;
   position: absolute;
   color: red;
   left: 0;
-  top: 42px;
+  bottom: -16px;
   line-height: 1em;
 }
 
-/* CHECKBOXS/RADIO BUTTONS ================================= */
+/* CHECKBOXS/RADIO ================================= */
 /* Source: https://kyusuf.com/post/completely-css-custom-checkbox-radio-buttons-and-select-boxes */
 .vita-form-control {
 	font-size: 18px;
@@ -316,9 +306,40 @@ label.error {
 	border-top-color: #ccc;
 }
 
+/* RADIO BUTTONS ================================= */
+.vita-form-radio {
+	position: relative;
+	display: inline-block;
+	margin-bottom: 32px;
+	width: 100%;
+}
+
+.vita-form-radio div .vita-form-radio-label {
+  border-radius: 4px;
+  margin: 3px 0;
+  min-width: 45px;
+  padding: 5px 10px;
+}
+
+.vita-form-radio .ui-state-active,
+.vita-form-radio .ui-widget-content .ui-state-active,
+.vita-form-radio .ui-widget-header .ui-state-active,
+.vita-form-radio a.ui-button:active,
+.vita-form-radio .ui-button:active,
+.vita-form-radio .ui-button.ui-state-active:hover {
+  background-color: #d00000;
+  border: 1px solid #d00000;
+  color: white;
+}
+
+.vita-form-radio .ui-visual-focus {
+  box-shadow: 0 0 5px -1px #000;
+}
+
+
 /* BUTTONS ================================= */
 /* Based on the UNL WDN Style Sheet: http://wdn.unl.edu/buttons */
-.vita-form-button {
+/*.vita-form-button {
     border: none;
     border-radius: 3px;
     color: #fff;
@@ -340,4 +361,4 @@ label.error {
 .background-primary {
     background-color: #d00000;
     color: #fff;
-}
+}*/
