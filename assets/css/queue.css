@@ -1,154 +1,22 @@
-@font-face {
-  font-family: Verdana;
-  src: url(../res/fonts/verdana.ttf);
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: Bebas_Neue;
-  src: url(../res/fonts/bebas_neue_bold.ttf);
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: Bebas_Neue;
-  src: url(../res/fonts/bebas_neue_regular.ttf);
-  font-weight: regular;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: Bebas_Neue;
-  src: url(../res/fonts/bebas_neue_book.ttf);
-  font-weight: book;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: Bebas_Neue;
-  src: url(../res/fonts/bebas_neue_light.ttf);
-  font-weight: light;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: Bebas_Neue;
-  src: url(../res/fonts/bebas_neue_thin.ttf);
-  font-weight: thin;
-  font-style: normal;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-  color: #212121;
-}
-
-.section {
-  position: relative;
-}
-
-.wrap-left, .wrap-right {
-  height: 100%;
-  position: relative;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  align-items: center;
-}
-
-.wrap-left {
-  text-align: left;
-  float: left;
-  justify-content: flex-start;
-}
-
-.wrap-right {
-  text-align: right;
-  float: right;
-  justify-content: flex-end;
-}
-
-.flex {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-}
-
-.box {
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-}
-
-.nav-bar {
-  height: 72px;
-  background: #212121;
-  font-size: 24px;
-  font-family: Verdana;
-  color: #FFFFFF;
-  padding: 0 24px;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-}
-
-.menu-icon-wrap {
-  width: 48px;
-}
-
-.page-lbl-wrap {
-  width: 256px;
-}
-
-.site-lbl-wrap {
-  width: 512px;
-}
-
-.menu-icon {
-  height: 24px;
-  width: 24px;
-  cursor: pointer;
-}
-
 .dashboard {
   height: 128px;
-  background: #F7F7F7;
 }
 
 .volunteers-wrap, .queue-size-wrap, .clock-wrap {
   margin: 0 24px;
-}
-
-.volunteers, .queue-size {
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
+  font-family: Bebas_Neue;
+  font-weight: bold;
 }
 
 .volunteers-lbl, .queue-size-lbl {
   font-family: Verdana;
   font-size: 32px;
+  font-weight: 400;
 }
 
 .volunteers-count, .queue-size-count {
-  font-family: Bebas_Neue;
   font-size: 64px;
-  font-weight: bold;
   margin-left: 8px;
-}
-
-.clock {
-  font-family: Bebas_Neue;
-  font-weight: bold;
-  align-items: center;
-  justify-content: center;
 }
 
 .clock-time {
@@ -164,40 +32,32 @@ html, body {
   opacity: 0.15;
 }
 
-.queue-container {
-  height: 100%;
+.queue {
   flex-direction: column;
   align-items: center;
 }
 
-.queue-header-container {
-  height: 96px;
-  width: 1536px;
-  background: #FFFFFF;
-  box-shadow: 0 36px 24px -36px rgba(0, 0, 0, 0.5);
+.queue-header {
+  min-height: 96px;
+  width: 100%;
   align-items: flex-end;
   justify-content: center;
   z-index: 1;
 }
 
-.queue-header {
-  height: 64px;
-  width: 1024px;
-}
-
 .queue-position-wrap {
-  width: 192px;
+  width: 20%;
 }
 
 .queue-name-wrap {
-  width: 512px;
+  width: 50%;
 }
 
 .queue-time-wrap {
-  width: 256px;
+  width: 30%;
 }
 
-.queue-lbl {
+.queue-header {
   font-family: Bebas_Neue;
   font-size: 48px;
   font-weight: bold;
@@ -205,12 +65,11 @@ html, body {
 
 .queue-table {
   padding: 12px 48px;
-  box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.5)
+  box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.25);
+  font-size: 24px;
 }
 
 .queue-table-record {
   height: 72px;
-  width: 1024px;
-  font-family: Verdana;
-  font-size: 24px;
+  width: 100%;
 }
