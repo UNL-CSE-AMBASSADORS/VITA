@@ -250,6 +250,19 @@ SET @appointmentTime = DATE_ADD(NOW(), INTERVAL -1 DAY);
 INSERT INTO Appointment (scheduledTime, clientId, siteId)
 	VALUES (@appointmentTime, @client_client5Id, @site_site1Id);
 SET @appointment_appointment5Id = LAST_INSERT_ID();
+
+-- Appointments for today (note that this is just for testing queue functionality)
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 5 HOUR);
+INSERT INTO Appointment (scheduledTime, clientId, siteId)
+	VALUES (@appointmentTime, @client_client1Id, @site_site1Id);
+
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 30 MINUTE);
+INSERT INTO Appointment (scheduledTime, clientId, siteId)
+	VALUES (@appointmentTime, @client_client2Id, @site_site1Id);
+
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 45 MINUTE);
+INSERT INTO Appointment (scheduledTime, clientId, siteId)
+	VALUES (@appointmentTime, @client_client3Id, @site_site2Id);
 -- end appointment
 
 
