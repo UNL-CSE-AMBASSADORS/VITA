@@ -46,37 +46,38 @@ SET @user_siteAdmin1Id = LAST_INSERT_ID();
 
 
 -- abilities
-INSERT INTO Ability (name, tag, description)
-	VALUES ("Basic Certification", "basic_certification", "Has finished the basic certification requirements");
+INSERT INTO Ability (name, tag, description, verificationRequired)
+	VALUES ("Basic Certification", "basic_certification", "Has finished the basic certification requirements", TRUE);
 SET @ability_basicCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (name, tag, description)
-	VALUES ("International Certification", "international_certification", "Has completed the international certification requirements");
+INSERT INTO Ability (name, tag, description, verificationRequired)
+	VALUES ("International Certification", "international_certification", "Has completed the international certification requirements", TRUE);
 SET @ability_internationalCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (name, tag, description)
-	VALUES ("Military Certification", "military_certification", "Has completed the military certification requirements");
+INSERT INTO Ability (name, tag, description, verificationRequired)
+	VALUES ("Military Certification", "military_certification", "Has completed the military certification requirements", TRUE);
 SET @ability_militaryCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (name, tag, description)
-	VALUES ("Spanish-Speaking", "spanish_speaking", "Can speak fluent Spanish");
+INSERT INTO Ability (name, tag, description, verificationRequired)
+	VALUES ("Spanish-Speaking", "spanish_speaking", "Can speak fluent Spanish", FALSE);
 SET @ability_spanishSpeakingId = LAST_INSERT_ID();
 -- end abilities
 
 
 
 -- user abilities
-INSERT INTO UserAbility (userId, abilityId)
-	VALUES (@user_preparer1Id, @ability_basicCertificationId);
+SET @currentYear = YEAR(CURDATE());
+INSERT INTO UserAbility (userId, abilityId, year)
+	VALUES (@user_preparer1Id, @ability_basicCertificationId, @currentYear);
 
-INSERT INTO UserAbility (userId, abilityId)
-	VALUES (@user_preparer1Id, @ability_internationalCertificationId);
+INSERT INTO UserAbility (userId, abilityId, year)
+	VALUES (@user_preparer1Id, @ability_internationalCertificationId, @currentYear);
 	
-INSERT INTO UserAbility (userId, abilityId)
-	VALUES (@user_preparer2Id, @ability_basicCertificationId);
+INSERT INTO UserAbility (userId, abilityId, year)
+	VALUES (@user_preparer2Id, @ability_basicCertificationId, @currentYear);
 	
-INSERT INTO UserAbility (userId, abilityId)
-	VALUES (@user_preparer2Id, @ability_spanishSpeakingId);
+INSERT INTO UserAbility (userId, abilityId, year)
+	VALUES (@user_preparer2Id, @ability_spanishSpeakingId, @currentYear);
 -- end user abilities
 
 
@@ -138,32 +139,32 @@ SET @site_site3Id = LAST_INSERT_ID();
 -- shift
 SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 1 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, internationalCapable)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id, FALSE);
 SET @shift_site1Shift1Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, internationalCapable)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE);
 SET @shift_site1Shift2Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 4 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, internationalCapable)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, FALSE);
 SET @shift_site2Shift1Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 3 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 2 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, internationalCapable)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE);
 SET @shift_site2Shift2Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, internationalCapable)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE);
 SET @shift_site2Shift3Id = LAST_INSERT_ID();
 -- end shift
 
@@ -252,6 +253,10 @@ INSERT INTO Appointment (scheduledTime, clientId, siteId)
 SET @appointment_appointment5Id = LAST_INSERT_ID();
 
 -- Appointments for today (note that this is just for testing queue functionality)
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL -5 MINUTE);
+INSERT INTO Appointment (scheduledTime, arrivedAt, clientId, siteId)
+	VALUES (@appointmentTime, NOW(), @client_client1Id, @site_site1Id);
+
 SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 5 HOUR);
 INSERT INTO Appointment (scheduledTime, clientId, siteId)
 	VALUES (@appointmentTime, @client_client1Id, @site_site1Id);
