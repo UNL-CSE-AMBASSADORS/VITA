@@ -66,18 +66,17 @@ SET @ability_spanishSpeakingId = LAST_INSERT_ID();
 
 
 -- user abilities
-SET @currentYear = YEAR(CURDATE());
-INSERT INTO UserAbility (userId, abilityId, year)
-	VALUES (@user_preparer1Id, @ability_basicCertificationId, @currentYear);
+INSERT INTO UserAbility (userId, abilityId, createdBy)
+	VALUES (@user_preparer1Id, @ability_basicCertificationId, @user_siteAdmin1Id);
 
-INSERT INTO UserAbility (userId, abilityId, year)
-	VALUES (@user_preparer1Id, @ability_internationalCertificationId, @currentYear);
+INSERT INTO UserAbility (userId, abilityId, createdBy)
+	VALUES (@user_preparer1Id, @ability_internationalCertificationId, @user_siteAdmin1Id);
 	
-INSERT INTO UserAbility (userId, abilityId, year)
-	VALUES (@user_preparer2Id, @ability_basicCertificationId, @currentYear);
+INSERT INTO UserAbility (userId, abilityId, createdBy)
+	VALUES (@user_preparer2Id, @ability_basicCertificationId, @user_siteAdmin1Id);
 	
-INSERT INTO UserAbility (userId, abilityId, year)
-	VALUES (@user_preparer2Id, @ability_spanishSpeakingId, @currentYear);
+INSERT INTO UserAbility (userId, abilityId, createdBy)
+	VALUES (@user_preparer2Id, @ability_spanishSpeakingId, @user_siteAdmin1Id);
 -- end user abilities
 
 
