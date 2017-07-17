@@ -17,14 +17,9 @@
 	// We do this server-side since we can't disclose the data client-side
 	$appointments = [];
 	foreach ($results as $result) {
-		$appointment = [];
-		
-		$appointment['appointmentId'] = $result['appointmentId'];
-		$appointment['scheduledTime'] = $result['scheduledTime'];
-		$appointment['firstName'] = $result['firstName'];
-		$appointment['lastName'] = substr($result['lastName'], 0, 1);
-		
-		$appointments[] = $appointment;
+		$result['lastName'] = substr($result['lastName'], 0, 1);
+
+		$appointments[] = $result;
 	}
 
 	echo json_encode($appointments);
