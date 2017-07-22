@@ -138,32 +138,32 @@ SET @site_site3Id = LAST_INSERT_ID();
 -- shift
 SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 1 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, internationalCapable)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id, FALSE);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE, FALSE);
 SET @shift_site1Shift1Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, internationalCapable)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE, TRUE);
 SET @shift_site1Shift2Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 4 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, internationalCapable)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, FALSE);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE, FALSE);
 SET @shift_site2Shift1Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 3 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 2 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, internationalCapable)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE, TRUE);
 SET @shift_site2Shift2Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, internationalCapable)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, FALSE, TRUE);
 SET @shift_site2Shift3Id = LAST_INSERT_ID();
 -- end shift
 
