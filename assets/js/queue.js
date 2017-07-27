@@ -40,17 +40,13 @@ function keepTime() {
 	var hour = now.getHours();
 	var min = now.getMinutes();
 
-	if (hour > 12) {
-		hour -= 12;
-		$('.clock-am').addClass('inactive-period');
-		$('.clock-pm').removeClass('inactive-period');
-	} else {
-		$('.clock-am').removeClass('inactive-period');
-		$('.clock-pm').addClass('inactive-period');
-	}
+	$('.clock-am').toggleClass('inactive-period', hour >= 12);
+	$('.clock-pm').toggleClass('inactive-period', hour < 12);
 
-	hour = hour < 10 ? '0' + hour : hour;
-	min = min >= 10 ? min : '0' + min;
+	hour %= 12;
+	if (hour !== 0) hour = 12;
+	if (hour < 10) hour = '0' + hour;
+
 	$('.clock-time').html(hour + ':' + min);
-    window.setInterval(keepTime, REFRESH_SEC * 1000);
+	window.setInterval(keepTime, REFRESH_SEC * 1000);
 }
