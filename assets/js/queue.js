@@ -11,7 +11,8 @@ var loadQueue = function() {
         url: '../server/queue.php',
         dataType: 'json',
         success: function(result) {
-			$('.queue-table').html("");
+			$('.queue-table').html("<div class='flex empty-queue-message'>Queue is empty</div>");
+			$('.empty-queue-message').toggle(result.length === 0);
 
             for (var i = 0; i < result.length; i++) {
 				var time = result[i].scheduledTime.split(' ');

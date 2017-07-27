@@ -67,6 +67,15 @@
   flex-direction: column;
 }
 
+.empty-queue-message {
+  height: 96px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  font-style: italic;
+}
+
 .queue-record {
   height: 96px;
   width: 100%;

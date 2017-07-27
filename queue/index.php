@@ -36,7 +36,7 @@
 				<div class='wrap-left queue-name-wrap'>Name</div>
 				<div class='wrap-right queue-time-wrap'>Time</div>
 			</div>
-			<div class='sub-section flex queue-table'></div> 
+			<div class='sub-section flex queue-table'> </div> 
 		</div> 
 		<?php require_once '../server/footer.php' ?>
 	</body>
