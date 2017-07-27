@@ -21,9 +21,9 @@
 					<div class='queue-size-count'>23</div>
 				</div>
 				<div class='wrap-right clock-wrap'>
-					<div class='clock-time'>08:45</div>
+					<div class='clock-time'></div>
 					<div class='clock-period'>
-						<div class='clock-am inactive-period'>AM</div>
+						<div class='clock-am'>AM</div>
 						<div class='clock-pm'>PM</div>
 					</div>
 				</div>
@@ -32,18 +32,13 @@
 
 		<div class='section queue'>
 			<div class='sub-section flex queue-header'>
-				<div class='wrap-left queue-position-wrap'>Position</div>
+				<div class='wrap-left queue-position-wrap'>Pos.</div>
 				<div class='wrap-left queue-name-wrap'>Name</div>
-				<div class='wrap-right queue-time-wrap'>Scheduled Time</div>
+				<div class='wrap-right queue-time-wrap'>Time</div>
 			</div>
-			<div class='sub-section flex queue-table'>
-				<div class='queue-table-record'>
-					<div class='wrap-left queue-position-wrap'>1</div>
-					<div class='wrap-left queue-name-wrap'>Natasha-Savatovic DeBaron-Rasmussen-Kapichev</div>
-					<div class='wrap-right queue-time-wrap'>8:30 AM</div>
-				</div>
-			</div>
+			<div class='sub-section flex queue-table'></div> 
 		</div> 
 		<?php require_once '../server/footer.php' ?>
-    </body>
+	</body>
+	<script src='/assets/js/queue.js'></script>
 </html>

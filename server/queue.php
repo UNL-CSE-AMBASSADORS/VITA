@@ -11,17 +11,13 @@
 		ORDER BY Appointment.scheduledTime ASC');
 
 	$stmt->execute();
-	$results = $stmt->fetchAll();
+	$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 	// We must only display the first letter of the last name
 	// We do this server-side since we can't disclose the data client-side
-	$appointments = [];
-	foreach ($results as $result) {
-		$result['lastName'] = substr($result['lastName'], 0, 1);
-
-		$appointments[] = $result;
+	for ($i = 0; $i < count($appointments); $i++) {
+		$appointments[$i]['lastName'] = substr($appointments[$i]['lastName'], 0, 1);
 	}
 
 	echo json_encode($appointments);
-
 	$stmt = null;

@@ -1,6 +1,9 @@
+var REFRESH_SEC = 5;
+
 $(document).ready(function() {
+	keepTime();
     loadQueue();
-    window.setInterval(loadQueue, 5 * 1000);
+    window.setInterval(loadQueue, REFRESH_SEC * 1000);
 });
 
 var loadQueue = function() {
@@ -8,22 +11,41 @@ var loadQueue = function() {
         url: '../server/queue.php',
         dataType: 'json',
         success: function(result) {
-            $('.vita-queue').html(""); // Clear any data in the queue right now
+			$('.queue-table').html("");
 
-            for(var i = 0; i < result.length; i++) {
-                var appointment = result[i];
-
-                var currentTime = new Date();
-                var appointmentTime = Date.parse(appointment.scheduledTime);
-                var timeDifference = appointmentTime - currentTime;
-                var waitTime = Math.round(timeDifference / (60 * 1000));
-
-                $('.vita-queue').append("<div class='vita-queue-entry'>" +
-        				"<div class='vita-queue-entry-position'>" + (i + 1) + "</div>" +
-        				"<div class='vita-queue-entry-name'>" + appointment.firstName + " " + appointment.lastName + ".</div>" +
-        				"<div class='vita-queue-entry-wait'>" + waitTime + " Minutes</div>" +
-        			"</div>");
+            for (var i = 0; i < result.length; i++) {
+				var time = result[i].scheduledTime.split(' ');
+				var hour = time[1].split(':')[0];
+				var min = time[1].split(':')[1];
+				hour = hour > 12 ? hour - 12 : hour;
+                $('.queue-table').append(
+					"<div class='queue-record'>" +
+        				"<div class='wrap-left queue-position-wrap'>" + (i + 1) + "</div>" +
+        				"<div class='wrap-left queue-name-wrap'>" + result[i].firstName + " " + result[i].lastName + ".</div>" +
+        				"<div class='wrap-right queue-time-wrap'>" + hour + ":" + min + "</div>" +
+					"</div>"
+				);
             }
         }
     });
+}
+
+function keepTime() {
+    var now = new Date();
+	var hour = now.getHours();
+	var min = now.getMinutes();
+
+	if (hour > 12) {
+		hour -= 12;
+		$('.clock-am').addClass('inactive-period');
+		$('.clock-pm').removeClass('inactive-period');
+	} else {
+		$('.clock-am').removeClass('inactive-period');
+		$('.clock-pm').addClass('inactive-period');
+	}
+
+	hour = hour < 10 ? '0' + hour : hour;
+	min = min >= 10 ? min : '0' + min;
+	$('.clock-time').html(hour + ':' + min);
+    window.setInterval(keepTime, REFRESH_SEC * 1000);
 }

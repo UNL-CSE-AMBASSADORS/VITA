@@ -37,14 +37,6 @@
   align-items: center;
 }
 
-.queue-header {
-  min-height: 96px;
-  width: 100%;
-  align-items: flex-end;
-  justify-content: center;
-  z-index: 1;
-}
-
 .queue-position-wrap {
   width: 20%;
 }
@@ -61,15 +53,21 @@
   font-family: Bebas_Neue;
   font-size: 48px;
   font-weight: bold;
+  min-height: 96px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
 }
 
 .queue-table {
   padding: 12px 48px;
   box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.25);
-  font-size: 24px;
+  font-size: 32px;
+  flex-direction: column;
 }
 
-.queue-table-record {
-  height: 72px;
+.queue-record {
+  height: 96px;
   width: 100%;
 }
