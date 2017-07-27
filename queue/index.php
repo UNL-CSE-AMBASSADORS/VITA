@@ -18,7 +18,7 @@
 				</div>
 				<div class='wrap-left queue-size-wrap'>
 					<div class='queue-size-lbl'>Queue:</div>
-					<div class='queue-size-count'>23</div>
+					<div class='queue-size-count'> </div>
 				</div>
 				<div class='wrap-right clock-wrap'>
 					<div class='clock-time'></div>
@@ -40,5 +40,13 @@
 		</div> 
 		<?php require_once '../server/footer.php' ?>
 	</body>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js'></script>
 	<script src='/assets/js/queue.js'></script>
+	<script class='queue-record-template' type='text/template'>
+		<div class='queue-record'>
+			<div class='wrap-left queue-position-wrap'>{{position}}</div>
+			<div class='wrap-left queue-name-wrap'>{{name}}</div>
+			<div class='wrap-right queue-time-wrap'>{{time}}</div>
+		</div>
+	</script>
 </html>

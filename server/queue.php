@@ -6,8 +6,8 @@
 	$stmt = $conn->prepare('SELECT DISTINCT appointmentId, scheduledTime, firstName, lastName
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
-		WHERE (Appointment.scheduledTime >= NOW() AND Appointment.scheduledTime < DATE_ADD(CURDATE(), INTERVAL 1 DAY))
-			AND Appointment.archived = FALSE
+		WHERE /* (Appointment.scheduledTime >= NOW() AND Appointment.scheduledTime < DATE_ADD(CURDATE(), INTERVAL 1 DAY))
+			AND */ Appointment.archived = FALSE
 		ORDER BY Appointment.scheduledTime ASC');
 
 	$stmt->execute();

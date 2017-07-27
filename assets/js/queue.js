@@ -13,19 +13,18 @@ var loadQueue = function() {
         success: function(result) {
 			$('.queue-table').html("<div class='flex empty-queue-message'>Queue is empty</div>");
 			$('.empty-queue-message').toggle(result.length === 0);
+			$('.queue-size-count').html(result.length);
 
             for (var i = 0; i < result.length; i++) {
-				var time = result[i].scheduledTime.split(' ');
-				var hour = time[1].split(':')[0];
-				var min = time[1].split(':')[1];
-				hour = hour > 12 ? hour - 12 : hour;
-                $('.queue-table').append(
-					"<div class='queue-record'>" +
-        				"<div class='wrap-left queue-position-wrap'>" + (i + 1) + "</div>" +
-        				"<div class='wrap-left queue-name-wrap'>" + result[i].firstName + " " + result[i].lastName + ".</div>" +
-        				"<div class='wrap-right queue-time-wrap'>" + hour + ":" + min + "</div>" +
-					"</div>"
-				);
+				var time = result[i].scheduledTime.split(' ')[1].split(':');
+				var record = {
+					position: i + 1,
+					name: result[i].firstName + ' ' + result[i].lastName + '.',
+					time: time[0] % 12 + 1 + ':' + time[1]
+				};
+
+				var template = $('.queue-record-template').html();
+                $('.queue-table').append(Mustache.render(template, record));
             }
         }
     });
