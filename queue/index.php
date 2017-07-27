@@ -46,7 +46,12 @@
 		<div class='queue-record'>
 			<div class='wrap-left queue-position-wrap'>{{position}}</div>
 			<div class='wrap-left queue-name-wrap'>{{name}}</div>
-			<div class='wrap-right queue-time-wrap'>{{time}}</div>
+			<div class='wrap-right queue-time-wrap'>
+				{{#isLate}}
+					<div class='flex queue-tag late-tag'>LATE</div>
+				{{/isLate}}
+				{{time}}
+			</div>
 		</div>
 	</script>
 </html>

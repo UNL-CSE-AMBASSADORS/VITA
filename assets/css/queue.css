@@ -80,3 +80,18 @@
   height: 96px;
   width: 100%;
 }
+
+.queue-tag {
+	height: 28px;
+	font-size: 16px;
+	color: #FFFFFF;
+	font-style: bold;
+	align-items: center;
+	justify-content: center;
+	margin: 0 16px;
+	padding: 0 16px;
+}
+
+.late-tag {
+	background: #FE4A49;
+}

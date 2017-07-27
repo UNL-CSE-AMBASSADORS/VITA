@@ -1,4 +1,4 @@
-var REFRESH_SEC = 5;
+var REFRESH_SEC = 10;
 
 $(document).ready(function() {
 	keepTime();
@@ -17,10 +17,15 @@ var loadQueue = function() {
 
             for (var i = 0; i < result.length; i++) {
 				var time = result[i].scheduledTime.split(' ')[1].split(':');
+				var hour = time[0] % 12 + 1;
+				var min = time[1];
+				if (hour < 10) hour = '0' + hour;
+
 				var record = {
 					position: i + 1,
 					name: result[i].firstName + ' ' + result[i].lastName + '.',
-					time: time[0] % 12 + 1 + ':' + time[1]
+					isLate: new Date(result[i].scheduledTime).getTime() < new Date().getTime(),
+					time: hour + ':' + min
 				};
 
 				var template = $('.queue-record-template').html();
