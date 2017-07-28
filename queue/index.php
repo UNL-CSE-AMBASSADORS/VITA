@@ -4,6 +4,7 @@
 		<title>Queue Test</title>
 		<?php require_once '../server/header.php' ?>
 		<link rel='stylesheet' href='../assets/css/queue.css'>
+		<meta http-equiv='refresh' content='600'/>
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -18,7 +19,7 @@
 				</div>
 				<div class='wrap-left queue-size-wrap'>
 					<div class='queue-size-lbl'>Queue:</div>
-					<div class='queue-size-count'> </div>
+					<div class='queue-size-count'></div>
 				</div>
 				<div class='wrap-right clock-wrap'>
 					<div class='clock-time'></div>
@@ -36,7 +37,7 @@
 				<div class='wrap-left queue-name-wrap'>Name</div>
 				<div class='wrap-right queue-time-wrap'>Time</div>
 			</div>
-			<div class='sub-section flex queue-table'> </div> 
+			<div class='sub-section flex queue-table'></div> 
 		</div> 
 		<?php require_once '../server/footer.php' ?>
 	</body>

@@ -1,15 +1,9 @@
-var REFRESH_SEC = 10;
+var REFRESH_SEC = 15;
 
-$(document).ready(function() {
-	keepTime();
-    loadQueue();
-    window.setInterval(loadQueue, REFRESH_SEC * 1000);
-});
-
-var loadQueue = function() {
-    $.post({
+(function loadQueue() {
+    $.get({
         url: '../server/queue.php',
-        dataType: 'json',
+		dataType: 'json',
         success: function(result) {
 			$('.queue-table').html("<div class='flex empty-queue-message'>Queue is empty</div>");
 			$('.empty-queue-message').toggle(result.length === 0);
@@ -28,25 +22,30 @@ var loadQueue = function() {
 					time: hour + ':' + min
 				};
 
-				var template = $('.queue-record-template').html();
-                $('.queue-table').append(Mustache.render(template, record));
-            }
-        }
-    });
-}
+				$('.queue-table').append(Mustache.render($('.queue-record-template').html(), record));
+				time = null; hour = null; min = null; record = null;
+			}
 
-function keepTime() {
-    var now = new Date();
-	var hour = now.getHours();
-	var min = now.getMinutes();
+			result = null;
+        }
+    }).then(function() {
+		setTimeout(loadQueue, REFRESH_SEC * 1000);
+	});
+})();
+
+(function keepTime() {
+	var hour = new Date().getHours();
+	var min = new Date().getMinutes();
 
 	$('.clock-am').toggleClass('inactive-period', hour >= 12);
 	$('.clock-pm').toggleClass('inactive-period', hour < 12);
 
 	hour %= 12;
-	if (hour !== 0) hour = 12;
-	if (hour < 10) hour = '0' + hour;
+	if (hour === 0) hour = 12;
+	if (min < 10) min = '0' + min;
 
 	$('.clock-time').html(hour + ':' + min);
-	window.setInterval(keepTime, REFRESH_SEC * 1000);
-}
+
+	hour = null; min = null;
+	setTimeout(keepTime, REFRESH_SEC * 1000);
+})();
