@@ -1,11 +1,35 @@
-(function refresh() {
+var REFRESH_SEC = 15;
+var displayDate = new Date();
+var monthStrings = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
+var refreshing = setTimeout(refresh, REFRESH_SEC * 1000);
+
+$(document).ready(function() {
+	refresh();
+	$('.date-back').click(function() { displayDate.setDate(displayDate.getDate() - 1); refresh(); });
+	$('.date-forward').click(function() { displayDate.setDate(displayDate.getDate() + 1); refresh(); });
+});
+
+function refresh() {
 	keepTime();
+	
+	var year = displayDate.getFullYear();
+    var month = displayDate.getMonth() + 1;
+    var day = displayDate.getDate();
+	if (day < 10) day = '0' + day;
+	$('.date').html(monthStrings[month - 1] + ' ' + day + ', ' + year);
+	if (month < 10) month = '0' + month;
+
     $.get({
-        url: '../server/queue.php',
+		data: 'displayDate=' + year + '-' + month + '-' + day,
+		url: '../server/queue.php',
 		dataType: 'json',
-        success: populateQueue
-    }).then(function() { setTimeout(refresh, 15 * 1000); });
-})();
+		cache: false,
+		success: populateQueue
+	});
+
+	clearTimeout(refreshing);
+	refreshing = setTimeout(refresh, REFRESH_SEC * 1000);
+}
 
 function keepTime() {
 	var hour = new Date().getHours();
@@ -19,7 +43,6 @@ function keepTime() {
 	if (min < 10) min = '0' + min;
 
 	$('.clock-time').html(hour + ':' + min);
-	hour = null; min = null;
 }
 
 function populateQueue(result) {
@@ -28,10 +51,10 @@ function populateQueue(result) {
 	$('.queue-size-count').html(result.length);
 
 	for (var i = 0; i < result.length; i++) {
-		var time = result[i].scheduledTime.split(' ')[1].split(':');
-		var hour = time[0] % 12 + 1;
-		var min = time[1];
-		if (hour < 10) hour = '0' + hour;
+		var time = new Date(result[i].scheduledTime);
+		var hour = time.getHours() % 12 + 1;
+		var min = time.getMinutes();
+		if (min < 10) min = '0' + min;
 
 		var record = {
 			position: i + 1,
@@ -41,8 +64,5 @@ function populateQueue(result) {
 		};
 
 		$('.queue-table').append(Mustache.render($('.queue-record-template').html(), record));
-		time = null; hour = null; min = null; record = null;
 	}
-
-	result = null;
 }

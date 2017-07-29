@@ -28,6 +28,14 @@
 						<div class='clock-pm'>PM</div>
 					</div>
 				</div>
+				<div class='wrap-right flex date-wrap'>
+					<div class='date'></div>
+					<div class='date-nav'>
+						<i class='material-icons no-select date-back'>keyboard_arrow_left</i>
+						<i class='material-icons no-select date-range'>date_range</i>
+						<i class='material-icons no-select date-forward'>keyboard_arrow_right</i>
+					</div>
+				</div>
 			</div>
 		</div>
 

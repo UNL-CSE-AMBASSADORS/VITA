@@ -86,7 +86,7 @@ html, body {
 	width: 25%;
 }
 
-.wrap-left, .wrap-right {
+.wrap, .wrap-left, .wrap-right {
 	height: 100%;
 	position: relative;
 	display: -webkit-box;
@@ -95,6 +95,11 @@ html, body {
 	display: -webkit-flex;
 	display: flex;
 	align-items: center;
+}
+
+.wrap {
+	text-align: center;
+	justify-content: center;
 }
 
 .wrap-left {
@@ -141,6 +146,15 @@ html, body {
 .theme-white {
 	background: #FFFFFF;
 	color: #212121;
+}
+
+.no-select {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 @media only screen and (max-width: 600px) {

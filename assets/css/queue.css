@@ -1,95 +1,118 @@
 .dashboard {
-  height: 128px;
+	height: 128px;
 }
 
-.volunteers-wrap, .queue-size-wrap, .clock-wrap {
-  margin: 0 24px;
-  font-family: Bebas_Neue;
-  font-weight: bold;
+.volunteers-wrap, .queue-size-wrap, .date-wrap, .clock-wrap {
+	margin: 0 24px;
+	font-family: Bebas_Neue;
+	font-weight: bold;
+}
+
+.date-wrap {
+	flex-direction: column;
+	justify-content: center;
 }
 
 .volunteers-lbl, .queue-size-lbl {
-  font-family: Verdana;
-  font-size: 32px;
-  font-weight: 400;
+	font-family: Verdana;
+	font-size: 32px;
+	font-weight: 400;
 }
 
 .volunteers-count, .queue-size-count {
-  font-size: 64px;
-  margin-left: 8px;
+	font-size: 64px;
+	margin-left: 8px;
 }
 
 .clock-time {
-  font-size: 96px;
+	font-size: 96px;
 }
 
 .clock-period {
-  font-size: 36px;
-  margin-left: 8px;
+	font-size: 36px;
+	margin-left: 8px;
+}
+
+.date {
+	font-size: 36px;
+}
+
+.date-back, .date-range, .date-forward {
+	cursor: pointer;
+	font-size: 36px;
 }
 
 .inactive-period {
-  opacity: 0.15;
+	opacity: 0.15;
 }
 
 .queue {
-  flex-direction: column;
-  align-items: center;
+	flex-direction: column;
+	align-items: center;
+}
+
+.queue-calendar {
+	align-items: center;
+	justify-content: center;
+	font-size: 24px;
+	min-height: 48px;
 }
 
 .queue-position-wrap {
-  width: 20%;
+	width: 20%;
 }
 
 .queue-name-wrap {
-  width: 50%;
+	width: 50%;
 }
 
 .queue-time-wrap {
-  width: 30%;
+	width: 30%;
 }
 
 .queue-header {
-  font-family: Bebas_Neue;
-  font-size: 48px;
-  font-weight: bold;
-  min-height: 96px;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
+	font-family: Bebas_Neue;
+	font-size: 48px;
+	font-weight: bold;
+	min-height: 96px;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	z-index: 1;
 }
 
 .queue-table {
-  padding: 12px 48px;
-  box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.25);
-  font-size: 32px;
-  flex-direction: column;
+	padding: 12px 48px;
+	box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.25);
+	font-size: 32px;
+	flex-direction: column;
+	overflow-y: scroll;
+	max-height: 60vh;
 }
 
 .empty-queue-message {
-  height: 96px;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.5;
-  font-style: italic;
+	height: 96px;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	opacity: 0.5;
+	font-style: italic;
 }
 
 .queue-record {
-  height: 96px;
-  width: 100%;
+	height: 96px;
+	width: 100%;
 }
 
 .queue-tag {
 	height: 28px;
 	font-size: 16px;
 	color: #FFFFFF;
-	font-style: bold;
+	font-weight: 700;
 	align-items: center;
 	justify-content: center;
 	margin: 0 16px;
-	padding: 0 16px;
+	padding: 0 8px;
 }
 
 .late-tag {

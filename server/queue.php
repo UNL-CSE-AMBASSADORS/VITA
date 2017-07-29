@@ -1,14 +1,15 @@
 <?php
 	require 'config.php';
 	$conn = $DB_CONN;
+	$displayDate = $_GET['displayDate'];
 
 	// TODO make this handle multiple locations, if necessary
-	$stmt = $conn->prepare('SELECT DISTINCT appointmentId, scheduledTime, firstName, lastName
+	$stmt = $conn->prepare("SELECT DISTINCT appointmentId, scheduledTime, firstName, lastName
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
-		WHERE /*(Appointment.scheduledTime >= NOW() AND Appointment.scheduledTime < DATE_ADD(CURDATE(), INTERVAL 1 DAY))
-			AND*/ Appointment.archived = FALSE
-		ORDER BY Appointment.scheduledTime ASC');
+		WHERE DATE(Appointment.scheduledTime) = '$displayDate'
+			AND Appointment.archived = FALSE
+		ORDER BY Appointment.scheduledTime ASC");
 
 	$stmt->execute();
 	$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
