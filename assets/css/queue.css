@@ -34,10 +34,10 @@
 }
 
 .date {
-	font-size: 36px;
+	font-size: 32px;
 }
 
-.date-back, .date-range, .date-forward {
+.date-back, .date-forward {
 	cursor: pointer;
 	font-size: 36px;
 }
@@ -49,13 +49,6 @@
 .queue {
 	flex-direction: column;
 	align-items: center;
-}
-
-.queue-calendar {
-	align-items: center;
-	justify-content: center;
-	font-size: 24px;
-	min-height: 48px;
 }
 
 .queue-position-wrap {
@@ -86,7 +79,7 @@
 	box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.25);
 	font-size: 32px;
 	flex-direction: column;
-	overflow-y: scroll;
+	overflow-y: auto;
 	max-height: 60vh;
 }
 
@@ -100,8 +93,25 @@
 }
 
 .queue-record {
+	position: relative;
 	height: 96px;
 	width: 100%;
+	max-width: 100%;
+}
+
+.queue-record-controls {
+	opacity: 0;
+	margin: 0 16px;
+}
+
+.queue-record-control {
+	cursor: pointer;
+	font-size: 28px;
+	opacity: 0.5;
+}
+
+.queue-record-control:hover {
+	opacity: 1;
 }
 
 .queue-tag {

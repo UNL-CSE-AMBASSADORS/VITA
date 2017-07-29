@@ -29,12 +29,9 @@
 					</div>
 				</div>
 				<div class='wrap-right flex date-wrap'>
+					<i class='material-icons no-select date-back'>keyboard_arrow_up</i>
 					<div class='date'></div>
-					<div class='date-nav'>
-						<i class='material-icons no-select date-back'>keyboard_arrow_left</i>
-						<i class='material-icons no-select date-range'>date_range</i>
-						<i class='material-icons no-select date-forward'>keyboard_arrow_right</i>
-					</div>
+					<i class='material-icons no-select date-forward'>keyboard_arrow_down</i>
 				</div>
 			</div>
 		</div>
@@ -54,11 +51,15 @@
 	<script class='queue-record-template' type='text/template'>
 		<div class='queue-record'>
 			<div class='wrap-left queue-position-wrap'>{{position}}</div>
-			<div class='wrap-left queue-name-wrap'>{{name}}</div>
+			<div class='wrap-left queue-name-wrap'>
+				{{name}}
+				<div class='queue-record-controls'>
+					<i class='material-icons queue-record-control queue-record-cancel'>delete</i>
+					<i class='material-icons queue-record-control queue-record-reschedule'>event</i>
+				</div>
+			</div>
 			<div class='wrap-right queue-time-wrap'>
-				{{#isLate}}
-					<div class='flex queue-tag late-tag'>LATE</div>
-				{{/isLate}}
+				{{#isLate}}<div class='flex queue-tag late-tag'>LATE</div>{{/isLate}}
 				{{time}}
 			</div>
 		</div>
