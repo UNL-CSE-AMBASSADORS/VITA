@@ -2,6 +2,7 @@
   height: 72px;
   font-size: 24px;
   font-family: Verdana;
+  z-index: 100;
 }
 
 .menu-icon-wrap {
