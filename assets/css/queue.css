@@ -127,3 +127,11 @@
 .late-tag {
 	background: #FE4A49;
 }
+
+.on-time-tag {
+	background: #067BC2;
+}
+
+.no-show-tag {
+	background: #212121;
+}

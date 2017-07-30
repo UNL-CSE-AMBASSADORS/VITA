@@ -59,7 +59,11 @@
 				</div>
 			</div>
 			<div class='wrap-right queue-time-wrap'>
-				{{#isLate}}<div class='flex queue-tag late-tag'>LATE</div>{{/isLate}}
+				{{#isOnTime}}<div class='flex queue-tag on-time-tag'>ON TIME</div>{{/isOnTime}}
+				{{^isOnTime}}
+					{{#isPresent}}<div class='flex queue-tag late-tag'>LATE</div>{{/isPresent}}
+					{{^isPresent}}<div class='flex queue-tag no-show-tag'>NO SHOW</div>{{/isPresent}}
+				{{/isOnTime}}
 				{{time}}
 			</div>
 		</div>

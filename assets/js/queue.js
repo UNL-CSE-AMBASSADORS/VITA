@@ -74,7 +74,8 @@ function populateQueue() {
 				var record = {
 					position: i + 1,
 					name: `${r[i].firstName} ${r[i].lastName}.`,
-					isLate: new Date(r[i].scheduledTime).getTime() < new Date().getTime(),
+					isPresent: false, // TODO pull arrival time from database
+					isOnTime: new Date().getTime() < new Date(r[i].scheduledTime).getTime(),
 					time: `${hr}:${mn}`
 				};
 
