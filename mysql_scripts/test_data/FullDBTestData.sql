@@ -443,12 +443,13 @@ BEGIN
         INSERT INTO Client (firstName, lastName, emailAddress)
 			VALUES (@firstName, @lastName, @emailAddress);
         SET @clientIdForThisAppointment = LAST_INSERT_ID();
-        SET @randomMinute = CEIL(RAND() * (maxIntervalValue - minIntervalValue));
         
         -- create appointment
+		SET @randomMinute = CEIL(RAND() * (maxIntervalValue - minIntervalValue));
+		SET @scheduledTime = DATE_ADD(NOW(), INTERVAL @randomMinute MINUTE);
         SET @siteIdForThisAppointment = startingSiteId + ROUND(RAND() * (endingSiteId - startingSiteId));
 		INSERT INTO Appointment (scheduledTime, clientId, siteId)
-			VALUES (DATE_ADD(NOW(), INTERVAL @randomMinute MINUTE), @clientIdForThisAppointment, @siteIdForThisAppointment);
+			VALUES (@scheduledTime, @clientIdForThisAppointment, @siteIdForThisAppointment);
 		SET i = i + 1;
     END WHILE;
     COMMIT;
