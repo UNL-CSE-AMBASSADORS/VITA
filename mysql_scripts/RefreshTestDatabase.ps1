@@ -1,3 +1,6 @@
+# You may have to run the Unblock-File INSERT_RELATIVE_FILE_PATH_TO_THIS_FILE_HERE
+# If powershell is saying it won't run this due to a security risk
+
 # Specify connection variables
 $MySQLUserName = 'root'
 $MySQLUserPassword = 'root'
