@@ -2,8 +2,8 @@
 <html class='no-js theme-light' lang="">
 <head>
 	<title>Queue Test</title>
-	<?php require_once 'server/header.php' ?>
-	<link rel='stylesheet' href='assets/css/queue.css'>
+	<?php require_once '../server/header.php' ?>
+	<link rel='stylesheet' href='/assets/css/queue.css'>
 	<meta http-equiv='refresh' content='600'/>
 </head>
 <body>
@@ -12,7 +12,7 @@
 	<![endif]-->
 	<?php
 		$page_title = 'Queue';
-		require_once 'components/nav.php';
+		require_once '../components/nav.php';
 	?>
 
 	<div class='section dashboard'>
@@ -48,7 +48,7 @@
 		</div>
 		<div class='sub-section theme-white flex queue-table'></div>
 	</div>
-	<?php require_once 'server/footer.php' ?>
+	<?php require_once '../server/footer.php' ?>
 </body>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js'></script>
 <script src='/assets/js/queue.js'></script>
