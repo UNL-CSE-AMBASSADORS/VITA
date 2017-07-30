@@ -1,2 +1,3 @@
 *.styl
 server/config.php
+mysql_scripts/RefreshTestDatabase.ps1
