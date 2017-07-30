@@ -12,7 +12,7 @@
 		<![endif]-->
 		<?php require_once '../components/nav.php' ?>
 		<div class='section box theme-light queue-details'>
-			<div class='theme-white flex queue'>
+			<div class='theme-white flex box queue'>
 				<div class='sub-section flex queue-header'>
 					<div class='wrap-left queue-position-wrap'>Pos.</div>
 					<div class='wrap-left queue-name-wrap'>Name</div>
@@ -41,12 +41,12 @@
 			<div class='wrap-left queue-position-wrap'>{{position}}</div>
 			<div class='wrap-left queue-name-wrap'>{{name}}</div>
 			<div class='wrap-right queue-time-wrap'>
+				{{time}}
 				{{#isOnTime}}<div class='flex queue-tag on-time-tag'>ON TIME</div>{{/isOnTime}}
 				{{^isOnTime}}
 					{{#isPresent}}<div class='flex queue-tag late-tag'>LATE</div>{{/isPresent}}
 					{{^isPresent}}<div class='flex queue-tag no-show-tag'>NO SHOW</div>{{/isPresent}}
 				{{/isOnTime}}
-				{{time}}
 			</div>
 		</div>
 	</script>

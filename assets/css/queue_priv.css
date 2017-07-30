@@ -14,6 +14,35 @@ html, body {
 	margin-right: 36px;
 	box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.25);
 	flex-direction: column;
+	font-size: 18px;
+}
+
+.queue-position-wrap {
+	width: 15%;
+}
+
+.queue-name-wrap {
+	width: 35%;
+}
+
+.queue-time-wrap {
+	width: 50%;
+	flex-direction: column;
+	align-items: flex-end;
+	justify-content: center;
+}
+
+.queue-table {
+	flex-direction: column;
+}
+
+.queue-record {
+	padding: 12px 24px;
+	cursor: pointer;
+}
+
+.queue-record:hover {
+	background: #F3F3F3;
 }
 
 .details {
