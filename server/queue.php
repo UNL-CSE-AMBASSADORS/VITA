@@ -1,17 +1,16 @@
 <?php
 	require 'config.php';
 	$conn = $DB_CONN;
-	$displayDate = $_GET['displayDate'];
 
 	// TODO make this handle multiple locations, if necessary
 	$stmt = $conn->prepare("SELECT DISTINCT appointmentId, scheduledTime, firstName, lastName
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
-		WHERE DATE(Appointment.scheduledTime) = '$displayDate'
+		WHERE DATE(Appointment.scheduledTime) = ?
 			AND Appointment.archived = FALSE
 		ORDER BY Appointment.scheduledTime ASC");
 
-	$stmt->execute();
+	$stmt->execute(array($_GET['displayDate']));
 	$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 	// We must only display the first letter of the last name
