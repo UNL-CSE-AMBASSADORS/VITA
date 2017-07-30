@@ -452,5 +452,5 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL CreateAppointments(200, @site_site1Id, @site_site2Id);
+CALL sp_CreateAppointments(200, @site_site1Id, @site_site2Id);
 -- end load testing for Appointments
