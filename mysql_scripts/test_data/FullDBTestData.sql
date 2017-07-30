@@ -452,8 +452,5 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL CreateAppointments(100, @site_site1Id, @site_site2Id);
+CALL CreateAppointments(200, @site_site1Id, @site_site2Id);
 -- end load testing for Appointments
-
-use vita;
-select * from Appointment;
