@@ -1,0 +1,23 @@
+html, body {
+	height: 100vh;
+}
+
+.queue-details {
+	height: calc(100% - 72px);
+	padding: 36px;
+	
+}
+
+.queue {
+	height: 100%;
+	width: 400px;
+	margin-right: 36px;
+	box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.25);
+	flex-direction: column;
+}
+
+.details {
+	height: 100%;
+	flex-grow: 1;
+	box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.25);
+}
