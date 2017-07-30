@@ -1,3 +1,6 @@
+# Note that if you are unable to run this file due to "security reasons"
+# You will need to run the cmdlet Unblock-File INSERT_RELATIVE_FILE_PATH_HERE
+
 # Specify connection variables
 $MySQLUserName = 'root'
 $MySQLUserPassword = 'root'
