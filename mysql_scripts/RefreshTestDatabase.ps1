@@ -6,7 +6,7 @@ $MySQLUserName = 'root'
 $MySQLUserPassword = 'root'
 $MySQLDatabase = 'vita'
 $MySQLHost = '127.0.0.1'
-$MySQLPort = '8889'
+$MySQLPort = '3306'
 
 
 $ConnectionString = "server=" + $MySQLHost + ";port=" + $MySQLPort + ";uid=" + $MySQLUserName + ";pwd=" + $MySQLUserPassword + ";database="+$MySQLDatabase +";Allow User Variables=True"
