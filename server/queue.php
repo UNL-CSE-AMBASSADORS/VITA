@@ -3,25 +3,21 @@
 	$conn = $DB_CONN;
 
 	// TODO make this handle multiple locations, if necessary
-	$stmt = $conn->prepare('SELECT DISTINCT appointmentId, scheduledTime, firstName, lastName
+	$stmt = $conn->prepare("SELECT DISTINCT appointmentId, scheduledTime, firstName, lastName
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
-		WHERE (Appointment.scheduledTime >= NOW() AND Appointment.scheduledTime < DATE_ADD(CURDATE(), INTERVAL 1 DAY))
+		WHERE DATE(Appointment.scheduledTime) = ?
 			AND Appointment.archived = FALSE
-		ORDER BY Appointment.scheduledTime ASC');
+		ORDER BY Appointment.scheduledTime ASC");
 
-	$stmt->execute();
-	$results = $stmt->fetchAll();
+	$stmt->execute(array($_GET['displayDate']));
+	$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 	// We must only display the first letter of the last name
 	// We do this server-side since we can't disclose the data client-side
-	$appointments = [];
-	foreach ($results as $result) {
-		$result['lastName'] = substr($result['lastName'], 0, 1);
-
-		$appointments[] = $result;
+	for ($i = 0; $i < count($appointments); $i++) {
+		$appointments[$i]['lastName'] = substr($appointments[$i]['lastName'], 0, 1);
 	}
 
 	echo json_encode($appointments);
-
 	$stmt = null;
