@@ -437,8 +437,11 @@ BEGIN
     START TRANSACTION;
     WHILE i < numAppointments DO
 		-- create random client
+		SET @firstName = LEFT(UUID(), 20);
+		SET @lastName = LEFT(UUID(), 20);
+		SET @emailAddress = CONCAT(LEFT(UUID(), 20), "@test.test");
         INSERT INTO Client (firstName, lastName, emailAddress)
-			VALUES (UUID(), UUID(), UUID());
+			VALUES (@firstName, @lastName, @emailAddress);
         SET @clientIdForThisAppointment = LAST_INSERT_ID();
         SET @randomMinute = CEIL(RAND() * (maxIntervalValue - minIntervalValue));
         
