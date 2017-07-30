@@ -11,8 +11,10 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 		<![endif]-->
 		<?php
-    $page_title = 'Queue';
-    require_once '../components/nav.php' ?>
+      $page_title = 'Queue';
+      require_once '../components/nav.php';
+    ?>
+    
 		<div class='section dashboard'>
 			<div class='sub-section-full'>
 				<!-- <div class='wrap-left flex volunteers-wrap'>

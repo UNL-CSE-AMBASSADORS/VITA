@@ -1,13 +1,13 @@
 <!-- TODO: insert authentication logic here -->
 
 <?php
-if (!isset($page_title)) {
-	$page_title = "VITA";
-}
+	if (!isset($page_title)) {
+		$page_title = "VITA";
+	}
 
-if (!isset($page_subtitle)) {
-	$page_subtitle = "Center for People in Need";
-}
+	if (!isset($page_subtitle)) {
+		$page_subtitle = "Center for People in Need";
+	}
 ?>
 
 <div class='section theme-dark nav'>
