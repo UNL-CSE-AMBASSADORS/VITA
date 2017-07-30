@@ -7,8 +7,8 @@
 	$stmt = $conn->prepare("SELECT DISTINCT appointmentId, scheduledTime, firstName, lastName
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
-		WHERE DATE(Appointment.scheduledTime) = '$displayDate'
-			AND Appointment.archived = FALSE
+		WHERE /*DATE(Appointment.scheduledTime) = '$displayDate'
+			AND */Appointment.archived = FALSE
 		ORDER BY Appointment.scheduledTime ASC");
 
 	$stmt->execute();

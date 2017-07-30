@@ -98,21 +98,6 @@
 	width: 100%;
 }
 
-.queue-record-controls {
-	opacity: 0;
-	margin: 0 16px;
-}
-
-.queue-record-control {
-	cursor: pointer;
-	font-size: 28px;
-	opacity: 0.5;
-}
-
-.queue-record-control:hover {
-	opacity: 1;
-}
-
 .queue-tag {
 	height: 28px;
 	font-size: 16px;
@@ -125,7 +110,7 @@
 }
 
 .late-tag {
-	background: #FE4A49;
+	background: #EE2E31;
 }
 
 .on-time-tag {

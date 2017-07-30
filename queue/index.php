@@ -13,10 +13,10 @@
 		<?php require_once '../components/nav.php' ?>
 		<div class='section dashboard'>
 			<div class='sub-section-full'>
-				<div class='wrap-left flex volunteers-wrap'>
+				<!-- <div class='wrap-left flex volunteers-wrap'>
 					<div class='volunteers-lbl'>Volunteers:</div>
-					<div class='volunteers-count'>5</div>
-				</div>
+					<div class='volunteers-count'></div>
+				</div> -->
 				<div class='wrap-left queue-size-wrap'>
 					<div class='queue-size-lbl'>Queue:</div>
 					<div class='queue-size-count'></div>
@@ -51,13 +51,7 @@
 	<script class='queue-record-template' type='text/template'>
 		<div class='queue-record'>
 			<div class='wrap-left queue-position-wrap'>{{position}}</div>
-			<div class='wrap-left queue-name-wrap'>
-				{{name}}
-				<div class='queue-record-controls'>
-					<i class='material-icons queue-record-control queue-record-cancel'>delete</i>
-					<i class='material-icons queue-record-control queue-record-reschedule'>event</i>
-				</div>
-			</div>
+			<div class='wrap-left queue-name-wrap'>{{name}}</div>
 			<div class='wrap-right queue-time-wrap'>
 				{{#isOnTime}}<div class='flex queue-tag on-time-tag'>ON TIME</div>{{/isOnTime}}
 				{{^isOnTime}}

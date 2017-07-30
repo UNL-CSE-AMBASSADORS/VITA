@@ -1,4 +1,4 @@
-var REFRESH_SEC = 60,
+var REFRESH_SEC = 15,
 	displayDate = new Date(),
 	monthStrings = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
 	refreshing = null;
@@ -20,12 +20,6 @@ function listen() {
 
 	$('.date-forward').unbind('click');
 	$('.date-forward').click(function() { displayDate.setDate(displayDate.getDate() + 1); refresh(); });
-
-	$('.queue-record').unbind('hover');
-	$('.queue-record').hover(
-		function() { $(this).find('.queue-record-controls').css('opacity', '1') },
-		function() { $(this).find('.queue-record-controls').css('opacity', '0') }
-	);
 }
 
 function keepTime() {
@@ -74,7 +68,7 @@ function populateQueue() {
 				var record = {
 					position: i + 1,
 					name: `${r[i].firstName} ${r[i].lastName}.`,
-					isPresent: false, // TODO pull arrival time from database
+					isPresent: true,
 					isOnTime: new Date().getTime() < new Date(r[i].scheduledTime).getTime(),
 					time: `${hr}:${mn}`
 				};
