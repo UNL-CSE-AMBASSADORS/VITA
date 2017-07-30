@@ -426,9 +426,9 @@ INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 
 
 -- load testing for Appointments
-DROP PROCEDURE IF EXISTS CreateAppointments;
+DROP PROCEDURE IF EXISTS sp_CreateAppointments;
 DELIMITER $$
-CREATE PROCEDURE CreateAppointments(IN numAppointments INT, IN startingSiteId INT, IN endingSiteId INT)
+CREATE PROCEDURE sp_CreateAppointments(IN numAppointments INT, IN startingSiteId INT, IN endingSiteId INT)
 BEGIN
 	DECLARE minIntervalValue INT DEFAULT 1; 
 	DECLARE maxIntervalValue INT DEFAULT 300; # 5 hours
