@@ -423,3 +423,37 @@ INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question6YesId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion6Id);
 -- end answer
+
+
+-- load testing for Appointments
+DROP PROCEDURE IF EXISTS CreateAppointments;
+DELIMITER $$
+CREATE PROCEDURE CreateAppointments(IN numAppointments INT, IN startingSiteId INT, IN endingSiteId INT)
+BEGIN
+	DECLARE minIntervalValue INT DEFAULT 1; 
+	DECLARE maxIntervalValue INT DEFAULT 300; # 5 hours
+
+	DECLARE i INT DEFAULT 0;
+    START TRANSACTION;
+    WHILE i < numAppointments DO
+		-- create random client
+        INSERT INTO Client (firstName, lastName, emailAddress)
+			VALUES (UUID(), UUID(), UUID());
+        SET @clientIdForThisAppointment = LAST_INSERT_ID();
+        SET @randomMinute = CEIL(RAND() * (maxIntervalValue - minIntervalValue));
+        
+        -- create appointment
+        SET @siteIdForThisAppointment = startingSiteId + ROUND(RAND() * (endingSiteId - startingSiteId));
+		INSERT INTO Appointment (scheduledTime, clientId, siteId)
+			VALUES (DATE_ADD(NOW(), INTERVAL @randomMinute MINUTE), @clientIdForThisAppointment, @siteIdForThisAppointment);
+		SET i = i + 1;
+    END WHILE;
+    COMMIT;
+END$$
+DELIMITER ;
+
+CALL CreateAppointments(100, @site_site1Id, @site_site2Id);
+-- end load testing for Appointments
+
+use vita;
+select * from Appointment;
