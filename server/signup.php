@@ -28,13 +28,13 @@ function addSelection($questionOptions) {
   $vitaFormRequired = "";
   $requiredClass = "";
   if ($questionOptions[0]['required'] == true) {
-    $vitaFormRequired = "vita-form-required";
+    $vitaFormRequired = "form-required";
     $requiredClass = 'class="required"';
   }
 
   $selectInput = '
-      <div class="vita-form-select">
-        <label for="'.$questionOptions[0]['tag'].'" class="vita-form-label '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
+      <div class="form-select">
+        <label for="'.$questionOptions[0]['tag'].'" class="form-label '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
         <div>
           <select id="'.$questionOptions[0]['tag'].'" '.$requiredClass.' name="'.$questionOptions[0]['litmusQuestionId'].'">';
 	foreach	($questionOptions as $option)	{
@@ -43,7 +43,7 @@ function addSelection($questionOptions) {
 	}
 	$selectInput .= '
           </select>
-          <div class="vita-form-select__arrow"></div>
+          <div class="form-select__arrow"></div>
         </div>
       </div>';
 	echo $selectInput;
@@ -53,17 +53,17 @@ function addRadioSelection($questionOptions) {
   $vitaFormRequired = "";
   $requiredClass = "";
   if ($questionOptions[0]['required'] == true) {
-    $vitaFormRequired = "vita-form-required";
+    $vitaFormRequired = "form-required";
     $requiredClass = 'class="required"';
   }
 
   $selectInput = '
-      <div class="vita-form-radio">
-        <label for="'.$questionOptions[0]['tag'].'" class="vita-form-label vita-form-label__floating '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
+      <div class="form-radio">
+        <label for="'.$questionOptions[0]['tag'].'" class="form-label form-label__floating '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
         <div>';
 	foreach	($questionOptions as $option)	{
   	$selectInput .= '
-              <label class="vita-form-radio-label" for="'.$option['possibleAnswerId'].'">'.$option['possibleAnswerText'].'</label>
+              <label class="form-radio-label" for="'.$option['possibleAnswerId'].'">'.$option['possibleAnswerText'].'</label>
               <input type="radio" id="'.$option['possibleAnswerId'].'" value="'.$option['possibleAnswerId'].'" '.$requiredClass.' name="'.$questionOptions[0]['litmusQuestionId'].'">
           ';
 	}

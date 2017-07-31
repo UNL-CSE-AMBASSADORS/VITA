@@ -16,33 +16,33 @@
 	<div class="section">
 		<div class="sub-section">
 			<form class="cmxform" id="vitaSignupForm" method="post" action="" autocomplete="off">
-				<h1 class="vita-form-title">Sign Up for a VITA Appointment</h1>
+				<h2 class="form-title">Sign Up for a VITA Appointment</h2>
 
-				<div class="vita-form-textfield">
+				<div class="form-textfield">
 					<input type="text" name="firstName" id="firstName">
-					<span class="vita-form-bar"></span>
-					<label class="vita-form-label vita-form-required" for="firstName">First Name</label>
+					<span class="form-bar"></span>
+					<label class="form-label form-required" for="firstName">First Name</label>
 				</div>
 
-				<div class="vita-form-textfield">
+				<div class="form-textfield">
 					<input type="text" name="lastName" id="lastName" required>
-					<span class="vita-form-bar"></span>
-					<label class="vita-form-label vita-form-required" for="lastName">Last Name</label>
+					<span class="form-bar"></span>
+					<label class="form-label form-required" for="lastName">Last Name</label>
 				</div>
 
-				<div class="vita-form-textfield">
+				<div class="form-textfield">
 					<input type="email" name="email" id="email" required>
-					<span class="vita-form-bar"></span>
-					<label class="vita-form-label vita-form-required" for="email">Email</label>
+					<span class="form-bar"></span>
+					<label class="form-label form-required" for="email">Email</label>
 				</div>
 
-				<div class="vita-form-textfield">
+				<div class="form-textfield">
 					<input type="text" name="phone" id="phone" required>
-					<span class="vita-form-bar"></span>
-					<label class="vita-form-label vita-form-required" for="phone">Phone Number</label>
+					<span class="form-bar"></span>
+					<label class="form-label form-required" for="phone">Phone Number</label>
 				</div>
 
-				<h2 class="vita-form-subheading">Appointment Information</h2>
+				<h3 class="form-subheading">Appointment Information</h3>
 
 				<?php
 					require_once "$root/server/signup.php";
