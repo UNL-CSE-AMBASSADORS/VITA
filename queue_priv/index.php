@@ -53,6 +53,12 @@
 						</div>
 					</div>
 				</div>
+				<div class='theme-white flex details-controls'>
+					<div class=''>Close</div>
+					<div class='button theme-dark'>Reschedule</div>
+					<div class='button theme-dark'>Cancel Appointment</div>
+					<div class='button theme-dark'>Accept</div>
+				</div>
 			</div>
 		</div>
 		<?php require_once '../server/footer.php' ?>

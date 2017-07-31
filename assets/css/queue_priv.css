@@ -93,6 +93,7 @@ html, body {
 	flex-grow: 1;
 	border-radius: 4px;
 	flex-direction: column;
+	justify-content: space-between;
 }
 
 .details-id {
@@ -120,4 +121,9 @@ html, body {
 
 .details-id-attribute-value {
 	font-size: 28px;
+}
+
+.details-controls {
+	align-items: center;
+	justify-content: flex-end;
 }
