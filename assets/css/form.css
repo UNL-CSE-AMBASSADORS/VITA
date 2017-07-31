@@ -1,152 +1,152 @@
 body {
-  background-color: #FEFDFA;
+	background-color: #FEFDFA;
 }
 
 /* HEADINGS ======================================= */
 h2.form-title {
-  color: #474746;
-  line-height: 1;
-  margin: 0;
-  padding: 1em 0 1em 0;
+	color: #474746;
+	line-height: 1;
+	margin: 0;
+	padding: 1em 0 1em 0;
 }
 h3.form-subheading {
-  margin-bottom: 0.5em;
+	margin-bottom: 0.5em;
 	margin-top: 0;
 }
 .form-container {
-  font-family: Verdana, 'Helvetica Neue', sans-serif;
-  margin: 30px 0;
-  padding: 10px 10px 50px;
-  display: block;
-  box-shadow: 0px 3px 15px -5px black;
-  border-radius: 3px;
-  min-width: 285px;
+	font-family: Verdana, 'Helvetica Neue', sans-serif;
+	margin: 30px 0;
+	padding: 10px 10px 50px;
+	display: block;
+	box-shadow: 0px 3px 15px -5px black;
+	border-radius: 3px;
+	min-width: 285px;
 }
 
 @media (min-width: 600px) {
-  .form-container {
-    margin: 30px 30px;
-  }
+	.form-container {
+		margin: 30px 30px;
+	}
 }
 
 @media (min-width: 960px) {
-  .form-container {
-    max-width: 720px;
-    margin: 30px auto;
-  }
+	.form-container {
+		max-width: 720px;
+		margin: 30px auto;
+	}
 }
 
 .form-container form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
 /* TEXTFIELD ======================================= */
 .form-textfield {
-  position: relative;
-  margin-top: 16px;
-  margin-bottom: 32px;
-  width: 100%;
+	position: relative;
+	margin-top: 16px;
+	margin-bottom: 32px;
+	width: 100%;
 }
 .form-textfield input {
-  font-size: 18px;
-  padding: 8px 0 8px 0;
-  display: block;
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid #757575;
-  background-color: transparent;
+	font-size: 18px;
+	padding: 8px 0 8px 0;
+	display: block;
+	width: 100%;
+	border: none;
+	border-bottom: 1px solid #757575;
+	background-color: transparent;
 }
 .form-textfield input:focus {
-  outline: none;
+	outline: none;
 }
 
 /* LABEL ======================================= */
 .form-label {
-  color: #777;
+	color: #777;
 }
 
 .form-select .form-label {
-  font-size: 14px;
+	font-size: 14px;
 }
 
 .form-textfield .form-label {
-  font-size: 18px;
-  font-weight: normal;
-  position: absolute;
-  pointer-events: none;
-  left: 3px;
-  top: 10px;
-  transition: 0.2s ease all;
-  -moz-transition: 0.2s ease all;
-  -webkit-transition: 0.2s ease all;
+	font-size: 18px;
+	font-weight: normal;
+	position: absolute;
+	pointer-events: none;
+	left: 3px;
+	top: 10px;
+	transition: 0.2s ease all;
+	-moz-transition: 0.2s ease all;
+	-webkit-transition: 0.2s ease all;
 }
 
 label.form-required::after {
-  content: " *";
-  color: #137CBD;
+	content: " *";
+	color: #137CBD;
 }
 
 /* active state */
 .form-textfield input:focus ~ .form-label {
-  color: #D00000;
+	color: #D00000;
 }
 
 .form-textfield input:focus ~ .form-label,
 .form-textfield input ~ .form-label__floating,
 .form-textfield input ~ .form-label__always-floating {
-  left: 0;
-  top: -1em;
-  font-size: 14px;
+	left: 0;
+	top: -1em;
+	font-size: 14px;
 }
 
 /* BOTTOM BARS ================================= */
 .form-bar {
-  position: relative;
-  display: block;
-  width: 100%;
+	position: relative;
+	display: block;
+	width: 100%;
 }
 .form-bar:before, .form-bar:after {
-  content: '';
-  height: 3px;
-  width: 0;
-  bottom: 0;
-  position: absolute;
-  background: #D00000;
-  transition: 0.2s ease all;
-  -moz-transition: 0.2s ease all;
-  -webkit-transition: 0.2s ease all;
+	content: '';
+	height: 3px;
+	width: 0;
+	bottom: 0;
+	position: absolute;
+	background: #D00000;
+	transition: 0.2s ease all;
+	-moz-transition: 0.2s ease all;
+	-webkit-transition: 0.2s ease all;
 }
 .form-bar:before {
-  left: 50%;
+	left: 50%;
 }
 .form-bar:after {
-  right: 50%;
+	right: 50%;
 }
 
 /* active state */
 .form-textfield input:focus ~ .form-bar:before, .form-textfield input:focus ~ .form-bar:after {
-  width: 50%;
+	width: 50%;
 }
 
 /* HINTS ================================= */
 .form-hint {
-  font-size: 14px;
-  position: relative;
-  left: 0;
-  top: 0;
-  line-height: 1em;
+	font-size: 14px;
+	position: relative;
+	left: 0;
+	top: 0;
+	line-height: 1em;
 }
 
 /* ERRORS ================================= */
 label.error {
-  font-size: 14px;
-  position: absolute;
-  color: red;
-  left: 0;
-  bottom: -16px;
-  line-height: 1em;
+	font-size: 14px;
+	position: absolute;
+	color: red;
+	left: 0;
+	bottom: -16px;
+	line-height: 1em;
 }
 
 /* CHECKBOXS/RADIO ================================= */
@@ -189,7 +189,7 @@ label.error {
 /* Hover state whilst checked */
 .form-control:hover input:not([disabled]):checked ~ .form-control__indicator,
 .form-control input:checked:focus ~ .form-control__indicator {
-  background: #910000;
+	background: #910000;
 }
 
 /* Disabled state */
@@ -283,7 +283,7 @@ label.error {
 
 .form-select__arrow {
 	position: relative;
-  bottom: 21px;
+	bottom: 21px;
 	left: calc(100% - 21px);
 	width: 0;
 	height: 0;
@@ -310,10 +310,10 @@ label.error {
 }
 
 .form-radio div .form-radio-label {
-  border-radius: 4px;
-  margin: 3px 0;
-  min-width: 45px;
-  padding: 5px 10px;
+	border-radius: 4px;
+	margin: 3px 0;
+	min-width: 45px;
+	padding: 5px 10px;
 }
 
 .form-radio .ui-state-active,
@@ -322,11 +322,11 @@ label.error {
 .form-radio a.ui-button:active,
 .form-radio .ui-button:active,
 .form-radio .ui-button.ui-state-active:hover {
-  background-color: #d00000;
-  border: 1px solid #d00000;
-  color: white;
+	background-color: #d00000;
+	border: 1px solid #d00000;
+	color: white;
 }
 
 .form-radio .ui-visual-focus {
-  box-shadow: 0 0 5px -1px #000;
+	box-shadow: 0 0 5px -1px #000;
 }
