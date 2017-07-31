@@ -4,7 +4,7 @@
 <head>
 	<title>VITA Lincoln</title>
 	<?php require_once "$root/server/header.php" ?>
-	<link rel='stylesheet' href='assets/css/main.css'>
+	<link rel='stylesheet' href='/assets/css/main.css'>
 </head>
 <body>
 	<?php require_once 'components/nav.php' ?>
