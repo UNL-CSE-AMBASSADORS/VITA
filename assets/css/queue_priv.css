@@ -46,7 +46,7 @@ html, body {
 
 .queue-table {
 	flex-direction: column;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 .empty-queue-message {
