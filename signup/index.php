@@ -46,7 +46,7 @@
         getLitmusQuestions();
       ?>
 
-      <input type="submit" value="Submit" class="submit vita-form-button vita-background-primary">
+      <input type="submit" value="Submit" class="submit button vita-background-primary">
     </form>
   </div>
   <?php
