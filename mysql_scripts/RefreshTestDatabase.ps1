@@ -29,6 +29,7 @@ Try {
   # Insert table data
   Write-Host "Inserting test data"
   $TestDataSQL = Get-Content -Raw "./test_data/FullDBTestData.sql"
+  $TestDataSQL = $TestDataSQL.Replace("DELIMITER","-- DELIMITER").Replace('$$', ";") # Enable stored procedure syntax to be used through powershell SQL runner. Also note that the single quotes must be used instead of double quotes because double quotes and $ are for string interpolation
   $TestDataCommand = New-Object MySql.Data.MySqlClient.MySqlCommand($TestDataSQL, $Connection)
   $TestDataResult = $TestDataCommand.ExecuteNonQuery()
   if ($TestDataResult -gt 0) {
