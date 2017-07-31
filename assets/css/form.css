@@ -19,7 +19,7 @@ h3.vita-form-subheading {
   margin-top: 0;
 }
 .vita-form-container {
-  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  font-family: Verdana, 'Helvetica Neue', sans-serif;
   margin: 30px 0;
   padding: 10px 10px 50px;
   display: block;
@@ -335,30 +335,3 @@ label.error {
 .vita-form-radio .ui-visual-focus {
   box-shadow: 0 0 5px -1px #000;
 }
-
-
-/* BUTTONS ================================= */
-/* Based on the UNL WDN Style Sheet: http://wdn.unl.edu/buttons */
-/*.vita-form-button {
-    border: none;
-    border-radius: 3px;
-    color: #fff;
-    cursor: pointer;
-    padding: 1.069em 1.333em 1em;
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-family: 'Gotham SSm A','Gotham SSm B','Montserrat',Verdana,sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    line-height: 1;
-    font-size: .75rem;
-    transition: background-color .3s ease-out;
-    background-color: #4a3b13;
-}
-
-.background-primary {
-    background-color: #d00000;
-    color: #fff;
-}*/
