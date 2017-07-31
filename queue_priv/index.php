@@ -13,25 +13,48 @@
 		<?php require_once '../components/nav.php' ?>
 		<div class='section box theme-light queue-details'>
 			<div class='theme-white flex box queue'>
-				<div class='sub-section flex queue-header'>
+				<div class='theme-dark flex box queue-date'>
+					<i class='material-icons no-select date-back'>keyboard_arrow_left</i>
+					<div class='date'></div>
+					<i class='material-icons no-select date-forward'>keyboard_arrow_right</i>
+				</div>
+				<div class='theme-dark flex box queue-header'>
 					<div class='wrap-left queue-position-wrap'>Pos.</div>
 					<div class='wrap-left queue-name-wrap'>Name</div>
 					<div class='wrap-right queue-time-wrap'>Time</div>
 				</div>
 				<div class='sub-section theme-white flex queue-table'></div> 
 			</div>
-			<div class='theme-white flex details'>
-
+			<div class='flex details'>
+				<div class='theme-white flex details-id'>
+					<div class='theme-dark box details-id-header'>Details</div>
+					<div class='flex box details-id-body'>
+						<div class='details-id-attribute'>
+							<div class='details-id-attribute-label'>Name</div>
+							<div class='details-id-attribute-value details-email'>Clienty McClientface</div>
+						</div>
+						<div class='details-id-attribute'>
+							<div class='details-id-attribute-label'>Email</div>
+							<div class='details-id-attribute-value details-email'>clienty@mcclientface.org</div>
+						</div>
+						<div class='details-id-attribute'>
+							<div class='details-id-attribute-label'>Phone</div>
+							<div class='details-id-attribute-value details-phone'>None</div>
+						</div>
+						<div class='details-id-attribute'>
+							<div class='details-id-attribute-label'>Site</div>
+							<div class='details-id-attribute-value details-site-name'>Center for People in Need</div>
+						</div>
+						<div class='details-id-attribute'>
+							<div class='details-id-attribute-label'>Time</div>
+							<div class='details-id-attribute-value details-time'>
+								8:45 AM
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-		<!-- <div class='section theme-light queue'>
-			 <div class='sub-section flex queue-header'>
-				<div class='wrap-left queue-position-wrap'>Pos.</div>
-				<div class='wrap-left queue-name-wrap'>Name</div>
-				<div class='wrap-right queue-time-wrap'>Time</div>
-			</div> 
-			<div class='sub-section theme-white flex queue-table'></div> 
-		</div>  -->
 		<?php require_once '../server/footer.php' ?>
 	</body>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js'></script>
@@ -41,12 +64,12 @@
 			<div class='wrap-left queue-position-wrap'>{{position}}</div>
 			<div class='wrap-left queue-name-wrap'>{{name}}</div>
 			<div class='wrap-right queue-time-wrap'>
-				{{time}}
-				{{#isOnTime}}<div class='flex queue-tag on-time-tag'>ON TIME</div>{{/isOnTime}}
+				{{#isOnTime}}<div class='flex queue-tag on-time-tag'>OT</div>{{/isOnTime}}
 				{{^isOnTime}}
-					{{#isPresent}}<div class='flex queue-tag late-tag'>LATE</div>{{/isPresent}}
-					{{^isPresent}}<div class='flex queue-tag no-show-tag'>NO SHOW</div>{{/isPresent}}
+					{{#isPresent}}<div class='flex queue-tag late-tag'>LT</div>{{/isPresent}}
+					{{^isPresent}}<div class='flex queue-tag no-show-tag'>NS</div>{{/isPresent}}
 				{{/isOnTime}}
+				{{time}}
 			</div>
 		</div>
 	</script>
