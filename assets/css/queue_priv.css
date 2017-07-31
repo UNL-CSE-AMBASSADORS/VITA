@@ -20,6 +20,7 @@ html, body {
 .queue-date {
 	padding-top: 24px;
 	justify-content: center;
+	flex-shrink: 0;
 }
 
 .date-back, .date-forward {
@@ -40,6 +41,7 @@ html, body {
 
 .queue-header {
 	padding: 24px;
+	flex-shrink: 0;
 }
 
 .queue-table {
