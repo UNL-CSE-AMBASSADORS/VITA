@@ -12,7 +12,6 @@
 		$page_title = 'Signup for an appointment';
 		require_once "$root/components/nav.php";
 	?>
-
 	<div class="vita-body-container">
 		<form class="cmxform" id="vitaSignupForm" method="post" action="" autocomplete="off">
 			<h1 class="vita-form-title">Sign Up for a VITA Appointment</h1>
@@ -48,7 +47,7 @@
 				getLitmusQuestions();
 			?>
 
-			<input type="submit" value="Submit" class="submit vita-form-button vita-background-primary">
+			<input type="submit" value="Submit" class="submit button vita-background-primary">
 		</form>
 	</div>
 	<?php require_once "$root/server/footer.php" ?>

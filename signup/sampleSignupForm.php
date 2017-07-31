@@ -146,7 +146,7 @@
           <label class="vita-form-label vita-form-label__always-floating vita-form-required" for="date">Date</label>
         </div>
 
-        <input type="submit" value="Submit" class="submit vita-form-button background-primary">
+        <input type="submit" value="Submit" class="submit button background-primary">
       </form>
     </div>
     <?php

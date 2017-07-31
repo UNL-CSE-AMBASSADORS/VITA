@@ -55,7 +55,7 @@ function populateQueue() {
 		dataType: 'json',
 		cache: false,
 		success: function(r) {
-			$('.queue-table').html("<div class='flex empty-queue-message'>Queue is empty</div>");
+			$('.queue-table').html("<div class='flex box empty-queue-message'>Queue is empty</div>");
 			$('.empty-queue-message').toggle(r.length === 0);
 			$('.queue-size-count').html(r.length);
 
