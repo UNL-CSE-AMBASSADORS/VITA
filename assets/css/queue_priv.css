@@ -9,7 +9,7 @@ html, body {
 
 .queue {
 	height: 100%;
-	width: 450px;
+	width: 35%;
 	margin-right: 36px;
 	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.25);
 	flex-direction: column;
