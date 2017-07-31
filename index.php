@@ -1,8 +1,9 @@
+<?php $root = realpath($_SERVER["DOCUMENT_ROOT"]) ?>
 <!DOCTYPE html>
 <html class='no-js' lang=''>
 <head>
 	<title>VITA Lincoln</title>
-	<?php require_once 'server/header.php' ?>
+	<?php require_once "$root/server/header.php" ?>
 	<link rel='stylesheet' href='assets/css/main.css'>
 </head>
 <body>
@@ -39,7 +40,7 @@
 		</div>
 	</div>
 	<?php
-		require_once 'server/footer.php';
+		require_once "$root/server/footer.php";
 	?>
 </body>
 </html>
