@@ -13,43 +13,45 @@
 		require_once "$root/components/nav.php";
 	?>
 
-	<div class="vita-body-container">
-		<form class="cmxform" id="vitaSignupForm" method="post" action="" autocomplete="off">
-			<h1 class="vita-form-title">Sign Up for a VITA Appointment</h1>
+	<div class="section">
+		<div class="sub-section">
+			<form class="cmxform" id="vitaSignupForm" method="post" action="" autocomplete="off">
+				<h1 class="vita-form-title">Sign Up for a VITA Appointment</h1>
 
-			<div class="vita-form-textfield">
-				<input type="text" name="firstName" id="firstName">
-				<span class="vita-form-bar"></span>
-				<label class="vita-form-label vita-form-required" for="firstName">First Name</label>
-			</div>
+				<div class="vita-form-textfield">
+					<input type="text" name="firstName" id="firstName">
+					<span class="vita-form-bar"></span>
+					<label class="vita-form-label vita-form-required" for="firstName">First Name</label>
+				</div>
 
-			<div class="vita-form-textfield">
-				<input type="text" name="lastName" id="lastName" required>
-				<span class="vita-form-bar"></span>
-				<label class="vita-form-label vita-form-required" for="lastName">Last Name</label>
-			</div>
+				<div class="vita-form-textfield">
+					<input type="text" name="lastName" id="lastName" required>
+					<span class="vita-form-bar"></span>
+					<label class="vita-form-label vita-form-required" for="lastName">Last Name</label>
+				</div>
 
-			<div class="vita-form-textfield">
-				<input type="email" name="email" id="email" required>
-				<span class="vita-form-bar"></span>
-				<label class="vita-form-label vita-form-required" for="email">Email</label>
-			</div>
+				<div class="vita-form-textfield">
+					<input type="email" name="email" id="email" required>
+					<span class="vita-form-bar"></span>
+					<label class="vita-form-label vita-form-required" for="email">Email</label>
+				</div>
 
-			<div class="vita-form-textfield">
-				<input type="text" name="phone" id="phone" required>
-				<span class="vita-form-bar"></span>
-				<label class="vita-form-label vita-form-required" for="phone">Phone Number</label>
-			</div>
+				<div class="vita-form-textfield">
+					<input type="text" name="phone" id="phone" required>
+					<span class="vita-form-bar"></span>
+					<label class="vita-form-label vita-form-required" for="phone">Phone Number</label>
+				</div>
 
-			<h2 class="vita-form-subheading">Appointment Information</h2>
+				<h2 class="vita-form-subheading">Appointment Information</h2>
 
-			<?php
-				require_once "$root/server/signup.php";
-				getLitmusQuestions();
-			?>
+				<?php
+					require_once "$root/server/signup.php";
+					getLitmusQuestions();
+				?>
 
-			<input type="submit" value="Submit" class="submit vita-form-button vita-background-primary">
-		</form>
+				<input type="submit" value="Submit" class="submit vita-form-button vita-background-primary">
+			</form>
+		</div>
 	</div>
 	<?php require_once "$root/server/footer.php" ?>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
