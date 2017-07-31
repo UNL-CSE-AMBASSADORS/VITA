@@ -53,11 +53,11 @@
 						</div>
 					</div>
 				</div>
-				<div class='theme-white flex details-controls'>
-					<div class=''>Close</div>
-					<div class='button theme-dark'>Reschedule</div>
-					<div class='button theme-dark'>Cancel Appointment</div>
-					<div class='button theme-dark'>Accept</div>
+				<div class='flex details-controls'>
+					<div class='details-close'>Close</div>
+					<div class='button theme-dark details-control details-reschedule'>Reschedule</div>
+					<div class='button theme-dark details-control details-cancel'>Cancel Appointment</div>
+					<div class='button theme-dark details-control details-accept'>Accept</div>
 				</div>
 			</div>
 		</div>

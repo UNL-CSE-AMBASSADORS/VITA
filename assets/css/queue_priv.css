@@ -44,6 +44,7 @@ html, body {
 
 .queue-table {
 	flex-direction: column;
+	overflow-y: scroll;
 }
 
 .empty-queue-message {
@@ -126,4 +127,8 @@ html, body {
 .details-controls {
 	align-items: center;
 	justify-content: flex-end;
+}
+
+.details-control {
+	margin-left: 8px;
 }
