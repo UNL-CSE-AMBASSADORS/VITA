@@ -65,8 +65,9 @@ html, body {
 }
 
 .sub-section {
-	width: 100%;
+	box-sizing: border-box;
 	max-width: 960px;
+	width: 100%;
 }
 
 .sub-section-full {
@@ -134,8 +135,8 @@ html, body {
 }
 
 .theme-medium {
-	background: grey;
-	color: #212121;
+	background: #545454;
+	color: #dcdcdc;
 }
 
 .theme-light {
@@ -160,5 +161,12 @@ html, body {
 @media only screen and (max-width: 600px) {
 	.section {
 		flex-direction: column;
+	}
+}
+
+@media only screen and (max-width: 960px) {}
+	.sub-section {
+		padding-left: 10px;
+		padding-right: 10px;
 	}
 }

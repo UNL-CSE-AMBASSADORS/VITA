@@ -1,8 +1,10 @@
 /* BUTTONS ================================= */
 /* Based on the UNL WDN Style Sheet: http://wdn.unl.edu/buttons */
 .button, .button-xl {
+  background-color: #4a3b13;
   border: none;
   border-radius: 4px;
+  box-sizing: border-box;
   color: #fff;
   cursor: pointer;
   padding: 1.069em 1.333em 1em;
@@ -15,7 +17,7 @@
   line-height: 1;
   font-size: .75em;
   transition: background-color .3s ease-out;
-  background-color: #4a3b13;
+  width: 100%;
 }
 
 .button {
@@ -34,4 +36,10 @@
 
 .vita-background-primary:hover {
   background-color: #a70000;
+}
+
+@media (min-width: 600px) {
+  .button, .button-xl {
+    width: auto;
+  }
 }
