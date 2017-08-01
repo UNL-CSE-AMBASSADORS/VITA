@@ -1,101 +1,86 @@
 $(document).ready(function() {
-  // loadQuestions();
+	// loadQuestions();
 
-  // to be deleted at a later point
-  validateSignupForm();
+	// to be deleted at a later point
+	validateSignupForm();
 
-  // Since non-required fields are "valid" when they are empty, we need an
-  // alternate way to keep labels raised when there is content in their
-  // associated input field
-  $(".vita-form-textfield input").blur(function() {
-    var isBlank = $.trim($(this).val()).length > 0;
-    $label = $(this).siblings(".vita-form-label").toggleClass( "vita-form-label__floating", isBlank );
-  });
+	// Since non-required fields are "valid" when they are empty, we need an
+	// alternate way to keep labels raised when there is content in their
+	// associated input field
+	$(".vita-form-textfield input").blur(function() {
+		var isBlank = $.trim($(this).val()).length > 0;
+		$label = $(this).siblings(".vita-form-label").toggleClass( "vita-form-label__floating", isBlank );
+	});
 
 });
 
 function validateSignupForm() {
-  $("#vitaSignupForm").validate({
-    rules: {
-      "firstName": "required",
-      "lastName": "required",
-      email: {
-        required: true,
-        email: true
-      },
-      phone: {
-        required: true,
-        phoneUS: true
-      }
-    },
-    messages: {
-      email: {
-        required: "We need your email address to confirm your appointment",
-        email: "Your email address must be in the format of name@domain.com"
-      }
-    }
-  });
+	$("#vitaSignupForm").validate({
+		rules: {
+			"firstName": "required",
+			"lastName": "required",
+			email: {
+				required: true,
+				email: true
+			},
+			phone: {
+				required: true,
+				// phoneUS: true
+			}
+		},
+		messages: {
+			email: {
+				required: "We need your email address to confirm your appointment",
+				email: "Your email address must be in the format of name@domain.com"
+			}
+		}
+	});
 }
 
 // Form submission
 $('#vitaSignupForm').submit(function(e) {
-  if (!$(this).valid()) {
-    return false;
-  }
+	// Stop default form submit action
+	e.preventDefault();
 
-  // AJAX Code To Submit Form.
-  $.ajax({
-    url: "/server/signup.php",
-    type: "post",
-    dataType: 'json',
-    data: $(this).serialize(),
-    cache: false,
-    success: function(submitResponse){
-      console.log(submitResponse);
-      window.location = "/";
-    }
-  });
+	if (!$(this).valid()) {
+		return false;
+	}
 
-  return true;
+	var questions = [];
+	$('.vita-form-radio').each(function(){
+		var checkedRadioBox = $(this).find('input[type="radio"]:checked');
+
+		questions.push({
+			id: checkedRadioBox.attr('name'),
+			value: checkedRadioBox.val()
+		});
+	});
+
+	var data = {
+		"firstName":firstName.value,
+		"lastName":lastName.value,
+		"email":email.value,
+		"phone":phone.value,
+		"questions": questions,
+
+		//TODO
+		"scheduledTime": '2017-07-26T15:30:00',
+		"siteId":1
+	};
+
+	// AJAX Code To Submit Form.
+	$.ajax({
+		url: "/server/storeAppointment.php",
+		type: "post",
+		dataType: 'json',
+		data: (data),
+		cache: false,
+		success: function(submitResponse){
+			// LUL
+			// console.log(submitResponse);
+			// window.location = "/";
+		}
+	});
+
+	return true;
 });
-
-// To be deleted at a later point
-function validateSampleForm() {
-  var validationString = '{ "rules": {' +
-  '    "firstName": "required",' +
-  '    "lastName": "required",' +
-  '    "email": {' +
-  '      "required": true,' +
-  '      "email": true' +
-  '    },' +
-  '    "phone": {' +
-  '      "required": true,' +
-  '      "phoneUS": true' +
-  '    },' +
-  '    "address1": "required",' +
-  '    "city": "required",' +
-  '    "state": {' +
-  '      "required": true,' +
-  '      "stateUS": true' +
-  '    },' +
-  '    "zip": {' +
-  '      "required": true,' +
-  '      "zipcodeUS": true' +
-  '    },' +
-  '    "date": {' +
-  '      "required": true,' +
-  '      "date": true' +
-  '    }' +
-  '  },' +
-  '  "messages": {' +
-  '    "email": {' +
-  '      "required": "We need your email address to confirm your appointment",' +
-  '      "email": "Your email address must be in the format of name@domain.com"' +
-  '    }' +
-  '  }' +
-  '}';
-
-  var validateJson = JSON.parse(validationString);
-
-  $("#vitaSignupForm").validate(validateJson);
-};
