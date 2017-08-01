@@ -3,18 +3,13 @@ require_once 'login.class.php';
 require_once 'callbacks.php';
 require_once 'config.php';
 
-// META - Can give users permissions(inclusive?!)
 define('PrivilegeControl', 'PrivilegeControl');
-
-// Can Unassign users from a shift
 define('UserShiftControl', 'UserShiftControl');
-
-// Can Modify Appointments
 define('AppointmentControl', 'AppointmentControl');
 
 
 /**
-* Class for easily checking user permissions
+* Class for easily checking user privileges
 * Simply instantiate and use
 */
 
@@ -51,11 +46,11 @@ class User
 	}
 
 	/**
-	* Checks whether the user has specifed permission
+	* Checks whether the user has specifed privilege
 	* 
 	* @return boolean
 	*/ 
-	public function hasPermission($permissionTag){
+	public function hasPrivilege($privilegeTag){
 		GLOBAL $DB_CONN;
 
 		$userId = $this->getUserId();
@@ -69,7 +64,7 @@ class User
 
 
 		$stmt = $DB_CONN->prepare($query);
-		$stmt->execute(array($userId,$permissionTag));
+		$stmt->execute(array($userId,$privilegeTag));
 
 		$results = $stmt->fetchAll();
 
