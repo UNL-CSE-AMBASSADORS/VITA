@@ -60,7 +60,7 @@ class User
 				INNER JOIN privilege ON privilege.privilegeId = userprivilege.userPrivilegeId
 			WHERE 1=1
 				AND userId = ?
-				AND tag = ?";
+				AND tag LIKE ?";
 
 
 		$stmt = $DB_CONN->prepare($query);
