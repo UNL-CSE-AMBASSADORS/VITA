@@ -57,7 +57,7 @@ class User
 
 		$query = "SELECT userId 
 			FROM userPrivilege
-				INNER JOIN privilege ON privilege.privilegeId = userprivilege.userPrivilegeId
+				INNER JOIN privilege ON privilege.privilegeId = userPrivilege.userPrivilegeId
 			WHERE 1=1
 				AND userId = ?
 				AND tag LIKE ?";
@@ -68,10 +68,6 @@ class User
 
 		$results = $stmt->fetchAll();
 
-		if(empty($results)){
-			return false;
-		}else{
-			return true;
-		}
+		return !empty($results);
 	}
 }
