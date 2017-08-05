@@ -1,7 +1,12 @@
 .dashboard {
-	height: 128px;
+	min-height: 128px;
 	box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.25);
 	z-index: 1;
+}
+
+.dashboard .sub-section-full.flex {
+	align-items: stretch;
+	flex-direction: column;
 }
 
 .volunteers-wrap, .queue-size-wrap, .date-wrap, .clock-wrap {
@@ -10,9 +15,17 @@
 	font-weight: bold;
 }
 
+.queue-size-wrap {
+	flex: 1;
+}
+
 .date-wrap {
 	flex-direction: column;
 	justify-content: center;
+}
+
+.clock-wrap {
+	display: none;
 }
 
 .volunteers-lbl, .queue-size-lbl {
@@ -119,4 +132,17 @@
 
 .no-show-tag {
 	background: #212121;
+}
+
+@media only screen and (min-width: 600px) {
+	.dashboard .sub-section-full.flex {
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	.queue-size-wrap {
+		justify-content: flex-start;
+	}
+	.clock-wrap {
+		display: flex;
+	}
 }

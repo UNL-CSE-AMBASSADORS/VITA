@@ -17,26 +17,26 @@
 	?>
 
 	<div class='section dashboard'>
-		<div class='sub-section-full'>
+		<div class='sub-section-full flex'>
 			<!-- <div class='wrap-left flex volunteers-wrap'>
 				<div class='volunteers-lbl'>Volunteers:</div>
 				<div class='volunteers-count'></div>
 			</div> -->
-			<div class='wrap-left queue-size-wrap'>
+			<div class='wrap queue-size-wrap'>
 				<div class='queue-size-lbl'>Queue:</div>
 				<div class='queue-size-count'></div>
 			</div>
-			<div class='wrap-right clock-wrap'>
+			<div class='wrap flex date-wrap'>
+				<i class='material-icons no-select date-back'>keyboard_arrow_up</i>
+				<div class='date'></div>
+				<i class='material-icons no-select date-forward'>keyboard_arrow_down</i>
+			</div>
+			<div class='wrap clock-wrap'>
 				<div class='clock-time'></div>
 				<div class='clock-period'>
 					<div class='clock-am'>AM</div>
 					<div class='clock-pm'>PM</div>
 				</div>
-			</div>
-			<div class='wrap-right flex date-wrap'>
-				<i class='material-icons no-select date-back'>keyboard_arrow_up</i>
-				<div class='date'></div>
-				<i class='material-icons no-select date-forward'>keyboard_arrow_down</i>
 			</div>
 		</div>
 	</div>
