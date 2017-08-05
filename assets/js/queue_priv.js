@@ -6,7 +6,6 @@ var REFRESH_SEC = 15,
 $(document).ready(refresh);
 
 function refresh() {
-	keepTime();
 	displayQueueDate();
 	populateQueue();
 
@@ -16,23 +15,41 @@ function refresh() {
 
 function listen() {
 	$('.date-back').unbind('click');
-	$('.date-back').click(function() { displayDate.setDate(displayDate.getDate() - 1); refresh(); });
+	$('.date-back').click(function() {
+		displayDate.setDate(displayDate.getDate() - 1);
+		refresh();
+	});
 
 	$('.date-forward').unbind('click');
-	$('.date-forward').click(function() { displayDate.setDate(displayDate.getDate() + 1); refresh(); });
-}
+	$('.date-forward').click(function() {
+		displayDate.setDate(displayDate.getDate() + 1);
+		refresh();
+	});
 
-function keepTime() {
-	var h = new Date().getHours(),
-		m = new Date().getMinutes();
+	$('.queue-record').unbind('click');
+	$('.queue-record').click(function() {
+		$.get({
+			data: 'id=' + $(this).find('.queue-record-id').html(),
+			url: '/server/queue_priv.php',
+			dataType: 'json',
+			cache: false,
+			success: function(r) {
+				var time = new Date(r[0].scheduledTime),
+					h = time.getHours() % 12,
+					m = time.getMinutes();
+				if (h === 0) h = 12;
+				if (m < 10) m = `0${m}`;
 
-	$('.clock-am').toggleClass('inactive-period', h >= 12);
-	$('.clock-pm').toggleClass('inactive-period', h < 12);
-
-	h %= 12;
-	if (h === 0) h = 12;
-	if (m < 10) m = `0${m}`;
-	$('.clock-time').html(`${h}:${m}`);
+				$('.details-name').html(`${r[0].firstName} ${r[0].lastName}`);
+				$('.details-email').html(r[0].emailAddress);
+				$('.details-phone').html(r[0].phoneNumber);
+				$('.details-site-name').html(r[0].title);
+				$('.details-time').html(`${h}:${m}`);
+				$('.details-id').show();
+				listen();
+			}
+		});
+	});
 }
 
 function displayQueueDate() {
@@ -57,11 +74,10 @@ function populateQueue() {
 		success: function(r) {
 			$('.queue-table').html("<div class='flex box empty-queue-message'>Queue is empty</div>");
 			$('.empty-queue-message').toggle(r.length === 0);
-			$('.queue-size-count').html(r.length);
 
 			for (var i = 0; i < r.length; i++) {
 				var t = new Date(r[i].scheduledTime),
-					hr = t.getHours() % 12 + 1,
+					hr = t.getHours() % 12,
 					mn = t.getMinutes();
 				if (mn < 10) mn = `0${mn}`;
 
