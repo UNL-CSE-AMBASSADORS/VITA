@@ -9,7 +9,8 @@ html, body {
 
 .queue {
 	height: 100%;
-	width: 35%;
+	width: 25%;
+	min-width: 350px;
 	margin-right: 36px;
 	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.25);
 	flex-direction: column;
@@ -32,11 +33,11 @@ html, body {
 }
 
 .queue-name-wrap {
-	width: 35%;
+	width: 50%;
 }
 
 .queue-time-wrap {
-	width: 50%;
+	width: 35%;
 }
 
 .queue-header {
@@ -110,12 +111,13 @@ html, body {
 }
 
 .details-id-body {
-	padding: 24px 64px;
-	flex-wrap: wrap;
+	width: 100%;
 }
 
 .details-id-attribute {
-	margin: 24px 96px 24px 0;
+	float: left;
+	min-width: calc(100% / 3);
+	padding: 24px 48px;
 }
 
 .details-id-attribute-label {

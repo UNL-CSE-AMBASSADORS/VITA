@@ -23,29 +23,29 @@
 					<div class='wrap-left queue-name-wrap'>Name</div>
 					<div class='wrap-right queue-time-wrap'>Time</div>
 				</div>
-				<div class='sub-section theme-white flex queue-table'></div> 
+				<div class='theme-white flex queue-table'></div> 
 			</div>
 			<div class='flex details'>
 				<div class='theme-white flex details-id'>
 					<div class='theme-dark box details-id-header'>Details</div>
-					<div class='flex box details-id-body'>
-						<div class='details-id-attribute'>
+					<div class='details-id-body'>
+						<div class='box details-id-attribute'>
 							<div class='details-id-attribute-label'>Name</div>
-							<div class='details-id-attribute-value details-email'>Clienty McClientface</div>
+							<div class='details-id-attribute-value details-name'>Clienty McClientface</div>
 						</div>
-						<div class='details-id-attribute'>
+						<div class='box details-id-attribute'>
 							<div class='details-id-attribute-label'>Email</div>
 							<div class='details-id-attribute-value details-email'>clienty@mcclientface.org</div>
 						</div>
-						<div class='details-id-attribute'>
+						<div class='box details-id-attribute'>
 							<div class='details-id-attribute-label'>Phone</div>
 							<div class='details-id-attribute-value details-phone'>None</div>
 						</div>
-						<div class='details-id-attribute'>
+						<div class='box details-id-attribute'>
 							<div class='details-id-attribute-label'>Site</div>
 							<div class='details-id-attribute-value details-site-name'>Center for People in Need</div>
 						</div>
-						<div class='details-id-attribute'>
+						<div class='box details-id-attribute'>
 							<div class='details-id-attribute-label'>Time</div>
 							<div class='details-id-attribute-value details-time'>
 								8:45 AM

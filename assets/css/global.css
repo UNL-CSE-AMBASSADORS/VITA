@@ -164,7 +164,7 @@ html, body {
 	}
 }
 
-@media only screen and (max-width: 960px) {}
+@media only screen and (max-width: 960px) {
 	.sub-section {
 		padding-left: 10px;
 		padding-right: 10px;
