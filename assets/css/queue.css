@@ -111,6 +111,10 @@
 	width: 100%;
 }
 
+.queue-record-id {
+	display: none;
+}
+
 .queue-tag {
 	height: 28px;
 	font-size: 16px;
@@ -139,9 +143,11 @@
 		flex-direction: row;
 		justify-content: space-between;
 	}
+	
 	.queue-size-wrap {
 		justify-content: flex-start;
 	}
+
 	.clock-wrap {
 		display: flex;
 	}

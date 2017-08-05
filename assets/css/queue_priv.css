@@ -68,6 +68,10 @@ html, body {
 	background: #F3F3F3;
 }
 
+.queue-record-id {
+	display: none;
+}
+
 .queue-tag {
 	height: 20px;
 	font-size: 12px;

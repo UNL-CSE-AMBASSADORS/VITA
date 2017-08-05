@@ -66,6 +66,7 @@ function populateQueue() {
 				if (mn < 10) mn = `0${mn}`;
 
 				var record = {
+					id: r[i].appointmentId,
 					position: i + 1,
 					name: `${r[i].firstName} ${r[i].lastName}.`,
 					isPresent: false,
