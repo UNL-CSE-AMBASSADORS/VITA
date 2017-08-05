@@ -45,6 +45,23 @@ SET @user_siteAdmin1Id = LAST_INSERT_ID();
 
 
 
+-- login
+SET @passwordHash = "$2y$10$g0OGzs2N5akgizkj0odajON8.Nr8PqpHYLhCps7lMM4YCUyJDNKUS"; -- This is the hash of "test"
+INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
+	VALUES (0, @passwordHash, TIMESTAMP(0), @user_preparer1Id);
+
+INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
+	VALUES (0, @passwordHash, TIMESTAMP(0), @user_reviewer1Id);
+
+INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
+	VALUES (0, @passwordHash, TIMESTAMP(0), @user_receptionist1Id);
+
+INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
+	VALUES (0, @passwordHash, TIMESTAMP(0), @user_siteAdmin1Id);
+-- end login
+
+
+
 -- abilities
 INSERT INTO Ability (name, tag, description, verificationRequired)
 	VALUES ("Basic Certification", "basic_certification", "Has finished the basic certification requirements", TRUE);
