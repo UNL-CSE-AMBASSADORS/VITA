@@ -5,6 +5,7 @@ html, body {
 .queue-details {
 	height: calc(100% - 72px);
 	padding: 36px;
+	justify-content: flex-start;
 }
 
 .queue {
@@ -102,7 +103,7 @@ html, body {
 	border-radius: 4px;
 	flex-direction: column;
 	justify-content: space-between;
-	opacity: 0;
+	display: none;
 }
 
 .details-id {
@@ -136,6 +137,7 @@ html, body {
 .details-controls {
 	align-items: center;
 	justify-content: flex-end;
+	cursor: pointer;
 }
 
 .details-control {

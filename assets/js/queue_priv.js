@@ -45,10 +45,15 @@ function listen() {
 				$('.details-phone').html(r[0].phoneNumber ? r[0].phoneNumber : 'None');
 				$('.details-site-name').html(r[0].title);
 				$('.details-time').html(`${h}:${m}`);
-				$('.details').css('opacity', '1');
+				$('.details').css('display', 'flex');
 				listen();
 			}
 		});
+	});
+
+	$('.details-close').unbind('click');
+	$('.details-close').click(function() {
+		$('.details').css('display', 'none');
 	});
 }
 

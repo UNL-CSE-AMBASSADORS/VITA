@@ -11,7 +11,7 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 		<![endif]-->
 		<?php require_once '../components/nav.php' ?>
-		<div class='section box theme-light queue-details'>
+		<div class='section flex box theme-light queue-details'>
 			<div class='theme-white flex box queue'>
 				<div class='theme-dark flex box queue-date'>
 					<i class='material-icons no-select date-back'>keyboard_arrow_left</i>
