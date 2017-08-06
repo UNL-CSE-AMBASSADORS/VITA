@@ -31,23 +31,23 @@
 					<div class='details-id-body'>
 						<div class='box details-id-attribute'>
 							<div class='details-id-attribute-label'>Name</div>
-							<div class='details-id-attribute-value details-name'>Clienty McClientface</div>
+							<div class='details-id-attribute-value details-name'></div>
 						</div>
 						<div class='box details-id-attribute'>
 							<div class='details-id-attribute-label'>Email</div>
-							<div class='details-id-attribute-value details-email'>clienty@mcclientface.org</div>
+							<div class='details-id-attribute-value details-email'></div>
 						</div>
 						<div class='box details-id-attribute'>
 							<div class='details-id-attribute-label'>Phone</div>
-							<div class='details-id-attribute-value details-phone'>None</div>
+							<div class='details-id-attribute-value details-phone'></div>
 						</div>
 						<div class='box details-id-attribute'>
 							<div class='details-id-attribute-label'>Site</div>
-							<div class='details-id-attribute-value details-site-name'>Center for People in Need</div>
+							<div class='details-id-attribute-value details-site-name'></div>
 						</div>
 						<div class='box details-id-attribute'>
 							<div class='details-id-attribute-label'>Time</div>
-							<div class='details-id-attribute-value details-time'>8:45 AM</div>
+							<div class='details-id-attribute-value details-time'></div>
 						</div>
 					</div>
 				</div>

@@ -41,11 +41,11 @@ function listen() {
 				if (m < 10) m = `0${m}`;
 
 				$('.details-name').html(`${r[0].firstName} ${r[0].lastName}`);
-				$('.details-email').html(r[0].emailAddress);
-				$('.details-phone').html(r[0].phoneNumber);
+				$('.details-email').html(r[0].emailAddress ? r[0].emailAddress : 'None');
+				$('.details-phone').html(r[0].phoneNumber ? r[0].phoneNumber : 'None');
 				$('.details-site-name').html(r[0].title);
 				$('.details-time').html(`${h}:${m}`);
-				$('.details-id').show();
+				$('.details').css('opacity', '1');
 				listen();
 			}
 		});
