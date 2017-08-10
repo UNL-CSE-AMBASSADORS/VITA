@@ -13,7 +13,7 @@
 		<?php require_once '../components/nav.php' ?>
 		<div class='section flex box theme-light queue-details'>
 			<div class='theme-white flex box queue'>
-				<div class='theme-dark flex box queue-date'>
+				<div class='theme-dark flex box date-wrap'>
 					<i class='material-icons no-select date-back'>keyboard_arrow_left</i>
 					<div class='date'></div>
 					<i class='material-icons no-select date-forward'>keyboard_arrow_right</i>
@@ -62,6 +62,7 @@
 		<?php require_once '../server/footer.php' ?>
 	</body>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js'></script>
+	<script src='/assets/js/queue_common.js'></script>
 	<script src='/assets/js/queue_priv.js'></script>
 	<script class='queue-record-template' type='text/template'>
 		<div class='queue-record'>

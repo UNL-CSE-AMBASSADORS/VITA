@@ -19,7 +19,7 @@ html, body {
 	border-radius: 4px;
 }
 
-.queue-date {
+.date-wrap {
 	padding-top: 24px;
 	justify-content: center;
 	flex-shrink: 0;
