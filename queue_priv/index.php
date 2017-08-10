@@ -23,7 +23,7 @@
 					<div class='wrap-left queue-name-wrap'>Name</div>
 					<div class='wrap-right queue-time-wrap'>Time</div>
 				</div>
-				<div class='theme-white flex queue-table'></div> 
+				<div class='theme-white flex queue-table'></div>
 			</div>
 			<div class='flex details'>
 				<div class='theme-white flex details-id'>
@@ -52,7 +52,7 @@
 					</div>
 				</div>
 				<div class='flex details-controls'>
-					<div class='details-close'>Close</div>
+					<div class='details-control details-close'>Close</div>
 					<div class='button theme-dark details-control details-reschedule'>Reschedule</div>
 					<div class='button theme-dark details-control details-cancel'>Cancel Appointment</div>
 					<div class='button theme-dark details-control details-accept'>Accept</div>

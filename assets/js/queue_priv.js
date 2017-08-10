@@ -6,6 +6,9 @@ var REFRESH_SEC = 15,
 $('.date-wrap').on('click', '.date-back', hideDetails);
 $('.date-wrap').on('click', '.date-forward', hideDetails);
 $('.details-controls').on('click', '.details-close', hideDetails);
+$('.details-controls').on('click', '.details-close', function() {
+	$('.queue-record').removeClass('theme-light');
+});
 
 $('.queue-table').on('click', '.queue-record', function() {
 	// Adds a soft highlight to the last selected appointment
