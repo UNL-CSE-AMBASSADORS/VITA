@@ -3,6 +3,16 @@ var REFRESH_SEC = 15,
 	monthStrings = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
 	refreshing = null;
 
+$('.date-wrap').on('click', '.date-back', function() {
+	displayDate.setDate(displayDate.getDate() - 1);
+	refresh();
+});
+
+$('.date-wrap').on('click', '.date-back', function() {
+	displayDate.setDate(displayDate.getDate() + 1);
+	refresh();
+});
+
 $(document).ready(refresh);
 
 function refresh() {
@@ -12,14 +22,6 @@ function refresh() {
 
 	clearTimeout(refreshing);
 	refreshing = setTimeout(refresh, REFRESH_SEC * 1000);
-}
-
-function listen() {
-	$('.date-back').unbind('click');
-	$('.date-back').click(function() { displayDate.setDate(displayDate.getDate() - 1); refresh(); });
-
-	$('.date-forward').unbind('click');
-	$('.date-forward').click(function() { displayDate.setDate(displayDate.getDate() + 1); refresh(); });
 }
 
 function keepTime() {
@@ -76,8 +78,6 @@ function populateQueue() {
 
 				$('.queue-table').append(Mustache.render($('.queue-record-template').html(), record));
 			}
-
-			listen();
 		}
 	});
 }
