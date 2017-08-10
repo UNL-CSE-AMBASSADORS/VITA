@@ -3,21 +3,21 @@ var REFRESH_SEC = 15,
 	monthStrings = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
 	refreshing = null;
 
-function decrementDisplayDate() {
+$('.queue-date').on('click', '.date-back', function() {
 	displayDate.setDate(displayDate.getDate() - 1);
 	refresh();
-}
+});
 
-function incrementDisplayDate() {
+$('.queue-date').on('click', '.date-forward', function() {
 	displayDate.setDate(displayDate.getDate() + 1);
 	refresh();
-}
+});
 
-function hideDetails() {
+$('.details-controls').on('click', '.details-close', function() {
 	$('.details').css('display', 'none');
-}
+});
 
-function getDetails() {
+$('.queue-table').on('click', '.queue-record', function() {
 	$.get({
 		data: 'id=' + $(this).find('.queue-record-id').html(),
 		url: '/server/queue_priv.php',
@@ -36,15 +36,9 @@ function getDetails() {
 			$('.details-site-name').html(r[0].title);
 			$('.details-time').html(`${h}:${m}`);
 			$('.details').css('display', 'flex');
-			rebindEventHandlers();
 		}
 	});
-}
-
-addEventHandler('.date-back', 'click', decrementDisplayDate);
-addEventHandler('.date-forward', 'click', incrementDisplayDate);
-addEventHandler('.details-close', 'click', hideDetails);
-addEventHandler('.queue-record', 'click', getDetails);
+});
 
 $(document).ready(refresh);
 
@@ -96,8 +90,6 @@ function populateQueue() {
 
 				$('.queue-table').append(Mustache.render($('.queue-record-template').html(), record));
 			}
-
-			rebindEventHandlers();
 		}
 	});
 }
