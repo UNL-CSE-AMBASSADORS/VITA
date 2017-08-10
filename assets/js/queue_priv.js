@@ -3,11 +3,15 @@ var REFRESH_SEC = 15,
 	monthStrings = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
 	refreshing = null;
 
-$('.details-controls').on('click', '.details-close', function() {
-	$('.details').css('display', 'none');
-});
+$('.date-wrap').on('click', '.date-back', hideDetails);
+$('.date-wrap').on('click', '.date-forward', hideDetails);
+$('.details-controls').on('click', '.details-close', hideDetails);
 
 $('.queue-table').on('click', '.queue-record', function() {
+	// Adds a soft highlight to the last selected appointment
+	$('.queue-record').removeClass('theme-light');
+	$(this).addClass('theme-light');
+
 	$.get({
 		data: 'id=' + $(this).find('.queue-record-id').html(),
 		url: '/server/queue_priv.php',
@@ -38,4 +42,8 @@ function refresh() {
 
 	clearTimeout(refreshing);
 	refreshing = setTimeout(refresh, REFRESH_SEC * 1000);
+}
+
+function hideDetails() {
+	$('.details').css('display', 'none');
 }
