@@ -3,6 +3,49 @@ var REFRESH_SEC = 15,
 	monthStrings = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
 	refreshing = null;
 
+function decrementDisplayDate() {
+	displayDate.setDate(displayDate.getDate() - 1);
+	refresh();
+}
+
+function incrementDisplayDate() {
+	displayDate.setDate(displayDate.getDate() + 1);
+	refresh();
+}
+
+function hideDetails() {
+	$('.details').css('display', 'none');
+}
+
+function getDetails() {
+	$.get({
+		data: 'id=' + $(this).find('.queue-record-id').html(),
+		url: '/server/queue_priv.php',
+		dataType: 'json',
+		cache: false,
+		success: function(r) {
+			var time = new Date(r[0].scheduledTime),
+				h = time.getHours() % 12,
+				m = time.getMinutes();
+			if (h === 0) h = 12;
+			if (m < 10) m = `0${m}`;
+
+			$('.details-name').html(`${r[0].firstName} ${r[0].lastName}`);
+			$('.details-email').html(r[0].emailAddress ? r[0].emailAddress : 'None');
+			$('.details-phone').html(r[0].phoneNumber ? r[0].phoneNumber : 'None');
+			$('.details-site-name').html(r[0].title);
+			$('.details-time').html(`${h}:${m}`);
+			$('.details').css('display', 'flex');
+			rebindEventHandlers();
+		}
+	});
+}
+
+addEventHandler('.date-back', 'click', decrementDisplayDate);
+addEventHandler('.date-forward', 'click', incrementDisplayDate);
+addEventHandler('.details-close', 'click', hideDetails);
+addEventHandler('.queue-record', 'click', getDetails);
+
 $(document).ready(refresh);
 
 function refresh() {
@@ -11,50 +54,6 @@ function refresh() {
 
 	clearTimeout(refreshing);
 	refreshing = setTimeout(refresh, REFRESH_SEC * 1000);
-}
-
-function listen() {
-	$('.date-back').unbind('click');
-	$('.date-back').click(function() {
-		displayDate.setDate(displayDate.getDate() - 1);
-		refresh();
-	});
-
-	$('.date-forward').unbind('click');
-	$('.date-forward').click(function() {
-		displayDate.setDate(displayDate.getDate() + 1);
-		refresh();
-	});
-
-	$('.queue-record').unbind('click');
-	$('.queue-record').click(function() {
-		$.get({
-			data: 'id=' + $(this).find('.queue-record-id').html(),
-			url: '/server/queue_priv.php',
-			dataType: 'json',
-			cache: false,
-			success: function(r) {
-				var time = new Date(r[0].scheduledTime),
-					h = time.getHours() % 12,
-					m = time.getMinutes();
-				if (h === 0) h = 12;
-				if (m < 10) m = `0${m}`;
-
-				$('.details-name').html(`${r[0].firstName} ${r[0].lastName}`);
-				$('.details-email').html(r[0].emailAddress ? r[0].emailAddress : 'None');
-				$('.details-phone').html(r[0].phoneNumber ? r[0].phoneNumber : 'None');
-				$('.details-site-name').html(r[0].title);
-				$('.details-time').html(`${h}:${m}`);
-				$('.details').css('display', 'flex');
-				listen();
-			}
-		});
-	});
-
-	$('.details-close').unbind('click');
-	$('.details-close').click(function() {
-		$('.details').css('display', 'none');
-	});
 }
 
 function displayQueueDate() {
@@ -98,7 +97,7 @@ function populateQueue() {
 				$('.queue-table').append(Mustache.render($('.queue-record-template').html(), record));
 			}
 
-			listen();
+			rebindEventHandlers();
 		}
 	});
 }

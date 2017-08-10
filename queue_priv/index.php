@@ -62,6 +62,7 @@
 		<?php require_once '../server/footer.php' ?>
 	</body>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js'></script>
+	<script src='/assets/js/global.js'></script> 
 	<script src='/assets/js/queue_priv.js'></script>
 	<script class='queue-record-template' type='text/template'>
 		<div class='queue-record'>
