@@ -13,7 +13,6 @@ html, body {
 	width: 25%;
 	min-width: 350px;
 	margin-right: 36px;
-	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.25);
 	flex-direction: column;
 	font-size: 16px;
 	border-radius: 4px;
@@ -49,6 +48,8 @@ html, body {
 .queue-table {
 	flex-direction: column;
 	overflow-y: auto;
+	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.25);
+	flex-grow: 1;
 }
 
 .empty-queue-message {
@@ -80,7 +81,7 @@ html, body {
 	font-weight: 700;
 	align-items: center;
 	justify-content: center;
-	margin-right: 16px;
+	margin: 0 16px;
 	padding: 0 8px;
 	border-radius: 10px;
 }
@@ -95,6 +96,11 @@ html, body {
 
 .no-show-tag {
 	background: #212121;
+}
+
+.queue-legend {
+	min-height: 20px;
+	margin-top: 24px;
 }
 
 .details {

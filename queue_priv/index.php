@@ -12,7 +12,7 @@
 		<![endif]-->
 		<?php require_once '../components/nav.php' ?>
 		<div class='section flex box theme-light queue-details'>
-			<div class='theme-white flex box queue'>
+			<div class='flex box queue'>
 				<div class='theme-dark flex box date-wrap'>
 					<i class='material-icons no-select date-back'>keyboard_arrow_left</i>
 					<div class='date'></div>
@@ -24,6 +24,12 @@
 					<div class='wrap-right queue-time-wrap'>Time</div>
 				</div>
 				<div class='theme-white flex queue-table'></div>
+				<div class='flex queue-legend'>
+					Legend:
+					<div class='flex queue-tag on-time-tag'>On Time</div>
+					<div class='flex queue-tag late-tag'>Late</div>
+					<div class='flex queue-tag no-show-tag'>No Show</div>
+				</div>
 			</div>
 			<div class='flex details'>
 				<div class='theme-white flex details-id'>
