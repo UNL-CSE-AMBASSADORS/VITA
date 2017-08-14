@@ -46,37 +46,37 @@ SET @user_siteAdmin1Id = LAST_INSERT_ID();
 
 
 -- abilities
-INSERT INTO Ability (name, tag, description)
-	VALUES ("Basic Certification", "basic_certification", "Has finished the basic certification requirements");
+INSERT INTO Ability (name, tag, description, verificationRequired)
+	VALUES ("Basic Certification", "basic_certification", "Has finished the basic certification requirements", TRUE);
 SET @ability_basicCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (name, tag, description)
-	VALUES ("International Certification", "international_certification", "Has completed the international certification requirements");
+INSERT INTO Ability (name, tag, description, verificationRequired)
+	VALUES ("International Certification", "international_certification", "Has completed the international certification requirements", TRUE);
 SET @ability_internationalCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (name, tag, description)
-	VALUES ("Military Certification", "military_certification", "Has completed the military certification requirements");
+INSERT INTO Ability (name, tag, description, verificationRequired)
+	VALUES ("Military Certification", "military_certification", "Has completed the military certification requirements", TRUE);
 SET @ability_militaryCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (name, tag, description)
-	VALUES ("Spanish-Speaking", "spanish_speaking", "Can speak fluent Spanish");
+INSERT INTO Ability (name, tag, description, verificationRequired)
+	VALUES ("Spanish-Speaking", "spanish_speaking", "Can speak fluent Spanish", FALSE);
 SET @ability_spanishSpeakingId = LAST_INSERT_ID();
 -- end abilities
 
 
 
 -- user abilities
-INSERT INTO UserAbility (userId, abilityId)
-	VALUES (@user_preparer1Id, @ability_basicCertificationId);
+INSERT INTO UserAbility (userId, abilityId, createdBy)
+	VALUES (@user_preparer1Id, @ability_basicCertificationId, @user_siteAdmin1Id);
 
-INSERT INTO UserAbility (userId, abilityId)
-	VALUES (@user_preparer1Id, @ability_internationalCertificationId);
-    
-INSERT INTO UserAbility (userId, abilityId)
-	VALUES (@user_preparer2Id, @ability_basicCertificationId);
-    
-INSERT INTO UserAbility (userId, abilityId)
-	VALUES (@user_preparer2Id, @ability_spanishSpeakingId);
+INSERT INTO UserAbility (userId, abilityId, createdBy)
+	VALUES (@user_preparer1Id, @ability_internationalCertificationId, @user_siteAdmin1Id);
+	
+INSERT INTO UserAbility (userId, abilityId, createdBy)
+	VALUES (@user_preparer2Id, @ability_basicCertificationId, @user_siteAdmin1Id);
+	
+INSERT INTO UserAbility (userId, abilityId, createdBy)
+	VALUES (@user_preparer2Id, @ability_spanishSpeakingId, @user_siteAdmin1Id);
 -- end user abilities
 
 
@@ -85,7 +85,7 @@ INSERT INTO UserAbility (userId, abilityId)
 INSERT INTO Privilege (name, description, tag)
 	VALUES ("Add Site", "Has the privilege to create a new VITA site on the add site page", "add_site");
 SET @privilege_addSiteId = LAST_INSERT_ID();
-    
+	
 INSERT INTO Privilege (name, description, tag)
 	VALUES ("Edit Site Information", "Has the privilege to edit the information associated with sites", "edit_site_information");
 SET @privilege_editSiteInformationId = LAST_INSERT_ID();
@@ -100,19 +100,19 @@ SET @privilege_popClientOffQueueId = LAST_INSERT_ID();
 -- user privileges
 INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
 	VALUES (@user_preparer1Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
-    
+	
 INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
 	VALUES (@user_preparer2Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
-    
+	
 INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
 	VALUES (@user_siteAdmin1Id, @privilege_addSiteId, @user_siteAdmin1Id);
-    
+	
 INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
 	VALUES (@user_siteAdmin1Id, @privilege_editSiteInformationId, @user_siteAdmin1Id);
-    
+	
 INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
 	VALUES (@user_receptionist1Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
-    
+	
 INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
 	VALUES (@user_reviewer1Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
 -- end user privileges
@@ -138,32 +138,32 @@ SET @site_site3Id = LAST_INSERT_ID();
 -- shift
 SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 1 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE, FALSE);
 SET @shift_site1Shift1Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE, TRUE);
 SET @shift_site1Shift2Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 4 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE, FALSE);
 SET @shift_site2Shift1Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 3 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 2 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE, TRUE);
 SET @shift_site2Shift2Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, FALSE, TRUE);
 SET @shift_site2Shift3Id = LAST_INSERT_ID();
 -- end shift
 
@@ -181,7 +181,7 @@ INSERT INTO UserShift (userId, shiftId)
 
 INSERT INTO UserShift (userId, shiftId)
 	VALUES (@user_preparer2Id, @shift_site2Shift3Id);
-    
+	
 INSERT INTO UserShift (userId, shiftId)
 	VALUES (@user_receptionist1Id, @shift_site1Shift1Id);
 
@@ -193,7 +193,7 @@ INSERT INTO UserShift (userId, shiftId)
 
 INSERT INTO UserShift (userId, shiftId)
 	VALUES (@user_reviewer1Id, @shift_site2Shift2Id);
-    
+	
 INSERT INTO UserShift (userId, shiftId)
 	VALUES (@user_reviewer1Id, @shift_site2Shift3Id);
 -- end user shift
@@ -250,6 +250,23 @@ SET @appointmentTime = DATE_ADD(NOW(), INTERVAL -1 DAY);
 INSERT INTO Appointment (scheduledTime, clientId, siteId)
 	VALUES (@appointmentTime, @client_client5Id, @site_site1Id);
 SET @appointment_appointment5Id = LAST_INSERT_ID();
+
+-- Appointments for today (note that this is just for testing queue functionality)
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL -5 MINUTE);
+INSERT INTO Appointment (scheduledTime, arrivedAt, clientId, siteId)
+	VALUES (@appointmentTime, NOW(), @client_client1Id, @site_site1Id);
+
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 5 HOUR);
+INSERT INTO Appointment (scheduledTime, clientId, siteId)
+	VALUES (@appointmentTime, @client_client1Id, @site_site1Id);
+
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 30 MINUTE);
+INSERT INTO Appointment (scheduledTime, clientId, siteId)
+	VALUES (@appointmentTime, @client_client2Id, @site_site1Id);
+
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 45 MINUTE);
+INSERT INTO Appointment (scheduledTime, clientId, siteId)
+	VALUES (@appointmentTime, @client_client3Id, @site_site2Id);
 -- end appointment
 
 
@@ -354,55 +371,90 @@ INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question2NoId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion2Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question3NoId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion3Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question6NoId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion6Id);
-    
+	
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question1NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion1Id);
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question2YesId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion2Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question3YesId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion3Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question4NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion4Id);
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question5NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion5Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question6NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion6Id);
-    
+	
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question1NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion1Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question2NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion2Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question3NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion3Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question6NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion6Id);
-    
+	
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question1YesId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion1Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question2YesId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion2Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question3NoId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion3Id);
-    
+	
 INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
 	VALUES (@possibleAnswer_question6YesId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion6Id);
 -- end answer
+
+
+-- load testing for Appointments
+DROP PROCEDURE IF EXISTS sp_CreateAppointments;
+DELIMITER $$
+CREATE PROCEDURE sp_CreateAppointments(IN numAppointments INT, IN startingSiteId INT, IN endingSiteId INT)
+BEGIN
+	DECLARE minIntervalValue INT DEFAULT 1; 
+	DECLARE maxIntervalValue INT DEFAULT 300; # 5 hours
+
+	DECLARE i INT DEFAULT 0;
+    START TRANSACTION;
+    WHILE i < numAppointments DO
+		-- create random client
+		SET @firstName = LEFT(UUID(), 20);
+		SET @lastName = LEFT(UUID(), 20);
+		SET @emailAddress = CONCAT(LEFT(UUID(), 20), "@test.test");
+        INSERT INTO Client (firstName, lastName, emailAddress)
+			VALUES (@firstName, @lastName, @emailAddress);
+        SET @clientIdForThisAppointment = LAST_INSERT_ID();
+        
+        -- create appointment
+		SET @randomMinute = CEIL(RAND() * (maxIntervalValue - minIntervalValue));
+		SET @scheduledTime = DATE_ADD(NOW(), INTERVAL @randomMinute MINUTE);
+        SET @siteIdForThisAppointment = startingSiteId + ROUND(RAND() * (endingSiteId - startingSiteId));
+		INSERT INTO Appointment (scheduledTime, clientId, siteId)
+			VALUES (@scheduledTime, @clientIdForThisAppointment, @siteIdForThisAppointment);
+		SET i = i + 1;
+    END WHILE;
+    COMMIT;
+END$$
+DELIMITER ;
+
+CALL sp_CreateAppointments(200, @site_site1Id, @site_site2Id);
+-- end load testing for Appointments

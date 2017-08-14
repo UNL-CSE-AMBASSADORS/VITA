@@ -1,162 +1,157 @@
 body {
-  background-color: #FEFDFA;
+	background-color: #FEFDFA;
 }
 
 /* HEADINGS ======================================= */
-.vita-form-title {
-  color: #474746;
-  line-height: 1;
-  margin: 0;
-  padding: 1em 0 1em 0;
+h2.form-title {
+	color: #474746;
+	line-height: 1;
+	margin: 0;
+	padding: 1em 0 1em 0;
 }
-
-.vita-form-subheading {
-  margin-top: 16px;
-  margin-bottom: 16px;
+h3.form-subheading {
+	margin-bottom: 0.5em;
+	margin-top: 0;
 }
-h3.vita-form-subheading {
-  font-size: 16px;
-  margin-top: 0;
-}
-.vita-form-container {
-  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
-  margin: 30px 0;
-  padding: 10px 10px 50px;
-  display: block;
-  box-shadow: 0px 3px 15px -5px black;
-  border-radius: 3px;
-  min-width: 285px;
+.form-container {
+	font-family: Verdana, 'Helvetica Neue', sans-serif;
+	margin: 30px 0;
+	padding: 10px 10px 50px;
+	display: block;
+	box-shadow: 0px 3px 15px -5px black;
+	border-radius: 3px;
+	min-width: 285px;
 }
 
 @media (min-width: 600px) {
-  .vita-form-container {
-    margin: 30px 30px;
-  }
+	.form-container {
+		margin: 30px 30px;
+	}
 }
 
 @media (min-width: 960px) {
-  .vita-form-container {
-    max-width: 720px;
-    margin: 30px auto;
-  }
+	.form-container {
+		max-width: 720px;
+		margin: 30px auto;
+	}
 }
 
-.vita-form-container form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+.form-container form {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
 /* TEXTFIELD ======================================= */
-.vita-form-textfield {
-  position: relative;
-  margin-top: 16px;
-  margin-bottom: 32px;
-  width: 100%;
+.form-textfield {
+	position: relative;
+	margin-top: 16px;
+	margin-bottom: 32px;
+	width: 100%;
 }
-.vita-form-textfield input {
-  font-size: 18px;
-  padding: 8px 0 8px 0;
-  display: block;
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid #757575;
-  background-color: transparent;
+.form-textfield input {
+	font-size: 18px;
+	padding: 8px 0 8px 0;
+	display: block;
+	width: 100%;
+	border: none;
+	border-bottom: 1px solid #757575;
+	background-color: transparent;
 }
-.vita-form-textfield input:focus {
-  outline: none;
+.form-textfield input:focus {
+	outline: none;
 }
 
 /* LABEL ======================================= */
-.vita-form-label {
-  color: #777;
+.form-label {
+	color: #777;
 }
 
-.vita-form-select .vita-form-label {
-  font-size: 14px;
+.form-select .form-label {
+	font-size: 14px;
 }
 
-.vita-form-textfield .vita-form-label {
-  font-size: 18px;
-  font-weight: normal;
-  position: absolute;
-  pointer-events: none;
-  left: 3px;
-  top: 10px;
-  transition: 0.2s ease all;
-  -moz-transition: 0.2s ease all;
-  -webkit-transition: 0.2s ease all;
+.form-textfield .form-label {
+	font-size: 18px;
+	font-weight: normal;
+	position: absolute;
+	pointer-events: none;
+	left: 3px;
+	top: 10px;
+	transition: 0.2s ease all;
+	-moz-transition: 0.2s ease all;
+	-webkit-transition: 0.2s ease all;
 }
 
-label.vita-form-required::after {
-  content: " *";
-  color: #137CBD;
+label.form-required::after {
+	content: " *";
+	color: #137CBD;
 }
 
 /* active state */
-.vita-form-textfield input:focus ~ .vita-form-label {
-  color: #D00000;
+.form-textfield input:focus ~ .form-label {
+	color: #D00000;
 }
 
-.vita-form-textfield input:focus ~ .vita-form-label,
-.vita-form-textfield input ~ .vita-form-label__floating,
-.vita-form-textfield input ~ .vita-form-label__always-floating {
-  left: 0;
-  top: -1em;
-  font-size: 14px;
+.form-textfield input:focus ~ .form-label,
+.form-textfield input ~ .form-label__floating,
+.form-textfield input ~ .form-label__always-floating {
+	left: 0;
+	top: -1em;
+	font-size: 14px;
 }
 
 /* BOTTOM BARS ================================= */
-.vita-form-bar {
-  position: relative;
-  display: block;
-  width: 100%;
+.form-bar {
+	position: relative;
+	display: block;
+	width: 100%;
 }
-.vita-form-bar:before, .vita-form-bar:after {
-  content: '';
-  height: 3px;
-  width: 0;
-  bottom: 0;
-  position: absolute;
-  background: #D00000;
-  transition: 0.2s ease all;
-  -moz-transition: 0.2s ease all;
-  -webkit-transition: 0.2s ease all;
+.form-bar:before, .form-bar:after {
+	content: '';
+	height: 3px;
+	width: 0;
+	bottom: 0;
+	position: absolute;
+	background: #D00000;
+	transition: 0.2s ease all;
+	-moz-transition: 0.2s ease all;
+	-webkit-transition: 0.2s ease all;
 }
-.vita-form-bar:before {
-  left: 50%;
+.form-bar:before {
+	left: 50%;
 }
-.vita-form-bar:after {
-  right: 50%;
+.form-bar:after {
+	right: 50%;
 }
 
 /* active state */
-.vita-form-textfield input:focus ~ .vita-form-bar:before, .vita-form-textfield input:focus ~ .vita-form-bar:after {
-  width: 50%;
+.form-textfield input:focus ~ .form-bar:before, .form-textfield input:focus ~ .form-bar:after {
+	width: 50%;
 }
 
 /* HINTS ================================= */
-.vita-form-hint {
-  font-size: 14px;
-  position: relative;
-  left: 0;
-  top: 0;
-  line-height: 1em;
+.form-hint {
+	font-size: 14px;
+	position: relative;
+	left: 0;
+	top: 0;
+	line-height: 1em;
 }
 
 /* ERRORS ================================= */
 label.error {
-  font-size: 14px;
-  position: absolute;
-  color: red;
-  left: 0;
-  bottom: -16px;
-  line-height: 1em;
+	font-size: 14px;
+	position: absolute;
+	color: red;
+	left: 0;
+	bottom: -16px;
+	line-height: 1em;
 }
 
 /* CHECKBOXS/RADIO ================================= */
 /* Source: https://kyusuf.com/post/completely-css-custom-checkbox-radio-buttons-and-select-boxes */
-.vita-form-control {
+.form-control {
 	font-size: 18px;
 	position: relative;
 	display: block;
@@ -165,13 +160,13 @@ label.error {
 	cursor: pointer;
 }
 
-.vita-form-control input {
+.form-control input {
 	position: absolute;
 	z-index: -1;
 	opacity: 0;
 }
 
-.vita-form-control__indicator {
+.form-control__indicator {
 	position: absolute;
 	top: 2px;
 	left: 0;
@@ -181,43 +176,43 @@ label.error {
 }
 
 /* Hover and focus states */
-.vita-form-control:hover input ~ .vita-form-control__indicator,
-.vita-form-control input:focus ~ .vita-form-control__indicator {
+.form-control:hover input ~ .form-control__indicator,
+.form-control input:focus ~ .form-control__indicator {
 	background: #ccc;
 }
 
 /* Checked state */
-.vita-form-control input:checked ~ .vita-form-control__indicator {
+.form-control input:checked ~ .form-control__indicator {
 	background: #D00000;
 }
 
 /* Hover state whilst checked */
-.vita-form-control:hover input:not([disabled]):checked ~ .vita-form-control__indicator,
-.vita-form-control input:checked:focus ~ .vita-form-control__indicator {
-  background: #910000;
+.form-control:hover input:not([disabled]):checked ~ .form-control__indicator,
+.form-control input:checked:focus ~ .form-control__indicator {
+	background: #910000;
 }
 
 /* Disabled state */
-.vita-form-control input:disabled ~ .vita-form-control__indicator {
+.form-control input:disabled ~ .form-control__indicator {
 	pointer-events: none;
 	opacity: .6;
 	background: #e6e6e6;
 }
 
 /* Check mark */
-.vita-form-control__indicator:after {
+.form-control__indicator:after {
 	position: absolute;
 	display: none;
 	content: '';
 }
 
 /* Show check mark */
-.vita-form-control input:checked ~ .vita-form-control__indicator:after {
+.form-control input:checked ~ .form-control__indicator:after {
 	display: block;
 }
 
 /* Checkbox tick */
-.vita-form-checkbox .vita-form-control__indicator:after {
+.form-checkbox .form-control__indicator:after {
 	top: 4px;
 	left: 8px;
 	width: 3px;
@@ -228,12 +223,12 @@ label.error {
 }
 
 /* Disabled tick colour */
-.vita-form-checkbox input:disabled ~ .vita-form-control__indicator:after {
+.form-checkbox input:disabled ~ .form-control__indicator:after {
 	border-color: #7b7b7b;
 }
 
 /* Radio button inner circle */
-.vita-form-radio .vita-form-control__indicator:after {
+.form-radio .form-control__indicator:after {
 	top: 7px;
 	left: 7px;
 	width: 6px;
@@ -243,20 +238,20 @@ label.error {
 }
 
 /* Disabled circle colour */
-.vita-form-radio input:disabled ~ .vita-form-control__indicator:after {
+.form-radio input:disabled ~ .form-control__indicator:after {
 	background: #7b7b7b;
 }
 
 /* SELECT BOXES ================================= */
 /* Source: https://kyusuf.com/post/completely-css-custom-checkbox-radio-buttons-and-select-boxes */
-.vita-form-select {
+.form-select {
 	position: relative;
 	display: inline-block;
 	width: 100%;
 	margin-bottom: 15px;
 }
 
-.vita-form-select select {
+.form-select select {
 	display: inline-block;
 	width: 100%;
 	padding: 10px 15px;
@@ -271,24 +266,24 @@ label.error {
 	-moz-appearance: none;
 }
 
-.vita-form-select select::-ms-expand {
+.form-select select::-ms-expand {
 	display: none;
 }
 
-.vita-form-select select:hover,
-.vita-form-select select:focus {
+.form-select select:hover,
+.form-select select:focus {
 	color: #000;
 	background: #ccc;
 }
 
-.vita-form-select select:disabled {
+.form-select select:disabled {
 	pointer-events: none;
 	opacity: .5;
 }
 
-.vita-form-select__arrow {
+.form-select__arrow {
 	position: relative;
-  bottom: 21px;
+	bottom: 21px;
 	left: calc(100% - 21px);
 	width: 0;
 	height: 0;
@@ -297,68 +292,41 @@ label.error {
 	border-style: solid;
 	border-color: #7b7b7b transparent transparent transparent;
 }
-.vita-form-select select:hover ~ .vita-form-select__arrow,
-.vita-form-select select:focus ~ .vita-form-select__arrow {
+.form-select select:hover ~ .form-select__arrow,
+.form-select select:focus ~ .form-select__arrow {
 	border-top-color: #000;
 }
 
-.vita-form-select select:disabled ~ .vita-form-select__arrow {
+.form-select select:disabled ~ .form-select__arrow {
 	border-top-color: #ccc;
 }
 
 /* RADIO BUTTONS ================================= */
-.vita-form-radio {
+.form-radio {
 	position: relative;
 	display: inline-block;
 	margin-bottom: 32px;
 	width: 100%;
 }
 
-.vita-form-radio div .vita-form-radio-label {
-  border-radius: 4px;
-  margin: 3px 0;
-  min-width: 45px;
-  padding: 5px 10px;
+.form-radio div .form-radio-label {
+	border-radius: 4px;
+	margin: 3px 0;
+	min-width: 45px;
+	padding: 5px 10px;
 }
 
-.vita-form-radio .ui-state-active,
-.vita-form-radio .ui-widget-content .ui-state-active,
-.vita-form-radio .ui-widget-header .ui-state-active,
-.vita-form-radio a.ui-button:active,
-.vita-form-radio .ui-button:active,
-.vita-form-radio .ui-button.ui-state-active:hover {
-  background-color: #d00000;
-  border: 1px solid #d00000;
-  color: white;
+.form-radio .ui-state-active,
+.form-radio .ui-widget-content .ui-state-active,
+.form-radio .ui-widget-header .ui-state-active,
+.form-radio a.ui-button:active,
+.form-radio .ui-button:active,
+.form-radio .ui-button.ui-state-active:hover {
+	background-color: #d00000;
+	border: 1px solid #d00000;
+	color: white;
 }
 
-.vita-form-radio .ui-visual-focus {
-  box-shadow: 0 0 5px -1px #000;
+.form-radio .ui-visual-focus {
+	box-shadow: 0 0 5px -1px #000;
 }
-
-
-/* BUTTONS ================================= */
-/* Based on the UNL WDN Style Sheet: http://wdn.unl.edu/buttons */
-/*.vita-form-button {
-    border: none;
-    border-radius: 3px;
-    color: #fff;
-    cursor: pointer;
-    padding: 1.069em 1.333em 1em;
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-family: 'Gotham SSm A','Gotham SSm B','Montserrat',Verdana,sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    line-height: 1;
-    font-size: .75rem;
-    transition: background-color .3s ease-out;
-    background-color: #4a3b13;
-}
-
-.background-primary {
-    background-color: #d00000;
-    color: #fff;
-}*/

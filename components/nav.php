@@ -1,21 +1,24 @@
-<link rel="stylesheet" href="/assets/css/nav.css">
-<header id="vita-nav">
-  <nav class="closed">
-    <a href="/">VITA</a> <!-- VITA LOGO -->
-    <a href="/signup">Make an Appointment</a>
-    <?php
-    // if not logged in
-    echo '<a href="/login">Log in</a>';
-    // else (the user is logged in)
-    // <a href="/">Sign out</a>
-     ?>
-  </nav>
-  <!-- For small screens. -->
-  <div id="vita-menu-toggle">
-    <!-- For modern browsers. -->
-    <i class="material-icons">menu</i>
-    <!-- For IE9 or below. -->
-    <i class="material-icons">&#xE5D2;</i>
-  </div>
-</header>
-<script src="/assets/js/nav.js"></script>
+<!-- TODO: insert authentication logic here -->
+
+<?php
+	if (!isset($page_title)) {
+		$page_title = "VITA";
+	}
+
+	if (!isset($page_subtitle)) {
+		$page_subtitle = "Center for People in Need";
+	}
+?>
+
+<div class='section theme-dark nav'>
+	<div class='sub-section-full'>
+		<div class='wrap-left menu-icon-wrap'>
+			<i class='menu-icon material-icons'>menu</i>
+			<!-- <i class='menu-icon material-icons'>&#xE5D2;</i> -->
+		</div>
+		<div class='wrap nav-title-section'>
+			<div id='page-title'><?php echo $page_title ?></div>
+			<div id='page-subtitle'><?php echo $page_subtitle ?></div>
+		</div>
+	</div>
+</div>
