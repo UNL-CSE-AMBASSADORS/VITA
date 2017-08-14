@@ -65,7 +65,7 @@ $('#vitaSignupForm').submit(function(e) {
 
 		//TODO
 		"scheduledTime": '2017-07-26T15:30:00',
-		"siteId":1
+		"siteId": 4
 	};
 
 	// AJAX Code To Submit Form.
@@ -75,10 +75,16 @@ $('#vitaSignupForm').submit(function(e) {
 		dataType: 'json',
 		data: (data),
 		cache: false,
-		success: function(submitResponse){
-			// LUL
-			// console.log(submitResponse);
-			// window.location = "/";
+		complete: function(response){
+			response = response.responseJSON;
+
+			if(typeof response !== 'undefined' && response && response.success){
+				$(vitaSignupForm).hide();
+				$(responsePlaceholder).show();
+				responsePlaceholder.innerHTML = response.message;
+			}else{
+				alert('There was an error on the server! Please refresh the page in a few minutes and try again.');
+			}
 		}
 	});
 

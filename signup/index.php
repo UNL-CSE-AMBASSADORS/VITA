@@ -12,6 +12,7 @@
 </head>
 <body>
   <div class="vita-body-container">
+    <div id="responsePlaceholder" style="display: none;"></div>
     <form class="cmxform" id="vitaSignupForm" method="post" action="" autocomplete="off">
       <h1 class="vita-form-title">Sign Up for a VITA Appointment</h1>
 

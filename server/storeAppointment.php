@@ -10,7 +10,6 @@ function storeAppointment($data){
 	$response = array();
 	$response['success'] = false;
 
-	
 
 	$conn->beginTransaction();
 	try {
@@ -58,7 +57,6 @@ function storeAppointment($data){
 			$data['siteId']
 		);
 		$stmt = $conn->prepare($appointmentInsert);
-		print_r($appointmentParams);
 		if(!$stmt->execute($appointmentParams)){
 			throw new Exception("There was an issue on the server. Please refresh the page and try again.", 999);
 		}
@@ -93,6 +91,23 @@ function storeAppointment($data){
 		$conn->commit();
 		$response['success'] = true;
 		$response['appointmentId'] = $appointmentId;
+
+		// get site information
+		$siteQuery = "SELECT address,phoneNumber FROM vita.site WHERE siteId = ?";
+		$stmt = $conn->prepare($siteQuery);
+		$stmt->execute(array($data['siteId']));
+
+		$siteInfo = $stmt->fetch();
+		$siteAddress = $siteInfo['address'];
+		$sitePhoneNumber = $siteInfo['phoneNumber'];
+
+		// TODO: Make sound better
+		$response['message'] = $data['firstName'].", thank you for signing up! Your appointment will be located at $siteAddress. Please arrive by ".$data['scheduledTime']." with all necessary materials. Please call $sitePhoneNumber for additional details or to reschedule. Thank you from Lincoln VITA.";
+
+		// if email is set and passes simple validation (x@x)
+		if($data['email'] && preg_match('/.+@.+/', $data['email'])){
+			mail($data['email'], 'Lincoln VITA - Appointment', $response['message']);
+		}
 	} catch (Exception $e) {
 		$conn->rollback();
 
