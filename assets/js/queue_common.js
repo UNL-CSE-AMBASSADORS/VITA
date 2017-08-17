@@ -33,9 +33,8 @@ function populateQueue() {
 			$('.queue-size-count').html(r.length); // This does nothing in the private queue
 
 			for (var i = 0; i < r.length; i++) {
-				var t = new Date(r[i].scheduledTime),
-					hr = t.getHours() % 12 + 1,
-					mn = t.getMinutes();
+				var t = new Date(r[i].scheduledTime), hr = t.getHours() % 12, mn = t.getMinutes();
+				if (hr === 0) hr = 12;
 				if (mn < 10) mn = `0${mn}`;
 
 				var record = {
