@@ -16,7 +16,7 @@ $('.queue-table').on('click', '.queue-record', function() {
 	$(this).addClass('theme-light');
 
 	$.get({
-		data: 'id=' + $(this).find('.queue-record-id').html(),
+		data: `id=${$(this).find('.queue-record-id').html()}&action=display`,
 		url: '/server/queue_priv.php',
 		dataType: 'json',
 		cache: false,
