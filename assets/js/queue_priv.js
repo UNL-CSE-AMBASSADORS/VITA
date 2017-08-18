@@ -8,15 +8,16 @@ $('.details-controls').on('click', '.details-close', hideDetails);
 
 // Cancels the selected appointment
 $('.details-controls').on('click', '.details-cancel', function() {
-	// TODO: Add confirmation
-	$.get({
-		data: `id=${openedAppointmentId}&action=cancel`,
-		url: '/server/queue_priv.php',
-		success: function(r) {
-			hideDetails();
-			populateQueue();
-		}
-	});
+	if (confirm('Are you sure you would like to cancel this appointment? Click OK to cancel this appointment.')) {
+		$.get({
+			data: `id=${openedAppointmentId}&action=cancel`,
+			url: '/server/queue_priv.php',
+			success: function(r) {
+				hideDetails();
+				populateQueue();
+			}
+		});
+	}
 });
 
 // Retrieves and displays the data associated with the selected appointment

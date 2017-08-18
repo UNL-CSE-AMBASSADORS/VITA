@@ -60,7 +60,7 @@
 				<div class='flex details-controls'>
 					<div class='details-control details-close'>Close</div>
 					<div class='button theme-dark details-control details-reschedule'>Reschedule</div>
-					<div class='button theme-dark details-control details-cancel'>Cancel Appointment</div>
+					<div class='button theme-dark details-control details-cancel'>Cancel</div>
 					<div class='button theme-dark details-control details-accept'>Accept</div>
 				</div>
 			</div>
