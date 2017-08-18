@@ -1,17 +1,14 @@
-var REFRESH_SEC = 15,
-	displayDate = new Date(),
-	monthStrings = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
-	refreshing = null,
-	openedAppointmentId = 0;
+var REFRESH_SEC = 15, refreshing = null, openedAppointmentId = 0;
+
+$(document).ready(refresh);
 
 $('.date-wrap').on('click', '.date-back', hideDetails);
 $('.date-wrap').on('click', '.date-forward', hideDetails);
-$('.details-controls').on('click', '.details-close', function() {
-	$('.queue-record').removeClass('theme-light');
-	hideDetails()
-});
+$('.details-controls').on('click', '.details-close', hideDetails);
 
+// Cancels the selected appointment
 $('.details-controls').on('click', '.details-cancel', function() {
+	// TODO: Add confirmation
 	$.get({
 		data: `id=${openedAppointmentId}&action=cancel`,
 		url: '/server/queue_priv.php',
@@ -24,7 +21,7 @@ $('.details-controls').on('click', '.details-cancel', function() {
 
 // Retrieves and displays the data associated with the selected appointment
 $('.queue-table').on('click', '.queue-record', function() {
-	openedAppointmentId = $(this).find('.queue-record-id').html();
+	openedAppointmentId = $(this).data('appointmentId');
 
 	// Adds a soft highlight to the last selected appointment
 	$('.queue-record').removeClass('theme-light');
@@ -36,7 +33,7 @@ $('.queue-table').on('click', '.queue-record', function() {
 		dataType: 'json',
 		cache: false,
 		success: function(r) {
-			var time = new Date(r[0].scheduledTime), h = time.getHours() % 12, m = time.getMinutes();
+			let t = new Date(r[0].scheduledTime), h = t.getHours() % 12, m = t.getMinutes();
 			if (h === 0) h = 12;
 			if (m < 10) m = `0${m}`;
 
@@ -50,8 +47,6 @@ $('.queue-table').on('click', '.queue-record', function() {
 	});
 });
 
-$(document).ready(refresh);
-
 function refresh() {
 	displayQueueDate();
 	populateQueue();
@@ -61,6 +56,7 @@ function refresh() {
 }
 
 function hideDetails() {
+	$('.queue-record').removeClass('theme-light');
 	$('.details').css('display', 'none');
 	openedAppointmentId = 0;
 }

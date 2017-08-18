@@ -1,7 +1,4 @@
-var REFRESH_SEC = 15,
-	displayDate = new Date(),
-	monthStrings = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
-	refreshing = null;
+var REFRESH_SEC = 15, refreshing = null;
 
 $(document).ready(refresh);
 
@@ -15,8 +12,7 @@ function refresh() {
 }
 
 function keepTime() {
-	var h = new Date().getHours(),
-		m = new Date().getMinutes();
+	let h = new Date().getHours(), m = new Date().getMinutes();
 
 	$('.clock-am').toggleClass('inactive-period', h >= 12);
 	$('.clock-pm').toggleClass('inactive-period', h < 12);
