@@ -1,5 +1,5 @@
 <?php
-	define('PROD', true);
+	define('PROD', false);
 
 	if(!PROD){
 		error_reporting(E_ALL);
