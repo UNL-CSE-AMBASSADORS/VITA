@@ -139,9 +139,11 @@
 		flex-direction: row;
 		justify-content: space-between;
 	}
+	
 	.queue-size-wrap {
 		justify-content: flex-start;
 	}
+
 	.clock-wrap {
 		display: flex;
 	}

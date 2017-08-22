@@ -52,9 +52,10 @@
 	<?php require_once "$root/server/footer.php" ?>
 </body>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js'></script>
+<script src='/assets/js/queue_common.js'></script>
 <script src='/assets/js/queue.js'></script>
 <script class='queue-record-template' type='text/template'>
-	<div class='queue-record'>
+	<div class='queue-record' data-appointment-id='{{id}}'>
 		<div class='wrap-left queue-position-wrap'>{{position}}</div>
 		<div class='wrap-left queue-name-wrap'>{{name}}</div>
 		<div class='wrap-right queue-time-wrap'>
