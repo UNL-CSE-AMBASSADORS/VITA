@@ -1,15 +1,12 @@
 $(document).ready(function() {
-	// loadQuestions();
-
-	// to be deleted at a later point
 	validateSignupForm();
 
 	// Since non-required fields are "valid" when they are empty, we need an
 	// alternate way to keep labels raised when there is content in their
 	// associated input field
-	$(".vita-form-textfield input").blur(function() {
+	$(".form-textfield input").blur(function() {
 		var isBlank = $.trim($(this).val()).length > 0;
-		$label = $(this).siblings(".vita-form-label").toggleClass( "vita-form-label__floating", isBlank );
+		$label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
 	});
 
 });
@@ -40,14 +37,14 @@ function validateSignupForm() {
 // Form submission
 $('#vitaSignupForm').submit(function(e) {
 	// Stop default form submit action
-	e.preventDefault();
+	// e.preventDefault();
 
 	if (!$(this).valid()) {
 		return false;
 	}
 
 	var questions = [];
-	$('.vita-form-radio').each(function(){
+	$('.form-radio').each(function(){
 		var checkedRadioBox = $(this).find('input[type="radio"]:checked');
 
 		questions.push({
@@ -88,5 +85,5 @@ $('#vitaSignupForm').submit(function(e) {
 		}
 	});
 
-	return true;
+	return false;
 });

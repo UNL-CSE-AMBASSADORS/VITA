@@ -1,4 +1,4 @@
-<?
+<?php
 require_once 'config.php';
 
 storeAppointment($_POST);
@@ -12,7 +12,7 @@ function storeAppointment($data){
 
 	$DB_CONN->beginTransaction();
 	try {
-			
+
 		$clientInsert = "INSERT INTO vita.client
 			(
 				firstName,
@@ -61,7 +61,7 @@ function storeAppointment($data){
 		}
 
 		$appointmentId = $DB_CONN->lastInsertId();
-		
+
 
 		$answerInsert = "INSERT INTO vita.answer
 			(
