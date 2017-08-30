@@ -15,6 +15,7 @@
 
 	<div class="section">
 		<div class="sub-section">
+      <div id="responsePlaceholder" style="display: none;"></div>
 			<form class="cmxform" id="vitaSignupForm" method="post" action="" autocomplete="off">
 				<h2 class="form-title">Sign Up for a VITA Appointment</h2>
 
