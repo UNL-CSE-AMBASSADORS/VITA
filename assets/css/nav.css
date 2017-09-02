@@ -1,6 +1,0 @@
-/* XS and SM styling to make container behave like fluid-container when XS or SM */
-@media (max-width: 767px) {
-	.container {
-		max-width: inherit !important;
-	}
-}

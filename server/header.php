@@ -9,5 +9,6 @@
 <link rel='stylesheet' href='/assets/css/nav.css'>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
