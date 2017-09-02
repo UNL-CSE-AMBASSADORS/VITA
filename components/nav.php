@@ -12,7 +12,7 @@
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
 	<div class="container">
-		<a class="navbar-brand" href="#"><?php echo $page_title ?></a>
+		<a class="navbar-brand" href="/"><?php echo $page_title ?></a>
 
 		<button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
