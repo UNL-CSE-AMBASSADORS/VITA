@@ -8,7 +8,7 @@
 </head>
 <body>
 	<?php
-		$page_title = 'Signup for an appointment';
+		$page_subtitle = 'Signup for an appointment';
 		require_once "$root/components/nav.php";
 	?>
 
