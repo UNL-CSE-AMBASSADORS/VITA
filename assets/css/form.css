@@ -4,7 +4,6 @@ body {
 
 /* HEADINGS ======================================= */
 h2.form-title {
-	color: #474746;
 	line-height: 1;
 	margin: 0;
 	padding: 1em 0 1em 0;
@@ -45,13 +44,13 @@ h3.form-subheading {
 /* TEXTFIELD ======================================= */
 .form-textfield {
 	position: relative;
-	margin-top: 16px;
-	margin-bottom: 32px;
+	margin-top: 1em;
+	margin-bottom: 2em;
 	width: 100%;
 }
 .form-textfield input {
-	font-size: 18px;
-	padding: 8px 0 8px 0;
+	font-size: 1.1em;
+	padding: 0.5em 0 0.5em 0;
 	display: block;
 	width: 100%;
 	border: none;
@@ -68,11 +67,11 @@ h3.form-subheading {
 }
 
 .form-select .form-label {
-	font-size: 14px;
+	font-size: 1em;
 }
 
 .form-textfield .form-label {
-	font-size: 18px;
+	font-size: 1.1em;
 	font-weight: normal;
 	position: absolute;
 	pointer-events: none;
@@ -98,7 +97,7 @@ label.form-required::after {
 .form-textfield input ~ .form-label__always-floating {
 	left: 0;
 	top: -1em;
-	font-size: 14px;
+	font-size: 1em;
 }
 
 /* BOTTOM BARS ================================= */
@@ -132,7 +131,7 @@ label.form-required::after {
 
 /* HINTS ================================= */
 .form-hint {
-	font-size: 14px;
+	font-size: 1em;
 	position: relative;
 	left: 0;
 	top: 0;
@@ -141,22 +140,22 @@ label.form-required::after {
 
 /* ERRORS ================================= */
 label.error {
-	font-size: 14px;
+	font-size: 1em;
 	position: absolute;
 	color: red;
 	left: 0;
-	bottom: -16px;
+	bottom: -1.7em;
 	line-height: 1em;
 }
 
 /* CHECKBOXS/RADIO ================================= */
 /* Source: https://kyusuf.com/post/completely-css-custom-checkbox-radio-buttons-and-select-boxes */
 .form-control {
-	font-size: 18px;
+	font-size: 1em;
 	position: relative;
 	display: block;
-	margin-bottom: 15px;
-	padding-left: 30px;
+	margin-bottom: 1em;
+	padding-left: 2em;
 	cursor: pointer;
 }
 
@@ -314,19 +313,4 @@ label.error {
 	margin: 3px 0;
 	min-width: 45px;
 	padding: 5px 10px;
-}
-
-.form-radio .ui-state-active,
-.form-radio .ui-widget-content .ui-state-active,
-.form-radio .ui-widget-header .ui-state-active,
-.form-radio a.ui-button:active,
-.form-radio .ui-button:active,
-.form-radio .ui-button.ui-state-active:hover {
-	background-color: #d00000;
-	border: 1px solid #d00000;
-	color: white;
-}
-
-.form-radio .ui-visual-focus {
-	box-shadow: 0 0 5px -1px #000;
 }
