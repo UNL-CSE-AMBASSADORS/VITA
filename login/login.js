@@ -1,57 +1,7 @@
 $(function(){
-	console.log("%cSTOP! \n%cDo NOT paste/type anything here under any circumstance.", "color: red; font-size:36px;", "color: black; font-size: 12pt"); 
-
-	var dir = document.URL;
-	if(dir.indexOf('login') > -1){
-		window.onload = LoginControls;
-	}else if(dir.indexOf('register') > -1){
-		window.onload = PasswordResetControls;
-	}else{
-		window.onload = LoginControls;
-	}
+	console.log("%cSTOP! \n%cDo NOT paste/type anything here under any circumstance.", "color: red; font-size:36px;", "color: black; font-size: 12pt");
+	LoginControls();
 });
-
-var PasswordResetControls = function(){
-// Validate Form
-	$("#reset_password_form").on('submit', function(e) {
-	
-		// Prevent form submission
-		e.preventDefault();
-
-		// Define Fields
-		var token = $("#reset_password_token").val();
-		var email = $("#reset_password_email").val();
-		var password = $("#reset_password_npassword").val();
-		var vpassword = $("#reset_password_vpassword").val();
-
-		if(email && password && vpassword){
-			// Ajax
-			$.ajax({
-				dataType: 'json',
-				method: 'POST',
-				url: '/server/callbacks.php',
-				data: {
-					callback: 'password_reset',
-					token: token,
-					email: email,
-					password: password,
-					vpassword: vpassword
-				},
-				success: function(response){
-					if(response.success){
-						$("#reset_password_form, #reset_password_info").hide();
-						$("#reset_password_success").fadeIn();
-					}else{
-						alert(response.error);
-					}
-				}
-			});
-		}else{
-			// display some message about fields
-		}
-
-	});
-};
 
 // login.php functions
 var LoginControls = function(){
@@ -108,7 +58,7 @@ var LoginControls = function(){
 	});
 
 	$("#register_form").on('submit', function(e) {
-	
+
 		// Prevent form submission
 		e.preventDefault();
 
