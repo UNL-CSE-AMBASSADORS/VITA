@@ -5,7 +5,6 @@
 	<title>VITA Appointment Signup</title>
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="/assets/css/form.css">
-	<link rel="stylesheet" href="/signup/signup.css">
 </head>
 <body>
 	<?php
