@@ -11,8 +11,8 @@ TRUNCATE Site;
 TRUNCATE PossibleAnswer;
 TRUNCATE LitmusQuestion;
 
-TRUNCATE UserPrivilege;
-TRUNCATE Privilege;
+TRUNCATE UserPermission;
+TRUNCATE Permission;
 TRUNCATE UserAbility;
 TRUNCATE Ability;
 TRUNCATE Login;
@@ -63,19 +63,19 @@ INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
 
 
 -- abilities
-INSERT INTO Ability (name, tag, description, verificationRequired)
+INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Basic Certification", "basic_certification", "Has finished the basic certification requirements", TRUE);
 SET @ability_basicCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (name, tag, description, verificationRequired)
+INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("International Certification", "international_certification", "Has completed the international certification requirements", TRUE);
 SET @ability_internationalCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (name, tag, description, verificationRequired)
+INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Military Certification", "military_certification", "Has completed the military certification requirements", TRUE);
 SET @ability_militaryCertificationId = LAST_INSERT_ID();
 
-INSERT INTO Ability (name, tag, description, verificationRequired)
+INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Spanish-Speaking", "spanish_speaking", "Can speak fluent Spanish", FALSE);
 SET @ability_spanishSpeakingId = LAST_INSERT_ID();
 -- end abilities
@@ -98,41 +98,41 @@ INSERT INTO UserAbility (userId, abilityId, createdBy)
 
 
 
--- privileges
-INSERT INTO Privilege (name, description, tag)
-	VALUES ("Add Site", "Has the privilege to create a new VITA site on the add site page", "add_site");
-SET @privilege_addSiteId = LAST_INSERT_ID();
+-- permissions
+INSERT INTO Permission (name, description, lookupName)
+	VALUES ("Add Site", "Has the permission to create a new VITA site on the add site page", "add_site");
+SET @permission_addSiteId = LAST_INSERT_ID();
 	
-INSERT INTO Privilege (name, description, tag)
-	VALUES ("Edit Site Information", "Has the privilege to edit the information associated with sites", "edit_site_information");
-SET @privilege_editSiteInformationId = LAST_INSERT_ID();
+INSERT INTO Permission (name, description, lookupName)
+	VALUES ("Edit Site Information", "Has the permission to edit the information associated with sites", "edit_site_information");
+SET @permission_editSiteInformationId = LAST_INSERT_ID();
 
-INSERT INTO Privilege (name, description, tag)
-	VALUES ("Can Take Client off of Queue", "Has the privilege to take clients off of the queue", "pop_client_off_queue");
-SET @privilege_popClientOffQueueId = LAST_INSERT_ID();
--- end privileges
+INSERT INTO Permission (name, description, lookupName)
+	VALUES ("Can Take Client off of Queue", "Has the permission to take clients off of the queue", "pop_client_off_queue");
+SET @permission_popClientOffQueueId = LAST_INSERT_ID();
+-- end permissions
 
 
 
--- user privileges
-INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
-	VALUES (@user_preparer1Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
+-- user permissions
+INSERT INTO UserPermission (userId, permissionId, createdBy)
+	VALUES (@user_preparer1Id, @permission_popClientOffQueueId, @user_siteAdmin1Id);
 	
-INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
-	VALUES (@user_preparer2Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
+INSERT INTO UserPermission (userId, permissionId, createdBy)
+	VALUES (@user_preparer2Id, @permission_popClientOffQueueId, @user_siteAdmin1Id);
 	
-INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
-	VALUES (@user_siteAdmin1Id, @privilege_addSiteId, @user_siteAdmin1Id);
+INSERT INTO UserPermission (userId, permissionId, createdBy)
+	VALUES (@user_siteAdmin1Id, @permission_addSiteId, @user_siteAdmin1Id);
 	
-INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
-	VALUES (@user_siteAdmin1Id, @privilege_editSiteInformationId, @user_siteAdmin1Id);
+INSERT INTO UserPermission (userId, permissionId, createdBy)
+	VALUES (@user_siteAdmin1Id, @permission_editSiteInformationId, @user_siteAdmin1Id);
 	
-INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
-	VALUES (@user_receptionist1Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
+INSERT INTO UserPermission (userId, permissionId, createdBy)
+	VALUES (@user_receptionist1Id, @permission_popClientOffQueueId, @user_siteAdmin1Id);
 	
-INSERT INTO UserPrivilege (userId, privilegeId, createdBy)
-	VALUES (@user_reviewer1Id, @privilege_popClientOffQueueId, @user_siteAdmin1Id);
--- end user privileges
+INSERT INTO UserPermission (userId, permissionId, createdBy)
+	VALUES (@user_reviewer1Id, @permission_popClientOffQueueId, @user_siteAdmin1Id);
+-- end user permissions
 
 
 
@@ -155,32 +155,32 @@ SET @site_site3Id = LAST_INSERT_ID();
 -- shift
 SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 1 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE, FALSE);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @shift_site1Shift1Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE, TRUE);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @shift_site1Shift2Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 4 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE, FALSE);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @shift_site2Shift1Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 3 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 2 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, TRUE, TRUE);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @shift_site2Shift2Id = LAST_INSERT_ID();
 
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy, handlesResidential, handlesInternational)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id, FALSE, TRUE);
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @shift_site2Shift3Id = LAST_INSERT_ID();
 -- end shift
 
@@ -298,27 +298,27 @@ INSERT INTO ServicedAppointment (startTime, endTime, userId, appointmentId)
 
 
 -- litmus question
-INSERT INTO LitmusQuestion (text, orderIndex, tag, required, followUpTo)
+INSERT INTO LitmusQuestion (text, orderIndex, lookupName, required, followUpTo)
 	VALUES ("Will you require a Depreciation Schedule?", 1, "depreciation_schedule", true, NULL);
 SET @litmusQuestion_litmusQuestion1Id = LAST_INSERT_ID();
 
-INSERT INTO LitmusQuestion (text, orderIndex, tag, required, followUpTo)
+INSERT INTO LitmusQuestion (text, orderIndex, lookupName, required, followUpTo)
 	VALUES ("Will you require a Schedule F (Farm)?", 2, "schedule_f", true, NULL);
 SET @litmusQuestion_litmusQuestion2Id = LAST_INSERT_ID();
 
-INSERT INTO LitmusQuestion (text, orderIndex, tag, required, followUpTo)
+INSERT INTO LitmusQuestion (text, orderIndex, lookupName, required, followUpTo)
 	VALUES ("Are you self-employed or own a home-based business?", 3, "self_employed", true, NULL);
 SET @litmusQuestion_litmusQuestion3Id = LAST_INSERT_ID();
 
-INSERT INTO LitmusQuestion (text, orderIndex, tag, required, followUpTo)
+INSERT INTO LitmusQuestion (text, orderIndex, lookupName, required, followUpTo)
 	VALUES ("Does your home-based business or self-employment have a net loss?", 4, "net_loss", false, @litmusQuestion_litmusQuestion3Id);
 SET @litmusQuestion_litmusQuestion4Id = LAST_INSERT_ID();
 
-INSERT INTO LitmusQuestion (text, orderIndex, tag, required, followUpTo)
+INSERT INTO LitmusQuestion (text, orderIndex, lookupName, required, followUpTo)
 	VALUES ("Does your home-based business or self-employment have more than $10,000 in expenses?", 5, "more_than_10000_expenses", false, @litmusQuestion_litmusQuestion3Id);
 SET @litmusQuestion_litmusQuestion5Id = LAST_INSERT_ID();
 
-INSERT INTO LitmusQuestion (text, orderIndex, tag, required, followUpTo)
+INSERT INTO LitmusQuestion (text, orderIndex, lookupName, required, followUpTo)
 	VALUES ("Will your return have casualty losses?",  6, "casualty_losses", true, NULL);
 SET @litmusQuestion_litmusQuestion6Id = LAST_INSERT_ID();
 -- end litmus question

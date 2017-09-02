@@ -10,8 +10,13 @@ DROP TABLE IF EXISTS Site;
 DROP TABLE IF EXISTS PossibleAnswer;
 DROP TABLE IF EXISTS LitmusQuestion;
 
+-- Temporary, this is here since I renamed the tables, but these old tables will still exist on other people's machines, we need to remove them
 DROP TABLE IF EXISTS UserPrivilege;
 DROP TABLE IF EXISTS Privilege;
+-- Temporary
+
+DROP TABLE IF EXISTS UserPermission;
+DROP TABLE IF EXISTS Permission;
 DROP TABLE IF EXISTS UserAbility;
 DROP TABLE IF EXISTS Ability;
 DROP TABLE IF EXISTS Login;
@@ -33,12 +38,12 @@ CREATE TABLE LitmusQuestion (
 	litmusQuestionId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	text VARCHAR(255) NOT NULL,
 	orderIndex INTEGER NOT NULL,
-	tag VARCHAR(255) NOT NULL,
+	lookupName VARCHAR(255) NOT NULL,
 	required BOOLEAN NOT NULL DEFAULT TRUE,
 	archived BOOLEAN NOT NULL DEFAULT FALSE,
 	followUpTo INTEGER UNSIGNED NULL,
 	FOREIGN KEY(followUpTo) REFERENCES Litmusquestion(litmusQuestionId),
-	CONSTRAINT uniqueTag UNIQUE INDEX(tag)
+	CONSTRAINT uniqueLookupName UNIQUE INDEX(lookupName)
 );
 
 CREATE TABLE PossibleAnswer (
@@ -129,32 +134,32 @@ CREATE TABLE PasswordReset (
 	FOREIGN KEY (userId) REFERENCES User(userId)
 );
 
-CREATE TABLE Privilege (
-	privilegeId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+CREATE TABLE Permission (
+	permissionId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	name VARCHAR(255) NOT NULL,
 	description VARCHAR(500) NOT NULL,
-	tag VARCHAR(255) NOT NULL,
-	CONSTRAINT uniqueTag UNIQUE INDEX(tag)
+	lookupName VARCHAR(255) NOT NULL,
+	CONSTRAINT uniqueLookupName UNIQUE INDEX(lookupName)
 );
 
-CREATE TABLE UserPrivilege (
-	userPrivilegeId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+CREATE TABLE UserPermission (
+	userPermissionId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
 	createdBy INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(createdBy) REFERENCES User(userId),
 	userId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(userId) REFERENCES User(userId),
-	privilegeId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(privilegeId) REFERENCES Privilege(privilegeId)
+	permissionId INTEGER UNSIGNED NOT NULL,
+	FOREIGN KEY(permissionId) REFERENCES Permission(permissionId)
 );
 
 CREATE TABLE Ability (
 	abilityId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	name VARCHAR(255) NOT NULL,
-	tag VARCHAR(255) NOT NULL,
+	lookupName VARCHAR(255) NOT NULL,
     verificationRequired BOOLEAN NOT NULL,
 	description VARCHAR(500) NOT NULL,
-	CONSTRAINT uniqueTag UNIQUE INDEX(tag)
+	CONSTRAINT uniqueLookupName UNIQUE INDEX(lookupName)
 );
 
 CREATE TABLE UserAbility (
@@ -172,9 +177,7 @@ CREATE TABLE Shift (
 	shiftId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	startTime DATETIME NOT NULL,
 	endTime DATETIME NOT NULL,
-	handlesResidential BOOLEAN NOT NULL,
-	handlesInternational BOOLEAN NOT NULL,
-	deleted BOOLEAN NOT NULL DEFAULT FALSE,
+	archived BOOLEAN NOT NULL DEFAULT FALSE,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
 	lastModifiedDate DATETIME NULL,
 	siteId INTEGER UNSIGNED NOT NULL,

@@ -5,7 +5,7 @@ function getLitmusQuestions() {
 	$conn = $DB_CONN;
 
 	$queryStatement = $conn->prepare('SELECT lq.litmusQuestionId, pa.possibleAnswerId, pa.text AS possibleAnswerText,
-				lq.text AS litmusQuestionText, lq.required, lq.tag
+				lq.text AS litmusQuestionText, lq.required, lq.lookupName
 				FROM PossibleAnswer pa
 				JOIN LitmusQuestion lq ON pa.litmusQuestionId = lq.litmusQuestionId
 				WHERE lq.archived = FALSE AND pa.archived = FALSE
@@ -34,9 +34,9 @@ function addSelection($questionOptions) {
 
 	$selectInput = '
 			<div class="form-select">
-				<label for="'.$questionOptions[0]['tag'].'" class="form-label '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
+				<label for="'.$questionOptions[0]['lookupName'].'" class="form-label '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
 				<div>
-					<select id="'.$questionOptions[0]['tag'].'" '.$requiredClass.' name="'.$questionOptions[0]['litmusQuestionId'].'">';
+					<select id="'.$questionOptions[0]['lookupName'].'" '.$requiredClass.' name="'.$questionOptions[0]['litmusQuestionId'].'">';
 	foreach	($questionOptions as $option)	{
 		$selectInput .= '
 						<option value="'.$option['possibleAnswerId'].'">'.$option['possibleAnswerText'].'</option>';
@@ -59,7 +59,7 @@ function addRadioSelection($questionOptions) {
 
 	$selectInput = '
 			<div class="form-radio">
-				<label for="'.$questionOptions[0]['tag'].'" class="form-label form-label__floating '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
+				<label for="'.$questionOptions[0]['lookupName'].'" class="form-label form-label__floating '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
 				<div>';
 	foreach	($questionOptions as $option)	{
 		$selectInput .= '

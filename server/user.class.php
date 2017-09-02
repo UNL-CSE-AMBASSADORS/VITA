@@ -3,13 +3,13 @@ require_once 'login.class.php';
 require_once 'callbacks.php';
 require_once 'config.php';
 
-define('PrivilegeControl', 'PrivilegeControl');
+define('PermissionControl', 'PermissionControl');
 define('UserShiftControl', 'UserShiftControl');
 define('AppointmentControl', 'AppointmentControl');
 
 
 /**
-* Class for easily checking user privileges
+* Class for easily checking user permissions
 * Simply instantiate and use
 */
 
@@ -46,25 +46,25 @@ class User
 	}
 
 	/**
-	* Checks whether the user has specifed privilege
+	* Checks whether the user has specifed permission
 	* 
 	* @return boolean
 	*/ 
-	public function hasPrivilege($privilegeTag){
+	public function hasPermission($permissionLookupName){
 		GLOBAL $DB_CONN;
 
 		$userId = $this->getUserId();
 
 		$query = "SELECT userId 
-			FROM userPrivilege
-				INNER JOIN privilege ON privilege.privilegeId = userPrivilege.userPrivilegeId
+			FROM UserPermission
+				INNER JOIN Permission ON Permission.permissionId = UserPermission.userPermissionId
 			WHERE 1=1
 				AND userId = ?
-				AND tag LIKE ?";
+				AND lookupName LIKE ?";
 
 
 		$stmt = $DB_CONN->prepare($query);
-		$stmt->execute(array($userId,$privilegeTag));
+		$stmt->execute(array($userId,$permissionLookupName));
 
 		$results = $stmt->fetchAll();
 
