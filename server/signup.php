@@ -58,14 +58,14 @@ function addRadioSelection($questionOptions) {
 	}
 
 	$selectInput = '
-			<div class="form-radio">
-				<label for="'.$questionOptions[0]['lookupName'].'" class="form-label form-label__floating '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
-				<div>';
+			<div class="form-radio row">
+				<label for="'.$questionOptions[0]['lookupName'].'" class="col '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
+				<div class="col btn-group" data-toggle="buttons">';
 	foreach	($questionOptions as $option)	{
 		$selectInput .= '
-							<label class="form-radio-label" for="'.$option['possibleAnswerId'].'">'.$option['possibleAnswerText'].'</label>
-							<input type="radio" id="'.$option['possibleAnswerId'].'" value="'.$option['possibleAnswerId'].'" '.$requiredClass.' name="'.$questionOptions[0]['litmusQuestionId'].'">
-					';
+					<label class="btn btn-outline-secondary" for="'.$option['possibleAnswerId'].'">
+						<input type="radio" id="'.$option['possibleAnswerId'].'" value="'.$option['possibleAnswerId'].'" '.$requiredClass.' name="'.$questionOptions[0]['litmusQuestionId'].'">'.$option['possibleAnswerText'].'
+					</label>';
 	}
 	$selectInput .= '
 				</div>

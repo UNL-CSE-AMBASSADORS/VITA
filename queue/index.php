@@ -1,4 +1,6 @@
 <?php
+	$page_subtitle = 'Queue';
+
 	if(isset($_REQUEST['public'])){
 		require_once 'public.php';
 	}
