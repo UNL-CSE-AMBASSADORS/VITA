@@ -1,4 +1,21 @@
-.dashboard {
+.dashboard, .md-datepicker-input {
+	font-family: Bebas_Neue;
+	font-weight: bold;
+	font-size: 2rem !important;
+	line-height: 2rem;
+}
+
+.clock-time {
+	font-size: 2em;
+}
+
+.inactive-period {
+	opacity: 0.15;
+}
+
+
+
+/*.dashboard {
 	min-height: 128px;
 	box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.25);
 	z-index: 1;
@@ -139,7 +156,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 	}
-	
+
 	.queue-size-wrap {
 		justify-content: flex-start;
 	}
@@ -147,4 +164,4 @@
 	.clock-wrap {
 		display: flex;
 	}
-}
+}*/
