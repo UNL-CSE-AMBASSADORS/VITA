@@ -425,7 +425,7 @@ SET @possibleAnswer_2015OrLaterId = LAST_INSERT_ID();
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
 	VALUES (@possibleAnswer_yesId, @appointment_appointment1Id, @question_question1Id);
 
-	INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
 	VALUES (@possibleAnswer_noId, @appointment_appointment1Id, @question_question2Id);
 	
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
