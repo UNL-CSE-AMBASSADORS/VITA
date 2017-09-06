@@ -8,11 +8,12 @@ DROP TABLE IF EXISTS UserShift;
 DROP TABLE IF EXISTS Shift;
 DROP TABLE IF EXISTS Site;
 DROP TABLE IF EXISTS PossibleAnswer;
-DROP TABLE IF EXISTS LitmusQuestion;
+DROP TABLE IF EXISTS Question;
 
 -- Temporary, this is here since I renamed the tables, but these old tables will still exist on other people's machines, we need to remove them
 DROP TABLE IF EXISTS UserPrivilege;
 DROP TABLE IF EXISTS Privilege;
+DROP TABLE IF EXISTS Question;
 -- Temporary
 
 DROP TABLE IF EXISTS UserPermission;
@@ -34,25 +35,18 @@ CREATE TABLE User (
 	archived BOOLEAN NOT NULL DEFAULT FALSE
 );
 
-CREATE TABLE LitmusQuestion (
-	litmusQuestionId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+CREATE TABLE Question (
+	questionId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	text VARCHAR(255) NOT NULL,
-	orderIndex INTEGER NOT NULL,
 	lookupName VARCHAR(255) NOT NULL,
-	required BOOLEAN NOT NULL DEFAULT TRUE,
 	archived BOOLEAN NOT NULL DEFAULT FALSE,
-	followUpTo INTEGER UNSIGNED NULL,
-	FOREIGN KEY(followUpTo) REFERENCES Litmusquestion(litmusQuestionId),
 	CONSTRAINT uniqueLookupName UNIQUE INDEX(lookupName)
 );
 
 CREATE TABLE PossibleAnswer (
 	possibleAnswerId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	text VARCHAR(255) NOT NULL,
-	orderIndex INTEGER NOT NULL,
-	archived BOOLEAN NOT NULL DEFAULT FALSE,
-	litmusQuestionId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(litmusQuestionId) REFERENCES LitmusQuestion(litmusQuestionId)
+	archived BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Site (
@@ -95,8 +89,8 @@ CREATE TABLE Answer (
 	FOREIGN KEY(possibleAnswerId) REFERENCES PossibleAnswer(possibleAnswerId),
 	appointmentId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId),
-	litmusQuestionId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(litmusQuestionId) REFERENCES LitmusQuestion(litmusQuestionId)
+	questionId INTEGER UNSIGNED NOT NULL,
+	FOREIGN KEY(questionId) REFERENCES Question(questionId)
 );
 
 CREATE TABLE ServicedAppointment (
