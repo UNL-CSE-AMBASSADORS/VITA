@@ -4,9 +4,9 @@
 <head>
 	<title>Queue Test</title>
 	<?php require_once "$root/server/header.php" ?>
-	<link rel="stylesheet" href="/queue/queue_public.css">
+	<link rel="stylesheet" href="/queue/queue.css">
 	<?php require_once "$root/server/angularjs_dependencies.php" ?>
-	<script src="/queue/queue_public.js"></script>
+	<script src="/queue/queue.js"></script>
 	<script src="/queue/queue_service.js"></script>
 </head>
 <body ng-controller="QueueController">

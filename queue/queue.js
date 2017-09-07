@@ -48,10 +48,8 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 		$interval.cancel(appointmentInterval);
 	});
 
-	// nvoke initialy
+	// Invoke initially
 	$scope.updateAppointmentInformation();
 	refreshClockContent();
 
-})
-
-;
+});
