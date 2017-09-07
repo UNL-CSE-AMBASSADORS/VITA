@@ -4,16 +4,17 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 	$scope.today = new Date();
 	$scope.currentDate = $scope.today;
 
-	/**
-	 * Loads the appointment info every 10 seconds
-	 */
-	$scope.updateAppointmentInformation = function (){
+	// Load the appointment info every 10 seconds
+	$scope.updateAppointmentInformation = function() {
 		let year = $scope.currentDate.getFullYear(),
 			month = $scope.currentDate.getMonth() + 1,
 			day = $scope.currentDate.getDate();
 		if (month < 10) month = "0" + month;
-		QueueService.getAppointments(year + "-" + month + "-" + day).then(function(data){
-			if (data != null && data.length > 0){
+		QueueService.getAppointments(year + "-" + month + "-" + day).then(function(data) {
+			if(data == null) {
+				console.log('server error');
+				// TODO
+			} else if(data.length > 0) {
 				$scope.appointments = data.map((appointment) => {
 					// This map converts the MySQL Datatime into a Javascript Date object
 					var t = appointment.scheduledTime.split(/[- :]/);
@@ -22,13 +23,10 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 				});
 			} else {
 				$scope.appointments = [];
-				console.log('server error');
 			}
 		});
 	}
-	/**
-	 * Refreshes the clock
-	 */
+	// Refresh the clock
 	let refreshClockContent = function(){
 		$scope.updateTime = new Date();
 		$scope.isAm = $scope.updateTime.getHours() < 12;
@@ -44,12 +42,13 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 		$scope.updateAppointmentInformation();
 	}.bind(this), 10000);
 
+	// Destroy the intervals when we leave this page
 	$scope.$on('$destroy', function () {
 		$interval.cancel(clockInterval);
 		$interval.cancel(appointmentInterval);
 	});
 
-	//invoke initialy
+	// nvoke initialy
 	$scope.updateAppointmentInformation();
 	refreshClockContent();
 

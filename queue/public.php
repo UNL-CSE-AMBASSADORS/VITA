@@ -5,7 +5,6 @@
 	<title>Queue Test</title>
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="/queue/queue_public.css">
-	<!-- <meta http-equiv="refresh" content="600"/> -->
 	<!-- Angular Material style sheet -->
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
 	<!-- AngularJS -->
@@ -26,17 +25,13 @@
 		require_once "$root/components/nav.php";
 	?>
 
+	<!-- Header section -->
 	<div class="container-fluid dashboard bg-light py-3" ng-cloak>
 		<div class="d-flex flex-column flex-sm-row justify-content-sm-between justify-content-center align-items-center">
 			<div class="d-flex flex-row pb-3 pb-sm-0">
 				<div class="queue-size-lbl">Queue:</div>
 				<div class="queue-size-count">{{appointments.length}}</div>
 			</div>
-			<!-- <div class="d-flex flex-column align-items-center">
-				<i class="material-icons no-select date-back">keyboard_arrow_up</i>
-				<div class="date"></div>
-				<i class="material-icons no-select date-forward">keyboard_arrow_down</i>
-			</div> -->
 			<md-datepicker
 				ng-model="currentDate"
 				ng-change="updateAppointmentInformation()"
@@ -54,6 +49,7 @@
 		</div>
 	</div>
 
+	<!-- Body Section with list of clients -->
 	<div class="container-fluid queue" ng-if="appointments.length > 0" ng-cloak>
 		<div class="row queue-header py-2 bg-secondary text-light font-weight-bold">
 			<div class="col col-1 queue-id">Id.</div>
@@ -76,21 +72,4 @@
 
 	<?php require_once "$root/server/footer.php" ?>
 </body>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
-<script src="/queue/queue_common.js"></script>
-
-<script class="queue-record-template" type="text/template">
-	<div class="queue-record" data-appointment-id="{{id}}">
-		<div class="wrap-left queue-position-wrap">{{position}}</div>
-		<div class="wrap-left queue-name-wrap">{{name}}</div>
-		<div class="wrap-right queue-time-wrap">
-			{{#isOnTime}}<div class="flex queue-tag on-time-tag">ON TIME</div>{{/isOnTime}}
-			{{^isOnTime}}
-				{{#isPresent}}<div class="flex queue-tag late-tag">LATE</div>{{/isPresent}}
-				{{^isPresent}}<div class="flex queue-tag no-show-tag">NO SHOW</div>{{/isPresent}}
-			{{/isOnTime}}
-			{{time}}
-		</div>
-	</div>
-</script> -->
 </html>
