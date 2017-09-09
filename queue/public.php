@@ -5,9 +5,6 @@
 	<title>Queue Test</title>
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="/queue/queue.css">
-	<?php require_once "$root/server/angularjs_dependencies.php" ?>
-	<script src="/queue/queue.js"></script>
-	<script src="/queue/queue_service.js"></script>
 </head>
 <body ng-controller="QueueController">
 	<!--[if lt IE 8]>
@@ -44,5 +41,8 @@
 	</div>
 
 	<?php require_once "$root/server/footer.php" ?>
+	<?php require_once "$root/server/angularjs_dependencies.php" ?>
+	<script src="/queue/queue.js"></script>
+	<script src="/queue/queue_service.js"></script>
 </body>
 </html>

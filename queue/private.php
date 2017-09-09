@@ -6,10 +6,6 @@
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="/queue/queue.css">
 	<link rel="stylesheet" href="/queue/queue_private.css">
-	<?php require_once "$root/server/angularjs_dependencies.php" ?>
-	<script src="/queue/queue.js"></script>
-	<script src="/queue/queue_service.js"></script>
-	<script src="/queue/queue_private.js"></script>
 </head>
 <body ng-controller="QueuePrivateController">
 	<!--[if lt IE 8]>
@@ -103,5 +99,9 @@
 	</div>
 
 	<?php require_once "../server/footer.php" ?>
+	<?php require_once "$root/server/angularjs_dependencies.php" ?>
+	<script src="/queue/queue.js"></script>
+	<script src="/queue/queue_service.js"></script>
+	<script src="/queue/queue_private.js"></script>
 </body>
 </html>
