@@ -1,0 +1,48 @@
+html, body {
+	height: 100%;
+}
+
+body:before {
+	content: '';
+	height: 100%;
+	float: left;
+}
+
+.relative-wrapper {
+	position: relative;
+}
+
+.fill-remaining {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+.fill-remaining > * {
+	height: 100%;
+}
+
+.queue-scroll-section {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	flex-basis: 40%;
+}
+
+.client-info-section {
+	flex-basis: 60%;
+	border-top: 2px solid #f8f9fa;
+}
+
+.client-name {
+	font-family: Bebas_Neue;
+	font-weight: bold;
+	font-size: 2rem !important;
+	line-height: 2rem;
+}
+
+/* Remove the section division border for devices larger than mobile */
+@media (min-width: 768px) {
+	.client-info-section {
+		border-top: 0;
+	}
+}

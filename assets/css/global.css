@@ -55,6 +55,10 @@ h1, h2, h3, h4, h5, h6 {
   display: none !important;
 }
 
+.pointer {
+	cursor: pointer;
+}
+
 /* XS and SM styling to make container behave like fluid-container when XS or SM */
 @media (max-width: 767px) {
 	.container {
