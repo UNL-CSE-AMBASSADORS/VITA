@@ -1,13 +1,5 @@
 queueApp.controller("QueuePrivateController", function($scope, $controller, QueueService) {
-	$scope.test = "world";
 	angular.extend(this, $controller('QueueController', {$scope: $scope}));
-
-	// $scope.client = {
-	// 	appointmentId: 6,
-	// 	scheduledTime: '2017-09-09T10:10:39.000Z',
-	// 	firstName: 'Bob',
-	// 	lastName: 'Smith',
-	// };
 
 	$scope.selectClient = function(client) {
 		$scope.client = client;
