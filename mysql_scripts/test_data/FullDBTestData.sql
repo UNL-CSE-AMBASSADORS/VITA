@@ -110,6 +110,10 @@ SET @permission_editSiteInformationId = LAST_INSERT_ID();
 INSERT INTO Permission (name, description, lookupName)
 	VALUES ("Can Take Client off of Queue", "Has the permission to take clients off of the queue", "pop_client_off_queue");
 SET @permission_popClientOffQueueId = LAST_INSERT_ID();
+
+INSERT INTO Permission (name, description, lookupName)
+	VALUES ("Edit Permissions", "Can edit user permission", "edit_user_permission");
+SET @permission_editUserPermissionId = LAST_INSERT_ID();
 -- end permissions
 
 
@@ -123,6 +127,9 @@ INSERT INTO UserPermission (userId, permissionId, createdBy)
 
 INSERT INTO UserPermission (userId, permissionId, createdBy)
 	VALUES (@user_siteAdmin1Id, @permission_addSiteId, @user_siteAdmin1Id);
+
+INSERT INTO UserPermission (userId, permissionId, createdBy)
+	VALUES (@user_siteAdmin1Id, @permission_editUserPermissionId, @user_siteAdmin1Id);
 
 INSERT INTO UserPermission (userId, permissionId, createdBy)
 	VALUES (@user_siteAdmin1Id, @permission_editSiteInformationId, @user_siteAdmin1Id);
