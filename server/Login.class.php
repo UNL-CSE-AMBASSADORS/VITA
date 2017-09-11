@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 
 /**
 * Login Class
@@ -38,6 +39,7 @@ class Login
 	## How long tokens are active
 	public $TOKEN_THRESHOLD = 30;
 	public $LOGIN_THRESHOLD = 5;
+	public $SESSION_THRESHOLD = 60*60; //units in seconds
 
 	
 	function __construct($conn, $database, $name, $login_url, $register_url, $noreply_email, $contact_email = ""){
@@ -617,7 +619,7 @@ class Login
 
 		if(isset($_SESSION['USER__ID']) && isset($_SESSION['LAST_ACTIVITY'])){
 
-			if($_SESSION['LAST_ACTIVITY'] + SESSION_THRESHOLD >= time()){
+			if($_SESSION['LAST_ACTIVITY'] + $this->SESSION_THRESHOLD >= time()){
 				
 				## Update Session
 				$_SESSION['LAST_ACTIVITY'] = time();
