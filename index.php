@@ -43,6 +43,13 @@
 			<a class="col col-12 col-sm-4 btn btn-primary" href="/login">Volunteer login</a>
 		</div>
 	</div>
+		<div id="google_translate_element"></div><script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'ar,es,en,vi', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 	<?php
 		require_once "$root/server/footer.php";
 	?>
