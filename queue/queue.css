@@ -1,0 +1,22 @@
+.dashboard, .md-datepicker-input {
+	font-family: Bebas_Neue;
+	font-weight: bold;
+	font-size: 2rem !important;
+	line-height: 2rem;
+}
+
+.clock-time {
+	font-size: 2em;
+}
+
+.inactive-period {
+	opacity: 0.15;
+}
+
+/* Center the datepicker calendar on mobile */
+@media (max-width: 767px) {
+	.md-datepicker-calendar-pane.md-pane-open {
+		left: 50% !important;
+		transform: translateX(-50%) !important;
+	}
+}

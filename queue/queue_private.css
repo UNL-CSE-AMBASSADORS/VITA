@@ -1,147 +1,48 @@
 html, body {
-	height: 100vh;
-}
-
-.queue-details {
-	height: calc(100% - 72px);
-	padding: 36px;
-	justify-content: flex-start;
-}
-
-.queue {
 	height: 100%;
-	width: 25%;
-	min-width: 350px;
-	margin-right: 36px;
-	flex-direction: column;
-	font-size: 16px;
-	border-radius: 4px;
 }
 
-.date-wrap {
-	padding-top: 24px;
-	justify-content: center;
-	flex-shrink: 0;
-}
-
-.date-back, .date-forward {
-	cursor: pointer;
-}
-
-.queue-position-wrap {
-	width: 15%;
-}
-
-.queue-name-wrap {
-	width: 50%;
-}
-
-.queue-time-wrap {
-	width: 35%;
-}
-
-.queue-header {
-	padding: 24px;
-	flex-shrink: 0;
-}
-
-.queue-table {
-	flex-direction: column;
-	overflow-y: auto;
-	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.25);
-	flex-grow: 1;
-}
-
-.empty-queue-message {
-	padding: 24px;
-	font-style: italic;
-	opacity: 0.5;
-	width: 100%;
-}
-
-.queue-record {
-	padding: 24px;
-	cursor: pointer;
-	align-items: center;
-	transition: all 0.25s;
-}
-
-.queue-record:hover {
-	background: #F3F3F3;
-}
-
-.queue-tag {
-	height: 20px;
-	font-size: 12px;
-	color: #FFFFFF;
-	font-weight: 700;
-	align-items: center;
-	justify-content: center;
-	margin: 0 16px;
-	padding: 0 8px;
-	border-radius: 10px;
-}
-
-.late-tag {
-	background: #EE2E31;
-}
-
-.on-time-tag {
-	background: #067BC2;
-}
-
-.no-show-tag {
-	background: #212121;
-}
-
-.queue-legend {
-	min-height: 20px;
-	margin-top: 24px;
-}
-
-.details {
+body:before {
+	content: '';
 	height: 100%;
-	flex-grow: 1;
-	border-radius: 4px;
-	flex-direction: column;
-	display: none;
-}
-
-.details-id {
-	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.25);
-	flex-direction: column;
-}
-
-.details-id-header {
-	padding: 16px;
-	font-size: 16px;
-}
-
-.details-id-body {
-	width: 100%;
-}
-
-.details-id-attribute {
 	float: left;
-	min-width: calc(100% / 3);
-	padding: 24px 48px;
 }
 
-.details-id-attribute-label {
-	opacity: 0.5;
+.relative-wrapper {
+	position: relative;
 }
 
-.details-id-attribute-value {
-	font-size: 24px;
+.fill-remaining {
+	position: absolute;
+	width: 100%;
+	height: 100%;
 }
 
-.details-controls {
-	align-items: center;
-	justify-content: flex-end;
-	margin: 24px 0;
+.fill-remaining > * {
+	height: 100%;
 }
 
-.details-control {
-	margin-left: 8px;
-	cursor: pointer;
+.queue-scroll-section {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	flex-basis: 40%;
+}
+
+.client-info-section {
+	flex-basis: 60%;
+	border-top: 2px solid #f8f9fa;
+}
+
+.client-name {
+	font-family: Bebas_Neue;
+	font-weight: bold;
+	font-size: 2rem !important;
+	line-height: 2rem;
+}
+
+/* Remove the section division border for devices larger than mobile */
+@media (min-width: 768px) {
+	.client-info-section {
+		border-top: 0;
+	}
 }
