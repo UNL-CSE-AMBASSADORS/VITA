@@ -66,7 +66,7 @@ function storeAppointment($data){
 		$answerInsert = "INSERT INTO vita.answer
 			(
 				appointmentId,
-				litmusQuestionId,
+				questionId,
 				possibleAnswerId
 			)
 			VALUES

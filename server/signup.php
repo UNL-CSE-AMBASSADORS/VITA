@@ -4,39 +4,42 @@ function getLitmusQuestions() {
 	require 'config.php';
 	$conn = $DB_CONN;
 
-	$queryStatement = $conn->prepare('SELECT lq.litmusQuestionId, pa.possibleAnswerId, pa.text AS possibleAnswerText,
-				lq.text AS litmusQuestionText, lq.required, lq.lookupName
-				FROM PossibleAnswer pa
-				JOIN LitmusQuestion lq ON pa.litmusQuestionId = lq.litmusQuestionId
-				WHERE lq.archived = FALSE AND pa.archived = FALSE
-				ORDER BY lq.orderIndex, pa.orderIndex');
+	# smile and wave boys, this will all be getting replaced
+	/*
+	$queryStatement = $conn->prepare('SELECT q.questionId, pa.possibleAnswerId, pa.text AS possibleAnswerText,
+				q.text AS questionText, q.lookupName
+				FROM Question q
+				JOIN Question q ON pa.questionId = q.questionId
+				WHERE q.archived = FALSE AND pa.archived = FALSE');
 	$queryStatement->execute();
 	$resultSet = $queryStatement->fetchAll();
 
 	$currentQuestionStartIndex = 0;
 	for ($i = 0; $i < sizeof($resultSet); $i++) {
-		if ($resultSet[$currentQuestionStartIndex]['litmusQuestionId'] != $resultSet[$i]['litmusQuestionId']) {
+		if ($resultSet[$currentQuestionStartIndex]['questionId'] != $resultSet[$i]['questionId']) {
 			addRadioSelection(array_slice($resultSet, $currentQuestionStartIndex, $i - $currentQuestionStartIndex));
 			$currentQuestionStartIndex = $i;
 		}
 	}
 	addRadioSelection(array_slice($resultSet, $currentQuestionStartIndex));
-
+	*/
 }
 
 function addSelection($questionOptions) {
 	$vitaFormRequired = "";
 	$requiredClass = "";
+	/*
 	if ($questionOptions[0]['required'] == true) {
 		$vitaFormRequired = "form-required";
 		$requiredClass = 'class="required"';
 	}
+	*/
 
 	$selectInput = '
 			<div class="form-select">
-				<label for="'.$questionOptions[0]['lookupName'].'" class="form-label '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
+				<label for="'.$questionOptions[0]['lookupName'].'" class="form-label '.$vitaFormRequired.'">'.$questionOptions[0]['questionText'].'</label>
 				<div>
-					<select id="'.$questionOptions[0]['lookupName'].'" '.$requiredClass.' name="'.$questionOptions[0]['litmusQuestionId'].'">';
+					<select id="'.$questionOptions[0]['lookupName'].'" '.$requiredClass.' name="'.$questionOptions[0]['questionId'].'">';
 	foreach	($questionOptions as $option)	{
 		$selectInput .= '
 						<option value="'.$option['possibleAnswerId'].'">'.$option['possibleAnswerText'].'</option>';
@@ -52,19 +55,21 @@ function addSelection($questionOptions) {
 function addRadioSelection($questionOptions) {
 	$vitaFormRequired = "";
 	$requiredClass = "";
+	/*
 	if ($questionOptions[0]['required'] == true) {
 		$vitaFormRequired = "form-required";
 		$requiredClass = 'class="required"';
 	}
+	*/
 
 	$selectInput = '
 			<div class="form-radio row">
-				<label for="'.$questionOptions[0]['lookupName'].'" class="col '.$vitaFormRequired.'">'.$questionOptions[0]['litmusQuestionText'].'</label>
+				<label for="'.$questionOptions[0]['lookupName'].'" class="col '.$vitaFormRequired.'">'.$questionOptions[0]['questionText'].'</label>
 				<div class="col btn-group" data-toggle="buttons">';
 	foreach	($questionOptions as $option)	{
 		$selectInput .= '
 					<label class="btn btn-outline-secondary" for="'.$option['possibleAnswerId'].'">
-						<input type="radio" id="'.$option['possibleAnswerId'].'" value="'.$option['possibleAnswerId'].'" '.$requiredClass.' name="'.$questionOptions[0]['litmusQuestionId'].'">'.$option['possibleAnswerText'].'
+						<input type="radio" id="'.$option['possibleAnswerId'].'" value="'.$option['possibleAnswerId'].'" '.$requiredClass.' name="'.$questionOptions[0]['questionId'].'">'.$option['possibleAnswerText'].'
 					</label>';
 	}
 	$selectInput .= '

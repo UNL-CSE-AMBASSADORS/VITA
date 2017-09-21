@@ -9,7 +9,7 @@ TRUNCATE UserShift;
 TRUNCATE Shift;
 TRUNCATE Site;
 TRUNCATE PossibleAnswer;
-TRUNCATE LitmusQuestion;
+TRUNCATE Question;
 
 TRUNCATE UserPermission;
 TRUNCATE Permission;
@@ -297,148 +297,187 @@ INSERT INTO ServicedAppointment (startTime, endTime, userId, appointmentId)
 
 
 
--- litmus question
-INSERT INTO LitmusQuestion (text, orderIndex, lookupName, required, followUpTo)
-	VALUES ("Will you require a Depreciation Schedule?", 1, "depreciation_schedule", true, NULL);
-SET @litmusQuestion_litmusQuestion1Id = LAST_INSERT_ID();
+-- questions
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will you require a Depreciation Schedule?", "depreciation_schedule");
+SET @question_question1Id = LAST_INSERT_ID();
 
-INSERT INTO LitmusQuestion (text, orderIndex, lookupName, required, followUpTo)
-	VALUES ("Will you require a Schedule F (Farm)?", 2, "schedule_f", true, NULL);
-SET @litmusQuestion_litmusQuestion2Id = LAST_INSERT_ID();
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will you require a Schedule F (Farm)?", "schedule_f");
+SET @question_question2Id = LAST_INSERT_ID();
 
-INSERT INTO LitmusQuestion (text, orderIndex, lookupName, required, followUpTo)
-	VALUES ("Are you self-employed or own a home-based business?", 3, "self_employed", true, NULL);
-SET @litmusQuestion_litmusQuestion3Id = LAST_INSERT_ID();
+INSERT INTO Question (text, lookupName)
+	VALUES ("Are you self-employed or own a home-based business?", "self_employed");
+SET @question_question3Id = LAST_INSERT_ID();
 
-INSERT INTO LitmusQuestion (text, orderIndex, lookupName, required, followUpTo)
-	VALUES ("Does your home-based business or self-employment have a net loss?", 4, "net_loss", false, @litmusQuestion_litmusQuestion3Id);
-SET @litmusQuestion_litmusQuestion4Id = LAST_INSERT_ID();
+INSERT INTO Question (text, lookupName)
+	VALUES ("Does your home-based business or self-employment have a net loss?", "net_loss");
+SET @question_question4Id = LAST_INSERT_ID();
 
-INSERT INTO LitmusQuestion (text, orderIndex, lookupName, required, followUpTo)
-	VALUES ("Does your home-based business or self-employment have more than $10,000 in expenses?", 5, "more_than_10000_expenses", false, @litmusQuestion_litmusQuestion3Id);
-SET @litmusQuestion_litmusQuestion5Id = LAST_INSERT_ID();
+INSERT INTO Question (text, lookupName)
+	VALUES ("Does your home-based business or self-employment have more than $10,000 in expenses?", "more_than_10000_expenses");
+SET @question_question5Id = LAST_INSERT_ID();
 
-INSERT INTO LitmusQuestion (text, orderIndex, lookupName, required, followUpTo)
-	VALUES ("Will your return have casualty losses?",  6, "casualty_losses", true, NULL);
-SET @litmusQuestion_litmusQuestion6Id = LAST_INSERT_ID();
--- end litmus question
+INSERT INTO Question (text, lookupName)
+	VALUES ("Does your home-based business or self-employment have self-employed, SEP, SIMPLE, or qualified retirement plans", "retirement_plans");
+SET @question_question6Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Does your home-based business or self-employment have employees?", "any_employees");
+SET @question_question7Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will your return have casualty losses?", "casualty_losses");
+SET @question_question8Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will your return have theft losses?", "theft_losses");
+SET @question_question9Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will you require a Schedule E (rental income)?", "schedule_e");
+SET @question_question10Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will you require a Schedule K-1 (partnership or trust income)", "schedule_k-1");
+SET @question_question11Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Do you have income from dividends, capital gains, or minimal brokerage transactions?", "dividends_income");
+SET @question_question12Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will your return involve a current bankruptcy?", "current_bankruptcy");
+SET @question_question13Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will your return involve income from more than one state?", "multiple_states");
+SET @question_question14Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Are you a University of Nebraska - Lincoln student?", "unl_student");
+SET @question_question15Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Are you an International Student Scholar?", "international_student_scholar");
+SET @question_question16Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("What sort of visa are you on?", "visa");
+SET @question_question17Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("How long have you been in the United States?", "duration_in_united_states");
+SET @question_question18Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Have you been on this visa for less than 183 days and in the United States for less than five years (after 2012)?", "visa_less_than_183_days");
+SET @question_question19Id = LAST_INSERT_ID();
+-- end question
 
 
 
 -- possible answer
-INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
-	VALUES ("Yes", 1, @litmusQuestion_litmusQuestion1Id);
-SET @possibleAnswer_question1YesId = LAST_INSERT_ID();
+INSERT INTO PossibleAnswer (text)
+	VALUES ("Yes");
+SET @possibleAnswer_yesId = LAST_INSERT_ID();
 
-INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
-	VALUES ("No", 2, @litmusQuestion_litmusQuestion1Id);
-SET @possibleAnswer_question1NoId = LAST_INSERT_ID();
+INSERT INTO PossibleAnswer (text)
+	VALUES ("No");
+SET @possibleAnswer_noId = LAST_INSERT_ID();
 
+INSERT INTO PossibleAnswer (text)
+	VALUES ("Unsure");
+SET @possibleAnswer_unsureId = LAST_INSERT_ID();
 
-INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
-	VALUES ("Yes", 1, @litmusQuestion_litmusQuestion2Id);
-SET @possibleAnswer_question2YesId = LAST_INSERT_ID();
+INSERT INTO PossibleAnswer (text)
+	VALUES ("F1");
+SET @possibleAnswer_f1Id = LAST_INSERT_ID();
 
-INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
-	VALUES ("No", 2, @litmusQuestion_litmusQuestion2Id);
-SET @possibleAnswer_question2NoId = LAST_INSERT_ID();
+INSERT INTO PossibleAnswer (text)
+	VALUES ("J1");
+SET @possibleAnswer_j1Id = LAST_INSERT_ID();
 
+INSERT INTO PossibleAnswer (text)
+	VALUES ("H1B");
+SET @possibleAnswer_h1bId = LAST_INSERT_ID();
 
-INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
-	VALUES ("Yes", 1, @litmusQuestion_litmusQuestion3Id);
-SET @possibleAnswer_question3YesId = LAST_INSERT_ID();
+INSERT INTO PossibleAnswer (text)
+	VALUES ("2011 or earlier");
+SET @possibleAnswer_2011OrEarlierId = LAST_INSERT_ID();
 
-INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
-	VALUES ("No", 2, @litmusQuestion_litmusQuestion3Id);
-SET @possibleAnswer_question3NoId = LAST_INSERT_ID();
+INSERT INTO PossibleAnswer (text)
+	VALUES ("2012 or later");
+SET @possibleAnswer_2012OrLaterId = LAST_INSERT_ID();
 
+INSERT INTO PossibleAnswer (text)
+	VALUES ("2014 or earlier");
+SET @possibleAnswer_2014OrEarlierId = LAST_INSERT_ID();
 
-INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
-	VALUES ("Yes", 1, @litmusQuestion_litmusQuestion4Id);
-SET @possibleAnswer_question4YesId = LAST_INSERT_ID();
-
-INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
-	VALUES ("No", 2, @litmusQuestion_litmusQuestion4Id);
-SET @possibleAnswer_question4NoId = LAST_INSERT_ID();
-
-
-INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
-	VALUES ("Yes", 1, @litmusQuestion_litmusQuestion5Id);
-SET @possibleAnswer_question5YesId = LAST_INSERT_ID();
-
-INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
-	VALUES ("No", 2, @litmusQuestion_litmusQuestion5Id);
-SET @possibleAnswer_question5NoId = LAST_INSERT_ID();
-
-
-INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
-	VALUES ("Yes", 1, @litmusQuestion_litmusQuestion6Id);
-SET @possibleAnswer_question6YesId = LAST_INSERT_ID();
-
-INSERT INTO PossibleAnswer (text, orderIndex, litmusQuestionId)
-	VALUES ("No", 2, @litmusQuestion_litmusQuestion6Id);
-SET @possibleAnswer_question6NoId = LAST_INSERT_ID();
+INSERT INTO PossibleAnswer (text)
+	VALUES ("2015 or later");
+SET @possibleAnswer_2015OrLaterId = LAST_INSERT_ID();
 -- end possible answer
 
 
 
 -- answer
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question1YesId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion1Id);
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_yesId, @appointment_appointment1Id, @question_question1Id);
 
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question2NoId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion2Id);
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question3NoId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion3Id);
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question6NoId, @appointment_appointment1Id, @litmusQuestion_litmusQuestion6Id);
-
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question1NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion1Id);
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question2YesId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion2Id);
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question3YesId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion3Id);
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question4NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion4Id);
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question5NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion5Id);
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question6NoId, @appointment_appointment2Id, @litmusQuestion_litmusQuestion6Id);
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_noId, @appointment_appointment1Id, @question_question2Id);
+	
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_noId, @appointment_appointment1Id, @question_question3Id);
+	
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_noId, @appointment_appointment1Id, @question_question6Id);
 
 
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question1NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion1Id);
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_noId, @appointment_appointment2Id, @question_question1Id);
 
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question2NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion2Id);
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_yesId, @appointment_appointment2Id, @question_question2Id);
+	
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_yesId, @appointment_appointment2Id, @question_question3Id);
+	
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_noId, @appointment_appointment2Id, @question_question4Id);
 
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question3NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion3Id);
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_noId, @appointment_appointment2Id, @question_question5Id);
+	
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_noId, @appointment_appointment2Id, @question_question6Id);
+	
 
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question6NoId, @appointment_appointment3Id, @litmusQuestion_litmusQuestion6Id);
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_noId, @appointment_appointment3Id, @question_question1Id);
+	
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_noId, @appointment_appointment3Id, @question_question2Id);
+	
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_noId, @appointment_appointment3Id, @question_question3Id);
+	
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_noId, @appointment_appointment3Id, @question_question6Id);
+	
 
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question1YesId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion1Id);
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question2YesId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion2Id);
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question3NoId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion3Id);
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, litmusQuestionId)
-	VALUES (@possibleAnswer_question6YesId, @appointment_appointment4Id, @litmusQuestion_litmusQuestion6Id);
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_yesId, @appointment_appointment4Id, @question_question1Id);
+	
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_yesId, @appointment_appointment4Id, @question_question2Id);
+	
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_noId, @appointment_appointment4Id, @question_question3Id);
+	
+INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
+	VALUES (@possibleAnswer_yesId, @appointment_appointment4Id, @question_question6Id);
 -- end answer
 
 
