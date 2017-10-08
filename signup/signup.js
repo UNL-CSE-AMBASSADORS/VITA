@@ -1,4 +1,6 @@
 $(document).ready(function() {
+	conditionalFormFields();
+
 	validateSignupForm();
 
 	// Since non-required fields are "valid" when they are empty, we need an
@@ -32,6 +34,23 @@ function validateSignupForm() {
 			}
 		}
 	});
+}
+
+function conditionalFormFields() {
+	// Independent fields = #student
+	var student = $("#student").find('input:radio[name="student"]');
+	// Dependent fields = #studentId
+	var studentId = $("#studentId");
+	var all = studentId;
+	// Hide everything and selectively show content
+	student.change(function(){
+		var value = this.value;
+		all.hide();
+		if(value === "yes"){
+			studentId.show();
+		}
+	});
+
 }
 
 // Form submission

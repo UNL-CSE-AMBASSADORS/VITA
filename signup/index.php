@@ -43,6 +43,24 @@
 						<label class="form-label form-required" for="phone">Phone Number</label>
 					</div>
 
+					<div class="form-radio row" id="student">
+						<label for="student" class="col">Are you a UNL student?</label>
+						<div class="col btn-group" data-toggle="buttons">
+							<label class="btn btn-outline-secondary" for="yes">
+								<input type="radio" id="yes" value="yes" name="student">Yes
+							</label>
+							<label class="btn btn-outline-secondary" for="no">
+								<input type="radio" id="no" value="no" name="student">No
+							</label>
+						</div>
+					</div>
+
+					<div class="form-textfield" id="studentId" style="display: none;">
+						<input type="text" name="studentnuid" id="studentnuid" required>
+						<span class="form-bar"></span>
+						<label class="form-label form-required" for="studentnuid">What is your NUID?</label>
+					</div>
+
 					<h3 class="form-subheading">Appointment Information</h3>
 
 					<?php
