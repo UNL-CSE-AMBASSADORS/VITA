@@ -114,6 +114,10 @@ SET @permission_popClientOffQueueId = LAST_INSERT_ID();
 INSERT INTO Permission (name, description, lookupName)
 	VALUES ("Edit Permissions", "Can edit user permission", "edit_user_permission");
 SET @permission_editUserPermissionId = LAST_INSERT_ID();
+
+INSERT INTO Permission (name, description, lookupName)
+	VALUES ("Can View Management Tab", "Can view the management tab in the nav bar", "can_view_management_tab");
+SET @permission_canViewManagementTabId = LAST_INSERT_ID();
 -- end permissions
 
 
@@ -133,6 +137,9 @@ INSERT INTO UserPermission (userId, permissionId, createdBy)
 
 INSERT INTO UserPermission (userId, permissionId, createdBy)
 	VALUES (@user_siteAdmin1Id, @permission_editSiteInformationId, @user_siteAdmin1Id);
+
+INSERT INTO UserPermission (userId, permissionId, createdBy)
+	VALUES (@user_siteAdmin1Id, @permission_canViewManagementTabId, @user_siteAdmin1Id);
 
 INSERT INTO UserPermission (userId, permissionId, createdBy)
 	VALUES (@user_receptionist1Id, @permission_popClientOffQueueId, @user_siteAdmin1Id);
