@@ -14,7 +14,7 @@
 
 	<div class="container">
 		<h2> Download Appointment Schedule for Site </h2>
-		<input type="date" id="dateInput" />
+		<input type="date" id="dateInput" value="<?php echo date('Y-m-d'); ?>"/>
 		<select id="siteSelect">
 			<?php
 				require_once "$root/server/config.php";
