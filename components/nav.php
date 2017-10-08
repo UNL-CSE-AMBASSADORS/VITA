@@ -1,11 +1,8 @@
-<!-- TODO: insert authentication logic here -->
-<?php 
+<?php
 	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
 	require_once "$root/server/user.class.php";
 	$USER = new User();
-?>
 
-<?php
 	if (!isset($page_title)) {
 		$page_title = "VITA";
 	}
