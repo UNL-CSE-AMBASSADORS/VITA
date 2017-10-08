@@ -15,7 +15,7 @@
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col col-12 col-sm-8">
-				<div id="responsePlaceholder" style="display: none;"></div>
+				<div id="responsePlaceholder" class="mt-5" style="display: none;"></div>
 				<form class="cmxform" id="vitaSignupForm" method="post" action="" autocomplete="off">
 					<h2 class="form-title">Sign Up for a VITA Appointment</h2>
 
