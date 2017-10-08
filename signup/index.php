@@ -17,7 +17,7 @@
 			<div class="col col-12 col-sm-8">
 				<div id="responsePlaceholder" class="mt-5" style="display: none;"></div>
 				<form class="cmxform" id="vitaSignupForm" method="post" action="" autocomplete="off">
-					<h2 class="form-title">Sign Up for a VITA Appointment</h2>
+					<h2 class="pt-5">Sign Up for a VITA Appointment</h2>
 
 					<div class="form-textfield">
 						<input type="text" name="firstName" id="firstName">
