@@ -1,3 +1,7 @@
+$(document).ready(function() {
+	loadAllSites();
+});
+
 let defaultColumnNames = ["Scheduled Time", "First Name", "Last Name", "Phone Number", "Email Address", "Appointment ID"];
 
 let downloadCsv = function() {
@@ -25,7 +29,7 @@ let downloadCsv = function() {
 			alert("Unable to get data");
 		}
 	});
-}
+};
 
 // Perhaps we should consider some sort of JS utility file for this CSV exporting stuff?
 // Got this code from https://halistechnology.com/2015/05/28/use-javascript-to-export-your-data-as-csv/ and modified it slightly
@@ -42,7 +46,7 @@ let exportAsCsv = function(csvString, fileName) {
 	link.setAttribute("href", data);
 	link.setAttribute("download", fileName);
 	link.click();
-}
+};
 
 // Got this code from https://halistechnology.com/2015/05/28/use-javascript-to-export-your-data-as-csv/ and modified it slightly
 let convertArrayOfObjectsToCsv = function(data, columnHeaders) { 
@@ -69,4 +73,27 @@ let convertArrayOfObjectsToCsv = function(data, columnHeaders) {
 	});
 
 	return result;
+};
+
+let loadAllSites = function() {
+	$.ajax({
+		url: "/server/api/sites/getAll.php",
+		type: "GET",
+		dataType: "JSON",
+		data: ({
+			"siteId": true,
+			"title": true
+		}),
+		cache: false,
+		success: function(response) {
+			console.log(response);
+			let siteSelect = document.getElementById("siteSelect");
+			for ($i = 0; $i < response.length; $i++) {
+				siteSelect.options.add(new Option(response[$i].title, response[$i].siteId));
+			}
+		},
+		error: function(response) {
+			alert("Unable to load sites");
+		}
+	});
 }

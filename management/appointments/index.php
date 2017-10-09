@@ -1,4 +1,14 @@
-<?php $root = realpath($_SERVER["DOCUMENT_ROOT"]) ?>
+<?php
+	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+	
+	require_once "$root/server/user.class.php";
+	$USER = new User();
+	if (!$USER->hasPermission('can_use_admin_tools')) {
+		header("Location: /unauthorized");
+		die();
+	}
+?>
+
 <!DOCTYPE html>
 <html class="no-js" lang="">
 <head>
@@ -12,26 +22,13 @@
 		require_once "$root/components/nav.php";
 	?>
 
-	<div class="container">
+	<div class="container pt-5">
 		<h2> Download Appointment Schedule for Site </h2>
 		<input type="date" id="dateInput" value="<?php echo date('Y-m-d'); ?>"/>
 		<select id="siteSelect">
-			<?php
-				require_once "$root/server/config.php";
-				GLOBAL $DB_CONN;
-				
-				$query = "SELECT siteId, title FROM Site";
-				$stmt = $DB_CONN->prepare($query);
-
-				$stmt->execute();
-				$sites = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-				for ($i = 0; $i < count($sites); $i++) {
-					print('<option value="' . $sites[$i]['siteId'] . '">' . $sites[$i]['title'] . '</option>');
-				}
-			?>
+			<!-- Sites injected through JS -->
 		</select>
-		<a href="#" onclick="downloadCsv();">Download CSV</a>
+		<button onclick="downloadCsv();">Download CSV</button>
 	</div>
 
 	<?php require_once "$root/server/footer.php" ?>
