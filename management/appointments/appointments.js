@@ -26,7 +26,7 @@ let downloadCsv = function() {
 			exportAsCsv(csvString, fileName);
 		},
 		error: function(response) {
-			alert("Unable to get data");
+			alert("Unable to get appointments. Please refresh the page in a few minutes.");
 		}
 	});
 };
@@ -86,14 +86,13 @@ let loadAllSites = function() {
 		}),
 		cache: false,
 		success: function(response) {
-			console.log(response);
 			let siteSelect = document.getElementById("siteSelect");
 			for ($i = 0; $i < response.length; $i++) {
 				siteSelect.options.add(new Option(response[$i].title, response[$i].siteId));
 			}
 		},
 		error: function(response) {
-			alert("Unable to load sites");
+			alert("Unable to load sites. Please refresh the page in a few minutes.");
 		}
 	});
 }
