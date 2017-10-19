@@ -150,7 +150,8 @@ CREATE TABLE UserPermission (
 	userId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(userId) REFERENCES User(userId),
 	permissionId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(permissionId) REFERENCES Permission(permissionId)
+	FOREIGN KEY(permissionId) REFERENCES Permission(permissionId),
+	CONSTRAINT UNIQUE unique_permission (userId, permissionId)
 );
 
 CREATE TABLE Ability (
