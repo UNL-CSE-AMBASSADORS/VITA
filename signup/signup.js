@@ -36,7 +36,35 @@ function validateSignupForm() {
 	});
 }
 
+function scrollDown(height, animationTime = 0) {
+	$('html, body').animate({
+		scrollTop: '+=' + height
+	}, animationTime);
+}
+
+function scrollToElement(element, animationTime = 0) {
+	$('.navbar-collapse.collapse').collapse('hide');
+	var offset = element.offset().top;
+	$('html, body').animate({
+		scrollTop: offset - $('.navbar').height() - 50
+	}, animationTime);
+}
+
+function showAppointmentPicker(animationTime = 300) {
+	$("#studentScholarAppointmentPicker").hide();
+	$("#appointmentPicker").show();
+	scrollToElement($("#appointmentPicker"), animationTime);
+}
+
+function showStudentScholarAppointmentPicker(animationTime = 300) {
+	$("#appointmentPicker").hide();
+	$("#studentScholarAppointmentPicker").show();
+	scrollToElement($("#studentScholarAppointmentPicker"), animationTime);
+}
+
 function conditionalFormFields() {
+	let animationTime = 300;
+
 	// All of the questions that required conditions to be viewed.
 	var homeBased = $("#homeBased");
 	var homeBasedNetLoss = $("#homeBasedNetLoss");
@@ -59,7 +87,7 @@ function conditionalFormFields() {
 	var studentIntVisaValues = studentIntVisa.find('input:radio[name="17"]');
 	var studentf1Values = studentf1.find('input:radio[name="18"]');
 	var studentj1Values = studentj1.find('input:radio[name="18"]');
-	var studenth1bValues = studenth1b.find('input:radio[name="18"]');
+	var studenth1bValues = studenth1b.find('input:radio[name="19"]');
 
 	// To help hide everything and selectively show content
 	var allUnderHomeBasedValues = homeBasedNetLoss.add(homeBased10000).add(homeBasedSEP).add(homeBasedEmployees);
@@ -73,10 +101,11 @@ function conditionalFormFields() {
 		var value = this.value;
 		if(this.checked){
 			if(value === "1"){
-				allUnderHomeBasedValues.slideUp(300);
-				allUnderHomeBasedValues.slideDown(300);
+				allUnderHomeBasedValues.slideUp(animationTime);
+				allUnderHomeBasedValues.slideDown(animationTime);
+				scrollDown(homeBased.height(), animationTime);
 			} else if(value === "2"){
-				allUnderHomeBasedValues.slideUp(300);
+				allUnderHomeBasedValues.slideUp(animationTime);
 			}
 		}
 	});
@@ -86,12 +115,13 @@ function conditionalFormFields() {
 	//                   if no --> appointmentPicker
 	studentUNLValues.change(function(){
 		var value = this.value;
-		allUnderStudentUNLValues.slideUp(300);
+		allUnderStudentUNLValues.slideUp(animationTime);
 		if(value === "1"){
-			studentInt.slideDown(300);
+			studentInt.slideDown(animationTime);
 			studentIntValues.change();
+			scrollDown(studentUNL.height(), animationTime);
 		} else if(value === "2"){
-			// TODO
+			showAppointmentPicker();
 		}
 	});
 
@@ -101,35 +131,35 @@ function conditionalFormFields() {
 	studentIntValues.change(function() {
 		var value = this.value;
 		if(this.checked){
+			allUnderStudentIntValues.slideUp(animationTime);
 			if(value === "1"){
-				allUnderStudentIntValues.slideUp(300);
-				studentIntVisa.slideDown(300);
+				studentIntVisa.slideDown(animationTime);
+				scrollDown(studentInt.height(), animationTime);
 				studentIntVisaValues.change();
 			} else if(value === "2"){
-				allUnderStudentIntValues.slideUp(300);
-				// TODO
+				showAppointmentPicker();
 			}
 		}
 	});
 
 	// Independent field = #studentIntVisa
 	// Dependent field = if f1 --> #studentf1
-	//                   if ja --> #studentja
+	//                   if j1 --> #studentj1
 	//                   if h1b --> #studenth1b
 	studentIntVisaValues.change(function() {
 		var value = this.value;
 		if(this.checked){
 			if(value === "4"){
-				allUnderstudentIntVisaValues.slideUp(300);
-				studentf1.slideDown(300);
+				allUnderstudentIntVisaValues.hide(animationTime);
+				studentf1.show(animationTime);
 				studentf1Values.change();
 			} else if(value === "5"){
-				allUnderstudentIntVisaValues.slideUp(300);
-				studentj1.slideDown(300);
+				allUnderstudentIntVisaValues.hide(animationTime);
+				studentj1.show(animationTime);
 				studentj1Values.change();
 			} else if(value === "6"){
-				allUnderstudentIntVisaValues.slideUp(300);
-				studenth1b.slideDown(300);
+				allUnderstudentIntVisaValues.hide(animationTime);
+				studenth1b.show(animationTime);
 				studenth1bValues.change();
 			}
 		}
@@ -142,11 +172,11 @@ function conditionalFormFields() {
 		var value = this.value;
 		if(this.checked){
 			if(value === "8"){
-				appointmentPicker.hide();
-				studentScholarAppointmentPicker.show();
+				scrollDown(appointmentPicker.height(), animationTime);
+				showStudentScholarAppointmentPicker(animationTime);
 			} else {
-				studentScholarAppointmentPicker.hide();
-				appointmentPicker.show();
+				scrollDown(studentScholarAppointmentPicker.height(), animationTime);
+				showAppointmentPicker(animationTime);
 			}
 		}
 	});
@@ -154,15 +184,13 @@ function conditionalFormFields() {
 	// Independent field = #studentj1
 	// Dependent field = any --> appointmentPicker
 	studentj1Values.change(function() {
-		studentScholarAppointmentPicker.hide();
-		appointmentPicker.show();
+		showAppointmentPicker(animationTime);
 	});
 
 	// Independent field = #studenth1b
 	// Dependent field = any --> appointmentPicker
 	studenth1bValues.change(function() {
-		studentScholarAppointmentPicker.hide();
-		appointmentPicker.show();
+		showAppointmentPicker(animationTime);
 	});
 
 }
@@ -180,10 +208,12 @@ $('#vitaSignupForm').submit(function(e) {
 	$('.form-radio').each(function(){
 		var checkedRadioBox = $(this).find('input[type="radio"]:checked');
 
-		questions.push({
-			id: checkedRadioBox.attr('name'),
-			value: checkedRadioBox.val()
-		});
+		if(checkedRadioBox.length>0) {
+			questions.push({
+				id: checkedRadioBox.attr('name'),
+				value: checkedRadioBox.val()
+			});
+		}
 	});
 
 	var data = {

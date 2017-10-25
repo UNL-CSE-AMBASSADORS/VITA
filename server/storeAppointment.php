@@ -111,7 +111,7 @@ function storeAppointment($data){
 		$DB_CONN->rollback();
 
 		// TODO
-		// mail('someoneimportant@important.com', 'Please help, everything is on fire?', print_r($e, true).print_r($data, true));
+		// mail('vita@cse.unl.edu', 'Please help, everything is on fire?', print_r($e, true).print_r($data, true));
 	}
 
 	## Return

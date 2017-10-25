@@ -16,7 +16,7 @@
 		<div class="row justify-content-center">
 			<div class="col col-12 col-sm-8">
 				<div id="responsePlaceholder" class="mt-5" style="display: none;"></div>
-				<form class="cmxform" id="vitaSignupForm" method="post" action="" autocomplete="off">
+				<form class="cmxform mb-5" id="vitaSignupForm" method="post" action="" autocomplete="off">
 					<h2 class="pt-5">Sign Up for a VITA Appointment</h2>
 
 					<div class="form-textfield">
@@ -314,11 +314,11 @@
 						</div>
 					</div>
 
-					<div id="appointmentPicker">
+					<div id="appointmentPicker" style="height:300px">
 						Appointment Picker
 					</div>
 
-					<div id="studentScholarAppointmentPicker" style="display: none;">
+					<div id="studentScholarAppointmentPicker" style="display:none; height:300px">
 						Student Scholar Appointment Picker
 					</div>
 
