@@ -2,77 +2,18 @@ $(document).ready(function() {
 	loadAllSites();
 });
 
-let defaultColumnNames = ["Scheduled Time", "First Name", "Last Name", "Phone Number", "Email Address", "Appointment ID"];
-
-let downloadCsv = function() {
+let downloadSchedule = function() {
 	let siteSelect = document.getElementById("siteSelect");
 	let siteSelectedOption = siteSelect.options[siteSelect.selectedIndex];
 	let date = document.getElementById("dateInput").value;
-	let filteringData = {
-		"date": date,
-		"siteId": siteSelectedOption.value
-	};
+	let siteId = siteSelectedOption.value;
 
-	$.ajax({
-		url: "/server/management/appointments.php",
-		type: "POST",
-		dataType: "JSON",
-		data: (filteringData),
-		cache: false,
-		success: function(response) {
-			let fileName = `Appointments_${filteringData.date}_${siteSelectedOption.innerHTML}.csv`;
-			let csvString = convertArrayOfObjectsToCsv(response, defaultColumnNames);
-
-			exportAsCsv(csvString, fileName);
-		},
-		error: function(response) {
-			alert("Unable to get appointments. Please refresh the page in a few minutes.");
-		}
-	});
-};
-
-// Perhaps we should consider some sort of JS utility file for this CSV exporting stuff?
-// Got this code from https://halistechnology.com/2015/05/28/use-javascript-to-export-your-data-as-csv/ and modified it slightly
-let exportAsCsv = function(csvString, fileName) {
-	if (csvString == null) return;
-	
-	if (!csvString.match(/^data:text\/csv/i)) {
-		csvString = "data:text/csv;charset=utf-8," + csvString;
-	}
-
-	let data = encodeURI(csvString);
-
-	let link = document.createElement("a");
-	link.setAttribute("href", data);
-	link.setAttribute("download", fileName);
-	link.click();
-};
-
-// Got this code from https://halistechnology.com/2015/05/28/use-javascript-to-export-your-data-as-csv/ and modified it slightly
-let convertArrayOfObjectsToCsv = function(data, columnHeaders) { 
-	let columnDelimiter = ",";
-	let lineDelimiter = "\n";
-	let columnHeadersString = columnHeaders.join(columnDelimiter);
-
-	if (data == null || !data.length) {
-		return columnHeadersString; // If there is no data, we will just return a string containing the headers for the CSV so that it could still be exported
-	}
-
-	let result = "";	
-	let keys = Object.keys(data[0]);	
-
-	result += columnHeadersString;
-	result += lineDelimiter;
-
-	data.forEach(function(item) {
-		for (let i = 0; i < keys.length; i++) {
-			result += (item[keys[i]] == undefined) ? "" : item[keys[i]]; // Avoid it printing "null", instead we print an empty string
-			result += columnDelimiter;
-		}
-		result += lineDelimiter;
-	});
-
-	return result;
+	let downloadLink = document.createElement("a");
+	downloadLink.setAttribute("href", `/server/management/appointments.php?date=${date}&siteId=${siteId}`);
+	downloadLink.setAttribute("target", "_blank");
+	downloadLink.style.display = "none";
+	document.body.append(downloadLink);
+	downloadLink.click();
 };
 
 let loadAllSites = function() {
@@ -87,6 +28,7 @@ let loadAllSites = function() {
 		cache: false,
 		success: function(response) {
 			let siteSelect = document.getElementById("siteSelect");
+			siteSelect.options.add(new Option("All Sites", -1));
 			for ($i = 0; $i < response.length; $i++) {
 				siteSelect.options.add(new Option(response[$i].title, response[$i].siteId));
 			}

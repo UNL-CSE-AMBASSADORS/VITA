@@ -28,7 +28,7 @@
 		<select id="siteSelect">
 			<!-- Sites injected through JS -->
 		</select>
-		<button onclick="downloadCsv();">Download CSV</button>
+		<button onclick="downloadSchedule();">Download Schedule</button>
 	</div>
 
 	<?php require_once "$root/server/footer.php" ?>
