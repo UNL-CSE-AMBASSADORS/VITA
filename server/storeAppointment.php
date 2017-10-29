@@ -105,13 +105,13 @@ function storeAppointment($data){
 
 		// if email is set and passes simple validation (x@x)
 		if($data['email'] && preg_match('/.+@.+/', $data['email'])){
-			mail($data['email'], 'Lincoln VITA - Appointment', $response['message']);
+			// mail($data['email'], 'Lincoln VITA - Appointment', $response['message']);
 		}
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
 
 		// TODO
-		mail('someoneimportant@important.com', 'Please help, everything is on fire?', print_r($e, true).print_r($data, true));
+		// mail('vita@cse.unl.edu', 'Please help, everything is on fire?', print_r($e, true).print_r($data, true));
 	}
 
 	## Return
