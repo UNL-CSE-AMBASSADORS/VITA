@@ -23,7 +23,7 @@ if (!$USER->hasPermission('edit_user_permission')) {
 <body>
 	<?php require_once "$root/components/nav.php"; ?>
 	<div class="container">
-		<div class="row">
+		<div class="row pt-5">
 			<div class="col-md-9">
 				<h1>User Management</h1>
 			</div>
@@ -31,7 +31,7 @@ if (!$USER->hasPermission('edit_user_permission')) {
 				<button class="btn btn-default pull-right" id="btn-add-user">Add User</button>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row" style="overflow-x: auto;">
 			<div class="col-md-12">
 				<table class="table table-condensed table-hover" id="user-permission-table">
 
