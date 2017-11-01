@@ -4,6 +4,7 @@ require_once 'config.php';
 require_once "user.class.php";
 
 $USER = new User();
+
 if (!$USER->hasPermission('edit_user_permission')) {
 	header("Location: /unauthorized");
 	die();
@@ -67,7 +68,7 @@ function getUserPermissionOptionList($userId){
 		name,
         description,
         lookupName,
-        (SELECT COUNT(*) FROM userpermission WHERE userId = ? AND permissionId = p.permissionId) as hasPermission
+        (SELECT userPermissionId FROM userpermission WHERE userId = ? AND permissionId = p.permissionId) as userPermissionId
 	FROM permission p");
 
 	$stmt->execute(array($userId));
@@ -76,13 +77,15 @@ function getUserPermissionOptionList($userId){
 
 	$count = 0;
 	while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-		if($row['hasPermission']){
+		if($row['userPermissionId']){
 			$selected = 'selected=true';
+			$data = "data-userPermissionId='".$row['userPermissionId']."'";
 			$count++;
 		}else{
 			$selected = '';
+			$data = '';
 		}
-		array_push($options, "<option value=".$row['permissionId']." $selected>".$row['name']."</option>");
+		array_push($options, "<option $data value=".$row['permissionId']." $selected>".$row['name']."</option>");
 	}
 
 	return array(
@@ -95,29 +98,30 @@ function updateUserPermissions($data){
 	GLOBAL $DB_CONN;
 	GLOBAL $USER;
 
+
 	$response = array();
 	$response['success'] = true;
 
 	$DB_CONN->beginTransaction();
 
-	$stmt = $DB_CONN->prepare("DELETE FROM UserPermission 
-		WHERE userId = ?");
-	$stmt->execute(array($data['userId']));
+	if(isset($data['removePermissionArr'])){
+		$stmt = $DB_CONN->prepare("DELETE FROM UserPermission WHERE userPermissionId = ?");
 
-	//if not set then we're just removing existing permissions, not adding new ones
-	if(isset($data['permissionIdArr'])){
+		foreach ($data['removePermissionArr'] as $userPermissionId) {
+			$stmt->execute(array($userPermissionId));
+		}
+	}
+
+	if(isset($data['addPermissionArr'])){
 		$stmt = $DB_CONN->prepare("INSERT INTO UserPermission 
 				(userId, permissionId, createdBy)
 			VALUES 
-				(?, ?, ?)
-			ON DUPLICATE KEY 
-			UPDATE createdBy = ?");
+				(?, ?, ?)");
 
-		foreach ($data['permissionIdArr'] as $permissionId) {
+		foreach ($data['addPermissionArr'] as $permissionId) {
 			$stmt->execute(array(
 				$data['userId'],
 				$permissionId, 
-				$USER->getUserId(), 
 				$USER->getUserId()
 			));
 		}

@@ -50,7 +50,12 @@ $(function(){
 	$('#user-permission-table').on('changed.bs.select', '.selectpicker', function(event){
 		var userId = $(this).parents('tr').data('user-id');
 
-		var permissionIdArr = $(this).children('option:selected').map(function(index, ele){
+		// permissions to be removed - all non-selected options with set ids
+		var removePermissionArr = $(this).children('option:not(:selected)[data-userPermissionId]').map(function(index, ele){
+			return ele.dataset.userpermissionid;
+		}).get();
+		// permissions to be added - all selected options w/o ids
+		var addPermissionArr = $(this).children('option:selected:not([data-userPermissionId])').map(function(index, ele){
 			return ele.value;
 		}).get();
 
@@ -61,7 +66,8 @@ $(function(){
 			data: {
 				callback: 'updateUserPermissions',
 				userId: userId,
-				permissionIdArr: permissionIdArr
+				removePermissionArr: removePermissionArr,
+				addPermissionArr: addPermissionArr
 			},
 			success: function(response){
 				if(response.success){
