@@ -10,8 +10,8 @@ require_once "$root/server/libs/PHPExcel/Classes/PHPExcel.php";
 getAppointmentsScheduleExcelFile($_GET);
 
 function getAppointmentsScheduleExcelFile($data) {
-	$stmt = executeAppointmentQuery($data);
-	$objPHPExcel = createAppointmentExcelFile($stmt);
+	$appointments = executeAppointmentQuery($data);
+	$objPHPExcel = createAppointmentExcelFile($appointments);
 	
 	@ob_clean();
 	@ob_end_clean();
@@ -51,57 +51,77 @@ function executeAppointmentQuery($data) {
 		$filterParams[] = $data['siteId'];
 	}
 	$stmt->execute($filterParams);
+	$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-	return $stmt;
+	return $appointments;
 }
 
-function createAppointmentExcelFile($stmt) {
+function createAppointmentExcelFile($appointments) {
 	# Initiate PHPExcel
 	$objPHPExcel = new PHPExcel();
 	# Remove the default sheet
 	$objPHPExcel->setActiveSheetIndexByName('Worksheet'); 
 	$objPHPExcel->removeSheetByIndex($objPHPExcel->getActiveSheetIndex());
 
-	# Iterate through all the results and append them to the proper sheet
-	$sheetRowNumber = array(); # This will keep track of the sheet index and the next row number for it
-	while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-		# Add in the sheet for the site if it doesn't already exist
-		if (!isset($sheetRowNumber[$row['siteId']])) {
-			# Create worksheet
-			$objPHPExcel->createSheet();
-			$objPHPExcel->setActiveSheetIndex($row['siteId'] - 1);
-			$activeSheet = $objPHPExcel->getActiveSheet();
-			$activeSheet->setTitle($row['title']);
+	if (empty($appointments)) {
+		$activeSheet = createSheet($objPHPExcel, 0, 'None');
+		insertHeaderRow($activeSheet);
+	} else {
+		# Iterate through all the results and append them to the proper sheet
+		$sheetNumber = 0;
+		$sheetIndexForSiteId = array(); 
+		$rowNumberForSiteId = array(); 
+		foreach ($appointments as $row) {
+			$siteId = $row['siteId'];
 
-			# Insert header row
-			$columnCharacter = 'A'; # Excel columns start at A
-			$rowNumber = 1;
-			foreach (headerColumnNames as $headerName) {
-				$activeSheet->setCellValue("$columnCharacter$rowNumber", $headerName);
-				$activeSheet->getColumnDimension("$columnCharacter")->setAutoSize(true);
+			# Add in the sheet for the site if it doesn't already exist
+			if (!isset($sheetIndexForSiteId[$siteId])) {
+				$sheetIndexForSiteId[$siteId] = $sheetNumber;
+				$sheetNumber++;
+
+				$activeSheet = createSheet($objPHPExcel, $sheetIndexForSiteId[$siteId], $row['title']);
+				insertHeaderRow($activeSheet);
+
+				$rowNumberForSiteId[$siteId] = 2;
+			}
+			
+			$objPHPExcel->setActiveSheetIndex($sheetIndexForSiteId[$siteId]);
+			$activeSheet = $objPHPExcel->getActiveSheet();
+
+			# Insert Appointment Data
+			$columnCharacter = 'A';
+			foreach ($row as $key => $value) {
+				if ($key === 'siteId' || $key === 'title') continue; 
+				if (!$value) $row[$key] = ''; # Change any null data to just be an empty string
+				
+				$rowNumber = $rowNumberForSiteId[$siteId];
+				$activeSheet->setCellValue("$columnCharacter$rowNumber", $row[$key]);
 				$columnCharacter++;
 			}
-			$sheetRowNumber[$row['siteId']] = 2;
+			$rowNumberForSiteId[$siteId]++;
 		}
-		
-		$objPHPExcel->setActiveSheetIndex($row['siteId'] - 1);
-		$activeSheet = $objPHPExcel->getActiveSheet();
-
-		# Insert Appointment Data
-		$columnCharacter = 'A';
-		foreach ($row as $key => $value) {
-			if ($key === 'siteId' || $key === 'title') continue; 
-			if (!$value) $row[$key] = ''; # Change any null data to just be an empty string
-			
-			$rowNumber = $sheetRowNumber[$row['siteId']];
-			$activeSheet->setCellValue("$columnCharacter$rowNumber", $row[$key]);
-			$columnCharacter++;
-		}
-		$sheetRowNumber[$row['siteId']]++;
 	}
 
 	# Set the default sheet to the first one
 	$objPHPExcel->setActiveSheetIndex(0);
 	
 	return $objPHPExcel;
+}
+
+function insertHeaderRow($activeSheet) {
+	$columnCharacter = 'A'; # Excel columns start at A
+	$rowNumber = 1;
+	foreach (headerColumnNames as $headerName) {
+		$activeSheet->setCellValue("$columnCharacter$rowNumber", $headerName);
+		$activeSheet->getColumnDimension("$columnCharacter")->setAutoSize(true);
+		$columnCharacter++;
+	}
+}
+
+function createSheet($objPHPExcel, $sheetIndex, $title) {
+	$objPHPExcel->createSheet();
+	$objPHPExcel->setActiveSheetIndex($sheetIndex);
+	$activeSheet = $objPHPExcel->getActiveSheet();
+	$activeSheet->setTitle($title);
+	return $activeSheet;
 }
