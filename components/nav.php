@@ -1,6 +1,8 @@
-<!-- TODO: insert authentication logic here -->
-
 <?php
+	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+	require_once "$root/server/user.class.php";
+	$USER = new User();
+
 	if (!isset($page_title)) {
 		$page_title = "VITA";
 	}
@@ -30,13 +32,13 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/login">Volunteer Login</a>
 				</li>
-			<?php if (isset($_REQUEST['admin'])): ?>
+			<?php if ($USER->hasPermission('can_view_management_tab')): ?>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
 						<a class="dropdown-item" href="#">Review Certifications</a>
 						<a class="dropdown-item" href="#">Adjust Shifts</a>
-						<a class="dropdown-item" href="#">Print Documents</a>
+						<a class="dropdown-item" href="/management/appointments">Print Documents</a>
 					</div>
 				</li>
 			<?php endif; ?>
