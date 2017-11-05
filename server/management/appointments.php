@@ -5,13 +5,13 @@ const allSitesId = -1;
 
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 require_once "$root/server/config.php";
-require_once "$root/server/libs/PHPExcel/Classes/PHPExcel.php";
+require_once "$root/server/libs/wrappers/PHPExcelWrapper.class.php";
 
 getAppointmentsScheduleExcelFile($_GET);
 
 function getAppointmentsScheduleExcelFile($data) {
 	$appointments = executeAppointmentQuery($data);
-	$objPHPExcel = createAppointmentExcelFile($appointments);
+	$phpExcelWrapper = createAppointmentExcelFile($appointments);
 	
 	@ob_clean();
 	@ob_end_clean();
@@ -25,7 +25,7 @@ function getAppointmentsScheduleExcelFile($data) {
 	header ('Cache-Control: cache, must-revalidate'); 
 	header ('Pragma: public');
 
-	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+	$objWriter = $phpExcelWrapper->createExcelWriter();
 	$objWriter->save('php://output');
 
 	exit;
@@ -57,71 +57,47 @@ function executeAppointmentQuery($data) {
 }
 
 function createAppointmentExcelFile($appointments) {
-	# Initiate PHPExcel
-	$objPHPExcel = new PHPExcel();
-	# Remove the default sheet
-	$objPHPExcel->setActiveSheetIndexByName('Worksheet'); 
-	$objPHPExcel->removeSheetByIndex($objPHPExcel->getActiveSheetIndex());
+	$phpExcelWrapper = new PHPExcelWrapper();
 
 	if (empty($appointments)) {
-		$activeSheet = createSheet($objPHPExcel, 0, 'None');
-		insertHeaderRow($activeSheet);
+		$sheetIndex = $phpExcelWrapper->createSheet('None');
+		$phpExcelWrapper->setActiveSheetIndex($sheetIndex);
+		$phpExcelWrapper->insertHeaderRow(headerColumnNames);
+		$phpExcelWrapper->nextRow();
 	} else {
 		# Iterate through all the results and append them to the proper sheet
-		$sheetNumber = 0;
 		$sheetIndexForSiteId = array(); 
-		$rowNumberForSiteId = array(); 
 		foreach ($appointments as $row) {
 			$siteId = $row['siteId'];
 
 			# Add in the sheet for the site if it doesn't already exist
 			if (!isset($sheetIndexForSiteId[$siteId])) {
-				$sheetIndexForSiteId[$siteId] = $sheetNumber;
-				$sheetNumber++;
+				$sheetIndex = $phpExcelWrapper->createSheet($row['title']);
+				$sheetIndexForSiteId[$siteId] = $sheetIndex;
 
-				$activeSheet = createSheet($objPHPExcel, $sheetIndexForSiteId[$siteId], $row['title']);
-				insertHeaderRow($activeSheet);
-
-				$rowNumberForSiteId[$siteId] = 2;
+				$phpExcelWrapper->setActiveSheetIndex($sheetIndex);				
+				$phpExcelWrapper->insertHeaderRow(headerColumnNames);
+				$phpExcelWrapper->nextRow();
 			}
-			
-			$objPHPExcel->setActiveSheetIndex($sheetIndexForSiteId[$siteId]);
-			$activeSheet = $objPHPExcel->getActiveSheet();
+
+			# Grab current sheet index
+			$sheetIndex = $sheetIndexForSiteId[$siteId];
+			$phpExcelWrapper->setActiveSheetIndex($sheetIndex);
 
 			# Insert Appointment Data
-			$columnCharacter = 'A';
 			foreach ($row as $key => $value) {
 				if ($key === 'siteId' || $key === 'title') continue; 
 				if (!$value) $row[$key] = ''; # Change any null data to just be an empty string
 				
-				$rowNumber = $rowNumberForSiteId[$siteId];
-				$activeSheet->setCellValue("$columnCharacter$rowNumber", $row[$key]);
-				$columnCharacter++;
+				$phpExcelWrapper->insertData($row[$key]);
+				$phpExcelWrapper->nextColumn();
 			}
-			$rowNumberForSiteId[$siteId]++;
+			$phpExcelWrapper->nextRow();
 		}
 	}
 
 	# Set the default sheet to the first one
-	$objPHPExcel->setActiveSheetIndex(0);
+	$phpExcelWrapper->setActiveSheetIndex(0);
 	
-	return $objPHPExcel;
-}
-
-function insertHeaderRow($activeSheet) {
-	$columnCharacter = 'A'; # Excel columns start at A
-	$rowNumber = 1;
-	foreach (headerColumnNames as $headerName) {
-		$activeSheet->setCellValue("$columnCharacter$rowNumber", $headerName);
-		$activeSheet->getColumnDimension("$columnCharacter")->setAutoSize(true);
-		$columnCharacter++;
-	}
-}
-
-function createSheet($objPHPExcel, $sheetIndex, $title) {
-	$objPHPExcel->createSheet();
-	$objPHPExcel->setActiveSheetIndex($sheetIndex);
-	$activeSheet = $objPHPExcel->getActiveSheet();
-	$activeSheet->setTitle($title);
-	return $activeSheet;
+	return $phpExcelWrapper;
 }
