@@ -6,25 +6,13 @@ $(document).ready(function() {
 let downloadAppointmentSchedule = function() {
 	let siteId = getSelectedSiteId();
 	let date = getSelectedDate();	
-
-	let downloadLink = document.createElement("a");
-	downloadLink.setAttribute("href", `/server/management/documents/appointmentsSchedule.php?date=${date}&siteId=${siteId}`);
-	downloadLink.setAttribute("target", "_blank");
-	downloadLink.style.display = "none";
-	document.body.append(downloadLink);
-	downloadLink.click();
+	clickDownloadLink(`/server/management/documents/appointmentsSchedule.php?date=${date}&siteId=${siteId}`);
 };
 
 let downloadVolunteerSchedule = function() {
 	let siteId = getSelectedSiteId();
 	let date = getSelectedDate();
-
-	let downloadLink = document.createElement("a");
-	downloadLink.setAttribute("href", `/server/management/documents/volunteerSchedule.php?date=${date}&siteId=${siteId}`);
-	downloadLink.setAttribute("target", "_blank");
-	downloadLink.style.display = "none";
-	document.body.append(downloadLink);
-	downloadLink.click();
+	clickDownloadLink(`/server/management/documents/volunteerSchedule.php?date=${date}&siteId=${siteId}`);
 };
 
 let getSelectedSiteId = function() {
@@ -35,6 +23,15 @@ let getSelectedSiteId = function() {
 
 let getSelectedDate = function() {
 	return document.getElementById("dateInput").value;	
+}
+
+let clickDownloadLink = function(url) {
+	let downloadLink = document.createElement("a");
+	downloadLink.setAttribute("href", url);
+	downloadLink.setAttribute("target", "_blank");
+	downloadLink.style.display = "none";
+	document.body.append(downloadLink);
+	downloadLink.click();
 }
 
 let loadAllSites = function() {
