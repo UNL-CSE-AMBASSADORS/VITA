@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	loadAllSites();
+	$("#dateInput").val(getDateString());
 });
 
 let downloadAppointmentSchedule = function() {
@@ -29,12 +30,19 @@ let loadAllSites = function() {
 		success: function(response) {
 			let siteSelect = document.getElementById("siteSelect");
 			siteSelect.options.add(new Option("All Sites", -1));
-			for ($i = 0; $i < response.length; $i++) {
-				siteSelect.options.add(new Option(response[$i].title, response[$i].siteId));
+			for (let i = 0; i < response.length; i++) {
+				siteSelect.options.add(new Option(response[i].title, response[i].siteId));
 			}
 		},
 		error: function(response) {
 			alert("Unable to load sites. Please refresh the page in a few minutes.");
 		}
 	});
+}
+
+let getDateString = function() {
+	let now = new Date();
+	let day = ("0" + now.getDate()).slice(-2);
+	let month = ("0" + (now.getMonth() + 1)).slice(-2);
+	return `${now.getFullYear()}-${month}-${day}`;
 }

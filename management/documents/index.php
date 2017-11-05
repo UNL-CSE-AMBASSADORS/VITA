@@ -24,7 +24,7 @@
 
 	<div class="container pt-5">
 		<h2> Download Appointment Schedule for Site </h2>
-		<input type="date" id="dateInput" value="<?php echo date('Y-m-d'); ?>"/>
+		<input type="date" id="dateInput"/>
 		<select id="siteSelect">
 			<!-- Sites injected through JS -->
 		</select>
