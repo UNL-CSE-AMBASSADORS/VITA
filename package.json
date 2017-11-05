@@ -1,0 +1,24 @@
+{
+  "name": "code",
+  "version": "1.0.0",
+  "description": "Scheduling and Appointment Management for VITA",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel . -d lib --ignore node_modules/,lib/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UNL-CSE-AMBASSADORS/VITA.git"
+  },
+  "author": "UNL CSE Ambassadors",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UNL-CSE-AMBASSADORS/VITA/issues"
+  },
+  "homepage": "https://github.com/UNL-CSE-AMBASSADORS/VITA#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
+  }
+}
