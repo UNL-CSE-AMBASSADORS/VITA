@@ -12,13 +12,13 @@
 <!DOCTYPE html>
 <html class="no-js" lang="">
 <head>
-	<title>VITA Appointment Management</title>
+	<title>VITA Document Management</title>
 	<?php require_once "$root/server/header.php" ?>
-	<link rel="stylesheet" href="/management/appointments/appointments.css">
+	<link rel="stylesheet" href="/management/documents/documents.css">
 </head>
 <body>
 	<?php
-		$page_subtitle = "Appointment Management";
+		$page_subtitle = "Document Management";
 		require_once "$root/components/nav.php";
 	?>
 
@@ -28,10 +28,10 @@
 		<select id="siteSelect">
 			<!-- Sites injected through JS -->
 		</select>
-		<button onclick="downloadSchedule();">Download Schedule</button>
+		<button onclick="downloadAppointmentSchedule();">Download Appointment Schedule</button>
 	</div>
 
 	<?php require_once "$root/server/footer.php" ?>
-	<script src="/management/appointments/appointments.js"></script>
+	<script src="/management/documents/documents.js"></script>
 </body>
 </html>

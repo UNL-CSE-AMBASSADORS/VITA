@@ -2,7 +2,7 @@ $(document).ready(function() {
 	loadAllSites();
 });
 
-let downloadSchedule = function() {
+let downloadAppointmentSchedule = function() {
 	let siteSelect = document.getElementById("siteSelect");
 	let siteSelectedOption = siteSelect.options[siteSelect.selectedIndex];
 	let date = document.getElementById("dateInput").value;
