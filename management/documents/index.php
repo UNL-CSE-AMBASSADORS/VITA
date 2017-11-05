@@ -23,12 +23,13 @@
 	?>
 
 	<div class="container pt-5">
-		<h2> Download Appointment Schedule for Site </h2>
+		<h2> Download Documents </h2>
 		<input type="date" id="dateInput"/>
 		<select id="siteSelect">
 			<!-- Sites injected through JS -->
 		</select>
 		<button onclick="downloadAppointmentSchedule();">Download Appointment Schedule</button>
+		<button onclick="downloadVolunteerSchedule();">Download Volunteer Schedule</button>
 	</div>
 
 	<?php require_once "$root/server/footer.php" ?>

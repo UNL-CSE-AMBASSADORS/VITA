@@ -1,9 +1,15 @@
 <?php
 
-const headerColumnNames = array('Scheduled Time', 'First Name', 'Last Name', 'Phone Number', 'Email Address', 'Appointment ID');
-const allSitesId = -1;
-
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
+require_once "$root/server/user.class.php";
+$USER = new User();
+if (!$USER->hasPermission('can_use_admin_tools')) {
+	header("Location: /unauthorized");
+	die();
+}
+$HEADER_COLUMN_NAMES = array('Scheduled Time', 'First Name', 'Last Name', 'Phone Number', 'Email Address', 'Appointment ID');
+$ALL_SITES_ID = -1;
+
 require_once "$root/server/config.php";
 require_once "$root/server/libs/wrappers/PHPExcelWrapper.class.php";
 
@@ -32,7 +38,7 @@ function getAppointmentsScheduleExcelFile($data) {
 }
 
 function executeAppointmentQuery($data) {
-	GLOBAL $DB_CONN;
+	GLOBAL $DB_CONN, $ALL_SITES_ID;
 	
 	$query = "SELECT TIME(scheduledTime), firstName, lastName, Client.phoneNumber, emailAddress, appointmentId, Appointment.siteId, Site.title
 		FROM Appointment
@@ -40,14 +46,14 @@ function executeAppointmentQuery($data) {
 		JOIN Site ON Appointment.siteId = Site.siteId
 		WHERE DATE(Appointment.scheduledTime) = ?
 			AND Appointment.archived = FALSE";
-	if ($data['siteId'] != allSitesId) {
+	if ($data['siteId'] != $ALL_SITES_ID) {
 		$query .= ' AND Appointment.siteId = ?';
 	} 
 	$query .= ' ORDER BY Appointment.siteId ASC, Appointment.scheduledTime ASC';
 	$stmt = $DB_CONN->prepare($query);
 	
 	$filterParams = array($data['date']);
-	if ($data['siteId'] != allSitesId) {
+	if ($data['siteId'] != $ALL_SITES_ID) {
 		$filterParams[] = $data['siteId'];
 	}
 	$stmt->execute($filterParams);
@@ -57,12 +63,13 @@ function executeAppointmentQuery($data) {
 }
 
 function createAppointmentExcelFile($appointments) {
+	GLOBAL $HEADER_COLUMN_NAMES;
 	$phpExcelWrapper = new PHPExcelWrapper();
 
 	if (empty($appointments)) {
 		$sheetIndex = $phpExcelWrapper->createSheet('None');
 		$phpExcelWrapper->setActiveSheetIndex($sheetIndex);
-		$phpExcelWrapper->insertHeaderRow(headerColumnNames);
+		$phpExcelWrapper->insertHeaderRow($HEADER_COLUMN_NAMES);
 		$phpExcelWrapper->nextRow();
 	} else {
 		# Iterate through all the results and append them to the proper sheet
@@ -76,7 +83,7 @@ function createAppointmentExcelFile($appointments) {
 				$sheetIndexForSiteId[$siteId] = $sheetIndex;
 
 				$phpExcelWrapper->setActiveSheetIndex($sheetIndex);				
-				$phpExcelWrapper->insertHeaderRow(headerColumnNames);
+				$phpExcelWrapper->insertHeaderRow($HEADER_COLUMN_NAMES);
 				$phpExcelWrapper->nextRow();
 			}
 

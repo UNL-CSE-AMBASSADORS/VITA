@@ -1,21 +1,41 @@
 $(document).ready(function() {
 	loadAllSites();
-	$("#dateInput").val(getDateString());
+	$("#dateInput").val(getCurrentDateString());
 });
 
 let downloadAppointmentSchedule = function() {
-	let siteSelect = document.getElementById("siteSelect");
-	let siteSelectedOption = siteSelect.options[siteSelect.selectedIndex];
-	let date = document.getElementById("dateInput").value;
-	let siteId = siteSelectedOption.value;
+	let siteId = getSelectedSiteId();
+	let date = getSelectedDate();	
 
 	let downloadLink = document.createElement("a");
-	downloadLink.setAttribute("href", `/server/management/documents/appointments.php?date=${date}&siteId=${siteId}`);
+	downloadLink.setAttribute("href", `/server/management/documents/appointmentsSchedule.php?date=${date}&siteId=${siteId}`);
 	downloadLink.setAttribute("target", "_blank");
 	downloadLink.style.display = "none";
 	document.body.append(downloadLink);
 	downloadLink.click();
 };
+
+let downloadVolunteerSchedule = function() {
+	let siteId = getSelectedSiteId();
+	let date = getSelectedDate();
+
+	let downloadLink = document.createElement("a");
+	downloadLink.setAttribute("href", `/server/management/documents/volunteerSchedule.php?date=${date}&siteId=${siteId}`);
+	downloadLink.setAttribute("target", "_blank");
+	downloadLink.style.display = "none";
+	document.body.append(downloadLink);
+	downloadLink.click();
+};
+
+let getSelectedSiteId = function() {
+	let siteSelect = document.getElementById("siteSelect");
+	let siteSelectedOption = siteSelect.options[siteSelect.selectedIndex];
+	return siteSelectedOption.value;
+}
+
+let getSelectedDate = function() {
+	return document.getElementById("dateInput").value;	
+}
 
 let loadAllSites = function() {
 	$.ajax({
@@ -40,7 +60,7 @@ let loadAllSites = function() {
 	});
 }
 
-let getDateString = function() {
+let getCurrentDateString = function() {
 	let now = new Date();
 	let day = ("0" + now.getDate()).slice(-2);
 	let month = ("0" + (now.getMonth() + 1)).slice(-2);

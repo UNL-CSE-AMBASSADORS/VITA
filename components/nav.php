@@ -38,7 +38,7 @@
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
 						<a class="dropdown-item" href="#">Review Certifications</a>
 						<a class="dropdown-item" href="#">Adjust Shifts</a>
-						<a class="dropdown-item" href="/management/appointments">Print Documents</a>
+						<a class="dropdown-item" href="/management/documents">Print Documents</a>
 					</div>
 				</li>
 			<?php endif; ?>
