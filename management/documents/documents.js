@@ -10,7 +10,7 @@ let downloadAppointmentSchedule = function() {
 	let siteId = siteSelectedOption.value;
 
 	let downloadLink = document.createElement("a");
-	downloadLink.setAttribute("href", `/server/management/appointments.php?date=${date}&siteId=${siteId}`);
+	downloadLink.setAttribute("href", `/server/management/documents/appointments.php?date=${date}&siteId=${siteId}`);
 	downloadLink.setAttribute("target", "_blank");
 	downloadLink.style.display = "none";
 	document.body.append(downloadLink);
