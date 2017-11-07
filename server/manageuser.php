@@ -35,7 +35,7 @@ function getUserTable($data){
 
 	$stmt = $DB_CONN->prepare("SELECT userId, firstName, lastName, email, preparesTaxes, archived 
 		FROM vita.user
-		ORDER BY firstName");
+		ORDER BY firstName, lastName");
 
 	$stmt->execute(array());
 
@@ -68,8 +68,8 @@ function getUserPermissionOptionList($userId){
 		name,
         description,
         lookupName,
-        (SELECT userPermissionId FROM userpermission WHERE userId = ? AND permissionId = p.permissionId) as userPermissionId
-	FROM permission p");
+        (SELECT userPermissionId FROM UserPermission WHERE userId = ? AND permissionId = p.permissionId) as userPermissionId
+	FROM Permission p");
 
 	$stmt->execute(array($userId));
 
@@ -85,7 +85,7 @@ function getUserPermissionOptionList($userId){
 			$selected = '';
 			$data = '';
 		}
-		array_push($options, "<option $data value=".$row['permissionId']." $selected>".$row['name']."</option>");
+		$options[] = "<option $data value=".$row['permissionId']." $selected>".$row['name']."</option>";
 	}
 
 	return array(

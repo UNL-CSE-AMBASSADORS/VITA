@@ -1,13 +1,12 @@
 <?php $root = realpath($_SERVER["DOCUMENT_ROOT"]) ?>
 <!DOCTYPE html>
-<html class='no-js theme-light' lang="">
+<html class="no-js theme-light" lang="" ng-app="queueApp">
 <head>
 	<title>Queue Test</title>
 	<?php require_once "$root/server/header.php" ?>
-	<link rel='stylesheet' href='/queue/queue_public.css'>
-	<meta http-equiv='refresh' content='600'/>
+	<link rel="stylesheet" href="/queue/queue.css">
 </head>
-<body>
+<body ng-controller="QueueController">
 	<!--[if lt IE 8]>
 		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 	<![endif]-->
@@ -15,56 +14,35 @@
 		require_once "$root/components/nav.php";
 	?>
 
-	<div class='section dashboard'>
-		<div class='sub-section-full flex'>
-			<!-- <div class='wrap-left flex volunteers-wrap'>
-				<div class='volunteers-lbl'>Volunteers:</div>
-				<div class='volunteers-count'></div>
-			</div> -->
-			<div class='wrap queue-size-wrap'>
-				<div class='queue-size-lbl'>Queue:</div>
-				<div class='queue-size-count'></div>
-			</div>
-			<div class='wrap flex date-wrap'>
-				<i class='material-icons no-select date-back'>keyboard_arrow_up</i>
-				<div class='date'></div>
-				<i class='material-icons no-select date-forward'>keyboard_arrow_down</i>
-			</div>
-			<div class='wrap clock-wrap'>
-				<div class='clock-time'></div>
-				<div class='clock-period'>
-					<div class='clock-am'>AM</div>
-					<div class='clock-pm'>PM</div>
-				</div>
+	<!-- Header section -->
+	<?php
+		require_once "$root/queue/queue_header.php";
+	?>
+
+	<!-- Body Section with list of clients -->
+	<div class="container-fluid queue" ng-if="appointments.length > 0" ng-cloak>
+		<div class="row queue-header py-2 bg-secondary text-light font-weight-bold">
+			<div class="col col-1 queue-id">Id.</div>
+			<div class="col col-8 queue-name">Name</div>
+			<div class="col col-3 queue-time">Time</div>
+		</div>
+		<div class="row queue-row" ng-repeat="appointment in appointments | orderBy:'scheduledTime'" ng-class-even="'bg-light'">
+			<div class="col col-1 queue-id">{{appointment.appointmentId}}</div>
+			<div class="col col-8 queue-name">{{appointment.firstName}} {{appointment.lastName}}.</div>
+			<div class="col col-3 queue-time">{{appointment.scheduledTime | date: "h:mm a"}}</div>
+		</div>
+	</div>
+	<div class="container-fluid queue" ng-if="appointments.length == 0" ng-cloak>
+		<div class="row d-flex justify-content-center">
+			<div class="my-5">
+				There are no appointments on this day.
 			</div>
 		</div>
 	</div>
 
-	<div class='section theme-light queue'>
-		<div class='sub-section flex queue-header'>
-			<div class='wrap-left queue-position-wrap'>Pos.</div>
-			<div class='wrap-left queue-name-wrap'>Name</div>
-			<div class='wrap-right queue-time-wrap'>Time</div>
-		</div>
-		<div class='sub-section theme-white flex queue-table'></div>
-	</div>
 	<?php require_once "$root/server/footer.php" ?>
+	<?php require_once "$root/server/angularjs_dependencies.php" ?>
+	<script src="/queue/queue.js"></script>
+	<script src="/queue/queue_service.js"></script>
 </body>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js'></script>
-<script src='/queue/queue_common.js'></script>
-<script src='/queue/queue_public.js'></script>
-<script class='queue-record-template' type='text/template'>
-	<div class='queue-record' data-appointment-id='{{id}}'>
-		<div class='wrap-left queue-position-wrap'>{{position}}</div>
-		<div class='wrap-left queue-name-wrap'>{{name}}</div>
-		<div class='wrap-right queue-time-wrap'>
-			{{#isOnTime}}<div class='flex queue-tag on-time-tag'>ON TIME</div>{{/isOnTime}}
-			{{^isOnTime}}
-				{{#isPresent}}<div class='flex queue-tag late-tag'>LATE</div>{{/isPresent}}
-				{{^isPresent}}<div class='flex queue-tag no-show-tag'>NO SHOW</div>{{/isPresent}}
-			{{/isOnTime}}
-			{{time}}
-		</div>
-	</div>
-</script>
 </html>
