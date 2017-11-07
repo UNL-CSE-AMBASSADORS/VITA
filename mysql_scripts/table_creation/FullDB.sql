@@ -73,9 +73,16 @@ CREATE TABLE Client (
 
 CREATE TABLE Appointment (
 	appointmentId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	scheduledTime DATETIME NOT NULL,
+    scheduledTime DATETIME NOT NULL,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
-	arrivedAt DATETIME NULL,
+    language VARCHAR(255) NOT NULL,
+	timeIn DATETIME NULL DEFAULT NOW(),
+	timeGivenPapers DATETIME NULL,
+    timeReturnedPapers DATETIME NULL,
+    actualAppointmentTime DATETIME NULL,
+    timeFinished DATETIME NULL,
+    completed BOOLEAN NOT NULL DEFAULT FALSE,
+    notCompletedDescription VARCHAR(255) NULL,
 	archived BOOLEAN NOT NULL DEFAULT FALSE,
 	clientId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(clientId) REFERENCES Client(clientId),

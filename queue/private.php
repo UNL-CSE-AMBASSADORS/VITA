@@ -31,6 +31,9 @@
 					<input class="w-100" type="text" ng-model="clientSearch" placeholder="Search for a client by name or appointment ID" />
 				</div>
 				<!-- List of clients -->
+
+				<!-- Create new rows here, use same styling, but make sure to have different properties for each one. -->
+
 				<div class="queue" ng-if="appointments.length > 0" ng-cloak>
 					<div class="row queue-row py-1 pointer"
 							 ng-repeat="appointment in appointments | orderBy:'scheduledTime' | searchFor: clientSearch"
@@ -45,8 +48,10 @@
 								<div class="d-flex flex-nowrap justify-content-between">
 									<div class="queue-id">#{{appointment.appointmentId}}</div>
 									<div class="queue-status">
-										<span class="badge badge-pill badge-primary">Checked-in</span>
-										<span class="badge badge-pill badge-primary">Task 2</span>
+										<span class="badge badge-pill badge-primary">Checked In</span>
+										<span class="badge badge-pill badge-primary">Completed Paperwork</span>
+										<span class="badge badge-pill badge-primary">Preparing</span>
+										<span class="badge badge-pill badge-primary">Finished</span>
 									</div>
 								</div>
 							</div>
@@ -80,10 +85,10 @@
 						</div>
 
 						<div class="client-progress d-flex flex-column">
-							<span class="my-1 badge badge-pill badge-primary">Check-in</span>
-							<span class="my-1 badge badge-pill badge-primary">Task 2</span>
-							<span class="my-1 badge badge-pill badge-secondary">Complete Paperwork</span>
-							<span class="my-1 badge badge-pill badge-secondary">Check-out</span>
+							<span class="my-1 badge badge-pill badge-primary">Checked In</span>
+							<span class="my-1 badge badge-pill badge-primary">Completed Paperwork</span>
+							<span class="my-1 badge badge-pill badge-secondary">Preparing</span>
+							<span class="my-1 badge badge-pill badge-secondary">Finished</span>
 						</div>
 
 						<div class="client-appointmentId mt-auto">Appointment ID: {{client.appointmentId}}</div>
