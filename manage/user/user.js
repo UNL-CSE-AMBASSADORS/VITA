@@ -73,6 +73,7 @@ $(function(){
 				if(response.success){
 					refreshUserTable();
 				}else{
+					refreshUserTable();
 					alert(response.error);
 				}
 			}

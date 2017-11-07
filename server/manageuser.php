@@ -102,6 +102,27 @@ function updateUserPermissions($data){
 	$response = array();
 	$response['success'] = true;
 
+	if($data['userId'] == $USER->getUserId()){
+		$stmt = $DB_CONN->prepare("SELECT lookupName 
+			FROM vita.permission
+				INNER JOIN vita.userpermission ON permission.permissionId = userpermission.permissionId
+			WHERE userPermissionId = ?");
+
+		foreach ($data['removePermissionArr'] as $userPermissionId) {
+			$stmt->execute(array($userPermissionId));
+			$lookupName = $stmt->fetch(PDO::FETCH_ASSOC)['lookupName'];
+
+			if($lookupName == 'edit_user_permission'){
+				$firstName = $USER->getUserDetails()['firstName'];
+
+				$response['success'] = false;
+				$response['error'] = "I'm sorry, $firstName, I'm afraid I can't do that.";
+				print json_encode($response);
+				die();
+			}
+		}
+	}
+
 	$DB_CONN->beginTransaction();
 
 	if(isset($data['removePermissionArr'])){
