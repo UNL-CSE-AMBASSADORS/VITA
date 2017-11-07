@@ -67,4 +67,26 @@ class User
 
 		return !empty($results);
 	}
+
+	/**
+	* Returns basic information about the logged in user
+	* 
+	* @return boolean
+	*/ 
+	public function getUserDetails(){
+		GLOBAL $DB_CONN;
+
+		$userId = $this->getUserId();
+
+		$query = "SELECT firstName, lastName, email, phoneNumber
+			FROM User
+			WHERE 1=1
+				AND userId = ?";
+
+
+		$stmt = $DB_CONN->prepare($query);
+		$stmt->execute(array($userId));
+
+		return $stmt->fetch(PDO::FETCH_ASSOC);
+	}
 }
