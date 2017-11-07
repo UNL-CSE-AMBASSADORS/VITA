@@ -8,7 +8,7 @@
 	}
 
 	if (!isset($page_subtitle)) {
-		$page_subtitle = "Center for People in Need";
+		$page_subtitle = "";
 	}
 ?>
 
@@ -30,7 +30,22 @@
 					<a class="nav-link" href="/queue">Queue</a>
 				</li>
 				<li class="nav-item">
+				<?php if ($USER->isLoggedIn()): ?>
+					<a class="nav-link" onclick="logout()">Log out</a>
+					<script type="text/javascript">
+						function logout() {
+							$.ajax({
+								url : "server/logout.php",
+								type: "POST",
+								success: function() {
+									location.reload();
+								}
+							});
+						}
+					</script>
+				<?php else: ?>
 					<a class="nav-link" href="/login">Volunteer Login</a>
+				<?php endif; ?>
 				</li>
 			<?php if ($USER->hasPermission('can_view_management_tab')): ?>
 				<li class="nav-item dropdown">
