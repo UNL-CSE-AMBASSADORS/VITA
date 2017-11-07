@@ -1,5 +1,5 @@
 <?php
-	require 'config.php';
+	require_once 'config.php';
 	$conn = $DB_CONN;
 
 	switch($_GET['action']) {
@@ -16,7 +16,7 @@
 			JOIN Site ON Appointment.siteId = Site.siteId
 			WHERE Appointment.appointmentId = ?"
 		);
-	
+
 		$stmt->execute(array($id));
 		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode($appointment);
@@ -29,7 +29,7 @@
 			SET Appointment.archived = TRUE
 			WHERE Appointment.appointmentId = ?"
 		);
-	
+
 		$stmt->execute(array($id));
 		$stmt = null;
 	}
