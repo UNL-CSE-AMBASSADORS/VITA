@@ -35,10 +35,12 @@
 					<script type="text/javascript">
 						function logout() {
 							$.ajax({
-								url : "server/logout.php",
+								url : "server/callbacks.php",
+								data: {"callback":"logout"},
 								type: "POST",
 								success: function() {
 									location.reload();
+									console.log("logged out");
 								}
 							});
 						}

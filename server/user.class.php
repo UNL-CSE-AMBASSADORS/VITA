@@ -43,17 +43,6 @@ class User
 	}
 
 	/**
-	* Logs the user out
-	*
-	* @return boolean
-	*/
-	public function logout(){
-		$LOGIN = getLoginClass();
-
-		return $LOGIN->logout();
-	}
-
-	/**
 	* Checks whether the user has specifed permission
 	*
 	* @return boolean

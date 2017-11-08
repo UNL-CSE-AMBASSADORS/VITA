@@ -6,6 +6,9 @@ if(isset($_REQUEST['callback'])){
 		case 'login':
 			login($_REQUEST);
 			break;
+		case 'logout':
+			logout();
+			break;
 		case 'register':
 			register($_REQUEST);
 			break;
@@ -29,6 +32,13 @@ function login($params){
 	$LOGIN = getLoginClass();
 
 	print $LOGIN->login($params['email'], $params['password']);
+	exit;
+}
+
+function logout() {
+	$LOGIN = getLoginClass();
+
+	print $LOGIN->logout();
 	exit;
 }
 
