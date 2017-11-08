@@ -40,7 +40,6 @@
 								type: "POST",
 								success: function() {
 									location.reload();
-									console.log("logged out");
 								}
 							});
 						}
