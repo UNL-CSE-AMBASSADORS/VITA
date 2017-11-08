@@ -318,7 +318,10 @@
 
 					<h3 class="form-subheading">Appointment Information</h3>
 
-					<div id="appointmentPicker" style="height:300px">
+					<div id="appointmentPicker" style="min-height:300px">
+						<div id="studentScholarAppointmentPicker" style="display:none">
+							Student Scholar
+						</div>
 						<div id="sitePicker" class="form-select">
 							<label class="form-label" for="sitePickerSelect">Site</label>
 							<select id="sitePickerSelect"></select>

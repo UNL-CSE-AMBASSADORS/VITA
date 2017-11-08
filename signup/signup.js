@@ -241,7 +241,7 @@ function showAppointmentPicker(animationTime = 300) {
 }
 
 function showStudentScholarAppointmentPicker(animationTime = 300) {
-	$("#appointmentPicker").hide();
+	// $("#appointmentPicker").hide();
 	$("#studentScholarAppointmentPicker").show();
 	scrollToElement($("#studentScholarAppointmentPicker"), animationTime);
 }
