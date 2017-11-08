@@ -256,6 +256,10 @@
 	border-left-width: 1px;
 }
 
+.ui-datepicker-other-month {
+	visibility:hidden;
+}
+
 /* Icons */
 .ui-datepicker .ui-icon {
 	display: block;

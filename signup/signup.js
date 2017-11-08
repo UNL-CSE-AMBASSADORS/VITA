@@ -109,6 +109,11 @@ function loadAllShifts(year=(new Date()).getFullYear()) {
 				} else {
 					return [false, ''];
 				}
+			},
+			beforeShow: function() {
+				setTimeout(function(){
+					$('.ui-datepicker').css('z-index', 100);
+				}, 0);
 			}
 		});
 
