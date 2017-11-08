@@ -1,20 +1,21 @@
-<?
+<?php
 
 require_once 'config.php';
-
-switch ($_REQUEST['callback']) {
-	case 'login':
-		login($_REQUEST);
-		break;
-	case 'register':
-		register($_REQUEST);
-		break;
-	case 'password_reset':
-		passwordReset($_REQUEST);
-		break;
-	default:
-		# code...
-		break;
+if(isset($_REQUEST['callback'])){
+	switch ($_REQUEST['callback']) {
+		case 'login':
+			login($_REQUEST);
+			break;
+		case 'register':
+			register($_REQUEST);
+			break;
+		case 'password_reset':
+			passwordReset($_REQUEST);
+			break;
+		default:
+			# code...
+			break;
+	}
 }
 
 function getLoginClass(){

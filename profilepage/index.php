@@ -1,18 +1,18 @@
-<?php $root = realpath($_SERVER["DOCUMENT_ROOT"]) ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>VITA Lincoln</title>
-	<?php $root = realpath($_SERVER["DOCUMENT_ROOT"]) ?> <?php require_once "$root/server/header.php" ?>
+	<?php
+		$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+		require_once "$root/server/header.php";
+	?>
 	<!-- <link href="/assets/css/main.css" rel="stylesheet"> -->
-	<link href="/assets/css/form.css" rel="stylesheet"><?php
-			require_once "../server/header.php";
-		?>
+	<link href="/assets/css/form.css" rel="stylesheet">
 </head>
 <body>
 	<?php
-		$page_subtitle = 'Create Volunteer Profile';
-		require_once "$root/components/nav.php";
+		//$page_subtitle = 'Create Volunteer Profile';
+		//require_once "$root/components/nav.php";
 	?>
 	<div>
 		<div class="container">
@@ -89,7 +89,8 @@
 
 						<input type="submit" value="Submit" class="submit button vita-background-primary">
 					</form>
-				</div><?php require_once "$root/server/footer.php" ?>
+				</div>
+				<?php require_once "$root/server/footer.php" ?>
 			</div>
 		</div>
 	</div>

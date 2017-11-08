@@ -1,11 +1,8 @@
-<?
+<?php
 require_once 'login.class.php';
 require_once 'callbacks.php';
 require_once 'config.php';
 
-define('PermissionControl', 'PermissionControl');
-define('UserShiftControl', 'UserShiftControl');
-define('AppointmentControl', 'AppointmentControl');
 
 
 /**
