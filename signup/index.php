@@ -5,6 +5,8 @@
 	<title>VITA Appointment Signup</title>
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="/assets/css/form.css">
+	<link rel="stylesheet" href="/assets/css/jquery-ui-datepicker.css">
+	<link rel="stylesheet" href="/assets/js/jquery-timepicker/jquery.timepicker.css">
 </head>
 <body>
 	<?php
@@ -43,7 +45,7 @@
 						<label class="form-label form-required" for="phone">Phone Number</label>
 					</div>
 
-					<h3 class="form-subheading">Appointment Information</h3>
+					<h3 class="form-subheading">Background Information</h3>
 
 					<div class="form-radio row">
 						<label for="depreciation_schedule" class="col form-required">Will you require a Depreciation Schedule?</label>
@@ -314,8 +316,22 @@
 						</div>
 					</div>
 
+					<h3 class="form-subheading">Appointment Information</h3>
+
 					<div id="appointmentPicker" style="height:300px">
-						Appointment Picker
+						<div id="sitePicker" class="form-select">
+							<label class="form-label" for="sitePickerSelect">Site</label>
+							<select id="sitePickerSelect"></select>
+							<div class="form-select__arrow"></div>
+						</div>
+						<div id="datePicker" class="form-textfield" style="display: none;">
+							<input type="text" id="dateInput" placeholder="Select a Date">
+							<label class="form-label form-label__always-floating">Date</label>
+						</div>
+						<div id="timePicker" class="form-textfield" style="display: none;">
+							<input type="text" id="timeInput" placeholder="Select a Time">
+							<label class="form-label form-label__always-floating">Time</label>
+						</div>
 					</div>
 
 					<div id="studentScholarAppointmentPicker" style="display:none; height:300px">
@@ -333,5 +349,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
 	<script src="/signup/signup.js"></script>
 	<script src="/assets/js/form.js"></script>
+	<script src="/assets/js/jquery-timepicker/jquery.timepicker.js"></script>
 </body>
 </html>

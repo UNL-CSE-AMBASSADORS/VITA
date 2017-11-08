@@ -1,4 +1,8 @@
 $(document).ready(function() {
+	loadAllSites();
+	loadAllShifts();
+	updateSitesDatesAndTimes();
+
 	conditionalFormFields();
 
 	validateSignupForm();
@@ -12,6 +16,186 @@ $(document).ready(function() {
 	});
 
 });
+
+let datesAllowed = [];
+var sitesWithShifts = [];
+let minTime = '0';
+let maxTime = '23';
+
+class SiteWithShift {
+	constructor(siteId, startTime, endTime) {
+		this.siteId = siteId;
+		const date = this.getDate(startTime);
+		this.dates = [];
+		this.dates.push(date);
+		this.shiftTimes = [];
+		this.shiftTimes.push({
+			date: date,
+			startTime: startTime,
+			endTime: endTime
+		});
+	}
+
+	getDate(dateTime) {
+		let t = dateTime.split(/[- :]/);
+		return new Date(t[0],t[1]-1,t[2]);
+	}
+
+	addShift(startTime, endTime) {
+		const date = this.getDate(startTime);
+		this.dates.push(date);
+		this.shiftTimes.push({
+			date: date,
+			startTime: startTime,
+			endTime: endTime
+		});
+	}
+}
+
+function loadAllSites() {
+	var request = $.ajax({
+		url: "/server/api/sites/getAll.php",
+		type: "GET",
+		dataType: "JSON",
+		data: ({
+			"siteId": true,
+			"title": true
+		}),
+		cache: false
+	})
+	.done(function(data) {
+		$siteSelect = $("#sitePicker select");
+		$siteSelect.append($('<option disabled selected value style="display:none"> -- select an option -- </option>'));
+		for(const site of data) {
+			$siteSelect.append($('<option>', {
+				value: site.siteId,
+				text : site.title
+			}));
+		}
+	});
+}
+
+// Load all of the shifts and store in a global variable
+// TODO year
+function loadAllShifts(year=(new Date()).getFullYear()) {
+	var request = $.ajax({
+		url: "/server/api/shifts/getAllShifts.php",
+		type: "GET",
+		dataType: "JSON",
+		data: ({
+			"year": year,
+			"startTime": true,
+			"endTime": true,
+			"siteId": true
+		}),
+		cache: false
+	})
+	.done(function(data) {
+		for(const shift of data) {
+			let sitesArray = sitesWithShifts.map(function(s) {return s.siteId});
+			if(sitesArray.includes(shift.siteId)) {
+				let i = sitesArray.indexOf(shift.siteId);
+				sitesWithShifts[i].addShift(shift.startTime, shift.endTime);
+			} else {
+				sitesWithShifts.push(new SiteWithShift(shift.siteId, shift.startTime, shift.endTime));
+			}
+		}
+		$("#dateInput").datepicker({
+			// Good example: https://stackoverflow.com/a/1962849/7577035
+			// called for every date before it is displayed
+			beforeShowDay: function(date) {
+				if (datesAllowed.includes(date.toDateString())) {
+					return [true, ''];
+				} else {
+					return [false, ''];
+				}
+			}
+		});
+
+		// Documentation: http://jonthornton.github.io/jquery-timepicker/
+		$("#timeInput").timepicker({
+			'step': 60,
+			'forceRoundTime': true,
+			'timeFormat': 'g:i A'
+		});
+	});
+}
+
+// This function will watch the site selector and the date selector for changes.
+function updateSitesDatesAndTimes() {
+	siteSelect = $("#sitePicker select");
+	dateInput = $("#dateInput");
+	// When the value of the site selector is updated...
+	// 1. Display the date picker
+	// 2. Update the options for the date selector to disable options that are not available at this site.
+	siteSelect.change(function() {
+		$("#datePicker").show();
+		// Clear any previously selected date
+		$("#dateInput").val('');
+		var value = this.value;
+		// Clear and repopulate the array of dates that are available at the selected site
+		datesAllowed.length = 0;
+		const i = sitesWithShifts.map(function(s) {return s.siteId}).indexOf(value);
+		if(i >= 0) {
+			datesAllowed = datesAllowed.concat(sitesWithShifts[i].dates.map(function(d) {return d.toDateString()}));
+		}
+		// If a site is selected that has no available dates, show this to the user.
+		if(datesAllowed.length === 0) {
+			$("#dateInput").val('No dates available');
+			$("#dateInput").prop("disabled", true);
+			$("#timePicker").hide();
+		} else {
+			$("#dateInput").prop("disabled", false);
+		}
+	});
+
+	// When the date selector changes...
+	// 1. Display the time picker
+	// 2. Update the available times selector.
+	dateInput.change(function() {
+		$("#timePicker").show();
+		// Clear any previously selected time
+		$("#timeInput").val('');
+		var siteId = siteSelect.val();
+		var date = this.value;
+
+		let currentSite = sitesWithShifts.find(function(site) {return site.siteId === siteId});
+		if(currentSite !== undefined && currentSite.shiftTimes.length > 0) {
+			let availableTimes = [];
+			currentSite.shiftTimes.forEach(function(shiftTime) {
+				if($.datepicker.formatDate("mm/dd/yy",shiftTime.date) === date) {
+					availableTimes.push({'start':shiftTime.startTime, 'end':shiftTime.endTime})
+				}
+			});
+
+			if(availableTimes.length === 1) {
+				start = new Date(availableTimes[0].start);
+				end = new Date(availableTimes[0].end);
+				minTime = start.getHours() + ":" + start.getMinutes();
+				maxTime = end.getHours() + ":" + end.getMinutes();
+				$("#timeInput").timepicker('option', {'minTime': minTime, 'maxTime': maxTime});
+			} else if(availableTimes.length > 1) {
+				// TODO: better logic that allows for intervals (disableTimeRanges)
+				availableTimes.sort(function(a, b) {
+					return Date.parse(a.start) - Date.parse(b.start);
+				});
+				start = Date.parse(availableTimes[0].start);
+				end = Date.parse(availableTimes[availableTimes.length-1].end);
+				minTime = start.getHours() + ":" + start.getMinutes();
+				maxTime = end.getHours() + ":" + end.getMinutes();
+				$("#timeInput").timepicker('option', {'minTime': minTime, 'maxTime': maxTime});
+			} else {
+				// This shouldn't ever happen, but it is here as a safety net.
+				$("#timeInput").val('No times available');
+				$("#timeInput").prop("disabled", true);
+			}
+		} else {
+			// This shouldn't ever happen, but it is here as a safety net.
+			$("#timeInput").val('No times available');
+			$("#timeInput").prop("disabled", true);
+		}
+	});
+}
 
 function validateSignupForm() {
 	$("#vitaSignupForm").validate({
@@ -225,7 +409,7 @@ $('#vitaSignupForm').submit(function(e) {
 
 		//TODO
 		"scheduledTime": '2017-07-26T15:30:00',
-		"siteId": 3
+		"siteId":sitePickerSelect.value
 	};
 
 	// AJAX Code To Submit Form.
