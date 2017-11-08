@@ -130,8 +130,10 @@ function updateSitesDatesAndTimes() {
 	// 2. Update the options for the date selector to disable options that are not available at this site.
 	siteSelect.change(function() {
 		$("#datePicker").show();
+		$("#timePicker").hide();
 		// Clear any previously selected date
 		$("#dateInput").val('');
+		$("#timeInput").val('');
 		var value = this.value;
 		// Clear and repopulate the array of dates that are available at the selected site
 		datesAllowed.length = 0;
