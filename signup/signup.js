@@ -400,6 +400,13 @@ $('#vitaSignupForm').submit(function(e) {
 		}
 	});
 
+	console.log(dateInput.value);
+	console.log($("#dateInput").val());
+	console.log(timeInput.value);
+	console.log($("#timeInput").val());
+	var scheduledTime = new Date($("#dateInput").val() + " " + $("#timeInput").val()).toISOString();
+	console.log(scheduledTime);
+
 	var data = {
 		"firstName":firstName.value,
 		"lastName":lastName.value,
@@ -408,7 +415,7 @@ $('#vitaSignupForm').submit(function(e) {
 		"questions": questions,
 
 		//TODO
-		"scheduledTime": '2017-07-26T15:30:00',
+		"scheduledTime":scheduledTime,
 		"siteId":sitePickerSelect.value
 	};
 
