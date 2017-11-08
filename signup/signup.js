@@ -138,6 +138,11 @@ function updateSitesDatesAndTimes() {
 		const i = sitesWithShifts.map(function(s) {return s.siteId}).indexOf(value);
 		if(i >= 0) {
 			datesAllowed = datesAllowed.concat(sitesWithShifts[i].dates.map(function(d) {return d.toDateString()}));
+			datesAllowed.sort(function(a,b) {
+				return Date.parse(a.start) - Date.parse(b.start);
+			});
+			$("#dateInput").datepicker("option", "minDate", new Date(datesAllowed[0]));
+			$("#dateInput").datepicker("option", "maxDate", new Date(datesAllowed[datesAllowed.length-1]));
 		}
 		// If a site is selected that has no available dates, show this to the user.
 		if(datesAllowed.length === 0) {
