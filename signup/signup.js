@@ -408,8 +408,6 @@ $('#vitaSignupForm').submit(function(e) {
 		"email":email.value,
 		"phone":phone.value,
 		"questions": questions,
-
-		//TODO
 		"scheduledTime":scheduledTime,
 		"siteId":sitePickerSelect.value
 	};
