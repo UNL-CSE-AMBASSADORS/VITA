@@ -400,12 +400,7 @@ $('#vitaSignupForm').submit(function(e) {
 		}
 	});
 
-	console.log(dateInput.value);
-	console.log($("#dateInput").val());
-	console.log(timeInput.value);
-	console.log($("#timeInput").val());
 	var scheduledTime = new Date($("#dateInput").val() + " " + $("#timeInput").val()).toISOString();
-	console.log(scheduledTime);
 
 	var data = {
 		"firstName":firstName.value,
