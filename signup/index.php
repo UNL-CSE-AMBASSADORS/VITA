@@ -337,10 +337,6 @@
 						</div>
 					</div>
 
-					<div id="studentScholarAppointmentPicker" style="display:none; height:300px">
-						Student Scholar Appointment Picker
-					</div>
-
 					<input type="submit" value="Submit" class="submit btn btn-primary mb-5 vita-background-primary">
 				</form>
 			</div>
