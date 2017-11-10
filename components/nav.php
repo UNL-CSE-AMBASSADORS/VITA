@@ -8,7 +8,7 @@
 	}
 
 	if (!isset($page_subtitle)) {
-		$page_subtitle = "";
+		$page_subtitle = "Center for People in Need";
 	}
 ?>
 
@@ -30,33 +30,8 @@
 					<a class="nav-link" href="/queue">Queue</a>
 				</li>
 				<li class="nav-item">
-				<?php if ($USER->isLoggedIn()): ?>
-					<a class="nav-link" onclick="logout()">Log out</a>
-					<script type="text/javascript">
-						function logout() {
-							$.ajax({
-								url : "server/logout.php",
-								type: "POST",
-								success: function() {
-									location.reload();
-								}
-							});
-						}
-					</script>
-				<?php else: ?>
 					<a class="nav-link" href="/login">Volunteer Login</a>
-				<?php endif; ?>
 				</li>
-			<?php if ($USER->hasPermission('can_view_management_tab')): ?>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
-					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
-						<a class="dropdown-item" href="#">Review Certifications</a>
-						<a class="dropdown-item" href="#">Adjust Shifts</a>
-						<a class="dropdown-item" href="/management/appointments">Print Documents</a>
-					</div>
-				</li>
-			<?php endif; ?>
 			</ul>
 		</div>
 	</div>
