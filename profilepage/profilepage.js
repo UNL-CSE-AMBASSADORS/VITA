@@ -1,4 +1,34 @@
 
+$document.ready(function() {
+  validateProfilePage();
+  $(".form-textfield input").blur(function)) {
+    var isBlank = $.trim($(this).val().length > 0;
+    $label = $(this).siblings(".form-label").toggleClass("form-label__floating",isBlank);
+
+  });
+});
+
+function validateProfilePage() {
+  $("#vitaProfileEdit").validate({
+    rules: {
+      "firstNameProfile":"required",
+      "lastNameProfile":"required",
+      email: {
+        required:true,
+        email: true
+      },
+      phone: {
+        required:true;
+      }
+    },
+    messages: {
+      email: {
+        required: "We need your email to confirm your shift times",
+        email: "Your email must be in the form of name@example.com"
+      }
+    }
+  });
+}
 function taxFunction() {
 	var taxValue = $("#taxSkills").val();
 	if (taxValue === "Yes") {
@@ -28,21 +58,21 @@ function taxFunction() {
 	}
 }
 var dataOut = {
-	"firstNameProfile":firstNameProfile.value,
-	"lastNameProfile":lastNameProfile.value,
-	"phoneProfile":phoneProfile.value,
-	"emailProfile":emailProfile.value,
+	"firstName":firstNameProfile.value,
+	"lastName":lastNameProfile.value,
+	"phone":phoneProfile.value,
+	"email":emailProfile.value,
 	"languageSkills":languageSkills.value,
 	"taxSkills" : taxSkills.value,
 	"taxSkillsType": taxSkillsType.value,
 	"shiftsWorking": sbTwo.value
 };
 
-var dataOut = {
-	"firstNameProfile":firstNameProfile.value,
-	"lastNameProfile":lastNameProfile.value,
-	"phoneProfile":phoneProfile.value,
-	"emailProfile":emailProfile.value,
+var dataIn = {
+	"firstName":firstNameProfile.value,
+	"lastName":lastNameProfile.value,
+	"phone":phoneProfile.value,
+	"email":emailProfile.value,
 	"languageSkills":languageSkills.value,
 	"taxSkills" : taxSkills.value,
 	"taxSkillsType": taxSkillsType.value,
@@ -56,8 +86,20 @@ $.ajax({
 	url: "/server/storeProfile.php"
 	type: "get",
 	dataType: "json",
-	data:(dataIn)
-})
+	data:(dataIn).
+	cache: false,
+	complete: function(response){
+		response = response.responseJSON;
+
+		if(typeof response !== 'undefined' && response && response.success){
+			$(vitaProfileEdit).hide();
+			$(responsePlaceholder).show();
+			responsePlaceholder.innerHTML = response.message;
+		}else{
+			alert('There was an error on the server! Please refresh the page in a few minutes and try again.');
+		}
+	}
+});
 
 // AJAX Code To Submit Form.
 $.ajax({
