@@ -32,8 +32,6 @@
 				</div>
 				<!-- List of clients -->
 
-				<!-- Create new rows here, use same styling, but make sure to have different properties for each one. -->
-
 				<div class="queue" ng-if="appointments.length > 0" ng-cloak>
 					<div class="row queue-row py-1 pointer"
 							 ng-repeat="appointment in appointments | orderBy:'scheduledTime' | searchFor: clientSearch"
@@ -48,10 +46,10 @@
 								<div class="d-flex flex-nowrap justify-content-between">
 									<div class="queue-id">#{{appointment.appointmentId}}</div>
 									<div class="queue-status">
-										<span class="badge badge-pill badge-primary">Checked In</span>
-										<span class="badge badge-pill badge-primary">Completed Paperwork</span>
-										<span class="badge badge-pill badge-primary">Preparing</span>
-										<span class="badge badge-pill badge-primary">Finished</span>
+										<span class="badge badge-pill badge-secondary" class="checkin">Checked In</span>
+										<span class="badge badge-pill badge-secondary" class="paperwork-complete">Completed Paperwork</span>
+										<span class="badge badge-pill badge-secondary" class="preparing">Preparing</span>
+										<span class="badge badge-pill badge-secondary" class="finished">Finished</span>
 									</div>
 								</div>
 							</div>
@@ -78,19 +76,22 @@
 						<div class="client-time">Scheduled Appointment Time: {{client.scheduledTime | date: "h:mm a"}}</div>
 
 						<!-- The following are a couple of options for client progress/"workflow" -->
-						<div class="progress w-100 my-2">
-							<div class="progress-bar" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-							<div class="progress-bar bg-success" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-							<div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
+
 
 						<div class="client-progress d-flex flex-column">
-							<span class="my-1 badge badge-pill badge-primary">Checked In</span>
-							<span class="my-1 badge badge-pill badge-primary">Completed Paperwork</span>
-							<span class="my-1 badge badge-pill badge-secondary">Preparing</span>
-							<span class="my-1 badge badge-pill badge-secondary">Finished</span>
+							<button type="button" class="btn btn-secondary" class="checkin">Checked In</button>
+						</br>
+							<button type="button" class="btn btn-secondary" class="paperwork-complete">Completed Paperwork</button>
+						</br>
+							<button type="button" class="btn btn-secondary" class="preparing">Preparing</button>
+						</br>
+							<button type="button" class="btn btn-secondary" class="finished">Finished</button>
 						</div>
 
+						<div class="greeter-directions">
+							Click on the button for each step a client completes.
+						</div>
+						<!-- TODO: Add timestamps to SQL db on clicks, create field for incomplete -->
 						<div class="client-appointmentId mt-auto">Appointment ID: {{client.appointmentId}}</div>
 				</div>
 				<!-- Default message if no appointment is selected -->

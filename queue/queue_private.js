@@ -37,3 +37,8 @@ queueApp.filter('searchFor', function(){
 	};
 
 });
+//
+// $("button").click(function(){
+// 		$(this).toggleClass('btn-primary btn-secondary');
+// });
+// TODO: Color change on click
