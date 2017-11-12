@@ -61,8 +61,51 @@ function storeProfile($data) {
 
   $appointmentID = $DB_CONN -> lastInsterId();
 
-  $appointmentInsert = "INSERT INTO 
-  "
+  $appointmentInsert = "INSERT INTO vita.servicedappointment
+  (
+    shiftsAvailable,
+    shiftsWorking,
+    siteId
+  )
+  VALUES
+  ?,
+  ?,
+  ?
+);";
+$appointmentParams = array(
+  $data['shiftsAvailable'],
+  $data['shiftsWorking'],
+  $data['taxSkillsType']
+);
+$stmt = DB_CONN -> prepare($appointmentInsert)
+$stmt -> execute($appointmentParams);
 
   }
+getProfile(_$GET);
+function getProfile($data) {
+  GLOBAL $DB_CONN
+  $response = array();
+  $response['success'] = false;
+
+  $DB_CONN -> beginTransaction();
+  try {
+    "SELECT FROM vita.user
+    (  firstName,
+      lastName,
+      phone,
+      email
+    )
+    VALUES
+    (
+      ?,
+      ?,
+      ?,
+      ?
+    );";
+
+  );
+
+  }
+}
+
 }
