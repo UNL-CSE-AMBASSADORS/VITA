@@ -45,12 +45,7 @@
 								</div>
 								<div class="d-flex flex-nowrap justify-content-between">
 									<div class="queue-id">#{{appointment.appointmentId}}</div>
-									<div class="queue-status">
-										<span class="badge badge-pill badge-secondary" class="checkin">Checked In</span>
-										<span class="badge badge-pill badge-secondary" class="paperwork-complete">Completed Paperwork</span>
-										<span class="badge badge-pill badge-secondary" class="preparing">Preparing</span>
-										<span class="badge badge-pill badge-secondary" class="finished">Finished</span>
-									</div>
+									<!-- Can be improved with queue status bar -->
 								</div>
 							</div>
 						</div>
@@ -79,17 +74,18 @@
 
 
 						<div class="client-progress d-flex flex-column">
-							<button type="button" class="btn btn-secondary" class="checkin">Checked In</button>
+							<!-- TODO: Try using ng-click for PHP to mySQL injection -->
+							<button type="button" class="btn" class="checkin" ng-class="client.checkedIn ? 'btn-primary': 'btn-secondary' " ng-click="checkIn()">Checked In</button>
 						</br>
-							<button type="button" class="btn btn-secondary" class="paperwork-complete">Completed Paperwork</button>
+							<button type="button" class="btn" class="paperworkComplete" ng-class="client.paperworkComplete ? 'btn-primary': 'btn-secondary' " ng-click="pwFilledOut()">Completed Paperwork</button>
 						</br>
-							<button type="button" class="btn btn-secondary" class="preparing">Preparing</button>
+							<button type="button" class="btn" class="preparing" ng-class="client.preparing ? 'btn-primary': 'btn-secondary' " ng-click="nowPreparing()">Preparing</button>
 						</br>
-							<button type="button" class="btn btn-secondary" class="finished">Finished</button>
+							<button type="button" class="btn" class="finished" ng-class="client.finished ? 'btn-primary': 'btn-secondary' " ng-click="completeAppointment()">Finished</button>
 						</div>
 
 						<div class="greeter-directions">
-							Click on the button for each step a client completes.
+							Click on each button once the client has completed that step.
 						</div>
 						<!-- TODO: Add timestamps to SQL db on clicks, create field for incomplete -->
 						<div class="client-appointmentId mt-auto">Appointment ID: {{client.appointmentId}}</div>

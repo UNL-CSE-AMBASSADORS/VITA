@@ -6,6 +6,7 @@ queueApp.factory("QueueService", function($http){
 			},function(error){
 				return null;
 			});
-		}
+		},
+		// TODO: Add function
 	}
 })

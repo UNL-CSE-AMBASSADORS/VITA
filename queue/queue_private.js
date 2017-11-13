@@ -4,6 +4,27 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 	$scope.selectClient = function(client) {
 		$scope.client = client;
 	};
+
+	$scope.checkIn = function() {
+		$scope.client.checkedIn = true;
+		//QueueService.newFunction(Date.now());
+	};
+
+	$scope.pwFilledOut = function() {
+		$scope.client.paperworkComplete = true;
+		//QueueService.newFunction(Date.now());
+	};
+
+	$scope.nowPreparing = function() {
+		$scope.client.preparing = true;
+		//QueueService.newFunction(Date.now());
+	};
+
+	$scope.completeAppointment = function() {
+		$scope.client.finished = true;
+		//QueueService.newFunction(Date.now());
+	};
+
 });
 
 queueApp.filter('searchFor', function(){
@@ -38,7 +59,9 @@ queueApp.filter('searchFor', function(){
 
 });
 //
-// $("button").click(function(){
-// 		$(this).toggleClass('btn-primary btn-secondary');
-// });
-// TODO: Color change on click
+//
+// // Changing type of button from secondary to primary on click
+// function swapColor() {
+// 	$(this).toggleClass('btn-secondary btn-primary');
+// 	console.log("This is working.");
+// };
