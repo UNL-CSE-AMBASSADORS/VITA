@@ -34,7 +34,7 @@ function getUserTable($data){
 	$response['success'] = true;
 
 	$stmt = $DB_CONN->prepare("SELECT userId, firstName, lastName, email, preparesTaxes, archived 
-		FROM vita.user
+		FROM user
 		ORDER BY firstName, lastName");
 
 	$stmt->execute(array());
@@ -102,17 +102,17 @@ function updateUserPermissions($data){
 	$response = array();
 	$response['success'] = true;
 
-	if($data['userId'] == $USER->getUserId()){
+	if($data['userId'] === $USER->getUserId()){
 		$stmt = $DB_CONN->prepare("SELECT lookupName 
-			FROM vita.permission
-				INNER JOIN vita.userpermission ON permission.permissionId = userpermission.permissionId
+			FROM permission
+				INNER JOIN userpermission ON permission.permissionId = userpermission.permissionId
 			WHERE userPermissionId = ?");
 
 		foreach ($data['removePermissionArr'] as $userPermissionId) {
 			$stmt->execute(array($userPermissionId));
 			$lookupName = $stmt->fetch(PDO::FETCH_ASSOC)['lookupName'];
 
-			if($lookupName == 'edit_user_permission'){
+			if($lookupName === 'edit_user_permission'){
 				$firstName = $USER->getUserDetails()['firstName'];
 
 				$response['success'] = false;
