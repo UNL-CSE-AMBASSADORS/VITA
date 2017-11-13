@@ -2,6 +2,9 @@
 	cursor: pointer;
 }
 
+#user-permission-table-row{
+	overflow-x: auto;
+}
 /*
 Make bootstrap-select work with bootstrap 4 see:
 https://github.com/silviomoreto/bootstrap-select/issues/1135

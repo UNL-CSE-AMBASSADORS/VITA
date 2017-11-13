@@ -31,7 +31,7 @@ if (!$USER->hasPermission('edit_user_permission')) {
 				<button class="btn btn-default pull-right" id="btn-add-user">Add User</button>
 			</div>
 		</div>
-		<div class="row" style="overflow-x: auto;">
+		<div class="row" id="user-permission-table-row">
 			<div class="col-md-12">
 				<table class="table table-condensed table-hover" id="user-permission-table">
 
