@@ -6,7 +6,6 @@
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="/assets/css/form.css">
 	<link rel="stylesheet" href="/assets/css/jquery-ui-datepicker.css">
-	<link rel="stylesheet" href="/assets/js/jquery-timepicker/jquery.timepicker.css">
 </head>
 <body>
 	<?php
@@ -354,6 +353,5 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
 	<script src="/signup/signup.js"></script>
 	<script src="/assets/js/form.js"></script>
-	<script src="/assets/js/jquery-timepicker/jquery.timepicker.js"></script>
 </body>
 </html>

@@ -180,13 +180,6 @@ function loadAllShifts(year=(new Date()).getFullYear()) {
 				}, 0);
 			}
 		});
-
-		// Documentation: http://jonthornton.github.io/jquery-timepicker/
-		// $("#timeInput").timepicker({
-		// 	'step': 60,
-		// 	'forceRoundTime': true,
-		// 	'timeFormat': 'g:i A'
-		// });
 	});
 }
 
