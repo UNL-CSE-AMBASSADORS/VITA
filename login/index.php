@@ -79,6 +79,6 @@
 	<?php
 		require_once '../server/footer.php';
 	?>
-		<script src="/login/login.js"></script>
+		<script src="/dist/login/login.js"></script>
 	</body>
 </html>

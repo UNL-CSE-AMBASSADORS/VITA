@@ -32,6 +32,6 @@
 	</div>
 
 	<?php require_once "$root/server/footer.php" ?>
-	<script src="/dist/appointments_bundle.js"></script>
+	<script src="/dist/management/appointments/appointments.js"></script>
 </body>
 </html>
