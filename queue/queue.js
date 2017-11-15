@@ -13,13 +13,11 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 		QueueService.getAppointments(year + "-" + month + "-" + day).then(function(data) {
 			if(data == null) {
 				console.log('server error');
-				// TODO
 			} else if(data.length > 0) {
 				$scope.appointments = data.map((appointment) => {
 					// This map converts the MySQL Datatime into a Javascript Date object
 					var t = appointment.scheduledTime.split(/[- :]/);
 					appointment.scheduledTime = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
-					// TODO: pull in rest of data from appt, use NOT NULL vs. NULL to check if fields are empty
 					appointment.checkedIn = false;
 					if (appointment.timeIn != null) {
 						appointment.checkedIn = true;

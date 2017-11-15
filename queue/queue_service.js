@@ -1,5 +1,4 @@
 queueApp.factory("QueueService", function($http){
-	//$httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded"; // Sends data in PHP-friendly format
 	return {
 		getAppointments: function(date){
 			return $http.get("/server/queue.php?displayDate=" + date).then(function(response){

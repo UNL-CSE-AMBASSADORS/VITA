@@ -89,7 +89,24 @@
 						</div>
 
 						<div class="greeter-directions">
-							Click on each button once the client has completed that step.
+							<br>
+							<strong>INSTRUCTIONS:</strong>
+							<br>
+							Once a client has completed a step, click on the corresponding button. This will log the time at which each step is completed. PROGRESS CAN NOT BE UNDONE, so
+							be sure to verify that the step is fully completed before clicking to progress the client. If, for any reason, a client does not complete their appointment,
+							fill out the form below and explain (in 255 characters or less) why the appointment was not completed.
+						</div>
+						<br>
+						<br>
+						<div class="appointment-not-complete">
+							<form>
+								<div class="form-group">
+									<label><strong>Appointment Not Completed:</strong></label>
+									<textarea class="form-control" rows="3"></textarea>
+									<br>
+									<button type="submit" class="btn btn-danger">Submit</button>
+							 </div>
+						 	</form>
 						</div>
 						<div class="client-appointmentId mt-auto">Appointment ID: {{client.appointmentId}}</div>
 				</div>
