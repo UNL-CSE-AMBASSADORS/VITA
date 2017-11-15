@@ -9,6 +9,7 @@
 		case 'completePaperwork': completePaperwork($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentStart': appointmentStart($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id']); break;
+		case 'appointmentIncomplete': appointmentIncomplete($_REQUEST['time'], $_REQUEST['explanation'], $_REQUEST['id']); break;
 		default: break;
 	}
 
@@ -63,6 +64,8 @@
 		echo json_encode($appointment);
 		$stmt = null;
 	}
+
+	// TODO: Create appointmentIncomplete function to set completed to false and give explanation
 
 	function displayAppointment($id) {
 		$stmt = $GLOBALS['conn']->prepare(

@@ -104,7 +104,7 @@
 									<label><strong>Appointment Not Completed:</strong></label>
 									<textarea class="form-control" rows="3"></textarea>
 									<br>
-									<button type="submit" class="btn btn-danger">Submit</button>
+									<button type="submit" class="btn btn-danger" ng-click="incompleteAppointment()">Submit</button>
 							 </div>
 						 	</form>
 						</div>

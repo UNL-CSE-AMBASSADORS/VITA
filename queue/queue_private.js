@@ -25,6 +25,10 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId)
 	};
 
+	$scope.incompleteAppointment = function() {
+		// TODO: Make a function to return explanation of incomplete appointment
+	}
+
 });
 
 queueApp.filter('searchFor', function(){

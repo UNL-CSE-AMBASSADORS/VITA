@@ -62,6 +62,20 @@ queueApp.factory("QueueService", function($http){
 			},function(error){
 				return null;
 			});
+		},
+		incompleteAppointment: function(time, explanation, id) {
+			return $http({
+				url: "/server/queue_priv.php",
+				method: 'POST',
+				data: 'action=appointmentComplete&time=' + time + '%explanation=' + explanation + '&id=' + id,
+				headers: {
+					'Content-Type': "application/x-www-form-urlencoded"
+				}
+			}).then(function(response){
+				return response.data;
+			},function(error){
+				return null;
+			});
 		}
 	}
 })
