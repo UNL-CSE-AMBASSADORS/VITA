@@ -25,17 +25,12 @@ $(document).ready(function() {
 /**
  * getTimeInSeconds - convert a Date to the time of day in seconds, optionally rounded down to the nearest hour or minute
  *
- * @param  {string} time        Date as ISO String
- * @param  {string} zone="GMT"  time zone
+ * @param  {Date} time          Date
  * @param  {string} round="m"   "h" or "m" for rounding down to "hour" or "minute" respectively
  * @return {number}             number of seconds in the day
  */
-function getTimeInSeconds(time, zone="GMT", round="m") {
-	if (typeof time === "string") {
-		if (typeof zone != "string") {
-			zone = "GMT";
-		}
-		time = new Date(time + " " + zone);
+function getTimeInSeconds(time, round="m") {
+	if (time instanceof Date) {
 		switch(round) {
 			case "h":
 				return time.getHours() * 3600;
@@ -204,6 +199,7 @@ class DateSiteTime {
 	 */
 	addShift(siteId, startTime, endTime) {
 		const date = new Date(startTime);
+		const endDate = new Date(endTime);
 		if(!this.hasDate(date)) {
 			this._addDate(date);
 		}
@@ -213,7 +209,13 @@ class DateSiteTime {
 			dateObj.addSite(siteId);
 		}
 
+		if (date.toDateString() !== endDate.toDateString()) {
+			console.log(date.toDateString() + " " + endDate.toDateString());
+			let newStartTime = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
+			this.addShift(siteId, newStartTime, endTime);
+		}
 		let newTimes = this._getAppointmentTimes(startTime, endTime);
+
 
 		let siteObj = dateObj.getSite(siteId);
 		for (const time of newTimes) {
@@ -254,8 +256,12 @@ class DateSiteTime {
 		if (startTime > endTime) {
 			return [];
 		}
-		const startTimeInSeconds = getTimeInSeconds(startTime),
-					endTimeInSeconds = getTimeInSeconds(endTime);
+		const startTimeInSeconds = getTimeInSeconds(new Date(startTime));
+		let endTimeInSeconds = getTimeInSeconds(new Date(endTime));
+
+		if (endTimeInSeconds < startTimeInSeconds) {
+			endTimeInSeconds = 86400;
+		}
 
 		let out = [],
 				ct = startTimeInSeconds;

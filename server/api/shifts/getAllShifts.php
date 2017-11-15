@@ -43,6 +43,11 @@ function getAllShifts($data) {
 	$stmt = $DB_CONN->prepare('SELECT ' . $selectColumnsString . ' FROM Shift WHERE YEAR(startTime) = ' . $year);
 	$stmt->execute();
 	$shifts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	foreach ($shifts as &$shift) {
+		$shift['startTime'] = $shift['startTime'] . " GMT";
+		$shift['endTime'] = $shift['endTime'] . " GMT";
+	}
+
 
 	echo json_encode($shifts);
 }
