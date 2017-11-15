@@ -45,7 +45,12 @@
 								</div>
 								<div class="d-flex flex-nowrap justify-content-between">
 									<div class="queue-id">#{{appointment.appointmentId}}</div>
-									<!-- Can be improved with queue status bar -->
+									<div class="queue-status">
+										<span class="badge badge-pill" ng-class="appointment.checkedIn ? 'badge-primary': 'badge-secondary'">Checked-in</span>
+										<span class="badge badge-pill" ng-class="appointment.paperworkComplete ? 'badge-primary': 'badge-secondary'">Task 2</span>
+										<span class="badge badge-pill" ng-class="appointment.preparing ? 'badge-primary': 'badge-secondary'">Checked-in</span>
+										<span class="badge badge-pill" ng-class="appointment.finished ? 'badge-primary': 'badge-secondary'">Task 2</span>
+									</div>
 								</div>
 							</div>
 						</div>

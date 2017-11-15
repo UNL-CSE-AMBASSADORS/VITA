@@ -8,7 +8,7 @@ queueApp.factory("QueueService", function($http){
 				return null;
 			});
 		},
-		// TODO: Add function
+		// TODO: Add functions
 		checkInNow: function(time, id) {
 			// Puts time into DB on click
 			return $http({
