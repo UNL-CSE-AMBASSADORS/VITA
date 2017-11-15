@@ -1,11 +1,11 @@
 {
-  "name": "code",
+  "name": "vita",
   "version": "1.0.0",
   "description": "Scheduling and Appointment Management for VITA",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
-    "production": "SET NODE_ENV=production&& webpack"
+    "dev": "webpack --config webpack.dev.js",
+    "production": "webpack --config webpack.prod.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "uglify-js": "^3.1.9",
-    "webpack": "^3.8.1"
+    "webpack": "^3.8.1",
+    "webpack-merge": "^4.1.1"
   }
 }

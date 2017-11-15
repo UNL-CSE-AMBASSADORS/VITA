@@ -29,8 +29,8 @@ let loadAllSites = function() {
 		success: function(response) {
 			let siteSelect = document.getElementById("siteSelect");
 			siteSelect.options.add(new Option("All Sites", -1));
-			for ($i = 0; $i < response.length; $i++) {
-				siteSelect.options.add(new Option(response[$i].title, response[$i].siteId));
+			for (let i = 0; i < response.length; i++) {
+				siteSelect.options.add(new Option(response[i].title, response[i].siteId));
 			}
 		},
 		error: function(response) {

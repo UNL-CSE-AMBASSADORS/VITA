@@ -14,7 +14,7 @@
 <head>
 	<title>VITA Appointment Management</title>
 	<?php require_once "$root/server/header.php" ?>
-	<link rel="stylesheet" href="/management/appointments/appointments.css">
+	<link rel="stylesheet" href="./appointments.css">
 </head>
 <body>
 	<?php
@@ -28,10 +28,10 @@
 		<select id="siteSelect">
 			<!-- Sites injected through JS -->
 		</select>
-		<button onclick="downloadSchedule();">Download Schedule</button>
+		<button onclick="downloadSchedule()">Download Schedule</button>
 	</div>
 
 	<?php require_once "$root/server/footer.php" ?>
-	<script src="/management/appointments/appointments.js"></script>
+	<script src="/dist/appointments_bundle.js"></script>
 </body>
 </html>
