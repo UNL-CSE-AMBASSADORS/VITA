@@ -77,7 +77,6 @@ CREATE TABLE Appointment (
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
     language VARCHAR(255) NOT NULL,
 	timeIn DATETIME NULL DEFAULT NOW(),
-	timeGivenPapers DATETIME NULL,
     timeReturnedPapers DATETIME NULL,
     actualAppointmentTime DATETIME NULL,
     timeFinished DATETIME NULL,

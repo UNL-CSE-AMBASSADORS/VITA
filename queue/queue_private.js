@@ -58,10 +58,3 @@ queueApp.filter('searchFor', function(){
 	};
 
 });
-//
-//
-// // Changing type of button from secondary to primary on click
-// function swapColor() {
-// 	$(this).toggleClass('btn-secondary btn-primary');
-// 	console.log("This is working.");
-// };
