@@ -4,7 +4,7 @@
   "description": "Scheduling and Appointment Management for VITA",
   "main": "index.js",
   "scripts": {
-    "dev": "babel . -d dist --ignore node_modules/,dist/ && uglifyjs dist/",
+    "dev": "babel . -d dist --ignore node_modules/,dist/",
     "production": "babel . -d dist --ignore node_modules/,dist/"
   },
   "repository": {
@@ -20,7 +20,6 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "uglify-js": "^3.1.9"
+    "babel-preset-env": "^1.6.1"
   }
 }
