@@ -1,10 +1,15 @@
 $(document).ready(function() {
+	// Get the information about sites
 	loadAllSites();
+	// Get all of the shift information and store it Date->Site->Time
 	loadAllShifts();
+	// Listen for changes to Date and Site fields to conditionally hide/show other fields
 	updateSitesDatesAndTimes();
 
+	// Listen for changes to all of the other conditional form fields
 	conditionalFormFields();
 
+	// Add validation to the form
 	validateSignupForm();
 
 	// Since non-required fields are "valid" when they are empty, we need an
@@ -17,19 +22,20 @@ $(document).ready(function() {
 
 });
 
-// Selection needs to be made Date -> Site -> time
-
-
-function getDateString(dateTime) {
-	let t = dateTime.split(/[- :]/);
-	return new Date(t[0],t[1]-1,t[2]);
-}
-
-function getTimeInSeconds(time, round="m") {
-	if (typeof time != "object") {
-		return undefined;
-	}
-	if (time instanceof Date) {
+/**
+ * getTimeInSeconds - convert a Date to the time of day in seconds, optionally rounded down to the nearest hour or minute
+ *
+ * @param  {string} time        Date as ISO String
+ * @param  {string} zone="GMT"  time zone
+ * @param  {string} round="m"   "h" or "m" for rounding down to "hour" or "minute" respectively
+ * @return {number}             number of seconds in the day
+ */
+function getTimeInSeconds(time, zone="GMT", round="m") {
+	if (typeof time === "string") {
+		if (typeof zone != "string") {
+			zone = "GMT";
+		}
+		time = new Date(time + " " + zone);
 		switch(round) {
 			case "h":
 				return time.getHours() * 3600;
@@ -43,7 +49,15 @@ function getTimeInSeconds(time, round="m") {
 	}
 }
 
-// function based on a function from http://jonthornton.github.com/jquery-timepicker/
+/**
+ * getTimeString - convert time (number in seconds) to a formatted time string
+ *   function based on a function from http://jonthornton.github.com/jquery-timepicker/
+ *
+ * @param  {number} timeInt              number of seconds into day
+ * @param  {string} timeFormat = "g:i A" formatting based on PHP DateTime
+ * @param  {boolean} show2400 = false    whether or not military time goes up through 2400 or if it flips back to 0000
+ * @return {string}                      formatted time string
+ */
 function getTimeString(timeInt, timeFormat = "g:i A", show2400 = false) {
 	if (typeof timeInt != "number") {
 		return undefined;
@@ -127,6 +141,7 @@ function getTimeString(timeInt, timeFormat = "g:i A", show2400 = false) {
 	return output;
 }
 
+/** Class representing a mapping from a site to an array of times. */
 class SiteTimeMap {
 	constructor(siteId) {
 		this.siteId = siteId;
@@ -147,6 +162,7 @@ class SiteTimeMap {
 	}
 }
 
+/** Class representing a mapping from a date to an array of sites. */
 class DateSiteMap {
 	constructor(date) {
 		this.date = date;
@@ -170,14 +186,24 @@ class DateSiteMap {
 	}
 }
 
+/** Class representing a list of dates with mappings to sites and times at those sites. */
 class DateSiteTime {
 	constructor() {
 		this.dates = []; // array of DateSiteMap objects
 		this.siteTitles = new Map();
 	}
 
+	/**
+	 * addShift - Adds a new shift to the object,
+	 *   automatically sorting by date and site,
+	 *   creating new ones if necessary.
+	 *
+	 * @param  {string} siteId    site ID
+	 * @param  {string} startTime startTime formatted as ISO String
+	 * @param  {string} endTime   endTime formatted as ISO String
+	 */
 	addShift(siteId, startTime, endTime) {
-		const date = getDateString(startTime);
+		const date = new Date(startTime);
 		if(!this.hasDate(date)) {
 			this._addDate(date);
 		}
@@ -213,7 +239,14 @@ class DateSiteTime {
 		return this.dates.map(d => d.date.toDateString());
 	}
 
-	// Gets the time of the day as a number of seconds
+	/**
+	 * _getAppointmentTimes - Gets the time of the day as a number of seconds
+	 *
+	 * @param  {string} startTime     startTime for appointment
+	 * @param  {string} endTime       endTime for appointment
+	 * @param  {number} interval=1800 seconds between appointments
+	 * @return {object}               array of appointment times in seconds
+	 */
 	_getAppointmentTimes(startTime, endTime, interval=1800) {
 		if (typeof interval != "number") {
 			interval = 1800;
@@ -221,8 +254,8 @@ class DateSiteTime {
 		if (startTime > endTime) {
 			return [];
 		}
-		const startTimeInSeconds = getTimeInSeconds(new Date(startTime)),
-					endTimeInSeconds = getTimeInSeconds(new Date(endTime));
+		const startTimeInSeconds = getTimeInSeconds(startTime),
+					endTimeInSeconds = getTimeInSeconds(endTime);
 
 		let out = [],
 				ct = startTimeInSeconds;
@@ -594,4 +627,5 @@ let datesAllowed = [],
 			mins: "mins",
 			hr: "hr",
 			hrs: "hrs"
-		};
+		},
+		_ONE_DAY = 86400;
