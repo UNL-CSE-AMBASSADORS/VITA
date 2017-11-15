@@ -74,7 +74,6 @@
 
 
 						<div class="client-progress d-flex flex-column">
-							<!-- TODO: Try using ng-click for PHP to mySQL injection -->
 							<button type="button" class="btn" class="checkin" ng-class="client.checkedIn ? 'btn-primary': 'btn-secondary' " ng-click="checkIn()">Checked In</button>
 						</br>
 							<button type="button" class="btn" class="paperworkComplete" ng-class="client.paperworkComplete ? 'btn-primary': 'btn-secondary' " ng-click="pwFilledOut()">Completed Paperwork</button>
@@ -87,7 +86,6 @@
 						<div class="greeter-directions">
 							Click on each button once the client has completed that step.
 						</div>
-						<!-- TODO: Add timestamps to SQL db on clicks, create field for incomplete -->
 						<div class="client-appointmentId mt-auto">Appointment ID: {{client.appointmentId}}</div>
 				</div>
 				<!-- Default message if no appointment is selected -->

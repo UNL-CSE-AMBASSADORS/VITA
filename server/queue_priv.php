@@ -2,10 +2,24 @@
 	require_once 'config.php';
 	$conn = $DB_CONN;
 
-	switch($_GET['action']) {
-		case 'display': displayAppointment($_GET['id']); break;
-		case 'cancel': cancelAppointment($_GET['id']); break;
+	switch($_REQUEST['action']) {
+		case 'display': displayAppointment($_REQUEST['id']); break;
+		case 'cancel': cancelAppointment($_REQUEST['id']); break;
+		case 'checkIn': checkIn($_REQUEST['time'], $_REQUEST['id']); break;
 		default: break;
+	}
+
+	function checkIn($time, $id) {
+		$stmt = $GLOBALS['conn']->prepare(
+			"UPDATE Appointment
+			SET Appointment.timeIn = ?
+			WHERE Appointment.appointmentId = ?"
+		);
+
+		$stmt->execute(array($time, $id));
+		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode($appointment);
+		$stmt = null;
 	}
 
 	function displayAppointment($id) {

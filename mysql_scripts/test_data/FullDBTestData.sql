@@ -291,8 +291,8 @@ SET @appointment_appointment5Id = LAST_INSERT_ID();
 
 -- Appointments for today (note that this is just for testing queue functionality)
 SET @appointmentTime = DATE_ADD(NOW(), INTERVAL -5 MINUTE);
-INSERT INTO Appointment (scheduledTime, timeIn, clientId, siteId, language)
-	VALUES (@appointmentTime, NOW(), @client_client1Id, @site_site1Id, "en");
+INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
+	VALUES (@appointmentTime, @client_client1Id, @site_site1Id, "en");
 
 SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 5 HOUR);
 INSERT INTO Appointment (scheduledTime, clientId, siteId, language)

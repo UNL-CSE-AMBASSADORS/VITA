@@ -7,7 +7,7 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 
 	$scope.checkIn = function() {
 		$scope.client.checkedIn = true;
-		//QueueService.newFunction(Date.now());
+		QueueService.checkInNow(new Date().toISOString(), $scope.client.appointmentId);
 	};
 
 	$scope.pwFilledOut = function() {

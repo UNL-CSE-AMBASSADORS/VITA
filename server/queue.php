@@ -3,7 +3,7 @@
 	$conn = $DB_CONN;
 
 	// TODO make this handle multiple locations, if necessary
-	$stmt = $conn->prepare("SELECT DISTINCT appointmentId, scheduledTime, firstName, lastName
+	$stmt = $conn->prepare("SELECT DISTINCT appointmentId, scheduledTime, firstName, lastName, timeIn
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
 		WHERE DATE(Appointment.scheduledTime) = ?
