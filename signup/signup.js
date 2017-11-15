@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	// loadAllSites();
+	loadAllSites();
 	loadAllShifts();
 	updateSitesDatesAndTimes();
 
@@ -24,17 +24,6 @@ function getDateString(dateTime) {
 	let t = dateTime.split(/[- :]/);
 	return new Date(t[0],t[1]-1,t[2]);
 }
-
-var _lang = {
-	am: "am",
-	pm: "pm",
-	AM: "AM",
-	PM: "PM",
-	decimal: ".",
-	mins: "mins",
-	hr: "hr",
-	hrs: "hrs"
-};
 
 function getTimeInSeconds(time, round="m") {
 	if (typeof time != "object") {
@@ -177,13 +166,14 @@ class DateSiteMap {
 	}
 
 	getSitesArray() {
-		return this.sites.map(s => ({siteId:s.siteId, title:s.siteId}));
+		return this.sites.map(s => ({siteId:s.siteId, title:dateSitesTimes.siteTitles.get(s.siteId)}));
 	}
 }
 
 class DateSiteTime {
 	constructor() {
 		this.dates = []; // array of DateSiteMap objects
+		this.siteTitles = new Map();
 	}
 
 	addShift(siteId, startTime, endTime) {
@@ -248,36 +238,23 @@ class DateSiteTime {
 	}
 }
 
-let datesAllowed = [];
-var sitesWithShifts = [];
-let minTime = '0';
-let maxTime = '23';
-var dateSitesTimes = new DateSiteTime();
-
-
-
-// function loadAllSites() {
-// 	var request = $.ajax({
-// 		url: "/server/api/sites/getAll.php",
-// 		type: "GET",
-// 		dataType: "JSON",
-// 		data: ({
-// 			"siteId": true,
-// 			"title": true
-// 		}),
-// 		cache: false
-// 	})
-// 	.done(function(data) {
-// 		$siteSelect = $("#sitePicker select");
-// 		$siteSelect.append($('<option disabled selected value style="display:none"> -- select an option -- </option>'));
-// 		for(const site of data) {
-// 			$siteSelect.append($('<option>', {
-// 				value: site.siteId,
-// 				text : site.title
-// 			}));
-// 		}
-// 	});
-// }
+function loadAllSites() {
+	var request = $.ajax({
+		url: "/server/api/sites/getAll.php",
+		type: "GET",
+		dataType: "JSON",
+		data: ({
+			"siteId": true,
+			"title": true
+		}),
+		cache: false
+	})
+	.done(function(data) {
+		for(const site of data) {
+			dateSitesTimes.siteTitles.set(site.siteId, site.title);
+		}
+	});
+}
 
 // Load all of the shifts and store in a global variable
 // TODO year
@@ -602,3 +579,19 @@ $('#vitaSignupForm').submit(function(e) {
 
 	return false;
 });
+
+let datesAllowed = [],
+		sitesWithShifts = [],
+		minTime = '0',
+		maxTime = '23',
+		dateSitesTimes = new DateSiteTime(),
+		_lang = {
+			am: "am",
+			pm: "pm",
+			AM: "AM",
+			PM: "PM",
+			decimal: ".",
+			mins: "mins",
+			hr: "hr",
+			hrs: "hrs"
+		};
