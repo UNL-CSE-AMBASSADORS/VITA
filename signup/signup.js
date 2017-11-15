@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	loadAllSites();
+	// loadAllSites();
 	loadAllShifts();
 	updateSitesDatesAndTimes();
 
@@ -17,63 +17,133 @@ $(document).ready(function() {
 
 });
 
+// Selection needs to be made Date -> Site -> time
+
+
+function getDateString(dateTime) {
+	let t = dateTime.split(/[- :]/);
+	return new Date(t[0],t[1]-1,t[2]);
+}
+
+class SiteTimeMap {
+	constructor(siteId) {
+		this.siteId = siteId;
+		this.times = []; // array of times in 24 hour floating point format
+	}
+
+	addTime(times) {
+		this.times.push(times);
+	}
+
+	hasTime(time) {
+		return this.times.includes(time);
+	}
+
+	getTimesArray() {
+		return this.times.map(t => ({time:t}));
+	}
+}
+
+class DateSiteMap {
+	constructor(date) {
+		this.date = date;
+		this.sites = []; // array of SiteTimeMap objects
+	}
+
+	addSite(siteId) {
+		this.sites.push(new SiteTimeMap(siteId));
+	}
+
+	hasSite(siteId) {
+		return this.sites.map(s => s.siteId).includes(siteId);
+	}
+
+	getSite(siteId) {
+		return this.sites.find(s => s.siteId === siteId);
+	}
+
+	getSitesArray() {
+		return this.sites.map(s => ({siteId:s.siteId, title:s.siteId}));
+	}
+}
+
+class DateSiteTime {
+	constructor() {
+		this.dates = []; // array of DateSiteMap objects
+	}
+
+	addShift(siteId, startTime, endTime) {
+		const date = getDateString(startTime);
+		if(!this.hasDate(date)) {
+			this._addDate(date);
+		}
+
+		let dateObj = this.getDate(date);
+		if(!dateObj.hasSite(siteId)) {
+			dateObj.addSite(siteId);
+		}
+
+		let newTimes = this._getAppointmentTimes(startTime, endTime);
+
+		let siteObj = dateObj.getSite(siteId);
+		for (const time of newTimes) {
+			if(!siteObj.hasTime(time)) {
+				siteObj.addTime(time);
+			}
+		}
+	}
+
+	_addDate(date) {
+		this.dates.push(new DateSiteMap(date));
+	}
+
+	hasDate(date) {
+		return this.getDatesArray().includes(date.toDateString());
+	}
+
+	getDate(date) {
+		return this.dates.find(d => d.date.toDateString() === date.toDateString());
+	}
+
+	getDatesArray() {
+		return this.dates.map(d => d.date.toDateString());
+	}
+
+	_getAppointmentTimes(startTime, endTime) {
+		return [8,8.5,9,9.5,10,10.5];
+	}
+}
+
 let datesAllowed = [];
 var sitesWithShifts = [];
 let minTime = '0';
 let maxTime = '23';
+var dateSitesTimes = new DateSiteTime();
 
-class SiteWithShift {
-	constructor(siteId, startTime, endTime) {
-		this.siteId = siteId;
-		const date = this.getDate(startTime);
-		this.dates = [];
-		this.dates.push(date);
-		this.shiftTimes = [];
-		this.shiftTimes.push({
-			date: date,
-			startTime: startTime,
-			endTime: endTime
-		});
-	}
 
-	getDate(dateTime) {
-		let t = dateTime.split(/[- :]/);
-		return new Date(t[0],t[1]-1,t[2]);
-	}
 
-	addShift(startTime, endTime) {
-		const date = this.getDate(startTime);
-		this.dates.push(date);
-		this.shiftTimes.push({
-			date: date,
-			startTime: startTime,
-			endTime: endTime
-		});
-	}
-}
-
-function loadAllSites() {
-	var request = $.ajax({
-		url: "/server/api/sites/getAll.php",
-		type: "GET",
-		dataType: "JSON",
-		data: ({
-			"siteId": true,
-			"title": true
-		}),
-		cache: false
-	})
-	.done(function(data) {
-		$siteSelect = $("#sitePicker select");
-		$siteSelect.append($('<option disabled selected value style="display:none"> -- select an option -- </option>'));
-		for(const site of data) {
-			$siteSelect.append($('<option>', {
-				value: site.siteId,
-				text : site.title
-			}));
-		}
-	});
-}
+// function loadAllSites() {
+// 	var request = $.ajax({
+// 		url: "/server/api/sites/getAll.php",
+// 		type: "GET",
+// 		dataType: "JSON",
+// 		data: ({
+// 			"siteId": true,
+// 			"title": true
+// 		}),
+// 		cache: false
+// 	})
+// 	.done(function(data) {
+// 		$siteSelect = $("#sitePicker select");
+// 		$siteSelect.append($('<option disabled selected value style="display:none"> -- select an option -- </option>'));
+// 		for(const site of data) {
+// 			$siteSelect.append($('<option>', {
+// 				value: site.siteId,
+// 				text : site.title
+// 			}));
+// 		}
+// 	});
+// }
 
 // Load all of the shifts and store in a global variable
 // TODO year
@@ -92,19 +162,13 @@ function loadAllShifts(year=(new Date()).getFullYear()) {
 	})
 	.done(function(data) {
 		for(const shift of data) {
-			let sitesArray = sitesWithShifts.map(function(s) {return s.siteId});
-			if(sitesArray.includes(shift.siteId)) {
-				let i = sitesArray.indexOf(shift.siteId);
-				sitesWithShifts[i].addShift(shift.startTime, shift.endTime);
-			} else {
-				sitesWithShifts.push(new SiteWithShift(shift.siteId, shift.startTime, shift.endTime));
-			}
+			dateSitesTimes.addShift(shift.siteId, shift.startTime, shift.endTime);
 		}
 		$("#dateInput").datepicker({
 			// Good example: https://stackoverflow.com/a/1962849/7577035
 			// called for every date before it is displayed
 			beforeShowDay: function(date) {
-				if (datesAllowed.includes(date.toDateString())) {
+				if (dateSitesTimes.hasDate(date)) {
 					return [true, ''];
 				} else {
 					return [false, ''];
@@ -118,93 +182,58 @@ function loadAllShifts(year=(new Date()).getFullYear()) {
 		});
 
 		// Documentation: http://jonthornton.github.io/jquery-timepicker/
-		$("#timeInput").timepicker({
-			'step': 60,
-			'forceRoundTime': true,
-			'timeFormat': 'g:i A'
-		});
+		// $("#timeInput").timepicker({
+		// 	'step': 60,
+		// 	'forceRoundTime': true,
+		// 	'timeFormat': 'g:i A'
+		// });
 	});
 }
 
-// This function will watch the site selector and the date selector for changes.
+// This function will watch the date selector and the site selector for changes.
 function updateSitesDatesAndTimes() {
-	siteSelect = $("#sitePicker select");
 	dateInput = $("#dateInput");
+	siteSelect = $("#sitePicker select");
+
+	// When the date selector changes...
+	// 1. Display the site picker
+	// 2. Update the site picker with the sites related to the selected date.
+	dateInput.change(function() {
+		$("#sitePicker").show();
+		$("#timePicker").hide();
+		// Clear any previously selected input
+		$("#timePickerSelect").html('');
+		$("#sitePickerSelect").html('');
+		var date = this.value;
+
+		let dateObj = dateSitesTimes.getDate(new Date(date));
+		siteSelect.append($('<option disabled selected value style="display:none"> -- select an option -- </option>'));
+		for(const site of dateObj.getSitesArray()) {
+			siteSelect.append($('<option>', {
+				value: site.siteId,
+				text : site.title
+			}));
+		}
+	});
+
 	// When the value of the site selector is updated...
 	// 1. Display the date picker
 	// 2. Update the options for the date selector to disable options that are not available at this site.
 	siteSelect.change(function() {
-		$("#datePicker").show();
-		$("#timePicker").hide();
-		// Clear any previously selected date
-		$("#dateInput").val('');
-		$("#timeInput").val('');
-		var value = this.value;
-		// Clear and repopulate the array of dates that are available at the selected site
-		datesAllowed.length = 0;
-		const i = sitesWithShifts.map(function(s) {return s.siteId}).indexOf(value);
-		if(i >= 0) {
-			datesAllowed = datesAllowed.concat(sitesWithShifts[i].dates.map(function(d) {return d.toDateString()}));
-			datesAllowed.sort(function(a,b) {
-				return Date.parse(a.start) - Date.parse(b.start);
-			});
-			$("#dateInput").datepicker("option", "minDate", new Date(datesAllowed[0]));
-			$("#dateInput").datepicker("option", "maxDate", new Date(datesAllowed[datesAllowed.length-1]));
-		}
-		// If a site is selected that has no available dates, show this to the user.
-		if(datesAllowed.length === 0) {
-			$("#dateInput").val('No dates available');
-			$("#dateInput").prop("disabled", true);
-			$("#timePicker").hide();
-		} else {
-			$("#dateInput").prop("disabled", false);
-		}
-	});
-
-	// When the date selector changes...
-	// 1. Display the time picker
-	// 2. Update the available times selector.
-	dateInput.change(function() {
 		$("#timePicker").show();
-		// Clear any previously selected time
-		$("#timeInput").val('');
-		var siteId = siteSelect.val();
-		var date = this.value;
+		// Clear any previously selected date
+		$("#timePickerSelect").html('');
+		var value = this.value;
+		var date = $("#dateInput").val();
 
-		let currentSite = sitesWithShifts.find(function(site) {return site.siteId === siteId});
-		if(currentSite !== undefined && currentSite.shiftTimes.length > 0) {
-			let availableTimes = [];
-			currentSite.shiftTimes.forEach(function(shiftTime) {
-				if($.datepicker.formatDate("mm/dd/yy",shiftTime.date) === date) {
-					availableTimes.push({'start':shiftTime.startTime, 'end':shiftTime.endTime})
-				}
-			});
-
-			if(availableTimes.length === 1) {
-				start = new Date(availableTimes[0].start);
-				end = new Date(availableTimes[0].end);
-				minTime = start.getHours() + ":" + start.getMinutes();
-				maxTime = end.getHours() + ":" + end.getMinutes();
-				$("#timeInput").timepicker('option', {'minTime': minTime, 'maxTime': maxTime});
-			} else if(availableTimes.length > 1) {
-				// TODO: better logic that allows for intervals (disableTimeRanges)
-				availableTimes.sort(function(a, b) {
-					return Date.parse(a.start) - Date.parse(b.start);
-				});
-				start = Date.parse(availableTimes[0].start);
-				end = Date.parse(availableTimes[availableTimes.length-1].end);
-				minTime = start.getHours() + ":" + start.getMinutes();
-				maxTime = end.getHours() + ":" + end.getMinutes();
-				$("#timeInput").timepicker('option', {'minTime': minTime, 'maxTime': maxTime});
-			} else {
-				// This shouldn't ever happen, but it is here as a safety net.
-				$("#timeInput").val('No times available');
-				$("#timeInput").prop("disabled", true);
-			}
-		} else {
-			// This shouldn't ever happen, but it is here as a safety net.
-			$("#timeInput").val('No times available');
-			$("#timeInput").prop("disabled", true);
+		let siteObj = dateSitesTimes.getDate(new Date(date)).getSite(value);
+		var timeSelect = $("#timePicker select")
+		timeSelect.append($('<option disabled selected value style="display:none"> -- select an option -- </option>'));
+		for(const time of siteObj.getTimesArray()) {
+			timeSelect.append($('<option>', {
+				value: time.time,
+				text : time.time
+			}));
 		}
 	});
 }
@@ -308,7 +337,7 @@ function conditionalFormFields() {
 
 	// Independent field = #studentUNL
 	// Dependent field = if yes --> #studentInt
-	//                   if no --> appointmentPicker
+	//									 if no --> appointmentPicker
 	studentUNLValues.change(function(){
 		var value = this.value;
 		allUnderStudentUNLValues.slideUp(animationTime);
@@ -323,7 +352,7 @@ function conditionalFormFields() {
 
 	// Independent field = #studentInt
 	// Dependent field = if yes --> #studentIntVisa
-	//                   if no --> appointmentPicker
+	//									 if no --> appointmentPicker
 	studentIntValues.change(function() {
 		var value = this.value;
 		if(this.checked){
@@ -340,8 +369,8 @@ function conditionalFormFields() {
 
 	// Independent field = #studentIntVisa
 	// Dependent field = if f1 --> #studentf1
-	//                   if j1 --> #studentj1
-	//                   if h1b --> #studenth1b
+	//									 if j1 --> #studentj1
+	//									 if h1b --> #studenth1b
 	studentIntVisaValues.change(function() {
 		var value = this.value;
 		if(this.checked){
@@ -363,7 +392,7 @@ function conditionalFormFields() {
 
 	// Independent field = #studentf1
 	// Dependent field = if 2011 or earlier --> studentScholarAppointmentPicker
-	//                   if 2012 or later --> appointmentPicker
+	//									 if 2012 or later --> appointmentPicker
 	studentf1Values.change(function() {
 		var value = this.value;
 		if(this.checked){

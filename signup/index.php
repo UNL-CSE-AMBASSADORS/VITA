@@ -322,19 +322,25 @@
 						<div id="studentScholarAppointmentPicker" style="display:none">
 							Student Scholar
 						</div>
-						<div id="sitePicker" class="form-select">
+						<div id="datePicker" class="form-textfield">
+							<input type="text" id="dateInput" placeholder="Select a Date">
+							<label class="form-label form-label__always-floating">Date</label>
+						</div>
+						<div id="sitePicker" class="form-select" style="display: none;">
 							<label class="form-label" for="sitePickerSelect">Site</label>
 							<select id="sitePickerSelect"></select>
 							<div class="form-select__arrow"></div>
 						</div>
-						<div id="datePicker" class="form-textfield" style="display: none;">
-							<input type="text" id="dateInput" placeholder="Select a Date">
-							<label class="form-label form-label__always-floating">Date</label>
+						<div id="timePicker" class="form-select" style="display: none;">
+							<label class="form-label" for="timePickerSelect">Site</label>
+							<select id="timePickerSelect"></select>
+							<div class="form-select__arrow"></div>
 						</div>
-						<div id="timePicker" class="form-textfield" style="display: none;">
+						<!-- <div id="timePicker" class="form-textfield" style="display: none;">
 							<input type="text" id="timeInput" placeholder="Select a Time">
+
 							<label class="form-label form-label__always-floating">Time</label>
-						</div>
+						</div> -->
 					</div>
 
 					<input type="submit" value="Submit" class="submit btn btn-primary mb-5 vita-background-primary">
