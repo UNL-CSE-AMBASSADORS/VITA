@@ -6,6 +6,9 @@
 		case 'display': displayAppointment($_REQUEST['id']); break;
 		case 'cancel': cancelAppointment($_REQUEST['id']); break;
 		case 'checkIn': checkIn($_REQUEST['time'], $_REQUEST['id']); break;
+		case 'completePaperwork': completePaperwork($_REQUEST['time'], $_REQUEST['id']); break;
+		case 'appointmentStart': appointmentStart($_REQUEST['time'], $_REQUEST['id']); break;
+		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id']); break;
 		default: break;
 	}
 
@@ -13,6 +16,45 @@
 		$stmt = $GLOBALS['conn']->prepare(
 			"UPDATE Appointment
 			SET Appointment.timeIn = ?
+			WHERE Appointment.appointmentId = ?"
+		);
+
+		$stmt->execute(array($time, $id));
+		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode($appointment);
+		$stmt = null;
+	}
+
+	function completePaperwork($time, $id) {
+		$stmt = $GLOBALS['conn']->prepare(
+			"UPDATE Appointment
+			SET Appointment.timeReturnedPapers = ?
+			WHERE Appointment.appointmentId = ?"
+		);
+
+		$stmt->execute(array($time, $id));
+		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode($appointment);
+		$stmt = null;
+	}
+
+	function appointmentStart($time, $id) {
+		$stmt = $GLOBALS['conn']->prepare(
+			"UPDATE Appointment
+			SET Appointment.actualAppointmentTime = ?
+			WHERE Appointment.appointmentId = ?"
+		);
+
+		$stmt->execute(array($time, $id));
+		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode($appointment);
+		$stmt = null;
+	}
+
+	function appointmentComplete($time, $id) {
+		$stmt = $GLOBALS['conn']->prepare(
+			"UPDATE Appointment
+			SET Appointment.timeFinished = ?
 			WHERE Appointment.appointmentId = ?"
 		);
 

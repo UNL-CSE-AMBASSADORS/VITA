@@ -24,6 +24,18 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 					if (appointment.timeIn != null) {
 						appointment.checkedIn = true;
 					}
+					appointment.paperworkComplete = false;
+					if (appointment.timeReturnedPapers != null) {
+						appointment.paperworkComplete = true;
+					}
+					appointment.preparing = false;
+					if (appointment.actualAppointmentTime != null) {
+						appointment.preparing = true;
+					}
+					appointment.finished = false;
+					if (appointment.timeFinished != null) {
+						appointment.finished = true;
+					}
 					appointment.name = appointment.firstName + " " + appointment.lastName;
 					return appointment;
 				});

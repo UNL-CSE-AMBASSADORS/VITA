@@ -8,9 +8,7 @@ queueApp.factory("QueueService", function($http){
 				return null;
 			});
 		},
-		// TODO: Add functions
 		checkInNow: function(time, id) {
-			// Puts time into DB on click
 			return $http({
 				url: "/server/queue_priv.php",
 				method: 'POST',
@@ -24,8 +22,47 @@ queueApp.factory("QueueService", function($http){
 				return null;
 			});
 		},
-		completePaperwork: function(time) {
-
+		turnInPapers: function(time, id) {
+			return $http({
+				url: "/server/queue_priv.php",
+				method: 'POST',
+				data: 'action=completePaperwork&time=' + time + '&id=' + id,
+				headers: {
+					'Content-Type': "application/x-www-form-urlencoded"
+				}
+			}).then(function(response){
+				return response.data;
+			},function(error){
+				return null;
+			});
+		},
+		beginAppointment: function(time, id) {
+			return $http({
+				url: "/server/queue_priv.php",
+				method: 'POST',
+				data: 'action=appointmentStart&time=' + time + '&id=' + id,
+				headers: {
+					'Content-Type': "application/x-www-form-urlencoded"
+				}
+			}).then(function(response){
+				return response.data;
+			},function(error){
+				return null;
+			});
+		},
+		finishAppointment: function(time, id) {
+			return $http({
+				url: "/server/queue_priv.php",
+				method: 'POST',
+				data: 'action=appointmentComplete&time=' + time + '&id=' + id,
+				headers: {
+					'Content-Type': "application/x-www-form-urlencoded"
+				}
+			}).then(function(response){
+				return response.data;
+			},function(error){
+				return null;
+			});
 		}
 	}
 })

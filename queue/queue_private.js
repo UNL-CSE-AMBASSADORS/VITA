@@ -12,17 +12,17 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 
 	$scope.pwFilledOut = function() {
 		$scope.client.paperworkComplete = true;
-		//QueueService.newFunction(Date.now());
+		QueueService.turnInPapers(new Date().toISOString(), $scope.client.appointmentId);
 	};
 
 	$scope.nowPreparing = function() {
 		$scope.client.preparing = true;
-		//QueueService.newFunction(Date.now());
+		QueueService.beginAppointment(new Date().toISOString(), $scope.client.appointmentId)
 	};
 
 	$scope.completeAppointment = function() {
 		$scope.client.finished = true;
-		//QueueService.newFunction(Date.now());
+		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId)
 	};
 
 });
