@@ -331,15 +331,10 @@
 							<div class="form-select__arrow"></div>
 						</div>
 						<div id="timePicker" class="form-select" style="display: none;">
-							<label class="form-label" for="timePickerSelect">Site</label>
+							<label class="form-label" for="timePickerSelect">Time</label>
 							<select id="timePickerSelect"></select>
 							<div class="form-select__arrow"></div>
 						</div>
-						<!-- <div id="timePicker" class="form-textfield" style="display: none;">
-							<input type="text" id="timeInput" placeholder="Select a Time">
-
-							<label class="form-label form-label__always-floating">Time</label>
-						</div> -->
 					</div>
 
 					<input type="submit" value="Submit" class="submit btn btn-primary mb-5 vita-background-primary">

@@ -25,6 +25,119 @@ function getDateString(dateTime) {
 	return new Date(t[0],t[1]-1,t[2]);
 }
 
+var _lang = {
+	am: "am",
+	pm: "pm",
+	AM: "AM",
+	PM: "PM",
+	decimal: ".",
+	mins: "mins",
+	hr: "hr",
+	hrs: "hrs"
+};
+
+function getTimeInSeconds(time, round="m") {
+	if (typeof time != "object") {
+		return undefined;
+	}
+	if (time instanceof Date) {
+		switch(round) {
+			case "h":
+				return time.getHours() * 3600;
+			case "m":
+				return time.getHours() * 3600 + time.getMinutes() * 60;
+			default:
+				return time.getHours() * 3600 + time.getMinutes() * 60 + time.getSeconds();
+		}
+	} else {
+		return undefined;
+	}
+}
+
+// function based on a function from http://jonthornton.github.com/jquery-timepicker/
+function getTimeString(timeInt, timeFormat = "g:i A", show2400 = false) {
+	if (typeof timeInt != "number") {
+		return undefined;
+	}
+
+	var seconds = parseInt(timeInt % 60),
+			minutes = parseInt((timeInt / 60) % 60),
+			hours = parseInt((timeInt / (60 * 60)) % 24);
+
+	var time = new Date(1970, 0, 2, hours, minutes, seconds, 0);
+
+	if (isNaN(time.getTime())) {
+		return null;
+	}
+
+	if ($.type(timeFormat) === "function") {
+		return timeFormat(time);
+	}
+
+	var output = "";
+	var hour, code;
+	for (var i = 0; i < timeFormat.length; i++) {
+		code = timeFormat.charAt(i);
+		switch (code) {
+			case "a":
+				output += time.getHours() > 11 ? _lang.pm : _lang.am;
+				break;
+
+			case "A":
+				output += time.getHours() > 11 ? _lang.PM : _lang.AM;
+				break;
+
+			case "g":
+				hour = time.getHours() % 12;
+				output += hour === 0 ? "12" : hour;
+				break;
+
+			case "G":
+				hour = time.getHours();
+				if (timeInt === _ONE_DAY) hour = show2400 ? 24 : 0;
+				output += hour;
+				break;
+
+			case "h":
+				hour = time.getHours() % 12;
+
+				if (hour !== 0 && hour < 10) {
+					hour = "0" + hour;
+				}
+
+				output += hour === 0 ? "12" : hour;
+				break;
+
+			case "H":
+				hour = time.getHours();
+				if (timeInt === _ONE_DAY) hour = show2400 ? 24 : 0;
+				output += hour > 9 ? hour : "0" + hour;
+				break;
+
+			case "i":
+				var minutes = time.getMinutes();
+				output += minutes > 9 ? minutes : "0" + minutes;
+				break;
+
+			case "s":
+				seconds = time.getSeconds();
+				output += seconds > 9 ? seconds : "0" + seconds;
+				break;
+
+			case "\\":
+				// escape character; add the next character and skip ahead
+				i++;
+				output += timeFormat.charAt(i);
+				break;
+
+			default:
+				output += code;
+		}
+	}
+
+	return output;
+}
+
 class SiteTimeMap {
 	constructor(siteId) {
 		this.siteId = siteId;
@@ -40,7 +153,8 @@ class SiteTimeMap {
 	}
 
 	getTimesArray() {
-		return this.times.map(t => ({time:t}));
+		console.log(this.times);
+		return this.times.sort().map(t => getTimeString(t));
 	}
 }
 
@@ -109,8 +223,28 @@ class DateSiteTime {
 		return this.dates.map(d => d.date.toDateString());
 	}
 
-	_getAppointmentTimes(startTime, endTime) {
-		return [8,8.5,9,9.5,10,10.5];
+	// Gets the time of the day as a number of seconds
+	_getAppointmentTimes(startTime, endTime, interval=1800) {
+		if (typeof interval != "number") {
+			interval = 1800;
+		}
+		if (startTime > endTime) {
+			return [];
+		}
+		const startTimeInSeconds = getTimeInSeconds(new Date(startTime)),
+					endTimeInSeconds = getTimeInSeconds(new Date(endTime));
+
+		let out = [],
+				ct = startTimeInSeconds;
+
+		out.push(startTimeInSeconds);
+
+		while (ct < endTimeInSeconds - interval) {
+			ct += interval;
+			out.push(ct);
+		}
+
+		return out;
 	}
 }
 
@@ -224,8 +358,8 @@ function updateSitesDatesAndTimes() {
 		timeSelect.append($('<option disabled selected value style="display:none"> -- select an option -- </option>'));
 		for(const time of siteObj.getTimesArray()) {
 			timeSelect.append($('<option>', {
-				value: time.time,
-				text : time.time
+				value: time,
+				text : time
 			}));
 		}
 	});
