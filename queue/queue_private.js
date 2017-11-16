@@ -17,16 +17,19 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 
 	$scope.nowPreparing = function() {
 		$scope.client.preparing = true;
-		QueueService.beginAppointment(new Date().toISOString(), $scope.client.appointmentId)
+		QueueService.beginAppointment(new Date().toISOString(), $scope.client.appointmentId);
 	};
 
 	$scope.completeAppointment = function() {
 		$scope.client.finished = true;
-		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId)
+		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId);
 	};
 
-	$scope.incompleteAppointment = function() {
-		// TODO: Make a function to return explanation of incomplete appointment
+	$scope.incompleteAppointment = function(explanation) {
+		$scope.client.notCompleted = true;
+		QueueService.incompleteAppointment(explanation, $scope.client.appointmentId);
+		console.log(explanation);
+		$('textarea').val('');
 	}
 
 });

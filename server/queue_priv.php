@@ -9,7 +9,7 @@
 		case 'completePaperwork': completePaperwork($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentStart': appointmentStart($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id']); break;
-		case 'appointmentIncomplete': appointmentIncomplete($_REQUEST['time'], $_REQUEST['explanation'], $_REQUEST['id']); break;
+		case 'appointmentIncomplete': appointmentIncomplete($_REQUEST['explanation'], $_REQUEST['id']); break;
 		default: break;
 	}
 
@@ -55,7 +55,7 @@
 	function appointmentComplete($time, $id) {
 		$stmt = $GLOBALS['conn']->prepare(
 			"UPDATE Appointment
-			SET Appointment.timeFinished = ?
+			SET Appointment.timeFinished = ?, Appointment.completed = TRUE
 			WHERE Appointment.appointmentId = ?"
 		);
 
@@ -65,7 +65,18 @@
 		$stmt = null;
 	}
 
-	// TODO: Create appointmentIncomplete function to set completed to false and give explanation
+	function appointmentIncomplete($explanation, $id) {
+		$stmt = $GLOBALS['conn']->prepare(
+			"UPDATE Appointment
+			SET Appointment.notCompletedDescription = ?, Appointment.notCompleted = TRUE
+			WHERE Appointment.appointmentId = ?"
+		);
+
+		$stmt->execute(array($explanation, $id));
+		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode($appointment);
+		$stmt = null;
+	}
 
 	function displayAppointment($id) {
 		$stmt = $GLOBALS['conn']->prepare(

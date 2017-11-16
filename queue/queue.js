@@ -34,7 +34,6 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 					if (appointment.timeFinished != null) {
 						appointment.finished = true;
 					}
-					// TODO: Pull in 'completed' and description
 					appointment.name = appointment.firstName + " " + appointment.lastName;
 					return appointment;
 				});

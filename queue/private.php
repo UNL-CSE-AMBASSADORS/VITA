@@ -35,6 +35,7 @@
 				<div class="queue" ng-if="appointments.length > 0" ng-cloak>
 					<div class="row queue-row py-1 pointer"
 							 ng-repeat="appointment in appointments | orderBy:'scheduledTime' | searchFor: clientSearch"
+							 ng-if="appointment.completed == false && appointment.notCompleted == false"
 							 ng-class-odd="'bg-light'"
 							 ng-click="selectClient(appointment)">
 						<div class="col">
@@ -46,10 +47,10 @@
 								<div class="d-flex flex-nowrap justify-content-between">
 									<div class="queue-id">#{{appointment.appointmentId}}</div>
 									<div class="queue-status">
-										<span class="badge badge-pill" ng-class="appointment.checkedIn ? 'badge-primary': 'badge-secondary'">Checked-in</span>
-										<span class="badge badge-pill" ng-class="appointment.paperworkComplete ? 'badge-primary': 'badge-secondary'">Task 2</span>
-										<span class="badge badge-pill" ng-class="appointment.preparing ? 'badge-primary': 'badge-secondary'">Checked-in</span>
-										<span class="badge badge-pill" ng-class="appointment.finished ? 'badge-primary': 'badge-secondary'">Task 2</span>
+										<span class="badge badge-pill" ng-class="appointment.checkedIn ? 'badge-primary': 'badge-secondary'">Checked In</span>
+										<span class="badge badge-pill" ng-class="appointment.paperworkComplete ? 'badge-primary': 'badge-secondary'">Completed Paperwork</span>
+										<span class="badge badge-pill" ng-class="appointment.preparing ? 'badge-primary': 'badge-secondary'">Preparing</span>
+										<span class="badge badge-pill" ng-class="appointment.finished ? 'badge-primary': 'badge-secondary'">Appointment Complete</span>
 									</div>
 								</div>
 							</div>
@@ -94,7 +95,8 @@
 							<br>
 							Once a client has completed a step, click on the corresponding button. This will log the time at which each step is completed. PROGRESS CAN NOT BE UNDONE, so
 							be sure to verify that the step is fully completed before clicking to progress the client. If, for any reason, a client does not complete their appointment,
-							fill out the form below and explain (in 255 characters or less) why the appointment was not completed.
+							fill out the form below and explain (in 255 characters or less) why the appointment was not completed. Appointments will disappear shortly after being marked
+							complete or incomplete.
 						</div>
 						<br>
 						<br>
@@ -102,9 +104,9 @@
 							<form>
 								<div class="form-group">
 									<label><strong>Appointment Not Completed:</strong></label>
-									<textarea class="form-control" rows="3"></textarea>
+									<textarea ng-model="explanation" placeholder="Explain why the appointment was not completed." class="form-control" cols="300" rows="3" ng-maxlength="255"></textarea>
 									<br>
-									<button type="submit" class="btn btn-danger" ng-click="incompleteAppointment()">Submit</button>
+									<button class="btn btn-danger" ng-click="incompleteAppointment(explanation)">Submit Incomplete Appointment</button>
 							 </div>
 						 	</form>
 						</div>
