@@ -35,7 +35,7 @@
 					<script type="text/javascript">
 						function logout() {
 							$.ajax({
-								url : "server/callbacks.php",
+								url : "/server/callbacks.php",
 								data: {"callback":"logout"},
 								type: "POST",
 								success: function() {
