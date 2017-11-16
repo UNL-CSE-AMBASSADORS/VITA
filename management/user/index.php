@@ -60,7 +60,7 @@ if (!$USER->hasPermission('edit_user_permission')) {
 								<input type="text" class="form-control" id="lastName">
 							</section>
 							<section class="form-group">
-								<label for="email">Email Address</label>
+								<label for="email">Email Address:</label>
 								<input type="text" class="form-control" id="email" placeholder="student@huskers.unl.edu">
 							</section>
 							<section class="form-group">
