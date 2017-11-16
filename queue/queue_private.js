@@ -28,7 +28,6 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 	$scope.incompleteAppointment = function(explanation) {
 		$scope.client.notCompleted = true;
 		QueueService.incompleteAppointment(explanation, $scope.client.appointmentId);
-		console.log(explanation);
 		$('textarea').val('');
 	}
 
