@@ -5,3 +5,11 @@
   position: fixed;
   bottom: 0;
 }
+
+.emailProfileStatic {
+  margin-bottom: 1rem !important;
+}
+
+#profilePicture {
+  margin-bottom: 20px;
+}
