@@ -1,5 +1,5 @@
 <?php
-	require 'config.php';
+	require_once 'config.php';
 	$conn = $DB_CONN;
 
 	switch($_GET['action']) {
