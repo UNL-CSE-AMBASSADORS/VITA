@@ -19,12 +19,6 @@ $(document).ready(function() {
 		var isBlank = $.trim($(this).val()).length > 0;
 		$label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
 	});
-
-	// With jQuery UI styling on the radio buttons, a new listener is necessary to update error messages
-	$("input:radio").change(function() {
-		$("#vitaSignupForm").valid();
-	});
-
 });
 
 /**
@@ -564,6 +558,12 @@ function validateSignupForm() {
 $('#vitaSignupForm').submit(function(e) {
 	// Stop default form submit action
 	e.preventDefault();
+
+	// With jQuery UI styling on the radio buttons, a new listener is necessary to update error messages
+	// However, this is only necessary after we have tried submitting once first.
+	$("input:radio").change(function() {
+		$("#vitaSignupForm").valid();
+	});
 
 	if (!$(this).valid() || !$("#sitePickerSelect").valid() || !$("#timePickerSelect").valid()) {
 		console.log("false");
