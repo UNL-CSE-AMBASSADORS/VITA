@@ -20,14 +20,19 @@ $(document).ready(function() {
 		$label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
 	});
 
+	// With jQuery UI styling on the radio buttons, a new listener is necessary to update error messages
+	$("input:radio").change(function() {
+		$("#vitaSignupForm").valid();
+	});
+
 });
 
 /**
  * getTimeInSeconds - convert a Date to the time of day in seconds, optionally rounded down to the nearest hour or minute
  *
- * @param  {Date} time          Date
+ * @param  {Date} time		  Date
  * @param  {string} round="m"   "h" or "m" for rounding down to "hour" or "minute" respectively
- * @return {number}             number of seconds in the day
+ * @return {number}			 number of seconds in the day
  */
 function getTimeInSeconds(time, round="m") {
 	if (time instanceof Date) {
@@ -48,10 +53,10 @@ function getTimeInSeconds(time, round="m") {
  * getTimeString - convert time (number in seconds) to a formatted time string
  *   function based on a function from http://jonthornton.github.com/jquery-timepicker/
  *
- * @param  {number} timeInt              number of seconds into day
+ * @param  {number} timeInt			  number of seconds into day
  * @param  {string} timeFormat = "g:i A" formatting based on PHP DateTime
- * @param  {boolean} show2400 = false    whether or not military time goes up through 2400 or if it flips back to 0000
- * @return {string}                      formatted time string
+ * @param  {boolean} show2400 = false	whether or not military time goes up through 2400 or if it flips back to 0000
+ * @return {string}					  formatted time string
  */
 function getTimeString(timeInt, timeFormat = "g:i A", show2400 = false) {
 	if (typeof timeInt != "number") {
@@ -152,7 +157,6 @@ class SiteTimeMap {
 	}
 
 	getTimesArray() {
-		console.log(this.times);
 		return this.times.sort().map(t => getTimeString(t));
 	}
 }
@@ -193,7 +197,7 @@ class DateSiteTime {
 	 *   automatically sorting by date and site,
 	 *   creating new ones if necessary.
 	 *
-	 * @param  {string} siteId    site ID
+	 * @param  {string} siteId	site ID
 	 * @param  {string} startTime startTime formatted as ISO String
 	 * @param  {string} endTime   endTime formatted as ISO String
 	 */
@@ -244,10 +248,10 @@ class DateSiteTime {
 	/**
 	 * _getAppointmentTimes - Gets the time of the day as a number of seconds
 	 *
-	 * @param  {string} startTime     startTime for appointment
-	 * @param  {string} endTime       endTime for appointment
+	 * @param  {string} startTime	 startTime for appointment
+	 * @param  {string} endTime	   endTime for appointment
 	 * @param  {number} interval=1800 seconds between appointments
-	 * @return {object}               array of appointment times in seconds
+	 * @return {object}			   array of appointment times in seconds
 	 */
 	_getAppointmentTimes(startTime, endTime, interval=1800) {
 		if (typeof interval != "number") {
@@ -350,7 +354,7 @@ function updateSitesDatesAndTimes() {
 		var date = this.value;
 
 		let dateObj = dateSitesTimes.getDate(new Date(date));
-		siteSelect.append($('<option disabled selected value style="display:none"> -- select an option -- </option>'));
+		siteSelect.append($('<option disabled selected value="" style="display:none"> -- select an option -- </option>'));
 		for(const site of dateObj.getSitesArray()) {
 			siteSelect.append($('<option>', {
 				value: site.siteId,
@@ -371,35 +375,12 @@ function updateSitesDatesAndTimes() {
 
 		let siteObj = dateSitesTimes.getDate(new Date(date)).getSite(value);
 		var timeSelect = $("#timePicker select")
-		timeSelect.append($('<option disabled selected value style="display:none"> -- select an option -- </option>'));
+		timeSelect.append($('<option disabled selected value="" style="display:none"> -- select an option -- </option>'));
 		for(const time of siteObj.getTimesArray()) {
 			timeSelect.append($('<option>', {
 				value: time,
 				text : time
 			}));
-		}
-	});
-}
-
-function validateSignupForm() {
-	$("#vitaSignupForm").validate({
-		rules: {
-			"firstName": "required",
-			"lastName": "required",
-			email: {
-				required: true,
-				email: true
-			},
-			phone: {
-				required: true,
-				// phoneUS: true
-			}
-		},
-		messages: {
-			email: {
-				required: "We need your email address to confirm your appointment",
-				email: "Your email address must be in the format of name@domain.com"
-			}
 		}
 	});
 }
@@ -560,15 +541,32 @@ function conditionalFormFields() {
 	studenth1bValues.change(function() {
 		showAppointmentPicker(animationTime);
 	});
+}
 
+function validateSignupForm() {
+	$("#vitaSignupForm").validate({
+		rules: {
+			email: {
+				required: true,
+				email: true
+			}
+		},
+		messages: {
+			email: {
+				required: "We need your email address to confirm your appointment",
+				email: "Your email address must be in the format of name@domain.com"
+			}
+		}
+	});
 }
 
 // Form submission
 $('#vitaSignupForm').submit(function(e) {
 	// Stop default form submit action
-	// e.preventDefault();
+	e.preventDefault();
 
-	if (!$(this).valid()) {
+	if (!$(this).valid() || !$("#sitePickerSelect").valid() || !$("#timePickerSelect").valid()) {
+		console.log("false");
 		return false;
 	}
 
@@ -584,7 +582,7 @@ $('#vitaSignupForm').submit(function(e) {
 		}
 	});
 
-	var scheduledTime = new Date($("#dateInput").val() + " " + $("#timeInput").val()).toISOString();
+	var scheduledTime = new Date($("#dateInput").val() + " " + $("#timePickerSelect").val()).toISOString();
 
 	var data = {
 		"firstName":firstName.value,
