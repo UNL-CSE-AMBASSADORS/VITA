@@ -1,3 +1,6 @@
+const NUM_SECONDS_IN_HOUR = 60*60; // 3600
+const NUM_SECONDS_IN_DAY = 24*60*60; // 86400
+
 $(document).ready(function() {
 	// Get the information about sites
 	loadAllSites();
@@ -33,11 +36,11 @@ function getTimeInSeconds(time, round="m") {
 	if (time instanceof Date) {
 		switch(round) {
 			case "h":
-				return time.getHours() * 3600;
+				return time.getHours() * NUM_SECONDS_IN_HOUR;
 			case "m":
-				return time.getHours() * 3600 + time.getMinutes() * 60;
+				return time.getHours() * NUM_SECONDS_IN_HOUR + time.getMinutes() * 60;
 			default:
-				return time.getHours() * 3600 + time.getMinutes() * 60 + time.getSeconds();
+				return time.getHours() * NUM_SECONDS_IN_HOUR + time.getMinutes() * 60 + time.getSeconds();
 		}
 	} else {
 		return undefined;
@@ -60,9 +63,9 @@ function getTimeString(timeInt, timeFormat = "g:i A", show2400 = false) {
 
 	var seconds = parseInt(timeInt % 60),
 			minutes = parseInt((timeInt / 60) % 60),
-			hours = parseInt((timeInt / (60 * 60)) % 24);
+			hours = parseInt((timeInt / (NUM_SECONDS_IN_HOUR)) % 24);
 
-	var time = new Date(1970, 0, 2, hours, minutes, seconds, 0);
+	var time = new Date(1970, 0, 2, hours, minutes, seconds, 0); 
 
 	if (isNaN(time.getTime())) {
 		return null;
@@ -210,7 +213,6 @@ class DateSiteTime {
 		}
 
 		if (date.toDateString() !== endDate.toDateString()) {
-			console.log(date.toDateString() + " " + endDate.toDateString());
 			let newStartTime = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
 			this.addShift(siteId, newStartTime, endTime);
 		}
@@ -246,12 +248,12 @@ class DateSiteTime {
 	 *
 	 * @param  {string} startTime     startTime for appointment
 	 * @param  {string} endTime       endTime for appointment
-	 * @param  {number} interval=1800 seconds between appointments
+	 * @param  {number} interval=NUM_SECONDS_IN_HOUR seconds between appointments
 	 * @return {object}               array of appointment times in seconds
 	 */
-	_getAppointmentTimes(startTime, endTime, interval=1800) {
+	_getAppointmentTimes(startTime, endTime, interval=NUM_SECONDS_IN_HOUR) {
 		if (typeof interval != "number") {
-			interval = 1800;
+			interval = NUM_SECONDS_IN_HOUR;
 		}
 		if (startTime > endTime) {
 			return [];
@@ -260,7 +262,7 @@ class DateSiteTime {
 		let endTimeInSeconds = getTimeInSeconds(new Date(endTime));
 
 		if (endTimeInSeconds < startTimeInSeconds) {
-			endTimeInSeconds = 86400;
+			endTimeInSeconds = NUM_SECONDS_IN_DAY;
 		}
 
 		let out = [],
@@ -296,7 +298,6 @@ function loadAllSites() {
 }
 
 // Load all of the shifts and store in a global variable
-// TODO year
 function loadAllShifts(year=(new Date()).getFullYear()) {
 	var request = $.ajax({
 		url: "/server/api/shifts/getAllShifts.php",
@@ -634,4 +635,4 @@ let datesAllowed = [],
 			hr: "hr",
 			hrs: "hrs"
 		},
-		_ONE_DAY = 86400;
+		_ONE_DAY = NUM_SECONDS_IN_DAY;
