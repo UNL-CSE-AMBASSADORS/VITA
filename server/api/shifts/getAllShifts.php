@@ -3,7 +3,7 @@
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 require_once "$root/server/config.php";
 
-const defaultSelectColumns = array('shiftId', 'startTime', 'endTime', 'archived', 'createdAt', 'lastModifiedDate', 'siteId', 'createdBy', 'lastModifiedBy');
+define ("defaultSelectColumns", serialize (array('shiftId', 'startTime', 'endTime', 'archived', 'createdAt', 'lastModifiedDate', 'siteId', 'createdBy', 'lastModifiedBy')));
 
 getAllShifts($_GET);
 
@@ -25,7 +25,7 @@ function getAllShifts($data) {
 	// construct select columns list
 	$selectColumns = [];
 	if (!is_null($data) && !empty($data)) {
-		foreach (defaultSelectColumns as $key) {
+		foreach (unserialize(defaultSelectColumns) as $key) {
 			if (isset($data[$key])) {
 				if ($data[$key] == true) {
 					$selectColumns[] = $key; // append the select columns
@@ -40,8 +40,8 @@ function getAllShifts($data) {
 		$year = $data['year'];
 	}
 
-	$stmt = $DB_CONN->prepare('SELECT ' . $selectColumnsString . ' FROM Shift WHERE YEAR(startTime) = ' . $year);
-	$stmt->execute();
+	$stmt = $DB_CONN->prepare('SELECT ' . $selectColumnsString . ' FROM Shift WHERE YEAR(startTime) = ?');
+	$stmt->execute(array($year));
 	$shifts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	foreach ($shifts as &$shift) {
 		$shift['startTime'] = $shift['startTime'] . " GMT";
