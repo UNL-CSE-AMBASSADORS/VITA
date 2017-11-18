@@ -296,6 +296,7 @@ function loadAllSites() {
 }
 
 // Load all of the shifts and store in a global variable
+// TODO
 function loadAllShifts(year=(new Date()).getFullYear()) {
 	var request = $.ajax({
 		url: "/server/api/shifts/getAllShifts.php",
