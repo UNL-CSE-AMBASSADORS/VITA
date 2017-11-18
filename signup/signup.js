@@ -567,7 +567,6 @@ $('#vitaSignupForm').submit(function(e) {
 	});
 
 	if (!$(this).valid() || !$("#sitePickerSelect").valid() || !$("#timePickerSelect").valid()) {
-		console.log("false");
 		return false;
 	}
 
