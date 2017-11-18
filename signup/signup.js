@@ -244,17 +244,10 @@ class DateSiteTime {
 	/**
 	 * _getAppointmentTimes - Gets the time of the day as a number of seconds
 	 *
-<<<<<<< HEAD
 	 * @param  {string} startTime     startTime for appointment
 	 * @param  {string} endTime       endTime for appointment
 	 * @param  {number} interval=NUM_SECONDS_IN_HOUR seconds between appointments
 	 * @return {object}               array of appointment times in seconds
-=======
-	 * @param  {string} startTime	 startTime for appointment
-	 * @param  {string} endTime	   endTime for appointment
-	 * @param  {number} interval=1800 seconds between appointments
-	 * @return {object}			   array of appointment times in seconds
->>>>>>> 7c2ab417133f073e9c974b36f8deb13f88c25401
 	 */
 	_getAppointmentTimes(startTime, endTime, interval=NUM_SECONDS_IN_HOUR) {
 		if (typeof interval != "number") {
