@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html class="no-js" lang="">
 <?php
-	require_once '../server/header.php';
+	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+	require_once "$root/server/header.php";
 ?>
 	<body>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<?php
-		require_once '../server/config.php';
+		require_once "$root/server/config.php";
 
 		if(isset($_REQUEST['token']) && strlen($_REQUEST['token']) == 32){
 			## Define Passed Variables
@@ -77,7 +78,7 @@
 			<a href="/">You appear to have reached this page in error. Please click this link to return home.</a>
 			<?php
 		}
-		require_once '../server/footer.php';
+		require_once "$root/server/footer.php";
 	?>
 		<script src="/register/register.js"></script>
 	</body>
