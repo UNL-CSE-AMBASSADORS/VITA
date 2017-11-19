@@ -14,7 +14,6 @@
 		$page_subtitle = 'Volunteer Profile';
 		require_once "$root/components/nav.php";
 	?>
-  <div>
     <div class="container">
       <div class="row justify-content-center">
         <div class="col col-12 col-sm-8">
@@ -24,15 +23,15 @@
               <h4>Phone Number</h4>
               <p id="phoneProfile"></p>
               <h4>Email</h4>
-              <a class="emailProfileStatic" href="mailto:joe@example.com?subject=feedback" id="emailProfile"></a>
+              <p id="emailProfile"></p>
               <h4>Foreign Languages</h4>
-              <ul id="#languageSkills">
+              <ul id="languageSkills">
               </ul>
               <h4>Tax Abilities</h4>
-              <ul id="#taxSkills">
+              <ul id="taxSkills">
               </ul>
               <h4>Signed Up Shifts</h4>
-                <ul id="#sbTwo">
+                <ul id="shiftRegistration">
                 </ul>
                 <a href="/profile/profileedit/index.php"><button>Edit Page</button></a>
             </div>
@@ -43,7 +42,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"> </script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
-	<script src="/profile/profilepage.js"></script>
+	<script src="/profile/profile.js"></script>
 	<script src="/profile/multipleSelect.js"></script>
 	<script src="/assets/js/form.js"></script>
 </body>

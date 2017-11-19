@@ -73,14 +73,16 @@ $.ajax({
 	dataType: "JSON",
 	cache: false,
 	complete: function(response){
-    console.log(response);
+    if(typeof response !== 'undefined' && response && response.success){
 		response = response.responseJSON;
-    $("#nameProfile").html(response[0].firstName + + response[0].lastName);
-    $("#firstNameProfile").html(response[0].firstName);
-    $("#lastNameProfile").html(reponse[0].lastName);
-    $("#phoneProfile").html(reponse[0].phoneNumber);
-    $("#emailProfileStatic").html(reponse[0].email);
-    $("#taxSkills").html(response[0].preparesTaxes);
+    $("#nameProfile").html(response.firstName +" "+ response.lastName);
+    $("#firstNameProfile").html(response.firstName);
+    $("#lastNameProfile").html(reponse.lastName);
+    $("#phoneProfile").html(reponse.phoneNumber);
+    $("#emailProfileStatic").html(reponse.email);
+    $("#taxSkills").html(response.preparesTaxes);
+    $("#shiftRegistration").html(response.shiftId);
+  }
 	}
 });
 }

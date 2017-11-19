@@ -8,9 +8,9 @@ if (!$USER->hasPermission('can_use_admin_tools')) {
   die();
 }
 require_once 'config.php';
-getProfile($USER->getUserId());
+getProfile($userId->getUserId());
 function getProfile($data) {
-  GLOBAL $DB_CONN:
+  GLOBAL $DB_CON;
   $userGet = "SELECT firstName, lastName, phoneNumber, email, preparesTaxes
   FROM User
   WHERE userId = ? ";
@@ -19,7 +19,6 @@ function getProfile($data) {
   $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
   echo json_encode($response);
 
-$userabilityId = $DB_CONN->lastInsertId();
   $userAbilityGet = "SELECT abilityId, abilityId
   FROM UserAbility
   WHERE abilityId = ?";
@@ -27,5 +26,28 @@ $userabilityId = $DB_CONN->lastInsertId();
   $stmt->execute(array($data));
   $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
   echo json_encode($response);
-//TODO shift get information, but I won't implement until I finish the front end.
+
+
+  $userShiftGet = "SELECT shiftId
+  FROM UserShift
+  WHERE userId = ?";
+  $stmt = $DB_CONN->prepare($userShiftGet);
+  $stmt->execute(array($data));
+  $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  echo json_encode($response);
+
+  $shiftSelectGet = "SELECT startTime, endTime, shiftId
+  FROM shift
+  WHERE siteId = ?";
+  $stmt = $DB_CONN->prepare($shiftSelectGet);
+  $stmt->execute(array($data));
+  $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  echo json_encode($response);
+
+  $siteIdGet = "SELECT siteId
+  FROM shift
+  $stmt = $DB_CONN->prepare($shiftSelectGet);
+  $stmt->execute(array($data));
+  $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  echo json_encode($response);
 }

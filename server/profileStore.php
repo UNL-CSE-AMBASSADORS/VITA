@@ -18,6 +18,7 @@ function storeProfile($data) {
       SET  firstName = ?,lastName = ?,phoneNumber = ?,email = ?,preparesTaxes = ?
        WHERE userId = ? ;";
     $userParams = array(
+      $data('userId'),
       $data['firstName'],
       $data['lastName'],
       $data['emailNumber'],
@@ -41,15 +42,17 @@ function storeProfile($data) {
   $stmt = $DB_CONN->prepare($abilityInsert)
   $stmt->execute($userabilityParams);
 
-  $appointmentId = $DB_CONN->lastInsertId();
 
   $shiftUpdate= "UPDATE UserShift
-  SET shiftId = ?
-  WHERE UserShiftID = ?;";
+  SET UserShiftId = ?
+  WHERE shiftId = ?;";
 
-$appointmentParams = $data['shiftId'];
+$shiftParams = array(
+  $data['shiftId'],
+  $data('UserShiftId'),
+);
 $stmt = DB_CONN->prepare($shiftUpdate)
-$stmt->execute($appointmentParams);
+$stmt->execute($shiftParams);
 
   }
 

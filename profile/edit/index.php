@@ -58,18 +58,9 @@
 						</div>
 						<div class="apptSelect form-group">
 						<h5>Choose Your Shift Times</h2>
-				     <select id="sbOne" multiple="multiple" class="form-control">
-				         <option value="1">Alpha</option>
-				         <option value="2">Beta</option>
-				         <option value="3">Gamma</option>
-				         <option value="4">Delta</option>
-				         <option value="5">Epsilon</option>
-				     </select>
-
-				     <select id="sbTwo" multiple="multiple" class="form-control">
-				         <option value="6">Zeta</option>
-				         <option value="7">Eta</option>
-				     </select>
+				    <select id="shiftLocation" class="form-control">
+							<option></option>
+						<select></select>
 
 				     <br />
 
@@ -87,7 +78,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"> </script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
-	<script src="/profile/profilepage.js"></script>
+	<script src="/profile/profile.js"></script>
 	<script src="/profile/multipleSelect.js"></script>
 	<script src="/assets/js/form.js"></script>
 </body>
