@@ -39,7 +39,7 @@ class Login
 	## How long tokens are active
 	public $TOKEN_THRESHOLD = 30;
 	public $LOGIN_THRESHOLD = 5;
-	public $SESSION_THRESHOLD = 60*60; //units in seconds
+	public $SESSION_THRESHOLD = 3600; //units in seconds
 
 	
 	function __construct($conn, $database, $name, $login_url, $register_url, $noreply_email, $contact_email = ""){
