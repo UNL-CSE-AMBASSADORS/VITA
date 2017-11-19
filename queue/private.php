@@ -35,7 +35,7 @@
 				<div class="queue" ng-if="appointments.length > 0" ng-cloak>
 					<div class="row queue-row py-1 pointer"
 							 ng-repeat="appointment in appointments | orderBy:'scheduledTime' | searchFor: clientSearch"
-							 ng-if="appointment.completed == false && appointment.notCompleted == false"
+							 ng-if="appointment.completed == null"
 							 ng-class-odd="'bg-light'"
 							 ng-click="selectClient(appointment)">
 						<div class="col">

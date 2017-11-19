@@ -75,7 +75,7 @@
 	function appointmentIncomplete($explanation, $id) {
 		$stmt = $GLOBALS['conn']->prepare(
 			"UPDATE Appointment
-			SET Appointment.notCompletedDescription = ?, Appointment.notCompleted = TRUE
+			SET Appointment.notCompletedDescription = ?, Appointment.completed = FALSE
 			WHERE Appointment.appointmentId = ?"
 		);
 
