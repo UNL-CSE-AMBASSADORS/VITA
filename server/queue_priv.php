@@ -2,6 +2,12 @@
 	require_once 'config.php';
 	$conn = $DB_CONN;
 
+	$USER = new User();
+	if (!$USER->isLoggedIn()) {
+		header("Location: /unauthorized");
+		die();
+	}
+
 	switch($_REQUEST['action']) {
 		case 'display': displayAppointment($_REQUEST['id']); break;
 		case 'cancel': cancelAppointment($_REQUEST['id']); break;
