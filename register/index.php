@@ -14,7 +14,7 @@
 			$token = $_REQUEST['token'];
 
 			## Make Sure There Is A Row With That Token
-			$stmt = $DB_CONN->prepare("SELECT * FROM vita.passwordreset WHERE token = ?");
+			$stmt = $DB_CONN->prepare("SELECT * FROM PasswordReset WHERE token = ?");
 			$stmt->execute(array($token));
 			if(count($stmt->fetchAll()) === 1){
 	?>
