@@ -1,7 +1,7 @@
 <?php
 
 function getLitmusQuestions() {
-	require 'config.php';
+	require_once 'config.php';
 	$conn = $DB_CONN;
 
 	# smile and wave boys, this will all be getting replaced
