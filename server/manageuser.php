@@ -1,7 +1,8 @@
 <?php
 
-require_once 'config.php';
-require_once "user.class.php";
+$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+require_once "$root/server/config.php";
+require_once "$root/server/user.class.php";
 
 $USER = new User();
 
