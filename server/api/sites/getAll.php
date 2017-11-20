@@ -3,8 +3,6 @@
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 require_once "$root/server/config.php";
 
-const defaultSelectColumns = array('siteId', 'title', 'address', 'phoneNumber', 'appointmentOnly');
-
 getAllSites($_GET);
 
 /*
@@ -21,11 +19,12 @@ getAllSites($_GET);
  */
 function getAllSites($data) {
 	GLOBAL $DB_CONN;
+	$defaultSelectColumns = array('siteId', 'title', 'address', 'phoneNumber', 'appointmentOnly');
 
 	// construct select columns list
 	$selectColumns = [];
 	if (!is_null($data) && !empty($data)) {
-		foreach (defaultSelectColumns as $key) {
+		foreach ($defaultSelectColumns as $key) {
 			if (isset($data[$key])) {
 				if ($data[$key] == true) {
 					$selectColumns[] = $key; // append the select columns

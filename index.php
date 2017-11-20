@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="/assets/css/main.css">
 </head>
 <body>
-	<?php require_once "components/nav.php" ?>
+	<?php require_once "$root/components/nav.php" ?>
 
 	<div class="jumbotron jumbotron-fluid mb-0">
 		<div class="container-fluid">

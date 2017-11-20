@@ -1,5 +1,6 @@
 <?php
-require_once 'config.php';
+$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+require_once "$root/server/config.php";
 
 storeAppointment($_POST);
 
@@ -13,7 +14,7 @@ function storeAppointment($data){
 	$DB_CONN->beginTransaction();
 	try {
 
-		$clientInsert = "INSERT INTO vita.client
+		$clientInsert = "INSERT INTO Client
 			(
 				firstName,
 				lastName,
@@ -38,7 +39,7 @@ function storeAppointment($data){
 
 		$clientId = $DB_CONN->lastInsertId();
 
-		$appointmentInsert = "INSERT INTO vita.appointment
+		$appointmentInsert = "INSERT INTO Appointment
 			(
 				clientId,
 				scheduledTime,
@@ -63,7 +64,7 @@ function storeAppointment($data){
 		$appointmentId = $DB_CONN->lastInsertId();
 
 
-		$answerInsert = "INSERT INTO vita.answer
+		$answerInsert = "INSERT INTO Answer
 			(
 				appointmentId,
 				questionId,
@@ -92,7 +93,7 @@ function storeAppointment($data){
 		$response['appointmentId'] = $appointmentId;
 
 		// get site information
-		$siteQuery = "SELECT address,phoneNumber FROM vita.site WHERE siteId = ?";
+		$siteQuery = "SELECT address,phoneNumber FROM Site WHERE siteId = ?";
 		$stmt = $DB_CONN->prepare($siteQuery);
 		$stmt->execute(array($data['siteId']));
 

@@ -41,7 +41,6 @@ class Login
 	public $LOGIN_THRESHOLD = 5;
 	public $SESSION_THRESHOLD = 3600; //units in seconds
 
-
 	function __construct($conn, $database, $name, $login_url, $register_url, $noreply_email, $contact_email = ""){
 		$this->conn = $conn;
 		$this->database = $database;
@@ -83,13 +82,13 @@ class Login
 			}
 
 			$stmt = $this->conn->prepare(
-				"SELECT
-					u.userId, u.email,
-					l.password, l.failedLoginCount as failed_login_count,
-					CASE WHEN DATE_ADD(l.lockoutTime, INTERVAL 30 MINUTE) > CURRENT_TIMESTAMP THEN 1 ELSE 0 END AS locked_out
-				FROM ".$this->database.".login l
-					INNER JOIN ".$this->database.".user u ON u.userId = l.userId
-				WHERE u.archived = 0
+				"SELECT 
+					u.userId, u.email, 
+					l.password, l.failedLoginCount as failed_login_count, 
+					CASE WHEN DATE_ADD(l.lockoutTime, INTERVAL 30 MINUTE) > CURRENT_TIMESTAMP THEN 1 ELSE 0 END AS locked_out          
+				FROM Login l
+					INNER JOIN User u ON u.userId = l.userId
+				WHERE u.archived = 0 
 					AND u.email = ?");
 			$stmt->execute(array($email));
 			$results = $stmt->fetchAll();
@@ -112,8 +111,8 @@ class Login
 			## Unlock Account If Needed
 			if(!$locked_out && $failed_login_count >= $this->LOGIN_THRESHOLD){
 				$stmt = $this->conn->prepare(
-					"UPDATE ".$this->database.".login l
-					SET failed_login_count = 0
+					"UPDATE Login l
+					SET failed_login_count = 0 
 					WHERE userId = ?");
 				$stmt->execute(array($userId));
 				$failed_login_count = 0;
@@ -133,8 +132,8 @@ class Login
 
 						## Create Statement
 						$stmt = $this->conn->prepare(
-							"UPDATE ".$this->database.".login l
-							SET password = ?
+							"UPDATE Login l
+							SET password = ? 
 							WHERE userId = ?;");
 						$stmt->execute(array($rehash, $userId));
 					}
@@ -148,19 +147,19 @@ class Login
 
 					## Record Login
 					$stmt = $this->conn->prepare(
-						"INSERT INTO ".$this->database.".login_history
-							(userId, ipAddress)
-						VALUES
+						"INSERT INTO LoginHistory 
+							(userId, ipAddress) 
+						VALUES 
 							(?, ?)");
 					$stmt->execute(array($userId, $_SERVER['REMOTE_ADDR']));
 				}else{
 
 					## Wrong password, record failure
 					$stmt = $this->conn->prepare(
-						"UPDATE ".$this->database.".login l
-						SET
-							failed_login_count = failed_login_count+1,
-							lockout_time = CURRENT_TIMESTAMP
+						"UPDATE Login l
+						SET 
+							failed_login_count = failed_login_count+1, 
+							lockout_time = CURRENT_TIMESTAMP 
 						WHERE userId = ?;");
 					$stmt->execute(array($userId));
 
@@ -170,8 +169,8 @@ class Login
 
 				## Too many failures, lock account
 				$stmt = $this->conn->prepare(
-					"UPDATE ".$this->database.".login
-					SET lockout_time = current_timestamp()
+					"UPDATE Login 
+					SET lockout_time = current_timestamp() 
 					WHERE userId = ?");
 				$stmt->execute(array($userId));
 
@@ -241,8 +240,8 @@ class Login
 			## Verify That The Email Address Is Allowed
 			$stmt = $this->conn->prepare(
 				"SELECT u.email, u.firstName as first_name, u.userId as id
-				FROM ".$this->database.".user u
-				WHERE archived = 0
+				FROM User u
+				WHERE archived = 0 
 					AND email = ?");
 			$stmt->execute(array($email));
 			$results = $stmt->fetchAll();
@@ -259,7 +258,7 @@ class Login
 
 			$stmt = $this->conn->prepare(
 				"SELECT *
-				FROM ".$this->database.".login
+				FROM Login 
 				WHERE userId = ?;");
 			$stmt->execute(array($userId));
 
@@ -271,9 +270,9 @@ class Login
 			$temp_password = $this->rand_string(10);
 			$password = password_hash($temp_password, PASSWORD_BCRYPT);
 			$stmt = $this->conn->prepare(
-				"INSERT INTO ".$this->database.".login
-					(userId, password)
-				VALUES
+				"INSERT INTO Login 
+					(userId, password) 
+				VALUES 
 					(?, ?)");
 			$stmt->execute(array($userId, $password));
 
@@ -345,9 +344,9 @@ class Login
 			## Verify That Email Exists
 			$stmt = $this->conn->prepare(
 				"SELECT u.email, u.firstName, u.userId
-				FROM ".$this->database.".login l
-					INNER JOIN ".$this->database.".user u ON u.userId = l.userId
-				WHERE u.archived = 0
+				FROM Login l
+					INNER JOIN User u ON u.userId = l.userId
+				WHERE u.archived = 0 
 					AND u.email = ?");
 			$stmt->execute(array($email));
 			$results = $stmt->fetchAll();
@@ -448,9 +447,9 @@ class Login
 
 			## Check That Email Address Exists
 			$stmt = $this->conn->prepare("SELECT u.userId
-				FROM ".$this->database.".passwordreset r
-					INNER JOIN ".$this->database.".user u ON u.userId = r.userId
-				WHERE u.archived = 0
+				FROM PasswordReset r
+					INNER JOIN User u ON u.userId = r.userId
+				WHERE u.archived = 0 
 					AND r.token = ?
 					AND r.archived = 0
 					AND u.email = ?");
@@ -467,9 +466,9 @@ class Login
 			## Make Sure User ID Is Associated With Provided Email
 			$row = $results[0];
 			$reset_userId = $row['userId'];
-			$stmt = $this->conn->prepare("SELECT u.userId, u.email as email, u.firstName as first_name
-				FROM ".$this->database.".user u
-				WHERE u.archived = 0
+			$stmt = $this->conn->prepare("SELECT u.userId, u.email as email, u.firstName as first_name 
+				FROM User u
+				WHERE u.archived = 0 
 					AND u.email = ?");
 			$stmt->execute(array($email));
 			$row = $stmt->fetch();
@@ -484,11 +483,11 @@ class Login
 
 			## At This Point It Is Okay To Reset The Password
 			$password_hash = password_hash($password, PASSWORD_BCRYPT);
-			$stmt = $this->conn->prepare("UPDATE ".$this->database.".login SET password = ? WHERE userId = ?");
+			$stmt = $this->conn->prepare("UPDATE Login SET password = ? WHERE userId = ?");
 			$stmt->execute(array($password_hash, $userId));
 
 			## Delete Row From password_reset Table
-			$stmt = $this->conn->prepare("UPDATE ".$this->database.".passwordreset SET archived = 1 WHERE userId = ?");
+			$stmt = $this->conn->prepare("UPDATE PasswordReset SET archived = 1 WHERE userId = ?");
 			$stmt->execute(array($userId));
 			$response['success'] = true;
 
@@ -550,9 +549,9 @@ class Login
 			}
 
 			## Fetch Current Password
-			$stmt = $this->conn->prepare("SELECT password
-				FROM ".$this->database.".login l
-					INNER JOIN ".$this->database.".user u ON u.userId = l.userId
+			$stmt = $this->conn->prepare("SELECT password 
+				FROM Login l
+					INNER JOIN User u ON u.userId = l.userId
 				WHERE u.archived = 0
 					AND l.userId = ?");
 			$stmt->execute(array($_SESSION['USER__ID']));
@@ -591,7 +590,7 @@ class Login
 
 			## Set New Password
 			$password = password_hash($npassword, PASSWORD_BCRYPT);
-			$stmt = $this->conn->prepare("UPDATE ".$this->database.".login SET password = ? WHERE userId = ?");
+			$stmt = $this->conn->prepare("UPDATE Login SET password = ? WHERE userId = ?");
 			$stmt->execute(array($password, $_SESSION['USER__ID']));
 			$response['success'] = true;
 		}catch(PDOException $e){
@@ -661,7 +660,7 @@ class Login
 	*/
 	private function clearOldTokens() {
 		$this->conn->query(
-			"UPDATE ".$this->database.".passwordreset
+			"UPDATE PasswordReset 
 			SET archived = 1
 			WHERE timestamp < current_timestamp() - INTERVAL ".$this->TOKEN_THRESHOLD." MINUTE;");
 	}
@@ -678,16 +677,16 @@ class Login
 
 		## Delete Existing Records
 		$stmt = $this->conn->prepare(
-			"UPDATE ".$this->database.".passwordreset
+			"UPDATE PasswordReset 
 			SET archived = 1
 			WHERE userId = ?");
 		$stmt->execute(array($userId));
 
 		## Create Reset Record
 		$stmt = $this->conn->prepare(
-			"INSERT INTO ".$this->database.".passwordreset
-				(userId, token, ipAddress)
-			VALUES
+			"INSERT INTO PasswordReset 
+				(userId, token, ipAddress) 
+			VALUES 
 				(?, ?, ?)");
 		if($stmt->execute(array($userId, $token, $_SERVER['REMOTE_ADDR']))){
 			return $token;
