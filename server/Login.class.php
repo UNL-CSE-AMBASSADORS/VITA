@@ -7,7 +7,7 @@ session_start();
 * Uses PHP session to determine whether the user's logged in
 * $_SESSION['USER__ID'] has the user's id from the user table
 * $_SESSION['LAST_ACTIVITY'] is a timestamp from the user's last activity, it will get updated with every call to checkLogin()
-* 
+*
 * Public Functions
 * login($email, $password)
 * logout()
@@ -41,7 +41,6 @@ class Login
 	public $LOGIN_THRESHOLD = 5;
 	public $SESSION_THRESHOLD = 3600; //units in seconds
 
-	
 	function __construct($conn, $database, $name, $login_url, $register_url, $noreply_email, $contact_email = ""){
 		$this->conn = $conn;
 		$this->database = $database;
@@ -56,12 +55,12 @@ class Login
 
 	/**
 	* Login
-	* 
+	*
 	* Logs in the user
-	* 
+	*
 	* @param string $email user's email
 	* @param string $password password
-	* 
+	*
 	* @return response
 	*/
 	public function login($email, $password) {
@@ -77,7 +76,7 @@ class Login
 
 			## Verify Form Fields
 			if(!isset($email) || !isset($password)){
-			
+
 				throw new Exception("Please provide both your email address and password.");
 
 			}
@@ -184,16 +183,16 @@ class Login
 			$response['success'] = false;
 			$response['error'] = $e->getMessage();
 		}
-		
+
 		## Return
 		return json_encode($response);
 	}
 
 	/**
 	* Logout
-	* 
+	*
 	* Kills session, logs user out
-	* 
+	*
 	* @return response
 	*/
 	public function logout() {
@@ -215,11 +214,11 @@ class Login
 
 	/**
 	* Register
-	* 
+	*
 	* Registers an account for the user
-	* 
+	*
 	* @param string $email user's email
-	* 
+	*
 	* @return response
 	*/
 	public function register($email){
@@ -318,12 +317,12 @@ class Login
 
 	/**
 	* Password Reset Request
-	* 
+	*
 	* Sends an a message with a password reset url to the specified email
 	* Will register an account if no account is found with that email
-	* 
+	*
 	* @param string $email user's email
-	* 
+	*
 	* @return response
 	*/
 	public function passwordResetRequest($email) {
@@ -373,8 +372,8 @@ class Login
 
 				$subject = $this->name." Password Reset Request";
 				$mail_body = "<p>".$dbfirst_name.",</p>";
-				$mail_body .= "<p>You have recently requested a password reset at ".URL_BASE.". Click or copy and paste the 
-					link below to reset your password. If you are receiving this email unexpectedly and have not requested a password reset, you may disregard this 
+				$mail_body .= "<p>You have recently requested a password reset at ".URL_BASE.". Click or copy and paste the
+					link below to reset your password. If you are receiving this email unexpectedly and have not requested a password reset, you may disregard this
 					email and continue to logon normally.</p><br />";
 				$mail_body .= $path."<br /><br />";
 				$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>";
@@ -406,12 +405,12 @@ class Login
 
 	/**
 	* Password Reset
-	* 
+	*
 	* @param string $email user's email
 	* @param string $token token that was used to reset password
 	* @param string $password  new password
 	* @param string $vpassword  new password second entry
-	* 
+	*
 	* @return response
 	*/
 	public function passwordReset($email, $token, $password, $vpassword) {
@@ -438,7 +437,7 @@ class Login
 			* Must contain at least one lower case character
 			* Must contain at least one digit OR at least one special character
 			*/
-			
+
 			if(!preg_match('/(?=^.{7,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/',$password)){
 
 				throw new Exception("The password provided does not meet the minimum requirements.");
@@ -496,7 +495,7 @@ class Login
 			$path = "<a href='".URL_BASE."'>".URL_BASE."</a>";
 			$subject = $this->name." Password Reset Success";
 			$mail_body = "<p>".$dbfirst_name.",</p>";
-			$mail_body .= "<p>Your password has been reset successfully. You may now login with your new password by following the link below. If you are receiving 
+			$mail_body .= "<p>Your password has been reset successfully. You may now login with your new password by following the link below. If you are receiving
 				this email unexpectedly and have not reset your password. Please contact support, as your account may have been compromised.</p><br />";
 			$mail_body .= $path."<br /><br />";
 			$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>";
@@ -526,7 +525,7 @@ class Login
 
 	/**
 	* Change Password
-	* 
+	*
 	* @param string $password  old password
 	* @param string $npassword  new password
 	* @param string $vpassword  new password second entry
@@ -584,7 +583,7 @@ class Login
 			* Must contain at least one lower case character
 			* Must contain at least one digit OR at least one special character
 			*/
-			
+
 			if(!preg_match('/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/',$password)){
 				throw new Exception("The password provided does not meet the minimum requirements.");
 			}
@@ -608,9 +607,9 @@ class Login
 
 	/**
 	* Logged In
-	* 
+	*
 	* Checks whether the user is still loggin in
-	* 
+	*
 	* @return boolean
 	*/
 	public function checkLogin(){
@@ -620,7 +619,7 @@ class Login
 		if(isset($_SESSION['USER__ID']) && isset($_SESSION['LAST_ACTIVITY'])){
 
 			if($_SESSION['LAST_ACTIVITY'] + $this->SESSION_THRESHOLD >= time()){
-				
+
 				## Update Session
 				$_SESSION['LAST_ACTIVITY'] = time();
 
@@ -634,9 +633,9 @@ class Login
 
 	/**
 	* Random String
-	* 
+	*
 	* Generates a random string for internal use like password reset
-	* 
+	*
 	* @return string
 	*/
 	private function rand_string($length) {
@@ -648,15 +647,15 @@ class Login
 		for( $i = 0; $i < $length; $i++ ) {
 			$str .= $chars[ rand( 0, $size - 1 ) ];
 		}
-		
+
 		return $str;
 	}
 
 	/**
 	* Clear Old Tokens
-	* 
+	*
 	* Clears all tokens in the db older than X minutes
-	* 
+	*
 	* @return string
 	*/
 	private function clearOldTokens() {
@@ -668,9 +667,9 @@ class Login
 
 	/**
 	* Get New Token
-	* 
+	*
 	* Returns a new Token as well as clearing tokens with that user id
-	* 
+	*
 	* @return string
 	*/
 	private function getPasswordResetToken($userId) {
@@ -690,7 +689,7 @@ class Login
 			VALUES 
 				(?, ?, ?)");
 		if($stmt->execute(array($userId, $token, $_SERVER['REMOTE_ADDR']))){
-			return $token;   
+			return $token;
 		}else{
 			return false;
 		}
