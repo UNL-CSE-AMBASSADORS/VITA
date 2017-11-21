@@ -1,7 +1,8 @@
 <?php
-require_once 'login.class.php';
-require_once 'callbacks.php';
-require_once 'config.php';
+$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+require_once "$root/server/config.php";
+require_once "$root/server/Login.class.php";
+require_once "$root/server/callbacks.php";
 
 
 
@@ -54,7 +55,7 @@ class User
 
 		$query = "SELECT userId
 			FROM UserPermission
-				INNER JOIN Permission ON Permission.permissionId = UserPermission.userPermissionId
+				INNER JOIN Permission ON Permission.permissionId = UserPermission.permissionId
 			WHERE 1=1
 				AND userId = ?
 				AND lookupName LIKE ?";
@@ -63,8 +64,30 @@ class User
 		$stmt = $DB_CONN->prepare($query);
 		$stmt->execute(array($userId,$permissionLookupName));
 
-		$results = $stmt->fetchAll();
+		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 		return !empty($results);
+	}
+
+	/**
+	* Returns basic information about the logged in user
+	*
+	* @return boolean
+	*/
+	public function getUserDetails(){
+		GLOBAL $DB_CONN;
+
+		$userId = $this->getUserId();
+
+		$query = "SELECT firstName, lastName, email, phoneNumber
+			FROM User
+			WHERE 1=1
+				AND userId = ?";
+
+
+		$stmt = $DB_CONN->prepare($query);
+		$stmt->execute(array($userId));
+
+		return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
 }
