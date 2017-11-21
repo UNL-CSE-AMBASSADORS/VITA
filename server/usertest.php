@@ -1,11 +1,9 @@
 <?php
+	session_start();
+	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+	require_once "$root/server/user.class.php";
 
-session_start();
-require_once 'user.class.php';
-
-$USER = new User();
-
-$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+	$USER = new User();
 ?>
 <!DOCTYPE html>
 <html class='no-js theme-light' lang="">
