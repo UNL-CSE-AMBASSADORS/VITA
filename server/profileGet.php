@@ -1,14 +1,14 @@
 <?php
-$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
 
-require_once "$root/server/user.class.php";
-$USER = new User();
-if (!$USER->hasPermission('can_use_admin_tools')) {
-  header("Location: /unauthorized");
-  die();
-}
+	require_once "$root/server/user.class.php";
+	$USER = new User();
+	if (!$USER->isLoggedIn()) {
+		header("Location: /unauthorized");
+		die();
+	}
 require_once 'config.php';
-getProfile($userId->getUserId());
+getProfile($userId);
 function getProfile($data) {
   GLOBAL $DB_CON;
   $userGet = "SELECT firstName, lastName, phoneNumber, email, preparesTaxes
