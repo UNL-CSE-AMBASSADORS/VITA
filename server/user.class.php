@@ -1,7 +1,7 @@
 <?php
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
-require_once "$root/server/config.php";
 require_once "$root/server/Login.class.php";
+require_once "$root/server/config.php";
 require_once "$root/server/callbacks.php";
 
 

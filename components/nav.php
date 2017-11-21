@@ -30,7 +30,7 @@
 					<a class="nav-link" href="/queue">Queue</a>
 				</li>
 				<li class="nav-item">
-				<?php if ($USER->isLoggedIn()): ?>
+				<?php if ($USER->isLoggedIn()) { ?>
 					<a class="nav-link" onclick="logout()">Log out</a>
 					<script type="text/javascript">
 						function logout() {
@@ -44,9 +44,9 @@
 							});
 						}
 					</script>
-				<?php else: ?>
+				<?php } else { ?>
 					<a class="nav-link" href="/login">Volunteer Login</a>
-				<?php endif; ?>
+				<?php } ?>
 				</li>
 			</ul>
 		</div>
