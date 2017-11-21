@@ -18,7 +18,7 @@ if (!$USER->hasPermission('edit_user_permission')) {
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css" />
-	<link rel="stylesheet" href="user.css" />
+	<link rel="stylesheet" href="users.css" />
 </head>
 <body>
 	<?php require_once "$root/components/nav.php"; ?>
@@ -84,6 +84,6 @@ if (!$USER->hasPermission('edit_user_permission')) {
 
 	<?php require_once "$root/server/footer.php" ?>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-	<script src="user.js"></script>
+	<script src="users.js"></script>
 </body>
 </html>

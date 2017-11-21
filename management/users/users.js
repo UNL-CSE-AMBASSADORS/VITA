@@ -25,7 +25,7 @@ $(function(){
 				$.ajax({
 					dataType: 'json',
 					method: 'POST',
-					url: '/server/manageuser.php',
+					url: '/server/management/users/users.php',
 					data: {
 						callback: 'addUser',
 						firstName: $('#firstName').val(),
@@ -71,7 +71,7 @@ $(function(){
 		$.ajax({
 			dataType: 'json',
 			method: 'POST',
-			url: '/server/manageuser.php',
+			url: '/server/management/users/users.php',
 			data: {
 				callback: 'updateUserPermissions',
 				userId: userId,
@@ -95,7 +95,7 @@ function refreshUserTable(){
 	$.ajax({
 		dataType: 'json',
 		method: 'POST',
-		url: '/server/manageuser.php',
+		url: '/server/management/users/users.php',
 		data: {
 			callback: 'getUserTable'
 		},
