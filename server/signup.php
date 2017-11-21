@@ -1,7 +1,8 @@
 <?php
 
 function getLitmusQuestions() {
-	require 'config.php';
+	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+	require_once "$root/server/config.php";
 	$conn = $DB_CONN;
 
 	# smile and wave boys, this will all be getting replaced

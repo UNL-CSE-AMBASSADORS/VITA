@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html class="no-js" lang="">
 <?php
-	require_once '../server/header.php';
+	$root = realpath($_SERVER["DOCUMENT_ROOT"]);	
+	require_once "$root/server/header.php";
 ?>
-		<body>
+	<body>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<main class='container'>
 			<div class='row'>
@@ -76,9 +77,8 @@
 			</div>
 		</main>
 
-	<?php
-		require_once '../server/footer.php';
-	?>
+		<?php require_once "$root/server/footer.php"; ?>
 		<script src="/dist/login/login.js"></script>
+		
 	</body>
 </html>

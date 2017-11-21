@@ -7,7 +7,7 @@ session_start();
 * Uses PHP session to determine whether the user's logged in
 * $_SESSION['USER__ID'] has the user's id from the user table
 * $_SESSION['LAST_ACTIVITY'] is a timestamp from the user's last activity, it will get updated with every call to checkLogin()
-* 
+*
 * Public Functions
 * login($email, $password)
 * logout()
@@ -39,9 +39,8 @@ class Login
 	## How long tokens are active
 	public $TOKEN_THRESHOLD = 30;
 	public $LOGIN_THRESHOLD = 5;
-	public $SESSION_THRESHOLD = 60*60; //units in seconds
+	public $SESSION_THRESHOLD = 3600; //units in seconds
 
-	
 	function __construct($conn, $database, $name, $login_url, $register_url, $noreply_email, $contact_email = ""){
 		$this->conn = $conn;
 		$this->database = $database;
@@ -56,12 +55,12 @@ class Login
 
 	/**
 	* Login
-	* 
+	*
 	* Logs in the user
-	* 
+	*
 	* @param string $email user's email
 	* @param string $password password
-	* 
+	*
 	* @return response
 	*/
 	public function login($email, $password) {
@@ -77,7 +76,7 @@ class Login
 
 			## Verify Form Fields
 			if(!isset($email) || !isset($password)){
-			
+
 				throw new Exception("Please provide both your email address and password.");
 
 			}
@@ -87,8 +86,8 @@ class Login
 					u.userId, u.email, 
 					l.password, l.failedLoginCount as failed_login_count, 
 					CASE WHEN DATE_ADD(l.lockoutTime, INTERVAL 30 MINUTE) > CURRENT_TIMESTAMP THEN 1 ELSE 0 END AS locked_out          
-				FROM ".$this->database.".login l
-					INNER JOIN ".$this->database.".user u ON u.userId = l.userId
+				FROM Login l
+					INNER JOIN User u ON u.userId = l.userId
 				WHERE u.archived = 0 
 					AND u.email = ?");
 			$stmt->execute(array($email));
@@ -112,7 +111,7 @@ class Login
 			## Unlock Account If Needed
 			if(!$locked_out && $failed_login_count >= $this->LOGIN_THRESHOLD){
 				$stmt = $this->conn->prepare(
-					"UPDATE ".$this->database.".login l
+					"UPDATE Login l
 					SET failed_login_count = 0 
 					WHERE userId = ?");
 				$stmt->execute(array($userId));
@@ -133,7 +132,7 @@ class Login
 
 						## Create Statement
 						$stmt = $this->conn->prepare(
-							"UPDATE ".$this->database.".login l
+							"UPDATE Login l
 							SET password = ? 
 							WHERE userId = ?;");
 						$stmt->execute(array($rehash, $userId));
@@ -148,7 +147,7 @@ class Login
 
 					## Record Login
 					$stmt = $this->conn->prepare(
-						"INSERT INTO ".$this->database.".login_history 
+						"INSERT INTO LoginHistory 
 							(userId, ipAddress) 
 						VALUES 
 							(?, ?)");
@@ -157,7 +156,7 @@ class Login
 
 					## Wrong password, record failure
 					$stmt = $this->conn->prepare(
-						"UPDATE ".$this->database.".login l
+						"UPDATE Login l
 						SET 
 							failed_login_count = failed_login_count+1, 
 							lockout_time = CURRENT_TIMESTAMP 
@@ -170,7 +169,7 @@ class Login
 
 				## Too many failures, lock account
 				$stmt = $this->conn->prepare(
-					"UPDATE ".$this->database.".login 
+					"UPDATE Login 
 					SET lockout_time = current_timestamp() 
 					WHERE userId = ?");
 				$stmt->execute(array($userId));
@@ -184,16 +183,16 @@ class Login
 			$response['success'] = false;
 			$response['error'] = $e->getMessage();
 		}
-		
+
 		## Return
 		return json_encode($response);
 	}
 
 	/**
 	* Logout
-	* 
+	*
 	* Kills session, logs user out
-	* 
+	*
 	* @return response
 	*/
 	public function logout() {
@@ -215,11 +214,11 @@ class Login
 
 	/**
 	* Register
-	* 
+	*
 	* Registers an account for the user
-	* 
+	*
 	* @param string $email user's email
-	* 
+	*
 	* @return response
 	*/
 	public function register($email){
@@ -241,7 +240,7 @@ class Login
 			## Verify That The Email Address Is Allowed
 			$stmt = $this->conn->prepare(
 				"SELECT u.email, u.firstName as first_name, u.userId as id
-				FROM ".$this->database.".user u
+				FROM User u
 				WHERE archived = 0 
 					AND email = ?");
 			$stmt->execute(array($email));
@@ -259,7 +258,7 @@ class Login
 
 			$stmt = $this->conn->prepare(
 				"SELECT *
-				FROM ".$this->database.".login 
+				FROM Login 
 				WHERE userId = ?;");
 			$stmt->execute(array($userId));
 
@@ -271,7 +270,7 @@ class Login
 			$temp_password = $this->rand_string(10);
 			$password = password_hash($temp_password, PASSWORD_BCRYPT);
 			$stmt = $this->conn->prepare(
-				"INSERT INTO ".$this->database.".login 
+				"INSERT INTO Login 
 					(userId, password) 
 				VALUES 
 					(?, ?)");
@@ -318,12 +317,12 @@ class Login
 
 	/**
 	* Password Reset Request
-	* 
+	*
 	* Sends an a message with a password reset url to the specified email
 	* Will register an account if no account is found with that email
-	* 
+	*
 	* @param string $email user's email
-	* 
+	*
 	* @return response
 	*/
 	public function passwordResetRequest($email) {
@@ -345,8 +344,8 @@ class Login
 			## Verify That Email Exists
 			$stmt = $this->conn->prepare(
 				"SELECT u.email, u.firstName, u.userId
-				FROM ".$this->database.".login l
-					INNER JOIN ".$this->database.".user u ON u.userId = l.userId
+				FROM Login l
+					INNER JOIN User u ON u.userId = l.userId
 				WHERE u.archived = 0 
 					AND u.email = ?");
 			$stmt->execute(array($email));
@@ -373,8 +372,8 @@ class Login
 
 				$subject = $this->name." Password Reset Request";
 				$mail_body = "<p>".$dbfirst_name.",</p>";
-				$mail_body .= "<p>You have recently requested a password reset at ".URL_BASE.". Click or copy and paste the 
-					link below to reset your password. If you are receiving this email unexpectedly and have not requested a password reset, you may disregard this 
+				$mail_body .= "<p>You have recently requested a password reset at ".URL_BASE.". Click or copy and paste the
+					link below to reset your password. If you are receiving this email unexpectedly and have not requested a password reset, you may disregard this
 					email and continue to logon normally.</p><br />";
 				$mail_body .= $path."<br /><br />";
 				$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>";
@@ -406,12 +405,12 @@ class Login
 
 	/**
 	* Password Reset
-	* 
+	*
 	* @param string $email user's email
 	* @param string $token token that was used to reset password
 	* @param string $password  new password
 	* @param string $vpassword  new password second entry
-	* 
+	*
 	* @return response
 	*/
 	public function passwordReset($email, $token, $password, $vpassword) {
@@ -438,7 +437,7 @@ class Login
 			* Must contain at least one lower case character
 			* Must contain at least one digit OR at least one special character
 			*/
-			
+
 			if(!preg_match('/(?=^.{7,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/',$password)){
 
 				throw new Exception("The password provided does not meet the minimum requirements.");
@@ -448,8 +447,8 @@ class Login
 
 			## Check That Email Address Exists
 			$stmt = $this->conn->prepare("SELECT u.userId
-				FROM ".$this->database.".passwordreset r
-					INNER JOIN ".$this->database.".user u ON u.userId = r.userId
+				FROM PasswordReset r
+					INNER JOIN User u ON u.userId = r.userId
 				WHERE u.archived = 0 
 					AND r.token = ?
 					AND r.archived = 0
@@ -468,7 +467,7 @@ class Login
 			$row = $results[0];
 			$reset_userId = $row['userId'];
 			$stmt = $this->conn->prepare("SELECT u.userId, u.email as email, u.firstName as first_name 
-				FROM ".$this->database.".user u
+				FROM User u
 				WHERE u.archived = 0 
 					AND u.email = ?");
 			$stmt->execute(array($email));
@@ -484,11 +483,11 @@ class Login
 
 			## At This Point It Is Okay To Reset The Password
 			$password_hash = password_hash($password, PASSWORD_BCRYPT);
-			$stmt = $this->conn->prepare("UPDATE ".$this->database.".login SET password = ? WHERE userId = ?");
+			$stmt = $this->conn->prepare("UPDATE Login SET password = ? WHERE userId = ?");
 			$stmt->execute(array($password_hash, $userId));
 
 			## Delete Row From password_reset Table
-			$stmt = $this->conn->prepare("UPDATE ".$this->database.".passwordreset SET archived = 1 WHERE userId = ?");
+			$stmt = $this->conn->prepare("UPDATE PasswordReset SET archived = 1 WHERE userId = ?");
 			$stmt->execute(array($userId));
 			$response['success'] = true;
 
@@ -496,7 +495,7 @@ class Login
 			$path = "<a href='".URL_BASE."'>".URL_BASE."</a>";
 			$subject = $this->name." Password Reset Success";
 			$mail_body = "<p>".$dbfirst_name.",</p>";
-			$mail_body .= "<p>Your password has been reset successfully. You may now login with your new password by following the link below. If you are receiving 
+			$mail_body .= "<p>Your password has been reset successfully. You may now login with your new password by following the link below. If you are receiving
 				this email unexpectedly and have not reset your password. Please contact support, as your account may have been compromised.</p><br />";
 			$mail_body .= $path."<br /><br />";
 			$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>";
@@ -526,7 +525,7 @@ class Login
 
 	/**
 	* Change Password
-	* 
+	*
 	* @param string $password  old password
 	* @param string $npassword  new password
 	* @param string $vpassword  new password second entry
@@ -551,8 +550,8 @@ class Login
 
 			## Fetch Current Password
 			$stmt = $this->conn->prepare("SELECT password 
-				FROM ".$this->database.".login l
-					INNER JOIN ".$this->database.".user u ON u.userId = l.userId
+				FROM Login l
+					INNER JOIN User u ON u.userId = l.userId
 				WHERE u.archived = 0
 					AND l.userId = ?");
 			$stmt->execute(array($_SESSION['USER__ID']));
@@ -584,14 +583,14 @@ class Login
 			* Must contain at least one lower case character
 			* Must contain at least one digit OR at least one special character
 			*/
-			
+
 			if(!preg_match('/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/',$password)){
 				throw new Exception("The password provided does not meet the minimum requirements.");
 			}
 
 			## Set New Password
 			$password = password_hash($npassword, PASSWORD_BCRYPT);
-			$stmt = $this->conn->prepare("UPDATE ".$this->database.".login SET password = ? WHERE userId = ?");
+			$stmt = $this->conn->prepare("UPDATE Login SET password = ? WHERE userId = ?");
 			$stmt->execute(array($password, $_SESSION['USER__ID']));
 			$response['success'] = true;
 		}catch(PDOException $e){
@@ -608,9 +607,9 @@ class Login
 
 	/**
 	* Logged In
-	* 
+	*
 	* Checks whether the user is still loggin in
-	* 
+	*
 	* @return boolean
 	*/
 	public function checkLogin(){
@@ -620,7 +619,7 @@ class Login
 		if(isset($_SESSION['USER__ID']) && isset($_SESSION['LAST_ACTIVITY'])){
 
 			if($_SESSION['LAST_ACTIVITY'] + $this->SESSION_THRESHOLD >= time()){
-				
+
 				## Update Session
 				$_SESSION['LAST_ACTIVITY'] = time();
 
@@ -634,9 +633,9 @@ class Login
 
 	/**
 	* Random String
-	* 
+	*
 	* Generates a random string for internal use like password reset
-	* 
+	*
 	* @return string
 	*/
 	private function rand_string($length) {
@@ -648,29 +647,29 @@ class Login
 		for( $i = 0; $i < $length; $i++ ) {
 			$str .= $chars[ rand( 0, $size - 1 ) ];
 		}
-		
+
 		return $str;
 	}
 
 	/**
 	* Clear Old Tokens
-	* 
+	*
 	* Clears all tokens in the db older than X minutes
-	* 
+	*
 	* @return string
 	*/
 	private function clearOldTokens() {
 		$this->conn->query(
-			"UPDATE ".$this->database.".passwordreset 
+			"UPDATE PasswordReset 
 			SET archived = 1
 			WHERE timestamp < current_timestamp() - INTERVAL ".$this->TOKEN_THRESHOLD." MINUTE;");
 	}
 
 	/**
 	* Get New Token
-	* 
+	*
 	* Returns a new Token as well as clearing tokens with that user id
-	* 
+	*
 	* @return string
 	*/
 	private function getPasswordResetToken($userId) {
@@ -678,19 +677,19 @@ class Login
 
 		## Delete Existing Records
 		$stmt = $this->conn->prepare(
-			"UPDATE ".$this->database.".passwordreset 
+			"UPDATE PasswordReset 
 			SET archived = 1
 			WHERE userId = ?");
 		$stmt->execute(array($userId));
 
 		## Create Reset Record
 		$stmt = $this->conn->prepare(
-			"INSERT INTO ".$this->database.".passwordreset 
+			"INSERT INTO PasswordReset 
 				(userId, token, ipAddress) 
 			VALUES 
 				(?, ?, ?)");
 		if($stmt->execute(array($userId, $token, $_SERVER['REMOTE_ADDR']))){
-			return $token;   
+			return $token;
 		}else{
 			return false;
 		}
