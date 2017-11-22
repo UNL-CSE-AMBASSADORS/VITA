@@ -20,7 +20,7 @@ getAllShifts($_GET);
 function getAllShifts($data) {
 	GLOBAL $DB_CONN;
 	$defaultSelectColumns = array('shiftId', 'startTime', 'endTime', 'archived', 'createdAt', 'lastModifiedDate', 'siteId', 'createdBy', 'lastModifiedBy');
-	
+
 	// construct select columns list
 	$selectColumns = [];
 	if (!is_null($data) && !empty($data)) {
@@ -34,8 +34,8 @@ function getAllShifts($data) {
 	}
 	$selectColumnsString = join(',', $selectColumns);
 
-	$year = 2018;
-	if(isset($data['year'])) {
+	$year = date("Y");
+	if (isset($data['year'])) {
 		$year = $data['year'];
 	}
 
