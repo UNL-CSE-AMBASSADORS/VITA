@@ -1,6 +1,5 @@
 <?php
 
-const headerColumnNames = array('Scheduled Time', 'First Name', 'Last Name', 'Phone Number', 'Email Address', 'Appointment ID');
 const allSitesId = -1;
 
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
@@ -109,9 +108,10 @@ function createAppointmentExcelFile($appointments) {
 }
 
 function insertHeaderRow($activeSheet) {
+	$headerColumnNames = array('Scheduled Time', 'First Name', 'Last Name', 'Phone Number', 'Email Address', 'Appointment ID');
 	$columnCharacter = 'A'; # Excel columns start at A
 	$rowNumber = 1;
-	foreach (headerColumnNames as $headerName) {
+	foreach ($headerColumnNames as $headerName) {
 		$activeSheet->setCellValue("$columnCharacter$rowNumber", $headerName);
 		$activeSheet->getColumnDimension("$columnCharacter")->setAutoSize(true);
 		$columnCharacter++;

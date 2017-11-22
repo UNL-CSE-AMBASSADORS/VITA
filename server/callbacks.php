@@ -1,10 +1,14 @@
 <?php
 
-require_once 'config.php';
+$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+require_once "$root/server/config.php";
 if(isset($_REQUEST['callback'])){
 	switch ($_REQUEST['callback']) {
 		case 'login':
 			login($_REQUEST);
+			break;
+		case 'logout':
+			logout();
 			break;
 		case 'register':
 			register($_REQUEST);
@@ -19,8 +23,8 @@ if(isset($_REQUEST['callback'])){
 }
 
 function getLoginClass(){
-	global $DB_CONN;
-	require_once 'Login.class.php';
+	GLOBAL $DB_CONN, $root;
+	require_once "$root/server/Login.class.php";
 
 	return new Login($DB_CONN, 'VITA', 'VITA', '/index.php', '/register/index.php', 'noreply@vita-lincoln.org', 'hmmm@hmmm.com');
 }
@@ -29,6 +33,13 @@ function login($params){
 	$LOGIN = getLoginClass();
 
 	print $LOGIN->login($params['email'], $params['password']);
+	exit;
+}
+
+function logout() {
+	$LOGIN = getLoginClass();
+
+	print $LOGIN->logout();
 	exit;
 }
 
