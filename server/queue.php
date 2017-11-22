@@ -1,5 +1,6 @@
 <?php
-	require_once 'config.php';
+	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+	require_once "$root/server/config.php";
 	$conn = $DB_CONN;
 
 	// TODO make this handle multiple locations, if necessary

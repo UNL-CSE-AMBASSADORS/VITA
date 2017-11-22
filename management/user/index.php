@@ -31,7 +31,7 @@ if (!$USER->hasPermission('edit_user_permission')) {
 				<button class="btn btn-default pull-right" id="btn-add-user">Add User</button>
 			</div>
 		</div>
-		<div class="row" style="overflow-x: auto;">
+		<div class="row" id="user-permission-table-row">
 			<div class="col-md-12">
 				<table class="table table-condensed table-hover" id="user-permission-table">
 
@@ -60,7 +60,7 @@ if (!$USER->hasPermission('edit_user_permission')) {
 								<input type="text" class="form-control" id="lastName">
 							</section>
 							<section class="form-group">
-								<label for="email">Email Address</label>
+								<label for="email">Email Address:</label>
 								<input type="text" class="form-control" id="email" placeholder="student@huskers.unl.edu">
 							</section>
 							<section class="form-group">

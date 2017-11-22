@@ -5,15 +5,16 @@ $(function(){
 
 		$('#add-user-form').on('submit', function(event){
 			event.preventDefault();
+			$('#add-user-form button[type=submit]').prop('disabled', true);
 			
 			var valid = true;
 
 			$(this).find('input').each(function(){
-				var hasVal = !$(this).val();
-				if(hasVal){
+				var noValue = !$(this).val();
+				if(noValue){
 					valid = false;
 				}
-				$(this).toggleClass('is-invalid',hasVal);
+				$(this).toggleClass('is-invalid',noValue);
 			});
 
 			if(!$('#email').val().match(/.+@.+\..+/)){
@@ -31,10 +32,16 @@ $(function(){
 						lastName: $('#lastName').val(),
 						email: $('#email').val(),
 						phone: $('#phone').val(),
-						prepareTaxes: !!$('#prepareTaxes').prop('checked')
+						prepareTaxes: (!!$('#prepareTaxes').prop('checked')) ? 1 : 0
 					},
 					success: function(response){
+						$('#add-user-form button[type=submit]').prop('disabled', false);
+
 						if(response.success){
+							// Clear inputs
+							$('#add-user-form input').val('');
+
+							// Close box
 							$('#add-user-modal').modal('hide');
 							refreshUserTable();
 						}else{
@@ -42,6 +49,8 @@ $(function(){
 						}
 					}
 				});
+			}else{
+				$('#add-user-form button[type=submit]').prop('disabled', false);
 			}
 		});
 	});
