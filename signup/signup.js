@@ -154,7 +154,7 @@ class SiteTimeMap {
 	}
 
 	getTimesArray() {
-		return this.times.sort().map(t => getTimeString(t));
+		return this.times.sort((a,b) => a - b).map(t => getTimeString(t));
 	}
 }
 
@@ -211,7 +211,7 @@ class DateSiteTime {
 		}
 
 		if (date.toDateString() !== endDate.toDateString()) {
-			let newStartTime = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
+			let newStartTime = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).toISOString();
 			this.addShift(siteId, newStartTime, endTime);
 		}
 		let newTimes = this._getAppointmentTimes(startTime, endTime);
@@ -256,11 +256,17 @@ class DateSiteTime {
 		if (startTime > endTime) {
 			return [];
 		}
-		const startTimeInSeconds = getTimeInSeconds(new Date(startTime));
-		let endTimeInSeconds = getTimeInSeconds(new Date(endTime));
+		let startDate = new Date(startTime);
+		let endDate = new Date(endTime);
+
+		const startTimeInSeconds = getTimeInSeconds(startDate);
+		let endTimeInSeconds = NUM_SECONDS_IN_DAY;
+		if(startDate.toDateString() === endDate.toDateString()) {
+			endTimeInSeconds = getTimeInSeconds(endDate);
+		}
 
 		if (endTimeInSeconds < startTimeInSeconds) {
-			endTimeInSeconds = NUM_SECONDS_IN_DAY;
+			return [];
 		}
 
 		let out = [],
