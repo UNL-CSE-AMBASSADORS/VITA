@@ -282,8 +282,8 @@ label.error {
 
 .form-select__arrow {
 	position: relative;
-	bottom: 21px;
-	left: calc(100% - 21px);
+	bottom: 25px;
+	left: calc(100% - 25px);
 	width: 0;
 	height: 0;
 	pointer-events: none;

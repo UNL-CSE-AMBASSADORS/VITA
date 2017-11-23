@@ -7,15 +7,15 @@ getAllSites($_GET);
 
 /*
  * The fields that CAN be returned are: siteId, title, address, phoneNumber, and appointmentOnly
- * 
+ *
  * The data can be used to narrow down what is selected from the database:
  * {
  *   "siteId": true,
  *   "title": true,
  *   "address": false
  * }
- * 
- * If the database field is missing it is assumed that you DON'T want it. 
+ *
+ * If the database field is missing it is assumed that you DON'T want it.
  */
 function getAllSites($data) {
 	GLOBAL $DB_CONN;
@@ -40,4 +40,3 @@ function getAllSites($data) {
 
 	echo json_encode($sites);
 }
-
