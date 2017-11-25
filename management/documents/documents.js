@@ -3,7 +3,7 @@ $(document).ready(function() {
 	$("#dateInput").val(getCurrentDateString());
 });
 
-const NUM_SECONDS_IN_HOUR = 60;
+const NUM_MINUTES_IN_HOUR = 60;
 
 let downloadAppointmentSchedule = function() {
 	let siteId = getSelectedSiteId();
@@ -30,7 +30,7 @@ let getSelectedDate = function() {
 }
 
 let getTimezoneOffset = function() {
-	return new Date().getTimezoneOffset() / NUM_SECONDS_IN_HOUR;
+	return new Date().getTimezoneOffset() / NUM_MINUTES_IN_HOUR;
 }
 
 let clickDownloadLink = function(url) {
