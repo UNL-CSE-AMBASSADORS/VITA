@@ -1,10 +1,7 @@
 #main-banner {
 	max-height: 200px;
 }
-#google_translate_element {
-	position: fixed;
-	bottom: 0;
-}
+
 .navbar-brand, .nav-link {
 	cursor: pointer;
 }

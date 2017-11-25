@@ -39,7 +39,7 @@
 								data: {"callback":"logout"},
 								type: "POST",
 								success: function() {
-									location.reload();
+									window.location.href = "/";
 								}
 							});
 						}
