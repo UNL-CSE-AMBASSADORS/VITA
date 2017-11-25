@@ -10,6 +10,7 @@ if (!$USER->hasPermission('can_use_admin_tools')) {
 
 require_once "$root/server/config.php";
 require_once "$root/server/libs/wrappers/PHPExcelWrapper.class.php";
+require_once "$root/server/utilities/dateTimezoneUtilities.php";
 
 $HEADER_COLUMN_NAMES = array('First Name', 'Last Name', 'Start Time', 'End Time', 'Preparing Taxes', 'Phone Number', 'Email Address');
 $ALL_SITES_ID = -1;
@@ -41,12 +42,12 @@ function getVolunteerScheduleExcelFile($data) {
 function executeVolunteerShiftsQuery($data) {
 	GLOBAL $DB_CONN, $ALL_SITES_ID;
 
-	$query = "SELECT User.firstName, User.lastName, TIME(Shift.startTime), TIME(Shift.endTime), User.preparesTaxes, User.phoneNumber, User.email, Shift.siteId, Site.title
+	$query = "SELECT User.firstName, User.lastName, Shift.startTime, Shift.endTime, User.preparesTaxes, User.phoneNumber, User.email, Shift.siteId, Site.title
 		FROM User
 		JOIN UserShift ON User.userId = UserShift.userId
 		JOIN Shift ON UserShift.shiftId = Shift.shiftId
 		JOIN Site ON Shift.siteId = Site.siteId
-		WHERE DATE(Shift.startTime) = ?
+		WHERE Shift.startTime >= ? AND Shift.startTime < ?
 			AND User.archived = FALSE
 			AND Shift.archived = FALSE";
 	if ($data['siteId'] != $ALL_SITES_ID) {
@@ -55,12 +56,26 @@ function executeVolunteerShiftsQuery($data) {
 	$query .= ' ORDER BY Shift.siteId ASC, Shift.startTime ASC';
 	$stmt = $DB_CONN->prepare($query);
 	
-	$filterParams = array($data['date']);
+	$timezoneOffset = $data['timezoneOffset'];
+	$dates = getUtcDateAdjustedForTimezoneOffset($data['date'], $timezoneOffset);
+	$filterParams = array($dates['date']->format('Y-m-d H:i:s'), $dates['datePlusOneDay']->format('Y-m-d H:i:s'));
 	if ($data['siteId'] != $ALL_SITES_ID) {
 		$filterParams[] = $data['siteId'];
 	}
 	$stmt->execute($filterParams);
 	$volunteerShifts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+	// Convert the UTC times from the datbase back into the users's timezone
+	foreach ($volunteerShifts as &$volunteerShift) {
+		$startTimeInUtc = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $volunteerShift['startTime']);
+		$endTimeInUtc = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $volunteerShift['endTime']);
+
+		$startTimeInUserTimezone = $startTimeInUtc->sub(new DateInterval('PT'.$timezoneOffset.'H'));
+		$endTimeInUserTimezone = $endTimeInUtc->sub(new DateInterval('PT'.$timezoneOffset.'H'));
+		
+		$volunteerShift['startTime'] = $startTimeInUserTimezone->format('H:i:s');
+		$volunteerShift['endTime'] = $endTimeInUserTimezone->format('H:i:s');
+	}
 
 	return $volunteerShifts;
 }

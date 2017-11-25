@@ -12,6 +12,7 @@ $ALL_SITES_ID = -1;
 
 require_once "$root/server/config.php";
 require_once "$root/server/libs/wrappers/PHPExcelWrapper.class.php";
+require_once "$root/server/utilities/dateTimezoneUtilities.php";
 
 getAppointmentsScheduleExcelFile($_GET);
 
@@ -39,25 +40,34 @@ function getAppointmentsScheduleExcelFile($data) {
 
 function executeAppointmentQuery($data) {
 	GLOBAL $DB_CONN, $ALL_SITES_ID;
-	
-	$query = "SELECT TIME(scheduledTime), firstName, lastName, Client.phoneNumber, emailAddress, appointmentId, Appointment.siteId, Site.title
+
+	$query = "SELECT scheduledTime, firstName, lastName, Client.phoneNumber, emailAddress, appointmentId, Appointment.siteId, Site.title
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
 		JOIN Site ON Appointment.siteId = Site.siteId
-		WHERE DATE(Appointment.scheduledTime) = ?
+		WHERE Appointment.scheduledTime >= ? AND Appointment.scheduledTime < ?
 			AND Appointment.archived = FALSE";
 	if ($data['siteId'] != $ALL_SITES_ID) {
 		$query .= ' AND Appointment.siteId = ?';
-	} 
+	}
 	$query .= ' ORDER BY Appointment.siteId ASC, Appointment.scheduledTime ASC';
 	$stmt = $DB_CONN->prepare($query);
 	
-	$filterParams = array($data['date']);
+	$timezoneOffset = $data['timezoneOffset'];
+	$dates = getUtcDateAdjustedForTimezoneOffset($data['date'], $timezoneOffset);
+	$filterParams = array($dates['date']->format('Y-m-d H:i:s'), $dates['datePlusOneDay']->format('Y-m-d H:i:s'));
 	if ($data['siteId'] != $ALL_SITES_ID) {
 		$filterParams[] = $data['siteId'];
 	}
 	$stmt->execute($filterParams);
 	$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+	// Convert the UTC times from the datbase back into the users's timezone
+	foreach ($appointments as &$appointment) {
+		$scheduledTimeInUtc = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $appointment['scheduledTime']);
+		$scheduledTimeInUserTimezone = $scheduledTimeInUtc->sub(new DateInterval('PT'.$timezoneOffset.'H'));
+		$appointment['scheduledTime'] = $scheduledTimeInUserTimezone->format('H:i:s');
+	}
 
 	return $appointments;
 }
