@@ -3,7 +3,7 @@
 	
 	require_once "$root/server/user.class.php";
 	$USER = new User();
-	if (!$USER->hasPermission('can_use_admin_tools')) {
+	if (!$USER->hasPermission('use_admin_tools')) {
 		header("Location: /unauthorized");
 		die();
 	}
