@@ -46,6 +46,7 @@
 					</script>
 				<?php else: ?>
 					<a class="nav-link" href="/login">Volunteer Login</a>
+				<?php endif; ?>
 				</li>
 			</ul>
 		</div>

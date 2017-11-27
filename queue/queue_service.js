@@ -11,7 +11,7 @@ queueApp.factory("QueueService", function($http){
 			return $http({
 				url: "/server/queue_priv.php",
 				method: 'POST',
-				data: 'action=checkIn&time=' + time + '&id=' + id,
+				data: 'action=checkIn&time=${time}&id=${id}',
 				headers: {
 					'Content-Type': "application/x-www-form-urlencoded"
 				}
@@ -25,7 +25,7 @@ queueApp.factory("QueueService", function($http){
 			return $http({
 				url: "/server/queue_priv.php",
 				method: 'POST',
-				data: 'action=completePaperwork&time=' + time + '&id=' + id,
+				data: 'action=completePaperwork&time=${time}&id=${id}',
 				headers: {
 					'Content-Type': "application/x-www-form-urlencoded"
 				}
@@ -39,7 +39,7 @@ queueApp.factory("QueueService", function($http){
 			return $http({
 				url: "/server/queue_priv.php",
 				method: 'POST',
-				data: 'action=appointmentStart&time=' + time + '&id=' + id,
+				data: 'action=appointmentStart&time={time}&id={id}',
 				headers: {
 					'Content-Type': "application/x-www-form-urlencoded"
 				}
@@ -53,7 +53,7 @@ queueApp.factory("QueueService", function($http){
 			return $http({
 				url: "/server/queue_priv.php",
 				method: 'POST',
-				data: 'action=appointmentComplete&time=' + time + '&id=' + id,
+				data: 'action=appointmentComplete&time={time}&id={id}',
 				headers: {
 					'Content-Type': "application/x-www-form-urlencoded"
 				}
@@ -67,7 +67,7 @@ queueApp.factory("QueueService", function($http){
 			return $http({
 				url: "/server/queue_priv.php",
 				method: 'POST',
-				data: 'action=appointmentIncomplete&explanation=' + explanation + '&id=' + id,
+				data: 'action=appointmentIncomplete&explanation={explanation}&id={id}',
 				headers: {
 					'Content-Type': "application/x-www-form-urlencoded"
 				}
