@@ -38,10 +38,10 @@ function storeProfile($data) {
 
     $userabilityId = $DB_CONN->lastInsertId();
 
-//Not exactly sure how to implement language information.. this is what I could understand.
+
     $abilityUpdate = "UPDATE UserAbility
-    SET  abilityId = ?
-    WHERE userabilityId = ?;";
+    SET  user.abilityId = ?
+    WHERE abilityId IN (SELECT "spanish_speaking" FROM Ability )
 
   $userabilityParams = array(
     $data['abilityId'],

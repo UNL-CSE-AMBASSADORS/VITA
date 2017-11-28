@@ -67,15 +67,14 @@
 							</select>
 						</div>
 						<div class="apptSelect form-group">
-						<h5>Choose Your Shift Times</h2>
-				    <select id="shiftLocation" class="form-control">
+							<h5>Choose Your Shift Times</h2>
+				    <select id="shiftLocation" class="form-control" onchange="allowShiftSelect()">
 							<option></option>
-						<select></select>
+						</select>
+						<select id="shiftTime" class="form-control" disabled>
+							<option></option>
+						</select> <button>+</button>
 
-				     <br />
-
-				     <input type="button" id="left" value="<" />
-				     <input type="button" id="right" value=">" />
 					 </div>
 
 						<input type="submit" value="Submit" class="submit button vita-background-primary" onclick="editSubmit()">
