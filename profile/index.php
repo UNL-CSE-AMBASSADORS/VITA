@@ -42,10 +42,10 @@
 				<ul id="shiftRegistration"></ul><a href="/profile/edit/index.php"><button>Edit Page</button></a>
 			</div>
 		</div>
-	</div><?php require_once "$root/server/footer.php" ?>
+	</div>
+	<?php require_once "$root/server/footer.php" ?>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 	<script src="/profile/profile.js"></script>
-	<script src="/profile/multipleSelect.js"></script>
 	<script src="/assets/js/form.js"></script>
 </body>
 </html>

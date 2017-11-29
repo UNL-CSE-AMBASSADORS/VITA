@@ -13,3 +13,7 @@
 #profilePicture {
   margin-bottom: 20px;
 }
+
+.shiftSelect {
+     display: inline-block;
+}

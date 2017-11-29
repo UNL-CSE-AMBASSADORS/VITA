@@ -55,7 +55,7 @@
 							<input class="" id="emailProfileStatic" name="emailProfile" required="" type="text">
 							<span class="form-bar"></span>
 							<label class="form-label form-required" for="emailProfile">Email</label>
-						</div>
+					</div>
 						<div class="form-group" style="margin-bottom: 10px;" required="">
 							<select id="languageSkills" class="form-control" multiple="multiple">
 								<option value='' disabled selected>Foreign Language</option>
@@ -66,16 +66,15 @@
 								<option value="Other">Other</option>
 							</select>
 						</div>
-						<div class="apptSelect form-group">
+					<div id="selectShiftContainer">
+						<div class="apptSelect form-group" id="shiftSelectDiv">
 							<h5>Choose Your Shift Times</h2>
-				    <select id="shiftLocation" class="form-control" onchange="allowShiftSelect()">
-							<option></option>
-						</select>
-						<select id="shiftTime" class="form-control" disabled>
-							<option></option>
-						</select> <button>+</button>
+				    <select id="shiftLocation" class="form-control shiftSelect" onchange="allowShiftSelect()"></select>
+						<select id="shiftTime" class="form-control shiftSelect" disabled></select>
+						 <button class="shiftSelect button vita-background-primary" onclick="addNewShift()">+</button>
 
 					 </div>
+				</div>
 
 						<input type="submit" value="Submit" class="submit button vita-background-primary" onclick="editSubmit()">
 					</form>
@@ -88,7 +87,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
 	<script src="/profile/profile.js"></script>
-	<script src="/profile/multipleSelect.js"></script>
 	<script src="/assets/js/form.js"></script>
 </body>
 </html>

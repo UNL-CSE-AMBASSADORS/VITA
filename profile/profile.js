@@ -29,6 +29,15 @@ function validateProfilePage() {
 	});
 }
 
+function allowShiftSelect() {
+	$("#shiftTime").prop("disabled",false);
+}
+
+function addNewShift() {
+	var newShiftEntry = $("#shiftSelectDiv");
+	$("#selectShiftContainer").append(newShiftEntry);
+}
+
 function editSubmit() {
 	var dataOut = {
 		"firstName": firstNameProfile.value,
@@ -52,12 +61,12 @@ function editSubmit() {
 			} else {
 				alert('There was an error on the server! Please refresh the page in a few minutes and try again.');
 			}
-			location.href = "/profile/index.php";
+			window.location.replace("/profile/index.php");
 		}
 	});
 }
 
-function getDataLoad() {
+window.onload = function getDataLoad() {
 	//AJAX for intial prefilled form
 	$.ajax({
 		url: "/server/profileGet.php",
@@ -73,7 +82,12 @@ function getDataLoad() {
 				$("#phoneProfile").html(reponse.phoneNumber);
 				$("#emailProfileStatic").html(reponse.email);
 				$("#taxSkills").html(response.preparesTaxes);
-				$("#shiftRegistration").html(response.shiftId);
+				for (var i  = 0; i < response.length; i++) {
+					$("#shiftLocation").append('<option value='+response.siteId[i]+'>'+response.siteId[i]+'</option>');
+				}
+				for (var i  = 0; i < response.length; i++) {
+					$("#shiftTime").append('<option value='+response.shiftId[i]+'>'+response.shiftId[i]+'</option>');
+				}
 			}
 		}
 	});

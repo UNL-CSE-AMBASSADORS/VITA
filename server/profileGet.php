@@ -19,7 +19,7 @@ function getProfile($data) {
 	$response = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	echo json_encode($response);
 
-	$userAbilityGet = "SELECT abilityId, abilityId
+	$userAbilityGet = "SELECT user.abilityId
 	FROM UserAbility
 	WHERE abilityId = ?";
 	$stmt = $DB_CONN->prepare($userAbilityGet);
