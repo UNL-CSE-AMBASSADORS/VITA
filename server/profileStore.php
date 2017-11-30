@@ -41,7 +41,7 @@ function storeProfile($data) {
 
     $abilityUpdate = "UPDATE UserAbility
     SET  user.abilityId = ?
-    WHERE abilityId IN (SELECT "spanish_speaking" FROM Ability )
+    WHERE abilityId IN (SELECT "spanish_speaking" FROM Ability );"
 
   $userabilityParams = array(
     $data['abilityId'],
