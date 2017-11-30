@@ -18,31 +18,60 @@
 	<div class="container-fluid bg-secondary">
 		<div class="container">
 			<div class="row">
-				<p class="col vita-block-highlight my-4">Qualified students and community members can have their tax return prepared AT NO CHARGE by qualified student and community volunteers.</p>
+				<p class="col vita-block-highlight my-4">
+					Qualified students and community members can have their tax return prepared AT NO CHARGE 
+					by trained student and community volunteers.
+				</p>
 			</div>
 		</div>
 	</div>
 
 	<div class="container my-4">
 		<div class="row">
-			<h2 class="col col-12 col-sm-4">Who qualifies to receive assistance?</h2>
-			<p class="col col-12 col-sm-8">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi aliquet vitae lectus non auctor. Suspendisse quis lacus neque. Integer nibh sem, vulputate et rhoncus suscipit, consequat id est. Vivamus efficitur, nibh vitae finibus sodales, elit sem viverra quam, vel fringilla ligula sapien a tellus. Suspendisse ac velit facilisis, vestibulum neque vitae, convallis metus. Maecenas dignissim iaculis accumsan. Nunc vulputate felis quis ullamcorper fermentum. Mauris mauris massa, molestie at congue vitae, accumsan sed lorem. Nam at rutrum ante.</p>
-		</div>
-		<div class="row justify-content-center mx-0">
-			<a class="col col-12 col-sm-4 btn btn-primary" href="/signup">Make an Appointment</a>
+			<h2 class="col col-12 col-sm-4">What is the UNL Tax Credit Campaign?</h2>
+			<p class="col col-12 col-sm-8">
+				The UNL Tax Credit Campaign prepares tax returns for low-income, working families and students for free.
+				It is sponsored by the University of Nebraska-Lincoln's Center for Civic Engagement in conjunction
+				with the Lincoln Volunteer Income Tax Assistance (VITA) Coalition.
+			</p>
 		</div>
 	</div>
 	<hr>
+
 	<div class="container my-4">
 		<div class="row">
-			<h2 class="col col-12 col-sm-4">Volunteers</h2>
-			<h3 class="col col-12 col-sm-8">How to Get Started</h3>
-			<p class="col col-12 col-sm-8 ml-auto">Getting started is easy! Register below for any of our volunteer positions. Sign up ends December 4th.  If you are uncomfortable with actually handling tax returns, there are still opportunities for you.  The Lincoln Tax Coalition is always in need of greeters and interpreters.  Apply for the volunteer position that works best for you.</p>
+			<h2 class="col col-12 col-sm-4">Sign up for an Appointment</h2>
+			<p class="col col-12 col-sm-8">
+				Residential appointments begin January 21st and run through April 8th. Appointments for international
+				returns begin March 6th and run through April 10th. You can sign up for appointments at the Nebraska East
+				Union, Anderson Library, and Jackie Gaughan Multicultural Center sites through this site. Download the schedule
+				to see all times for all sites and how to contact the sites. 
+			</p>
 		</div>
 		<div class="row justify-content-center mx-0">
-			<a class="col col-12 col-sm-4 btn btn-primary" href="/login">Volunteer login</a>
+			<a class="col col-12 col-sm-4 btn btn-primary" href="/signup">Make an Appointment</a>
+			<a class="col col-12 col-sm-4 btn btn-primary" href="/server/download/downloadFile.php?file=2018_Schedule.pdf">Download Site Schedule</a>
 		</div>
 	</div>
+	<hr>
+
+	<div class="container my-4">
+		<div class="row">
+			<h2 class="col col-12 col-sm-4">Documents to Bring</h2>
+			<ul class="col col-12 col-sm-8">
+				<li>Social Security Card and photo identification</li>
+				<li>Social Security numbers and birth dates for all dependents</li>
+				<li>Forms W-2 and all other income forms and tax documents for 2016</li>
+				<li>Bank routing and account number for deposit/debit of any tax balance</li>
+				<li>Tax identification numbers for any and all daycare providers</li>
+				<li>Spouse, if filing jointly (both must be present to sign the return)</li>
+				<li>If a post secondary student, you must bring your 1098T and student account information showing payment of tuition and qualified fees</li>
+			</ul>
+		</div>
+	</div>
+	<hr>
+
+
 		<div id="google_translate_element"></div><script type="text/javascript">
 function googleTranslateElementInit() {
   new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'ar,es,en,vi', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
