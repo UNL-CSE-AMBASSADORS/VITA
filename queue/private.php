@@ -72,7 +72,7 @@
 			<!-- Client/Appointment Info Section -->
 			<div class="client-info-section container-fluid d-flex py-3">
 				<!-- Currently selected client -->
-				<div class="client d-flex align-items-start flex-column w-100" ng-if="client != null" ng-cloak>
+				<div class="client align-items-start w-100" ng-if="client != null" ng-cloak>
 						<div class="client-name">{{client.firstName}} {{client.lastName}}.</div>
 						<div class="client-time">Scheduled Appointment Time: {{client.scheduledTime | date: "h:mm a"}}</div>
 

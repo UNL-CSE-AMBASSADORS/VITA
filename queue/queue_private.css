@@ -44,5 +44,6 @@ body:before {
 @media (min-width: 768px) {
 	.client-info-section {
 		border-top: 0;
+		overflow-y: scroll;
 	}
 }
