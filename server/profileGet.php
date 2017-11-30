@@ -10,14 +10,14 @@ if (!$USER->isLoggedIn()) {
 require_once 'config.php';
 getProfile($userId);
 function getProfile($data) {
-	GLOBAL $DB_CON;
+	GLOBAL $DB_CONN;
 	$userGet = "SELECT firstName, lastName, phoneNumber, email, preparesTaxes
 	FROM User
 	WHERE userId = ? ";
 	$stmt = $DB_CONN->prepare($userGet);
 	$stmt->execute(array($data));
 	$response = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	echo json_encode($response);
+
 
 	$userAbilityGet = "SELECT user.abilityId
 	FROM UserAbility
@@ -25,7 +25,7 @@ function getProfile($data) {
 	$stmt = $DB_CONN->prepare($userAbilityGet);
 	$stmt->execute(array($data));
 	$response = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	echo json_encode($response);
+
 
 
 	$userShiftGet = "SELECT shiftId
@@ -34,7 +34,7 @@ function getProfile($data) {
 	$stmt = $DB_CONN->prepare($userShiftGet);
 	$stmt->execute(array($data));
 	$response = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	echo json_encode($response);
+
 
 	$shiftSelectGet = "SELECT startTime, endTime, shiftId
 	FROM Shift
@@ -42,7 +42,7 @@ function getProfile($data) {
 	$stmt = $DB_CONN->prepare($shiftSelectGet);
 	$stmt->execute(array($data));
 	$response = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	echo json_encode($response);
+
 
 	$siteIdGet = "SELECT siteId
 	FROM Shift;"

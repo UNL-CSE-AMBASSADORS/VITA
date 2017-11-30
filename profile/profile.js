@@ -1,6 +1,5 @@
 $(document).ready(function() {
 	validateProfilePage();
-	getDataLoad();
 	$(".form-textfield input").blur(function() {
 		var isBlank = $.trim($(this).val()).length > 0;
 		$label = $(this).siblings(".form-label").toggleClass("form-label__floating", isBlank);
