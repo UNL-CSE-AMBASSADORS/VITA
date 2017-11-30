@@ -48,9 +48,13 @@
 				to see all times for all sites and how to contact the sites. 
 			</p>
 		</div>
-		<div class="row justify-content-center mx-0">
-			<a class="col col-12 col-sm-4 btn btn-primary" href="/signup">Make an Appointment</a>
-			<a class="col col-12 col-sm-4 btn btn-primary" href="/server/download/downloadFile.php?file=2018_Schedule.pdf">Download Site Schedule</a>
+		<div class="row justify-content-end mx-0">
+			<div class='col col-12 col-sm-4 px-3'>
+				<a class="btn-block btn btn-primary" href="/signup">Make an Appointment</a>
+			</div>
+			<div class='col col-12 col-sm-4 px-3'>
+				<a class="btn-block btn btn-primary" href="/server/download/downloadFile.php?file=2018_Schedule.pdf">Download Site Schedule</a>
+			</div>
 		</div>
 	</div>
 	<hr>
