@@ -1,12 +1,12 @@
 <?php
-	// $root = realpath($_SERVER["DOCUMENT_ROOT"]);
-     //
-	// require_once "$root/server/user.class.php";
-	// $USER = new User();
-	// if (!$USER->isLoggedIn()) {
-	// 	header("Location: /unauthorized");
-	// 	die();
-	// }
+	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+
+	require_once "$root/server/user.class.php";
+	$USER = new User();
+	if (!$USER->isLoggedIn()) {
+		header("Location: /unauthorized");
+		die();
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -52,7 +52,7 @@
 						</div>
 
 						<div class="form-textfield">
-							<input class="" id="emailProfileStatic" name="emailProfile" required="" type="text">
+							<input class="" id="emailProfile" name="emailProfile" required="" type="text">
 							<span class="form-bar"></span>
 							<label class="form-label form-required" for="emailProfile">Email</label>
 					</div>

@@ -53,6 +53,7 @@ function editSubmit() {
 		cache: false,
 		complete: function(response) {
 			response = response.responseJSON;
+			console.log(response);
 			if (typeof response !== 'undefined' && response && response.success) {
 				$(vitaProfileEdit).hide();
 				$(responsePlaceholder).show();
@@ -75,20 +76,23 @@ window.onload = function getDataLoad() {
 		complete: function(response) {
 			response = response.responseJSON;
 			console.log(response);
-			
+
 			if (typeof response !== 'undefined' && response && response.success) {
 				$("#nameProfile").html(response.userInformation[0].firstName + " " + response.userInformation[0].lastName);
-				$("#firstNameProfile").html(response.userInformation[0].firstName);
-				$("#lastNameProfile").html(response.userInformation[0].lastName);
+				$("#firstNameProfile").val(response.userInformation[0].firstName);
+				$("#lastNameProfile").val(response.userInformation[0].lastName);
 				$("#phoneProfile").html(response.userInformation[0].phoneNumber);
+				$("#phoneProfile").val(response.userInformation[0].phoneNumber);
 				$("#emailProfile").html(response.userInformation[0].email);
+				$("#emailProfile").val(response.userInformation[0].email);
 				$("#taxSkills").html(response.userInformation[0].preparesTaxes ? 'true' : 'false');
 				for (var i  = 0; i < response.userShiftsInformation.length; i++) {
-					let shiftInformation = response.userShiftsInformation[i];
-					$("#shiftRegistration").append(`${shiftInformation.title}: ${shiftInformation.startTime} - ${shiftInformation.endTime}`);
+					let shiftInformation = response.userShiftsInformation[i]
+					console.log(shiftInformation);
+					$("#shiftRegistration").append("<li>" +`${shiftInformation.title} : ${shiftInformation.startTime} - ${shiftInformation.endTime}` + "</li>");
 				}
 				for (var i  = 0; i < response.length; i++) {
-					$("#shiftTime").append('<option value='+response.shiftId[i]+'>'+response.shiftId[i]+'</option>');
+					$("#shiftTime").html('<option value='+response.shiftId[i]+'>'+response.shiftId[i]+'</option>');
 				}
 			}
 		}
