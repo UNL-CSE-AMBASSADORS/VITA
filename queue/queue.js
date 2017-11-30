@@ -20,8 +20,8 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 					appointment.scheduledTime = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
 					appointment.checkedIn = appointment.timeIn != null;
 					appointment.paperworkComplete = appointment.timeReturnedPapers != null;
-					appointment.preparing = appointment.actualAppointmentTime != null;
-					appointment.finished = appointment.timeFinished != null;
+					appointment.preparing = appointment.timeAppointmentStarted != null;
+					appointment.finished = appointment.timeAppointmentEnded != null;
 					appointment.name = appointment.firstName + " " + appointment.lastName;
 					return appointment;
 				});

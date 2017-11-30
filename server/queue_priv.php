@@ -50,7 +50,7 @@
 	function appointmentStart($time, $id) {
 		$stmt = $GLOBALS['conn']->prepare(
 			"UPDATE Appointment
-			SET Appointment.actualAppointmentTime = ?
+			SET Appointment.timeAppointmentStarted = ?
 			WHERE Appointment.appointmentId = ?"
 		);
 
@@ -63,7 +63,7 @@
 	function appointmentComplete($time, $id) {
 		$stmt = $GLOBALS['conn']->prepare(
 			"UPDATE Appointment
-			SET Appointment.timeFinished = ?, Appointment.completed = TRUE
+			SET Appointment.timeAppointmentEnded = ?, Appointment.completed = TRUE
 			WHERE Appointment.appointmentId = ?"
 		);
 
