@@ -73,16 +73,19 @@ window.onload = function getDataLoad() {
 		dataType: "JSON",
 		cache: false,
 		complete: function(response) {
+			response = response.responseJSON;
+			console.log(response);
+			
 			if (typeof response !== 'undefined' && response && response.success) {
-				response = response.responseJSON;
-				$("#nameProfile").html(response.firstName + " " + response.lastName);
-				$("#firstNameProfile").html(response.firstName);
-				$("#lastNameProfile").html(reponse.lastName);
-				$("#phoneProfile").html(reponse.phoneNumber);
-				$("#emailProfileStatic").html(reponse.email);
-				$("#taxSkills").html(response.preparesTaxes);
-				for (var i  = 0; i < response.length; i++) {
-					$("#shiftLocation").append('<option value='+response.siteId[i]+'>'+response.siteId[i]+'</option>');
+				$("#nameProfile").html(response.userInformation[0].firstName + " " + response.userInformation[0].lastName);
+				$("#firstNameProfile").html(response.userInformation[0].firstName);
+				$("#lastNameProfile").html(response.userInformation[0].lastName);
+				$("#phoneProfile").html(response.userInformation[0].phoneNumber);
+				$("#emailProfile").html(response.userInformation[0].email);
+				$("#taxSkills").html(response.userInformation[0].preparesTaxes ? 'true' : 'false');
+				for (var i  = 0; i < response.userShiftsInformation.length; i++) {
+					let shiftInformation = response.userShiftsInformation[i];
+					$("#shiftRegistration").append(`${shiftInformation.title}: ${shiftInformation.startTime} - ${shiftInformation.endTime}`);
 				}
 				for (var i  = 0; i < response.length; i++) {
 					$("#shiftTime").append('<option value='+response.shiftId[i]+'>'+response.shiftId[i]+'</option>');
