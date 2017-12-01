@@ -32,9 +32,9 @@ function allowShiftSelect() {
 	$("#shiftTime").prop("disabled",false);
 }
 
+
 function addNewShift() {
-	var newShiftEntry = $("#shiftSelectDiv");
-	$("#selectShiftContainer").append(newShiftEntry);
+	$("#shiftSelectDiv").clone().appendTo("#shiftSelectFullDiv");
 }
 
 function editSubmit() {
@@ -88,7 +88,6 @@ window.onload = function getDataLoad() {
 				$("#taxSkills").html(response.userInformation[0].preparesTaxes ? 'true' : 'false');
 				for (var i  = 0; i < response.userShiftsInformation.length; i++) {
 					let shiftInformation = response.userShiftsInformation[i]
-					console.log(shiftInformation);
 					$("#shiftRegistration").append("<li>" +`${shiftInformation.title} : ${shiftInformation.startTime} - ${shiftInformation.endTime}` + "</li>");
 				}
 				for (var i  = 0; i < response.length; i++) {

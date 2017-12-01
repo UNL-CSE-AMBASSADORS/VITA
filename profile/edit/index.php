@@ -67,12 +67,16 @@
 							</select>
 						</div>
 					<div id="selectShiftContainer">
-						<div class="apptSelect form-group" id="shiftSelectDiv">
+						<div class="apptSelect form-group" id="shiftSelectFullDiv">
 							<h5>Choose Your Shift Times</h2>
-				    <select id="shiftLocation" class="form-control shiftSelect" onchange="allowShiftSelect()"></select>
+				<div class="apptSelect form-group" id="shiftSelectDiv">
+				    <select id="shiftLocation" class="form-control shiftSelect" onchange="allowShiftSelect()">
+					    <option value="selectShift" disabled selected>Select Shift</option>
+					    <option>a</option>
+				    </select>
 						<select id="shiftTime" class="form-control shiftSelect" disabled></select>
-						 <button class="shiftSelect button vita-background-primary" onclick="addNewShift()">+</button>
-
+						 <button class="shiftSelect button vita-background-primary" id="shiftButton" type="button" onclick="addNewShift()">Add New Shift</button>
+					</div>
 					 </div>
 				</div>
 
