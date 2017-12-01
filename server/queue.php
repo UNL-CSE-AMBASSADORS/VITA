@@ -1,10 +1,13 @@
 <?php
 	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
 	require_once "$root/server/config.php";
+	require_once "$root/server/user.class.php";
 	$conn = $DB_CONN;
 
 	// TODO make this handle multiple locations, if necessary
-	$stmt = $conn->prepare("SELECT DISTINCT appointmentId, scheduledTime, firstName, lastName, timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, completed, notCompletedDescription
+	$stmt = $conn->prepare("SELECT DISTINCT appointmentId, scheduledTime,
+		firstName, lastName, timeIn, timeReturnedPapers,
+		timeAppointmentStarted, timeAppointmentEnded, completed, notCompletedDescription
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
 		WHERE DATE(Appointment.scheduledTime) = ?

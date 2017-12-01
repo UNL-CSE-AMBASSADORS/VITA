@@ -50,8 +50,9 @@
 
 	function appointmentStart($time, $id) {
 		$stmt = $GLOBALS['conn']->prepare(
-			"UPDATE Appointment
-			SET Appointment.timeAppointmentStarted = ?
+			"UPDATE Appointment LEFT JOIN ServicedAppointment
+			ON Appointment.appointmentId = ServicedAppointment.appointmentId
+			SET Appointment.timeAppointmentStarted = ?, ServicedAppointment.startTime = Appointment.timeAppointmentStarted
 			WHERE Appointment.appointmentId = ?"
 		);
 
