@@ -38,8 +38,19 @@ function addNewShift() {
 }
 
 
-function editSubmit() {
-	var dataOut = `action=storeProfile&firstNameProfile=${profileUser.firstName}&lastNameProfile=${profileUser.lastName}&phoneNumberProfile=${profileUser.phoneNumber}&emailProfile=${profileUser.email}&languageSkills=${profileAbility.languageSkills}&shiftTime=${profileShift.UserShiftId}`;
+$('#vitaProfileEdit').submit(function(e) {
+
+	e.preventDefault();
+
+	var dataOut = {
+	"firstName":firstNameProfile.value,
+	"lastName":lastNameProfile.value,
+	"email":emailProfile.value,
+	"phone":phoneProfile.value,
+	"abilityId": languageSkills.value,
+	"siteId": shiftLocation.value,
+	"shiftId":shiftTime.value
+	}
 	$.ajax({
 		url: "/server/profileStore.php",
 		type: "POST",
@@ -55,12 +66,12 @@ function editSubmit() {
 				responsePlaceholder.innerHTML = response.message;
 			} else {
 				alert('There was an error on the server! Please refresh the page in a few minutes and try again.');
-				window.location.replace("/profile/index.php");
 			}
 
 		}
 	});
-}
+	return false;
+});
 
 window.onload = function getDataLoad() {
 	//AJAX for intial prefilled form

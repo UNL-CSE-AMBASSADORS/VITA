@@ -75,7 +75,7 @@
 					    <option>a</option>
 				    </select>
 						<select id="shiftTime" class="form-control shiftSelect" disabled></select>
-						 <button class="shiftSelect button vita-background-primary" id="shiftButton" type="button" onclick="addNewShift()">Add New Shift</button>
+						 <button class="shiftSelect button vita-background-primary" id="shiftButton" type="button">Add New Shift</button>
 					</div>
 					 </div>
 				</div>
