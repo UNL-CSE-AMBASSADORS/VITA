@@ -21,8 +21,8 @@ function getVolunteerScheduleExcelFile($data) {
 	$volunteerShifts = executeVolunteerShiftsQuery($data);
 	$phpExcelWrapper = createVolunteerScheduleExcelFile($volunteerShifts);
 	
-	@ob_clean();
-	@ob_end_clean();
+	ob_clean();
+	ob_end_clean();
 	
 	$fileName = $data['date'] . '_VolunteerSchedule' . '.xlsx';
 	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

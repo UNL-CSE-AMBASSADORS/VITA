@@ -20,8 +20,8 @@ function getAppointmentsScheduleExcelFile($data) {
 	$appointments = executeAppointmentQuery($data);
 	$phpExcelWrapper = createAppointmentExcelFile($appointments);
 	
-	@ob_clean();
-	@ob_end_clean();
+	ob_clean();
+	ob_end_clean();
 	
 	$fileName = $data['date'] . '_AppointmentSchedule' . '.xlsx';
 	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
