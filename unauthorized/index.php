@@ -12,7 +12,8 @@
 	?>
 
 	<div class="container">
-		You are not authorized to access this page.
+		<div class='h1 mt-5'>401 - Unauthorized</div>
+		<div class='h5'>You are not authorized to access this page. Contact your site coordinator if you feel this to be in error.</div>
 	</div>
 
 	<?php require_once "$root/server/footer.php" ?>
