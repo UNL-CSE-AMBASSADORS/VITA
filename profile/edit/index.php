@@ -80,7 +80,7 @@
 					 </div>
 				</div>
 
-						<input type="submit" value="Submit" class="submit button vita-background-primary" onclick="editSubmit()">
+						<input type="submit" value="Submit" class="submit button vita-background-primary" ng-click="editSubmit()">
 					</form>
 				</div>
 				<?php require_once "$root/server/footer.php" ?>

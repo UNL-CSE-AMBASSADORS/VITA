@@ -37,19 +37,13 @@ function addNewShift() {
 	$("#shiftSelectDiv").clone().appendTo("#shiftSelectFullDiv");
 }
 
+
 function editSubmit() {
-	var dataOut = {
-		"firstName": firstNameProfile.value,
-		"lastName": lastNameProfile.value,
-		"phoneNumber": phoneProfile.value,
-		"email": emailProfile.value,
-		"abilityId": languageSkills.value
-	};
 	$.ajax({
 		url: "/server/profileStore.php",
 		type: "POST",
 		dataType: 'JSON',
-		data: dataOut,
+		data: `action=storeProfile&firstName=${profileUser.firstName}&lastName=${profileUser.lastName}&phoneNumber=${profileUser.phoneNumber}&email=${profileUser.email}$abilityId=${profileAbility.languageSkills}`,
 		cache: false,
 		complete: function(response) {
 			response = response.responseJSON;
@@ -60,8 +54,9 @@ function editSubmit() {
 				responsePlaceholder.innerHTML = response.message;
 			} else {
 				alert('There was an error on the server! Please refresh the page in a few minutes and try again.');
+				window.location.replace("/profile/index.php");
 			}
-			window.location.replace("/profile/index.php");
+
 		}
 	});
 }

@@ -23,18 +23,19 @@ function storeProfile($data) {
 
   try {
     $userUpdate = "UPDATE User
-      SET  firstName = ?,lastName = ?,phoneNumber = ?,email = ?,preparesTaxes = ?
-       WHERE userId = ? ;";
+      SET  User.firstName = ?,User.lastName = ?,User.phoneNumber = ?,User.email = ?,User.preparesTaxes = ?
+       WHERE User.userId = ? ;"
     $userParams = array(
       $data('userId'),
       $data['firstName'],
       $data['lastName'],
-      $data['emailNumber'],
+      $data['email'],
       $data['phoneNumber']
       $data['preparesTaxes']
     );
-    $stmt = $DB_CONN->prepare($userUpdate)
+    $stmt = $DB_CONN->prepare($userUpdate);
     $stmt->execute($userParams);
+    $profileUser = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $userabilityId = $DB_CONN->lastInsertId();
 
@@ -47,21 +48,29 @@ function storeProfile($data) {
     $data['abilityId'],
   );
 
-  $stmt = $DB_CONN->prepare($abilityInsert)
+  $stmt = $DB_CONN->prepare($abilityInsert);
   $stmt->execute($userabilityParams);
+  $profileAbility = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
   $shiftUpdate= "UPDATE UserShift
-  SET UserShiftId = ?
-  WHERE shiftId = ?;";
+  SET User.ShiftId = ?
+  WHERE shiftId = ?;"
 
-$shiftParams = array(
-  $data['shiftId'],
-  $data('UserShiftId'),
-);
-$stmt = DB_CONN->prepare($shiftUpdate)
+$shiftParams = $data('UserShiftId');
+$stmt = DB_CONN->prepare($shiftUpdate);
 $stmt->execute($shiftParams);
+$profileShift = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+$profile = array(
+     'success' => true,
+     'profileUser' => $profileUser,
+     'profileAbility' => $profileAbility,
+     'profileShift' => $profileShift
+);
+
+echo json_encode($profile);
   }
 
  catch (Exception $e) {
