@@ -50,7 +50,7 @@
 										<span class="badge badge-pill" ng-class="appointment.checkedIn ? 'badge-primary': 'badge-secondary'">Checked In</span>
 										<span class="badge badge-pill" ng-class="appointment.paperworkComplete ? 'badge-primary': 'badge-secondary'">Completed Paperwork</span>
 										<span class="badge badge-pill" ng-class="appointment.preparing ? 'badge-primary': 'badge-secondary'">Preparing</span>
-										<span class="badge badge-pill" ng-class="appointment.finished ? 'badge-primary': 'badge-secondary'">Appointment Complete</span>
+										<span class="badge badge-pill" ng-class="appointment.ended ? 'badge-primary': 'badge-secondary'">Appointment Complete</span>
 									</div>
 								</div>
 							</div>
@@ -86,7 +86,7 @@
 						</br>
 							<button type="button" class="btn" class="preparing" ng-class="client.preparing ? 'btn-primary': 'btn-secondary' " ng-click="nowPreparing()">Preparing</button>
 						</br>
-							<button type="button" class="btn" class="finished" ng-class="client.finished ? 'btn-primary': 'btn-secondary' " ng-click="completeAppointment()">Finished</button>
+							<button type="button" class="btn" class="ended" ng-class="client.ended ? 'btn-primary': 'btn-secondary' " ng-click="completeAppointment()">Finished</button>
 						</div>
 
 						<div class="greeter-directions">

@@ -21,12 +21,12 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 	};
 
 	$scope.completeAppointment = function() {
-		$scope.client.finished = true;
+		$scope.client.ended = true;
 		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId);
 	};
 
 	$scope.incompleteAppointment = function(explanation) {
-		$scope.client.finished = true;
+		$scope.client.ended = true;
 		QueueService.incompleteAppointment(explanation, $scope.client.appointmentId);
 		$('textarea').val('');
 	}
