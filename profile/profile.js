@@ -39,11 +39,12 @@ function addNewShift() {
 
 
 function editSubmit() {
+	var dataOut = `action=storeProfile&firstNameProfile=${profileUser.firstName}&lastNameProfile=${profileUser.lastName}&phoneNumberProfile=${profileUser.phoneNumber}&emailProfile=${profileUser.email}&languageSkills=${profileAbility.languageSkills}&shiftTime=${profileShift.UserShiftId}`;
 	$.ajax({
 		url: "/server/profileStore.php",
 		type: "POST",
 		dataType: 'JSON',
-		data: `action=storeProfile&firstName=${profileUser.firstName}&lastName=${profileUser.lastName}&phoneNumber=${profileUser.phoneNumber}&email=${profileUser.email}$abilityId=${profileAbility.languageSkills}`,
+		data: dataOut,
 		cache: false,
 		complete: function(response) {
 			response = response.responseJSON;
