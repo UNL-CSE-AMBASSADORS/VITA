@@ -39,7 +39,7 @@ queueApp.factory("QueueService", function($http){
 			return $http({
 				url: "/server/queue_priv.php",
 				method: 'POST',
-				data: `action=appointmentStart&time=${$time}&id=${id}`,
+				data: `action=appointmentStart&time=${time}&id=${id}`,
 				headers: {
 					'Content-Type': "application/x-www-form-urlencoded"
 				}
