@@ -37,9 +37,9 @@
 
 	function completePaperwork($time, $id) {
 		$stmt = $GLOBALS['conn']->prepare(
-			"UPDATE Appointment
-			SET Appointment.timeReturnedPapers = ?
-			WHERE Appointment.appointmentId = ?"
+			"UPDATE ServicedAppointment
+			SET ServicedAppointment.timeReturnedPapers = ?
+			WHERE Appointment.servicedAppointmentId = ?"
 		);
 
 		$stmt->execute(array($time, $id));
@@ -50,10 +50,9 @@
 
 	function appointmentStart($time, $id) {
 		$stmt = $GLOBALS['conn']->prepare(
-			"UPDATE Appointment LEFT JOIN ServicedAppointment
-			ON Appointment.appointmentId = ServicedAppointment.appointmentId
-			SET Appointment.timeAppointmentStarted = ?, ServicedAppointment.startTime = Appointment.timeAppointmentStarted
-			WHERE Appointment.appointmentId = ?"
+			"UPDATE ServicedAppointment
+			SET ServicedAppointment.timeAppointmentStarted = ?
+			WHERE ServicedAppointment.servicedAppointmentId = ?"
 		);
 
 		$stmt->execute(array($time, $id));
@@ -64,9 +63,9 @@
 
 	function appointmentComplete($time, $id) {
 		$stmt = $GLOBALS['conn']->prepare(
-			"UPDATE Appointment
-			SET Appointment.timeAppointmentEnded = ?, Appointment.completed = TRUE
-			WHERE Appointment.appointmentId = ?"
+			"UPDATE ServicedAppointment
+			SET ServicedAppointment.timeAppointmentEnded = ?, ServicedAppointment.completed = TRUE
+			WHERE ServicedAppointment.servicedAppointmentId = ?"
 		);
 
 		$stmt->execute(array($time, $id));
@@ -77,9 +76,9 @@
 
 	function appointmentIncomplete($explanation, $id) {
 		$stmt = $GLOBALS['conn']->prepare(
-			"UPDATE Appointment
-			SET Appointment.notCompletedDescription = ?, Appointment.completed = FALSE
-			WHERE Appointment.appointmentId = ?"
+			"UPDATE ServicedAppointment
+			SET ServicedAppointment.notCompletedDescription = ?, ServicedAppointment.completed = FALSE
+			WHERE ServicedAppointment.servicedAppointmentId = ?"
 		);
 
 		$stmt->execute(array($explanation, $id));
