@@ -647,4 +647,126 @@ SET @permission_useAdminToolsId = LAST_INSERT_ID();
 
 
 
--- 
+-- Questions
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will you require a Depreciation Schedule?", "depreciation_schedule");
+SET @question_question1Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will you require a Schedule F (Farm)?", "schedule_f");
+SET @question_question2Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Are you self-employed or own a home-based business?", "self_employed");
+SET @question_question3Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Does your home-based business or self-employment have a net loss?", "net_loss");
+SET @question_question4Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Does your home-based business or self-employment have more than $10,000 in expenses?", "more_than_10000_expenses");
+SET @question_question5Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Does your home-based business or self-employment have self-employed, SEP, SIMPLE, or qualified retirement plans", "retirement_plans");
+SET @question_question6Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Does your home-based business or self-employment have employees?", "any_employees");
+SET @question_question7Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will your return have casualty losses?", "casualty_losses");
+SET @question_question8Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will your return have theft losses?", "theft_losses");
+SET @question_question9Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will you require a Schedule E (rental income)?", "schedule_e");
+SET @question_question10Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will you require a Schedule K-1 (partnership or trust income)", "schedule_k-1");
+SET @question_question11Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Do you have income from dividends, capital gains, or minimal brokerage transactions?", "dividends_income");
+SET @question_question12Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will your return involve a current bankruptcy?", "current_bankruptcy");
+SET @question_question13Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Will your return involve income from more than one state?", "multiple_states");
+SET @question_question14Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Are you a University of Nebraska - Lincoln student?", "unl_student");
+SET @question_question15Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Are you an International Student Scholar?", "international_student_scholar");
+SET @question_question16Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("What sort of visa are you on?", "visa");
+SET @question_question17Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("How long have you been in the United States?", "duration_in_united_states");
+SET @question_question18Id = LAST_INSERT_ID();
+
+INSERT INTO Question (text, lookupName)
+	VALUES ("Have you been on this visa for less than 183 days and in the United States for less than five years (after 2012)?", "visa_less_than_183_days");
+SET @question_question19Id = LAST_INSERT_ID();
+-- End Questions
+
+
+
+
+
+-- PossibleAnswer
+INSERT INTO PossibleAnswer (text)
+	VALUES ("Yes");
+SET @possibleAnswer_yesId = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text)
+	VALUES ("No");
+SET @possibleAnswer_noId = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text)
+	VALUES ("Unsure");
+SET @possibleAnswer_unsureId = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text)
+	VALUES ("F1");
+SET @possibleAnswer_f1Id = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text)
+	VALUES ("J1");
+SET @possibleAnswer_j1Id = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text)
+	VALUES ("H1B");
+SET @possibleAnswer_h1bId = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text)
+	VALUES ("2011 or earlier");
+SET @possibleAnswer_2011OrEarlierId = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text)
+	VALUES ("2012 or later");
+SET @possibleAnswer_2012OrLaterId = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text)
+	VALUES ("2014 or earlier");
+SET @possibleAnswer_2014OrEarlierId = LAST_INSERT_ID();
+
+INSERT INTO PossibleAnswer (text)
+	VALUES ("2015 or later");
+SET @possibleAnswer_2015OrLaterId = LAST_INSERT_ID();
+-- End PossibleAnswer
