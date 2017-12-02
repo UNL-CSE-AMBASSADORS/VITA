@@ -19,6 +19,9 @@ if(isset($_REQUEST['callback'])){
 		case 'updateUserPermissions':
 			updateUserPermissions($_REQUEST);
 			break;
+		case 'updateUserAbilities':
+			updateUserAbilities($_REQUEST);
+			break;
 		case 'addUser':
 			addUser($_REQUEST);
 			break;
@@ -40,16 +43,18 @@ function getUserTable($data){
 
 	$stmt->execute(array());
 
-	$thead = "<thead><tr><th>Name</th><th>Email</th><th>Permissions</th><th>Count</th></tr>";
+	$thead = "<thead><tr><th>Name</th><th>Email</th><th>Permissions</th><th>Cerifications</th><th>Permissions Count</th></tr>";
 	$tbody = "<tbody>";
 	while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-		$optionList = getUserPermissionOptionList($row['userId']);
+		$permissionsList = getUserPermissionOptionList($row['userId']);
+		$abilitiesList = getUserAbilityOptionList($row['userId']);
 
 		$tbody.= "<tr data-user-id='".$row['userId']."'>";
 		$tbody.= "<td>".$row['firstName']." ".$row['lastName']."</td>";
 		$tbody.= "<td>".$row['email']."</td>";
-		$tbody.= "<td><select class='userPermissionList selectpicker' multiple=true>".implode('', $optionList['options'])."</select></td>";
-		$tbody.= "<td>".$optionList['hasPermissionCount']."</td>";
+		$tbody.= "<td><select class='userPermissionList userPermissionsSelectPicker' multiple=true>".implode('', $permissionsList['options'])."</select></td>";
+		$tbody.= "<td><select class='userAbilityList userAbilitiesSelectPicker' multiple=true>".implode('', $abilitiesList)."</select></td>";		
+		$tbody.= "<td>".$permissionsList['hasPermissionCount']."</td>";
 		$tbody.= "</tr>";
 	}
 	$tbody.= "</tbody>";
@@ -95,18 +100,48 @@ function getUserPermissionOptionList($userId){
 	);
 }
 
+// Returns string of html <option> elments with all abilities
+function getUserAbilityOptionList($userId) {
+	GLOBAL $DB_CONN;
+
+	$stmt = $DB_CONN->prepare("SELECT 
+		abilityId, 
+		name, 
+		description, 
+		lookupName, 
+		(SELECT userAbilityId FROM UserAbility WHERE userId = ? AND UserAbility.abilityId = Ability.abilityId) as userAbilityId
+	FROM Ability
+	ORDER BY !verificationRequired");
+
+	$stmt->execute(array($userId));
+
+	$options = array();
+	while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		if ($row['userAbilityId']) {
+			$selected = 'selected=true';
+			$data = "data-userAbilityId='".$row['userAbilityId']."'";
+		} else {
+			$selected = '';
+			$data = '';
+		}
+		$options[] = "<option $data value=".$row['abilityId']." $selected>".$row['name']."</option>";
+	}
+
+	return $options;
+}
+
 function updateUserPermissions($data){
 	GLOBAL $DB_CONN;
 	GLOBAL $USER;
 
-
 	$response = array();
 	$response['success'] = true;
 
+	// This will disallow a person from removing their own permission that lets them edit permissions.
 	if($data['userId'] === $USER->getUserId()){
 		$stmt = $DB_CONN->prepare("SELECT lookupName 
-			FROM permission
-				INNER JOIN userpermission ON permission.permissionId = userpermission.permissionId
+			FROM Permission
+				INNER JOIN UserPermission ON Permission.permissionId = UserPermission.permissionId
 			WHERE userPermissionId = ?");
 
 		foreach ($data['removePermissionArr'] as $userPermissionId) {
@@ -144,6 +179,42 @@ function updateUserPermissions($data){
 			$stmt->execute(array(
 				$data['userId'],
 				$permissionId, 
+				$USER->getUserId()
+			));
+		}
+	}
+
+	$DB_CONN->commit();
+
+	print json_encode($response);
+}
+
+function updateUserAbilities($data) {
+	GLOBAL $DB_CONN, $USER;
+
+	$response = array();
+	$response['success'] = true;
+
+	$DB_CONN->beginTransaction();
+	
+	if (isset($data['removeAbilityArr'])) {
+		$stmt = $DB_CONN->prepare("DELETE FROM UserAbility WHERE userAbilityId = ?");
+
+		foreach ($data['removeAbilityArr'] as $userAbilityId) {
+			$stmt->execute(array($userAbilityId));
+		}
+	}
+
+	if (isset($data['addAbilityArr'])){
+		$stmt = $DB_CONN->prepare("INSERT INTO UserAbility 
+				(userId, abilityId, createdBy)
+			VALUES 
+				(?, ?, ?)");
+
+		foreach ($data['addAbilityArr'] as $abilityId) {
+			$stmt->execute(array(
+				$data['userId'],
+				$abilityId, 
 				$USER->getUserId()
 			));
 		}
