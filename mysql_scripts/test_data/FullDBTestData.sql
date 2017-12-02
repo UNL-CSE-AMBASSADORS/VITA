@@ -310,10 +310,9 @@ INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
 
 
 -- serviced appointment
-SET @startTime = DATE_ADD((SELECT scheduledTime FROM Appointment WHERE appointmentId = @appointment_appointment5Id), INTERVAL 5 MINUTE);
-SET @endTime = DATE_ADD(@startTime, INTERVAL 37 MINUTE);
+SET @timeIn = DATE_ADD((SELECT scheduledTime FROM Appointment WHERE appointmentId = @appointment_appointment5Id), INTERVAL 5 MINUTE);
 INSERT INTO ServicedAppointment (timeIn, userId, appointmentId)
-	VALUES (@startTime, @user_preparer1Id, @appointment_appointment5Id);
+	VALUES (@timeIn, @user_preparer1Id, @appointment_appointment5Id);
 -- end serviced appointment
 
 
