@@ -1,0 +1,5 @@
+Options -Indexes
+ErrorDocument 401 /unauthorized
+ErrorDocument 403 /server/redirect.php 
+ErrorDocument 404 /error_pages/404.php
+ErrorDocument 500 /error_pages/500.php

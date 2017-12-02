@@ -8,7 +8,7 @@
 	}
 
 	if (!isset($page_subtitle)) {
-		$page_subtitle = "Center for People in Need";
+		$page_subtitle = "";
 	}
 ?>
 
@@ -29,9 +29,37 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/queue">Queue</a>
 				</li>
+			<?php if ($USER->hasPermission('use_admin_tools')): ?>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
+						<a class="dropdown-item" href="#">Review Certifications</a>
+						<a class="dropdown-item" href="#">Adjust Shifts</a>
+						<a class="dropdown-item" href="/management/documents">Print Documents</a>
+					</div>
+				</li>
+			<?php endif; ?>
+			<?php if ($USER->isLoggedIn()): ?>
+				<li class="nav-item">
+					<a class="nav-link" onclick="logout()">Log out</a>
+				</li>
+				<script type="text/javascript">
+					function logout() {
+						$.ajax({
+							url : "/server/callbacks.php",
+							data: {"callback":"logout"},
+							type: "POST",
+							success: function() {
+								window.location.href = "/";
+							}
+						});
+					}
+				</script>
+			<?php else: ?>
 				<li class="nav-item">
 					<a class="nav-link" href="/login">Volunteer Login</a>
 				</li>
+			<?php endif; ?>
 			</ul>
 		</div>
 	</div>
