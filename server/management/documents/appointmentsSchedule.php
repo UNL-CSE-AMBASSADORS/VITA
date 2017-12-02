@@ -19,17 +19,17 @@ getAppointmentsScheduleExcelFile($_GET);
 function getAppointmentsScheduleExcelFile($data) {
 	$appointments = executeAppointmentQuery($data);
 	$phpExcelWrapper = createAppointmentExcelFile($appointments);
-	
+
 	ob_clean();
 	ob_end_clean();
-	
+
 	$fileName = $data['date'] . '_AppointmentSchedule' . '.xlsx';
 	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 	header('Content-Disposition: attachment;filename="'. $fileName .'"');
 	header('Cache-Control: max-age=0');
-	header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); 
-	header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); 
-	header ('Cache-Control: cache, must-revalidate'); 
+	header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+	header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+	header ('Cache-Control: cache, must-revalidate');
 	header ('Pragma: public');
 
 	$objWriter = $phpExcelWrapper->createExcelWriter();
@@ -52,7 +52,7 @@ function executeAppointmentQuery($data) {
 	}
 	$query .= ' ORDER BY Appointment.siteId ASC, Appointment.scheduledTime ASC';
 	$stmt = $DB_CONN->prepare($query);
-	
+
 	$timezoneOffset = $data['timezoneOffset'];
 	$dates = getUtcDateAdjustedForTimezoneOffset($data['date'], $timezoneOffset);
 	$filterParams = array($dates['date']->format('Y-m-d H:i:s'), $dates['datePlusOneDay']->format('Y-m-d H:i:s'));
@@ -64,9 +64,7 @@ function executeAppointmentQuery($data) {
 
 	// Convert the UTC times from the datbase back into the users's timezone
 	foreach ($appointments as &$appointment) {
-		$scheduledTimeInUtc = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $appointment['scheduledTime']);
-		$scheduledTimeInUserTimezone = $scheduledTimeInUtc->sub(new DateInterval('PT'.$timezoneOffset.'H'));
-		$appointment['scheduledTime'] = $scheduledTimeInUserTimezone->format('H:i:s');
+		$appointment['scheduledTime'] = getTimezoneDateFromUtc($appointment['scheduledTime'], $timezoneOffset)->format('H:i:s');
 	}
 
 	return $appointments;
@@ -83,7 +81,7 @@ function createAppointmentExcelFile($appointments) {
 		$phpExcelWrapper->nextRow();
 	} else {
 		# Iterate through all the results and append them to the proper sheet
-		$sheetIndexForSiteId = array(); 
+		$sheetIndexForSiteId = array();
 		foreach ($appointments as $row) {
 			$siteId = $row['siteId'];
 
@@ -92,7 +90,7 @@ function createAppointmentExcelFile($appointments) {
 				$sheetIndex = $phpExcelWrapper->createSheet($row['title']);
 				$sheetIndexForSiteId[$siteId] = $sheetIndex;
 
-				$phpExcelWrapper->setActiveSheetIndex($sheetIndex);				
+				$phpExcelWrapper->setActiveSheetIndex($sheetIndex);
 				$phpExcelWrapper->insertHeaderRow($HEADER_COLUMN_NAMES);
 				$phpExcelWrapper->nextRow();
 			}
@@ -103,9 +101,9 @@ function createAppointmentExcelFile($appointments) {
 
 			# Insert Appointment Data
 			foreach ($row as $key => $value) {
-				if ($key === 'siteId' || $key === 'title') continue; 
+				if ($key === 'siteId' || $key === 'title') continue;
 				if (!$value) $row[$key] = ''; # Change any null data to just be an empty string
-				
+
 				$phpExcelWrapper->insertData($row[$key]);
 				$phpExcelWrapper->nextColumn();
 			}
@@ -115,6 +113,6 @@ function createAppointmentExcelFile($appointments) {
 
 	# Set the default sheet to the first one
 	$phpExcelWrapper->setActiveSheetIndex(0);
-	
+
 	return $phpExcelWrapper;
 }

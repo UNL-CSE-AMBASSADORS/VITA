@@ -18,10 +18,10 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 					// This map converts the MySQL Datatime into a Javascript Date object
 					var t = appointment.scheduledTime.split(/[- :]/);
 					appointment.scheduledTime = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
-					appointment.checkedIn = ServicedAppointment.timeIn != null;
-					appointment.paperworkComplete = ServicedAppointment.timeReturnedPapers != null;
-					appointment.preparing = ServicedAppointment.timeAppointmentStarted != null;
-					appointment.ended = ServicedAppointment.timeAppointmentEnded != null;
+					appointment.checkedIn = appointment.timeIn != null;
+					appointment.paperworkComplete = appointment.timeReturnedPapers != null;
+					appointment.preparing = appointment.timeAppointmentStarted != null;
+					appointment.ended = appointment.timeAppointmentEnded != null;
 					appointment.name = appointment.firstName + " " + appointment.lastName;
 					return appointment;
 				});

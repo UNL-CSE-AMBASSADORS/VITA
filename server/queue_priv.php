@@ -24,9 +24,8 @@
 
 	function checkIn($time, $id) {
 		$stmt = $GLOBALS['conn']->prepare(
-			"UPDATE Appointment
-			SET Appointment.timeIn = ?
-			WHERE Appointment.appointmentId = ?"
+			"INSERT INTO ServicedAppointment (timeIn, appointmentId)
+					VALUES (?, ?)"
 		);
 
 		$stmt->execute(array($time, $id));
@@ -39,7 +38,7 @@
 		$stmt = $GLOBALS['conn']->prepare(
 			"UPDATE ServicedAppointment
 			SET ServicedAppointment.timeReturnedPapers = ?
-			WHERE Appointment.servicedAppointmentId = ?"
+			WHERE ServicedAppointment.appointmentId = ?"
 		);
 
 		$stmt->execute(array($time, $id));
@@ -52,7 +51,7 @@
 		$stmt = $GLOBALS['conn']->prepare(
 			"UPDATE ServicedAppointment
 			SET ServicedAppointment.timeAppointmentStarted = ?
-			WHERE ServicedAppointment.servicedAppointmentId = ?"
+			WHERE ServicedAppointment.appointmentId = ?"
 		);
 
 		$stmt->execute(array($time, $id));
@@ -65,7 +64,7 @@
 		$stmt = $GLOBALS['conn']->prepare(
 			"UPDATE ServicedAppointment
 			SET ServicedAppointment.timeAppointmentEnded = ?, ServicedAppointment.completed = TRUE
-			WHERE ServicedAppointment.servicedAppointmentId = ?"
+			WHERE ServicedAppointment.appointmentId = ?"
 		);
 
 		$stmt->execute(array($time, $id));
@@ -78,7 +77,7 @@
 		$stmt = $GLOBALS['conn']->prepare(
 			"UPDATE ServicedAppointment
 			SET ServicedAppointment.notCompletedDescription = ?, ServicedAppointment.completed = FALSE
-			WHERE ServicedAppointment.servicedAppointmentId = ?"
+			WHERE ServicedAppointment.appointmentId = ?"
 		);
 
 		$stmt->execute(array($explanation, $id));
