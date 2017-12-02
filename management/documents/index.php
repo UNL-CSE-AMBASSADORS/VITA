@@ -33,6 +33,6 @@
 	</div>
 
 	<?php require_once "$root/server/footer.php" ?>
-	<script src="/management/documents/documents.js"></script>
+	<script src="/dist/management/documents/documents.js"></script>
 </body>
 </html>
