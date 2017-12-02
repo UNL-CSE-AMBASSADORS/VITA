@@ -634,3 +634,17 @@ INSERT INTO Ability (name, lookupName, description, verificationRequired)
 
 
 -- Permissions
+INSERT INTO Permission (name, description, lookupName)
+	VALUES ("Edit Permissions", "Can edit user permissions", "edit_user_permissions");
+SET @permission_editUserPermissionId = LAST_INSERT_ID();
+
+INSERT INTO Permission (name, description, lookupName)
+	VALUES ("Use Admin Tools", "Can use administrative tools", "use_admin_tools");
+SET @permission_useAdminToolsId = LAST_INSERT_ID();
+-- End Permissions
+
+
+
+
+
+-- 

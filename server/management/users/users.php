@@ -6,7 +6,7 @@ require_once "$root/server/user.class.php";
 
 $USER = new User();
 
-if (!$USER->hasPermission('edit_user_permission')) {
+if (!$USER->hasPermission('edit_user_permissions')) {
 	header("Location: /unauthorized");
 	die();
 }
@@ -148,7 +148,7 @@ function updateUserPermissions($data){
 			$stmt->execute(array($userPermissionId));
 			$lookupName = $stmt->fetch(PDO::FETCH_ASSOC)['lookupName'];
 
-			if($lookupName === 'edit_user_permission'){
+			if($lookupName === 'edit_user_permissions'){
 				$firstName = $USER->getUserDetails()['firstName'];
 
 				$response['success'] = false;

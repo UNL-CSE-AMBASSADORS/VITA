@@ -17,7 +17,7 @@
 
 <p>Who am I? <span><?php @print $USER->getUserId() ?: 'N/A'?></span></p>
 
-<p>Do I have edit_user_permission? <span><?php @print $USER->hasPermission('edit_user_permission') ? 'Yes': 'No'?></span></p>
+<p>Do I have edit_user_permission? <span><?php @print $USER->hasPermission('edit_user_permissions') ? 'Yes': 'No'?></span></p>
 
 <p>Do I have edit_user_TYPOrmission? <span><?php @print $USER->hasPermission('edit_user_TYPOrmission') ? 'Yes': 'No'?></span></p>
 
