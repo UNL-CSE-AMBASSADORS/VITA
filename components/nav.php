@@ -29,7 +29,6 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/queue">Queue</a>
 				</li>
-				<li class="nav-item">
 			<?php if ($USER->hasPermission('use_admin_tools')): ?>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
@@ -51,7 +50,7 @@
 							data: {"callback":"logout"},
 							type: "POST",
 							success: function() {
-								location.reload();
+								window.location.href = "/";
 							}
 						});
 					}
