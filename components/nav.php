@@ -12,6 +12,20 @@
 	}
 ?>
 
+<?php
+	date_default_timezone_set('America/Chicago'); // Use CST
+	$now = date('Y-m-d H:i:s');
+	$signupBeginsDate = '2018-01-15 00:00:00';
+	if ($now < $signupBeginsDate) {
+?>
+	<div class="navbar navbar-expand-md navbar-light bg-light" style="z-index: 10000">
+		<div class="container d-flex d-sm-inline-flex justify-content-center">
+			<img src="https://openclipart.org/download/29833/warning.svg" />
+			<h2>Warning: This site is still under construction.</div>
+		</div>
+	</div>
+<?php } ?>
+
 <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
 	<div class="container">
 		<a class="navbar-brand" href="/"><?php echo $page_title ?></a>
