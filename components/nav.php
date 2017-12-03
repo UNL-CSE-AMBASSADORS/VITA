@@ -18,7 +18,7 @@
 	$signupBeginsDate = '2018-01-15 00:00:00';
 	if ($now < $signupBeginsDate) {
 ?>
-	<div class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+	<div class="navbar navbar-expand-md navbar-light bg-light sticky-top" style="z-index: 10000">
 		<div class="container">
 			<img src="https://openclipart.org/download/29833/warning.svg" />
 			<h2 class="pt-5">Warning: This site is still under construction until January 15th, 2018. Please check back then.</div>
