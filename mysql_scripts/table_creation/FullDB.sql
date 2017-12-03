@@ -10,12 +10,6 @@ DROP TABLE IF EXISTS Site;
 DROP TABLE IF EXISTS PossibleAnswer;
 DROP TABLE IF EXISTS Question;
 
--- Temporary, this is here since I renamed the tables, but these old tables will still exist on other people's machines, we need to remove them
-DROP TABLE IF EXISTS UserPrivilege;
-DROP TABLE IF EXISTS Privilege;
-DROP TABLE IF EXISTS LitmusQuestion;
--- Temporary
-
 DROP TABLE IF EXISTS UserPermission;
 DROP TABLE IF EXISTS Permission;
 DROP TABLE IF EXISTS UserAbility;
