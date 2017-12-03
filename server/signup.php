@@ -1,5 +1,12 @@
 <?php
 
+date_default_timezone_set('America/Chicago'); // Use CST
+$now = date('Y-m-d H:i:s');
+$signupBeginsDate = '2018-01-15 00:00:00';
+if ($now < $signupBeginsDate) {
+	die('Appointment signup does not begin until January 15th, 2018. Please check back then.');
+}
+
 function getLitmusQuestions() {
 	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
 	require_once "$root/server/config.php";
