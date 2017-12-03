@@ -15,10 +15,13 @@
 	?>
 
 	<?php 
+		// TODO, THIS CODE WILL NEED TO BE REMOVED ONCE APPOINTMENT SIGN UP ACTUALLY STARTS
 		date_default_timezone_set('America/Chicago'); // Use CST
 		$now = date('Y-m-d H:i:s');
 		$signupBeginsDate = '2018-01-15 00:00:00';
-		if ($now < $signupBeginsDate) {
+		require_once "$root/server/user.class.php";
+		$USER = new User();
+		if ($now < $signupBeginsDate && !$USER->isLoggedIn()) {
 	?>
 		<!-- BEFORE SIGN UP BEGINS -->
 		<div class="container">
