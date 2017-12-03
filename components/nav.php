@@ -21,7 +21,7 @@
 	<div class="navbar navbar-expand-md navbar-light bg-light sticky-top" style="z-index: 10000">
 		<div class="container">
 			<img src="https://openclipart.org/download/29833/warning.svg" />
-			<h2 class="pt-5">Warning: This site is still under construction until January 15th, 2018. Please check back then.</div>
+			<h2 class="pt-5">Warning: This site is still under construction.</div>
 		</div>
 	</div>
 <?php } ?>
