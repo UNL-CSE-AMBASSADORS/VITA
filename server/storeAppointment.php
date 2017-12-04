@@ -2,6 +2,19 @@
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 require_once "$root/server/config.php";
 
+// TODO, WILL BE REMOVED AFTER APPOINTMENTS BEGIN THIS SEASON
+date_default_timezone_set('America/Chicago'); // Use CST
+$now = date('Y-m-d H:i:s');
+$signupBeginsDate = '2018-01-15 00:00:00';
+if ($now < $signupBeginsDate) {
+	require_once "$root/server/user.class.php";
+	$USER = new User();
+	if (!$USER->isLoggedIn()) {
+		die('Appointment signup does not begin until January 15th, 2018. Please check back then.');
+	}
+}
+// END TODO
+
 storeAppointment($_POST);
 
 function storeAppointment($data){
