@@ -60,6 +60,15 @@
 							<label class="form-label form-required" for="phone">Phone Number</label>
 						</div>
 
+
+						<!-- TODO CHANGE THE ADD DEPENDENT TO SOMETHING MORE DESCRIPTIVE OF WHAT THIS IS FOR CLIENTS-->
+						<h3 class="form-subheading">Add Dependents</h3>
+						<div id="dependents" class="mb-3">
+							
+						</div>
+						<button type="button" class="btn mb-3" id="addDependentButton">Add Dependent</button>
+
+						
 						<h3 class="form-subheading">Background Information</h3>
 
 						<div class="form-radio row">

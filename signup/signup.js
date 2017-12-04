@@ -516,6 +516,8 @@ function conditionalFormFields() {
 		}
 	});
 
+	// TODO: MAKE THE NUMBER OF RETURNS FIELD DYNAMICALLY ADD/REMOVE TEXT FIELDS FOR NAMES
+
 	// Independent field = #studentf1
 	// Dependent field = if 2011 or earlier --> studentScholarAppointmentPicker
 	//									 if 2012 or later --> appointmentPicker
@@ -562,6 +564,24 @@ function validateSignupForm() {
 	});
 }
 
+$("#addDependentButton").click(function(e) {
+	var firstNameRow = $('<div class="form-textfield"></div>');
+	firstNameRow.append($('<input type="text" name="firstName" class="firstName" required/>'));
+	firstNameRow.append($('<span class="form-bar"></span>'));
+	firstNameRow.append($('<label class="form-label form-required" for="firstName">First Name</label>'));
+
+	var lastNameRow = $('<div class="form-textfield"></div>');	
+	lastNameRow.append($('<input type="text" name="lastName" class="lastName" required/>'));
+	lastNameRow.append($('<span class="form-bar"></span>'));
+	lastNameRow.append($('<label class="form-label form-required" for="lastName">Last Name</label>'));
+
+	var removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
+
+	$("#dependents").append(firstNameRow);
+	$("#dependents").append(lastNameRow);
+	$("#dependents").append(removeButton);
+});
+
 // Form submission
 $('#vitaSignupForm').submit(function(e) {
 	// Stop default form submit action
@@ -589,6 +609,20 @@ $('#vitaSignupForm').submit(function(e) {
 		}
 	});
 
+	var dependents = [];
+	// TODO: Maybe use a div class here? 
+	$("").each(function() { 
+		var firstName = $(this).find('.firstName').val().trim();
+		var lastName = $(this).find('.lastName').val().trim();
+
+		if (firstName.length > 0 && lastName.length > 0) { // empty strings
+			dependents.push({
+				firstName: firstName,
+				lastName: lastName
+			});
+		}
+	});
+
 	var scheduledTime = new Date($("#dateInput").val() + " " + $("#timePickerSelect").val()).toISOString();
 
 	var data = {
@@ -596,7 +630,8 @@ $('#vitaSignupForm').submit(function(e) {
 		"lastName":lastName.value,
 		"email":email.value,
 		"phone":phone.value,
-		"questions": questions,
+		"questions":questions,
+		"dependents":dependents,
 		"scheduledTime":scheduledTime,
 		"siteId":sitePickerSelect.value
 	};
