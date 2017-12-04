@@ -565,21 +565,15 @@ function validateSignupForm() {
 }
 
 $("#addDependentButton").click(function(e) {
-	var firstNameRow = $('<div class="form-textfield"></div>');
-	firstNameRow.append($('<input type="text" name="firstName" class="firstName" required/>'));
-	firstNameRow.append($('<span class="form-bar"></span>'));
-	firstNameRow.append($('<label class="form-label form-required" for="firstName">First Name</label>'));
+	var dependentRow = $('<div></div>').addClass("container dependent-div");
+	var firstNameBlock = $('<input type="text" name="firstName" required />').addClass("col-5 firstName");
+	var lastNameBlock = $('<input type="text" name="lastName" required />').addClass("col-5 lastName");
+	var removeBlock = $('<button type="button"></button>').addClass("btn btn-danger col-2").html("Remove").click(function(){
+		$(this).parent().remove();
+	});
 
-	var lastNameRow = $('<div class="form-textfield"></div>');	
-	lastNameRow.append($('<input type="text" name="lastName" class="lastName" required/>'));
-	lastNameRow.append($('<span class="form-bar"></span>'));
-	lastNameRow.append($('<label class="form-label form-required" for="lastName">Last Name</label>'));
-
-	var removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-	$("#dependents").append(firstNameRow);
-	$("#dependents").append(lastNameRow);
-	$("#dependents").append(removeButton);
+	dependentRow.append(firstNameBlock, lastNameBlock, removeBlock);
+	$("#dependents").append(dependentRow);	
 });
 
 // Form submission
@@ -611,7 +605,7 @@ $('#vitaSignupForm').submit(function(e) {
 
 	var dependents = [];
 	// TODO: Maybe use a div class here? 
-	$("").each(function() { 
+	$(".dependent-div").each(function() { 
 		var firstName = $(this).find('.firstName').val().trim();
 		var lastName = $(this).find('.lastName').val().trim();
 
