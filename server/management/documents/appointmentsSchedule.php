@@ -3,11 +3,11 @@
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 require_once "$root/server/user.class.php";
 $USER = new User();
-if (!$USER->hasPermission('can_use_admin_tools')) {
+if (!$USER->hasPermission('use_admin_tools')) {
 	header("Location: /unauthorized");
 	die();
 }
-$HEADER_COLUMN_NAMES = array('Scheduled Time', 'First Name', 'Last Name', 'Phone Number', 'Email Address', 'Appointment ID');
+$HEADER_COLUMN_NAMES = array('Scheduled Time', 'First Name', 'Last Name', 'Phone Number', 'Email Address', 'Appointment ID', 'Number of Returns');
 $ALL_SITES_ID = -1;
 
 require_once "$root/server/config.php";
@@ -41,7 +41,8 @@ function getAppointmentsScheduleExcelFile($data) {
 function executeAppointmentQuery($data) {
 	GLOBAL $DB_CONN, $ALL_SITES_ID;
 
-	$query = "SELECT scheduledTime, firstName, lastName, Client.phoneNumber, emailAddress, appointmentId, Appointment.siteId, Site.title
+	$query = "SELECT scheduledTime, Client.firstName, Client.lastName, Client.phoneNumber, emailAddress,
+			appointmentId, Appointment.siteId, Site.title, (SELECT COUNT(*) FROM DependentClient WHERE DependentClient.clientId = Client.clientId) AS numberOfReturns
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
 		JOIN Site ON Appointment.siteId = Site.siteId
@@ -67,6 +68,8 @@ function executeAppointmentQuery($data) {
 		$scheduledTimeInUtc = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $appointment['scheduledTime']);
 		$scheduledTimeInUserTimezone = $scheduledTimeInUtc->sub(new DateInterval('PT'.$timezoneOffset.'H'));
 		$appointment['scheduledTime'] = $scheduledTimeInUserTimezone->format('H:i:s');
+
+		$appointment['numberOfReturns']++; // Add one to include the client themselves (numberOfReturns returned by the database simply counts the dependents)		
 	}
 
 	return $appointments;
