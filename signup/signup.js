@@ -566,8 +566,8 @@ function validateSignupForm() {
 
 $("#addDependentButton").click(function(e) {
 	var dependentRow = $('<div></div>').addClass("container dependent-div");
-	var firstNameBlock = $('<input type="text" name="firstName" required />').addClass("col-5 firstName");
-	var lastNameBlock = $('<input type="text" name="lastName" required />').addClass("col-5 lastName");
+	var firstNameBlock = $('<input type="text" name="firstName" placeholder="First Name" required />').addClass("col-5 firstName");
+	var lastNameBlock = $('<input type="text" name="lastName" placeholder="Last Name" required />').addClass("col-5 lastName");
 	var removeBlock = $('<button type="button"></button>').addClass("btn btn-danger col-2").html("Remove").click(function(){
 		$(this).parent().remove();
 	});
