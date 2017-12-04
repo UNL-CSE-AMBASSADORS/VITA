@@ -516,8 +516,6 @@ function conditionalFormFields() {
 		}
 	});
 
-	// TODO: MAKE THE NUMBER OF RETURNS FIELD DYNAMICALLY ADD/REMOVE TEXT FIELDS FOR NAMES
-
 	// Independent field = #studentf1
 	// Dependent field = if 2011 or earlier --> studentScholarAppointmentPicker
 	//									 if 2012 or later --> appointmentPicker
@@ -604,7 +602,6 @@ $('#vitaSignupForm').submit(function(e) {
 	});
 
 	var dependents = [];
-	// TODO: Maybe use a div class here? 
 	$(".dependent-div").each(function() { 
 		var firstName = $(this).find('.firstName').val().trim();
 		var lastName = $(this).find('.lastName').val().trim();
