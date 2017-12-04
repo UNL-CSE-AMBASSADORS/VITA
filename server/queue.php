@@ -8,7 +8,7 @@
 	// TODO make this handle multiple locations, if necessary
 	$stmt = $conn->prepare("SELECT Appointment.appointmentId, scheduledTime,
 		firstName, lastName, timeIn, timeReturnedPapers,
-		timeAppointmentStarted, timeAppointmentEnded, completed, notCompletedDescription
+		timeAppointmentStarted, timeAppointmentEnded, completed
 		FROM Appointment
 		LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 		JOIN Client ON Appointment.clientId = Client.clientId
@@ -25,9 +25,6 @@
 	// We do this server-side since we can't disclose the data client-side
 	foreach ($appointments as &$appointment) {
 		$appointment['lastName'] = substr($appointment['lastName'], 0, 1);
-		$appointment['scheduledTime'] = getTimezoneDateFromUtc($appointment['scheduledTime'], $timezoneOffset)->format('Y-m-d H:i:s');
-		// TODO FINISH THE OTHERS
-
 	}
 
 	echo json_encode($appointments);

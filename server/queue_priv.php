@@ -3,7 +3,6 @@
 	require_once "$root/server/config.php";
 	$conn = $DB_CONN;
 
-	// TODO: Make it so this is testable
 	require_once "$root/server/user.class.php";
 	$USER = new User();
 	if (!$USER->isLoggedIn()) {
