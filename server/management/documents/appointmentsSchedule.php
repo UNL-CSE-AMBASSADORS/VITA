@@ -3,10 +3,11 @@
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 require_once "$root/server/user.class.php";
 $USER = new User();
-if (!$USER->hasPermission('can_use_admin_tools')) {
+if (!$USER->hasPermission('use_admin_tools')) {
 	header("Location: /unauthorized");
 	die();
 }
+
 $HEADER_COLUMN_NAMES = array('Scheduled Time', 'First Name', 'Last Name', 'Phone Number', 'Email Address', 'Appointment ID');
 $ALL_SITES_ID = -1;
 
