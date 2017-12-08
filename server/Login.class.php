@@ -176,12 +176,9 @@ class Login
 
 				throw new Exception("You have entered the wrong login information too many times and you have been temporarily locked out.");
 			}
-		}catch(PDOException $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}catch(Exception $e){
 			$response['success'] = false;
-			$response['error'] = $e->getMessage();
+			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}
 
 		## Return
@@ -303,12 +300,9 @@ class Login
 				print $mail_body;
 			}
 
-		}catch(PDOException $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}catch(Exception $e){
 			$response['success'] = false;
-			$response['error'] = $e->getMessage();
+			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}
 
 		## Return
@@ -391,12 +385,9 @@ class Login
 				## No Results Found For Email Address - Register Them
 				$response = $this->register($email);
 			}
-		}catch(PDOException $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}catch(Exception $e){
 			$response['success'] = false;
-			$response['error'] = $e->getMessage();
+			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}
 
 		## Return
@@ -511,12 +502,9 @@ class Login
 
 
 			$this->login($email, $password);
-		}catch(PDOException $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}catch(Exception $e){
 			$response['success'] = false;
-			$response['error'] = $e->getMessage();
+			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}
 
 		## Return
@@ -593,12 +581,9 @@ class Login
 			$stmt = $this->conn->prepare("UPDATE Login SET password = ? WHERE userId = ?");
 			$stmt->execute(array($password, $_SESSION['USER__ID']));
 			$response['success'] = true;
-		}catch(PDOException $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}catch(Exception $e){
 			$response['success'] = false;
-			$response['error'] = $e->getMessage();
+			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}
 
 		## Return
