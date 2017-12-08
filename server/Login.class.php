@@ -280,14 +280,14 @@ class Login
 			}
 
 			## Build Email Body
-			$path = "<a href='".$this->register_and_password_reset_url."/?token=".$token."'>".$this->register_and_password_reset_url."/?token=".$token."</a>";
+			$path = "<a href='"."https://".$_SERVER['SERVER_NAME'].$this->register_and_password_reset_url."/?token=".$token."'>"."https://".$_SERVER['SERVER_NAME'].$this->register_and_password_reset_url."/?token=".$token."</a>";
 
 			$subject = $this->name." - Account Created";
-			$mail_body = "<p>".$dbfirst_name.",</p>";
+			$mail_body = "<p>".$dbfirst_name.",</p>\r\n";
 			$mail_body .= "<p>Your account has been successfully created for the ".$this->name." System.
-				In order to activate your account, you must visit the link below to set up a password. This token will expire after 30 minutes if unused.</p><br />";
-			$mail_body .= $path."<br /><br />";
-			$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>";
+				In order to activate your account, you must visit the link below to set up a password. This token will expire after 30 minutes if unused.</p><br />\r\n";
+			$mail_body .= $path."<br /><br />\r\n";
+			$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>\r\n";
 			if($this->contact_email){
 				$mail_body .= "<br />You can reach us at: <a href='mailto:".$this->contact_email."'>".$this->contact_email."</a>";
 			}
@@ -362,17 +362,17 @@ class Login
 				$response['success'] = true;
 
 				## Build Email Body
-				$path = "<a href='".$this->register_and_password_reset_url."/?token=".$token."'>".$this->register_and_password_reset_url."/?token=".$token."</a>";
+				$path = "<a href='"."https://".$_SERVER['SERVER_NAME'].$this->register_and_password_reset_url."/?token=".$token."'>"."https://".$_SERVER['SERVER_NAME'].$this->register_and_password_reset_url."/?token=".$token."</a>";
 
-				$subject = $this->name." Password Reset Request";
-				$mail_body = "<p>".$dbfirst_name.",</p>";
-				$mail_body .= "<p>You have recently requested a password reset at ".URL_BASE.". Click or copy and paste the
+				$subject = $this->name." Password Reset Request\r\n";
+				$mail_body = "<p>".$dbfirst_name.",</p>\r\n";
+				$mail_body .= "<p>You have recently requested a password reset at ".$_SERVER['SERVER_NAME'].". Click or copy and paste the
 					link below to reset your password. If you are receiving this email unexpectedly and have not requested a password reset, you may disregard this
-					email and continue to logon normally.</p><br />";
-				$mail_body .= $path."<br /><br />";
+					email and continue to logon normally.</p><br />\r\n";
+				$mail_body .= $path."<br /><br />\r\n";
 				$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>";
 				if($this->contact_email){
-					$mail_body .= "<br />You can reach us at: <a href='mailto:".$this->contact_email."'>".$this->contact_email."</a>";
+					$mail_body .= "<br />You can reach us at: <a href='mailto:".$this->contact_email."'>".$this->contact_email."</a>\r\n";
 				}
 
 				## Build Email Headers
@@ -483,15 +483,15 @@ class Login
 			$response['success'] = true;
 
 			## Build Email Body
-			$path = "<a href='".URL_BASE."'>".URL_BASE."</a>";
+			$path = "<a href='".$_SERVER['SERVER_NAME']."'>".$_SERVER['SERVER_NAME']."</a>";
 			$subject = $this->name." Password Reset Success";
-			$mail_body = "<p>".$dbfirst_name.",</p>";
+			$mail_body = "<p>".$dbfirst_name.",</p>\r\n";
 			$mail_body .= "<p>Your password has been reset successfully. You may now login with your new password by following the link below. If you are receiving
-				this email unexpectedly and have not reset your password. Please contact support, as your account may have been compromised.</p><br />";
+				this email unexpectedly and have not reset your password. Please contact support, as your account may have been compromised.</p><br />\r\n";
 			$mail_body .= $path."<br /><br />";
-			$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>";
+			$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>\r\n";
 			if($this->contact_email){
-				$mail_body .= "<br />You can reach us at: <a href='mailto:".$this->contact_email."'>".$this->contact_email."</a>";
+				$mail_body .= "<br />You can reach us at: <a href='mailto:".$this->contact_email."'>".$this->contact_email."</a>\r\n";
 			}
 
 			## Build Email Headers
