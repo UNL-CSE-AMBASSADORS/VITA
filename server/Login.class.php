@@ -260,7 +260,7 @@ class Login
 			$stmt->execute(array($userId));
 
 			if(count($stmt->fetchAll()) > 0){
-				throw new Exception("Account already exists!");
+				return $this->passwordResetRequest($email);
 			}
 
 			## Add User
