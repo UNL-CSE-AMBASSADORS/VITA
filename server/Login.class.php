@@ -349,7 +349,7 @@ class Login
 				## Get User Info
 				$row = $results[0];
 
-				$userId = $row['id'];
+				$userId = $row['userId'];
 				$dbemail = $row['email'];
 				$dbfirst_name = $row['first_name'];
 
