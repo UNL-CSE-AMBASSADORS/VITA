@@ -25,7 +25,10 @@
 	?>
 
 	<div class="container pt-5">
-		<h2>First Name:</h2><p id="firstName"></p>
+		<label for="firstName">First Name:</label>
+		<input type="text" id="firstName" class="col-md-6" />
+		<button class="btn btn-primary col-md-2" id="firstNameSaveButton">Save</button>
+
 		<h2>Last Name:</h2><p id="lastName"></p>
 		<h2>Email:</h2><p id="email"></p>
 		<h2>Phone number:</h2><p id="phoneNumber"></p>

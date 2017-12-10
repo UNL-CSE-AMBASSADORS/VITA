@@ -2,6 +2,8 @@ $(document).ready(function() {
 	loadProfileInformation();
 	loadAbilities();
 	loadShifts();
+
+	initializeObservers();
 });
 
 // TODO: Need to combine all these methods into one, and same in the PHP
@@ -16,7 +18,7 @@ let loadProfileInformation = function() {
 		},
 		cache: false,
 		success: function(response) {
-			$("#firstName").html(response.firstName);
+			$("#firstName").val(response.firstName);
 			$("#lastName").html(response.lastName);
 			$("#email").html(response.email);
 			$("#phoneNumber").html(response.phoneNumber);
@@ -75,5 +77,34 @@ let loadShifts = function() {
 		error: function(response) {
 			alert("Unable to load shift. Please refresh the page in a few minutes.");
 		}
+	});
+}
+
+let updateFirstName = function() {
+	$.ajax({
+		url: "/server/profile/profile.php",
+		type: "POST",
+		dataType: "JSON",
+		data: {
+			firstName: $("#firstName").val(),
+			callback: 'updateFirstName'
+		},
+		cache: false,
+		success: function(response) {
+			if (!response.success) {
+				alert(response.error);
+			}
+		},
+		error: function(response) {
+			alert("Unable to communicate with the server. Please try again later.");
+		}
+	});
+}
+
+let initializeObservers = function() {
+	$("#firstNameSaveButton").click(function(e) {
+		$(this).prop("disabled", true);
+		updateFirstName();
+		$(this).prop("disabled", false);		
 	});
 }

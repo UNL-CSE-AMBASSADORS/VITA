@@ -21,6 +21,9 @@ if (isset($_REQUEST['callback'])) {
 		case 'getShifts':
 			getShifts();
 			break;
+		case 'updateFirstName':
+			updateFirstName($_REQUEST['firstName']);
+			break;
 		default:
 			die('Invalid callback function. This instance has been reported.');
 			break;
@@ -31,6 +34,30 @@ function getUserInformation() {
 	GLOBAL $USER;
 	$userInformation = $USER->getUserDetails();
 	echo json_encode($userInformation);
+}
+
+function updateFirstName($firstName) {
+	GLOBAL $USER, $DB_CONN;
+	$userId = $USER->getUserId();
+
+	$response = array();
+	$response['success'] = false;
+
+	try {
+		if (isset($firstName)) {
+			$query = "UPDATE User
+				SET firstName = ?
+				WHERE userId = ?";
+			
+			$stmt = $DB_CONN->prepare($query);
+			$response['success'] = $stmt->execute(array($firstName, $userId));
+		}
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = 'There was an error communicating with the server. Please try again later.';
+	}
+
+	echo json_encode($response);
 }
 
 function getAbilities() {
