@@ -63,11 +63,12 @@ let loadShifts = function() {
 		},
 		cache: false,
 		success: function(response) {
-			console.log(response);
 			for (let i = 0; i < response.shifts.length; i++) {
 				let shift = response.shifts[i];
-				$("#shiftsDiv").append($('<p></p>').html(`${shift.title} ${shift.startTime}-${shift.endTime} ${shift.signedUp ? 'SIGNED UP' : 'NOT SIGNED UP'}`));
+				let option = $(`<option value=${shift.shiftId} ${shift.signedUp ? 'selected' : ''}>${shift.title} ${shift.startTime}-${shift.endTime}</option>`);
+				$("#shiftsSelect").append(option);
 			}
+			$('#shiftsSelect').selectpicker();			
 		},
 		error: function(response) {
 			alert("Unable to load shift. Please refresh the page in a few minutes.");

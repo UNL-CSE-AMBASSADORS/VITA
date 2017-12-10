@@ -14,6 +14,8 @@
 <head>
 	<title>VITA Profile</title>
 	<?php require_once "$root/server/header.php" ?>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css" />
 	<link rel="stylesheet" href="/profile/profile.css">
 </head>
 <body>
@@ -39,12 +41,20 @@
 		</div>
 
 		<h2>Shifts</h2>
-		<div id="shiftsDiv">
+		<select id="shiftsSelect" class='mb-5 userShiftsSelectPicker' multiple=true>
+			
+		</select>
 
-		</div>
+		<h2 pb-5>TEST</h2>
+		<h2 pb-5>TEST</h2>
+		<h2 pb-5>TEST</h2>
+		<h2 pb-5>TEST</h2>
+		<h2 pb-5>TEST</h2>
+		<h2 pb-5>TEST</h2>
 	</div>
 
 	<?php require_once "$root/server/footer.php" ?>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 	<!-- TODO NEED TO CHANGE THIS TO DIST -->
 	<script src="/profile/profile.js"></script>
 </body>
