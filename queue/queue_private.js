@@ -1,6 +1,10 @@
 queueApp.controller("QueuePrivateController", function($scope, $controller, QueueService) {
 	angular.extend(this, $controller('QueueController', {$scope: $scope}));
 
+	function fixedEncodeURIComponent (str) {
+  	return encodeURIComponent(str).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
+	}
+
 	$scope.selectClient = function(client) {
 		$scope.client = client;
 	};
@@ -27,10 +31,11 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 
 	$scope.incompleteAppointment = function(explanation) {
 		$scope.client.ended = true;
-		QueueService.incompleteAppointment(explanation, $scope.client.appointmentId);
+		urlSafeExplanation = fixedEncodeURIComponent(explanation);
+		QueueService.incompleteAppointment(urlSafeExplanation, $scope.client.appointmentId);
 		$('textarea').val('');
 	};
-	
+
 	$scope.cancelledAppointment = function() {
 		$scope.client.ended = true;
 		QueueService.cancelledAppointment($scope.client.appointmentId);

@@ -80,7 +80,7 @@
 
 
 						<div class="client-progress d-flex flex-column">
-							<button type="button" class="btn" class="checkin" ng-disabled="client.timeIn != null" ng-class="client.checkedIn ? 'btn-primary': 'btn-secondary' " ng-click="checkIn()">Checked In</button>
+							<button type="button" class="btn" class="checkin" ng-disabled="client.checkedIn" ng-class="client.checkedIn ? 'btn-primary': 'btn-secondary' " ng-click="checkIn()">Checked In</button>
 						</br>
 							<button type="button" class="btn" class="paperworkComplete" ng-disabled="!client.checkedIn" ng-class="client.paperworkComplete ? 'btn-primary': 'btn-secondary' " ng-click="pwFilledOut()">Completed Paperwork</button>
 						</br>
