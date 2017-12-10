@@ -77,6 +77,20 @@ queueApp.factory("QueueService", function($http){
 			},function(error){
 				return null;
 			});
+		},
+		cancelledAppointment: function(id) {
+			return $http({
+				url: "/server/queue_priv.php",
+				method: 'POST',
+				data: `action=cancelledAppointment&id=${id}`,
+				headers: {
+					'Content-Type': "application/x-www-form-urlencoded"
+				}
+			}).then(function(response){
+				return response.data;
+			},function(error){
+				return null;
+			});
 		}
 	}
 })

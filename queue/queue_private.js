@@ -29,6 +29,11 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 		$scope.client.ended = true;
 		QueueService.incompleteAppointment(explanation, $scope.client.appointmentId);
 		$('textarea').val('');
+	};
+	
+	$scope.cancelledAppointment = function() {
+		$scope.client.ended = true;
+		QueueService.cancelledAppointment($scope.client.appointmentId);
 	}
 
 });

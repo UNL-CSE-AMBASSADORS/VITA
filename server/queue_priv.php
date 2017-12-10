@@ -18,6 +18,7 @@
 		case 'appointmentStart': appointmentStart($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentIncomplete': appointmentIncomplete($_REQUEST['explanation'], $_REQUEST['id']); break;
+		case 'cancelledAppointment': cancelledAppointment($_REQUEST['id']); break;
 		default: break;
 	}
 
@@ -80,6 +81,18 @@
 		);
 
 		$stmt->execute(array($explanation, $id));
+		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode($appointment);
+		$stmt = null;
+	}
+
+	function cancelledAppointment($id) {
+		$stmt = $GLOBALS['conn']->prepare(
+			"INSERT INTO ServicedAppointment (appointmentId, notCompletedDescription, completed)
+					VALUES (?, 'Cancelled Appointment', FALSE)"
+		);
+
+		$stmt->execute(array($id));
 		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode($appointment);
 		$stmt = null;

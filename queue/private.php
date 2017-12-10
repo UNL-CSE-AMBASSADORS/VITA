@@ -82,11 +82,11 @@
 						<div class="client-progress d-flex flex-column">
 							<button type="button" class="btn" class="checkin" ng-disabled="client.timeIn != null" ng-class="client.checkedIn ? 'btn-primary': 'btn-secondary' " ng-click="checkIn()">Checked In</button>
 						</br>
-							<button type="button" class="btn" class="paperworkComplete" ng-disabled="client.timeIn == null" ng-class="client.paperworkComplete ? 'btn-primary': 'btn-secondary' " ng-click="pwFilledOut()">Completed Paperwork</button>
+							<button type="button" class="btn" class="paperworkComplete" ng-disabled="!client.checkedIn" ng-class="client.paperworkComplete ? 'btn-primary': 'btn-secondary' " ng-click="pwFilledOut()">Completed Paperwork</button>
 						</br>
-							<button type="button" class="btn" class="preparing" ng-disabled="client.timeReturnedPapers == null" ng-class="client.preparing ? 'btn-primary': 'btn-secondary' " ng-click="nowPreparing()">Preparing</button>
+							<button type="button" class="btn" class="preparing" ng-disabled="!client.paperworkComplete" ng-class="client.preparing ? 'btn-primary': 'btn-secondary' " ng-click="nowPreparing()">Preparing</button>
 						</br>
-							<button type="button" class="btn" class="ended" ng-disabled="client.timeAppointmentStarted == null" ng-class="client.ended ? 'btn-primary': 'btn-secondary' " ng-click="completeAppointment()">Finished</button>
+							<button type="button" class="btn" class="ended" ng-disabled="!client.preparing" ng-class="client.ended ? 'btn-primary': 'btn-secondary' " ng-click="completeAppointment()">Finished</button>
 						</div>
 
 						<div class="greeter-directions">
@@ -106,9 +106,10 @@
 									<label><strong>Appointment Not Completed:</strong></label>
 									<textarea ng-model="explanation" placeholder="Explain why the appointment was not completed." class="form-control" cols="300" rows="3" ng-maxlength="255"></textarea>
 									<br>
-									<button class="btn btn-danger" ng-disabled="client.timeIn == null" ng-click="incompleteAppointment(explanation)">Submit Incomplete Appointment</button>
+									<button class="btn btn-danger" ng-disabled="!client.checkedIn" ng-click="incompleteAppointment(explanation)">Submit Incomplete Appointment</button>
 							 </div>
 						 	</form>
+							<button class="btn btn-danger" ng-disabled="client.checkedIn" ng-click="cancelledAppointment()">Submit Cancelled Appointment</button>
 						</div>
 						<div class="client-appointmentId mt-auto">Appointment ID: {{client.appointmentId}}</div>
 				</div>
