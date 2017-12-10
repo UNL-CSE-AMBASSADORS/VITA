@@ -39,8 +39,10 @@ let loadAbilities = function() {
 		success: function(response) {
 			for (let i = 0; i < response.abilities.length; i++) {
 				let ability = response.abilities[i];
-				$("#abilitiesDiv").append($('<p></p>').html(`${ability.name} ${ability.has ? 'HAS' : 'DOES NOT HAVE'}`));
+				let option = $(`<option value=${ability.abilityId} ${ability.has ? 'selected' : ''}>${ability.name}</option>`);
+				$("#abilitiesSelect").append(option);
 			}
+			$('#abilitiesSelect').selectpicker();				
 
 			for (let i = 0; i < response.abilitiesRequiringVerification.length; i++) {
 				let ability = response.abilitiesRequiringVerification[i];
@@ -75,13 +77,3 @@ let loadShifts = function() {
 		}
 	});
 }
-
-
-/*
-- Personal certifications (ex. can speak Spanish) (editable)
-- Verified certifications
-Shifts
-- Currently signed up shifts
-Ability to sign up for more shifts
-
-*/

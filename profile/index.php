@@ -31,9 +31,9 @@
 		<h2>Phone number:</h2><p id="phoneNumber"></p>
 
 		<h2>Abilities</h2>
-		<div id="abilitiesDiv">
-
-		</div>
+		<select id="abilitiesSelect" class='userAbilitiesSelectPicker' multiple=true>
+			
+		</select>
 
 		<h2>Abilities That Require Verification</h2>
 		<div id ="abilitiesRequiringVerificationDiv">
@@ -41,7 +41,7 @@
 		</div>
 
 		<h2>Shifts</h2>
-		<select id="shiftsSelect" class='mb-5 userShiftsSelectPicker' multiple=true>
+		<select id="shiftsSelect" class='userShiftsSelectPicker' multiple=true>
 			
 		</select>
 
