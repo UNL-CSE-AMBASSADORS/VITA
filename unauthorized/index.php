@@ -4,7 +4,7 @@
 <head>
 	<title>Unauthorized</title>
 	<link rel="stylesheet" href="/assets/css/global.css">
-	<link rel="stylesheet" href="/unauthorized/unauthorized.css">
+	<link rel="stylesheet" href="/error_pages/error_page.css">
 	<?php require_once "$root/server/header.php" ?>
 </head>
 <body>
