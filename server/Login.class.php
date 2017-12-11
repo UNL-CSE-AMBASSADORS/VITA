@@ -112,7 +112,7 @@ class Login
 			if(!$locked_out && $failed_login_count >= $this->LOGIN_THRESHOLD){
 				$stmt = $this->conn->prepare(
 					"UPDATE Login l
-					SET failed_login_count = 0
+					SET failedLoginCount = 0
 					WHERE userId = ?");
 				$stmt->execute(array($userId));
 				$failed_login_count = 0;
@@ -158,8 +158,8 @@ class Login
 					$stmt = $this->conn->prepare(
 						"UPDATE Login l
 						SET
-							failed_login_count = failed_login_count+1,
-							lockout_time = CURRENT_TIMESTAMP
+							failedLoginCount = failedLoginCount+1,
+							lockoutTime = CURRENT_TIMESTAMP
 						WHERE userId = ?;");
 					$stmt->execute(array($userId));
 
@@ -170,7 +170,7 @@ class Login
 				## Too many failures, lock account
 				$stmt = $this->conn->prepare(
 					"UPDATE Login
-					SET lockout_time = current_timestamp()
+					SET lockoutTime = current_timestamp()
 					WHERE userId = ?");
 				$stmt->execute(array($userId));
 
@@ -236,7 +236,7 @@ class Login
 
 			## Verify That The Email Address Is Allowed
 			$stmt = $this->conn->prepare(
-				"SELECT u.email, u.firstName as first_name, u.userId as id
+				"SELECT u.email, u.firstName, u.userId
 				FROM User u
 				WHERE archived = 0
 					AND email = ?");
@@ -249,9 +249,9 @@ class Login
 
 			## Verify That Email Doesn't Already Exist
 			$row = $results[0];
-			$userId = $row['id'];
+			$userId = $row['userId'];
 			$dbemail = $row['email'];
-			$dbfirst_name = $row['first_name'];
+			$dbfirst_name = $row['firstName'];
 
 			$stmt = $this->conn->prepare(
 				"SELECT *
@@ -300,6 +300,7 @@ class Login
 				print $mail_body;
 			}
 
+			$response['success'] = true;
 		}catch(Exception $e){
 			$this->processException($e, $response);
 		}
@@ -350,7 +351,7 @@ class Login
 
 				$userId = $row['userId'];
 				$dbemail = $row['email'];
-				$dbfirst_name = $row['first_name'];
+				$dbfirst_name = $row['firstName'];
 
 				## Set Unique Token
 				$token = $this->getPasswordResetToken($userId);
@@ -380,7 +381,6 @@ class Login
 				$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 				mail($dbemail, $subject, $mail_body, $headers);
 			}else{
-
 				## No Results Found For Email Address - Register Them
 				$response = $this->register($email);
 			}
@@ -414,7 +414,7 @@ class Login
 				throw new Exception("Please provide all form fields.", MY_EXCEPTION);
 			}
 
-			if($password != $vpassword){
+			if($password !== $vpassword){
 
 				throw new Exception("Passwords do not match", MY_EXCEPTION);
 			}
@@ -455,7 +455,7 @@ class Login
 			## Make Sure User ID Is Associated With Provided Email
 			$row = $results[0];
 			$reset_userId = $row['userId'];
-			$stmt = $this->conn->prepare("SELECT u.userId, u.email as email, u.firstName as first_name
+			$stmt = $this->conn->prepare("SELECT u.userId, u.email, u.firstName
 				FROM User u
 				WHERE u.archived = 0
 					AND u.email = ?");
@@ -463,7 +463,7 @@ class Login
 			$row = $stmt->fetch();
 			$userId = $row['userId'];
 			$dbemail = $row['email'];
-			$dbfirst_name = $row['first_name'];
+			$dbfirst_name = $row['firstName'];
 
 			## Check That User ID's Match From Each Table
 			if($reset_userId != $userId){
@@ -478,8 +478,8 @@ class Login
 			## Delete Row From password_reset Table
 			$stmt = $this->conn->prepare("UPDATE PasswordReset SET archived = 1 WHERE userId = ?");
 			$stmt->execute(array($userId));
-			$response['success'] = true;
-
+			$response['success'] = true;			
+			
 			## Build Email Body
 			$path = "<a href='".$_SERVER['SERVER_NAME']."'>".$_SERVER['SERVER_NAME']."</a>";
 			$subject = $this->name." Password Reset Success";
@@ -497,7 +497,6 @@ class Login
 			$headers .= 'MIME-Version: 1.0' . "\r\n";
 			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 			mail($dbemail, $subject, $mail_body, $headers);
-
 
 			$this->login($email, $password);
 		}catch(Exception $e){
@@ -557,7 +556,7 @@ class Login
 			}
 
 			## Make Sure Passwords Match
-			if($npassword != $vpassword){
+			if($npassword !== $vpassword){
 				throw new Exception("Passwords do not match", MY_EXCEPTION);
 			}
 
