@@ -31,7 +31,7 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 
 	$scope.incompleteAppointment = function(explanation) {
 		$scope.client.ended = true;
-		urlSafeExplanation = fixedEncodeURIComponent(explanation);
+		let urlSafeExplanation = fixedEncodeURIComponent(explanation);
 		QueueService.incompleteAppointment(urlSafeExplanation, $scope.client.appointmentId);
 		$('textarea').val('');
 	};
