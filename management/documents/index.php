@@ -3,7 +3,7 @@
 	
 	require_once "$root/server/user.class.php";
 	$USER = new User();
-	if (!$USER->hasPermission('can_use_admin_tools')) {
+	if (!$USER->hasPermission('use_admin_tools')) {
 		header("Location: /unauthorized");
 		die();
 	}
@@ -33,6 +33,6 @@
 	</div>
 
 	<?php require_once "$root/server/footer.php" ?>
-	<script src="/management/documents/documents.js"></script>
+	<script src="/dist/management/documents/documents.js"></script>
 </body>
 </html>

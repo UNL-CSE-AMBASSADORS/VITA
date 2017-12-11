@@ -12,6 +12,20 @@
 	}
 ?>
 
+<?php
+	date_default_timezone_set('America/Chicago'); // Use CST
+	$now = date('Y-m-d H:i:s');
+	$signupBeginsDate = '2018-01-15 00:00:00';
+	if ($now < $signupBeginsDate) {
+?>
+	<div class="navbar navbar-expand-md navbar-light bg-light" style="z-index: 10000">
+		<div class="container d-flex d-sm-inline-flex justify-content-center">
+			<img src="https://openclipart.org/download/29833/warning.svg" />
+			<h2>Warning: This site is still under construction.</div>
+		</div>
+	</div>
+<?php } ?>
+
 <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
 	<div class="container">
 		<a class="navbar-brand" href="/"><?php echo $page_title ?></a>
@@ -29,35 +43,37 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/queue">Queue</a>
 				</li>
-				<li class="nav-item">
-				<?php if ($USER->isLoggedIn()): ?>
-					<a class="nav-link" onclick="logout()">Log out</a>
-					<script type="text/javascript">
-						function logout() {
-							$.ajax({
-								url : "/server/callbacks.php",
-								data: {"callback":"logout"},
-								type: "POST",
-								success: function() {
-									location.reload();
-								}
-							});
-						}
-					</script>
-				<?php else: ?>
-					<a class="nav-link" href="/login">Volunteer Login</a>
-				<?php endif; ?>
+			<?php if ($USER->hasPermission('use_admin_tools')): ?>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
+						<a class="dropdown-item" href="#">Review Certifications</a>
+						<a class="dropdown-item" href="#">Adjust Shifts</a>
+						<a class="dropdown-item" href="/management/documents">Print Documents</a>
+					</div>
 				</li>
-				<?php if ($USER->hasPermission('can_view_management_tab')): ?>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
-						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
-							<a class="dropdown-item" href="#">Review Certifications</a>
-							<a class="dropdown-item" href="#">Adjust Shifts</a>
-							<a class="dropdown-item" href="/management/documents">Print Documents</a>
-						</div>
-					</li>
-				<?php endif; ?>
+			<?php endif; ?>
+			<?php if ($USER->isLoggedIn()): ?>
+				<li class="nav-item">
+					<a class="nav-link" onclick="logout()">Log out</a>
+				</li>
+				<script type="text/javascript">
+					function logout() {
+						$.ajax({
+							url : "/server/callbacks.php",
+							data: {"callback":"logout"},
+							type: "POST",
+							success: function() {
+								window.location.href = "/";
+							}
+						});
+					}
+				</script>
+			<?php else: ?>
+				<li class="nav-item">
+					<a class="nav-link" href="/login">Volunteer Login</a>
+				</li>
+			<?php endif; ?>
 			</ul>
 		</div>
 	</div>

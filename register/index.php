@@ -80,6 +80,6 @@
 		}
 		require_once "$root/server/footer.php";
 	?>
-		<script src="/register/register.js"></script>
+		<script src="/dist/register/register.js"></script>
 	</body>
 </html>

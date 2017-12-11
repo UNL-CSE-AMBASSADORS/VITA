@@ -18,7 +18,7 @@ if (!$USER->hasPermission('edit_user_permission')) {
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css" />
-	<link rel="stylesheet" href="user.css" />
+	<link rel="stylesheet" href="users.css" />
 </head>
 <body>
 	<?php require_once "$root/components/nav.php"; ?>
@@ -31,10 +31,10 @@ if (!$USER->hasPermission('edit_user_permission')) {
 				<button class="btn btn-default pull-right" id="btn-add-user">Add User</button>
 			</div>
 		</div>
-		<div class="row" id="user-permission-table-row">
+		<div class="row" id="user-management-table-row">
 			<div class="col-md-12">
-				<table class="table table-condensed table-hover" id="user-permission-table">
-
+				<table class="table table-condensed table-hover" id="user-management-table">
+					<!-- table data injected through JS -->
 				</table>
 			</div>
 		</div>
@@ -84,6 +84,6 @@ if (!$USER->hasPermission('edit_user_permission')) {
 
 	<?php require_once "$root/server/footer.php" ?>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-	<script src="user.js"></script>
+	<script src="/dist/management/users/users.js"></script>
 </body>
 </html>
