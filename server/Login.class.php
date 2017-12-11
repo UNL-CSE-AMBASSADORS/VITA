@@ -77,7 +77,7 @@ class Login
 			## Verify Form Fields
 			if(!isset($email) || !isset($password)){
 
-				throw new Exception("Please provide both your email address and password.");
+				throw new Exception("Please provide both your email address and password.", MY_EXCEPTION);
 
 			}
 
@@ -95,7 +95,7 @@ class Login
 
 			## Make Sure Account Exists
 			if(count($results) != 1){
-				throw new Exception("Email Address and/or Password is incorrect!");
+				throw new Exception("Email Address and/or Password is incorrect!", MY_EXCEPTION);
 			}
 
 			## Get User Info
@@ -163,7 +163,7 @@ class Login
 						WHERE userId = ?;");
 					$stmt->execute(array($userId));
 
-					throw new Exception("Email Address and/or Password is incorrect.");
+					throw new Exception("Email Address and/or Password is incorrect.", MY_EXCEPTION);
 				}
 			}else{
 
@@ -174,11 +174,11 @@ class Login
 					WHERE userId = ?");
 				$stmt->execute(array($userId));
 
-				throw new Exception("You have entered the wrong login information too many times and you have been temporarily locked out.");
+				throw new Exception("You have entered the wrong login information too many times and you have been temporarily locked out.", MY_EXCEPTION);
 			}
 		}catch(Exception $e){
+			$this->processException($e, $response);
 			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}
 
 		## Return
@@ -231,7 +231,7 @@ class Login
 			$email = trim(strtolower($email));
 			if(!preg_match('/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/',$email)){
 
-				throw new Exception("Please enter a valid email address.");
+				throw new Exception("Please enter a valid email address.", MY_EXCEPTION);
 			}
 
 			## Verify That The Email Address Is Allowed
@@ -244,7 +244,7 @@ class Login
 			$results = $stmt->fetchAll();
 
 			if(count($results) != 1){
-				throw new Exception("Your email has not been approved for use yet. Please contact your administrator for further instruction.");
+				throw new Exception("Your email has not been approved for use yet. Please contact your administrator for further instruction.", MY_EXCEPTION);
 			}
 
 			## Verify That Email Doesn't Already Exist
@@ -276,7 +276,7 @@ class Login
 			## Set Unique Token
 			$token = $this->getPasswordResetToken($userId);
 			if(!$token){
-				throw new Exception("Error retrieving token.");
+				throw new Exception("Error retrieving token.", MY_EXCEPTION);
 			}
 
 			## Build Email Body
@@ -301,8 +301,7 @@ class Login
 			}
 
 		}catch(Exception $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
+			$this->processException($e, $response);
 		}
 
 		## Return
@@ -332,7 +331,7 @@ class Login
 			$email = trim(strtolower($email));
 			if(!preg_match('/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/',$email)){
 
-				throw new Exception("Please enter a valid email address");
+				throw new Exception("Please enter a valid email address", MY_EXCEPTION);
 			}
 
 			## Verify That Email Exists
@@ -356,7 +355,7 @@ class Login
 				## Set Unique Token
 				$token = $this->getPasswordResetToken($userId);
 				if(!$token){
-					throw new Exception("Error retrieving token.");
+					throw new Exception("Error retrieving token.", MY_EXCEPTION);
 				}
 
 				$response['success'] = true;
@@ -386,8 +385,7 @@ class Login
 				$response = $this->register($email);
 			}
 		}catch(Exception $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
+			$this->processException($e, $response);
 		}
 
 		## Return
@@ -413,12 +411,12 @@ class Login
 		try{
 			if(!isset($token) || !isset($email) || !isset($password) || !isset($vpassword)){
 
-				throw new Exception("Please provide all form fields.");
+				throw new Exception("Please provide all form fields.", MY_EXCEPTION);
 			}
 
 			if($password != $vpassword){
 
-				throw new Exception("Passwords do not match");
+				throw new Exception("Passwords do not match", MY_EXCEPTION);
 			}
 
 			## Make Sure Passwords Are Strong(LOL)
@@ -431,7 +429,7 @@ class Login
 
 			if(!preg_match('/(?=^.{7,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/',$password)){
 
-				throw new Exception("The password provided does not meet the minimum requirements.");
+				throw new Exception("The password provided does not meet the minimum requirements.", MY_EXCEPTION);
 			}
 
 			$this->clearOldTokens();
@@ -450,7 +448,7 @@ class Login
 
 			if(count($results) != 1){
 
-				throw new Exception("There was an error processing your request. 010");
+				throw new Exception("There was an error processing your request. 010", MY_EXCEPTION);
 
 			}
 
@@ -469,7 +467,7 @@ class Login
 
 			## Check That User ID's Match From Each Table
 			if($reset_userId != $userId){
-				throw new Exception("There was an error processing your request. 020");
+				throw new Exception("There was an error processing your request. 020", MY_EXCEPTION);
 			}
 
 			## At This Point It Is Okay To Reset The Password
@@ -503,8 +501,7 @@ class Login
 
 			$this->login($email, $password);
 		}catch(Exception $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
+			$this->processException($e, $response);
 		}
 
 		## Return
@@ -533,7 +530,7 @@ class Login
 
 			## Check Required Fields
 			if(!isset($password) || !isset($npassword) || !isset($vpassword)){
-				throw new Exception("Please provide all form fields");
+				throw new Exception("Please provide all form fields", MY_EXCEPTION);
 			}
 
 			## Fetch Current Password
@@ -547,7 +544,7 @@ class Login
 
 			## Make Sure User Exists
 			if(count($results) != 1){
-				throw new Exception("There was an error changing your password.");
+				throw new Exception("There was an error changing your password.", MY_EXCEPTION);
 			}
 
 			## Define Database Results
@@ -556,12 +553,12 @@ class Login
 
 			## Check That Current Password Is Correct
 			if(!password_verify($password, $dbpassword)){
-				throw new Exception("Invalid password");
+				throw new Exception("Invalid password", MY_EXCEPTION);
 			}
 
 			## Make Sure Passwords Match
 			if($npassword != $vpassword){
-				throw new Exception("Passwords do not match");
+				throw new Exception("Passwords do not match", MY_EXCEPTION);
 			}
 
 			## Make Sure Passwords Are Strong
@@ -573,7 +570,7 @@ class Login
 			*/
 
 			if(!preg_match('/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/',$password)){
-				throw new Exception("The password provided does not meet the minimum requirements.");
+				throw new Exception("The password provided does not meet the minimum requirements.", MY_EXCEPTION);
 			}
 
 			## Set New Password
@@ -582,8 +579,7 @@ class Login
 			$stmt->execute(array($password, $_SESSION['USER__ID']));
 			$response['success'] = true;
 		}catch(Exception $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
+			$this->processException($e, $response);
 		}
 
 		## Return
@@ -678,5 +674,14 @@ class Login
 		}else{
 			return false;
 		}
+	}
+
+	private function processException($exception, &$response){
+		if($exception->getCode() === MY_EXCEPTION){
+			$response['error'] = $exception->getMessage();
+		}else{
+			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
+		}
+		$response['success'] = false;
 	}
 }
