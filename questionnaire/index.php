@@ -8,6 +8,7 @@
 	?>
 	<link rel="stylesheet" href="/assets/css/form.css">
 	<link rel="stylesheet" href="/questionnaire/questionnaire.css">
+	<link rel="stylesheet" href="/assets/css/jquery-ui-datepicker.css">
 </head>
 <body>
 	<?php
@@ -15,10 +16,30 @@
 		require_once "$root/components/nav.php";
 	?>
 
-	<!-- TODO HERE -->
-
+	<!-- Questions -->
 	<div class="container">
 		<div class="row justify-content-center">
+
+			<!-- Can't Help Modal -->
+			<div class="modal fade" id="cantHelpModal" tabindex="-1" role="dialog" aria-labelledby="cantHelpModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="cantHelpModalLabel">Sorry</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							Sorry, VITA can not help you.
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary btn-danger" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<div class="col col-12 col-sm-8">
 				<h2 class="my-5">Can VITA Help You?</h2>
 
@@ -26,7 +47,7 @@
 					<div class="form-radio row">
 						<label for="depreciation_schedule" class="col form-required">Will you require a Depreciation Schedule?</label>
 						<div class="col btn-group" data-toggle="buttons">
-							<label class="btn btn-outline-secondary" for="1yes">
+							<label class="btn btn-outline-secondary" for="1yes" data-toggle="modal" data-target="#cantHelpModal">
 								<input type="radio" id="1yes" value="1" name="1" required>Yes
 							</label>
 							<label class="btn btn-outline-secondary" for="1no">
@@ -40,7 +61,7 @@
 					<div class="form-radio row">
 						<label for="schedule_f" class="col form-required">Will you require a Schedule F (Farm)?</label>
 						<div class="col btn-group" data-toggle="buttons">
-							<label class="btn btn-outline-secondary" for="2yes">
+							<label class="btn btn-outline-secondary" for="2yes" data-toggle="modal" data-target="#cantHelpModal">
 								<input type="radio" id="2yes" value="1" name="2" required>Yes
 							</label>
 							<label class="btn btn-outline-secondary" for="2no">
@@ -65,7 +86,7 @@
 					<div class="form-radio row" id="homeBasedNetLoss" style="display: none;">
 						<label for="net_loss" class="col form-required">Does your home-based business or self-employment have a net loss?</label>
 						<div class="col btn-group" data-toggle="buttons">
-							<label class="btn btn-outline-secondary" for="4yes">
+							<label class="btn btn-outline-secondary" for="4yes" data-toggle="modal" data-target="#cantHelpModal">
 								<input type="radio" id="4yes" value="1" name="4" required>Yes
 							</label>
 							<label class="btn btn-outline-secondary" for="4no">
@@ -76,10 +97,10 @@
 							</label>
 						</div>
 					</div>
-					<div class="form-radio row" id="homeBased10000" style="display: none;">
+					<div class="form-radio row" id="homeBased10000" style="display: none;" >
 						<label for="more_than_10000_expenses" class="col form-required">Does your home-based business or self-employment have more than $10,000 in expenses?</label>
 						<div class="col btn-group" data-toggle="buttons">
-							<label class="btn btn-outline-secondary" for="5yes">
+							<label class="btn btn-outline-secondary" for="5yes" data-toggle="modal" data-target="#cantHelpModal">
 								<input type="radio" id="5yes" value="1" name="5" required>Yes
 							</label>
 							<label class="btn btn-outline-secondary" for="5no">
@@ -93,7 +114,7 @@
 					<div class="form-radio row" id="homeBasedSEP" style="display: none;">
 						<label for="retirement_plans" class="col form-required">Does your home-based business or self-employment have self-employed, SEP, SIMPLE, or qualified retirement plans?</label>
 						<div class="col btn-group" data-toggle="buttons">
-							<label class="btn btn-outline-secondary" for="6yes">
+							<label class="btn btn-outline-secondary" for="6yes" data-toggle="modal" data-target="#cantHelpModal">
 								<input type="radio" id="6yes" value="1" name="6" required>Yes
 							</label>
 							<label class="btn btn-outline-secondary" for="6no">
@@ -107,7 +128,7 @@
 					<div class="form-radio row" id="homeBasedEmployees" style="display: none;">
 						<label for="any_employees" class="col form-required">Does your home-based business or self-employment have employees?</label>
 						<div class="col btn-group" data-toggle="buttons">
-							<label class="btn btn-outline-secondary" for="7yes">
+							<label class="btn btn-outline-secondary" for="7yes" data-toggle="modal" data-target="#cantHelpModal">
 								<input type="radio" id="7yes" value="1" name="7" required>Yes
 							</label>
 							<label class="btn btn-outline-secondary" for="7no">
@@ -121,7 +142,7 @@
 					<div class="form-radio row">
 						<label for="casualty_losses" class="col form-required">Will your return have casualty losses?</label>
 						<div class="col btn-group" data-toggle="buttons">
-							<label class="btn btn-outline-secondary" for="8yes">
+							<label class="btn btn-outline-secondary" for="8yes" data-toggle="modal" data-target="#cantHelpModal">
 								<input type="radio" id="8yes" value="1" name="8" required>Yes
 							</label>
 							<label class="btn btn-outline-secondary" for="8no">
@@ -135,7 +156,7 @@
 					<div class="form-radio row">
 						<label for="theft_losses" class="col form-required">Will your return have theft losses?</label>
 						<div class="col btn-group" data-toggle="buttons">
-							<label class="btn btn-outline-secondary" for="9yes">
+							<label class="btn btn-outline-secondary" for="9yes" data-toggle="modal" data-target="#cantHelpModal">
 								<input type="radio" id="9yes" value="1" name="9" required>Yes
 							</label>
 							<label class="btn btn-outline-secondary" for="9no">
