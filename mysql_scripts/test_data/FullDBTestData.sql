@@ -241,56 +241,55 @@ SET @client_client5Id = LAST_INSERT_ID();
 
 -- appointment
 SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site1Shift1Id), INTERVAL 0 MINUTE);
-INSERT INTO Appointment (scheduledTime, clientId, siteId)
-	VALUES (@appointmentTime, @client_client1Id, @site_site1Id);
+INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
+	VALUES (@appointmentTime, @client_client1Id, @site_site1Id, "en");
 SET @appointment_appointment1Id = LAST_INSERT_ID();
 
 SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site1Shift2Id), INTERVAL 30 MINUTE);
-INSERT INTO Appointment (scheduledTime, clientId, siteId)
-	VALUES (@appointmentTime, @client_client2Id, @site_site1Id);
+INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
+	VALUES (@appointmentTime, @client_client2Id, @site_site1Id, "sp");
 SET @appointment_appointment2Id = LAST_INSERT_ID();
 
 SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site2Shift1Id), INTERVAL 0 MINUTE);
-INSERT INTO Appointment (scheduledTime, clientId, siteId)
-	VALUES (@appointmentTime, @client_client3Id, @site_site2Id);
+INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
+	VALUES (@appointmentTime, @client_client3Id, @site_site2Id, "en");
 SET @appointment_appointment3Id = LAST_INSERT_ID();
 
 SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site2Shift2Id), INTERVAL 30 MINUTE);
-INSERT INTO Appointment (scheduledTime, clientId, siteId)
-	VALUES (@appointmentTime, @client_client4Id, @site_site2Id);
+INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
+	VALUES (@appointmentTime, @client_client4Id, @site_site2Id, "vi");
 SET @appointment_appointment4Id = LAST_INSERT_ID();
 
 -- Already serviced appointment
 SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL -1 DAY);
-INSERT INTO Appointment (scheduledTime, clientId, siteId)
-	VALUES (@appointmentTime, @client_client5Id, @site_site1Id);
+INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
+	VALUES (@appointmentTime, @client_client5Id, @site_site1Id, "en");
 SET @appointment_appointment5Id = LAST_INSERT_ID();
 
 -- Appointments for today (note that this is just for testing queue functionality)
 SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL -5 MINUTE);
-INSERT INTO Appointment (scheduledTime, arrivedAt, clientId, siteId)
-	VALUES (@appointmentTime, UTC_TIMESTAMP(), @client_client1Id, @site_site1Id);
+INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
+	VALUES (@appointmentTime, @client_client1Id, @site_site1Id, "en");
 
 SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 5 HOUR);
-INSERT INTO Appointment (scheduledTime, clientId, siteId)
-	VALUES (@appointmentTime, @client_client1Id, @site_site1Id);
+INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
+	VALUES (@appointmentTime, @client_client1Id, @site_site1Id, "en");
 
 SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 30 MINUTE);
-INSERT INTO Appointment (scheduledTime, clientId, siteId)
-	VALUES (@appointmentTime, @client_client2Id, @site_site1Id);
+INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
+	VALUES (@appointmentTime, @client_client2Id, @site_site1Id, "en");
 
 SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 45 MINUTE);
-INSERT INTO Appointment (scheduledTime, clientId, siteId)
-	VALUES (@appointmentTime, @client_client3Id, @site_site2Id);
+INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
+	VALUES (@appointmentTime, @client_client3Id, @site_site2Id, "en");
 -- end appointment
 
 
 
 -- serviced appointment
-SET @startTime = DATE_ADD((SELECT scheduledTime FROM Appointment WHERE appointmentId = @appointment_appointment5Id), INTERVAL 5 MINUTE);
-SET @endTime = DATE_ADD(@startTime, INTERVAL 37 MINUTE);
-INSERT INTO ServicedAppointment (startTime, endTime, userId, appointmentId)
-	VALUES (@startTime, @endTime, @user_preparer1Id, @appointment_appointment5Id);
+SET @timeIn = DATE_ADD((SELECT scheduledTime FROM Appointment WHERE appointmentId = @appointment_appointment5Id), INTERVAL 5 MINUTE);
+INSERT INTO ServicedAppointment (timeIn, userId, appointmentId)
+	VALUES (@timeIn, @user_preparer1Id, @appointment_appointment5Id);
 -- end serviced appointment
 
 
@@ -502,8 +501,8 @@ BEGIN
 		SET @randomMinute = CEIL(RAND() * (maxIntervalValue - minIntervalValue));
 		SET @scheduledTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL @randomMinute MINUTE);
 		SET @siteIdForThisAppointment = startingSiteId + ROUND(RAND() * (endingSiteId - startingSiteId));
-		INSERT INTO Appointment (scheduledTime, clientId, siteId)
-			VALUES (@scheduledTime, @clientIdForThisAppointment, @siteIdForThisAppointment);
+		INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
+			VALUES (@scheduledTime, @clientIdForThisAppointment, @siteIdForThisAppointment, "en");
 		SET i = i + 1;
 	END WHILE;
 	COMMIT;

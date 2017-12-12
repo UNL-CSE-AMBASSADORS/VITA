@@ -8,7 +8,7 @@
 	}
 
 	if (!isset($page_subtitle)) {
-		$page_subtitle = "";
+		$page_subtitle = "Center for People in Need";
 	}
 ?>
 

@@ -1,9 +1,46 @@
 queueApp.controller("QueuePrivateController", function($scope, $controller, QueueService) {
 	angular.extend(this, $controller('QueueController', {$scope: $scope}));
 
+	function fixedEncodeURIComponent (str) {
+  	return encodeURIComponent(str).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
+	}
+
 	$scope.selectClient = function(client) {
 		$scope.client = client;
 	};
+
+	$scope.checkIn = function() {
+		$scope.client.checkedIn = true;
+		QueueService.checkInNow(new Date().toISOString(), $scope.client.appointmentId);
+	};
+
+	$scope.pwFilledOut = function() {
+		$scope.client.paperworkComplete = true;
+		QueueService.turnInPapers(new Date().toISOString(), $scope.client.appointmentId);
+	};
+
+	$scope.nowPreparing = function() {
+		$scope.client.preparing = true;
+		QueueService.beginAppointment(new Date().toISOString(), $scope.client.appointmentId);
+	};
+
+	$scope.completeAppointment = function() {
+		$scope.client.ended = true;
+		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId);
+	};
+
+	$scope.incompleteAppointment = function(explanation) {
+		$scope.client.ended = true;
+		let urlSafeExplanation = fixedEncodeURIComponent(explanation);
+		QueueService.incompleteAppointment(urlSafeExplanation, $scope.client.appointmentId);
+		$('textarea').val('');
+	};
+
+	$scope.cancelledAppointment = function() {
+		$scope.client.ended = true;
+		QueueService.cancelledAppointment($scope.client.appointmentId);
+	}
+
 });
 
 queueApp.filter('searchFor', function(){
