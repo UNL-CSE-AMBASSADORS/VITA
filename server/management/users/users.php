@@ -246,7 +246,7 @@ function addUser($data){
 		));
 
 		if ($res == 0) {
-			throw new Exception('There is already a user with that email.', MY_EXCEPTION);
+			throw new Exception('Unable to create the user, a user with that email may already exist.', MY_EXCEPTION);
 		}
 
 		$response['success'] = true;		
