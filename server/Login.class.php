@@ -77,7 +77,7 @@ class Login
 			## Verify Form Fields
 			if(!isset($email) || !isset($password)){
 
-				throw new Exception("Please provide both your email address and password.");
+				throw new Exception("Please provide both your email address and password.", MY_EXCEPTION);
 
 			}
 
@@ -95,7 +95,7 @@ class Login
 
 			## Make Sure Account Exists
 			if(count($results) != 1){
-				throw new Exception("Email Address and/or Password is incorrect!");
+				throw new Exception("Email Address and/or Password is incorrect!", MY_EXCEPTION);
 			}
 
 			## Get User Info
@@ -112,7 +112,7 @@ class Login
 			if(!$locked_out && $failed_login_count >= $this->LOGIN_THRESHOLD){
 				$stmt = $this->conn->prepare(
 					"UPDATE Login l
-					SET failed_login_count = 0
+					SET failedLoginCount = 0
 					WHERE userId = ?");
 				$stmt->execute(array($userId));
 				$failed_login_count = 0;
@@ -158,30 +158,27 @@ class Login
 					$stmt = $this->conn->prepare(
 						"UPDATE Login l
 						SET
-							failed_login_count = failed_login_count+1,
-							lockout_time = CURRENT_TIMESTAMP
+							failedLoginCount = failedLoginCount+1,
+							lockoutTime = CURRENT_TIMESTAMP
 						WHERE userId = ?;");
 					$stmt->execute(array($userId));
 
-					throw new Exception("Email Address and/or Password is incorrect.");
+					throw new Exception("Email Address and/or Password is incorrect.", MY_EXCEPTION);
 				}
 			}else{
 
 				## Too many failures, lock account
 				$stmt = $this->conn->prepare(
 					"UPDATE Login
-					SET lockout_time = current_timestamp()
+					SET lockoutTime = current_timestamp()
 					WHERE userId = ?");
 				$stmt->execute(array($userId));
 
-				throw new Exception("You have entered the wrong login information too many times and you have been temporarily locked out.");
+				throw new Exception("You have entered the wrong login information too many times and you have been temporarily locked out.", MY_EXCEPTION);
 			}
-		}catch(PDOException $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}catch(Exception $e){
+			$this->processException($e, $response);
 			$response['success'] = false;
-			$response['error'] = $e->getMessage();
 		}
 
 		## Return
@@ -234,12 +231,12 @@ class Login
 			$email = trim(strtolower($email));
 			if(!preg_match('/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/',$email)){
 
-				throw new Exception("Please enter a valid email address.");
+				throw new Exception("Please enter a valid email address.", MY_EXCEPTION);
 			}
 
 			## Verify That The Email Address Is Allowed
 			$stmt = $this->conn->prepare(
-				"SELECT u.email, u.firstName as first_name, u.userId as id
+				"SELECT u.email, u.firstName, u.userId
 				FROM User u
 				WHERE archived = 0
 					AND email = ?");
@@ -247,14 +244,14 @@ class Login
 			$results = $stmt->fetchAll();
 
 			if(count($results) != 1){
-				throw new Exception("Your email has not been approved for use yet. Please contact your administrator for further instruction.");
+				throw new Exception("Your email has not been approved for use yet. Please contact your administrator for further instruction.", MY_EXCEPTION);
 			}
 
 			## Verify That Email Doesn't Already Exist
 			$row = $results[0];
-			$userId = $row['id'];
+			$userId = $row['userId'];
 			$dbemail = $row['email'];
-			$dbfirst_name = $row['first_name'];
+			$dbfirst_name = $row['firstName'];
 
 			$stmt = $this->conn->prepare(
 				"SELECT *
@@ -263,7 +260,7 @@ class Login
 			$stmt->execute(array($userId));
 
 			if(count($stmt->fetchAll()) > 0){
-				throw new Exception("Account already exists!");
+				return $this->passwordResetRequest($email);
 			}
 
 			## Add User
@@ -279,18 +276,18 @@ class Login
 			## Set Unique Token
 			$token = $this->getPasswordResetToken($userId);
 			if(!$token){
-				throw new Exception("Error retrieving token.");
+				throw new Exception("Error retrieving token.", MY_EXCEPTION);
 			}
 
 			## Build Email Body
-			$path = "<a href='".$this->register_and_password_reset_url."/?token=".$token."'>".$this->register_and_password_reset_url."/?token=".$token."</a>";
+			$path = "<a href='"."https://".$_SERVER['SERVER_NAME'].$this->register_and_password_reset_url."/?token=".$token."'>"."https://".$_SERVER['SERVER_NAME'].$this->register_and_password_reset_url."/?token=".$token."</a>";
 
 			$subject = $this->name." - Account Created";
-			$mail_body = "<p>".$dbfirst_name.",</p>";
+			$mail_body = "<p>".$dbfirst_name.",</p>\r\n";
 			$mail_body .= "<p>Your account has been successfully created for the ".$this->name." System.
-				In order to activate your account, you must visit the link below to set up a password. This token will expire after 30 minutes if unused.</p><br />";
-			$mail_body .= $path."<br /><br />";
-			$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>";
+				In order to activate your account, you must visit the link below to set up a password. This token will expire after 30 minutes if unused.</p><br />\r\n";
+			$mail_body .= $path."<br /><br />\r\n";
+			$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>\r\n";
 			if($this->contact_email){
 				$mail_body .= "<br />You can reach us at: <a href='mailto:".$this->contact_email."'>".$this->contact_email."</a>";
 			}
@@ -303,12 +300,9 @@ class Login
 				print $mail_body;
 			}
 
-		}catch(PDOException $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
+			$response['success'] = true;
 		}catch(Exception $e){
-			$response['success'] = false;
-			$response['error'] = $e->getMessage();
+			$this->processException($e, $response);
 		}
 
 		## Return
@@ -338,7 +332,7 @@ class Login
 			$email = trim(strtolower($email));
 			if(!preg_match('/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/',$email)){
 
-				throw new Exception("Please enter a valid email address");
+				throw new Exception("Please enter a valid email address", MY_EXCEPTION);
 			}
 
 			## Verify That Email Exists
@@ -355,30 +349,30 @@ class Login
 				## Get User Info
 				$row = $results[0];
 
-				$userId = $row['id'];
+				$userId = $row['userId'];
 				$dbemail = $row['email'];
-				$dbfirst_name = $row['first_name'];
+				$dbfirst_name = $row['firstName'];
 
 				## Set Unique Token
 				$token = $this->getPasswordResetToken($userId);
 				if(!$token){
-					throw new Exception("Error retrieving token.");
+					throw new Exception("Error retrieving token.", MY_EXCEPTION);
 				}
 
 				$response['success'] = true;
 
 				## Build Email Body
-				$path = "<a href='".$this->register_and_password_reset_url."/?token=".$token."'>".$this->register_and_password_reset_url."/?token=".$token."</a>";
+				$path = "<a href='"."https://".$_SERVER['SERVER_NAME'].$this->register_and_password_reset_url."/?token=".$token."'>"."https://".$_SERVER['SERVER_NAME'].$this->register_and_password_reset_url."/?token=".$token."</a>";
 
-				$subject = $this->name." Password Reset Request";
-				$mail_body = "<p>".$dbfirst_name.",</p>";
-				$mail_body .= "<p>You have recently requested a password reset at ".URL_BASE.". Click or copy and paste the
+				$subject = $this->name." Password Reset Request\r\n";
+				$mail_body = "<p>".$dbfirst_name.",</p>\r\n";
+				$mail_body .= "<p>You have recently requested a password reset at ".$_SERVER['SERVER_NAME'].". Click or copy and paste the
 					link below to reset your password. If you are receiving this email unexpectedly and have not requested a password reset, you may disregard this
-					email and continue to logon normally.</p><br />";
-				$mail_body .= $path."<br /><br />";
+					email and continue to logon normally.</p><br />\r\n";
+				$mail_body .= $path."<br /><br />\r\n";
 				$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>";
 				if($this->contact_email){
-					$mail_body .= "<br />You can reach us at: <a href='mailto:".$this->contact_email."'>".$this->contact_email."</a>";
+					$mail_body .= "<br />You can reach us at: <a href='mailto:".$this->contact_email."'>".$this->contact_email."</a>\r\n";
 				}
 
 				## Build Email Headers
@@ -387,16 +381,11 @@ class Login
 				$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 				mail($dbemail, $subject, $mail_body, $headers);
 			}else{
-
 				## No Results Found For Email Address - Register Them
 				$response = $this->register($email);
 			}
-		}catch(PDOException $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}catch(Exception $e){
-			$response['success'] = false;
-			$response['error'] = $e->getMessage();
+			$this->processException($e, $response);
 		}
 
 		## Return
@@ -422,12 +411,12 @@ class Login
 		try{
 			if(!isset($token) || !isset($email) || !isset($password) || !isset($vpassword)){
 
-				throw new Exception("Please provide all form fields.");
+				throw new Exception("Please provide all form fields.", MY_EXCEPTION);
 			}
 
-			if($password != $vpassword){
+			if($password !== $vpassword){
 
-				throw new Exception("Passwords do not match");
+				throw new Exception("Passwords do not match", MY_EXCEPTION);
 			}
 
 			## Make Sure Passwords Are Strong(LOL)
@@ -440,7 +429,7 @@ class Login
 
 			if(!preg_match('/(?=^.{7,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/',$password)){
 
-				throw new Exception("The password provided does not meet the minimum requirements.");
+				throw new Exception("The password provided does not meet the minimum requirements.", MY_EXCEPTION);
 			}
 
 			$this->clearOldTokens();
@@ -459,14 +448,14 @@ class Login
 
 			if(count($results) != 1){
 
-				throw new Exception("There was an error processing your request. 010");
+				throw new Exception("There was an error processing your request. 010", MY_EXCEPTION);
 
 			}
 
 			## Make Sure User ID Is Associated With Provided Email
 			$row = $results[0];
 			$reset_userId = $row['userId'];
-			$stmt = $this->conn->prepare("SELECT u.userId, u.email as email, u.firstName as first_name
+			$stmt = $this->conn->prepare("SELECT u.userId, u.email, u.firstName
 				FROM User u
 				WHERE u.archived = 0
 					AND u.email = ?");
@@ -474,11 +463,11 @@ class Login
 			$row = $stmt->fetch();
 			$userId = $row['userId'];
 			$dbemail = $row['email'];
-			$dbfirst_name = $row['first_name'];
+			$dbfirst_name = $row['firstName'];
 
 			## Check That User ID's Match From Each Table
 			if($reset_userId != $userId){
-				throw new Exception("There was an error processing your request. 020");
+				throw new Exception("There was an error processing your request. 020", MY_EXCEPTION);
 			}
 
 			## At This Point It Is Okay To Reset The Password
@@ -489,18 +478,18 @@ class Login
 			## Delete Row From password_reset Table
 			$stmt = $this->conn->prepare("UPDATE PasswordReset SET archived = 1 WHERE userId = ?");
 			$stmt->execute(array($userId));
-			$response['success'] = true;
-
+			$response['success'] = true;			
+			
 			## Build Email Body
-			$path = "<a href='".URL_BASE."'>".URL_BASE."</a>";
+			$path = "<a href='".$_SERVER['SERVER_NAME']."'>".$_SERVER['SERVER_NAME']."</a>";
 			$subject = $this->name." Password Reset Success";
-			$mail_body = "<p>".$dbfirst_name.",</p>";
+			$mail_body = "<p>".$dbfirst_name.",</p>\r\n";
 			$mail_body .= "<p>Your password has been reset successfully. You may now login with your new password by following the link below. If you are receiving
-				this email unexpectedly and have not reset your password. Please contact support, as your account may have been compromised.</p><br />";
+				this email unexpectedly and have not reset your password. Please contact support, as your account may have been compromised.</p><br />\r\n";
 			$mail_body .= $path."<br /><br />";
-			$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>";
+			$mail_body .= "<font style='font-size:11px;'>Please do NOT reply to this message.</font>\r\n";
 			if($this->contact_email){
-				$mail_body .= "<br />You can reach us at: <a href='mailto:".$this->contact_email."'>".$this->contact_email."</a>";
+				$mail_body .= "<br />You can reach us at: <a href='mailto:".$this->contact_email."'>".$this->contact_email."</a>\r\n";
 			}
 
 			## Build Email Headers
@@ -509,14 +498,9 @@ class Login
 			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 			mail($dbemail, $subject, $mail_body, $headers);
 
-
 			$this->login($email, $password);
-		}catch(PDOException $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}catch(Exception $e){
-			$response['success'] = false;
-			$response['error'] = $e->getMessage();
+			$this->processException($e, $response);
 		}
 
 		## Return
@@ -545,7 +529,7 @@ class Login
 
 			## Check Required Fields
 			if(!isset($password) || !isset($npassword) || !isset($vpassword)){
-				throw new Exception("Please provide all form fields");
+				throw new Exception("Please provide all form fields", MY_EXCEPTION);
 			}
 
 			## Fetch Current Password
@@ -559,7 +543,7 @@ class Login
 
 			## Make Sure User Exists
 			if(count($results) != 1){
-				throw new Exception("There was an error changing your password.");
+				throw new Exception("There was an error changing your password.", MY_EXCEPTION);
 			}
 
 			## Define Database Results
@@ -568,12 +552,12 @@ class Login
 
 			## Check That Current Password Is Correct
 			if(!password_verify($password, $dbpassword)){
-				throw new Exception("Invalid password");
+				throw new Exception("Invalid password", MY_EXCEPTION);
 			}
 
 			## Make Sure Passwords Match
-			if($npassword != $vpassword){
-				throw new Exception("Passwords do not match");
+			if($npassword !== $vpassword){
+				throw new Exception("Passwords do not match", MY_EXCEPTION);
 			}
 
 			## Make Sure Passwords Are Strong
@@ -585,7 +569,7 @@ class Login
 			*/
 
 			if(!preg_match('/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/',$password)){
-				throw new Exception("The password provided does not meet the minimum requirements.");
+				throw new Exception("The password provided does not meet the minimum requirements.", MY_EXCEPTION);
 			}
 
 			## Set New Password
@@ -593,12 +577,8 @@ class Login
 			$stmt = $this->conn->prepare("UPDATE Login SET password = ? WHERE userId = ?");
 			$stmt->execute(array($password, $_SESSION['USER__ID']));
 			$response['success'] = true;
-		}catch(PDOException $e){
-			$response['success'] = false;
-			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}catch(Exception $e){
-			$response['success'] = false;
-			$response['error'] = $e->getMessage();
+			$this->processException($e, $response);
 		}
 
 		## Return
@@ -693,5 +673,14 @@ class Login
 		}else{
 			return false;
 		}
+	}
+
+	private function processException($exception, &$response){
+		if($exception->getCode() === MY_EXCEPTION){
+			$response['error'] = $exception->getMessage();
+		}else{
+			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
+		}
+		$response['success'] = false;
 	}
 }
