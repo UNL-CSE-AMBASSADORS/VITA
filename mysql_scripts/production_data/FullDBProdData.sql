@@ -2,8 +2,14 @@ USE vita;
 
 -- User
 INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes) 
-	VALUES ('Unused', 'User', '', '', FALSE);
+	VALUES ('Matthew', 'Meacham', 'mmeacham6@gmail.com', '', FALSE);
 SET @userId = LAST_INSERT_ID();
+
+INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
+	VALUES ('Austin', 'Schmidt', 'schmidtwithad@hotmail.com', '', FALSE);
+
+INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
+	VALUES ('Spencer', 'Collins', 'collinsspencer97@gmail.com', '', FALSE);
 -- End User
 
 
@@ -22,29 +28,6 @@ SET @site_andersonLibrary = LAST_INSERT_ID();
 INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
 	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", TRUE, @userId, @userId);
 SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
-
-/*
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("Center for People in Need", "3901 N 27th, Unit 1", "402-472-9638", FALSE, @userId, @userId);
-SET @site_centerForPeopleInNeed = LAST_INSERT_ID();
-
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("Asian Community and Cultural Center", "144 North 44 Suite A", "402-477-3446", TRUE, @userId, @userId);
-SET @site_asianCommunityAndCulturalCenter = LAST_INSERT_ID();
-
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("Eiseley Library", "1530 Superior Street", "402-472-9638", FALSE, @userId, @userId);
-SET @site_eiseleyLibrary = LAST_INSERT_ID();
-
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("Bennett Martin Library", "14th and N Street", "402-472-9638", FALSE, @userId, @userId);
-SET @site_bennettMartinLibrary = LAST_INSERT_ID();
-
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("Good Neighbor Center", "2617 Y Street", "402-472-9638", FALSE, @userId, @userId);
-SET @site_goodNeighborCenter = LAST_INSERT_ID();
-*/
-
 -- End Sites
 
 
@@ -657,80 +640,24 @@ SET @permission_useAdminToolsId = LAST_INSERT_ID();
 
 -- Questions
 INSERT INTO Question (text, lookupName)
-	VALUES ("Will you require a Depreciation Schedule?", "depreciation_schedule");
+	VALUES ("Are you a University of Nebraska - Lincoln student?", "unl_student");
 SET @question_question1Id = LAST_INSERT_ID();
 
 INSERT INTO Question (text, lookupName)
-	VALUES ("Will you require a Schedule F (Farm)?", "schedule_f");
+	VALUES ("Are you an International Student Scholar?", "international_student_scholar");
 SET @question_question2Id = LAST_INSERT_ID();
 
 INSERT INTO Question (text, lookupName)
-	VALUES ("Are you self-employed or own a home-based business?", "self_employed");
+	VALUES ("What sort of visa are you on?", "visa");
 SET @question_question3Id = LAST_INSERT_ID();
 
 INSERT INTO Question (text, lookupName)
-	VALUES ("Does your home-based business or self-employment have a net loss?", "net_loss");
+	VALUES ("How long have you been in the United States?", "duration_in_united_states");
 SET @question_question4Id = LAST_INSERT_ID();
 
 INSERT INTO Question (text, lookupName)
-	VALUES ("Does your home-based business or self-employment have more than $10,000 in expenses?", "more_than_10000_expenses");
-SET @question_question5Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Does your home-based business or self-employment have self-employed, SEP, SIMPLE, or qualified retirement plans", "retirement_plans");
-SET @question_question6Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Does your home-based business or self-employment have employees?", "any_employees");
-SET @question_question7Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Will your return have casualty losses?", "casualty_losses");
-SET @question_question8Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Will your return have theft losses?", "theft_losses");
-SET @question_question9Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Will you require a Schedule E (rental income)?", "schedule_e");
-SET @question_question10Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Will you require a Schedule K-1 (partnership or trust income)", "schedule_k-1");
-SET @question_question11Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Do you have income from dividends, capital gains, or minimal brokerage transactions?", "dividends_income");
-SET @question_question12Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Will your return involve a current bankruptcy?", "current_bankruptcy");
-SET @question_question13Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Will your return involve income from more than one state?", "multiple_states");
-SET @question_question14Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Are you a University of Nebraska - Lincoln student?", "unl_student");
-SET @question_question15Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Are you an International Student Scholar?", "international_student_scholar");
-SET @question_question16Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("What sort of visa are you on?", "visa");
-SET @question_question17Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("How long have you been in the United States?", "duration_in_united_states");
-SET @question_question18Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
 	VALUES ("Have you been on this visa for less than 183 days and in the United States for less than five years (after 2012)?", "visa_less_than_183_days");
-SET @question_question19Id = LAST_INSERT_ID();
+SET @question_question5Id = LAST_INSERT_ID();
 -- End Questions
 
 
