@@ -100,9 +100,10 @@
 
 	function displayAppointment($id) {
 		$stmt = $GLOBALS['conn']->prepare(
-			"SELECT Appointment.scheduledTime, Client.firstName, Client.lastName, Client.emailAddress, Site.title
+			"SELECT AppointmentTime.scheduledTime, Client.firstName, Client.lastName, Client.emailAddress, Site.title
 			FROM Appointment
 			JOIN Client ON Appointment.clientId = Client.clientId
+			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 			JOIN Site ON Appointment.siteId = Site.siteId
 			WHERE Appointment.appointmentId = ?"
 		);

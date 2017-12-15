@@ -12,9 +12,10 @@
 		FROM Appointment
 		LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 		JOIN Client ON Appointment.clientId = Client.clientId
-		WHERE Appointment.scheduledTime >= ? AND Appointment.scheduledTime < ?
+		JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+		WHERE AppointmentTime.scheduledTime >= ? AND AppointmentTime.scheduledTime < ?
 			AND Appointment.archived = FALSE
-		ORDER BY Appointment.scheduledTime ASC");
+		ORDER BY AppointmentTime.scheduledTime ASC");
 
 	$timezoneOffset = $_GET['timezoneOffset'];
 	$dates = getUtcDateAdjustedForTimezoneOffset($_GET['displayDate'], $timezoneOffset);
