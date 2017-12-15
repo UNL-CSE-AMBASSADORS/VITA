@@ -427,12 +427,12 @@ function conditionalFormFields() {
 	var studentScholarAppointmentPicker = $("#studentScholarAppointmentPicker");
 
 	// All the radio buttons
-	var studentUNLValues = studentUNL.find('input:radio[name="15"]');
-	var studentIntValues = studentInt.find('input:radio[name="16"]');
-	var studentIntVisaValues = studentIntVisa.find('input:radio[name="17"]');
-	var studentf1Values = studentf1.find('input:radio[name="18"]');
-	var studentj1Values = studentj1.find('input:radio[name="18"]');
-	var studenth1bValues = studenth1b.find('input:radio[name="19"]');
+	var studentUNLValues = studentUNL.find('input:radio[name="1"]');
+	var studentIntValues = studentInt.find('input:radio[name="2"]');
+	var studentIntVisaValues = studentIntVisa.find('input:radio[name="3"]');
+	var studentf1Values = studentf1.find('input:radio[name="4"]');
+	var studentj1Values = studentj1.find('input:radio[name="4"]');
+	var studenth1bValues = studenth1b.find('input:radio[name="5"]');
 
 	// To help hide everything and selectively show content
 	var allUnderstudentIntVisaValues = studentf1.add(studentj1).add(studenth1b);
