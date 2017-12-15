@@ -10,7 +10,6 @@ if (!$USER->hasPermission('use_admin_tools')) {
 
 require_once "$root/server/config.php";
 require_once "$root/server/libs/wrappers/PHPExcelWrapper.class.php";
-require_once "$root/server/utilities/dateTimezoneUtilities.php";
 
 $HEADER_COLUMN_NAMES = array('First Name', 'Last Name', 'Start Time', 'End Time', 'Preparing Taxes', 'Phone Number', 'Email Address');
 $ALL_SITES_ID = -1;
@@ -47,7 +46,7 @@ function executeVolunteerShiftsQuery($data) {
 		JOIN UserShift ON User.userId = UserShift.userId
 		JOIN Shift ON UserShift.shiftId = Shift.shiftId
 		JOIN Site ON Shift.siteId = Site.siteId
-		WHERE Shift.startTime >= ? AND Shift.startTime < ?
+		WHERE DATE(Shift.startTime) = ?
 			AND User.archived = FALSE
 			AND Shift.archived = FALSE";
 	if ($data['siteId'] != $ALL_SITES_ID) {
@@ -56,20 +55,12 @@ function executeVolunteerShiftsQuery($data) {
 	$query .= ' ORDER BY Shift.siteId ASC, Shift.startTime ASC';
 	$stmt = $DB_CONN->prepare($query);
 
-	$timezoneOffset = $data['timezoneOffset'];
-	$dates = getUtcDateAdjustedForTimezoneOffset($data['date'], $timezoneOffset);
-	$filterParams = array($dates['date']->format('Y-m-d H:i:s'), $dates['datePlusOneDay']->format('Y-m-d H:i:s'));
+	$filterParams = array($data['date']);
 	if ($data['siteId'] != $ALL_SITES_ID) {
 		$filterParams[] = $data['siteId'];
 	}
 	$stmt->execute($filterParams);
 	$volunteerShifts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-	// Convert the UTC times from the datbase back into the users's timezone
-	foreach ($volunteerShifts as &$volunteerShift) {
-		$volunteerShift['startTime'] = getTimezoneDateFromUtc($appointment['startTime'], $timezoneOffset)->format('H:i:s');
-		$volunteerShift['endTime'] = getTimezoneDateFromUtc($appointment['endTime'], $timezoneOffset)->format('H:i:s');
-	}
 
 	return $volunteerShifts;
 }
