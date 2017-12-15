@@ -60,9 +60,9 @@
 							<select id="languageSkills" class="form-control" multiple="multiple">
 								<option value='' disabled selected>Foreign Language</option>
 								<option value="None">None</option>
-								<option value="Spanish">Spanish</option>
-								<option value="Arabic">Arabic</option>
-								<option value="Vietnamese">Vietnamese</option>
+								<option value="spanish_speaking">Spanish</option>
+								<option value="arabic_speaking">Arabic</option>
+								<option value="vietnamese_speaking">Vietnamese</option>
 								<option value="Other">Other</option>
 							</select>
 						</div>
