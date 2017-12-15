@@ -4,6 +4,12 @@
 			<div class="queue-size-lbl">Queue:</div>
 			<div class="queue-size-count">{{appointments.length}}</div>
 		</div>
+		<div class="siteSelection">
+        <button class="btn btn-default dropdown-toggle" type="button" id="site" data-toggle="dropdown"></button>
+        <ul class="dropdown-menu">
+            <li ng-repeat="site in sites">{{site.title}}</li>
+        </ul>
+    </div>
 		<md-datepicker
 			ng-model="currentDate"
 			ng-change="updateAppointmentInformation()"
