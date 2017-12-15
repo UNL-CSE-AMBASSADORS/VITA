@@ -3,6 +3,7 @@ USE vita;
 DROP TABLE IF EXISTS Answer;
 DROP TABLE IF EXISTS ServicedAppointment;
 DROP TABLE IF EXISTS Appointment;
+DROP TABLE IF EXISTS AppointmentTime;
 DROP TABLE IF EXISTS Client;
 DROP TABLE IF EXISTS UserShift;
 DROP TABLE IF EXISTS Shift;
@@ -66,16 +67,24 @@ CREATE TABLE Client (
 	emailAddress VARCHAR(255) NULL
 );
 
+CREATE TABLE AppointmentTime (
+	appointmentTimeId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	scheduledTime DATETIME NOT NULL,
+	percentageAppointments INTEGER UNSIGNED NOT NULL DEFAULT 100,
+	CONSTRAINT percentageCheck CHECK (percentageAppointments>=0 AND percentageAppointments<=100),
+	siteId INTEGER UNSIGNED NOT NULL,
+	FOREIGN KEY(siteId) REFERENCES Site(siteId)
+);
+
 CREATE TABLE Appointment (
 	appointmentId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    scheduledTime DATETIME NOT NULL,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
-    language VARCHAR(255) NOT NULL,
+	language VARCHAR(255) NOT NULL,
 	archived BOOLEAN NOT NULL DEFAULT FALSE,
 	clientId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(clientId) REFERENCES Client(clientId),
-	siteId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(siteId) REFERENCES Site(siteId)
+	appointmentTimeId INTEGER UNSIGNED NOT NULL,
+	FOREIGN KEY(appointmentTimeId) REFERENCES AppointmentTime(appointmentTimeId)
 );
 
 CREATE TABLE Answer (
