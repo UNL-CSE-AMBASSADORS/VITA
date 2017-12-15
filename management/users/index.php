@@ -4,7 +4,7 @@ $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 
 require_once "$root/server/user.class.php";
 $USER = new User();
-if (!$USER->hasPermission('edit_user_permission')) {
+if (!$USER->hasPermission('edit_user_permissions')) {
 	header("Location: /unauthorized");
 	die();
 }
