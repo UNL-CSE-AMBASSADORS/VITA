@@ -114,6 +114,10 @@ SET @permission_editUserPermissionId = LAST_INSERT_ID();
 INSERT INTO Permission (name, description, lookupName)
 	VALUES ("Use Admin Tools", "Can use administrative tools", "use_admin_tools");
 SET @permission_useAdminToolsId = LAST_INSERT_ID();
+
+INSERT INTO Permission (name, description, lookupName)
+	VALUES ("View All Client Information", "Can view all client information (full last name, email, phone number)", "view_client_information");
+SET @permission_viewClientInformationId = LAST_INSERT_ID();
 -- end permissions
 
 
@@ -130,6 +134,9 @@ INSERT INTO UserPermission (userId, permissionId, createdBy)
 
 INSERT INTO UserPermission (userId, permissionId, createdBy)
 	VALUES (@user_siteAdmin1Id, @permission_useAdminToolsId, @user_siteAdmin1Id);
+
+INSERT INTO UserPermission (userId, permissionId, createdBy)
+	VALUES (@user_siteAdmin1Id, @permission_viewClientInformationId, @user_siteAdmin1Id);
 -- end user permissions
 
 

@@ -41,7 +41,7 @@
 						<div class="col">
 							<div class="d-flex flex-column">
 								<div class="d-flex flex-nowrap justify-content-between">
-									<div class="queue-name font-weight-bold">{{appointment.firstName}} {{appointment.lastName}}.</div>
+									<div class="queue-name font-weight-bold">{{appointment.firstName}} {{appointment.lastName}}</div>
 									<div class="queue-time">{{appointment.scheduledTime | date: "h:mm a"}}</div>
 								</div>
 								<div class="d-flex flex-nowrap justify-content-between">
@@ -73,11 +73,14 @@
 			<div class="client-info-section container-fluid d-flex py-3">
 				<!-- Currently selected client -->
 				<div class="client align-items-start w-100" ng-if="client != null" ng-cloak>
-						<div class="client-name">{{client.firstName}} {{client.lastName}}.</div>
+						<div class="client-name">{{client.firstName}} {{client.lastName}}</div>
 						<div class="client-time">Scheduled Appointment Time: {{client.scheduledTime | date: "h:mm a"}}</div>
-
-						<!-- The following are a couple of options for client progress/"workflow" -->
-
+						<div class="client-email">
+							Email: <span ng-if="client.emailAddress != null" ng-clock>{{client.emailAddress}}</span>
+						</div>
+						<div class="client-phoneNumber mb-3">
+							Phone Number: <span ng-if="client.phoneNumber != null" ng-cloak>{{client.phoneNumber}}</span>
+						</div>
 
 						<div class="client-progress d-flex flex-column">
 							<button type="button" class="btn" class="checkin" ng-disabled="client.checkedIn" ng-class="client.checkedIn ? 'btn-primary': 'btn-secondary' " ng-click="checkIn()">Checked In</button>
