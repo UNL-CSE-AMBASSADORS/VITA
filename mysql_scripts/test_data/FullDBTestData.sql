@@ -397,7 +397,7 @@ INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
 	VALUES (@possibleAnswer_j1Id, @appointment_appointment4Id, @question_question3Id);
 	
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_2015OrLaterId, @appointment_appointment4Id, @question_question6Id);
+	VALUES (@possibleAnswer_2015OrLaterId, @appointment_appointment4Id, @question_question4Id);
 -- end answer
 
 
