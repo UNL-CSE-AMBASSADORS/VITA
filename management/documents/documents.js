@@ -6,14 +6,12 @@ $(document).ready(function() {
 let downloadAppointmentSchedule = function() {
 	let siteId = getSelectedSiteId();
 	let date = getSelectedDate();	
-	let timezoneOffset = getTimezoneOffset();
 	clickDownloadLink(`/server/management/documents/appointmentsSchedule.php?date=${date}&siteId=${siteId}`);
 };
 
 let downloadVolunteerSchedule = function() {
 	let siteId = getSelectedSiteId();
 	let date = getSelectedDate();
-	let timezoneOffset = getTimezoneOffset();
 	clickDownloadLink(`/server/management/documents/volunteerSchedule.php?date=${date}&siteId=${siteId}`);
 };
 
