@@ -2,7 +2,7 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 	angular.extend(this, $controller('QueueController', {$scope: $scope}));
 
 	function fixedEncodeURIComponent (str) {
-  	return encodeURIComponent(str).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
+  		return encodeURIComponent(str).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
 	}
 
 	$scope.selectClient = function(client) {
