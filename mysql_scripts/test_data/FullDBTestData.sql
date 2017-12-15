@@ -108,7 +108,7 @@ INSERT INTO Permission (name, description, lookupName)
 SET @permission_editSiteInformationId = LAST_INSERT_ID();
 
 INSERT INTO Permission (name, description, lookupName)
-	VALUES ("Edit Permissions", "Can edit user permission", "edit_user_permission");
+	VALUES ("Edit Permissions", "Can edit user permissions", "edit_user_permissions");
 SET @permission_editUserPermissionId = LAST_INSERT_ID();
 
 INSERT INTO Permission (name, description, lookupName)
