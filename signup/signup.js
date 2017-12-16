@@ -582,20 +582,24 @@ $('#vitaSignupForm').submit(function(e) {
 		var checkedRadioBox = $(this).find('input[type="radio"]:checked');
 
 		if(checkedRadioBox.length>0) {
-			questions.push({
-				id: checkedRadioBox.attr('name'),
-				value: checkedRadioBox.val()
-			});
+			if (checkedRadioBox.attr('name') !== 'languageRadio') {
+				questions.push({
+					id: checkedRadioBox.attr('name'),
+					value: checkedRadioBox.val()
+				});
+			}
 		}
 	});
 
 	var scheduledTime = new Date($("#dateInput").val() + " " + $("#timePickerSelect").val()).toISOString();
+	var language = $('#language').find('input[type="radio"]:checked').val();
 
 	var data = {
 		"firstName":firstName.value,
 		"lastName":lastName.value,
 		"email":email.value,
 		"phone":phone.value,
+		"langauge":language,
 		"questions": questions,
 		"scheduledTime":scheduledTime,
 		"siteId":sitePickerSelect.value

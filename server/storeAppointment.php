@@ -57,10 +57,12 @@ function storeAppointment($data){
 				clientId,
 				scheduledTime,
 				siteId,
+				language,
 				ipAddress
 			)
 			VALUES
 			(
+				?,
 				?,
 				?,
 				?,
@@ -70,6 +72,7 @@ function storeAppointment($data){
 			$clientId,
 			$data['scheduledTime'],
 			$data['siteId'],
+			$data['language'],
 			$_SERVER['REMOTE_ADDR']
 		);
 		$stmt = $DB_CONN->prepare($appointmentInsert);
