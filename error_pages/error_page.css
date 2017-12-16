@@ -1,0 +1,53 @@
+.error-number {
+	font-size: 320px;
+	line-height: 320px;
+	font-family: Bebas_Neue;
+	font-weight: bold;
+	text-align: center;
+}
+
+.error-name {
+	font-size: 192px;
+	line-height: 192px;
+	font-family: Bebas_Neue;
+	font-weight: bold;
+	text-align: center;
+}
+
+.error-description {
+	font-size: 24px;
+	font-family: Verdana;
+	text-align: center;
+}
+
+@media only screen and (max-width: 1000px) {
+	.error-number {
+		font-size: 192px;
+		line-height: 192px;
+	}
+
+	.error-name {
+		font-size: 96px;
+		line-height: 96px;
+	}
+
+	.error-description {
+		font-size: 18px;
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	.error-number {
+		font-size: 96px;
+		line-height: 96px;
+	}
+
+	.error-name {
+		font-size: 56px;
+		line-height: 56px;
+	}
+
+	.error-description {
+		font-size: 14px;
+	}
+}

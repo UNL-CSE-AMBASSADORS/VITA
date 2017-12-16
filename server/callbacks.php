@@ -26,7 +26,7 @@ function getLoginClass(){
 	GLOBAL $DB_CONN, $root;
 	require_once "$root/server/Login.class.php";
 
-	return new Login($DB_CONN, 'VITA', 'VITA', '/index.php', '/register/index.php', 'noreply@vita-lincoln.org', 'hmmm@hmmm.com');
+	return new Login($DB_CONN, 'VITA', 'VITA', '/index.php', '/register/index.php', 'noreply@vita.unl.edu', 'vita@cse.unl.edu');
 }
 
 function login($params){

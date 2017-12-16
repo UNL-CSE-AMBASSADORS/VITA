@@ -25,7 +25,7 @@ $(function(){
 				$.ajax({
 					dataType: 'json',
 					method: 'POST',
-					url: '/server/manageuser.php',
+					url: '/server/management/users/users.php',
 					data: {
 						callback: 'addUser',
 						firstName: $('#firstName').val(),
@@ -56,12 +56,12 @@ $(function(){
 	});
 
 	refreshUserTable();
-	$('#user-permission-table').on('changed.bs.select', '.selectpicker', function(event){
+	$('#user-management-table').on('changed.bs.select', '.userPermissionsSelectPicker', function(event){
 		var userId = $(this).parents('tr').data('user-id');
 
 		// permissions to be removed - all non-selected options with set ids
 		var removePermissionArr = $(this).children('option:not(:selected)[data-userPermissionId]').map(function(index, ele){
-			return ele.dataset.userpermissionid;
+			return ele.dataset.userpermissionid; // note this is case-sensitive and should be all lowercase
 		}).get();
 		// permissions to be added - all selected options w/o ids
 		var addPermissionArr = $(this).children('option:selected:not([data-userPermissionId])').map(function(index, ele){
@@ -71,7 +71,7 @@ $(function(){
 		$.ajax({
 			dataType: 'json',
 			method: 'POST',
-			url: '/server/manageuser.php',
+			url: '/server/management/users/users.php',
 			data: {
 				callback: 'updateUserPermissions',
 				userId: userId,
@@ -88,21 +88,55 @@ $(function(){
 			}
 		});
 	});
+
+	$('#user-management-table').on('changed.bs.select', '.userAbilitiesSelectPicker', function(event) {
+		let userId = $(this).parents('tr').data('user-id');
+
+		// abilities to be removed - all non-selected options with set ids
+		let removeAbilityArr = $(this).children('option:not(:selected)[data-userAbilityId]').map((index, element) => {
+			return element.dataset.userabilityid; // note this is case-sensitive and should be all lowercase
+		}).get();
+
+		// abilities to be added - all selected options w/o ids
+		let addAbilityArr = $(this).children('option:selected:not([data-userAbilityId])').map((index, element) => {
+			return element.value;
+		}).get();
+
+		$.ajax({
+			dataType: 'json',
+			method: 'POST',
+			url: '/server/management/users/users.php',
+			data: {
+				callback: 'updateUserAbilities',
+				userId: userId,
+				removeAbilityArr: removeAbilityArr,
+				addAbilityArr: addAbilityArr
+			},
+			success: function (response) {
+				if (response.success) {
+					refreshUserTable();
+				} else {
+					refreshUserTable();
+					alert(response.error);
+				}
+			}
+ 		});
+	});
 });
 
 function refreshUserTable(){
-
 	$.ajax({
 		dataType: 'json',
 		method: 'POST',
-		url: '/server/manageuser.php',
+		url: '/server/management/users/users.php',
 		data: {
 			callback: 'getUserTable'
 		},
 		success: function(response){
 			if(response.success){
-				$('#user-permission-table').html(response.table);
-				$('#user-permission-table .selectpicker').selectpicker();
+				$('#user-management-table').html(response.table);
+				$('#user-management-table .userPermissionsSelectPicker').selectpicker();
+				$('#user-management-table .userAbilitiesSelectPicker').selectpicker();
 			}else{
 				alert(response.error);
 			}

@@ -5,18 +5,3 @@
 	position: fixed;
 	bottom: 0;
 }
-.navbar-brand, .nav-link {
-	cursor: pointer;
-}
-
-.emailProfileStatic {
-  margin-bottom: 1rem !important;
-}
-
-#profilePicture {
-  margin-bottom: 20px;
-}
-
-.shiftSelect {
-     display: inline-block;
-}

@@ -1,6 +1,6 @@
 
 <?php
-die('this was called');
+
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 
 require_once "$root/server/user.class.php";
@@ -17,7 +17,7 @@ storeProfile($_POST);
 
 function storeProfile($data) {
      echo json_encode($data);
-     die();
+     
      GLOBAL $DB_CONN;
      $response = array();
      $response['success'] = false;
