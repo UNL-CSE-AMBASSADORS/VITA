@@ -7,6 +7,20 @@ queueApp.factory("QueueService", function($http){
 				return null;
 			});
 		},
+		getVolunteers: function(date, siteId) {
+			return $http({
+				url: "/server/queue/queue_priv.php",
+				method: 'POST',
+				data: `action=getVolunteers&date=${date}&siteId=${siteId}`,
+				headers: {
+					'Content-Type': "application/x-www-form-urlencoded"
+				}
+			}).then(function(response){
+				return response.data;
+			},function(error){
+				return null;
+			});
+		},
 		checkInNow: function(time, id) {
 			return $http({
 				url: "/server/queue/queue_priv.php",

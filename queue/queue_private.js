@@ -39,8 +39,28 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 	$scope.cancelledAppointment = function() {
 		$scope.client.ended = true;
 		QueueService.cancelledAppointment($scope.client.appointmentId);
+	};
+
+	$scope.getVolunteers = function() {
+		let year = $scope.currentDate.getFullYear(),
+		month = $scope.currentDate.getMonth() + 1,
+		day = $scope.currentDate.getDate(),
+		siteId = 1; // TODO THIS NEEDS TO BE CHANGED TO THE SITE SELECTED ONCE THAT IS IMPLEMENTED
+		if (month < 10) month = "0" + month;
+		QueueService.getVolunteers(year + "-" + month + "-" + day, siteId).then(function(data) {
+			console.log(data);
+			if(data == null) {
+				console.log('server error');
+			} else if(data.length > 0) {
+				$scope.volunteers = data;
+			} else {
+				$scope.volunteers = [];
+			}
+		});
 	}
 
+	// Invoke initially
+	$scope.getVolunteers();
 });
 
 queueApp.filter('searchFor', function(){

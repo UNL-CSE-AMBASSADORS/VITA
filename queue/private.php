@@ -86,6 +86,8 @@
 						</br>
 							<button type="button" class="btn" class="preparing" ng-disabled="!client.paperworkComplete" ng-class="client.preparing ? 'btn-primary': 'btn-secondary' " ng-click="nowPreparing()">Preparing</button>
 						</br>
+							<select ng-model="volunteers">Select Preparer</select>
+						</br>
 							<button type="button" class="btn" class="ended" ng-disabled="!client.preparing" ng-class="client.ended ? 'btn-primary': 'btn-secondary' " ng-click="completeAppointment()">Finished</button>
 						</div>
 

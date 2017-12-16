@@ -19,7 +19,13 @@
 		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentIncomplete': appointmentIncomplete($_REQUEST['explanation'], $_REQUEST['id']); break;
 		case 'cancelledAppointment': cancelledAppointment($_REQUEST['id']); break;
+		case 'getVolunteers': getVolunteers($_REQUEST['date'], $_REQUEST['siteId']); break;
 		default: break;
+	}
+
+	function getVolunteers($date, $siteId) {
+		echo json_encode(array('date' => $date, 'siteId' => $siteId));
+		die();
 	}
 
 	function checkIn($time, $id) {
