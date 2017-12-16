@@ -63,7 +63,6 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 		siteId = 1; // TODO THIS NEEDS TO BE CHANGED TO THE SITE SELECTED ONCE THAT IS IMPLEMENTED
 		if (month < 10) month = "0" + month;
 		QueueService.getVolunteers(year + "-" + month + "-" + day, siteId).then(function(data) {
-			console.log(data);
 			if(data == null) {
 				console.log('server error');
 			} else if(data.length > 0) {
