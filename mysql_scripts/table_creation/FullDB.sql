@@ -71,6 +71,7 @@ CREATE TABLE Appointment (
     scheduledTime DATETIME NOT NULL,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
     language VARCHAR(255) NOT NULL,
+	ipAddress VARCHAR(95) NOT NULL,
 	archived BOOLEAN NOT NULL DEFAULT FALSE,
 	clientId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(clientId) REFERENCES Client(clientId),
