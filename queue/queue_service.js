@@ -8,14 +8,7 @@ queueApp.factory("QueueService", function($http){
 			});
 		},
 		getVolunteers: function(date, siteId) {
-			return $http({
-				url: "/server/queue/queue_priv.php",
-				method: 'POST',
-				data: `action=getVolunteers&date=${date}&siteId=${siteId}`,
-				headers: {
-					'Content-Type': "application/x-www-form-urlencoded"
-				}
-			}).then(function(response){
+			return $http.get(`/server/queue/queue_priv.php?action=getVolunteers&date=${date}&siteId=${siteId}`).then(function(response){
 				return response.data;
 			},function(error){
 				return null;
