@@ -73,14 +73,16 @@
 			<div class="client-info-section container-fluid d-flex py-3">
 				<!-- Currently selected client -->
 				<div class="client align-items-start w-100" ng-if="client != null" ng-cloak>
+					<div class="mb-3">
 						<div class="client-name">{{client.firstName}} {{client.lastName}}</div>
 						<div class="client-time"><b>Scheduled Appointment Time: </b>{{client.scheduledTime | date: "h:mm a"}}</div>
-						<div class="client-email">
-							<span><b>Email: </b></span><span ng-if="client.emailAddress != null" ng-clock>{{client.emailAddress}}</span>
+						<div class="client-email" ng-if="client.emailAddress != null" ng-cloak>
+							<span><b>Email:</b> {{client.emailAddress}}</span>
 						</div>
-						<div class="client-phoneNumber mb-3">
-							<span><b>Phone Number: </b></span><span ng-if="client.phoneNumber != null" ng-cloak>{{client.phoneNumber}}</span>
+						<div class="client-phoneNumber" ng-if="client.phoneNumber != null" ng-cloak>
+							<span><b>Phone Number:</b> {{client.phoneNumber}}</span>
 						</div>
+					</div>
 
 						<div class="client-progress d-flex flex-column">
 							<button type="button" class="btn" class="checkin" ng-disabled="client.checkedIn" ng-class="client.checkedIn ? 'btn-primary': 'btn-secondary' " ng-click="checkIn()">Checked In</button>
