@@ -86,7 +86,7 @@
 						</br>
 							<button type="button" class="btn" class="preparing" ng-disabled="!client.paperworkComplete" ng-class="client.preparing ? 'btn-primary': 'btn-secondary' " ng-click="nowPreparing()">Preparing</button>
 						</br>
-							<select ng-disabled="!client.paperworkComplete" ng-model="selectedVolunteer" ng-options="volunteer.name for volunteer in volunteers track by volunteer.userId">
+							<select ng-disabled="!client.preparing" ng-model="selectedVolunteer" ng-options="volunteer.name for volunteer in volunteers track by volunteer.userId">
 								<option value="">-- Select Preparer --</option>
 							</select>
 						</br>

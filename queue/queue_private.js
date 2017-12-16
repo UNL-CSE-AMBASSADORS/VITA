@@ -1,6 +1,16 @@
 queueApp.controller("QueuePrivateController", function($scope, $controller, QueueService) {
 	angular.extend(this, $controller('QueueController', {$scope: $scope}));
 
+	// Initialize selectedVolunteer model for the volunteer select
+	$scope.selectedVolunteer = undefined;
+
+	// We override the updateAppointmentInformation to update the volunteer select as well in the private queue on date changes
+	let parentUpdateAppointmentInformation = $scope.updateAppointmentInformation;
+	$scope.updateAppointmentInformation = function() {
+		parentUpdateAppointmentInformation();
+		$scope.getVolunteers();
+	}
+
 	function fixedEncodeURIComponent (str) {
   		return encodeURIComponent(str).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
 	}
@@ -29,7 +39,6 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 			alert('You must select who prepared the taxes');
 			return;
 		}
-		console.log(this.selectClient.userId);
 
 		$scope.client.ended = true;
 		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId, this.selectedVolunteer.userId);
@@ -67,9 +76,6 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 			}
 		});
 	}
-
-	// Initialize selectedVolunteer model for the volunteer select
-	$scope.selectedVolunteer = undefined;
 
 	// Invoke initially
 	$scope.getVolunteers();
