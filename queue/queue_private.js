@@ -25,8 +25,14 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 	};
 
 	$scope.completeAppointment = function() {
+		if (this.selectedVolunteer == null) {
+			alert('You must select who prepared the taxes');
+			return;
+		}
+		console.log(this.selectClient.userId);
+
 		$scope.client.ended = true;
-		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId);
+		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId, this.selectedVolunteer.userId);
 	};
 
 	$scope.incompleteAppointment = function(explanation) {
@@ -52,12 +58,18 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 			if(data == null) {
 				console.log('server error');
 			} else if(data.length > 0) {
-				$scope.volunteers = data;
+				$scope.volunteers = data.map((volunteer) => {
+					volunteer.name = `${volunteer.firstName} ${volunteer.lastName}`;
+					return volunteer;
+				});
 			} else {
 				$scope.volunteers = [];
 			}
 		});
 	}
+
+	// Initialize selectedVolunteer model for the volunteer select
+	$scope.selectedVolunteer = undefined;
 
 	// Invoke initially
 	$scope.getVolunteers();

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html class="no-js theme-light" lang="" ng-app="queueApp">
 <head>
-	<title>Queue Test</title>
+	<title>Queue</title>
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="/queue/queue.css">
 </head>

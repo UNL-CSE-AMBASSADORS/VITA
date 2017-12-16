@@ -63,11 +63,11 @@ queueApp.factory("QueueService", function($http){
 				return null;
 			});
 		},
-		finishAppointment: function(time, id) {
+		finishAppointment: function(time, id, servicedById) {
 			return $http({
 				url: "/server/queue/queue_priv.php",
 				method: 'POST',
-				data: `action=appointmentComplete&time=${time}&id=${id}`,
+				data: `action=appointmentComplete&time=${time}&id=${id}&servicedById=${servicedById}`,
 				headers: {
 					'Content-Type': "application/x-www-form-urlencoded"
 				}
