@@ -43,19 +43,19 @@ $('#vitaProfileEdit').submit(function(e) {
 	e.preventDefault();
 
 	var dataOut = {
-		"firstName":firstNameProfile.value,
+		"firstName": firstNameProfile.value,
 		"lastName":lastNameProfile.value,
-		"email":emailProfile.value,
-		"phone":phoneProfile.value,
-		"abilityLookupName": languageSkills.value,
-		"siteId": shiftLocation.value,
-		"shiftId":shiftTime.value
-	}
+		"email": emailProfile.value,
+		"phoneNumber": phoneProfile.value
+		// "abilityLookupName": languageSkills.value,
+		// "siteId": $("#").val(),
+		// "shiftId":shiftTime.value
+	};
 	$.ajax({
 		url: "/server/profileStore.php",
 		type: "POST",
 		dataType: 'JSON',
-		data: dataOut,
+		data: (dataOut),
 		cache: false,
 		complete: function(response) {
 			response = response.responseJSON;
