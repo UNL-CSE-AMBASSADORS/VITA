@@ -1,8 +1,7 @@
 queueApp.factory("QueueService", function($http){
 	return {
 		getAppointments: function(date){
-			let timezoneOffset = new Date().getTimezoneOffset() / 60;
-			return $http.get("/server/queue.php?displayDate=" + date + "&timezoneOffset=" + timezoneOffset).then(function(response){
+			return $http.get(`/server/queue.php?displayDate=${date}`).then(function(response){
 				return response.data;
 			},function(error){
 				return null;
