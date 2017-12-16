@@ -599,7 +599,7 @@ $('#vitaSignupForm').submit(function(e) {
 		"lastName":lastName.value,
 		"email":email.value,
 		"phone":phone.value,
-		"langauge":language,
+		"language":language,
 		"questions": questions,
 		"scheduledTime":scheduledTime,
 		"siteId":sitePickerSelect.value
