@@ -331,6 +331,40 @@
 							</div>
 						</div>
 
+						<!-- TODO REMOVE -->
+						<div class="form-radio row" id="studentUNL">
+							<label for="15" class="col form-required">Are you a University of Nebraska-Lincoln student?</label>
+							<div class="col btn-group" data-toggle="buttons">
+								<label class="btn btn-outline-secondary" for="studentyes">
+									<input type="radio" id="studentyes" value="1" name="15" required>Yes
+								</label>
+								<label class="btn btn-outline-secondary" for="studentno">
+									<input type="radio" id="studentno" value="2" name="15" required>No
+								</label>
+							</div>
+						</div>
+						<!-- TODO END REMOVE -->
+
+						<!-- TODO ONCE THE QUESTIONNAIRE PR GETS MERGED, THE NUMBERS HERE SHOULD PROBABLY CHANGE -->
+						<div class="form-radio row" id="language">
+							<label for="16" class="col form-required">What language will you require?</label>
+							<div class="col btn-group" data-toggle="buttons">
+								<!-- NOTE: the values here are the ISO 639-2/T specfication for language codes (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) -->
+								<label>
+									<input type="radio" id="languageEnglish" value="eng" required>English
+								</label>
+								<label>
+									<input type="radio" id="languageSpanish" value="spa" required>Spanish
+								</label>
+								<label>
+									<input type="radio" id="languageArabic" value="ara" required>Arabic
+								</label>
+								<label>
+									<input type="radio" id="languageVietnamese" value="vie" required>Vietnamese
+								</label>
+							</div>
+						</div>
+
 						<h3 class="form-subheading">Appointment Information</h3>
 
 						<div id="appointmentPicker">
