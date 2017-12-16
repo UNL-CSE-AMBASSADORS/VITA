@@ -19,9 +19,9 @@ let loadProfileInformation = function() {
 		cache: false,
 		success: function(response) {
 			$("#firstName").val(response.firstName);
-			$("#lastName").html(response.lastName);
-			$("#email").html(response.email);
-			$("#phoneNumber").html(response.phoneNumber);
+			$("#lastName").val(response.lastName);
+			$("#email").val(response.email);
+			$("#phoneNumber").val(response.phoneNumber);
 		},
 		error: function(response) {
 			alert("Unable to load information. Please refresh the page in a few minutes.");
@@ -87,7 +87,7 @@ let updateFirstName = function() {
 		dataType: "JSON",
 		data: {
 			firstName: $("#firstName").val(),
-			callback: 'updateFirstName'
+			callback: "updateFirstName"
 		},
 		cache: false,
 		success: function(response) {
@@ -101,10 +101,98 @@ let updateFirstName = function() {
 	});
 }
 
+let updateLastName = function() {
+	$.ajax({
+		url: "/server/profile/profile.php",
+		type: "POST",
+		dataType: "JSON",
+		data: {
+			lastName: $("#lastName").val(),
+			callback: "updateLastName"
+		},
+		cache: false,
+		success: function(response) {
+			if (!response.success) {
+				alert(response.error);
+			}
+		},
+		error: function(response) {
+			alert("Unable to communicate with the server. Please try again later.")
+		}
+	});
+}
+
+
+let updateEmail = function() {
+	$.ajax({
+		url: "/server/profile/profile.php",
+		type: "POST",
+		dataType: "JSON",
+		data: {
+			email: $("#email").val(),
+			callback: "updateEmail"
+		},
+		cache: false,
+		success: function(response) {
+			if (!response.success) {
+				alert(response.error);
+			}
+		},
+		error: function(response) {
+			alert("Unable to communicate with the server. Please try again later.")
+		}
+	});
+}
+
+
+let updatePhoneNumber = function() {
+	$.ajax({
+		url: "/server/profile/profile.php",
+		type: "POST",
+		dataType: "JSON",
+		data: {
+			phoneNumber: $("#phoneNumber").val(),
+			callback: "updatePhoneNumber"
+		},
+		cache: false,
+		success: function(response) {
+			if (!response.success) {
+				alert(response.error);
+			}
+		},
+		error: function(response) {
+			alert("Unable to communicate with the server. Please try again later.")
+		}
+	});
+}
+
 let initializeObservers = function() {
 	$("#firstNameSaveButton").click(function(e) {
 		$(this).prop("disabled", true);
 		updateFirstName();
 		$(this).prop("disabled", false);		
+	});
+
+	$("#lastNameSaveButton").click(function(e) {
+		$(this).prop("disabled", true);
+		updateLastName();
+		$(this).prop("disabled", false);
+	});
+
+	$("#emailSaveButton").click(function(e) {
+		$(this).prop("disabled", true);
+		updateEmail();
+		$(this).prop("disabled", false);
+	});
+
+	$("#phoneNumberSaveButton").click(function(e) {
+		$(this).prop("disabled", true);
+		updatePhoneNumber();
+		$(this).prop("disabled", false);
+	});
+
+	$("#shiftsSelect").change(function() {
+		console.log("CHANGED");
+		console.log($(this).val());
 	});
 }

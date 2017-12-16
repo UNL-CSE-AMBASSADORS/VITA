@@ -25,13 +25,30 @@
 	?>
 
 	<div class="container pt-5">
-		<label for="firstName">First Name:</label>
-		<input type="text" id="firstName" class="col-md-6" />
-		<button class="btn btn-primary col-md-2" id="firstNameSaveButton">Save</button>
+		<h2>Personal Information</h2>
+		<div>
+			<label for="firstName">First Name:</label>
+			<input type="text" id="firstName" class="col-md-6" />
+			<button class="btn btn-primary col-md-2" id="firstNameSaveButton">Save</button>
+		</div>
 
-		<h2>Last Name:</h2><p id="lastName"></p>
-		<h2>Email:</h2><p id="email"></p>
-		<h2>Phone number:</h2><p id="phoneNumber"></p>
+		<div>
+			<label for="lastName">Last Name:</label>
+			<input type="text" id="lastName" class="col-md-6" />
+			<button class="btn btn-primary col-md-2" id="lastNameSaveButton">Save</button>
+		</div>
+
+		<div>
+			<label for="email">Email:</label>
+			<input type="text" id="email" class="col-md-6" />
+			<button class="btn btn-primary col-md-2" id="emailSaveButton">Save</button>
+		</div>
+
+		<div>
+			<label for="phoneNumber">Phone Number:</label>
+			<input type="text" id="phoneNumber" class="col-md-6" />
+			<button class="btn btn-primary col-md-2" id="phoneNumberSaveButton">Save</button>
+		</div>
 
 		<h2>Abilities</h2>
 		<select id="abilitiesSelect" class='userAbilitiesSelectPicker' multiple=true>
