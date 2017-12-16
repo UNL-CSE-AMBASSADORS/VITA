@@ -34,7 +34,7 @@
 
 				<div class="queue" ng-if="appointments.length > 0" ng-cloak>
 					<div class="row queue-row py-1 pointer"
-							 ng-repeat="appointment in appointments | orderBy:'scheduledTime' | searchFor: clientSearch"
+							 ng-repeat="appointment in appointments | orderBy:['timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime'] | searchFor: clientSearch"
 							 ng-if="appointment.completed == null"
 							 ng-class-odd="'bg-light'"
 							 ng-click="selectClient(appointment)">
@@ -74,12 +74,12 @@
 				<!-- Currently selected client -->
 				<div class="client align-items-start w-100" ng-if="client != null" ng-cloak>
 						<div class="client-name">{{client.firstName}} {{client.lastName}}</div>
-						<div class="client-time">Scheduled Appointment Time: {{client.scheduledTime | date: "h:mm a"}}</div>
+						<div class="client-time"><b>Scheduled Appointment Time: </b>{{client.scheduledTime | date: "h:mm a"}}</div>
 						<div class="client-email">
-							Email: <span ng-if="client.emailAddress != null" ng-clock>{{client.emailAddress}}</span>
+							<span><b>Email: </b></span><span ng-if="client.emailAddress != null" ng-clock>{{client.emailAddress}}</span>
 						</div>
 						<div class="client-phoneNumber mb-3">
-							Phone Number: <span ng-if="client.phoneNumber != null" ng-cloak>{{client.phoneNumber}}</span>
+							<span><b>Phone Number: </b></span><span ng-if="client.phoneNumber != null" ng-cloak>{{client.phoneNumber}}</span>
 						</div>
 
 						<div class="client-progress d-flex flex-column">
@@ -114,7 +114,7 @@
 						 	</form>
 							<button class="btn btn-danger" ng-disabled="client.checkedIn" ng-click="cancelledAppointment()">Submit Cancelled Appointment</button>
 						</div>
-						<div class="client-appointmentId mt-auto">Appointment ID: {{client.appointmentId}}</div>
+						<div class="client-appointmentId my-2"><b>Appointment ID: </b>{{client.appointmentId}}</div>
 				</div>
 				<!-- Default message if no appointment is selected -->
 				<div class="client d-flex justify-content-center w-100" ng-if="client == null" ng-cloak>

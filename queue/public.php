@@ -25,9 +25,9 @@
 			<div class="col col-1 queue-id">Id.</div> <!-- TODO: Remove ID from here -->
 			<div class="col col-3 queue-name">Name</div>
 			<div class="col col-5 queue-progress">Progress</div>
-			<div class="col col-3 queue-time">Time</div>
+			<div class="col col-3 queue-time">Scheduled Time</div>
 		</div>
-		<div class="row queue-row" ng-repeat="appointment in appointments | orderBy:'scheduledTime'" ng-if="appointment.completed == null" ng-class-even="'bg-light'">
+		<div class="row queue-row" ng-repeat="appointment in appointments | orderBy:['timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime']" ng-if="appointment.completed == null" ng-class-even="'bg-light'">
 			<div class="col col-1 queue-id">{{appointment.appointmentId}}</div>
 			<div class="col col-3 queue-name" style="size:8em">{{appointment.firstName}} {{appointment.lastName}}</div>
 			<div class="col col-5 queue-progress">
