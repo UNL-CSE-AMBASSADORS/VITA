@@ -96,8 +96,8 @@ CREATE TABLE ServicedAppointment (
     timeAppointmentEnded DATETIME NULL DEFAULT NULL,
     completed BOOLEAN NULL DEFAULT NULL,
     notCompletedDescription VARCHAR(255) NULL DEFAULT NULL,
-	userId INTEGER UNSIGNED NULL,
-	FOREIGN KEY(userId) REFERENCES User(userId),
+	servicedBy INTEGER UNSIGNED NULL,
+	FOREIGN KEY(servicedBy) REFERENCES User(userId),
 	appointmentId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId)
 );

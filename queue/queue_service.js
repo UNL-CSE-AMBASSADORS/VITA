@@ -1,7 +1,7 @@
 queueApp.factory("QueueService", function($http){
 	return {
 		getAppointments: function(date){
-			return $http.get(`/server/queue.php?displayDate=${date}`).then(function(response){
+			return $http.get(`/server/queue/queue.php?displayDate=${date}`).then(function(response){
 				return response.data;
 			},function(error){
 				return null;
@@ -9,7 +9,7 @@ queueApp.factory("QueueService", function($http){
 		},
 		checkInNow: function(time, id) {
 			return $http({
-				url: "/server/queue_priv.php",
+				url: "/server/queue/queue_priv.php",
 				method: 'POST',
 				data: `action=checkIn&time=${time}&id=${id}`,
 				headers: {
@@ -23,7 +23,7 @@ queueApp.factory("QueueService", function($http){
 		},
 		turnInPapers: function(time, id) {
 			return $http({
-				url: "/server/queue_priv.php",
+				url: "/server/queue/queue_priv.php",
 				method: 'POST',
 				data: `action=completePaperwork&time=${time}&id=${id}`,
 				headers: {
@@ -37,7 +37,7 @@ queueApp.factory("QueueService", function($http){
 		},
 		beginAppointment: function(time, id) {
 			return $http({
-				url: "/server/queue_priv.php",
+				url: "/server/queue/queue_priv.php",
 				method: 'POST',
 				data: `action=appointmentStart&time=${time}&id=${id}`,
 				headers: {
@@ -51,7 +51,7 @@ queueApp.factory("QueueService", function($http){
 		},
 		finishAppointment: function(time, id) {
 			return $http({
-				url: "/server/queue_priv.php",
+				url: "/server/queue/queue_priv.php",
 				method: 'POST',
 				data: `action=appointmentComplete&time=${time}&id=${id}`,
 				headers: {
@@ -65,7 +65,7 @@ queueApp.factory("QueueService", function($http){
 		},
 		incompleteAppointment: function(explanation, id) {
 			return $http({
-				url: "/server/queue_priv.php",
+				url: "/server/queue/queue_priv.php",
 				method: 'POST',
 				data: `action=appointmentIncomplete&explanation=${explanation}&id=${id}`,
 				headers: {
@@ -79,7 +79,7 @@ queueApp.factory("QueueService", function($http){
 		},
 		cancelledAppointment: function(id) {
 			return $http({
-				url: "/server/queue_priv.php",
+				url: "/server/queue/queue_priv.php",
 				method: 'POST',
 				data: `action=cancelledAppointment&id=${id}`,
 				headers: {
