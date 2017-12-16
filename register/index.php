@@ -21,8 +21,7 @@
 		<div class='container'>
 			<div class='row'>
 				<section class='col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3'>
-					<h1 class='text-center'>Hoovestol, inc.</h1>
-					<h1 class='text-center'>Eagle Express Lines, inc.</h1>
+					<h1 class='text-center'>VITA Lincoln</h1>
 					<hr />
 				</section>
 			</div>
@@ -35,10 +34,10 @@
 					<div class="panel-body">
 					<section id='reset_password_success' style='display:none;'>
 						<p>Your password has been reset successfully. You may login to your account using the link below.</p>
-						<p><a href='<?php echo URL_BASE;?>'>Login</a></p>
+						<p><a href='/login'>Login</a></p>
 					</section>
 					<section id='reset_password_info'>
-						<p>Please provide your current password, and your new password below. Your password must mee the following requirements:</p>
+						<p>Please provide your current password, and your new password below. Your password must meet the following requirements:</p>
 						<p class='text-primary'><b>- At least 8 characters</b><br />
 						<b>- At least 1 uppercase</b><br />
 						<b>- At least 1 lowercase</b><br />

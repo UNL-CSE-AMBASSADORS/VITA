@@ -3,20 +3,16 @@ $(document).ready(function() {
 	$("#dateInput").val(getCurrentDateString());
 });
 
-const NUM_MINUTES_IN_HOUR = 60;
-
 let downloadAppointmentSchedule = function() {
 	let siteId = getSelectedSiteId();
 	let date = getSelectedDate();	
-	let timezoneOffset = getTimezoneOffset();
-	clickDownloadLink(`/server/management/documents/appointmentsSchedule.php?date=${date}&siteId=${siteId}&timezoneOffset=${timezoneOffset}`);
+	clickDownloadLink(`/server/management/documents/appointmentsSchedule.php?date=${date}&siteId=${siteId}`);
 };
 
 let downloadVolunteerSchedule = function() {
 	let siteId = getSelectedSiteId();
 	let date = getSelectedDate();
-	let timezoneOffset = getTimezoneOffset();
-	clickDownloadLink(`/server/management/documents/volunteerSchedule.php?date=${date}&siteId=${siteId}&timezoneOffset=${timezoneOffset}`);
+	clickDownloadLink(`/server/management/documents/volunteerSchedule.php?date=${date}&siteId=${siteId}`);
 };
 
 let getSelectedSiteId = function() {
@@ -27,10 +23,6 @@ let getSelectedSiteId = function() {
 
 let getSelectedDate = function() {
 	return document.getElementById("dateInput").value;	
-}
-
-let getTimezoneOffset = function() {
-	return new Date().getTimezoneOffset() / NUM_MINUTES_IN_HOUR;
 }
 
 let clickDownloadLink = function(url) {
