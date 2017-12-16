@@ -72,7 +72,6 @@
 				<div class="apptSelect form-group" id="shiftSelectDiv">
 				    <select id="shiftLocation" class="form-control shiftSelect" onchange="allowShiftSelect()">
 					    <option value="selectShift" disabled selected>Select Shift</option>
-					    <option>a</option>
 				    </select>
 						<select id="shiftTime" class="form-control shiftSelect" disabled></select>
 						 <button class="shiftSelect button vita-background-primary" id="shiftButton" type="button">Add New Shift</button>

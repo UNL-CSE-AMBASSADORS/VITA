@@ -16,6 +16,7 @@ function getProfile($data) {
 
 	$userId = $USER->getUserId();
 
+
 	$userInformationQuery = "SELECT firstName, lastName, phoneNumber, email, preparesTaxes
 		FROM User
 		WHERE userId = ?";
@@ -34,7 +35,7 @@ function getProfile($data) {
 
 
 
-	$userShiftsQuery = "SELECT Shift.shiftId, Shift.startTime, Shift.endTime, Site.siteId, Site.title, 
+	$userShiftsQuery = "SELECT Shift.shiftId, Shift.startTime, Shift.endTime, Site.siteId, Site.title,
 		FROM UserShift
 		JOIN Shift ON UserShift.shiftId = Shift.shiftId
 		JOIN Site ON Shift.siteId = Site.siteId

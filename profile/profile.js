@@ -46,10 +46,9 @@ $('#vitaProfileEdit').submit(function(e) {
 		"firstName": firstNameProfile.value,
 		"lastName":lastNameProfile.value,
 		"email": emailProfile.value,
-		"phoneNumber": phoneProfile.value
-		// "abilityLookupName": languageSkills.value,
-		// "siteId": $("#").val(),
-		// "shiftId":shiftTime.value
+		"phoneNumber": phoneProfile.value,
+		"abilityLookupName": languageSkills.value,
+		"UserShiftId": shiftTime.value
 	};
 	$.ajax({
 		url: "/server/profileStore.php",

@@ -16,27 +16,26 @@ require_once 'config.php';
 storeProfile($_POST);
 
 function storeProfile($data) {
-     echo json_encode($data);
-     
-     GLOBAL $DB_CONN;
+     GLOBAL $DB_CONN,$USER;
      $response = array();
      $response['success'] = false;
 
      $DB_CONN->beginTransaction();
 
      try {
+          $userId = $USER->getUserId();
 
           $userUpdate = "UPDATE User
-               SET User.firstName = ?,User.lastName = ?,User.phoneNumber = ?,User.email = ?,User.preparesTaxes = ?
+               SET User.firstName = ?,User.lastName = ?,User.phoneNumber = ?,User.email = ?
                WHERE User.userId = ? ;";
-               echo "test";
           $userParams = array(
                $data['firstName'],
                $data['lastName'],
                $data['phoneNumber'],
-               $data['email']
+               $data['email'],
+               $userId
 );
-echo "test";
+
 
 
           $stmt = $DB_CONN->prepare($userUpdate);
@@ -47,37 +46,38 @@ echo "test";
 
 
           $abilityUpdate = "UPDATE UserAbility
-               SET UserAbility.abilityId = (SELECT abilityId FROM Ability WHERE lookupName = ? )
+               SET UserAbility.abilityId = (SELECT Ability.abilityId FROM Ability WHERE Ability.lookupName = ? )
                WHERE UserAbility.userId = ?;";
 
           $userabilityParams = array(
                $data['abilityLookupName'],
-               $data['userId']
+               $userId
           );
 
           $stmt = $DB_CONN->prepare($abilityUpdate);
           $stmt->execute($userabilityParams);
           $profileAbility = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-//500 issue is here, will work on fixing this later, after figure out the other issue
 
-          // $shiftUpdate= "UPDATE UserShift
-          //      SET UserShift.ShiftId = ?
-          //      WHERE shiftId = ?;";
 
-          // $shiftParams = array(
-          //      $data['UserShiftId']
-          // );
-          // $stmt = DB_CONN->prepare($shiftUpdate);
-          // $stmt->execute($shiftParams);
-          // $profileShift = $stmt->fetchAll(PDO::FETCH_ASSOC);
-          //
-          //
+          $shiftUpdate = "UPDATE UserShift
+               SET UserShift.ShiftId = ?
+               WHERE userId = ?;";
+
+          $shiftParams = array(
+               $data['UserShiftId'],
+               $userId
+          );
+          $stmt = $DB_CONN->prepare($shiftUpdate);
+          $stmt->execute($shiftParams);
+          $profileShift = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
           $profile = array(
                 'success' => true,
-                'profileUser' => $profileUser,
-                'profileAbility' => $profileAbility
-                // 'profileShift' => $profileShift
+                'userInformation' => $profileUser,
+                'userAbilityInformation' => $profileAbility,
+                'userShiftsInformation' => $profileShift
            );
 
            echo json_encode($profile);
