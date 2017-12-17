@@ -69,7 +69,7 @@
 		</div>
 
 		<div>
-			<h2 class="mt-5">Shifts</h2>
+			<h2 class="mt-5">Shifts You're Signed Up For</h2>
 			<div id="shifts">
 				<div id="shiftsSignedUpFor"></div>
 			</div>

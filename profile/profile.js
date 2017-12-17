@@ -191,9 +191,12 @@ let initializeEventListeners = function() {
 				} else {
 					alert(response.error);
 				}
+
+				$("#personalInformationSaveButton").prop('disabled', false);
 			},
 			error: function(response) {
-				alert("Unable to communicate with the server. Please try again later.")
+				alert("Unable to communicate with the server. Please try again later.");
+				$("#personalInformationSaveButton").prop('disabled', false);
 			}
 		});
 	});
@@ -251,7 +254,14 @@ let initializeEventListeners = function() {
 			}
 		});
 
+		let cancelButton = $('<button type="button"></button>').addClass("btn btn-seconday").html("Cancel").click(function(){
+			$(this).parent().remove();
+		});
+
 		let signUpButton = $('<button type="button"></button>').addClass('btn btn-primary').html('Sign Up').click(function() {
+			$(this).prop('disabled', true);
+			cancelButton.prop('disabled', true);
+
 			let siteId = siteSelect.val();
 			let dateString = dateSelect.val();
 			let shiftId = timeSelect.val();
@@ -279,15 +289,18 @@ let initializeEventListeners = function() {
 					} else {
 						alert(response.error);
 					}
+
+					signUpButton.prop('disabled', false);
+					cancelButton.prop('disabled', false);
 				},
 				error: function(response) {
 					alert("Unable to communicate with the server. Please try again later.");
+					signUpButton.prop('disabled', false);
+					cancelButton.prop('disabled', false);
 				}
 			});
 		});
-		let cancelButton = $('<button type="button"></button>').addClass("btn btn-seconday").html("Cancel").click(function(){
-			$(this).parent().remove();
-		});
+		
 
 		shiftRow.append(siteSelect, dateSelect, timeSelect, signUpButton, cancelButton);
 		$("#shifts").append(shiftRow);	
