@@ -79,7 +79,6 @@
 
 	<?php require_once "$root/server/footer.php" ?>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-	<!-- TODO NEED TO CHANGE THIS TO DIST -->
-	<script src="/profile/profile.js"></script>
+	<script src="/dist/profile/profile.js"></script>
 </body>
 </html>
