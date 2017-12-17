@@ -72,6 +72,7 @@ function getShifts() {
 		FROM Shift
 		LEFT JOIN UserShift ON Shift.shiftId = UserShift.shiftId AND UserShift.userId = ?
 		JOIN Site ON Shift.siteId = Site.siteId
+		WHERE Site.archived = FALSE AND Shift.archived = FALSE
 		ORDER BY startTime";
 
 	$stmt = $DB_CONN->prepare($query);
@@ -99,10 +100,10 @@ function updateAbilities($data) {
 	$DB_CONN->beginTransaction();
 
 	if(isset($data['removeAbilityArray'])){
-		$stmt = $DB_CONN->prepare("DELETE FROM UserAbility WHERE userAbilityId = ?");
+		$stmt = $DB_CONN->prepare("DELETE FROM UserAbility WHERE userAbilityId = ? AND userId = ?");
 
 		foreach ($data['removeAbilityArray'] as $userAbilityId) {
-			$stmt->execute(array($userAbilityId));
+			$stmt->execute(array($userAbilityId, $userId));
 		}
 	}
 

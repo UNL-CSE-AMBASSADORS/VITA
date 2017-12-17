@@ -64,6 +64,7 @@
 			
 		<div>
 			<h2 class="mt-5">Certifications</h2>
+			<p><b>NOTE</b>: These must be verified by your site administrator.</p>
 			<div id ="certificationsDiv"></div>
 		</div>
 

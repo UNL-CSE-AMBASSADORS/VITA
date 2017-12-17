@@ -6,9 +6,6 @@ $(document).ready(function() {
 	initializeEventListeners();
 });
 
-
-// TODO: Need to combine all these methods into one, and same in the PHP
-
 let loadProfileInformation = function() {
 	$.ajax({
 		url: "/server/profile/profile.php",
@@ -40,14 +37,16 @@ let loadAbilities = function() {
 		},
 		cache: false,
 		success: function(response) {
+			$('#abilitiesSelect').find('option').remove();
 			for (let i = 0; i < response.abilities.length; i++) {
 				let ability = response.abilities[i];
 				let modifiers = ability.has ? `data-userAbilityId=${ability.userAbilityId} selected` : '';
 				let option = $(`<option value=${ability.abilityId} ${modifiers}>${ability.name}</option>`);
-				$("#abilitiesSelect").append(option);
+				$('#abilitiesSelect').append(option);
 			}
 			$('#abilitiesSelect').selectpicker();
 
+			$('#certificationsDiv').find('div').remove();
 			for (let i = 0; i < response.abilitiesRequiringVerification.length; i++) {
 				let ability = response.abilitiesRequiringVerification[i];
 				
@@ -57,8 +56,6 @@ let loadAbilities = function() {
 
 				abilityDiv.append(abilityName, abilityStatus);
 				$('#certificationsDiv').append(abilityDiv);
-
-				//$("#certificationsDiv").append($('<p></p>').html(`${ability.name}`).addClass(`${ability.has ? 'show-icon-check' : 'show-icon-x'}`));
 			}
 		},
 		error: function(response) {
@@ -165,6 +162,8 @@ let initializeEventListeners = function() {
 	});
 
 	$("#personalInformationSaveButton").click(function(e) {
+		$(this).prop('disabled', true);
+
 		$.ajax({
 			url: "/server/profile/profile.php",
 			type: "POST",
@@ -296,11 +295,12 @@ let initializeEventListeners = function() {
 
 	$('#abilitiesSelect').on('changed.bs.select', function(event){
 		// abilities to be removed - all non-selected options with set ids
-		let removeAbilityArray = $(this).children('option:not(:selected)[data-userAbilityId]').map(function(index, ele){
+		let removeUserAbilityIds = $(this).children('option:not(:selected)[data-userAbilityId]').map(function(index, ele){
 			return ele.dataset.userabilityid; // note this is case-sensitive and should be all lowercase
 		}).get();
+
 		// abilities to be added - all selected options w/o ids
-		let addAbilityArray = $(this).children('option:selected:not([data-userAbilityId])').map(function(index, ele){
+		let addAbilityIds = $(this).children('option:selected:not([data-userAbilityId])').map(function(index, ele){
 			return ele.value;
 		}).get();
 
@@ -310,11 +310,13 @@ let initializeEventListeners = function() {
 			url: '/server/profile/profile.php',
 			data: {
 				callback: 'updateAbilities',
-				removeAbilityArray: removeAbilityArray,
-				addAbilityArray: addAbilityArray
+				removeAbilityArray: removeUserAbilityIds,
+				addAbilityArray: addAbilityIds
 			},
 			success: function(response){
-				if (!response.success) {
+				if (response.success) {
+					loadAbilities();
+				} else {
 					alert(response.error);
 				}
 			}
