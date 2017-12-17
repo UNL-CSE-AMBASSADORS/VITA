@@ -78,6 +78,12 @@ SET @ability_militaryCertificationId = LAST_INSERT_ID();
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Spanish-Speaking", "spanish_speaking", "Can speak fluent Spanish", FALSE);
 SET @ability_spanishSpeakingId = LAST_INSERT_ID();
+
+INSERT INTO Ability (name, lookupName, description, verificationRequired)
+	VALUES ("Arabic-Speaking", "arabic_speaking", "Can speak fluent Arabic", FALSE);
+
+INSERT INTO Ability (name, lookupName, description, verificationRequired)
+	VALUES ("Vietnamese-Speaking", "vietnamese_speaking", "Can speak fluent Vietnamese", FALSE);
 -- end abilities
 
 

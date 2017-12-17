@@ -2,9 +2,15 @@ $(document).ready(function() {
 	loadProfileInformation();
 	loadAbilities();
 	loadShifts();
+	loadSites();
 
 	initializeObservers();
 });
+
+let loadSites = function() {
+	// TODO LOAD SITES
+	console.log('SITES');
+}
 
 // TODO: Need to combine all these methods into one, and same in the PHP
 
@@ -18,10 +24,10 @@ let loadProfileInformation = function() {
 		},
 		cache: false,
 		success: function(response) {
-			$("#firstName").val(response.firstName);
-			$("#lastName").val(response.lastName);
-			$("#email").val(response.email);
-			$("#phoneNumber").val(response.phoneNumber);
+			$("#firstNameText").html(response.firstName);
+			$("#lastNameText").html(response.lastName);
+			$("#emailText").html(response.email);
+			$("#phoneNumberText").html(response.phoneNumber);
 		},
 		error: function(response) {
 			alert("Unable to load information. Please refresh the page in a few minutes.");
@@ -41,14 +47,16 @@ let loadAbilities = function() {
 		success: function(response) {
 			for (let i = 0; i < response.abilities.length; i++) {
 				let ability = response.abilities[i];
-				let option = $(`<option value=${ability.abilityId} ${ability.has ? 'selected' : ''}>${ability.name}</option>`);
+				let modifiers = ability.has ? `data-userAbilityId=${ability.userAbilityId} selected` : '';
+				let option = $(`<option value=${ability.abilityId} ${modifiers}>${ability.name}</option>`);
 				$("#abilitiesSelect").append(option);
 			}
-			$('#abilitiesSelect').selectpicker();				
+			$('#abilitiesSelect').selectpicker();
 
 			for (let i = 0; i < response.abilitiesRequiringVerification.length; i++) {
 				let ability = response.abilitiesRequiringVerification[i];
-				$("#abilitiesRequiringVerificationDiv").append($('<p></p>').html(`${ability.name} ${ability.has ? 'HAS' : 'DOES NOT HAVE'}`));
+				
+				$("#abilitiesRequiringVerificationDiv").append($('<p></p>').html(`${ability.name}`).addClass(`${ability.has ? 'show-icon-check' : 'show-icon-x'}`));
 			}
 		},
 		error: function(response) {
@@ -72,7 +80,7 @@ let loadShifts = function() {
 				let option = $(`<option value=${shift.shiftId} ${shift.signedUp ? 'selected' : ''}>${shift.title} ${shift.startTime}-${shift.endTime}</option>`);
 				$("#shiftsSelect").append(option);
 			}
-			$('#shiftsSelect').selectpicker();			
+			$('#shiftsSelect').selectpicker();
 		},
 		error: function(response) {
 			alert("Unable to load shift. Please refresh the page in a few minutes.");
@@ -86,7 +94,7 @@ let updateFirstName = function() {
 		type: "POST",
 		dataType: "JSON",
 		data: {
-			firstName: $("#firstName").val(),
+			firstName: $("#firstNameInput").val(),
 			callback: "updateFirstName"
 		},
 		cache: false,
@@ -107,7 +115,7 @@ let updateLastName = function() {
 		type: "POST",
 		dataType: "JSON",
 		data: {
-			lastName: $("#lastName").val(),
+			lastName: $("#lastNameInput").val(),
 			callback: "updateLastName"
 		},
 		cache: false,
@@ -129,7 +137,7 @@ let updateEmail = function() {
 		type: "POST",
 		dataType: "JSON",
 		data: {
-			email: $("#email").val(),
+			email: $("#emailInput").val(),
 			callback: "updateEmail"
 		},
 		cache: false,
@@ -151,7 +159,7 @@ let updatePhoneNumber = function() {
 		type: "POST",
 		dataType: "JSON",
 		data: {
-			phoneNumber: $("#phoneNumber").val(),
+			phoneNumber: $("#phoneNumberInput").val(),
 			callback: "updatePhoneNumber"
 		},
 		cache: false,
@@ -167,32 +175,117 @@ let updatePhoneNumber = function() {
 }
 
 let initializeObservers = function() {
-	$("#firstNameSaveButton").click(function(e) {
-		$(this).prop("disabled", true);
+	$("#personalInformationEditButton").click(function(e) {
+		$("#firstNameInput").val($("#firstNameText").html());
+		$("#lastNameInput").val($("#lastNameText").html());
+		$("#emailInput").val($("#emailText").html());
+		$("#phoneNumberInput").val($("#phoneNumberText").html());
+		
+		$(".personal-info").find('input').show();		
+		$(".personal-info").find('p').hide();
+
+		$(this).hide();
+		$("#personalInformationSaveButton").show();
+	});
+
+	$("#personalInformationSaveButton").click(function(e) {
+		$("#firstNameText").html($("#firstNameInput").val());
+		$("#lastNameText").html($("#lastNameInput").val());
+		$("#emailText").html($("#emailInput").val());
+		$("#phoneNumberText").html($("#phoneNumberInput").val());
+
 		updateFirstName();
-		$(this).prop("disabled", false);		
-	});
-
-	$("#lastNameSaveButton").click(function(e) {
-		$(this).prop("disabled", true);
 		updateLastName();
-		$(this).prop("disabled", false);
-	});
-
-	$("#emailSaveButton").click(function(e) {
-		$(this).prop("disabled", true);
 		updateEmail();
-		$(this).prop("disabled", false);
-	});
-
-	$("#phoneNumberSaveButton").click(function(e) {
-		$(this).prop("disabled", true);
 		updatePhoneNumber();
-		$(this).prop("disabled", false);
+		
+		$(".personal-info").find('p').show();		
+		$(".personal-info").find('input').hide();
+
+		$(this).hide();
+		$("#personalInformationEditButton").show();
 	});
 
-	$("#shiftsSelect").change(function() {
-		console.log("CHANGED");
-		console.log($(this).val());
+	$("#addShiftButton").click(function(e) {
+		let shiftRow = $('<div></div>').addClass("shift-div");
+		let siteSelect = $('<select></select>').addClass("siteSelect");
+		let dateSelect = $('<select></select>').addClass("dateSelect").attr('disabled', true);
+		let timeSelect = $('<select></select>').addClass("timeSelect").attr('disabled', true);
+		let removeButton = $('<button type="button"></button>').addClass("btn btn-danger").html("Remove").click(function(){
+			$(this).parent().remove();
+		});
+
+		siteSelect.append($('<option disabled selected value="" style="display:none"> -- select an option -- </option>'));
+		// TODO FINISH IMPLEMENTING SITES
+		// for(const site of sites) {
+		// 	siteSelect.append($('<option>', {
+		// 		value: site.siteId,
+		// 		text : site.title
+		// 	}));
+		// }
+
+		siteSelect.change(function() {
+			dateSelect.attr('disabled', false);
+		});
+
+		shiftRow.append(siteSelect, dateSelect, timeSelect, removeButton);
+		$("#shifts").append(shiftRow);	
 	});
+
+	$('#abilitiesSelect').on('changed.bs.select', function(event){
+		// abilities to be removed - all non-selected options with set ids
+		let removeAbilityArray = $(this).children('option:not(:selected)[data-userAbilityId]').map(function(index, ele){
+			return ele.dataset.userabilityid; // note this is case-sensitive and should be all lowercase
+		}).get();
+		// abilities to be added - all selected options w/o ids
+		let addAbilityArray = $(this).children('option:selected:not([data-userAbilityId])').map(function(index, ele){
+			return ele.value;
+		}).get();
+
+		$.ajax({
+			dataType: 'JSON',
+			method: 'POST',
+			url: '/server/profile/profile.php',
+			data: {
+				callback: 'updateAbilities',
+				removeAbilityArray: removeAbilityArray,
+				addAbilityArray: addAbilityArray
+			},
+			success: function(response){
+				if (!response.success) {
+					alert(response.error);
+				}
+			}
+		});
+	});
+
+
+	$('#shiftsSelect').on('changed.bs.select', function(event){
+		// abilities to be removed - all non-selected options with set ids
+		let removeShiftArray = $(this).children('option:not(:selected)[data-userAbilityId]').map(function(index, ele){
+			return ele.dataset.userabilityid; // note this is case-sensitive and should be all lowercase
+		}).get();
+		// abilities to be added - all selected options w/o ids
+		let addAbilityArray = $(this).children('option:selected:not([data-userAbilityId])').map(function(index, ele){
+			return ele.value;
+		}).get();
+
+		$.ajax({
+			dataType: 'JSON',
+			method: 'POST',
+			url: '/server/profile/profile.php',
+			data: {
+				callback: 'updateAbilities',
+				removeAbilityArray: removeAbilityArray,
+				addAbilityArray: addAbilityArray
+			},
+			success: function(response){
+				if (!response.success) {
+					alert(response.error);
+				}
+			}
+		});
+	});
+
+
 }

@@ -1,3 +1,62 @@
+.heading-group {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.item {
+	margin-top: 16px;
+}
+
+.personal-info label {
+	font-weight: bold;
+}
+
+.personal-info p {
+	display: inline-block;
+}
+
+#phoneNumberText {
+	margin-bottom: 0;
+}
+
+.show-icon-x:after,
+.show-icon-check:after {
+	display: inline-block;
+	margin-left: 8px;
+	height: 16px;
+}
+
+.show-icon-x:after {
+	content: url("/assets/images/x-icon.svg");
+	width: 16px;
+}
+
+.show-icon-check:after {
+	content: url("/assets/images/check-icon.svg");
+	width: 22px;
+}
+
+.shift-div {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	margin-top: 16px;
+}
+
+.shift-div select {
+	width: auto;
+	min-width: 200px;
+	margin-bottom: 8px;
+}
+
+@media (min-width: 768px) {
+	.shift-div {
+		flex-direction: row;
+	}
+}
+
 /*
 Make bootstrap-select work with bootstrap 4 see:
 https://github.com/silviomoreto/bootstrap-select/issues/1135

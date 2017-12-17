@@ -19,6 +19,7 @@ if (isset($_REQUEST['callback'])) {
 		case 'updateLastName': updateLastName($_REQUEST['lastName']); break;
 		case 'updateEmail': updateEmail($_REQUEST['email']); break;
 		case 'updatePhoneNumber': updatePhoneNumber($_REQUEST['phoneNumber']); break;
+		case 'updateAbilities': updateAbilities($_REQUEST); break;
 		default:
 			die('Invalid callback function. This instance has been reported.');
 			break;
@@ -47,6 +48,7 @@ function getAbilities() {
 	$abilitiesRequiringVerification = array();
 	foreach ($abilities as &$ability) {
 		$ability['has'] = isset($ability['userAbilityId']);
+		$ability['verificationRequired'] = $ability['verificationRequired'] ? true : false;
 		
 		if ($ability['verificationRequired']) {
 			$abilitiesRequiringVerification[] = $ability;
@@ -180,6 +182,43 @@ function updatePhoneNumber($phoneNumber) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error communicating with the server. Please try again later.';
 	}
+
+	echo json_encode($response);
+}
+
+function updateAbilities($data) {
+	GLOBAL $DB_CONN, $USER;
+
+	$userId = $USER->getUserId();
+	$response = array();
+	$response['success'] = true;
+
+	$DB_CONN->beginTransaction();
+
+	if(isset($data['removeAbilityArray'])){
+		$stmt = $DB_CONN->prepare("DELETE FROM UserAbility WHERE userAbilityId = ?");
+
+		foreach ($data['removeAbilityArray'] as $userAbilityId) {
+			$stmt->execute(array($userAbilityId));
+		}
+	}
+
+	if(isset($data['addAbilityArray'])){
+		$stmt = $DB_CONN->prepare("INSERT INTO UserAbility 
+				(userId, abilityId, createdBy)
+			VALUES 
+				(?, ?, ?)");
+
+		foreach ($data['addAbilityArray'] as $abilityId) {
+			$stmt->execute(array(
+				$userId,
+				$abilityId, 
+				$userId
+			));
+		}
+	}
+
+	$DB_CONN->commit();
 
 	echo json_encode($response);
 }

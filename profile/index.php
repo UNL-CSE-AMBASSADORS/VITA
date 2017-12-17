@@ -25,52 +25,53 @@
 	?>
 
 	<div class="container pt-5">
-		<h2>Personal Information</h2>
-		<div>
-			<label for="firstName">First Name:</label>
-			<input type="text" id="firstName" class="col-md-6" />
-			<button class="btn btn-primary col-md-2" id="firstNameSaveButton">Save</button>
+		<div class="personal-info">
+			<div class="heading-group">
+				<h2>Personal Information</h2>
+				<button class="btn btn-secondary" id="personalInformationEditButton">Edit</button>
+			</div>
+			<div>
+				<label for="firstName" id="firstNameLabel">First Name:</label>
+				<p id="firstNameText"></p>
+				<input type="text" id="firstNameInput" style="display:none;" />
+			</div>
+
+			<div>
+				<label for="lastName" id="lastNameLabel">Last Name:</label>
+				<p id="lastNameText"></p>
+				<input type="text" id="lastNameInput" style="display:none;" />
+			</div>
+
+			<div>
+				<label for="email" id="emailLabel">Email:</label>
+				<p id="emailText"></p>
+				<input type="text" id="emailInput" style="display:none;" />
+			</div>
+
+			<div>
+				<label for="phoneNumber" id="phoneNumberLabel">Phone Number:</label>
+				<p id="phoneNumberText"></p>
+				<input type="text" id="phoneNumberInput" style="display:none;" />
+			</div>
+
+			<button class="btn btn-primary" id="personalInformationSaveButton" style="display:none;">Save</button>
 		</div>
 
-		<div>
-			<label for="lastName">Last Name:</label>
-			<input type="text" id="lastName" class="col-md-6" />
-			<button class="btn btn-primary col-md-2" id="lastNameSaveButton">Save</button>
-		</div>
-
-		<div>
-			<label for="email">Email:</label>
-			<input type="text" id="email" class="col-md-6" />
-			<button class="btn btn-primary col-md-2" id="emailSaveButton">Save</button>
-		</div>
-
-		<div>
-			<label for="phoneNumber">Phone Number:</label>
-			<input type="text" id="phoneNumber" class="col-md-6" />
-			<button class="btn btn-primary col-md-2" id="phoneNumberSaveButton">Save</button>
-		</div>
-
-		<h2>Abilities</h2>
-		<select id="abilitiesSelect" class='userAbilitiesSelectPicker' multiple=true>
+		<div class="">
+			<h2 class="mt-5">Abilities</h2>
+			<select id="abilitiesSelect" class='userAbilitiesSelectPicker' multiple=true></select>
+		</div>	
 			
-		</select>
-
-		<h2>Abilities That Require Verification</h2>
-		<div id ="abilitiesRequiringVerificationDiv">
-
+		<div>
+			<h2 class="mt-5">Certifications</h2>
+			<div id ="abilitiesRequiringVerificationDiv"></div>
 		</div>
 
-		<h2>Shifts</h2>
-		<select id="shiftsSelect" class='userShiftsSelectPicker' multiple=true>
-			
-		</select>
-
-		<h2 pb-5>TEST</h2>
-		<h2 pb-5>TEST</h2>
-		<h2 pb-5>TEST</h2>
-		<h2 pb-5>TEST</h2>
-		<h2 pb-5>TEST</h2>
-		<h2 pb-5>TEST</h2>
+		<div>
+			<h2 class="mt-5">Shifts</h2>
+			<div id="shifts"></div>
+			<button class="btn btn-primary mb-5 mt-3" id="addShiftButton">Add Shift</button>
+		</div>
 	</div>
 
 	<?php require_once "$root/server/footer.php" ?>
