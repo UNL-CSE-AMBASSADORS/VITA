@@ -64,13 +64,15 @@
 			
 		<div>
 			<h2 class="mt-5">Certifications</h2>
-			<div id ="abilitiesRequiringVerificationDiv"></div>
+			<div id ="certificationsDiv"></div>
 		</div>
 
 		<div>
 			<h2 class="mt-5">Shifts</h2>
-			<div id="shifts"></div>
-			<button class="btn btn-primary mb-5 mt-3" id="addShiftButton">Add Shift</button>
+			<div id="shifts">
+				<div id="shiftsSignedUpFor"></div>
+			</div>
+			<button class="btn btn-primary mb-5 mt-3" id="addShiftButton">+ Sign Up for a Shift</button>
 		</div>
 	</div>
 
