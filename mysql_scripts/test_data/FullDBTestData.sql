@@ -152,7 +152,7 @@ SET @site_site3Id = LAST_INSERT_ID();
 
 
 -- shift
-SET @shiftStartTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 1 HOUR);
+SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 HOUR);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 1 HOUR);
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
@@ -164,7 +164,7 @@ INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @shift_site1Shift2Id = LAST_INSERT_ID();
 
-SET @shiftStartTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 1 MONTH);
+SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 4 HOUR);
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
@@ -275,28 +275,28 @@ INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
 SET @appointmentTime_site2Shift2AppointmentTime4Id = LAST_INSERT_ID();
 
 -- Already serviced appointment
-SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL -1 DAY);
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL -1 DAY);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
 	VALUES (@appointmentTime, 100, @site_site1Id);
 SET @appointmentTime_site2AppointmentTime5Id = LAST_INSERT_ID();
 
 -- Appointments for today (note that this is just for testing queue functionality)
-SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL -5 MINUTE);
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL -5 MINUTE);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
 	VALUES (@appointmentTime, 100, @site_site1Id);
 SET @appointmentTime_site1AppointmentTime6Id = LAST_INSERT_ID();
 
-SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 5 HOUR);
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 5 HOUR);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
 	VALUES (@appointmentTime, 100, @site_site1Id);
 SET @appointmentTime_site1AppointmentTime7Id = LAST_INSERT_ID();
 
-SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 30 MINUTE);
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 30 MINUTE);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
 	VALUES (@appointmentTime, 100, @site_site1Id);
 SET @appointmentTime_site1AppointmentTime8Id = LAST_INSERT_ID();
 
-SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 45 MINUTE);
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 45 MINUTE);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
 	VALUES (@appointmentTime, 100, @site_site2Id);
 SET @appointmentTime_site2AppointmentTime9Id = LAST_INSERT_ID();
@@ -558,7 +558,7 @@ BEGIN
 
 		-- create appointment
 		SET @randomMinute = CEIL(RAND() * (maxIntervalValue - minIntervalValue));
-		SET @scheduledTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL @randomMinute MINUTE);
+		SET @scheduledTime = DATE_ADD(NOW(), INTERVAL @randomMinute MINUTE);
 		SET @siteIdForThisAppointment = startingSiteId + ROUND(RAND() * (endingSiteId - startingSiteId));
 		INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
 			VALUES (@scheduledTime, 100, @siteIdForThisAppointment);
