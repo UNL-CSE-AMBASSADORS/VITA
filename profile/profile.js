@@ -50,6 +50,8 @@ $('#vitaProfileEdit').submit(function(e) {
 		"abilityLookupName": languageSkills.value,
 		"UserShiftId": shiftTime.value
 	};
+
+
 	$.ajax({
 		url: "/server/profileStore.php",
 		type: "POST",

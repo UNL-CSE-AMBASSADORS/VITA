@@ -41,8 +41,9 @@ function storeProfile($data) {
           $stmt = $DB_CONN->prepare($userUpdate);
           $stmt->execute($userParams);
           $profileUser = $stmt->fetchAll(PDO::FETCH_ASSOC);
+          $stmt = null;
 
-          $userabilityId = $DB_CONN->lastInsertId();
+          // $userabilityId = $DB_CONN->lastInsertId();
 
 
           $abilityUpdate = "UPDATE UserAbility
@@ -57,6 +58,7 @@ function storeProfile($data) {
           $stmt = $DB_CONN->prepare($abilityUpdate);
           $stmt->execute($userabilityParams);
           $profileAbility = $stmt->fetchAll(PDO::FETCH_ASSOC);
+          $stmt = null;
 
 
 
@@ -71,16 +73,17 @@ function storeProfile($data) {
           $stmt = $DB_CONN->prepare($shiftUpdate);
           $stmt->execute($shiftParams);
           $profileShift = $stmt->fetchAll(PDO::FETCH_ASSOC);
+          $stmt = null;
 
 
-          $profile = array(
+          $response = array(
                 'success' => true,
                 'userInformation' => $profileUser,
                 'userAbilityInformation' => $profileAbility,
                 'userShiftsInformation' => $profileShift
            );
-
-           echo json_encode($profile);
+           echo json_encode($response);
+           $response['message'] = "Edits Succesful!";
      }
 
      catch (Exception $e) {
