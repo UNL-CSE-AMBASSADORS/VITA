@@ -154,20 +154,7 @@ SET @site_site2Id = LAST_INSERT_ID();
 INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
 	VALUES ("No walkins site", "9876 Test St. Lincoln, NE 29384", "555-999-8888", true, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_site3Id = LAST_INSERT_ID();
--- end site
 
-
-
-
-
-
-
-
-
-
-
-
--- Sites
 INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
 	VALUES ("Nebraska East Union", "Holdrege and 35th Streets", "402-472-6150", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_nebraskaEastUnion = LAST_INSERT_ID();
@@ -180,10 +167,6 @@ INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastM
 	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
 -- End Sites
-
-
-
-
 
 -- Shifts
 -- Sunday
@@ -739,24 +722,7 @@ SET @shiftStartTime = "2018-04-08 12:30:00";
 SET @shiftEndTime = "2018-04-08 16:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
--- End Shifts
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- shift
 SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 HOUR);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 1 HOUR);
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
