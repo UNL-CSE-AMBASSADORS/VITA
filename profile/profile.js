@@ -12,7 +12,7 @@ let loadProfileInformation = function() {
 		type: "GET",
 		dataType: "JSON",
 		data: {
-			callback: 'getUserInformation'
+			action: 'getUserInformation'
 		},
 		cache: false,
 		success: function(response) {
@@ -33,7 +33,7 @@ let loadAbilities = function() {
 		type: "GET",
 		dataType: "JSON",
 		data: {
-			callback: 'getAbilities'
+			action: 'getAbilities'
 		},
 		cache: false,
 		success: function(response) {
@@ -75,7 +75,7 @@ let loadShifts = function() {
 		type: "GET",
 		dataType: "JSON",
 		data: {
-			callback: 'getShifts'
+			action: 'getShifts'
 		},
 		cache: false,
 		success: function(response) {
@@ -126,7 +126,7 @@ let appendSignedUpShift = function(title, dateString, startTimeString, endTimeSt
 			type: "POST",
 			dataType: "JSON",
 			data: {
-				callback: 'removeShift',
+				action: 'removeShift',
 				userShiftId: userShiftId
 			},
 			cache: false,
@@ -173,7 +173,7 @@ let initializeEventListeners = function() {
 				lastName: $("#lastNameInput").val(),
 				email: $("#emailInput").val(),
 				phoneNumber: $("#phoneNumberInput").val(),
-				callback: "updatePersonalInformation"
+				action: "updatePersonalInformation"
 			},
 			cache: false,
 			success: function(response) {
@@ -272,7 +272,7 @@ let initializeEventListeners = function() {
 				dataType: "JSON",
 				data: {
 					shiftId: shiftId,
-					callback: "signUpForShift"
+					action: "signUpForShift"
 				},
 				cache: false,
 				success: function(response) {
@@ -322,7 +322,7 @@ let initializeEventListeners = function() {
 			method: 'POST',
 			url: '/server/profile/profile.php',
 			data: {
-				callback: 'updateAbilities',
+				action: 'updateAbilities',
 				removeAbilityArray: removeUserAbilityIds,
 				addAbilityArray: addAbilityIds
 			},

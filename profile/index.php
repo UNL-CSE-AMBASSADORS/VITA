@@ -57,7 +57,7 @@
 			<button class="btn btn-primary" id="personalInformationSaveButton" style="display:none;">Save</button>
 		</div>
 
-		<div class="">
+		<div>
 			<h2 class="mt-5">Abilities</h2>
 			<select id="abilitiesSelect" class='userAbilitiesSelectPicker' multiple=true></select>
 		</div>	

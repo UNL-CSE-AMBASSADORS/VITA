@@ -10,8 +10,8 @@ if (!$USER->isLoggedIn()) {
 
 require_once "$root/server/config.php";
 
-if (isset($_REQUEST['callback'])) {
-	switch ($_REQUEST['callback']) {
+if (isset($_REQUEST['action'])) {
+	switch ($_REQUEST['action']) {
 		case 'getUserInformation': getUserInformation(); break;
 		case 'getAbilities': getAbilities(); break;
 		case 'getShifts': getShifts(); break;
@@ -20,7 +20,7 @@ if (isset($_REQUEST['callback'])) {
 		case 'removeShift': removeShift($_REQUEST['userShiftId']); break;
 		case 'signUpForShift': signUpForShift($_REQUEST['shiftId']); break;
 		default:
-			die('Invalid callback function. This instance has been reported.');
+			die('Invalid action function. This instance has been reported.');
 			break;
 	}
 }
