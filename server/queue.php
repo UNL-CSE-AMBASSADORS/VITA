@@ -8,7 +8,7 @@
 	// TODO make this handle multiple locations, if necessary
 	$stmt = $conn->prepare("SELECT Appointment.appointmentId, scheduledTime,
 		firstName, lastName, timeIn, timeReturnedPapers,
-		timeAppointmentStarted, timeAppointmentEnded, completed
+		timeAppointmentStarted, timeAppointmentEnded, completed, siteId
 		FROM Appointment
 		LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 		JOIN Client ON Appointment.clientId = Client.clientId

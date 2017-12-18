@@ -6,7 +6,7 @@
 			<div class="queue-size-lbl">Queue:</div>
 			<div class="queue-size-count">{{appointments.length}}</div>
 		</div>
-		<select id="siteSelect" ng-model="selectSite">
+		<select class="btn dropdown-toggle" id="siteSelect" ng-model="selectSite">
 			<option value="">Select A Site</option>
 		</select>
 		<md-datepicker
