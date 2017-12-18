@@ -11,12 +11,6 @@ DROP TABLE IF EXISTS Site;
 DROP TABLE IF EXISTS PossibleAnswer;
 DROP TABLE IF EXISTS Question;
 
--- Temporary, this is here since I renamed the tables, but these old tables will still exist on other people's machines, we need to remove them
-DROP TABLE IF EXISTS UserPrivilege;
-DROP TABLE IF EXISTS Privilege;
-DROP TABLE IF EXISTS LitmusQuestion;
--- Temporary
-
 DROP TABLE IF EXISTS UserPermission;
 DROP TABLE IF EXISTS Permission;
 DROP TABLE IF EXISTS UserAbility;
@@ -33,7 +27,8 @@ CREATE TABLE User (
 	email VARCHAR(355) NOT NULL,
 	phoneNumber VARCHAR(20) NULL,
 	preparesTaxes BOOLEAN NOT NULL DEFAULT FALSE,
-	archived BOOLEAN NOT NULL DEFAULT FALSE
+	archived BOOLEAN NOT NULL DEFAULT FALSE,
+	CONSTRAINT uniqueEmail UNIQUE INDEX(email)
 );
 
 CREATE TABLE Question (
@@ -82,9 +77,9 @@ CREATE TABLE DependentClient (
 
 CREATE TABLE Appointment (
 	appointmentId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	scheduledTime DATETIME NOT NULL,
+    scheduledTime DATETIME NOT NULL,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
-	arrivedAt DATETIME NULL,
+    language VARCHAR(255) NOT NULL,
 	archived BOOLEAN NOT NULL DEFAULT FALSE,
 	clientId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(clientId) REFERENCES Client(clientId),
@@ -104,9 +99,13 @@ CREATE TABLE Answer (
 
 CREATE TABLE ServicedAppointment (
 	servicedAppointmentId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	startTime DATETIME,
-	endTime DATETIME,
-	userId INTEGER UNSIGNED NOT NULL,
+	timeIn DATETIME NULL DEFAULT NULL,
+    timeReturnedPapers DATETIME NULL DEFAULT NULL,
+    timeAppointmentStarted DATETIME NULL DEFAULT NULL,
+    timeAppointmentEnded DATETIME NULL DEFAULT NULL,
+    completed BOOLEAN NULL DEFAULT NULL,
+    notCompletedDescription VARCHAR(255) NULL DEFAULT NULL,
+	userId INTEGER UNSIGNED NULL,
 	FOREIGN KEY(userId) REFERENCES User(userId),
 	appointmentId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId)

@@ -6,7 +6,7 @@ require_once "$root/server/user.class.php";
 
 $USER = new User();
 
-if (!$USER->hasPermission('edit_user_permission')) {
+if (!$USER->hasPermission('edit_user_permissions')) {
 	header("Location: /unauthorized");
 	die();
 }
@@ -38,7 +38,7 @@ function getUserTable($data){
 	$response['success'] = true;
 
 	$stmt = $DB_CONN->prepare("SELECT userId, firstName, lastName, email, preparesTaxes, archived 
-		FROM user
+		FROM User
 		ORDER BY firstName, lastName");
 
 	$stmt->execute(array());
@@ -148,7 +148,7 @@ function updateUserPermissions($data){
 			$stmt->execute(array($userPermissionId));
 			$lookupName = $stmt->fetch(PDO::FETCH_ASSOC)['lookupName'];
 
-			if($lookupName === 'edit_user_permission'){
+			if($lookupName === 'edit_user_permissions'){
 				$firstName = $USER->getUserDetails()['firstName'];
 
 				$response['success'] = false;
@@ -231,20 +231,33 @@ function addUser($data){
 	$response = array();
 	$response['success'] = true;
 
-	$stmt = $DB_CONN->prepare("INSERT INTO User 
-			(firstName, lastName, email, phoneNumber, preparesTaxes)
-		VALUES 
-			(?, ?, ?, ?, ?)");
+	try {
+		$stmt = $DB_CONN->prepare("INSERT INTO User 
+				(firstName, lastName, email, phoneNumber, preparesTaxes)
+			VALUES 
+				(?, ?, ?, ?, ?)");
 
-	$res = $stmt->execute(array(
-		$data['firstName'],
-		$data['lastName'],
-		$data['email'],
-		$data['phone'],
-		$data['prepareTaxes']
-	));
+		$res = $stmt->execute(array(
+			$data['firstName'],
+			$data['lastName'],
+			$data['email'],
+			$data['phone'],
+			$data['prepareTaxes']
+		));
 
-	$response['success'] = !!$res;
+		if ($res == 0) {
+			throw new Exception('Unable to create the user, a user with that email may already exist.', MY_EXCEPTION);
+		}
+
+		$response['success'] = true;		
+	} catch (Exception $e) {
+		$response['success'] = false;
+		if($e->getCode() === MY_EXCEPTION){
+			$response['error'] = $e->getMessage();
+		}else{
+			$response['error'] = 'Sorry, there was an error reaching the server. Please try again later.';
+		}
+	}
 
 	print json_encode($response);
 }

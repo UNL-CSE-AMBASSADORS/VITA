@@ -341,8 +341,8 @@ function loadAllShifts(year=(new Date()).getFullYear()) {
 
 // This function will watch the date selector and the site selector for changes.
 function updateSitesDatesAndTimes() {
-	dateInput = $("#dateInput");
-	siteSelect = $("#sitePicker select");
+	let dateInput = $("#dateInput");
+	let siteSelect = $("#sitePicker select");
 
 	// When the date selector changes...
 	// 1. Display the site picker

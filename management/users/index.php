@@ -4,7 +4,7 @@ $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 
 require_once "$root/server/user.class.php";
 $USER = new User();
-if (!$USER->hasPermission('edit_user_permission')) {
+if (!$USER->hasPermission('edit_user_permissions')) {
 	header("Location: /unauthorized");
 	die();
 }
@@ -84,6 +84,6 @@ if (!$USER->hasPermission('edit_user_permission')) {
 
 	<?php require_once "$root/server/footer.php" ?>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-	<script src="users.js"></script>
+	<script src="/dist/management/users/users.js"></script>
 </body>
 </html>

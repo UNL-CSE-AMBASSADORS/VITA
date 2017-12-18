@@ -3,6 +3,8 @@
 <html class="no-js" lang="">
 <head>
 	<title>Server Error</title>
+	<link rel="stylesheet" href="/assets/css/global.css">
+	<link rel="stylesheet" href="/error_pages/error_page.css">
 	<?php require_once "$root/server/header.php" ?>
 </head>
 <body>
@@ -12,10 +14,9 @@
 	?>
 
 	<div class="container">
-		The server encountered an error while trying to help you :(
-	</div>
-	<div class="container">
-		Please try again in a few minutes, and if the problem persists, contact vita@cse.unl.edu
+		<div class='mt-5 error-number'>500</div>
+		<div class='error-name'>Server Error</div>
+		<div class='mt-3 error-description'>The server encountered an error trying to help you.<br>Please try again later, and if the problem persists, contact vita@cse.unl.edu</div>
 	</div>
 
 	<?php require_once "$root/server/footer.php" ?>

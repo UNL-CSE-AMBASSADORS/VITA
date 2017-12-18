@@ -373,7 +373,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
-	<script src="/signup/signup.js"></script>
-	<script src="/assets/js/form.js"></script>
+	<script src="/dist/signup/signup.js"></script>
+	<script src="/dist/assets/js/form.js"></script>
 </body>
 </html>
