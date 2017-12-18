@@ -89,7 +89,7 @@ let loadShifts = function() {
 				let startDateTime = new Date(shift.startTime + ' CST');
 				let endDateTime = new Date(shift.endTime + ' CST');
 
-				let date = startDateTime.toLocaleDateString();
+				let date = getDateString(startDateTime);
 
 				let datesMap = shiftsMap.get(shift.siteId);
 				if (!datesMap.has(date)) datesMap.set(date, []);
@@ -124,6 +124,13 @@ let getTimeString = function(dateTime) {
 	if (minutes.toString().length < 2) minutes = '0' + minutes;
 	let timeOfDay = dateTime.getHours() < 12 ? 'AM' : 'PM';
 	return `${hour}:${minutes} ${timeOfDay}`;
+}
+
+let getDateString = function(dateTime) {
+	let day = dateTime.getDate();
+	let month = dateTime.getMonth() + 1;
+	let year = dateTime.getFullYear();
+	return `${month}/${day}/${year}`;
 }
 
 let appendSignedUpShift = function(title, dateString, startTimeString, endTimeString, userShiftId) {
