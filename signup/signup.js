@@ -20,7 +20,7 @@ $(document).ready(function() {
 	// associated input field
 	$(".form-textfield input").blur(function() {
 		var isBlank = $.trim($(this).val()).length > 0;
-		$label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
+		var label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
 	});
 });
 
@@ -563,15 +563,43 @@ function validateSignupForm() {
 }
 
 $("#addDependentButton").click(function(e) {
-	var dependentRow = $('<div></div>').addClass("container dependent-div");
-	var firstNameBlock = $('<input type="text" name="firstName" placeholder="First Name" required />').addClass("col-5 firstName");
-	var lastNameBlock = $('<input type="text" name="lastName" placeholder="Last Name" required />').addClass("col-5 lastName");
+	var currentLastName = $('#lastName').val();
+	var id = $('.firstName').length;
+
+	var dependentRow = $('<div></div>').addClass("dependent-div row");
+	var firstNameBlock = $('<div></div>').addClass("col-5 form-textfield");
+	var firstNameInput = $(`<input type="text" name="firstNameInput${id}" id="firstNameInput${id}" required/>`).addClass("firstName");
+	var firstNameSpan = $('<span></span>').addClass("form-bar");
+	var firstNameLabel = $(`<label for="firstNameInput${id}">First Name</label>`).addClass("form-label form-required");
+	firstNameBlock.append(firstNameInput, firstNameSpan, firstNameLabel);
+
+	var lastNameBlock = $('<div></div>').addClass("col-5 form-textfield");
+	var lastNameInput = $(`<input type="text" name="lastNameInput${id}" id="lastNameInput${id}" value="${currentLastName}" required/>`).addClass("lastName");
+	var lastNameSpan = $('<span></span>').addClass("form-bar");
+	var lastNameLabel = $(`<label for="lastNameInput${id}">Last Name</label>`).addClass("form-label form-required");
+	lastNameBlock.append(lastNameInput, lastNameSpan, lastNameLabel);
+
+	// Since the last name is inherited from the top-most last name input, we need to raise the label if there was a last name
+	if (currentLastName.trim().length > 0) lastNameLabel.addClass("form-label__floating");
+
 	var removeBlock = $('<button type="button"></button>').addClass("btn btn-danger col-2").html("Remove").click(function(){
 		$(this).parent().remove();
 	});
 
 	dependentRow.append(firstNameBlock, lastNameBlock, removeBlock);
-	$("#dependents").append(dependentRow);	
+	$("#dependents").append(dependentRow);
+
+	// Since non-required fields are "valid" when they are empty, we need an
+	// alternate way to keep labels raised when there is content in their
+	// associated input field
+	firstNameInput.blur(function() {
+		var isBlank = $.trim($(this).val()).length > 0;
+		var label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
+	});
+	lastNameInput.blur(function() {
+		var isBlank = $.trim($(this).val()).length > 0;
+		var label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
+	});
 });
 
 // Form submission
@@ -603,13 +631,13 @@ $('#vitaSignupForm').submit(function(e) {
 
 	var dependents = [];
 	$(".dependent-div").each(function() { 
-		var firstName = $(this).find('.firstName').val().trim();
-		var lastName = $(this).find('.lastName').val().trim();
+		var dependentFirstName = $(this).find('.firstName').val().trim();
+		var dependentLastName = $(this).find('.lastName').val().trim();
 
-		if (firstName.length > 0 && lastName.length > 0) { // empty strings
+		if(dependentFirstName.length > 0 && dependentLastName.length > 0) { // empty strings
 			dependents.push({
-				firstName: firstName,
-				lastName: lastName
+				firstName: dependentFirstName,
+				lastName: dependentLastName
 			});
 		}
 	});
