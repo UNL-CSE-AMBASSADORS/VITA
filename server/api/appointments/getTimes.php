@@ -21,10 +21,11 @@ function getAppointmentTimes($data) {
 		$year = $data['year'];
 	}
 
-	$stmt = $DB_CONN->prepare('SELECT apt.appointmentTimeId, apt.siteId, DATE(scheduledTime) AS scheduledDate, TIME(scheduledTime) AS scheduledTime, percentageAppointments, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, COUNT(DISTINCT us.userShiftId) AS numberOfVolunteers, apt.maximumNumberOfAppointments
+	$stmt = $DB_CONN->prepare('SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, TIME(scheduledTime) AS scheduledTime, percentageAppointments, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, COUNT(DISTINCT us.userShiftId) AS numberOfVolunteers, apt.maximumNumberOfAppointments
 		FROM AppointmentTime apt
 		LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
 		LEFT JOIN UserShift us ON us.shiftId IN (SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId AND s.startTime <= apt.scheduledTime AND s.endTime >= apt.scheduledTime ORDER BY s.startTime DESC)
+		LEFT JOIN Site s ON s.siteId = apt.siteId
 		WHERE YEAR(apt.scheduledTime) = ?
 		GROUP BY apt.appointmentTimeId
 		ORDER BY apt.scheduledTime');
@@ -36,6 +37,8 @@ function getAppointmentTimes($data) {
 	foreach ($appointmentTimes as $appointmentTime) {
 		$dstMap->addDateSiteTimeObject($appointmentTime);
 	}
+
+	$dstMap->updateAvailability();
 
 	echo json_encode($dstMap);
 }
@@ -59,7 +62,30 @@ class DateSiteTimeMap {
 		// Get the number of appointments still available
 		$appointmentsAvailable = calculateRemainingAppointmentsAvailable($dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['percentageAppointments'], $dstObject['numberOfVolunteers'], $dstObject['maximumNumberOfAppointments']);
 
+		// Reformat the time to be h:i MM
+		$time = date_format(date_create($dstObject['scheduledTime']), 'g:i A');
+
 		// Add the appointmentTime to the map
-		$this->dates[$dstObject['scheduledDate']][$dstObject['siteId']][$dstObject['scheduledTime']] = $appointmentsAvailable;
+		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["site_title"] = $dstObject['title'];
+		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["times"][$time] = $appointmentsAvailable;
+	}
+
+	public function updateAvailability() {
+		foreach (array_keys($this->dates) as $date) {
+			$dateHasTimes = false;
+			foreach (array_keys($this->dates[$date]["sites"]) as $site) {
+				$siteHasTimes = false;
+				foreach ($this->dates[$date]["sites"][$site]["times"] as $time) {
+					if($time > 0) {
+						$dateHasTimes = true;
+						$siteHasTimes = true;
+					}
+				}
+				$this->dates[$date]["sites"][$site]["hasAvailability"] = $siteHasTimes;
+			}
+			$this->dates[$date]["hasAvailability"] = $dateHasTimes;
+		}
 	}
 }
+
+
