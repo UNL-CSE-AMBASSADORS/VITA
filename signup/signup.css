@@ -1,3 +1,7 @@
 #appointmentPicker {
 	min-height: 300px;
 }
+
+td.ui-state-disabled.full {
+	opacity: 0.65;
+}
