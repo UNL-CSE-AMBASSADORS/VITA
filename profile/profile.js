@@ -168,10 +168,21 @@ let initializeEventListeners = function() {
 
 		$(this).hide();
 		$("#personalInformationSaveButton").show();
+		$("#personalInformationCancelButton").show();
+	});
+
+	$("#personalInformationCancelButton").click(function(e) {
+		$(this).hide();
+		$("#personalInformationSaveButton").hide();
+		$("#personalInformationEditButton").show();
+
+		$(".personal-info").find('p').show();
+		$(".personal-info").find('input').hide();
 	});
 
 	$("#personalInformationSaveButton").click(function(e) {
 		$(this).prop('disabled', true);
+		$("#personalInformationCancelButton").prop('disabled', true);
 
 		$.ajax({
 			url: "/server/profile/profile.php",
@@ -196,16 +207,19 @@ let initializeEventListeners = function() {
 					$(".personal-info").find('input').hide();
 
 					$("#personalInformationSaveButton").hide();
+					$("#personalInformationCancelButton").hide();
 					$("#personalInformationEditButton").show();
 				} else {
 					alert(response.error);
 				}
 
 				$("#personalInformationSaveButton").prop('disabled', false);
+				$("#personalInformationCancelButton").prop('disabled', false);
 			},
 			error: function(response) {
 				alert("Unable to communicate with the server. Please try again later.");
 				$("#personalInformationSaveButton").prop('disabled', false);
+				$("#personalInformationCancelButton").prop('disabled', false);
 			}
 		});
 	});

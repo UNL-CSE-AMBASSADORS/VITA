@@ -55,6 +55,7 @@
 			</div>
 
 			<button class="btn btn-primary" id="personalInformationSaveButton" style="display:none;">Save</button>
+			<button class="btn btn-secondary" id="personalInformationCancelButton" style="display:none;">Cancel</button>
 		</div>
 
 		<div>
