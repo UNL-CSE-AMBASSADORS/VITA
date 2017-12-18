@@ -36,7 +36,6 @@
 					<div class="row queue-row py-1 pointer"
 							 ng-repeat="appointment in appointments | orderBy:'scheduledTime' | searchFor: clientSearch"
 							 ng-if="appointment.completed == null"
-							 ng-show="appointment.siteId == selectSite"
 							 ng-class-odd="'bg-light'"
 							 ng-click="selectClient(appointment)">
 						<div class="col">

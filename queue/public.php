@@ -26,7 +26,7 @@
 			<div class="col col-5 queue-progress">Progress</div>
 			<div class="col col-3 queue-time">Time</div>
 		</div>
-		<div class="row queue-row" ng-repeat="appointment in appointments | orderBy:'scheduledTime'" ng-if="appointment.completed == null" ng-show="appointment.siteId == selectSite" ng-class-even="'bg-light'">
+		<div class="row queue-row" ng-repeat="appointment in appointments | orderBy:'scheduledTime'" ng-if="appointment.completed == null" ng-class-even="'bg-light'">
 			<div class="col col-4 queue-name" style="size:8em">{{appointment.firstName}} {{appointment.lastName}}.</div>
 			<div class="col col-5 queue-progress">
 				<span class="badge badge-pill" ng-class="appointment.checkedIn ? 'badge-primary': 'badge-secondary'">Checked In</span>

@@ -4,18 +4,18 @@
 	require_once "$root/server/user.class.php";
 	$conn = $DB_CONN;
 
-	// TODO make this handle multiple locations, if necessary
 	$stmt = $conn->prepare("SELECT Appointment.appointmentId, scheduledTime,
 		firstName, lastName, timeIn, timeReturnedPapers,
-		timeAppointmentStarted, timeAppointmentEnded, completed, siteId
+		timeAppointmentStarted, timeAppointmentEnded, completed
 		FROM Appointment
 		LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 		JOIN Client ON Appointment.clientId = Client.clientId
 		WHERE DATE(Appointment.scheduledTime) = ?
+			AND Appointment.siteId = ?
 			AND Appointment.archived = FALSE
 		ORDER BY Appointment.scheduledTime ASC");
 
-	$stmt->execute(array($_GET['displayDate']));
+	$stmt->execute(array($_GET['displayDate'], $_GET['siteId']));
 	$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 	// We must only display the first letter of the last name

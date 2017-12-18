@@ -3,6 +3,7 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 .controller("QueueController", function($scope, $interval, QueueService) {
 	$scope.today = new Date();
 	$scope.currentDate = $scope.today;
+	$scope.selectedSite = -1;
 
 	// Load the appointment info every 10 seconds
 	$scope.updateAppointmentInformation = function() {
@@ -10,7 +11,11 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 			month = $scope.currentDate.getMonth() + 1,
 			day = $scope.currentDate.getDate();
 		if (month < 10) month = "0" + month;
-		QueueService.getAppointments(year + "-" + month + "-" + day).then(function(data) {
+
+		if ($scope.selectedSite == null || $scope.selectedSite.siteId == null) return;
+		let siteId = $scope.selectedSite.siteId;
+		
+		QueueService.getAppointments(year + "-" + month + "-" + day, siteId).then(function(data) {
 			if(data == null) {
 				console.log('server error');
 			} else if(data.length > 0) {
@@ -29,6 +34,20 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 			}
 		});
 	}
+
+	$scope.getSites = function() {
+		QueueService.getSites().then(function(data) {
+			if(data == null) {
+				console.log('server error');
+			} else if (data.length > 0) {
+				$scope.sites = data;
+			} else {
+				$scope.sites = [];
+				$scope.selectedSite = -1;
+			}
+		});
+	}
+
 	// Refresh the clock
 	let refreshClockContent = function(){
 		$scope.updateTime = new Date();
@@ -52,6 +71,7 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 	});
 
 	// Invoke initially
+	$scope.getSites();
 	$scope.updateAppointmentInformation();
 	refreshClockContent();
 
