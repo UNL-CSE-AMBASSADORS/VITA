@@ -138,17 +138,16 @@ function updatePersonalInformation($data) {
 		// Validate input
 		if (!isset($data['firstName']) || trim($data['firstName']) === '') throw new Exception('Please enter a valid first name.', MY_EXCEPTION);
 		if (!isset($data['lastName']) || trim($data['lastName']) === '') throw new Exception('Please enter a valid last name.', MY_EXCEPTION);
-		if (!isset($data['email']) || trim($data['email']) === '' || !preg_match('/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/', trim(strtolower($data['email'])))) throw new Exception('Please enter a valid email.', MY_EXCEPTION);
+		// if (!isset($data['email']) || trim($data['email']) === '' || !preg_match('/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/', trim(strtolower($data['email'])))) throw new Exception('Please enter a valid email.', MY_EXCEPTION);
 		if (!isset($data['phoneNumber']) || trim($data['phoneNumber']) === '') throw new Exception('Please enter a valid phone number.', MY_EXCEPTION);
-		
+
 		$query = "UPDATE User
-			SET firstName = ?, lastName = ?, email = ?, phoneNumber = ?
+			SET firstName = ?, lastName = ?, phoneNumber = ?
 			WHERE userId = ?";
 		$stmt = $DB_CONN->prepare($query);
 		$success = $stmt->execute(array(
 			$data['firstName'],
 			$data['lastName'],
-			$data['email'],
 			$data['phoneNumber'],
 			$userId
 		));

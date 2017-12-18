@@ -45,7 +45,7 @@
 			<div>
 				<label for="email" id="emailLabel">Email:</label>
 				<p id="emailText"></p>
-				<input type="text" id="emailInput" style="display:none;" />
+				<input type="text" id="emailInput" style="display:none;" disabled />
 			</div>
 
 			<div>
