@@ -70,6 +70,7 @@ CREATE TABLE Client (
 CREATE TABLE AppointmentTime (
 	appointmentTimeId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	scheduledTime DATETIME NOT NULL,
+	maximumNumberOfAppointments INTEGER UNSIGNED DEFAULT NULL,
 	percentageAppointments INTEGER UNSIGNED NOT NULL DEFAULT 100,
 	CONSTRAINT percentageCheck CHECK (percentageAppointments>=0 AND percentageAppointments<=100),
 	siteId INTEGER UNSIGNED NOT NULL,

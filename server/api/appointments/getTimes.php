@@ -6,26 +6,6 @@ ini_set('display_errors', 'On');
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 require_once "$root/server/config.php";
 
-function calculateRemainingAppointmentsAvailable($volunteerCount, $appointmentCount, $percentAppointments) {
-	$availableAppointmentSpots = $volunteerCount * $percentAppointments / 100;
-	if ($appointmentCount < $availableAppointmentSpots) {
-		return $availableAppointmentSpots - $appointmentCount;
-	}
-	return 0;
-}
-
-class DateSiteTimeMap {
-	public $dates = [];
-
-	public function addDateSiteTimeObject($dstObject) {
-		// Get the number of appointments still available
-		$appointmentsAvailable = calculateRemainingAppointmentsAvailable($dstObject['numberOfVolunteers'], $dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['percentageAppointments']);
-
-		// Add the appointmentTime to the map
-		$this->dates[$dstObject['scheduledDate']][$dstObject['siteId']][$dstObject['scheduledTime']] = $appointmentsAvailable;
-	}
-}
-
 getAppointmentTimes($_GET);
 
 /*
@@ -41,13 +21,13 @@ function getAppointmentTimes($data) {
 		$year = $data['year'];
 	}
 
-	$stmt = $DB_CONN->prepare('SELECT at.appointmentTimeId, at.siteId, DATE(scheduledTime) AS scheduledDate, TIME(scheduledTime) AS scheduledTime, percentageAppointments, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, COUNT(DISTINCT us.userShiftId) AS numberOfVolunteers
-		FROM AppointmentTime at
-		LEFT JOIN Appointment a ON a.appointmentTimeId = at.appointmentTimeId
-		LEFT JOIN UserShift us ON us.shiftId IN (SELECT s.shiftId FROM Shift s WHERE s.siteId = at.siteId AND s.startTime <= at.scheduledTime AND s.endTime >= at.scheduledTime ORDER BY s.startTime DESC)
-		WHERE YEAR(at.scheduledTime) = ?
-		GROUP BY at.appointmentTimeId
-		ORDER BY at.scheduledTime');
+	$stmt = $DB_CONN->prepare('SELECT apt.appointmentTimeId, apt.siteId, DATE(scheduledTime) AS scheduledDate, TIME(scheduledTime) AS scheduledTime, percentageAppointments, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, COUNT(DISTINCT us.userShiftId) AS numberOfVolunteers, apt.maximumNumberOfAppointments
+		FROM AppointmentTime apt
+		LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
+		LEFT JOIN UserShift us ON us.shiftId IN (SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId AND s.startTime <= apt.scheduledTime AND s.endTime >= apt.scheduledTime ORDER BY s.startTime DESC)
+		WHERE YEAR(apt.scheduledTime) = ?
+		GROUP BY apt.appointmentTimeId
+		ORDER BY apt.scheduledTime');
 	$stmt->execute(array($year));
 	$appointmentTimes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -58,4 +38,28 @@ function getAppointmentTimes($data) {
 	}
 
 	echo json_encode($dstMap);
+}
+
+function calculateRemainingAppointmentsAvailable($appointmentCount, $percentAppointments, $volunteerCount, $maximum) {
+	if (isset($maximum)) {
+		$availableAppointmentSpots = $maximum;
+	} else {
+		$availableAppointmentSpots = $volunteerCount * $percentAppointments / 100;
+	}
+	if ($appointmentCount < $availableAppointmentSpots) {
+		return $availableAppointmentSpots - $appointmentCount;
+	}
+	return 0;
+}
+
+class DateSiteTimeMap {
+	public $dates = [];
+
+	public function addDateSiteTimeObject($dstObject) {
+		// Get the number of appointments still available
+		$appointmentsAvailable = calculateRemainingAppointmentsAvailable($dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['percentageAppointments'], $dstObject['numberOfVolunteers'], $dstObject['maximumNumberOfAppointments']);
+
+		// Add the appointmentTime to the map
+		$this->dates[$dstObject['scheduledDate']][$dstObject['siteId']][$dstObject['scheduledTime']] = $appointmentsAvailable;
+	}
 }
