@@ -1,15 +1,14 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="/queue/queue_header.js"></script>
 <div class="container-fluid dashboard bg-light py-3" ng-cloak>
 	<div class="d-flex flex-row justify-content-between align-items-center">
 		<div class="d-flex flex-row">
 			<div class="queue-size-lbl">Queue:</div>
 			<div class="queue-size-count">{{appointments.length}}</div>
 		</div>
-		<div class="siteSelection">
-        <button class="btn btn-default dropdown-toggle" type="button" id="site" data-toggle="dropdown"></button>
-        <ul class="dropdown-menu">
-            <li ng-repeat="site in sites">{{site.title}}</li>
-        </ul>
-    </div>
+		<select id="siteSelect" ng-model="selectSite">
+			<option value="">Select A Site</option>
+		</select>
 		<md-datepicker
 			ng-model="currentDate"
 			ng-change="updateAppointmentInformation()"

@@ -23,6 +23,7 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 					appointment.preparing = appointment.timeAppointmentStarted != null;
 					appointment.ended = appointment.timeAppointmentEnded != null;
 					appointment.name = appointment.firstName + " " + appointment.lastName;
+					appointment.site = $scope.selectSite;;
 					return appointment;
 				});
 			} else {

@@ -7,7 +7,7 @@ const NUM_MINUTES_IN_HOUR = 60;
 
 let downloadAppointmentSchedule = function() {
 	let siteId = getSelectedSiteId();
-	let date = getSelectedDate();	
+	let date = getSelectedDate();
 	let timezoneOffset = getTimezoneOffset();
 	clickDownloadLink(`/server/management/documents/appointmentsSchedule.php?date=${date}&siteId=${siteId}&timezoneOffset=${timezoneOffset}`);
 };
@@ -26,7 +26,7 @@ let getSelectedSiteId = function() {
 }
 
 let getSelectedDate = function() {
-	return document.getElementById("dateInput").value;	
+	return document.getElementById("dateInput").value;
 }
 
 let getTimezoneOffset = function() {
