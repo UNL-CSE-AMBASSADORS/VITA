@@ -85,29 +85,21 @@ let loadShifts = function() {
 				// Create the shiftsMap
 				if (!sitesMap.has(shift.siteId)) sitesMap.set(shift.siteId, shift.title);
 				if (!shiftsMap.has(shift.siteId)) shiftsMap.set(shift.siteId, new Map());
-				
-				let startDateTime = new Date(shift.startTime + ' CST');
-				let endDateTime = new Date(shift.endTime + ' CST');
-
-				let date = getDateString(startDateTime);
 
 				let datesMap = shiftsMap.get(shift.siteId);
-				if (!datesMap.has(date)) datesMap.set(date, []);
+				if (!datesMap.has(shift.dateString)) datesMap.set(shift.dateString, []);
 
-				let startTimeString = getTimeString(startDateTime);
-				let endTimeString = getTimeString(endDateTime);
-
-				let shiftTimes = datesMap.get(date);
+				let shiftTimes = datesMap.get(shift.dateString);
 				shiftTimes.push({
 					'shiftId': shift.shiftId,
-					'startTime': startTimeString,
-					'endTime': endTimeString,
+					'startTime': shift.startTimeString,
+					'endTime': shift.endTimeString,
 					'signedUp': shift.signedUp
 				});
 
 				// Append any shifts the person is already signed up for
 				if (shift.signedUp) {
-					appendSignedUpShift(shift.title, date, startTimeString, endTimeString, shift.userShiftId);
+					appendSignedUpShift(shift.title, shift.dateString, shift.startTimeString, shift.endTimeString, shift.userShiftId);
 				}
 			}
 		},
@@ -115,22 +107,6 @@ let loadShifts = function() {
 			alert("Unable to load shift. Please refresh the page in a few minutes.");
 		}
 	});
-}
-
-let getTimeString = function(dateTime) {
-	let hour = dateTime.getHours();
-	if (hour > 12) hour = hour % 12;
-	let minutes = dateTime.getMinutes();
-	if (minutes.toString().length < 2) minutes = '0' + minutes;
-	let timeOfDay = dateTime.getHours() < 12 ? 'AM' : 'PM';
-	return `${hour}:${minutes} ${timeOfDay}`;
-}
-
-let getDateString = function(dateTime) {
-	let day = dateTime.getDate();
-	let month = dateTime.getMonth() + 1;
-	let year = dateTime.getFullYear();
-	return `${month}/${day}/${year}`;
 }
 
 let appendSignedUpShift = function(title, dateString, startTimeString, endTimeString, userShiftId) {

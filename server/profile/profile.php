@@ -68,7 +68,7 @@ function getShifts() {
 	GLOBAL $USER, $DB_CONN;
 	$userId = $USER->getUserId();
 
-	$query = "SELECT Shift.shiftId, startTime, endTime, title, Site.siteId, UserShift.userShiftId
+	$query = "SELECT Shift.shiftId, TIME_FORMAT(startTime, '%l:%i %p') AS startTimeString, TIME_FORMAT(endTime, '%l:%i %p') AS endTimeString, DATE_FORMAT(startTime, '%b %D, %Y') AS dateString, title, Site.siteId, UserShift.userShiftId
 		FROM Shift
 		LEFT JOIN UserShift ON Shift.shiftId = UserShift.shiftId AND UserShift.userId = ?
 		JOIN Site ON Shift.siteId = Site.siteId
