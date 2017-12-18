@@ -252,10 +252,10 @@ let initializeEventListeners = function() {
 
 			// populate shift times select now based on which date was chosen AND the user is not already signed up for it
 			for (const shift of shiftsMap.get(siteId).get(dateString)) {
-				if (shift.signedUp) continue;
 				timeSelect.append($('<option>', {
 					value: shift.shiftId,
-					text: `${shift.startTime} - ${shift.endTime}`
+					text: `${shift.startTime} - ${shift.endTime}`,
+					disabled: shift.signedUp
 				}));
 			}
 		});
