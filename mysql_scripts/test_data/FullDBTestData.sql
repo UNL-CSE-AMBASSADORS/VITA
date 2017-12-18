@@ -65,27 +65,35 @@ INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
 -- Abilities
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Basic Certification", "basic_certification", "Has completed the basic certification requirements", TRUE);
+SET @ability_basicCertificationId = LAST_INSERT_ID();
 
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Advanced Certification", "advanced_certification", "Has completed the advanced certification requirements", TRUE);
+SET @ability_advancedCertificationId = LAST_INSERT_ID();
 
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("International Certification", "international_certification", "Has completed the international certification requirements", TRUE);
+SET @ability_internationalCertificationId = LAST_INSERT_ID();
 
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Military Certification", "military_certification", "Has completed the military certification requirements", TRUE);
+SET @ability_militaryCertificationId = LAST_INSERT_ID();
 
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Health Savings (HSA) Certification", "health_savings_certification", "Has completed the health savings (HSA) certification requirements", TRUE);
+SET @ability_healthSavingsCertificationId = LAST_INSERT_ID();
 
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Spanish-Speaking", "spanish_speaking", "Can speak fluent Spanish", FALSE);
+SET @ability_spanishSpeakingId = LAST_INSERT_ID();
 
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Vietnamese-Speaking", "viatnamese_speaking", "Can speak fluent vietnamese", FALSE);
+SET @ability_vietnameseSpeakingId = LAST_INSERT_ID();
 
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Arabic-Speaking", "arabic_speaking", "Can speak fluent Arabic", FALSE);
+SET @ability_arabicSpeakingId = LAST_INSERT_ID();
 -- End Abilities
 
 
