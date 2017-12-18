@@ -94,12 +94,13 @@ let loadShifts = function() {
 					'shiftId': shift.shiftId,
 					'startTime': shift.startTimeString,
 					'endTime': shift.endTimeString,
-					'signedUp': shift.signedUp
+					'signedUp': shift.signedUp,
+					'userShiftId': shift.userShiftId
 				});
 
 				// Append any shifts the person is already signed up for
 				if (shift.signedUp) {
-					appendSignedUpShift(shift.title, shift.dateString, shift.startTimeString, shift.endTimeString, shift.userShiftId);
+					appendSignedUpShift(shift.title, shift.dateString, shift.startTimeString, shift.endTimeString, shift.userShiftId, shift.siteId);
 				}
 			}
 		},
@@ -109,7 +110,7 @@ let loadShifts = function() {
 	});
 }
 
-let appendSignedUpShift = function(title, dateString, startTimeString, endTimeString, userShiftId) {
+let appendSignedUpShift = function(title, dateString, startTimeString, endTimeString, userShiftId, siteId) {
 	let shiftRow = $('<div></div>');
 	let shiftInformation = $('<span></span>').html(`${title}: ${dateString} ${startTimeString} - ${endTimeString}`);
 	let removeButton = $('<i></i>').addClass('fa fa-trash-o icon clickable').click(function() {
@@ -125,6 +126,15 @@ let appendSignedUpShift = function(title, dateString, startTimeString, endTimeSt
 			success: function(response) {
 				if (response.success) {
 					shiftRow.remove();
+
+					// Find the shift that just got removed and make it so we're not signed up for it anymore
+					for (const shift of shiftsMap.get(siteId).get(dateString)) {
+						if (shift.userShiftId === userShiftId) {
+							shift.signedUp = false;
+							shift.userShiftId = null;
+							break;
+						}
+					}
 				} else {
 					alert(response.error);
 				}
@@ -284,11 +294,15 @@ let initializeEventListeners = function() {
 				success: function(response) {
 					if (response.success) {
 						shiftRow.remove();
+
 						// Find the shift and append the p tags to show the user is signed up
 						for (const shift of shiftsMap.get(siteId).get(dateString)) {
 							if (shift.shiftId === shiftId) {
+								shift.signedUp = true;
+								shift.userShiftId = response.userShiftId;
+
 								let title = sitesMap.get(siteId);
-								appendSignedUpShift(title, dateString, shift.startTime, shift.endTime, response.userShiftId);
+								appendSignedUpShift(title, dateString, shift.startTime, shift.endTime, response.userShiftId, siteId);
 								break;
 							}
 						}
