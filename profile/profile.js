@@ -94,20 +94,20 @@ let loadShifts = function() {
 				let datesMap = shiftsMap.get(shift.siteId);
 				if (!datesMap.has(date)) datesMap.set(date, []);
 
-				let startTime = startDateTime.toLocaleTimeString();
-				let endTime = endDateTime.toLocaleTimeString();
+				let startTimeString = getTimeString(startDateTime);
+				let endTimeString = getTimeString(endDateTime);
 
 				let shiftTimes = datesMap.get(date);
 				shiftTimes.push({
 					'shiftId': shift.shiftId,
-					'startTime': startTime,
-					'endTime': endTime,
+					'startTime': startTimeString,
+					'endTime': endTimeString,
 					'signedUp': shift.signedUp
 				});
 
 				// Append any shifts the person is already signed up for
 				if (shift.signedUp) {
-					appendSignedUpShift(shift.title, date, startTime, endTime, shift.userShiftId);
+					appendSignedUpShift(shift.title, date, startTimeString, endTimeString, shift.userShiftId);
 				}
 			}
 		},
@@ -117,9 +117,18 @@ let loadShifts = function() {
 	});
 }
 
+let getTimeString = function(dateTime) {
+	let hour = dateTime.getHours();
+	if (hour > 12) hour = hour % 12;
+	let minutes = dateTime.getMinutes();
+	if (minutes.toString().length < 2) minutes = '0' + minutes;
+	let timeOfDay = dateTime.getHours() < 12 ? 'AM' : 'PM';
+	return `${hour}:${minutes} ${timeOfDay}`;
+}
+
 let appendSignedUpShift = function(title, dateString, startTimeString, endTimeString, userShiftId) {
 	let shiftRow = $('<div></div>');
-	let shiftInformation = $('<span></span>').html(`${title}: ${dateString} ${startTimeString}-${endTimeString}`);
+	let shiftInformation = $('<span></span>').html(`${title}: ${dateString} ${startTimeString} - ${endTimeString}`);
 	let removeButton = $('<i></i>').addClass('fa fa-trash-o icon clickable').click(function() {
 		$.ajax({
 			url: "/server/profile/profile.php",
@@ -249,7 +258,7 @@ let initializeEventListeners = function() {
 				if (shift.signedUp) continue;
 				timeSelect.append($('<option>', {
 					value: shift.shiftId,
-					text: `${shift.startTime}-${shift.endTime}`
+					text: `${shift.startTime} - ${shift.endTime}`
 				}));
 			}
 		});
