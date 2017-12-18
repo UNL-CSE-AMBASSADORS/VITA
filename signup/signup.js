@@ -352,7 +352,7 @@ $('#vitaSignupForm').submit(function(e) {
 		}
 	});
 
-	var scheduledTime = new Date($("#dateInput").val() + " " + $("#timePickerSelect").val()).toISOString();
+	var scheduledTime = new Date($("#dateInput").val() + " " + $("#timePickerSelect").val() + " GMT").toISOString();
 
 	var data = {
 		"firstName":firstName.value,

@@ -55,19 +55,20 @@ function storeAppointment($data){
 		$appointmentInsert = "INSERT INTO Appointment
 			(
 				clientId,
-				scheduledTime,
-				siteId
+				appointmentTimeId
 			)
 			VALUES
 			(
 				?,
-				?,
-				?
+				(SELECT appointmentTimeId FROM AppointmentTime
+	WHERE DATE(scheduledTime) = ? AND time_format(TIME(scheduledTime), '%l:%i %p') = ?)
 			);";
+
+		$dateTime = new DateTime($data['scheduledTime']);
 		$appointmentParams = array(
 			$clientId,
-			$data['scheduledTime'],
-			$data['siteId']
+			$dateTime->format('Y-m-d'),
+			$dateTime->format('g:i A')
 		);
 		$stmt = $DB_CONN->prepare($appointmentInsert);
 		if(!$stmt->execute($appointmentParams)){
