@@ -700,7 +700,7 @@ SET @shiftEndTime = "2018-04-01 15:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
 
-SET @shiftStartTime = "2018-04-01 12:30:00";
+SET @shiftStartTime = "2018-04-01 14:30:00";
 SET @shiftEndTime = "2018-04-01 16:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
@@ -726,7 +726,7 @@ SET @shiftEndTime = "2018-04-08 15:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
 
-SET @shiftStartTime = "2018-04-08 12:30:00";
+SET @shiftStartTime = "2018-04-08 14:30:00";
 SET @shiftEndTime = "2018-04-08 16:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
