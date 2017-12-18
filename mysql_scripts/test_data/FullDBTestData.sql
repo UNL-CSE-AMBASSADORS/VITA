@@ -100,39 +100,25 @@ INSERT INTO UserAbility (userId, abilityId, createdBy)
 
 -- permissions
 INSERT INTO Permission (name, description, lookupName)
-	VALUES ("Add Site", "Has the permission to create a new VITA site on the add site page", "add_site");
+	VALUES ("Add Site", "Can create a new VITA site on the add site page", "add_site");
 SET @permission_addSiteId = LAST_INSERT_ID();
 
 INSERT INTO Permission (name, description, lookupName)
-	VALUES ("Edit Site Information", "Has the permission to edit the information associated with sites", "edit_site_information");
+	VALUES ("Edit Site Information", "Can edit the information associated with sites", "edit_site_information");
 SET @permission_editSiteInformationId = LAST_INSERT_ID();
 
 INSERT INTO Permission (name, description, lookupName)
-	VALUES ("Can Take Client off of Queue", "Has the permission to take clients off of the queue", "pop_client_off_queue");
-SET @permission_popClientOffQueueId = LAST_INSERT_ID();
-
-INSERT INTO Permission (name, description, lookupName)
-	VALUES ("Edit Permissions", "Can edit user permission", "edit_user_permission");
+	VALUES ("Edit Permissions", "Can edit user permissions", "edit_user_permissions");
 SET @permission_editUserPermissionId = LAST_INSERT_ID();
 
 INSERT INTO Permission (name, description, lookupName)
-	VALUES ("Can View Management Tab", "Can view the management tab in the nav bar", "can_view_management_tab");
-SET @permission_canViewManagementTabId = LAST_INSERT_ID();
-
-INSERT INTO Permission (name, description, lookupName)
-	VALUES ("Can Use Admin Tools", "Can use administrative tools", "can_use_admin_tools");
-SET @permission_canUseAdminToolsId = LAST_INSERT_ID();
+	VALUES ("Use Admin Tools", "Can use administrative tools", "use_admin_tools");
+SET @permission_useAdminToolsId = LAST_INSERT_ID();
 -- end permissions
 
 
 
 -- user permissions
-INSERT INTO UserPermission (userId, permissionId, createdBy)
-	VALUES (@user_preparer1Id, @permission_popClientOffQueueId, @user_siteAdmin1Id);
-
-INSERT INTO UserPermission (userId, permissionId, createdBy)
-	VALUES (@user_preparer2Id, @permission_popClientOffQueueId, @user_siteAdmin1Id);
-
 INSERT INTO UserPermission (userId, permissionId, createdBy)
 	VALUES (@user_siteAdmin1Id, @permission_addSiteId, @user_siteAdmin1Id);
 
@@ -143,16 +129,7 @@ INSERT INTO UserPermission (userId, permissionId, createdBy)
 	VALUES (@user_siteAdmin1Id, @permission_editSiteInformationId, @user_siteAdmin1Id);
 
 INSERT INTO UserPermission (userId, permissionId, createdBy)
-	VALUES (@user_siteAdmin1Id, @permission_canViewManagementTabId, @user_siteAdmin1Id);
-
-INSERT INTO UserPermission (userId, permissionId, createdBy)
-	VALUES (@user_siteAdmin1Id, @permission_canUseAdminToolsId, @user_siteAdmin1Id);
-
-INSERT INTO UserPermission (userId, permissionId, createdBy)
-	VALUES (@user_receptionist1Id, @permission_popClientOffQueueId, @user_siteAdmin1Id);
-
-INSERT INTO UserPermission (userId, permissionId, createdBy)
-	VALUES (@user_reviewer1Id, @permission_popClientOffQueueId, @user_siteAdmin1Id);
+	VALUES (@user_siteAdmin1Id, @permission_useAdminToolsId, @user_siteAdmin1Id);
 -- end user permissions
 
 
@@ -174,7 +151,7 @@ SET @site_site3Id = LAST_INSERT_ID();
 
 
 -- shift
-SET @shiftStartTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 1 HOUR);
+SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 HOUR);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 1 HOUR);
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
@@ -186,7 +163,7 @@ INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @shift_site1Shift2Id = LAST_INSERT_ID();
 
-SET @shiftStartTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 1 MONTH);
+SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 4 HOUR);
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
@@ -284,25 +261,25 @@ INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
 SET @appointment_appointment4Id = LAST_INSERT_ID();
 
 -- Already serviced appointment
-SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL -1 DAY);
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL -1 DAY);
 INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
 	VALUES (@appointmentTime, @client_client5Id, @site_site1Id, "en");
 SET @appointment_appointment5Id = LAST_INSERT_ID();
 
 -- Appointments for today (note that this is just for testing queue functionality)
-SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL -5 MINUTE);
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL -5 MINUTE);
 INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
 	VALUES (@appointmentTime, @client_client1Id, @site_site1Id, "en");
 
-SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 5 HOUR);
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 5 HOUR);
 INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
 	VALUES (@appointmentTime, @client_client1Id, @site_site1Id, "en");
 
-SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 30 MINUTE);
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 30 MINUTE);
 INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
 	VALUES (@appointmentTime, @client_client2Id, @site_site1Id, "en");
 
-SET @appointmentTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 45 MINUTE);
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 45 MINUTE);
 INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
 	VALUES (@appointmentTime, @client_client3Id, @site_site2Id, "en");
 -- end appointment
@@ -522,7 +499,7 @@ BEGIN
 
 		-- create appointment
 		SET @randomMinute = CEIL(RAND() * (maxIntervalValue - minIntervalValue));
-		SET @scheduledTime = DATE_ADD(UTC_TIMESTAMP(), INTERVAL @randomMinute MINUTE);
+		SET @scheduledTime = DATE_ADD(NOW(), INTERVAL @randomMinute MINUTE);
 		SET @siteIdForThisAppointment = startingSiteId + ROUND(RAND() * (endingSiteId - startingSiteId));
 		INSERT INTO Appointment (scheduledTime, clientId, siteId, language)
 			VALUES (@scheduledTime, @clientIdForThisAppointment, @siteIdForThisAppointment, "en");
