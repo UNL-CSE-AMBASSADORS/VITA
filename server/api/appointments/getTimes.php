@@ -47,8 +47,9 @@ function calculateRemainingAppointmentsAvailable($appointmentCount, $percentAppo
 	if (isset($maximum)) {
 		$availableAppointmentSpots = $maximum;
 	} else {
-		$availableAppointmentSpots = $volunteerCount * $percentAppointments / 100;
+		$availableAppointmentSpots = $volunteerCount;
 	}
+	$availableAppointmentSpots *= $percentAppointments / 100;
 	if ($appointmentCount < $availableAppointmentSpots) {
 		return $availableAppointmentSpots - $appointmentCount;
 	}
