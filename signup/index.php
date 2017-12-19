@@ -64,6 +64,25 @@
 
 						<h3 class="form-subheading">Background Information</h3>
 
+						<div class="form-radio row" id="language">
+							<label for="language" class="col form-required">Which language will you require?</label>
+							<div class="col btn-group" data-toggle="buttons">
+								<!-- NOTE: the values here are the ISO 639-2/T specfication for language codes (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) -->
+								<label class="btn btn-outline-secondary" for="languageEnglish">
+									<input type="radio" id="languageEnglish" value="eng" name="languageRadio" required>English
+								</label>
+								<label class="btn btn-outline-secondary" for="languageSpanish">
+									<input type="radio" id="languageSpanish" value="spa" name="languageRadio" required>Spanish
+								</label>
+								<label class="btn btn-outline-secondary" for="languageArabic">
+									<input type="radio" id="languageArabic" value="ara" name="languageRadio" required>Arabic
+								</label>
+								<label class="btn btn-outline-secondary" for="languageVietnamese">
+									<input type="radio" id="languageVietnamese" value="vie" name="languageRadio" required>Vietnamese
+								</label>
+							</div>
+						</div>
+
 						<div class="form-radio row" id="studentUNL">
 							<label for="1" class="col form-required">Are you a University of Nebraska-Lincoln student?</label>
 							<div class="col btn-group" data-toggle="buttons">
@@ -135,25 +154,6 @@
 								</label>
 								<label class="btn btn-outline-secondary" for="studenth1bno">
 									<input type="radio" id="studenth1bno" value="2" name="5" required>No
-								</label>
-							</div>
-						</div>
-
-						<div class="form-radio row" id="language">
-							<label for="language" class="col form-required">Which language will you require?</label>
-							<div class="col btn-group" data-toggle="buttons">
-								<!-- NOTE: the values here are the ISO 639-2/T specfication for language codes (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) -->
-								<label class="btn btn-outline-secondary" for="languageEnglish">
-									<input type="radio" id="languageEnglish" value="eng" name="languageRadio" required>English
-								</label>
-								<label class="btn btn-outline-secondary" for="languageSpanish">
-									<input type="radio" id="languageSpanish" value="spa" name="languageRadio" required>Spanish
-								</label>
-								<label class="btn btn-outline-secondary" for="languageArabic">
-									<input type="radio" id="languageArabic" value="ara" name="languageRadio" required>Arabic
-								</label>
-								<label class="btn btn-outline-secondary" for="languageVietnamese">
-									<input type="radio" id="languageVietnamese" value="vie" name="languageRadio" required>Vietnamese
 								</label>
 							</div>
 						</div>
