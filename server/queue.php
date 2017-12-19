@@ -17,13 +17,13 @@
 		LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 		JOIN Client ON Appointment.clientId = Client.clientId
 		WHERE DATE(Appointment.scheduledTime) = ?
+			AND Appointment.siteId = ?
 			AND Appointment.archived = FALSE
 		ORDER BY Appointment.scheduledTime ASC";
 
-	// TODO make this handle multiple locations, if necessary
 	$stmt = $conn->prepare($query);
 
-	$stmt->execute(array($_GET['displayDate']));
+	$stmt->execute(array($_GET['displayDate'], $_GET['siteId']));
 	$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 	foreach ($appointments as &$appointment) {
