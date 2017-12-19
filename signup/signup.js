@@ -20,7 +20,7 @@ $(document).ready(function() {
 	// associated input field
 	$(".form-textfield input").blur(function() {
 		var isBlank = $.trim($(this).val()).length > 0;
-		$label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
+		var $label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
 	});
 });
 
@@ -417,11 +417,6 @@ function conditionalFormFields() {
 	let animationTime = 300;
 
 	// All of the questions that required conditions to be viewed.
-	var homeBased = $("#homeBased");
-	var homeBasedNetLoss = $("#homeBasedNetLoss");
-	var homeBased10000 = $("#homeBased10000");
-	var homeBasedSEP = $("#homeBasedSEP");
-	var homeBasedEmployees = $("#homeBasedEmployees");
 	var studentUNL = $("#studentUNL");
 	var studentInt = $("#studentInt");
 	var studentIntVisa = $("#studentIntVisa");
@@ -432,34 +427,17 @@ function conditionalFormFields() {
 	var studentScholarAppointmentPicker = $("#studentScholarAppointmentPicker");
 
 	// All the radio buttons
-	var homeBasedValues = homeBased.find('input:radio[name="3"]');
-	var studentUNLValues = studentUNL.find('input:radio[name="15"]');
-	var studentIntValues = studentInt.find('input:radio[name="16"]');
-	var studentIntVisaValues = studentIntVisa.find('input:radio[name="17"]');
-	var studentf1Values = studentf1.find('input:radio[name="18"]');
-	var studentj1Values = studentj1.find('input:radio[name="18"]');
-	var studenth1bValues = studenth1b.find('input:radio[name="19"]');
+	var studentUNLValues = studentUNL.find('input:radio[name="1"]');
+	var studentIntValues = studentInt.find('input:radio[name="2"]');
+	var studentIntVisaValues = studentIntVisa.find('input:radio[name="3"]');
+	var studentf1Values = studentf1.find('input:radio[name="4"]');
+	var studentj1Values = studentj1.find('input:radio[name="4"]');
+	var studenth1bValues = studenth1b.find('input:radio[name="5"]');
 
 	// To help hide everything and selectively show content
-	var allUnderHomeBasedValues = homeBasedNetLoss.add(homeBased10000).add(homeBasedSEP).add(homeBasedEmployees);
 	var allUnderstudentIntVisaValues = studentf1.add(studentj1).add(studenth1b);
 	var allUnderStudentIntValues = studentIntVisa.add(allUnderstudentIntVisaValues)
 	var allUnderStudentUNLValues = studentInt.add(allUnderStudentIntValues).add(allUnderstudentIntVisaValues);
-
-	// Independent field = #homeBased
-	// Dependent field = if yes --> #homeBasedNetLoss,#homeBased10000,#homeBasedSEP,#homeBasedEmployees
-	homeBasedValues.change(function() {
-		var value = this.value;
-		if(this.checked){
-			if(value === "1"){
-				allUnderHomeBasedValues.slideUp(animationTime);
-				allUnderHomeBasedValues.slideDown(animationTime);
-				scrollDown(homeBased.height(), animationTime);
-			} else if(value === "2"){
-				allUnderHomeBasedValues.slideUp(animationTime);
-			}
-		}
-	});
 
 	// Independent field = #studentUNL
 	// Dependent field = if yes --> #studentInt
