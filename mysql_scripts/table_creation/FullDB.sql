@@ -52,6 +52,7 @@ CREATE TABLE Site (
 	appointmentOnly BOOLEAN NOT NULL DEFAULT FALSE,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
 	lastModifiedDate DATETIME,
+	archived BOOLEAN NOT NULL DEFAULT FALSE,
 	createdBy INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(createdBy) REFERENCES User(userId),
 	lastModifiedBy INTEGER UNSIGNED NOT NULL,
@@ -165,7 +166,8 @@ CREATE TABLE UserAbility (
 	userId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(userId) REFERENCES User(userId),
 	abilityId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(abilityId) REFERENCES Ability(abilityId)
+	FOREIGN KEY(abilityId) REFERENCES Ability(abilityId),
+	CONSTRAINT UNIQUE unique_ability (userId, abilityId)
 );
 
 CREATE TABLE Shift (
@@ -189,5 +191,6 @@ CREATE TABLE UserShift (
 	userId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(userId) REFERENCES User(userId),
 	shiftId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(shiftId) REFERENCES Shift(shiftId)
+	FOREIGN KEY(shiftId) REFERENCES Shift(shiftId),
+	CONSTRAINT UNIQUE unique_shift (userId, shiftId)
 );
