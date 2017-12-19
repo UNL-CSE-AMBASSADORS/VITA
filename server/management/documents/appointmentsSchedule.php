@@ -44,13 +44,14 @@ function executeAppointmentQuery($data) {
 	$query = "SELECT scheduledTime, firstName, lastName, Client.phoneNumber, emailAddress, appointmentId, Appointment.siteId, Site.title
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
-		JOIN Site ON Appointment.siteId = Site.siteId
-		WHERE DATE(Appointment.scheduledTime) = ?
+		JOIN AppointmentTime ON AppointmentTime.appointmentTimeId = Appointment.appointmentTimeId
+		JOIN Site ON AppointmentTime.siteId = Site.siteId
+		WHERE DATE(AppointmentTime.scheduledTime) = ?
 			AND Appointment.archived = FALSE";
 	if ($data['siteId'] != $ALL_SITES_ID) {
 		$query .= ' AND Appointment.siteId = ?';
 	}
-	$query .= ' ORDER BY Appointment.siteId ASC, Appointment.scheduledTime ASC';
+	$query .= ' ORDER BY AppointmentTime.siteId ASC, AppointmentTime.scheduledTime ASC';
 	$stmt = $DB_CONN->prepare($query);
 
 	$filterParams = array($data['date']);
