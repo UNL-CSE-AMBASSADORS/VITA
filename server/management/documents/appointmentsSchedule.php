@@ -41,7 +41,7 @@ function getAppointmentsScheduleExcelFile($data) {
 function executeAppointmentQuery($data) {
 	GLOBAL $DB_CONN, $ALL_SITES_ID;
 
-	$query = "SELECT scheduledTime, firstName, lastName, Client.phoneNumber, emailAddress, appointmentId, Appointment.siteId, Site.title
+	$query = "SELECT scheduledTime, firstName, lastName, Client.phoneNumber, emailAddress, appointmentId, AppointmentTime.siteId, Site.title
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
 		JOIN AppointmentTime ON AppointmentTime.appointmentTimeId = Appointment.appointmentTimeId
@@ -49,7 +49,7 @@ function executeAppointmentQuery($data) {
 		WHERE DATE(AppointmentTime.scheduledTime) = ?
 			AND Appointment.archived = FALSE";
 	if ($data['siteId'] != $ALL_SITES_ID) {
-		$query .= ' AND Appointment.siteId = ?';
+		$query .= ' AND AppointmentTime.siteId = ?';
 	}
 	$query .= ' ORDER BY AppointmentTime.siteId ASC, AppointmentTime.scheduledTime ASC';
 	$stmt = $DB_CONN->prepare($query);
