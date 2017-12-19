@@ -54,6 +54,9 @@
 			<?php endif; ?>
 			<?php if ($USER->isLoggedIn()): ?>
 				<li class="nav-item">
+					<a class="nav-link" href="/profile">Profile</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" onclick="logout()">Log out</a>
 				</li>
 				<script type="text/javascript">
