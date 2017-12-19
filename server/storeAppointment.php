@@ -56,10 +56,14 @@ function storeAppointment($data){
 			(
 				clientId,
 				scheduledTime,
-				siteId
+				siteId,
+				language,
+				ipAddress
 			)
 			VALUES
 			(
+				?,
+				?,
 				?,
 				?,
 				?
@@ -67,7 +71,9 @@ function storeAppointment($data){
 		$appointmentParams = array(
 			$clientId,
 			$data['scheduledTime'],
-			$data['siteId']
+			$data['siteId'],
+			$data['language'],
+			$_SERVER['REMOTE_ADDR']
 		);
 		$stmt = $DB_CONN->prepare($appointmentInsert);
 		if(!$stmt->execute($appointmentParams)){
