@@ -143,7 +143,7 @@ function updateSitesDatesAndTimes() {
 		for(const time in times) {
 			timeSelect.append($('<option>', {
 				value: time,
-				text : time,
+				text : time + (times[time] > 0 ? '' : ' - FULL'),
 				disabled: times[time] > 0 ? false : true
 			}));
 		}
