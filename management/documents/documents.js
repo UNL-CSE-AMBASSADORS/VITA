@@ -22,7 +22,7 @@ let getSelectedSiteId = function() {
 }
 
 let getSelectedDate = function() {
-	return document.getElementById("dateInput").value;	
+	return document.getElementById("dateInput").value;
 }
 
 let clickDownloadLink = function(url) {
