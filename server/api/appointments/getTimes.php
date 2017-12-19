@@ -1,8 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 'On');
-
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 require_once "$root/server/config.php";
 
@@ -24,7 +21,7 @@ function getAppointmentTimes($data) {
 	$stmt = $DB_CONN->prepare('SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, TIME(scheduledTime) AS scheduledTime, percentageAppointments, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, COUNT(DISTINCT us.userShiftId) AS numberOfVolunteers, apt.maximumNumberOfAppointments
 		FROM AppointmentTime apt
 		LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
-		LEFT JOIN UserShift us ON us.shiftId IN (SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId AND s.startTime <= apt.scheduledTime AND s.endTime >= apt.scheduledTime ORDER BY s.startTime DESC)
+		LEFT JOIN UserShift us ON us.shiftId IN (SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId AND s.startTime <= apt.scheduledTime AND s.endTime >= apt.scheduledTime)
 		LEFT JOIN Site s ON s.siteId = apt.siteId
 		WHERE YEAR(apt.scheduledTime) = ?
 		GROUP BY apt.appointmentTimeId
