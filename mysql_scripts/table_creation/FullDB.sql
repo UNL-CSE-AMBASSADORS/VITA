@@ -104,13 +104,13 @@ CREATE TABLE Answer (
 CREATE TABLE ServicedAppointment (
 	servicedAppointmentId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	timeIn DATETIME NULL DEFAULT NULL,
-	timeReturnedPapers DATETIME NULL DEFAULT NULL,
-	timeAppointmentStarted DATETIME NULL DEFAULT NULL,
-	timeAppointmentEnded DATETIME NULL DEFAULT NULL,
-	completed BOOLEAN NULL DEFAULT NULL,
-	notCompletedDescription VARCHAR(255) NULL DEFAULT NULL,
-	userId INTEGER UNSIGNED NULL,
-	FOREIGN KEY(userId) REFERENCES User(userId),
+    timeReturnedPapers DATETIME NULL DEFAULT NULL,
+    timeAppointmentStarted DATETIME NULL DEFAULT NULL,
+    timeAppointmentEnded DATETIME NULL DEFAULT NULL,
+    completed BOOLEAN NULL DEFAULT NULL,
+    notCompletedDescription VARCHAR(255) NULL DEFAULT NULL,
+	servicedBy INTEGER UNSIGNED NULL,
+	FOREIGN KEY(servicedBy) REFERENCES User(userId),
 	appointmentId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId)
 );

@@ -973,7 +973,7 @@ INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
 
 -- serviced appointment
 SET @timeIn = DATE_ADD((SELECT scheduledTime FROM AppointmentTime WHERE appointmentTimeId = (SELECT appointmentTimeId FROM Appointment WHERE appointmentId = @appointment_appointment5Id)), INTERVAL 5 MINUTE);
-INSERT INTO ServicedAppointment (timeIn, userId, appointmentId)
+INSERT INTO ServicedAppointment (timeIn, servicedBy, appointmentId)
 	VALUES (@timeIn, @user_preparer1Id, @appointment_appointment5Id);
 -- end serviced appointment
 
