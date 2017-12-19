@@ -63,10 +63,14 @@ INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
 
 
 
--- abilities
+-- Abilities
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Basic Certification", "basic_certification", "Has finished the basic certification requirements", TRUE);
+	VALUES ("Basic Certification", "basic_certification", "Has completed the basic certification requirements", TRUE);
 SET @ability_basicCertificationId = LAST_INSERT_ID();
+
+INSERT INTO Ability (name, lookupName, description, verificationRequired)
+	VALUES ("Advanced Certification", "advanced_certification", "Has completed the advanced certification requirements", TRUE);
+SET @ability_advancedCertificationId = LAST_INSERT_ID();
 
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("International Certification", "international_certification", "Has completed the international certification requirements", TRUE);
@@ -77,9 +81,21 @@ INSERT INTO Ability (name, lookupName, description, verificationRequired)
 SET @ability_militaryCertificationId = LAST_INSERT_ID();
 
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
+	VALUES ("Health Savings (HSA) Certification", "health_savings_certification", "Has completed the health savings (HSA) certification requirements", TRUE);
+SET @ability_healthSavingsCertificationId = LAST_INSERT_ID();
+
+INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Spanish-Speaking", "spanish_speaking", "Can speak fluent Spanish", FALSE);
 SET @ability_spanishSpeakingId = LAST_INSERT_ID();
--- end abilities
+
+INSERT INTO Ability (name, lookupName, description, verificationRequired)
+	VALUES ("Vietnamese-Speaking", "viatnamese_speaking", "Can speak fluent vietnamese", FALSE);
+SET @ability_vietnameseSpeakingId = LAST_INSERT_ID();
+
+INSERT INTO Ability (name, lookupName, description, verificationRequired)
+	VALUES ("Arabic-Speaking", "arabic_speaking", "Can speak fluent Arabic", FALSE);
+SET @ability_arabicSpeakingId = LAST_INSERT_ID();
+-- End Abilities
 
 
 
@@ -115,6 +131,10 @@ SET @permission_editUserPermissionId = LAST_INSERT_ID();
 INSERT INTO Permission (name, description, lookupName)
 	VALUES ("Use Admin Tools", "Can use administrative tools", "use_admin_tools");
 SET @permission_useAdminToolsId = LAST_INSERT_ID();
+
+INSERT INTO Permission (name, description, lookupName)
+	VALUES ("View All Client Information", "Can view all client information (full last name, email, phone number)", "view_client_information");
+SET @permission_viewClientInformationId = LAST_INSERT_ID();
 -- end permissions
 
 
@@ -131,6 +151,9 @@ INSERT INTO UserPermission (userId, permissionId, createdBy)
 
 INSERT INTO UserPermission (userId, permissionId, createdBy)
 	VALUES (@user_siteAdmin1Id, @permission_useAdminToolsId, @user_siteAdmin1Id);
+
+INSERT INTO UserPermission (userId, permissionId, createdBy)
+	VALUES (@user_siteAdmin1Id, @permission_viewClientInformationId, @user_siteAdmin1Id);
 -- end user permissions
 
 
@@ -147,11 +170,577 @@ SET @site_site2Id = LAST_INSERT_ID();
 INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
 	VALUES ("No walkins site", "9876 Test St. Lincoln, NE 29384", "555-999-8888", true, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_site3Id = LAST_INSERT_ID();
--- end site
+
+INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
+	VALUES ("Nebraska East Union", "Holdrege and 35th Streets", "402-472-6150", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+SET @site_nebraskaEastUnion = LAST_INSERT_ID();
+
+INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
+	VALUES ("Anderson Library", "3635 Touzalin Ave", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+SET @site_andersonLibrary = LAST_INSERT_ID();
+
+INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
+	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
+-- End Sites
+
+-- Shifts
+-- Sunday
+SET @shiftStartTime = "2018-01-21 13:00:00";
+SET @shiftEndTime = "2018-01-21 15:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-01-21 14:30:00";
+SET @shiftEndTime = "2018-01-21 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
 
 
+-- Monday
+SET @shiftStartTime = "2018-01-22 16:30:00";
+SET @shiftEndTime = "2018-01-22 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
 
--- shift
+SET @shiftStartTime = "2018-01-22 18:00:00";
+SET @shiftEndTime = "2018-01-22 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Tuesday
+SET @shiftStartTime = "2018-01-23 16:30:00";
+SET @shiftEndTime = "2018-01-23 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-01-23 18:00:00";
+SET @shiftEndTime = "2018-01-23 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Wednesday, NEU
+SET @shiftStartTime = "2018-01-24 16:30:00";
+SET @shiftEndTime = "2018-01-24 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-01-24 18:00:00";
+SET @shiftEndTime = "2018-01-24 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+-- Wednesday, AL
+SET @shiftStartTime = "2018-01-24 16:30:00";
+SET @shiftEndTime = "2018-01-24 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Saturday
+SET @shiftStartTime = "2018-01-27 09:30:00";
+SET @shiftEndTime = "2018-01-27 13:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-01-27 12:30:00";
+SET @shiftEndTime = "2018-01-27 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+-- Sunday
+SET @shiftStartTime = "2018-01-28 13:00:00";
+SET @shiftEndTime = "2018-01-28 15:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-01-28 14:30:00";
+SET @shiftEndTime = "2018-01-28 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Monday
+SET @shiftStartTime = "2018-01-29 16:30:00";
+SET @shiftEndTime = "2018-01-29 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-01-29 18:00:00";
+SET @shiftEndTime = "2018-01-29 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Tuesday, NEU
+SET @shiftStartTime = "2018-01-30 16:30:00";
+SET @shiftEndTime = "2018-01-30 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-01-30 18:00:00";
+SET @shiftEndTime = "2018-01-30 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+-- Tuesday, AL
+SET @shiftStartTime = "2018-01-30 16:30:00";
+SET @shiftEndTime = "2018-01-30 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Wednesday, NEU
+SET @shiftStartTime = "2018-01-31 16:30:00";
+SET @shiftEndTime = "2018-01-31 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-01-31 18:00:00";
+SET @shiftEndTime = "2018-01-31 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+-- Wednesday, AL
+SET @shiftStartTime = "2018-01-31 16:30:00";
+SET @shiftEndTime = "2018-01-31 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Saturday
+SET @shiftStartTime = "2018-02-03 09:30:00";
+SET @shiftEndTime = "2018-02-03 13:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-03 12:30:00";
+SET @shiftEndTime = "2018-02-03 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Sunday 
+SET @shiftStartTime = "2018-02-04 13:00:00";
+SET @shiftEndTime = "2018-02-04 15:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-04 14:30:00";
+SET @shiftEndTime = "2018-02-04 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Monday
+SET @shiftStartTime = "2018-02-05 16:30:00";
+SET @shiftEndTime = "2018-02-05 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-05 18:00:00";
+SET @shiftEndTime = "2018-02-05 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Tuesday, NEU
+SET @shiftStartTime = "2018-02-06 16:30:00";
+SET @shiftEndTime = "2018-02-06 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-06 18:00:00";
+SET @shiftEndTime = "2018-02-06 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+-- Tuesday, AL
+SET @shiftStartTime = "2018-02-06 16:30:00";
+SET @shiftEndTime = "2018-02-06 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Wednesday, NEU
+SET @shiftStartTime = "2018-02-07 16:30:00";
+SET @shiftEndTime = "2018-02-07 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-07 18:00:00";
+SET @shiftEndTime = "2018-02-07 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+-- Wednesday, AL
+SET @shiftStartTime = "2018-02-07 16:30:00";
+SET @shiftEndTime = "2018-02-07 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Saturday
+SET @shiftStartTime = "2018-02-10 09:30:00";
+SET @shiftEndTime = "2018-02-10 13:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-10 12:30:00";
+SET @shiftEndTime = "2018-02-10 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Sunday
+SET @shiftStartTime = "2018-02-11 13:00:00";
+SET @shiftEndTime = "2018-02-11 15:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-11 14:30:00";
+SET @shiftEndTime = "2018-02-11 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Monday
+SET @shiftStartTime = "2018-02-12 16:30:00";
+SET @shiftEndTime = "2018-02-12 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-12 18:00:00";
+SET @shiftEndTime = "2018-02-12 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Tuesday, NEU
+SET @shiftStartTime = "2018-02-13 16:30:00";
+SET @shiftEndTime = "2018-02-13 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-13 18:00:00";
+SET @shiftEndTime = "2018-02-13 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+-- Tuesday, AL
+SET @shiftStartTime = "2018-02-13 16:30:00";
+SET @shiftEndTime = "2018-02-13 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Wednesday, NEU
+SET @shiftStartTime = "2018-02-14 16:30:00";
+SET @shiftEndTime = "2018-02-14 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-14 18:00:00";
+SET @shiftEndTime = "2018-02-14 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+-- Wednesday, AL
+SET @shiftStartTime = "2018-02-14 16:30:00";
+SET @shiftEndTime = "2018-02-14 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Saturday
+SET @shiftStartTime = "2018-02-17 09:30:00";
+SET @shiftEndTime = "2018-02-17 13:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-17 12:30:00";
+SET @shiftEndTime = "2018-02-17 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Sunday
+SET @shiftStartTime = "2018-02-18 13:00:00";
+SET @shiftEndTime = "2018-02-18 15:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-18 14:30:00";
+SET @shiftEndTime = "2018-02-18 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Monday
+SET @shiftStartTime = "2018-02-19 16:30:00";
+SET @shiftEndTime = "2018-02-19 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-19 18:00:00";
+SET @shiftEndTime = "2018-02-19 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Tuesday, NEU
+SET @shiftStartTime = "2018-02-20 16:30:00";
+SET @shiftEndTime = "2018-02-20 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-20 18:00:00";
+SET @shiftEndTime = "2018-02-20 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+-- Tuesday, AL
+SET @shiftStartTime = "2018-02-20 16:30:00";
+SET @shiftEndTime = "2018-02-20 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Wednesday, NEU
+SET @shiftStartTime = "2018-02-21 16:30:00";
+SET @shiftEndTime = "2018-02-21 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-21 18:00:00";
+SET @shiftEndTime = "2018-02-21 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+-- Wednesday, AL
+SET @shiftStartTime = "2018-02-21 16:30:00";
+SET @shiftEndTime = "2018-02-21 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Saturday
+SET @shiftStartTime = "2018-02-24 09:30:00";
+SET @shiftEndTime = "2018-02-24 13:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-24 12:30:00";
+SET @shiftEndTime = "2018-02-24 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Sunday
+SET @shiftStartTime = "2018-02-25 13:00:00";
+SET @shiftEndTime = "2018-02-25 15:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-25 14:30:00";
+SET @shiftEndTime = "2018-02-25 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Monday
+SET @shiftStartTime = "2018-02-26 16:30:00";
+SET @shiftEndTime = "2018-02-26 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-26 18:00:00";
+SET @shiftEndTime = "2018-02-26 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Tuesday, NEU
+SET @shiftStartTime = "2018-02-27 16:30:00";
+SET @shiftEndTime = "2018-02-27 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-27 18:00:00";
+SET @shiftEndTime = "2018-02-27 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+-- Tuesday, AL
+SET @shiftStartTime = "2018-02-27 16:30:00";
+SET @shiftEndTime = "2018-02-27 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Wednesday, NEU
+SET @shiftStartTime = "2018-02-28 16:30:00";
+SET @shiftEndTime = "2018-02-28 18:30:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-02-28 18:00:00";
+SET @shiftEndTime = "2018-02-28 20:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+-- Wednesday, AL
+SET @shiftStartTime = "2018-02-28 16:30:00";
+SET @shiftEndTime = "2018-02-28 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Saturday
+SET @shiftStartTime = "2018-03-03 09:30:00";
+SET @shiftEndTime = "2018-03-03 13:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-03-03 12:30:00";
+SET @shiftEndTime = "2018-03-03 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Sunday
+SET @shiftStartTime = "2018-03-04 13:00:00";
+SET @shiftEndTime = "2018-03-04 15:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-03-04 14:30:00";
+SET @shiftEndTime = "2018-03-04 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Tuesday
+SET @shiftStartTime = "2018-03-06 16:30:00";
+SET @shiftEndTime = "2018-03-06 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Wednesday
+SET @shiftStartTime = "2018-03-07 16:30:00";
+SET @shiftEndTime = "2018-03-07 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Saturday
+SET @shiftStartTime = "2018-03-10 09:30:00";
+SET @shiftEndTime = "2018-03-10 13:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-03-10 12:30:00";
+SET @shiftEndTime = "2018-03-10 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_nebraskaEastUnion, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Sunday
+SET @shiftStartTime = "2018-03-11 13:00:00";
+SET @shiftEndTime = "2018-03-11 15:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-03-11 14:30:00";
+SET @shiftEndTime = "2018-03-11 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Tuesday
+SET @shiftStartTime = "2018-03-13 16:30:00";
+SET @shiftEndTime = "2018-03-13 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Wednesday
+SET @shiftStartTime = "2018-03-14 16:30:00";
+SET @shiftEndTime = "2018-03-14 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Tuesday
+SET @shiftStartTime = "2018-03-20 16:30:00";
+SET @shiftEndTime = "2018-03-20 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Wednesday
+SET @shiftStartTime = "2018-03-21 16:30:00";
+SET @shiftEndTime = "2018-03-21 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Tuesday
+SET @shiftStartTime = "2018-03-27 16:30:00";
+SET @shiftEndTime = "2018-03-27 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Wednesday
+SET @shiftStartTime = "2018-03-28 16:30:00";
+SET @shiftEndTime = "2018-03-28 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Sunday
+SET @shiftStartTime = "2018-04-01 13:00:00";
+SET @shiftEndTime = "2018-04-01 15:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-04-01 14:30:00";
+SET @shiftEndTime = "2018-04-01 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Tuesday
+SET @shiftStartTime = "2018-04-03 16:30:00";
+SET @shiftEndTime = "2018-04-03 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Wednesday
+SET @shiftStartTime = "2018-04-04 16:30:00";
+SET @shiftEndTime = "2018-04-04 19:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Sunday
+SET @shiftStartTime = "2018-04-08 13:00:00";
+SET @shiftEndTime = "2018-04-08 15:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+SET @shiftStartTime = "2018-04-08 14:30:00";
+SET @shiftEndTime = "2018-04-08 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+
+
+-- Other test data shifts
 SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 HOUR);
 SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 1 HOUR);
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
@@ -342,42 +931,42 @@ SET @appointmentTime_site2AppointmentTime9Id = LAST_INSERT_ID();
 
 
 -- appointment
-INSERT INTO Appointment (appointmentTimeId, clientId, language)
-	VALUES (@appointmentTime_site1Shift1Time0, @client_client1Id, "en");
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site1Shift1Time0, @client_client1Id, "eng", "localhost");
 SET @appointment_appointment1Id = LAST_INSERT_ID();
 
-INSERT INTO Appointment (appointmentTimeId, clientId, language)
-	VALUES (@appointmentTime_site1Shift2Time0, @client_client2Id, "en");
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site1Shift2Time0, @client_client2Id, "eng", "localhost");
 
-INSERT INTO Appointment (appointmentTimeId, clientId, language)
-	VALUES (@appointmentTime_site1Shift2Time2, @client_client2Id, "sp");
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site1Shift2Time2, @client_client2Id, "spa", "localhost");
 SET @appointment_appointment2Id = LAST_INSERT_ID();
 
-INSERT INTO Appointment (appointmentTimeId, clientId, language)
-	VALUES (@appointmentTime_site2Shift1Time3, @client_client3Id, "en");
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site2Shift1Time3, @client_client3Id, "eng", "localhost");
 SET @appointment_appointment3Id = LAST_INSERT_ID();
 
-INSERT INTO Appointment (appointmentTimeId, clientId, language)
-	VALUES (@appointmentTime_site2Shift2Time1, @client_client4Id, "vi");
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site2Shift2Time1, @client_client4Id, "vie", "localhost");
 SET @appointment_appointment4Id = LAST_INSERT_ID();
 
 -- Already serviced appointment
-INSERT INTO Appointment (appointmentTimeId, clientId, language)
-	VALUES (@appointmentTime_site2AppointmentTime5Id, @client_client5Id, "en");
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site2AppointmentTime5Id, @client_client5Id, "eng", "localhost");
 SET @appointment_appointment5Id = LAST_INSERT_ID();
 
 -- Appointments for today (note that this is just for testing queue functionality)
-INSERT INTO Appointment (appointmentTimeId, clientId, language)
-	VALUES (@appointmentTime_site1AppointmentTime6Id, @client_client1Id, "en");
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site1AppointmentTime6Id, @client_client1Id, "eng", "localhost");
 
-INSERT INTO Appointment (appointmentTimeId, clientId, language)
-	VALUES (@appointmentTime_site1AppointmentTime7Id, @client_client1Id, "en");
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site1AppointmentTime7Id, @client_client1Id, "eng", "localhost");
 
-INSERT INTO Appointment (appointmentTimeId, clientId, language)
-	VALUES (@appointmentTime_site1AppointmentTime8Id, @client_client2Id, "en");
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site1AppointmentTime8Id, @client_client2Id, "eng", "localhost");
 
-INSERT INTO Appointment (appointmentTimeId, clientId, language)
-	VALUES (@appointmentTime_site2AppointmentTime9Id, @client_client3Id, "en");
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site2AppointmentTime9Id, @client_client3Id, "eng", "localhost");
 -- end appointment
 
 
@@ -392,80 +981,24 @@ INSERT INTO ServicedAppointment (timeIn, userId, appointmentId)
 
 -- questions
 INSERT INTO Question (text, lookupName)
-	VALUES ("Will you require a Depreciation Schedule?", "depreciation_schedule");
+	VALUES ("Are you a University of Nebraska - Lincoln student?", "unl_student");
 SET @question_question1Id = LAST_INSERT_ID();
 
 INSERT INTO Question (text, lookupName)
-	VALUES ("Will you require a Schedule F (Farm)?", "schedule_f");
+	VALUES ("Are you an International Student Scholar?", "international_student_scholar");
 SET @question_question2Id = LAST_INSERT_ID();
 
 INSERT INTO Question (text, lookupName)
-	VALUES ("Are you self-employed or own a home-based business?", "self_employed");
+	VALUES ("What sort of visa are you on?", "visa");
 SET @question_question3Id = LAST_INSERT_ID();
 
 INSERT INTO Question (text, lookupName)
-	VALUES ("Does your home-based business or self-employment have a net loss?", "net_loss");
+	VALUES ("How long have you been in the United States?", "duration_in_united_states");
 SET @question_question4Id = LAST_INSERT_ID();
 
 INSERT INTO Question (text, lookupName)
-	VALUES ("Does your home-based business or self-employment have more than $10,000 in expenses?", "more_than_10000_expenses");
-SET @question_question5Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Does your home-based business or self-employment have self-employed, SEP, SIMPLE, or qualified retirement plans", "retirement_plans");
-SET @question_question6Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Does your home-based business or self-employment have employees?", "any_employees");
-SET @question_question7Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Will your return have casualty losses?", "casualty_losses");
-SET @question_question8Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Will your return have theft losses?", "theft_losses");
-SET @question_question9Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Will you require a Schedule E (rental income)?", "schedule_e");
-SET @question_question10Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Will you require a Schedule K-1 (partnership or trust income)", "schedule_k-1");
-SET @question_question11Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Do you have income from dividends, capital gains, or minimal brokerage transactions?", "dividends_income");
-SET @question_question12Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Will your return involve a current bankruptcy?", "current_bankruptcy");
-SET @question_question13Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Will your return involve income from more than one state?", "multiple_states");
-SET @question_question14Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Are you a University of Nebraska - Lincoln student?", "unl_student");
-SET @question_question15Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("Are you an International Student Scholar?", "international_student_scholar");
-SET @question_question16Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("What sort of visa are you on?", "visa");
-SET @question_question17Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
-	VALUES ("How long have you been in the United States?", "duration_in_united_states");
-SET @question_question18Id = LAST_INSERT_ID();
-
-INSERT INTO Question (text, lookupName)
 	VALUES ("Have you been on this visa for less than 183 days and in the United States for less than five years (after 2012)?", "visa_less_than_183_days");
-SET @question_question19Id = LAST_INSERT_ID();
+SET @question_question5Id = LAST_INSERT_ID();
 -- end question
 
 
@@ -520,44 +1053,23 @@ INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
 	VALUES (@possibleAnswer_noId, @appointment_appointment1Id, @question_question2Id);
-	
-INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_noId, @appointment_appointment1Id, @question_question3Id);
-	
-INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_noId, @appointment_appointment1Id, @question_question6Id);
 
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
 	VALUES (@possibleAnswer_noId, @appointment_appointment2Id, @question_question1Id);
 
-INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_yesId, @appointment_appointment2Id, @question_question2Id);
-	
-INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_yesId, @appointment_appointment2Id, @question_question3Id);
-	
-INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_noId, @appointment_appointment2Id, @question_question4Id);
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_noId, @appointment_appointment2Id, @question_question5Id);
+	VALUES (@possibleAnswer_yesId, @appointment_appointment3Id, @question_question1Id);
 	
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_noId, @appointment_appointment2Id, @question_question6Id);
-	
-
-INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_noId, @appointment_appointment3Id, @question_question1Id);
+	VALUES (@possibleAnswer_yesId, @appointment_appointment3Id, @question_question2Id);
 	
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_noId, @appointment_appointment3Id, @question_question2Id);
+	VALUES (@possibleAnswer_f1Id, @appointment_appointment3Id, @question_question3Id);
 	
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_noId, @appointment_appointment3Id, @question_question3Id);
-	
-INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_noId, @appointment_appointment3Id, @question_question6Id);
+	VALUES (@possibleAnswer_2011OrEarlierId, @appointment_appointment3Id, @question_question4Id);
 	
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
@@ -567,10 +1079,10 @@ INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
 	VALUES (@possibleAnswer_yesId, @appointment_appointment4Id, @question_question2Id);
 	
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_noId, @appointment_appointment4Id, @question_question3Id);
+	VALUES (@possibleAnswer_j1Id, @appointment_appointment4Id, @question_question3Id);
 	
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_yesId, @appointment_appointment4Id, @question_question6Id);
+	VALUES (@possibleAnswer_2015OrLaterId, @appointment_appointment4Id, @question_question4Id);
 -- end answer
 
 
@@ -599,8 +1111,8 @@ BEGIN
 
 		-- create appointment
 		SET @appointmentTimeIdForThisAppointment = @min + ROUND(RAND() * (@max - @min));
-		INSERT INTO Appointment (appointmentTimeId, clientId, language)
-			VALUES (@appointmentTimeIdForThisAppointment, @clientIdForThisAppointment, "en");
+		INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+			VALUES (@appointmentTimeIdForThisAppointment, @clientIdForThisAppointment, "eng", "localhost");
 		SET i = i + 1;
 	END WHILE;
 	COMMIT;

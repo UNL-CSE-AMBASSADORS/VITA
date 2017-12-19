@@ -34,14 +34,14 @@
 
 				<div class="queue" ng-if="appointments.length > 0" ng-cloak>
 					<div class="row queue-row py-1 pointer"
-							 ng-repeat="appointment in appointments | orderBy:'scheduledTime' | searchFor: clientSearch"
+							 ng-repeat="appointment in appointments | orderBy:['timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime'] | searchFor: clientSearch"
 							 ng-if="appointment.completed == null"
 							 ng-class-odd="'bg-light'"
 							 ng-click="selectClient(appointment)">
 						<div class="col">
 							<div class="d-flex flex-column">
 								<div class="d-flex flex-nowrap justify-content-between">
-									<div class="queue-name font-weight-bold">{{appointment.firstName}} {{appointment.lastName}}.</div>
+									<div class="queue-name font-weight-bold">{{appointment.firstName}} {{appointment.lastName}}</div>
 									<div class="queue-time">{{appointment.scheduledTime | date: "h:mm a"}}</div>
 								</div>
 								<div class="d-flex flex-nowrap justify-content-between">
@@ -73,11 +73,16 @@
 			<div class="client-info-section container-fluid d-flex py-3">
 				<!-- Currently selected client -->
 				<div class="client align-items-start w-100" ng-if="client != null" ng-cloak>
-						<div class="client-name">{{client.firstName}} {{client.lastName}}.</div>
-						<div class="client-time">Scheduled Appointment Time: {{client.scheduledTime | date: "h:mm a"}}</div>
-
-						<!-- The following are a couple of options for client progress/"workflow" -->
-
+					<div class="mb-3">
+						<div class="client-name">{{client.firstName}} {{client.lastName}}</div>
+						<div class="client-time"><b>Scheduled Appointment Time: </b>{{client.scheduledTime | date: "h:mm a"}}</div>
+						<div class="client-email" ng-if="client.emailAddress != null" ng-cloak>
+							<span><b>Email:</b> {{client.emailAddress}}</span>
+						</div>
+						<div class="client-phoneNumber" ng-if="client.phoneNumber != null" ng-cloak>
+							<span><b>Phone Number:</b> {{client.phoneNumber}}</span>
+						</div>
+					</div>
 
 						<div class="client-progress d-flex flex-column">
 							<button type="button" class="btn" class="checkin" ng-disabled="client.checkedIn" ng-class="client.checkedIn ? 'btn-primary': 'btn-secondary' " ng-click="checkIn()">Checked In</button>
@@ -93,7 +98,7 @@
 							<br>
 							<strong>INSTRUCTIONS:</strong>
 							<br>
-							Once a client has completed a step, click on the corresponding button. This will log the time at which each step is completed. PROGRESS CAN NOT BE UNDONE, so
+							Once a client has completed a step, click on the corresponding button. This will log the time at which each step is completed. PROGRESS CANNOT BE UNDONE, so
 							be sure to verify that the step is fully completed before clicking to progress the client. If, for any reason, a client does not complete their appointment,
 							fill out the form below and explain (in 255 characters or less) why the appointment was not completed. Appointments will disappear shortly after being marked
 							complete or incomplete.
@@ -111,7 +116,7 @@
 						 	</form>
 							<button class="btn btn-danger" ng-disabled="client.checkedIn" ng-click="cancelledAppointment()">Submit Cancelled Appointment</button>
 						</div>
-						<div class="client-appointmentId mt-auto">Appointment ID: {{client.appointmentId}}</div>
+						<div class="client-appointmentId my-2"><b>Appointment ID: </b>{{client.appointmentId}}</div>
 				</div>
 				<!-- Default message if no appointment is selected -->
 				<div class="client d-flex justify-content-center w-100" ng-if="client == null" ng-cloak>

@@ -558,7 +558,7 @@ SET @shiftEndTime = "2018-04-01 15:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @userId, @userId);
 
-SET @shiftStartTime = "2018-04-01 12:30:00";
+SET @shiftStartTime = "2018-04-01 14:30:00";
 SET @shiftEndTime = "2018-04-01 16:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @userId, @userId);
@@ -584,7 +584,7 @@ SET @shiftEndTime = "2018-04-08 15:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @userId, @userId);
 
-SET @shiftStartTime = "2018-04-08 12:30:00";
+SET @shiftStartTime = "2018-04-08 14:30:00";
 SET @shiftEndTime = "2018-04-08 16:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @userId, @userId);
@@ -632,6 +632,10 @@ SET @permission_editUserPermissionId = LAST_INSERT_ID();
 INSERT INTO Permission (name, description, lookupName)
 	VALUES ("Use Admin Tools", "Can use administrative tools", "use_admin_tools");
 SET @permission_useAdminToolsId = LAST_INSERT_ID();
+
+INSERT INTO Permission (name, description, lookupName)
+	VALUES ("View All Client Information", "Can view all client information (full last name, email, phone number)", "view_client_information");
+SET @permission_viewClientInformationId = LAST_INSERT_ID();
 -- End Permissions
 
 

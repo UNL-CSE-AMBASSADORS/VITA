@@ -3,26 +3,35 @@
 	require_once "$root/server/config.php";
 	require_once "$root/server/user.class.php";
 	$conn = $DB_CONN;
+	$USER = new User();
 
-	// TODO make this handle multiple locations, if necessary
-	$stmt = $conn->prepare("SELECT Appointment.appointmentId, scheduledTime,
+	$canViewClientInformation = $USER->isLoggedIn() && $USER->hasPermission('view_client_information');
+
+	$query = "SELECT Appointment.appointmentId, scheduledTime,
 		firstName, lastName, timeIn, timeReturnedPapers,
-		timeAppointmentStarted, timeAppointmentEnded, completed
-		FROM Appointment
+		timeAppointmentStarted, timeAppointmentEnded, completed ";
+	if ($canViewClientInformation) {
+		$query .= ", phoneNumber, emailAddress ";
+	}
+	$query .= "FROM Appointment
 		LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 		JOIN Client ON Appointment.clientId = Client.clientId
 		JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 		WHERE DATE(AppointmentTime.scheduledTime) = ?
+			AND AppointmentTime.siteId = ?
 			AND Appointment.archived = FALSE
-		ORDER BY AppointmentTime.scheduledTime ASC");
+		ORDER BY AppointmentTime.scheduledTime ASC";
 
-	$stmt->execute(array($_GET['displayDate']));
+	$stmt = $conn->prepare($query);
+
+	$stmt->execute(array($_GET['displayDate'], $_GET['siteId']));
 	$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-	// We must only display the first letter of the last name
-	// We do this server-side since we can't disclose the data client-side
 	foreach ($appointments as &$appointment) {
-		$appointment['lastName'] = substr($appointment['lastName'], 0, 1);
+		// Shorten last name to only the initial if user doesn't have permission to view entire last name
+		if (!$canViewClientInformation) {
+			$appointment['lastName'] = substr($appointment['lastName'], 0, 1).'.'; // concat period since this is a last initial
+		}
 	}
 
 	echo json_encode($appointments);
