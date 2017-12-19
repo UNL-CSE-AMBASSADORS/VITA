@@ -18,7 +18,7 @@ function getAppointmentTimes($data) {
 		$year = $data['year'];
 	}
 
-	$stmt = $DB_CONN->prepare('SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, TIME(scheduledTime) AS scheduledTime, percentageAppointments, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, COUNT(DISTINCT us.userShiftId) AS numberOfVolunteers, apt.maximumNumberOfAppointments
+	$stmt = $DB_CONN->prepare('SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, TIME(scheduledTime) AS scheduledTime, percentageAppointments, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, COUNT(DISTINCT us.userShiftId) AS numberOfVolunteers, apt.minimumNumberOfAppointments, apt.maximumNumberOfAppointments
 		FROM AppointmentTime apt
 		LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
 		LEFT JOIN UserShift us ON us.shiftId IN (SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId AND s.startTime <= apt.scheduledTime AND s.endTime >= apt.scheduledTime)
@@ -40,11 +40,11 @@ function getAppointmentTimes($data) {
 	echo json_encode($dstMap);
 }
 
-function calculateRemainingAppointmentsAvailable($appointmentCount, $percentAppointments, $volunteerCount, $maximum) {
+function calculateRemainingAppointmentsAvailable($appointmentCount, $percentAppointments, $volunteerCount, $minimum, $maximum) {
 	if (isset($maximum)) {
 		$availableAppointmentSpots = $maximum;
 	} else {
-		$availableAppointmentSpots = $volunteerCount;
+		$availableAppointmentSpots = max($minimum, $volunteerCount);
 	}
 	$availableAppointmentSpots *= $percentAppointments / 100;
 	if ($appointmentCount < $availableAppointmentSpots) {
@@ -58,7 +58,7 @@ class DateSiteTimeMap {
 
 	public function addDateSiteTimeObject($dstObject) {
 		// Get the number of appointments still available
-		$appointmentsAvailable = calculateRemainingAppointmentsAvailable($dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['percentageAppointments'], $dstObject['numberOfVolunteers'], $dstObject['maximumNumberOfAppointments']);
+		$appointmentsAvailable = calculateRemainingAppointmentsAvailable($dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['percentageAppointments'], $dstObject['numberOfVolunteers'], $dstObject['minimumNumberOfAppointments'], $dstObject['maximumNumberOfAppointments']);
 
 		// Reformat the time to be h:i MM
 		$time = date_format(date_create($dstObject['scheduledTime']), 'g:i A');
