@@ -41,7 +41,7 @@ function getAppointmentsScheduleExcelFile($data) {
 function executeAppointmentQuery($data) {
 	GLOBAL $DB_CONN, $ALL_SITES_ID;
 
-	$query = "SELECT scheduledTime, firstName, lastName, Client.phoneNumber, emailAddress, appointmentId, AppointmentTime.siteId, Site.title
+	$query = "SELECT TIME_FORMAT(scheduledTime, '%l:%i %p') AS scheduledTime, firstName, lastName, Client.phoneNumber, emailAddress, appointmentId, AppointmentTime.siteId, Site.title
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
 		JOIN AppointmentTime ON AppointmentTime.appointmentTimeId = Appointment.appointmentTimeId
