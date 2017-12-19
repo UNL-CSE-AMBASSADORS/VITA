@@ -1,6 +1,6 @@
 queueApp.factory("QueueService", function($http){
 	return {
-		getAppointments: function(date){
+		getAppointments: function(date, siteId){
 			return $http.get(`/server/queue/queue.php?displayDate=${date}&siteId=${siteId}`).then(function(response){
 				return response.data;
 			},function(error){

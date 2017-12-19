@@ -37,8 +37,6 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 			return;
 		}
 
-		console.log($scope.client.selectedVolunteer.userId);
-
 		$scope.client.ended = true;
 		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId, $scope.client.selectedVolunteer.userId);
 	};
@@ -58,9 +56,12 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 	$scope.getVolunteers = function() {
 		let year = $scope.currentDate.getFullYear(),
 		month = $scope.currentDate.getMonth() + 1,
-		day = $scope.currentDate.getDate(),
-		siteId = 1; // TODO THIS NEEDS TO BE CHANGED TO THE SITE SELECTED ONCE THAT IS IMPLEMENTED
+		day = $scope.currentDate.getDate();
 		if (month < 10) month = "0" + month;
+
+		if ($scope.selectedSite == null || $scope.selectedSite.siteId == null) return;
+		let siteId = $scope.selectedSite.siteId;
+		
 		QueueService.getVolunteers(year + "-" + month + "-" + day, siteId).then(function(data) {
 			if(data == null) {
 				console.log('server error');
