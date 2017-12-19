@@ -16,10 +16,11 @@
 	$query .= "FROM Appointment
 		LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 		JOIN Client ON Appointment.clientId = Client.clientId
-		WHERE DATE(Appointment.scheduledTime) = ?
-			AND Appointment.siteId = ?
+		JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+		WHERE DATE(AppointmentTime.scheduledTime) = ?
+			AND AppointmentTime.siteId = ?
 			AND Appointment.archived = FALSE
-		ORDER BY Appointment.scheduledTime ASC";
+		ORDER BY AppointmentTime.scheduledTime ASC";
 
 	$stmt = $conn->prepare($query);
 
