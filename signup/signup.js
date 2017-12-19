@@ -119,10 +119,10 @@ function updateSitesDatesAndTimes() {
 		dateSitesTimes.updateGlobalSites(date);
 		siteSelect.append($('<option disabled selected value="" style="display:none"> -- select an option -- </option>'));
 		for(let site in sites) {
+			if (!sites[site]["hasTimeSlotsRemaining"]) continue;
 			siteSelect.append($('<option>', {
 				value: sites[site]["siteId"],
-				text : sites[site]["title"],
-				disabled: sites[site]["hasTimeSlotsRemaining"] ? false : true
+				text : sites[site]["title"]
 			}));
 		}
 	});
