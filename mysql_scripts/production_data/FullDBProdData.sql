@@ -137,23 +137,23 @@ SET @shiftEndTime = "2018-01-24 19:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @userId, @userId);
 
-SET @scheduledTime = "2018-01-24 16:30:00"
+SET @scheduledTime = "2018-01-24 16:30:00";
 INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 3, 3, @site_andersonLibrary);
 
-SET @scheduledTime = "2018-01-24 17:00:00"
+SET @scheduledTime = "2018-01-24 17:00:00";
 INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 3, 3, @site_andersonLibrary);
 
-SET @scheduledTime = "2018-01-24 17:30:00"
+SET @scheduledTime = "2018-01-24 17:30:00";
 INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 3, 3, @site_andersonLibrary);
 
-SET @scheduledTime = "2018-01-24 18:00:00"
+SET @scheduledTime = "2018-01-24 18:00:00";
 INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 3, 3, @site_andersonLibrary);
 
-SET @scheduledTime = "2018-01-24 18:30:00"
+SET @scheduledTime = "2018-01-24 18:30:00";
 INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 3, 3, @site_andersonLibrary);
 
