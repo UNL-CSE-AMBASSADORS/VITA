@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html class="no-js theme-light" lang="" ng-app="queueApp">
 <head>
-	<title>Queue Test</title>
+	<title>Queue</title>
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="/queue/queue.css">
 	<link rel="stylesheet" href="/queue/queue_private.css">
@@ -90,6 +90,10 @@
 							<button type="button" class="btn" class="paperworkComplete" ng-disabled="!client.checkedIn" ng-class="client.paperworkComplete ? 'btn-primary': 'btn-secondary' " ng-click="pwFilledOut()">Completed Paperwork</button>
 						</br>
 							<button type="button" class="btn" class="preparing" ng-disabled="!client.paperworkComplete" ng-class="client.preparing ? 'btn-primary': 'btn-secondary' " ng-click="nowPreparing()">Preparing</button>
+						</br>
+							<select ng-disabled="!client.preparing" ng-model="client.selectedVolunteer" ng-options="volunteer.name for volunteer in volunteers track by volunteer.userId">
+								<option value="" style="display:none;">-- Select Preparer --</option>
+							</select>
 						</br>
 							<button type="button" class="btn" class="ended" ng-disabled="!client.preparing" ng-class="client.ended ? 'btn-primary': 'btn-secondary' " ng-click="completeAppointment()">Finished</button>
 						</div>
