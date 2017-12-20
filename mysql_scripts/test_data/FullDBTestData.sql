@@ -73,8 +73,8 @@ INSERT INTO Ability (name, lookupName, description, verificationRequired)
 SET @ability_advancedCertificationId = LAST_INSERT_ID();
 
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("International Certification", "international_certification", "Has completed the international certification requirements", TRUE);
-SET @ability_internationalCertificationId = LAST_INSERT_ID();
+	VALUES ("Worldwide Income Certification", "worldwide_income_certification", "Has completed the worldwide income certification requirements", TRUE);
+SET @ability_worldwideIncomeCertificationId = LAST_INSERT_ID();
 
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Military Certification", "military_certification", "Has completed the military certification requirements", TRUE);
@@ -95,6 +95,9 @@ SET @ability_vietnameseSpeakingId = LAST_INSERT_ID();
 INSERT INTO Ability (name, lookupName, description, verificationRequired)
 	VALUES ("Arabic-Speaking", "arabic_speaking", "Can speak fluent Arabic", FALSE);
 SET @ability_arabicSpeakingId = LAST_INSERT_ID();
+
+INSERT INTO Ability (name, lookupName, description, verificationRequired)
+	VALUES ("Foreign Student Scholar Certification", "foreign_student_scholar_certification", "Has complete the foreign student scholar certification requirements", TRUE);
 -- End Abilities
 
 
@@ -104,7 +107,7 @@ INSERT INTO UserAbility (userId, abilityId, createdBy)
 	VALUES (@user_preparer1Id, @ability_basicCertificationId, @user_siteAdmin1Id);
 
 INSERT INTO UserAbility (userId, abilityId, createdBy)
-	VALUES (@user_preparer1Id, @ability_internationalCertificationId, @user_siteAdmin1Id);
+	VALUES (@user_preparer1Id, @ability_worldwideIncomeCertificationId, @user_siteAdmin1Id);
 
 INSERT INTO UserAbility (userId, abilityId, createdBy)
 	VALUES (@user_preparer2Id, @ability_basicCertificationId, @user_siteAdmin1Id);
@@ -116,14 +119,6 @@ INSERT INTO UserAbility (userId, abilityId, createdBy)
 
 
 -- permissions
-INSERT INTO Permission (name, description, lookupName)
-	VALUES ("Add Site", "Can create a new VITA site on the add site page", "add_site");
-SET @permission_addSiteId = LAST_INSERT_ID();
-
-INSERT INTO Permission (name, description, lookupName)
-	VALUES ("Edit Site Information", "Can edit the information associated with sites", "edit_site_information");
-SET @permission_editSiteInformationId = LAST_INSERT_ID();
-
 INSERT INTO Permission (name, description, lookupName)
 	VALUES ("Edit Permissions", "Can edit user permissions", "edit_user_permissions");
 SET @permission_editUserPermissionId = LAST_INSERT_ID();
@@ -141,13 +136,7 @@ SET @permission_viewClientInformationId = LAST_INSERT_ID();
 
 -- user permissions
 INSERT INTO UserPermission (userId, permissionId, createdBy)
-	VALUES (@user_siteAdmin1Id, @permission_addSiteId, @user_siteAdmin1Id);
-
-INSERT INTO UserPermission (userId, permissionId, createdBy)
 	VALUES (@user_siteAdmin1Id, @permission_editUserPermissionId, @user_siteAdmin1Id);
-
-INSERT INTO UserPermission (userId, permissionId, createdBy)
-	VALUES (@user_siteAdmin1Id, @permission_editSiteInformationId, @user_siteAdmin1Id);
 
 INSERT INTO UserPermission (userId, permissionId, createdBy)
 	VALUES (@user_siteAdmin1Id, @permission_useAdminToolsId, @user_siteAdmin1Id);
@@ -997,7 +986,7 @@ INSERT INTO Question (text, lookupName)
 SET @question_question4Id = LAST_INSERT_ID();
 
 INSERT INTO Question (text, lookupName)
-	VALUES ("Have you been on this visa for less than 183 days and in the United States for less than five years (after 2012)?", "visa_less_than_183_days");
+	VALUES ("Have you been on this visa for less than 183 days and in the United States for less than five years?", "visa_less_than_183_days");
 SET @question_question5Id = LAST_INSERT_ID();
 -- end question
 
@@ -1029,20 +1018,20 @@ INSERT INTO PossibleAnswer (text)
 SET @possibleAnswer_h1bId = LAST_INSERT_ID();
 
 INSERT INTO PossibleAnswer (text)
-	VALUES ("2011 or earlier");
-SET @possibleAnswer_2011OrEarlierId = LAST_INSERT_ID();
+	VALUES ("5 full years or more");
+SET @possibleAnswer_5FullYearsOrMoreId = LAST_INSERT_ID();
 
 INSERT INTO PossibleAnswer (text)
-	VALUES ("2012 or later");
-SET @possibleAnswer_2012OrLaterId = LAST_INSERT_ID();
+	VALUES ("Less than 5 full years");
+SET @possibleAnswer_LessThan5FullYearsId = LAST_INSERT_ID();
 
 INSERT INTO PossibleAnswer (text)
-	VALUES ("2014 or earlier");
-SET @possibleAnswer_2014OrEarlierId = LAST_INSERT_ID();
+	VALUES ("2 full years or more");
+SET @possibleAnswer_2FullYearsOrMoreId = LAST_INSERT_ID();
 
 INSERT INTO PossibleAnswer (text)
-	VALUES ("2015 or later");
-SET @possibleAnswer_2015OrLaterId = LAST_INSERT_ID();
+	VALUES ("Less than 2 full years");
+SET @possibleAnswer_LessThan2FullYearsd = LAST_INSERT_ID();
 -- end possible answer
 
 
@@ -1069,7 +1058,7 @@ INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
 	VALUES (@possibleAnswer_f1Id, @appointment_appointment3Id, @question_question3Id);
 	
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_2011OrEarlierId, @appointment_appointment3Id, @question_question4Id);
+	VALUES (@possibleAnswer_5FullYearsOrMoreId, @appointment_appointment3Id, @question_question4Id);
 	
 
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
@@ -1082,7 +1071,7 @@ INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
 	VALUES (@possibleAnswer_j1Id, @appointment_appointment4Id, @question_question3Id);
 	
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
-	VALUES (@possibleAnswer_2015OrLaterId, @appointment_appointment4Id, @question_question4Id);
+	VALUES (@possibleAnswer_LessThan2FullYearsd, @appointment_appointment4Id, @question_question4Id);
 -- end answer
 
 

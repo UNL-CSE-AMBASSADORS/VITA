@@ -125,11 +125,11 @@
 						<div class="form-radio row" id="studentf1" style="display: none;">
 							<label for="4" class="col">How long have you been in the United States?</label>
 							<div class="col btn-group" data-toggle="buttons">
-								<label class="btn btn-outline-secondary" for="2011">
-									<input type="radio" id="2011" value="7" name="4" required>2011 or earlier
-								</label>
 								<label class="btn btn-outline-secondary" for="2012">
-									<input type="radio" id="2012" value="8" name="4" required>2012 or later
+									<input type="radio" id="2012" value="7" name="4" required>2012 or earlier
+								</label>
+								<label class="btn btn-outline-secondary" for="2013">
+									<input type="radio" id="2013" value="8" name="4" required>2013 or later
 								</label>
 							</div>
 						</div>
@@ -137,11 +137,11 @@
 						<div class="form-radio row" id="studentj1" style="display: none;">
 							<label for="4" class="col">How long have you been in the United States?</label>
 							<div class="col btn-group" data-toggle="buttons">
-								<label class="btn btn-outline-secondary" for="2014">
-									<input type="radio" id="2014" value="9" name="4" required>2014 or earlier
-								</label>
 								<label class="btn btn-outline-secondary" for="2015">
-									<input type="radio" id="2015" value="10" name="4" required>2015 or later
+									<input type="radio" id="2015" value="9" name="4" required>2015 or earlier
+								</label>
+								<label class="btn btn-outline-secondary" for="2016">
+									<input type="radio" id="2016" value="10" name="4" required>2016 or later
 								</label>
 							</div>
 						</div>
