@@ -171,6 +171,10 @@ SET @site_andersonLibrary = LAST_INSERT_ID();
 INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
 	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
+
+INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
+	VALUES ("International Student Scholar", "1400 R St, Lincoln, NE 68588", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+SET @site_internationalStudentScholar = LAST_INSERT_ID();
 -- End Sites
 
 -- Shifts
@@ -611,12 +615,11 @@ INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
 
 
--- Tuesday
+-- Tuesday, AL
 SET @shiftStartTime = "2018-03-06 16:30:00";
 SET @shiftEndTime = "2018-03-06 19:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_andersonLibrary, @user_siteAdmin1Id, @user_siteAdmin1Id);
-
 
 -- Wednesday
 SET @shiftStartTime = "2018-03-07 16:30:00";
