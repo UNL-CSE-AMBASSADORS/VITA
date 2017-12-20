@@ -14,7 +14,7 @@ if (!$USER->hasPermission('edit_user_permissions')) {
 <!DOCTYPE html>
 <html class="no-js" lang="">
 <head>
-	<title>Queue Test</title>
+	<title>User Management</title>
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css" />
