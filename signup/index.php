@@ -51,9 +51,9 @@
 						</div>
 
 						<div class="form-textfield">
-							<input type="email" name="email" id="email" required>
+							<input type="email" name="email" id="email">
 							<span class="form-bar"></span>
-							<label class="form-label form-required" for="email">Email</label>
+							<label class="form-label" for="email">Email</label>
 						</div>
 
 						<div class="form-textfield">

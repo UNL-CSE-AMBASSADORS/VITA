@@ -291,13 +291,11 @@ function validateSignupForm() {
 	$("#vitaSignupForm").validate({
 		rules: {
 			email: {
-				required: true,
 				email: true
 			}
 		},
 		messages: {
 			email: {
-				required: "We need your email address to confirm your appointment",
 				email: "Your email address must be in the format of name@domain.com"
 			}
 		}
