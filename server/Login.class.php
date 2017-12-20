@@ -26,7 +26,7 @@ class Login
 	private $database;
 
 	## (String) Name of the application, ex: Hoovestol Portal
-	private $name;
+	private $name = 'VITA';
 
 	## (String) URL Paths to login, logout, etc
 	private $login_url;
