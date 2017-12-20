@@ -1,9 +1,17 @@
 <div class="container-fluid dashboard bg-light py-3" ng-cloak>
-	<div class="d-flex flex-row justify-content-between align-items-center">
+	<div class="d-flex flex-column flex-sm-row justify-content-between align-items-center">
 		<div class="d-flex flex-row">
 			<div class="queue-size-lbl">Queue:</div>
 			<div class="queue-size-count">{{appointments.length}}</div>
 		</div>
+		<select 
+			class="btn dropdown-toggle" 
+			ng-model="selectedSite" 
+			ng-options="site.title for site in sites track by site.siteId"
+			ng-change="updateAppointmentInformation()">
+			
+			<option value="" style="display:none;">-- Select A Site --</option>
+		</select> 
 		<md-datepicker
 			ng-model="currentDate"
 			ng-change="updateAppointmentInformation()"

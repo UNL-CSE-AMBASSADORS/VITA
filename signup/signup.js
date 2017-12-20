@@ -2,10 +2,8 @@ const NUM_SECONDS_IN_HOUR = 60*60; // 3600
 const NUM_SECONDS_IN_DAY = 24*60*60; // 86400
 
 $(document).ready(function() {
-	// Get the information about sites
-	loadAllSites();
-	// Get all of the shift information and store it Date->Site->Time
-	loadAllShifts();
+	// Get all of the appointment information stored Date->Site->Time
+	loadAllAppointments();
 	// Listen for changes to Date and Site fields to conditionally hide/show other fields
 	updateSitesDatesAndTimes();
 
@@ -20,312 +18,76 @@ $(document).ready(function() {
 	// associated input field
 	$(".form-textfield input").blur(function() {
 		var isBlank = $.trim($(this).val()).length > 0;
-		$label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
+		$(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
+
 	});
 });
 
-/**
- * getTimeInSeconds - convert a Date to the time of day in seconds, optionally rounded down to the nearest hour or minute
- *
- * @param  {Date} time		  Date
- * @param  {string} round="m"   "h" or "m" for rounding down to "hour" or "minute" respectively
- * @return {number}			 number of seconds in the day
- */
-function getTimeInSeconds(time, round="m") {
-	if (time instanceof Date) {
-		switch(round) {
-			case "h":
-				return time.getHours() * NUM_SECONDS_IN_HOUR;
-			case "m":
-				return time.getHours() * NUM_SECONDS_IN_HOUR + time.getMinutes() * 60;
-			default:
-				return time.getHours() * NUM_SECONDS_IN_HOUR + time.getMinutes() * 60 + time.getSeconds();
-		}
-	} else {
-		return undefined;
-	}
-}
-
-/**
- * getTimeString - convert time (number in seconds) to a formatted time string
- *   function based on a function from http://jonthornton.github.com/jquery-timepicker/
- *
- * @param  {number} timeInt			  number of seconds into day
- * @param  {string} timeFormat = "g:i A" formatting based on PHP DateTime
- * @param  {boolean} show2400 = false	whether or not military time goes up through 2400 or if it flips back to 0000
- * @return {string}					  formatted time string
- */
-function getTimeString(timeInt, timeFormat = "g:i A", show2400 = false) {
-	if (typeof timeInt != "number") {
-		return undefined;
-	}
-
-	var seconds = parseInt(timeInt % 60),
-			minutes = parseInt((timeInt / 60) % 60),
-			hours = parseInt((timeInt / (NUM_SECONDS_IN_HOUR)) % 24);
-
-	var time = new Date(1970, 0, 2, hours, minutes, seconds, 0); 
-
-	if (isNaN(time.getTime())) {
-		return null;
-	}
-
-	if ($.type(timeFormat) === "function") {
-		return timeFormat(time);
-	}
-
-	var output = "";
-	var hour, code;
-	for (var i = 0; i < timeFormat.length; i++) {
-		code = timeFormat.charAt(i);
-		switch (code) {
-			case "a":
-				output += time.getHours() > 11 ? _lang.pm : _lang.am;
-				break;
-
-			case "A":
-				output += time.getHours() > 11 ? _lang.PM : _lang.AM;
-				break;
-
-			case "g":
-				hour = time.getHours() % 12;
-				output += hour === 0 ? "12" : hour;
-				break;
-
-			case "G":
-				hour = time.getHours();
-				if (timeInt === _ONE_DAY) hour = show2400 ? 24 : 0;
-				output += hour;
-				break;
-
-			case "h":
-				hour = time.getHours() % 12;
-
-				if (hour !== 0 && hour < 10) {
-					hour = "0" + hour;
-				}
-
-				output += hour === 0 ? "12" : hour;
-				break;
-
-			case "H":
-				hour = time.getHours();
-				if (timeInt === _ONE_DAY) hour = show2400 ? 24 : 0;
-				output += hour > 9 ? hour : "0" + hour;
-				break;
-
-			case "i":
-				var minutes = time.getMinutes();
-				output += minutes > 9 ? minutes : "0" + minutes;
-				break;
-
-			case "s":
-				seconds = time.getSeconds();
-				output += seconds > 9 ? seconds : "0" + seconds;
-				break;
-
-			case "\\":
-				// escape character; add the next character and skip ahead
-				i++;
-				output += timeFormat.charAt(i);
-				break;
-
-			default:
-				output += code;
-		}
-	}
-
-	return output;
-}
-
-/** Class representing a mapping from a site to an array of times. */
-class SiteTimeMap {
-	constructor(siteId) {
-		this.siteId = siteId;
-		this.times = []; // array of times in 24 hour floating point format
-	}
-
-	addTime(times) {
-		this.times.push(times);
-	}
-
-	hasTime(time) {
-		return this.times.includes(time);
-	}
-
-	getTimesArray() {
-		return this.times.sort((a,b) => a - b).map(t => getTimeString(t));
-	}
-}
-
-/** Class representing a mapping from a date to an array of sites. */
-class DateSiteMap {
-	constructor(date) {
-		this.date = date;
-		this.sites = []; // array of SiteTimeMap objects
-	}
-
-	addSite(siteId) {
-		this.sites.push(new SiteTimeMap(siteId));
-	}
-
-	hasSite(siteId) {
-		return this.sites.map(s => s.siteId).includes(siteId);
-	}
-
-	getSite(siteId) {
-		return this.sites.find(s => s.siteId === siteId);
-	}
-
-	getSitesArray() {
-		return this.sites.map(s => ({siteId:s.siteId, title:dateSitesTimes.siteTitles.get(s.siteId)}));
-	}
-}
-
-/** Class representing a list of dates with mappings to sites and times at those sites. */
+/** Class representing a map of dates => sites => times => remaining spots. */
 class DateSiteTime {
 	constructor() {
-		this.dates = []; // array of DateSiteMap objects
+		this.dates = new Object(); // array of DateSiteMap objects
 		this.siteTitles = new Map();
 	}
 
-	/**
-	 * addShift - Adds a new shift to the object,
-	 *   automatically sorting by date and site,
-	 *   creating new ones if necessary.
-	 *
-	 * @param  {string} siteId	site ID
-	 * @param  {string} startTime startTime formatted as ISO String
-	 * @param  {string} endTime   endTime formatted as ISO String
-	 */
-	addShift(siteId, startTime, endTime) {
-		const date = new Date(startTime);
-		const endDate = new Date(endTime);
-		if(!this.hasDate(date)) {
-			this._addDate(date);
-		}
+	addMap(datesMap) {
+		this.dates = datesMap;
+	}
 
-		let dateObj = this.getDate(date);
-		if(!dateObj.hasSite(siteId)) {
-			dateObj.addSite(siteId);
-		}
+	hasDate(dateObj) {
+		return dateObj.toISOString().substring(0, 10) in this.dates;
+	}
 
-		if (date.toDateString() !== endDate.toDateString()) {
-			let newStartTime = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).toISOString();
-			this.addShift(siteId, newStartTime, endTime);
-		}
-		let newTimes = this._getAppointmentTimes(startTime, endTime);
+	hasTimeSlotsRemaining(dateObj) {
+		let date = dateObj.toISOString().substring(0, 10);
+		return this.dates[date]["hasAvailability"];
+	}
 
-
-		let siteObj = dateObj.getSite(siteId);
-		for (const time of newTimes) {
-			if(!siteObj.hasTime(time)) {
-				siteObj.addTime(time);
-			}
+	updateGlobalSites(dateInput) {
+		let dateObj = new Date(dateInput);
+		let date = dateObj.toISOString().substring(0, 10);
+		let localSites = this.dates[date]["sites"];
+		sites = [];
+		for (let site in localSites) {
+			sites.push({
+				"siteId": site,
+				"title": localSites[site]["site_title"],
+				"hasTimeSlotsRemaining": localSites[site]["hasAvailability"]
+			});
 		}
 	}
 
-	_addDate(date) {
-		this.dates.push(new DateSiteMap(date));
-	}
-
-	hasDate(date) {
-		return this.getDatesArray().includes(date.toDateString());
-	}
-
-	getDate(date) {
-		return this.dates.find(d => d.date.toDateString() === date.toDateString());
-	}
-
-	getDatesArray() {
-		return this.dates.map(d => d.date.toDateString());
-	}
-
-	/**
-	 * _getAppointmentTimes - Gets the time of the day as a number of seconds
-	 *
-	 * @param  {string} startTime     startTime for appointment
-	 * @param  {string} endTime       endTime for appointment
-	 * @param  {number} interval=NUM_SECONDS_IN_HOUR seconds between appointments
-	 * @return {object}               array of appointment times in seconds
-	 */
-	_getAppointmentTimes(startTime, endTime, interval=NUM_SECONDS_IN_HOUR) {
-		if (typeof interval != "number") {
-			interval = NUM_SECONDS_IN_HOUR;
-		}
-		if (startTime > endTime) {
-			return [];
-		}
-		let startDate = new Date(startTime);
-		let endDate = new Date(endTime);
-
-		const startTimeInSeconds = getTimeInSeconds(startDate);
-		let endTimeInSeconds = NUM_SECONDS_IN_DAY;
-		if(startDate.toDateString() === endDate.toDateString()) {
-			endTimeInSeconds = getTimeInSeconds(endDate);
-		}
-
-		if (endTimeInSeconds < startTimeInSeconds) {
-			return [];
-		}
-
-		let out = [],
-				ct = startTimeInSeconds;
-
-		out.push(startTimeInSeconds);
-
-		while (ct < endTimeInSeconds - interval) {
-			ct += interval;
-			out.push(ct);
-		}
-
-		return out;
+	updateGlobalTimes(dateInput, site) {
+		let dateObj = new Date(dateInput);
+		let date  = dateObj.toISOString().substring(0, 10);
+		times = this.dates[date]["sites"][site]["times"];
 	}
 }
 
-function loadAllSites() {
+// Load all of the appointments and store in a global variable
+// Default is to only load the current year
+function loadAllAppointments(year=(new Date()).getFullYear()) {
 	var request = $.ajax({
-		url: "/server/api/sites/getAll.php",
+		url: "/server/api/appointments/getTimes.php",
 		type: "GET",
 		dataType: "JSON",
 		data: ({
-			"siteId": true,
-			"title": true
+			"year": year
 		}),
 		cache: false
 	})
 	.done(function(data) {
-		for(const site of data) {
-			dateSitesTimes.siteTitles.set(site.siteId, site.title);
-		}
-	});
-}
-
-// Load all of the shifts and store in a global variable
-// TODO
-function loadAllShifts(year=(new Date()).getFullYear()) {
-	var request = $.ajax({
-		url: "/server/api/shifts/getAllShifts.php",
-		type: "GET",
-		dataType: "JSON",
-		data: ({
-			"year": year,
-			"startTime": true,
-			"endTime": true,
-			"siteId": true
-		}),
-		cache: false
-	})
-	.done(function(data) {
-		for(const shift of data) {
-			dateSitesTimes.addShift(shift.siteId, shift.startTime, shift.endTime);
-		}
+		dateSitesTimes.addMap(data.dates);
 		$("#dateInput").datepicker({
 			// Good example: https://stackoverflow.com/a/1962849/7577035
 			// called for every date before it is displayed
 			beforeShowDay: function(date) {
 				if (dateSitesTimes.hasDate(date)) {
-					return [true, ''];
+					if (dateSitesTimes.hasTimeSlotsRemaining(date)) {
+						return [true, ''];
+					} else {
+						return [false, 'full'];
+					}
 				} else {
 					return [false, ''];
 				}
@@ -355,12 +117,13 @@ function updateSitesDatesAndTimes() {
 		$("#sitePickerSelect").html('');
 		var date = this.value;
 
-		let dateObj = dateSitesTimes.getDate(new Date(date));
+		dateSitesTimes.updateGlobalSites(date);
 		siteSelect.append($('<option disabled selected value="" style="display:none"> -- select an option -- </option>'));
-		for(const site of dateObj.getSitesArray()) {
+		for(let site in sites) {
+			if (!sites[site]["hasTimeSlotsRemaining"]) continue;
 			siteSelect.append($('<option>', {
-				value: site.siteId,
-				text : site.title
+				value: sites[site]["siteId"],
+				text : sites[site]["title"]
 			}));
 		}
 	});
@@ -372,16 +135,17 @@ function updateSitesDatesAndTimes() {
 		$("#timePicker").show();
 		// Clear any previously selected date
 		$("#timePickerSelect").html('');
-		var value = this.value;
+		var site = this.value;
 		var date = $("#dateInput").val();
 
-		let siteObj = dateSitesTimes.getDate(new Date(date)).getSite(value);
+		dateSitesTimes.updateGlobalTimes(date, site);
 		var timeSelect = $("#timePicker select")
 		timeSelect.append($('<option disabled selected value="" style="display:none"> -- select an option -- </option>'));
-		for(const time of siteObj.getTimesArray()) {
+		for(const time in times) {
 			timeSelect.append($('<option>', {
 				value: time,
-				text : time
+				text : time + (times[time] > 0 ? '' : ' - FULL'),
+				disabled: times[time] > 0 ? false : true
 			}));
 		}
 	});
@@ -417,11 +181,6 @@ function conditionalFormFields() {
 	let animationTime = 300;
 
 	// All of the questions that required conditions to be viewed.
-	var homeBased = $("#homeBased");
-	var homeBasedNetLoss = $("#homeBasedNetLoss");
-	var homeBased10000 = $("#homeBased10000");
-	var homeBasedSEP = $("#homeBasedSEP");
-	var homeBasedEmployees = $("#homeBasedEmployees");
 	var studentUNL = $("#studentUNL");
 	var studentInt = $("#studentInt");
 	var studentIntVisa = $("#studentIntVisa");
@@ -432,34 +191,17 @@ function conditionalFormFields() {
 	var studentScholarAppointmentPicker = $("#studentScholarAppointmentPicker");
 
 	// All the radio buttons
-	var homeBasedValues = homeBased.find('input:radio[name="3"]');
-	var studentUNLValues = studentUNL.find('input:radio[name="15"]');
-	var studentIntValues = studentInt.find('input:radio[name="16"]');
-	var studentIntVisaValues = studentIntVisa.find('input:radio[name="17"]');
-	var studentf1Values = studentf1.find('input:radio[name="18"]');
-	var studentj1Values = studentj1.find('input:radio[name="18"]');
-	var studenth1bValues = studenth1b.find('input:radio[name="19"]');
+	var studentUNLValues = studentUNL.find('input:radio[name="1"]');
+	var studentIntValues = studentInt.find('input:radio[name="2"]');
+	var studentIntVisaValues = studentIntVisa.find('input:radio[name="3"]');
+	var studentf1Values = studentf1.find('input:radio[name="4"]');
+	var studentj1Values = studentj1.find('input:radio[name="4"]');
+	var studenth1bValues = studenth1b.find('input:radio[name="5"]');
 
 	// To help hide everything and selectively show content
-	var allUnderHomeBasedValues = homeBasedNetLoss.add(homeBased10000).add(homeBasedSEP).add(homeBasedEmployees);
 	var allUnderstudentIntVisaValues = studentf1.add(studentj1).add(studenth1b);
 	var allUnderStudentIntValues = studentIntVisa.add(allUnderstudentIntVisaValues)
 	var allUnderStudentUNLValues = studentInt.add(allUnderStudentIntValues).add(allUnderstudentIntVisaValues);
-
-	// Independent field = #homeBased
-	// Dependent field = if yes --> #homeBasedNetLoss,#homeBased10000,#homeBasedSEP,#homeBasedEmployees
-	homeBasedValues.change(function() {
-		var value = this.value;
-		if(this.checked){
-			if(value === "1"){
-				allUnderHomeBasedValues.slideUp(animationTime);
-				allUnderHomeBasedValues.slideDown(animationTime);
-				scrollDown(homeBased.height(), animationTime);
-			} else if(value === "2"){
-				allUnderHomeBasedValues.slideUp(animationTime);
-			}
-		}
-	});
 
 	// Independent field = #studentUNL
 	// Dependent field = if yes --> #studentInt
@@ -582,20 +324,24 @@ $('#vitaSignupForm').submit(function(e) {
 		var checkedRadioBox = $(this).find('input[type="radio"]:checked');
 
 		if(checkedRadioBox.length>0) {
-			questions.push({
-				id: checkedRadioBox.attr('name'),
-				value: checkedRadioBox.val()
-			});
+			if (checkedRadioBox.attr('name') !== 'languageRadio') {
+				questions.push({
+					id: checkedRadioBox.attr('name'),
+					value: checkedRadioBox.val()
+				});
+			}
 		}
 	});
 
-	var scheduledTime = new Date($("#dateInput").val() + " " + $("#timePickerSelect").val()).toISOString();
+	var scheduledTime = new Date($("#dateInput").val() + " " + $("#timePickerSelect").val() + " GMT").toISOString();
+	var language = $('#language').find('input[type="radio"]:checked').val();
 
 	var data = {
 		"firstName":firstName.value,
 		"lastName":lastName.value,
 		"email":email.value,
 		"phone":phone.value,
+		"language":language,
 		"questions": questions,
 		"scheduledTime":scheduledTime,
 		"siteId":sitePickerSelect.value
@@ -624,19 +370,6 @@ $('#vitaSignupForm').submit(function(e) {
 	return false;
 });
 
-let datesAllowed = [],
-		sitesWithShifts = [],
-		minTime = '0',
-		maxTime = '23',
-		dateSitesTimes = new DateSiteTime(),
-		_lang = {
-			am: "am",
-			pm: "pm",
-			AM: "AM",
-			PM: "PM",
-			decimal: ".",
-			mins: "mins",
-			hr: "hr",
-			hrs: "hrs"
-		},
-		_ONE_DAY = NUM_SECONDS_IN_DAY;
+let dateSitesTimes = new DateSiteTime(),
+	sites = [],
+	times = [];

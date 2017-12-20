@@ -3,18 +3,13 @@ USE vita;
 DROP TABLE IF EXISTS Answer;
 DROP TABLE IF EXISTS ServicedAppointment;
 DROP TABLE IF EXISTS Appointment;
+DROP TABLE IF EXISTS AppointmentTime;
 DROP TABLE IF EXISTS Client;
 DROP TABLE IF EXISTS UserShift;
 DROP TABLE IF EXISTS Shift;
 DROP TABLE IF EXISTS Site;
 DROP TABLE IF EXISTS PossibleAnswer;
 DROP TABLE IF EXISTS Question;
-
--- Temporary, this is here since I renamed the tables, but these old tables will still exist on other people's machines, we need to remove them
-DROP TABLE IF EXISTS UserPrivilege;
-DROP TABLE IF EXISTS Privilege;
-DROP TABLE IF EXISTS LitmusQuestion;
--- Temporary
 
 DROP TABLE IF EXISTS UserPermission;
 DROP TABLE IF EXISTS Permission;
@@ -32,7 +27,8 @@ CREATE TABLE User (
 	email VARCHAR(355) NOT NULL,
 	phoneNumber VARCHAR(20) NULL,
 	preparesTaxes BOOLEAN NOT NULL DEFAULT FALSE,
-	archived BOOLEAN NOT NULL DEFAULT FALSE
+	archived BOOLEAN NOT NULL DEFAULT FALSE,
+	CONSTRAINT uniqueEmail UNIQUE INDEX(email)
 );
 
 CREATE TABLE Question (
@@ -57,6 +53,7 @@ CREATE TABLE Site (
 	appointmentOnly BOOLEAN NOT NULL DEFAULT FALSE,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
 	lastModifiedDate DATETIME,
+	archived BOOLEAN NOT NULL DEFAULT FALSE,
 	createdBy INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(createdBy) REFERENCES User(userId),
 	lastModifiedBy INTEGER UNSIGNED NOT NULL,
@@ -71,16 +68,27 @@ CREATE TABLE Client (
 	emailAddress VARCHAR(255) NULL
 );
 
+CREATE TABLE AppointmentTime (
+	appointmentTimeId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	scheduledTime DATETIME NOT NULL,
+	minimumNumberOfAppointments INTEGER UNSIGNED DEFAULT 0,
+	maximumNumberOfAppointments INTEGER UNSIGNED DEFAULT NULL,
+	percentageAppointments INTEGER UNSIGNED NOT NULL DEFAULT 100,
+	CONSTRAINT percentageCheck CHECK (percentageAppointments>=0 AND percentageAppointments<=100),
+	siteId INTEGER UNSIGNED NOT NULL,
+	FOREIGN KEY(siteId) REFERENCES Site(siteId)
+);
+
 CREATE TABLE Appointment (
 	appointmentId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	scheduledTime DATETIME NOT NULL,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
-	arrivedAt DATETIME NULL,
+	language VARCHAR(5) NOT NULL,
+	ipAddress VARCHAR(95) NOT NULL,
 	archived BOOLEAN NOT NULL DEFAULT FALSE,
 	clientId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(clientId) REFERENCES Client(clientId),
-	siteId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(siteId) REFERENCES Site(siteId)
+	appointmentTimeId INTEGER UNSIGNED NOT NULL,
+	FOREIGN KEY(appointmentTimeId) REFERENCES AppointmentTime(appointmentTimeId)
 );
 
 CREATE TABLE Answer (
@@ -95,10 +103,14 @@ CREATE TABLE Answer (
 
 CREATE TABLE ServicedAppointment (
 	servicedAppointmentId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	startTime DATETIME,
-	endTime DATETIME,
-	userId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(userId) REFERENCES User(userId),
+	timeIn DATETIME NULL DEFAULT NULL,
+    timeReturnedPapers DATETIME NULL DEFAULT NULL,
+    timeAppointmentStarted DATETIME NULL DEFAULT NULL,
+    timeAppointmentEnded DATETIME NULL DEFAULT NULL,
+    completed BOOLEAN NULL DEFAULT NULL,
+    notCompletedDescription VARCHAR(255) NULL DEFAULT NULL,
+	servicedBy INTEGER UNSIGNED NULL,
+	FOREIGN KEY(servicedBy) REFERENCES User(userId),
 	appointmentId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId)
 );
@@ -165,7 +177,8 @@ CREATE TABLE UserAbility (
 	userId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(userId) REFERENCES User(userId),
 	abilityId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(abilityId) REFERENCES Ability(abilityId)
+	FOREIGN KEY(abilityId) REFERENCES Ability(abilityId),
+	CONSTRAINT UNIQUE unique_ability (userId, abilityId)
 );
 
 CREATE TABLE Shift (
@@ -189,5 +202,6 @@ CREATE TABLE UserShift (
 	userId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(userId) REFERENCES User(userId),
 	shiftId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(shiftId) REFERENCES Shift(shiftId)
+	FOREIGN KEY(shiftId) REFERENCES Shift(shiftId),
+	CONSTRAINT UNIQUE unique_shift (userId, shiftId)
 );
