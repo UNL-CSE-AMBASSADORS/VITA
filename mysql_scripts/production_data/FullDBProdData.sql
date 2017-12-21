@@ -1815,3 +1815,25 @@ INSERT INTO PossibleAnswer (text)
 	VALUES ("2015 or later");
 SET @possibleAnswer_2015OrLaterId = LAST_INSERT_ID();
 -- End PossibleAnswer
+
+
+
+
+
+-- Role
+INSERT INTO Role (name, lookupName)
+	VALUES ("Site Administrator", "site_administrator");
+SET @role_siteAdministrator = LAST_INSERT_ID();
+
+INSERT INTO Role (name, lookupName)
+	VALUES ("Greeter", "greeter");
+SET @role_greeter = LAST_INSERT_ID();
+
+INSERT INTO Role (name, lookupName)
+	VALUES ("Preparer", "preparer");
+SET @role_preparer = LAST_INSERT_ID();
+
+INSERT INTO Role (name, lookupName)
+	VALUES ("Reviewer", "reviewer");
+SET @role_reviewer = LAST_INSERT_ID();
+-- End Role
