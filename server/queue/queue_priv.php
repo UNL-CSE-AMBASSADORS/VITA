@@ -29,8 +29,7 @@
 			WHERE DATE(Shift.startTime) = ?
 				AND Shift.siteId = ?
 				AND Shift.archived = FALSE 
-				AND User.archived = FALSE
-			ORDER BY preparesTaxes DESC"
+				AND User.archived = FALSE"
 		);
 
 		$stmt->execute(array($date, $siteId));

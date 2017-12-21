@@ -11,7 +11,7 @@ if (!$USER->hasPermission('use_admin_tools')) {
 require_once "$root/server/config.php";
 require_once "$root/server/libs/wrappers/PHPExcelWrapper.class.php";
 
-$HEADER_COLUMN_NAMES = array('First Name', 'Last Name', 'Start Time', 'End Time', 'Preparing Taxes', 'Phone Number', 'Email Address');
+$HEADER_COLUMN_NAMES = array('First Name', 'Last Name', 'Start Time', 'End Time', 'Phone Number', 'Email Address');
 $ALL_SITES_ID = -1;
 
 getVolunteerScheduleExcelFile($_GET);
@@ -41,7 +41,7 @@ function getVolunteerScheduleExcelFile($data) {
 function executeVolunteerShiftsQuery($data) {
 	GLOBAL $DB_CONN, $ALL_SITES_ID;
 
-	$query = "SELECT User.firstName, User.lastName, TIME_FORMAT(Shift.startTime, '%l:%i %p') AS startTime, TIME_FORMAT(Shift.endTime, '%l:%i %p') AS endTime, User.preparesTaxes, User.phoneNumber, User.email, Shift.siteId, Site.title
+	$query = "SELECT User.firstName, User.lastName, TIME_FORMAT(Shift.startTime, '%l:%i %p') AS startTime, TIME_FORMAT(Shift.endTime, '%l:%i %p') AS endTime, User.phoneNumber, User.email, Shift.siteId, Site.title
 		FROM User
 		JOIN UserShift ON User.userId = UserShift.userId
 		JOIN Shift ON UserShift.shiftId = Shift.shiftId
@@ -98,9 +98,6 @@ function createVolunteerScheduleExcelFile($volunteerShifts) {
 			foreach ($row as $key => $value) {
 				if ($key === 'siteId' || $key === 'title') continue;
 				if (!$value) $row[$key] = ''; # Change any null data to just be an empty string
-				if ($key === 'preparesTaxes') {
-					$row[$key] = $value == 1 ? 'Yes' : 'No';
-				}
 
 				$phpExcelWrapper->insertData($row[$key]);
 				$phpExcelWrapper->nextColumn();

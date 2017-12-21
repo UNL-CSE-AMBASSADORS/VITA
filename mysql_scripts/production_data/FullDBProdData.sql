@@ -1,15 +1,15 @@
 USE vita;
 
 -- User
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes) 
-	VALUES ('Matthew', 'Meacham', 'mmeacham6@gmail.com', '', FALSE);
+INSERT INTO User (firstName, lastName, email, phoneNumber) 
+	VALUES ('Matthew', 'Meacham', 'mmeacham6@gmail.com', '');
 SET @userId = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ('Austin', 'Schmidt', 'schmidtwithad@hotmail.com', '', FALSE);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ('Austin', 'Schmidt', 'schmidtwithad@hotmail.com', '');
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ('Spencer', 'Collins', 'collinsspencer97@gmail.com', '', FALSE);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ('Spencer', 'Collins', 'collinsspencer97@gmail.com', '');
 -- End User
 
 

@@ -23,24 +23,24 @@ TRUNCATE User;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- users
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("Preparer", "McPreparer", "preparer@test.test", "555-123-4567", true);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("Preparer", "McPreparer", "preparer@test.test", "555-123-4567");
 SET @user_preparer1Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("Preparer2", "MacPreparer2", "preparer2@test.test", "555-902-7563", true);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("Preparer2", "MacPreparer2", "preparer2@test.test", "555-902-7563");
 SET @user_preparer2Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("Reviewer", "McReviewer", "reviewer@test.test", "555-952-7319", false);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("Reviewer", "McReviewer", "reviewer@test.test", "555-952-7319");
 SET @user_reviewer1Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("Receptionist", "McReceptionist", "receptionist@test.test", "555-987-6543", false);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("Receptionist", "McReceptionist", "receptionist@test.test", "555-987-6543");
 SET @user_receptionist1Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("SiteAdmin", "McSiteAdmin", "siteadmin@test.test", "555-019-2837", false);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("SiteAdmin", "McSiteAdmin", "siteadmin@test.test", "555-019-2837");
 SET @user_siteAdmin1Id = LAST_INSERT_ID();
 -- end users
 

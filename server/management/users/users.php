@@ -37,7 +37,7 @@ function getUserTable($data){
 	$response = array();
 	$response['success'] = true;
 
-	$stmt = $DB_CONN->prepare("SELECT userId, firstName, lastName, email, preparesTaxes, archived 
+	$stmt = $DB_CONN->prepare("SELECT userId, firstName, lastName, email, archived 
 		FROM User
 		ORDER BY firstName, lastName");
 
@@ -233,16 +233,15 @@ function addUser($data){
 
 	try {
 		$stmt = $DB_CONN->prepare("INSERT INTO User 
-				(firstName, lastName, email, phoneNumber, preparesTaxes)
+				(firstName, lastName, email, phoneNumber)
 			VALUES 
-				(?, ?, ?, ?, ?)");
+				(?, ?, ?, ?)");
 
 		$res = $stmt->execute(array(
 			$data['firstName'],
 			$data['lastName'],
 			$data['email'],
-			$data['phone'],
-			$data['prepareTaxes']
+			$data['phone']
 		));
 
 		if ($res == 0) {
