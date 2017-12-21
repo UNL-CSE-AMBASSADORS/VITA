@@ -63,8 +63,8 @@
 						</div>
 
 
-						<!-- TODO CHANGE THE ADD DEPENDENT TO SOMETHING MORE DESCRIPTIVE OF WHAT THIS IS FOR CLIENTS-->
-						<h3 class="form-subheading">Add Dependents</h3>
+						<h3 class="form-subheading">Add Filing Dependents</h3>
+						<p>Are any of your dependents filing a return during this appointment? If so, add them here.</p>
 						<div id="dependents" class="mb-3"></div>
 						<button type="button" class="btn mb-3" id="addDependentButton">Add Dependent</button>
 
