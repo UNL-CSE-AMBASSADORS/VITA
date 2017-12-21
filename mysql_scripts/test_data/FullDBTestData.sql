@@ -8,6 +8,7 @@ TRUNCATE AppointmentTime;
 TRUNCATE Client;
 TRUNCATE UserShift;
 TRUNCATE Shift;
+TRUNCATE Role;
 TRUNCATE Site;
 TRUNCATE PossibleAnswer;
 TRUNCATE Question;
