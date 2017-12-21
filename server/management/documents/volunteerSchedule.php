@@ -11,7 +11,7 @@ if (!$USER->hasPermission('use_admin_tools')) {
 require_once "$root/server/config.php";
 require_once "$root/server/libs/wrappers/PHPExcelWrapper.class.php";
 
-$HEADER_COLUMN_NAMES = array('First Name', 'Last Name', 'Start Time', 'End Time', 'Phone Number', 'Email Address');
+$HEADER_COLUMN_NAMES = array('First Name', 'Last Name', 'Start Time', 'End Time', 'Role', 'Phone Number', 'Email Address');
 $ALL_SITES_ID = -1;
 
 getVolunteerScheduleExcelFile($_GET);
@@ -41,10 +41,13 @@ function getVolunteerScheduleExcelFile($data) {
 function executeVolunteerShiftsQuery($data) {
 	GLOBAL $DB_CONN, $ALL_SITES_ID;
 
-	$query = "SELECT User.firstName, User.lastName, TIME_FORMAT(Shift.startTime, '%l:%i %p') AS startTime, TIME_FORMAT(Shift.endTime, '%l:%i %p') AS endTime, User.phoneNumber, User.email, Shift.siteId, Site.title
+	$query = "SELECT User.firstName, User.lastName, TIME_FORMAT(Shift.startTime, '%l:%i %p') AS startTime, 
+			TIME_FORMAT(Shift.endTime, '%l:%i %p') AS endTime, Role.name AS roleName, User.phoneNumber, User.email, Shift.siteId, 
+			Site.title
 		FROM User
 		JOIN UserShift ON User.userId = UserShift.userId
 		JOIN Shift ON UserShift.shiftId = Shift.shiftId
+		JOIN Role ON UserShift.roleId = Role.roleId
 		JOIN Site ON Shift.siteId = Site.siteId
 		WHERE DATE(Shift.startTime) = ?
 			AND User.archived = FALSE
@@ -52,7 +55,7 @@ function executeVolunteerShiftsQuery($data) {
 	if ($data['siteId'] != $ALL_SITES_ID) {
 		$query .= ' AND Shift.siteId = ?';
 	}
-	$query .= ' ORDER BY Shift.siteId ASC, Shift.startTime ASC';
+	$query .= ' ORDER BY Shift.siteId ASC, Shift.startTime ASC, roleName';
 	$stmt = $DB_CONN->prepare($query);
 
 	$filterParams = array($data['date']);
