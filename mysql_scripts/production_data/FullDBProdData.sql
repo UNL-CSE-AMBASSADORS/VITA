@@ -28,6 +28,10 @@ SET @site_andersonLibrary = LAST_INSERT_ID();
 INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
 	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", TRUE, @userId, @userId);
 SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
+
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("International Student Scholar", "Nebraska Union -- Colonial Room", "402-472-9638", @userId, @userId);
+SET @site_internationalStudentScholar = LAST_INSERT_ID();
 -- End Sites
 
 
@@ -1141,7 +1145,7 @@ INSERT INTO AppointmentTime (scheduledTime, siteId)
 	VALUES (@scheduledTime, @site_jackieGaughanMulticulturalCenter);
 
 
--- Tuesday
+-- Tuesday, AL
 SET @shiftStartTime = "2018-03-06 16:30:00";
 SET @shiftEndTime = "2018-03-06 19:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
@@ -1166,6 +1170,37 @@ INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximum
 SET @scheduledTime = "2018-03-06 18:30:00";
 INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 3, 3, @site_andersonLibrary);
+
+-- Tuesday, ISS
+SET @shiftStartTime = "2018-03-06 13:00:00";
+SET @shiftEndTime = "2018-03-06 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_internationalStudentScholar, @userId, @userId);
+
+SET @shiftStartTime = "2018-03-06 15:30:00";
+SET @shiftEndTime = "2018-03-06 18:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_internationalStudentScholar, @userId, @userId);
+
+SET @scheduledTime = "2018-03-06 13:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-06 14:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-06 15:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-06 16:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 15, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-06 17:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 10, @site_internationalStudentScholar);
 
 
 -- Wednesday
@@ -1255,7 +1290,7 @@ INSERT INTO AppointmentTime (scheduledTime, siteId)
 	VALUES (@scheduledTime, @site_jackieGaughanMulticulturalCenter);
 
 
--- Tuesday
+-- Tuesday, AL
 SET @shiftStartTime = "2018-03-13 16:30:00";
 SET @shiftEndTime = "2018-03-13 19:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
@@ -1280,6 +1315,37 @@ INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximum
 SET @scheduledTime = "2018-03-13 18:30:00";
 INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 3, 3, @site_andersonLibrary);
+
+-- Tuesday, ISS
+SET @shiftStartTime = "2018-03-13 13:00:00";
+SET @shiftEndTime = "2018-03-13 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_internationalStudentScholar, @userId, @userId);
+
+SET @shiftStartTime = "2018-03-13 15:30:00";
+SET @shiftEndTime = "2018-03-13 18:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_internationalStudentScholar, @userId, @userId);
+
+SET @scheduledTime = "2018-03-13 13:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-13 14:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-13 15:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-13 16:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 15, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-13 17:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 10, @site_internationalStudentScholar);
 
 
 -- Wednesday
@@ -1309,7 +1375,7 @@ INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximum
 	VALUES (@scheduledTime, 3, 3, @site_andersonLibrary);
 
 
--- Tuesday
+-- Tuesday, AL
 SET @shiftStartTime = "2018-03-20 16:30:00";
 SET @shiftEndTime = "2018-03-20 19:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
@@ -1334,6 +1400,24 @@ INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximum
 SET @scheduledTime = "2018-03-20 18:30:00";
 INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 3, 3, @site_andersonLibrary);
+
+-- Tuesday, ISS
+SET @shiftStartTime = "2018-03-20 13:00:00";
+SET @shiftEndTime = "2018-03-20 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_internationalStudentScholar, @userId, @userId);
+
+SET @scheduledTime = "2018-03-20 13:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 20, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-20 14:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 20, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-20 15:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 20, @site_internationalStudentScholar);
 
 
 -- Wednesday
@@ -1363,7 +1447,7 @@ INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximum
 	VALUES (@scheduledTime, 3, 3, @site_andersonLibrary);
 
 
--- Tuesday
+-- Tuesday, AL
 SET @shiftStartTime = "2018-03-27 16:30:00";
 SET @shiftEndTime = "2018-03-27 19:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
@@ -1388,6 +1472,37 @@ INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximum
 SET @scheduledTime = "2018-03-27 18:30:00";
 INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 3, 3, @site_andersonLibrary);
+
+-- Tuesday, ISS
+SET @shiftStartTime = "2018-03-27 13:00:00";
+SET @shiftEndTime = "2018-03-27 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_internationalStudentScholar, @userId, @userId);
+
+SET @shiftStartTime = "2018-03-27 15:30:00";
+SET @shiftEndTime = "2018-03-27 18:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_internationalStudentScholar, @userId, @userId);
+
+SET @scheduledTime = "2018-03-27 13:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-27 14:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-27 15:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-27 16:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 15, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-03-27 17:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 10, @site_internationalStudentScholar);
 
 
 -- Wednesday
@@ -1441,7 +1556,7 @@ INSERT INTO AppointmentTime (scheduledTime, siteId)
 	VALUES (@scheduledTime, @site_jackieGaughanMulticulturalCenter);
 
 
--- Tuesday
+-- Tuesday, AL
 SET @shiftStartTime = "2018-04-03 16:30:00";
 SET @shiftEndTime = "2018-04-03 19:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
@@ -1466,6 +1581,37 @@ INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximum
 SET @scheduledTime = "2018-04-03 18:30:00";
 INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 3, 3, @site_andersonLibrary);
+
+-- Tuesday, ISS
+SET @shiftStartTime = "2018-04-03 13:00:00";
+SET @shiftEndTime = "2018-04-03 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_internationalStudentScholar, @userId, @userId);
+
+SET @shiftStartTime = "2018-04-03 15:30:00";
+SET @shiftEndTime = "2018-04-03 18:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_internationalStudentScholar, @userId, @userId);
+
+SET @scheduledTime = "2018-04-03 13:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-04-03 14:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-04-03 15:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-04-03 16:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 15, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-04-05 17:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 10, @site_internationalStudentScholar);
 
 
 -- Wednesday
@@ -1517,6 +1663,37 @@ INSERT INTO AppointmentTime (scheduledTime, siteId)
 SET @scheduledTime = "2018-04-08 15:00:00";
 INSERT INTO AppointmentTime (scheduledTime, siteId)
 	VALUES (@scheduledTime, @site_jackieGaughanMulticulturalCenter);
+
+-- Tuesday
+SET @shiftStartTime = "2018-04-10 13:00:00";
+SET @shiftEndTime = "2018-04-10 16:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_internationalStudentScholar, @userId, @userId);
+
+SET @shiftStartTime = "2018-04-10 15:30:00";
+SET @shiftEndTime = "2018-04-10 18:00:00";
+INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
+	VALUES (@shiftStartTime, @shiftEndTime, @site_internationalStudentScholar, @userId, @userId);
+
+SET @scheduledTime = "2018-04-10 13:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-04-10 14:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-04-10 15:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 30, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-04-10 16:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 15, @site_internationalStudentScholar);
+
+SET @scheduledTime = "2018-04-10 17:00:00";
+INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
+	VALUES (@scheduledTime, 10, @site_internationalStudentScholar);
 -- End Shifts and AppointmentTimes
 
 
