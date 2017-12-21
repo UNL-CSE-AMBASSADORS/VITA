@@ -40,17 +40,18 @@ function getAppointmentsScheduleExcelFile($data) {
 function executeAppointmentQuery($data) {
 	GLOBAL $DB_CONN, $ALL_SITES_ID;
 
-	$query = "SELECT scheduledTime, Client.firstName, Client.lastName, Client.phoneNumber, emailAddress,
-			appointmentId, Appointment.siteId, Site.title, (SELECT COUNT(*) FROM DependentClient WHERE DependentClient.clientId = Client.clientId) AS numberOfReturns
+	$query = "SELECT TIME_FORMAT(scheduledTime, '%l:%i %p') AS scheduledTime, Client.firstName, Client.lastName, 
+			Client.phoneNumber, emailAddress, appointmentId, AppointmentTime.siteId, Site.title, (SELECT COUNT(*) FROM DependentClient WHERE DependentClient.clientId = Client.clientId) AS numberOfReturns
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
-		JOIN Site ON Appointment.siteId = Site.siteId
-		WHERE DATE(Appointment.scheduledTime) = ?
+		JOIN AppointmentTime ON AppointmentTime.appointmentTimeId = Appointment.appointmentTimeId
+		JOIN Site ON AppointmentTime.siteId = Site.siteId
+		WHERE DATE(AppointmentTime.scheduledTime) = ?
 			AND Appointment.archived = FALSE";
 	if ($data['siteId'] != $ALL_SITES_ID) {
-		$query .= ' AND Appointment.siteId = ?';
+		$query .= ' AND AppointmentTime.siteId = ?';
 	}
-	$query .= ' ORDER BY Appointment.siteId ASC, Appointment.scheduledTime ASC';
+	$query .= ' ORDER BY AppointmentTime.siteId ASC, AppointmentTime.scheduledTime ASC';
 	$stmt = $DB_CONN->prepare($query);
 
 	$filterParams = array($data['date']);
