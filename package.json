@@ -4,10 +4,10 @@
   "description": "Scheduling and Appointment Management for VITA",
   "main": "index.js",
   "scripts": {
-    "dev:transpile": "babel . -d dist --ignore node_modules/,dist/",
-    "dev:cachebust": "hashmark dist/**/*.js {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\\//g'  | replaceinfiles -s **/*.php -d {dir}/{name}{ext}",
-    "dev": "rm -rf dist/ && npm run dev:transpile && npm run dev:cachebust",
-    "production": "babel . -d dist --ignore node_modules/,dist/"
+    "transpile": "babel . -d dist --ignore node_modules/,dist/",
+    "cachebust": "hashmark dist/**/*.js {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\\//g'  | replaceinfiles -s **/*.php -d {dir}/{name}{ext}",
+    "dev": "rm -rf dist/ && npm run transpile",
+    "production": "rm -rf dist/ && npm run transpile && cachebust"
   },
   "repository": {
     "type": "git",
