@@ -41,7 +41,7 @@ function getVolunteerScheduleExcelFile($data) {
 function executeVolunteerShiftsQuery($data) {
 	GLOBAL $DB_CONN, $ALL_SITES_ID;
 
-	$query = "SELECT User.firstName, User.lastName, Shift.startTime, Shift.endTime, User.preparesTaxes, User.phoneNumber, User.email, Shift.siteId, Site.title
+	$query = "SELECT User.firstName, User.lastName, TIME_FORMAT(Shift.startTime, '%l:%i %p') AS startTime, TIME_FORMAT(Shift.endTime, '%l:%i %p') AS endTime, User.preparesTaxes, User.phoneNumber, User.email, Shift.siteId, Site.title
 		FROM User
 		JOIN UserShift ON User.userId = UserShift.userId
 		JOIN Shift ON UserShift.shiftId = Shift.shiftId

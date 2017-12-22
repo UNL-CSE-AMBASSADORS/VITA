@@ -8,7 +8,7 @@
 	}
 
 	if (!isset($page_subtitle)) {
-		$page_subtitle = "Center for People in Need";
+		$page_subtitle = "";
 	}
 ?>
 
@@ -53,6 +53,9 @@
 				</li>
 			<?php endif; ?>
 			<?php if ($USER->isLoggedIn()): ?>
+				<li class="nav-item">
+					<a class="nav-link" href="/profile">Profile</a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" onclick="logout()">Log out</a>
 				</li>
