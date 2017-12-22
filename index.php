@@ -19,7 +19,7 @@ function wdnInclude($path)
 -->
 <?php wdnInclude("/wdn/templates_4.1/includes/scriptsandstyles.html"); ?>
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>Use a descriptive page title | Optional Site Title (use for context) | University of Nebraska&ndash;Lincoln</title>
+<title>VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
 <!-- TemplateEndEditable -->
@@ -42,8 +42,8 @@ function wdnInclude($path)
             <div id="wdn_logo_lockup">
                 <div class="wdn-inner-wrapper">
                     <?php wdnInclude("/wdn/templates_4.1/includes/logo.html"); ?>
-                        <span id="wdn_site_affiliation"><!-- TemplateBeginEditable name="affiliation" -->My site affiliation<!-- TemplateEndEditable --></span>
-                        <span id="wdn_site_title"><!-- TemplateBeginEditable name="titlegraphic" -->Title of my site<!-- TemplateEndEditable --></span>
+                        <span id="wdn_site_affiliation"><!-- TemplateBeginEditable name="affiliation" --><!-- TemplateEndEditable --></span>
+                        <span id="wdn_site_title"><!-- TemplateBeginEditable name="titlegraphic" -->VITA Lincoln<!-- TemplateEndEditable --></span>
                 </div>
             </div>
         </header>
@@ -52,7 +52,7 @@ function wdnInclude($path)
                 <!-- TemplateBeginEditable name="breadcrumbs" -->
                 <ul>
                     <li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
-                    <li><a href="#" title="Site Title">Site Title</a></li>
+                    <li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
                     <li>Home</li>
                 </ul>
                 <!-- TemplateEndEditable -->
