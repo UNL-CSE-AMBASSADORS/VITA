@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "transpile": "babel . -d dist --ignore node_modules/,dist/",
-    "cachebust": "hashmark dist/**/*.js {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\\//g'  | replaceinfiles -s **/*.php -d {dir}/{name}{ext}",
+    "css": "postcss **/*.css -b -d dist",
+    "cachebust": "hashmark dist/**/*.js {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\//g'  | replaceinfiles -s **/*.php -d {dir}/{name}{ext}",
     "dev": "rm -rf dist/ && npm run transpile",
     "production": "rm -rf dist/ && npm run transpile && npm run cachebust"
   },
@@ -24,6 +25,7 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "hashmark": "^5.0.0"
+    "hashmark": "^5.0.0",
+    "postcss-cli": "^4.1.1"
   }
 }
