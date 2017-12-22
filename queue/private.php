@@ -4,8 +4,8 @@
 <head>
 	<title>Queue</title>
 	<?php require_once "$root/server/header.php" ?>
-	<link rel="stylesheet" href="/queue/queue.css">
-	<link rel="stylesheet" href="/queue/queue_private.css">
+	<link rel="stylesheet" href="/dist/queue/queue.css">
+	<link rel="stylesheet" href="/dist/queue/queue_private.css">
 </head>
 <body ng-controller="QueuePrivateController">
 	<!--[if lt IE 8]>
