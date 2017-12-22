@@ -8,8 +8,10 @@
     "dev:css": "postcss **/*.css -d dist/ -b ./ --use postcss-cssnext",
     "production:css": "postcss **/*.css -d dist/ -b ./ --use postcss-cssnext cssnano",
     "cachebust": "hashmark dist/**/*.{js,css} {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\//g'  | replaceinfiles -s **/*.php -d {dir}/{name}{ext}",
-    "dev": "rm -rf dist/ && npm run transpile && npm run dev:css",
-    "production": "rm -rf dist/ && npm run transpile && npm run production:css && npm run cachebust"
+    "dev": "npm run cleanWorkspace && npm run transpile && npm run dev:css && npm run removeUnecessaryFiles",
+    "production": "npm run cleanWorkspace && npm run transpile && npm run production:css && npm run cachebust && npm run removeUnecessaryFiles",
+    "cleanWorkspace": "rm -rf dist/",
+    "removeUnnecessaryFiles": "rm -rf ./dist/node_modules"
   },
   "repository": {
     "type": "git",
