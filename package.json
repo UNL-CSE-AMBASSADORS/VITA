@@ -7,7 +7,7 @@
     "transpile": "babel . -d dist --ignore node_modules/,dist/",
     "cachebust": "hashmark dist/**/*.js {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\\//g'  | replaceinfiles -s **/*.php -d {dir}/{name}{ext}",
     "dev": "rm -rf dist/ && npm run transpile",
-    "production": "rm -rf dist/ && npm run transpile && cachebust"
+    "production": "rm -rf dist/ && npm run transpile && npm run cachebust"
   },
   "repository": {
     "type": "git",
