@@ -4,7 +4,11 @@
   "description": "Scheduling and Appointment Management for VITA",
   "main": "index.js",
   "scripts": {
-    "dev": "babel . -d dist --ignore node_modules/,dist/",
+    "dev:transpile": "babel . -d dist --ignore node_modules/,dist/",
+    "dev:hash": "hashmark dist/**/*.js {dir}/{name}-{hash}{ext}",
+    "dev:replaceinfiles": "replaceinfiles -S -s **/*.php -d {base}",
+    "dev:cachebust": "hashmark dist/**/*.js {dir}/{name}-{hash}{ext} | replaceinfiles -S -s **/*.php -d {base}",
+    "dev": "rm -rf dist/ && npm run dev:transpile && npm run dev:cachebust",
     "production": "babel . -d dist --ignore node_modules/,dist/"
   },
   "repository": {
@@ -20,6 +24,8 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1"
+    "babel-preset-env": "^1.6.1",
+    "hashmark": "^5.0.0",
+    "replaceinfiles": "^1.1.4"
   }
 }
