@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "transpile": "babel . -d dist --ignore node_modules/,dist/",
-    "css": "postcss **/*.css -b -d dist",
+    "dev:css": "postcss **/*.css -d dist/ -b ./ --use postcss-cssnext",
+    "production:css": "postcss **/*.css -d dist/ -b ./ --use postcss-cssnext cssnano",
     "cachebust": "hashmark dist/**/*.js {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\//g'  | replaceinfiles -s **/*.php -d {dir}/{name}{ext}",
-    "dev": "rm -rf dist/ && npm run transpile",
-    "production": "rm -rf dist/ && npm run transpile && npm run cachebust"
+    "dev": "rm -rf dist/ && npm run transpile && npm run dev:css",
+    "production": "rm -rf dist/ && npm run transpile && npm run production:css && npm run cachebust"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,9 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "cssnano": "^3.10.0",
     "hashmark": "^5.0.0",
-    "postcss-cli": "^4.1.1"
+    "postcss-cli": "^4.1.1",
+    "postcss-cssnext": "^3.0.2"
   }
 }
