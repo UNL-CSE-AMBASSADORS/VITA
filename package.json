@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev:transpile": "babel . -d dist --ignore node_modules/,dist/",
-    "dev:hash": "hashmark dist/**/*.js {dir}/{name}-{hash}{ext}",
-    "dev:replaceinfiles": "replaceinfiles -S -s **/*.php -d {base}",
-    "dev:cachebust": "hashmark dist/**/*.js {dir}/{name}-{hash}{ext} | replaceinfiles -S -s **/*.php -d {base}",
+    "dev:cachebust": "hashmark dist/**/*.js {dir}/{name}-{hash}{ext} | replaceinfiles -S -s **/*.php -d {dir}/{name}{ext}",
     "dev": "rm -rf dist/ && npm run dev:transpile && npm run dev:cachebust",
     "production": "babel . -d dist --ignore node_modules/,dist/"
   },
