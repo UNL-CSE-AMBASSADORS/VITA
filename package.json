@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev:transpile": "babel . -d dist --ignore node_modules/,dist/",
-    "dev:cachebust": "hashmark dist/**/*.js {dir}/{name}-{hash}{ext} | replaceinfiles -S -s **/*.php -d {dir}/{name}{ext}",
+    "dev:cachebust": "hashmark dist/**/*.js {dir}/{name}-{hash}{ext} | sed 's/\\\\/\//g' | replaceinfiles -s **/*.php -d {dir}/{name}{ext}",
     "dev": "rm -rf dist/ && npm run dev:transpile && npm run dev:cachebust",
     "production": "babel . -d dist --ignore node_modules/,dist/"
   },
@@ -20,10 +20,10 @@
   },
   "homepage": "https://github.com/UNL-CSE-AMBASSADORS/VITA#readme",
   "devDependencies": {
+    "@songkick/replaceinfiles": "^1.1.6",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "hashmark": "^5.0.0",
-    "replaceinfiles": "^1.1.4"
+    "hashmark": "^5.0.0"
   }
 }
