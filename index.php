@@ -61,7 +61,7 @@ function wdnInclude($path)
             <div id="wdn_navigation_wrapper">
                 <nav id="navigation" role="navigation" aria-label="main navigation">
                     <!-- TemplateBeginEditable name="navlinks" -->
-                    <?php include "$root/sharedcode/navigation.html"; ?>
+                    <?php include "$root/sharedcode/navigation.php"; ?>
                     <!-- TemplateEndEditable -->
                     <?php wdnInclude("/wdn/templates_4.1/includes/navigation-addons.html"); ?>
                 </nav>
