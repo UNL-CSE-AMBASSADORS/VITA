@@ -1,4 +1,5 @@
 <?php
+$root = realpath($_SERVER["DOCUMENT_ROOT"]);
 function wdnInclude($path)
 {
     $documentRoot = 'https://unlcms.unl.edu';
@@ -52,7 +53,7 @@ function wdnInclude($path)
                 <!-- TemplateBeginEditable name="breadcrumbs" -->
                 <ul>
                     <li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
-                    <li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
+                    <li><a href="#" title="VITA Lincoln">VITA Lincoln</a></li>
                     <li>Home</li>
                 </ul>
                 <!-- TemplateEndEditable -->
@@ -60,7 +61,7 @@ function wdnInclude($path)
             <div id="wdn_navigation_wrapper">
                 <nav id="navigation" role="navigation" aria-label="main navigation">
                     <!-- TemplateBeginEditable name="navlinks" -->
-                    <?php include "../sharedcode/navigation.html"; ?>
+                    <?php include "$root/sharedcode/navigation.html"; ?>
                     <!-- TemplateEndEditable -->
                     <?php wdnInclude("/wdn/templates_4.1/includes/navigation-addons.html"); ?>
                 </nav>
@@ -96,7 +97,7 @@ function wdnInclude($path)
             <div id="wdn_local_footer" class="wdn-band wdn-footer-local">
                 <div class="wdn-inner-wrapper">
                     <!-- TemplateBeginEditable name="contactinfo" -->
-                    <?php include "../sharedcode/localFooter.html"; ?>
+                    <?php include "$root/sharedcode/localFooter.html"; ?>
                     <!-- TemplateEndEditable -->
                     <!-- TemplateBeginEditable name="leftcollinks" -->
                     <!-- TemplateEndEditable -->
