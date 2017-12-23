@@ -30,6 +30,9 @@ function emailConfirmation($data) {
 	$response['success'] = false;
 
 	try {
+		if (!isset($data['email']) || !preg_match('/.+@.+/', $data['email'])) throw new Exception('Invalid email address given. Unable to send email.', MY_EXCEPTION);
+		if (!isset($data['firstName']) || !isset($data['siteId']) || !isset($data['scheduledTime'])) throw new Exception('Invalid information received. Unable to send email.', MY_EXCEPTION); 
+
 		$confirmationMessage = generateConfirmation($data['firstName'], $data['siteId'], $data['scheduledTime']);
 
 		if (PROD) {
@@ -39,7 +42,11 @@ function emailConfirmation($data) {
 		}
 		$response['success'] = true;
 	} catch (Exception $e) {
-		$response['error'] = 'There was an error on the server, please try again. If the problem persists, please print this page instead.';
+		if ($e->getCode() === MY_EXCEPTION) {
+			$response['error'] = $e->getMessage();
+		} else {
+			$response['error'] = 'There was an error on the server, please try again. If the problem persists, please print this page instead.';
+		}
 	}
 
 	echo json_encode($response);
