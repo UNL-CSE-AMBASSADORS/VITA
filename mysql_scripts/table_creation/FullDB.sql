@@ -3,6 +3,7 @@ USE vita;
 DROP TABLE IF EXISTS Answer;
 DROP TABLE IF EXISTS ServicedAppointment;
 DROP TABLE IF EXISTS Appointment;
+DROP TABLE IF EXISTS DependentClient;
 DROP TABLE IF EXISTS AppointmentTime;
 DROP TABLE IF EXISTS Client;
 DROP TABLE IF EXISTS UserShift;
@@ -50,7 +51,6 @@ CREATE TABLE Site (
 	title VARCHAR(255) NOT NULL,
 	address VARCHAR(255) NOT NULL,
 	phoneNumber VARCHAR(20) NOT NULL,
-	appointmentOnly BOOLEAN NOT NULL DEFAULT FALSE,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
 	lastModifiedDate DATETIME,
 	archived BOOLEAN NOT NULL DEFAULT FALSE,
@@ -66,6 +66,14 @@ CREATE TABLE Client (
 	lastName VARCHAR(255) NOT NULL,
 	phoneNumber VARCHAR(255) NULL,
 	emailAddress VARCHAR(255) NULL
+);
+
+CREATE TABLE DependentClient (
+	dependentClientId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	firstName VARCHAR(255) NOT NULL,
+	lastName VARCHAR(255) NOT NULL,
+	clientId INTEGER UNSIGNED NOT NULL,
+	FOREIGN KEY(clientId) REFERENCES Client(clientId)
 );
 
 CREATE TABLE AppointmentTime (
@@ -109,8 +117,7 @@ CREATE TABLE ServicedAppointment (
     timeAppointmentEnded DATETIME NULL DEFAULT NULL,
     completed BOOLEAN NULL DEFAULT NULL,
     notCompletedDescription VARCHAR(255) NULL DEFAULT NULL,
-	servicedBy INTEGER UNSIGNED NULL,
-	FOREIGN KEY(servicedBy) REFERENCES User(userId),
+	servicedByStation INTEGER UNSIGNED NULL,
 	appointmentId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId)
 );

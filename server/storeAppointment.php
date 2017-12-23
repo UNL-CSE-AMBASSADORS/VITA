@@ -52,6 +52,30 @@ function storeAppointment($data){
 
 		$clientId = $DB_CONN->lastInsertId();
 
+
+		$dependentClientInsert = "INSERT INTO DependentClient
+			(
+				clientId,
+				firstName,
+				lastName
+			)
+			VALUES
+			(
+				?,
+				?,
+				?
+			)";	
+		$stmt = $DB_CONN->prepare($dependentClientInsert);						
+		foreach ($data['dependents'] as $dependentClient) {
+			$dependentClientParams = array( 
+				$clientId,
+				$dependentClient['firstName'], 
+				$dependentClient['lastName']
+			);
+			$stmt->execute($dependentClientParams);
+		}
+
+
 		$appointmentInsert = "INSERT INTO Appointment
 			(
 				clientId,
@@ -131,7 +155,7 @@ function storeAppointment($data){
 		}
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
-
+		
 		// TODO
 		// mail('vita@cse.unl.edu', 'Please help, everything is on fire?', print_r($e, true).print_r($data, true));
 	}

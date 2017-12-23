@@ -14,28 +14,10 @@
 		case 'checkIn': checkIn($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'completePaperwork': completePaperwork($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentStart': appointmentStart($_REQUEST['time'], $_REQUEST['id']); break;
-		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id'], $_REQUEST['servicedById']); break;
+		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id'], $_REQUEST['stationNumber']); break;
 		case 'appointmentIncomplete': appointmentIncomplete($_REQUEST['explanation'], $_REQUEST['id']); break;
 		case 'cancelledAppointment': cancelledAppointment($_REQUEST['id']); break;
-		case 'getVolunteers': getVolunteers($_REQUEST['date'], $_REQUEST['siteId']); break;
 		default: break;
-	}
-
-	function getVolunteers($date, $siteId) {
-		GLOBAL $DB_CONN;
-		$stmt = $DB_CONN->prepare("SELECT User.firstName, User.lastName, User.userId FROM User
-			JOIN UserShift ON User.userId = UserShift.userId
-			JOIN Shift ON UserShift.shiftId = Shift.shiftId
-			WHERE DATE(Shift.startTime) = ?
-				AND Shift.siteId = ?
-				AND Shift.archived = FALSE 
-				AND User.archived = FALSE"
-		);
-
-		$stmt->execute(array($date, $siteId));
-		$volunteers = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		echo json_encode($volunteers);
-		$stmt = null;
 	}
 
 	function checkIn($time, $id) {
@@ -76,14 +58,14 @@
 		$stmt = null;
 	}
 
-	function appointmentComplete($time, $id, $servicedById) {
+	function appointmentComplete($time, $id, $stationNumber) {
 		$stmt = $GLOBALS['conn']->prepare(
 			"UPDATE ServicedAppointment
-			SET timeAppointmentEnded = ?, completed = TRUE, servicedBy = ?
+			SET timeAppointmentEnded = ?, completed = TRUE, servicedByStation = ?
 			WHERE appointmentId = ?"
 		);
 
-		$stmt->execute(array($time, $servicedById, $id));
+		$stmt->execute(array($time, $stationNumber, $id));
 		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode($appointment);
 		$stmt = null;
