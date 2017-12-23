@@ -62,6 +62,13 @@
 							<label class="form-label form-required" for="phone">Phone Number</label>
 						</div>
 
+
+						<h3 class="form-subheading">Add Filing Dependents</h3>
+						<p>Are any of your dependents filing a return during this appointment? If so, add them here.</p>
+						<div id="dependents" class="mb-3"></div>
+						<button type="button" class="btn mb-3" id="addDependentButton">Add Dependent</button>
+
+						
 						<h3 class="form-subheading">Background Information</h3>
 
 						<div class="form-radio row" id="language">
