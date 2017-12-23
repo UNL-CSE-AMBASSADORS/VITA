@@ -425,7 +425,7 @@ $('#vitaSignupForm').submit(function(e) {
 
 				if (emailValue.length > 0) {
 					var emailMeButton = $('<button type="button">Email Me this Confirmation</button>').addClass('mb-3 ml-2 btn btn-primary').click(function() {
-						$(this).removeClass('btn-primary').addClass('btn-secondary').prop('disabled', true);
+						$(this).prop('disabled', true).removeClass('btn-primary').addClass('btn-secondary');
 						$.ajax({
 							url: "/server/storeAppointment.php",
 							type: "POST",
