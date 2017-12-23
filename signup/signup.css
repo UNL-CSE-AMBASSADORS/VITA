@@ -5,3 +5,32 @@
 td.ui-state-disabled.full {
 	opacity: 0.65;
 }
+
+@media print {
+	@page {
+		size: portrait;
+	}
+
+	#google_translate_element, button, .btn, .navbar {
+		display: none;
+	}
+
+	body {
+		font-size: 12pt;
+		font-family: 'Times New Roman', Times, serif;
+	}
+
+	b {
+		font-weight: normal;
+	}
+
+	h2 {
+		font-size: 18pt;
+		font-weight: normal;
+	}
+
+	h5 {
+		font-size: 14pt;
+		font-weight: normal;
+	}
+}

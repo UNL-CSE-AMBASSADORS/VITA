@@ -387,6 +387,7 @@ $('#vitaSignupForm').submit(function(e) {
 	var language = $('#language').find('input[type="radio"]:checked').val();
 
 	var data = {
+		"action":"storeAppointment",
 		"firstName":firstName.value,
 		"lastName":lastName.value,
 		"email":email.value,
@@ -399,6 +400,9 @@ $('#vitaSignupForm').submit(function(e) {
 	};
 
 	// AJAX Code To Submit Form.
+	var emailValue = email.value;
+	var firstNameValue = firstName.value;
+	var siteId = sitePickerSelect.value;
 	$.ajax({
 		url: "/server/storeAppointment.php",
 		type: "post",
@@ -409,9 +413,48 @@ $('#vitaSignupForm').submit(function(e) {
 			response = response.responseJSON;
 
 			if(typeof response !== 'undefined' && response && response.success){
+				document.body.scrollTop = document.documentElement.scrollTop = 0;
 				$(vitaSignupForm).hide();
 				$(responsePlaceholder).show();
 				responsePlaceholder.innerHTML = response.message;
+
+				var printButton = $('<button type="button">Print</button>').addClass('mb-3 btn btn-primary').click(function() {
+					window.print();
+				});
+				$(responsePlaceholder).append(printButton);
+
+				if (emailValue.length > 0) {
+					var emailMeButton = $('<button type="button">Email Me this Confirmation</button>').addClass('mb-3 ml-2 btn btn-primary').click(function() {
+						$(this).removeClass('btn-primary').addClass('btn-secondary').prop('disabled', true);
+						$.ajax({
+							url: "/server/storeAppointment.php",
+							type: "POST",
+							dataType: "JSON",
+							data: {
+								"action": "emailConfirmation",
+								"email": emailValue,
+								"firstName": firstNameValue,
+								"siteId": siteId,
+								"scheduledTime": scheduledTime
+							},
+							cache: false,
+							success: function(response) {
+								if (response.success) {
+									emailMeButton.html('Sent!');
+								} else {
+									emailMeButton.prop('disabled', false);
+									alert(response.error);
+								}
+							},
+							error: function(response) {
+								emailMeButton.prop('disabled', false);
+								alert('There was a problem on the server. Please try again or print this page instead.');
+							}
+						});
+						$(this).html('Sent!').removeClass('btn-primary').addClass('btn-secondary').prop('disabled', true);
+					});
+					$(responsePlaceholder).append(emailMeButton);
+				}
 			}else{
 				alert('There was an error on the server! Please refresh the page in a few minutes and try again.');
 			}
