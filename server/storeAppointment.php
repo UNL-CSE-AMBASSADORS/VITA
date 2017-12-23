@@ -53,26 +53,28 @@ function storeAppointment($data){
 		$clientId = $DB_CONN->lastInsertId();
 
 
-		$dependentClientInsert = "INSERT INTO DependentClient
-			(
-				clientId,
-				firstName,
-				lastName
-			)
-			VALUES
-			(
-				?,
-				?,
-				?
-			)";	
-		$stmt = $DB_CONN->prepare($dependentClientInsert);						
-		foreach ($data['dependents'] as $dependentClient) {
-			$dependentClientParams = array( 
-				$clientId,
-				$dependentClient['firstName'], 
-				$dependentClient['lastName']
-			);
-			$stmt->execute($dependentClientParams);
+		if (isset($data['dependents'])) {
+			$dependentClientInsert = "INSERT INTO DependentClient
+				(
+					clientId,
+					firstName,
+					lastName
+				)
+				VALUES
+				(
+					?,
+					?,
+					?
+				)";	
+			$stmt = $DB_CONN->prepare($dependentClientInsert);						
+			foreach ($data['dependents'] as $dependentClient) {
+				$dependentClientParams = array( 
+					$clientId,
+					$dependentClient['firstName'], 
+					$dependentClient['lastName']
+				);
+				$stmt->execute($dependentClientParams);
+			}
 		}
 
 
