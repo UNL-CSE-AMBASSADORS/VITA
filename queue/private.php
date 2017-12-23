@@ -94,8 +94,10 @@
 							<select ng-disabled="!client.preparing" ng-model="client.selectedVolunteer" ng-options="volunteer.name for volunteer in volunteers track by volunteer.userId">
 								<option value="" style="display:none;">-- Select Preparer --</option>
 							</select>
-							<div ng-repeat="filingStatus in filingStatuses">
-								<input type="checkbox" ng-model="filingStatus.checked"/> {{filingStatus.text}}
+							<div class="mt-2 row">
+								<div class="col-sm-6" ng-repeat="filingStatus in filingStatuses">
+									<input type="checkbox" ng-disabled="!client.preparing" ng-model="filingStatus.checked"/> {{filingStatus.text}}
+								</div>
 							</div>
 						</br>
 							<button type="button" class="btn" class="ended" ng-disabled="!client.preparing" ng-class="client.ended ? 'btn-primary': 'btn-secondary' " ng-click="completeAppointment()">Finished</button>
