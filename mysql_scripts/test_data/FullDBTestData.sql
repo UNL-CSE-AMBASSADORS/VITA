@@ -149,28 +149,28 @@ INSERT INTO UserPermission (userId, permissionId, createdBy)
 
 
 -- site
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("Test Site", "1234 Test Ave. Lincoln, NE 86722", "555-203-2032", false, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("Test Site", "1234 Test Ave. Lincoln, NE 86722", "555-203-2032", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_site1Id = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("My new new site", "5656 Test test. Lincoln, NE 83747", "555-111-2345", false, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("My new new site", "5656 Test test. Lincoln, NE 83747", "555-111-2345", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_site2Id = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("No walkins site", "9876 Test St. Lincoln, NE 29384", "555-999-8888", true, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("No walkins site", "9876 Test St. Lincoln, NE 29384", "555-999-8888", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_site3Id = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("Nebraska East Union", "Holdrege and 35th Streets", "402-472-6150", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("Nebraska East Union", "Holdrege and 35th Streets", "402-472-6150", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_nebraskaEastUnion = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("Anderson Library", "3635 Touzalin Ave", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("Anderson Library", "3635 Touzalin Ave", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_andersonLibrary = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
 
 INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)

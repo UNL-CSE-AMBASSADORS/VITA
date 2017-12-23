@@ -6,7 +6,7 @@ require_once "$root/server/config.php";
 getAllSites($_GET);
 
 /*
- * The fields that CAN be returned are: siteId, title, address, phoneNumber, and appointmentOnly
+ * The fields that CAN be returned are: siteId, title, address, and, phoneNumber
  *
  * The data can be used to narrow down what is selected from the database:
  * {
@@ -19,7 +19,7 @@ getAllSites($_GET);
  */
 function getAllSites($data) {
 	GLOBAL $DB_CONN;
-	$defaultSelectColumns = array('siteId', 'title', 'address', 'phoneNumber', 'appointmentOnly');
+	$defaultSelectColumns = array('siteId', 'title', 'address', 'phoneNumber');
 
 	// construct select columns list
 	$selectColumns = [];
