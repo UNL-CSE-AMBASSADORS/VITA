@@ -94,6 +94,9 @@
 							<select ng-disabled="!client.preparing" ng-model="client.selectedVolunteer" ng-options="volunteer.name for volunteer in volunteers track by volunteer.userId">
 								<option value="" style="display:none;">-- Select Preparer --</option>
 							</select>
+							<div ng-repeat="filingStatus in filingStatuses">
+								<input type="checkbox" ng-model="filingStatus.checked"/> {{filingStatus.text}}
+							</div>
 						</br>
 							<button type="button" class="btn" class="ended" ng-disabled="!client.preparing" ng-class="client.ended ? 'btn-primary': 'btn-secondary' " ng-click="completeAppointment()">Finished</button>
 						</div>
@@ -132,10 +135,11 @@
 		</div>
 	</div>
 
+	<!-- CHANGE BACK TO DIST -->
 	<?php require_once "$root/server/footer.php" ?>
 	<?php require_once "$root/server/angularjs_dependencies.php" ?>
-	<script src="/dist/queue/queue.js"></script>
-	<script src="/dist/queue/queue_service.js"></script>
-	<script src="/dist/queue/queue_private.js"></script>
+	<script src="/queue/queue.js"></script>
+	<script src="/queue/queue_service.js"></script>
+	<script src="/queue/queue_private.js"></script>
 </body>
 </html>

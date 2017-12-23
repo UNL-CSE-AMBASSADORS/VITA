@@ -2,6 +2,8 @@ USE vita;
 
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE Answer;
+TRUNCATE AppointmentFilingStatus;
+TRUNCATE FilingStatus;
 TRUNCATE ServicedAppointment;
 TRUNCATE Appointment;
 TRUNCATE AppointmentTime;
@@ -60,6 +62,22 @@ INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
 INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
 	VALUES (0, @passwordHash, TIMESTAMP(0), @user_siteAdmin1Id);
 -- end login
+
+
+
+-- filing statuses
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('State E-file', 'state_efile');
+
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('Federal E-file', 'federal_efile');
+
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('State Paper', 'state_paper');
+
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('Federal Paper', 'federal_paper');
+-- end filiing statuses
 
 
 

@@ -14,6 +14,9 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 
 	$scope.selectClient = function(client) {
 		$scope.client = client;
+		for (let filingStatus of $scope.filingStatuses) {
+			filingStatus.checked = false;
+		}
 	};
 
 	$scope.checkIn = function() {
@@ -37,8 +40,15 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 			return;
 		}
 
+		let selectedFilingStatuses = [];
+		for (let filingStatus of $scope.filingStatuses) {
+			if (filingStatus.checked) {
+				selectedFilingStatuses.push(filingStatus.filingStatusId);
+			}
+		}
+
 		$scope.client.ended = true;
-		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId, $scope.client.selectedVolunteer.userId);
+		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId, $scope.client.selectedVolunteer.userId, selectedFilingStatuses);
 	};
 
 	$scope.incompleteAppointment = function(explanation) {
@@ -76,8 +86,21 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 		});
 	}
 
+	$scope.getFilingStatuses = function() {
+		QueueService.getFilingStatuses().then(function(data) {
+			if(data == null) {
+				console.log('server error');
+			} else if(data.length > 0) {
+				$scope.filingStatuses = data;
+			} else {
+				$scope.filingStatuses = [];
+			}
+		});
+	}
+
 	// Invoke initially
 	$scope.getVolunteers();
+	$scope.getFilingStatuses();
 });
 
 queueApp.filter('searchFor', function(){
