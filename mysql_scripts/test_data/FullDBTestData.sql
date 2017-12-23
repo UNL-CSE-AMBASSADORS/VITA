@@ -9,6 +9,7 @@ TRUNCATE AppointmentTime;
 TRUNCATE Client;
 TRUNCATE UserShift;
 TRUNCATE Shift;
+TRUNCATE Role;
 TRUNCATE Site;
 TRUNCATE PossibleAnswer;
 TRUNCATE Question;
@@ -24,24 +25,24 @@ TRUNCATE User;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- users
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("Preparer", "McPreparer", "preparer@test.test", "555-123-4567", true);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("Preparer", "McPreparer", "preparer@test.test", "555-123-4567");
 SET @user_preparer1Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("Preparer2", "MacPreparer2", "preparer2@test.test", "555-902-7563", true);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("Preparer2", "MacPreparer2", "preparer2@test.test", "555-902-7563");
 SET @user_preparer2Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("Reviewer", "McReviewer", "reviewer@test.test", "555-952-7319", false);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("Reviewer", "McReviewer", "reviewer@test.test", "555-952-7319");
 SET @user_reviewer1Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("Receptionist", "McReceptionist", "receptionist@test.test", "555-987-6543", false);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("Receptionist", "McReceptionist", "receptionist@test.test", "555-987-6543");
 SET @user_receptionist1Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("SiteAdmin", "McSiteAdmin", "siteadmin@test.test", "555-019-2837", false);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("SiteAdmin", "McSiteAdmin", "siteadmin@test.test", "555-019-2837");
 SET @user_siteAdmin1Id = LAST_INSERT_ID();
 -- end users
 
@@ -767,33 +768,53 @@ SET @shift_site2Shift3Id = LAST_INSERT_ID();
 
 
 
+-- role
+INSERT INTO Role (name, lookupName)
+	VALUES ("Site Administrator", "site_administrator");
+SET @role_siteAdministrator = LAST_INSERT_ID();
+
+INSERT INTO Role (name, lookupName)
+	VALUES ("Greeter", "greeter");
+SET @role_greeter = LAST_INSERT_ID();
+
+INSERT INTO Role (name, lookupName)
+	VALUES ("Preparer", "preparer");
+SET @role_preparer = LAST_INSERT_ID();
+
+INSERT INTO Role (name, lookupName)
+	VALUES ("Reviewer", "reviewer");
+SET @role_reviewer = LAST_INSERT_ID();
+-- end role
+
+
+
 -- user shift
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_preparer1Id, @shift_site1Shift1Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_preparer1Id, @shift_site1Shift1Id, @role_preparer);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_preparer1Id, @shift_site1Shift2Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_preparer1Id, @shift_site1Shift2Id, @role_preparer);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_preparer2Id, @shift_site1Shift2Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_preparer2Id, @shift_site1Shift2Id, @role_preparer);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_preparer2Id, @shift_site2Shift3Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_preparer2Id, @shift_site2Shift3Id, @role_preparer);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_receptionist1Id, @shift_site1Shift1Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_receptionist1Id, @shift_site1Shift1Id, @role_greeter);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_receptionist1Id, @shift_site1Shift2Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_receptionist1Id, @shift_site1Shift2Id, @role_greeter);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_reviewer1Id, @shift_site2Shift1Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_reviewer1Id, @shift_site2Shift1Id, @role_reviewer);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_reviewer1Id, @shift_site2Shift2Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_reviewer1Id, @shift_site2Shift2Id, @role_reviewer);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_reviewer1Id, @shift_site2Shift3Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_reviewer1Id, @shift_site2Shift3Id, @role_reviewer);
 -- end user shift
 
 

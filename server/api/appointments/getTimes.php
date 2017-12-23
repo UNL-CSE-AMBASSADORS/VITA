@@ -6,7 +6,7 @@ require_once "$root/server/config.php";
 getAppointmentTimes($_GET);
 
 /*
- * The fields that will be returned are: appointmentTimeId, siteId, scheduledDate,  scheduledTime, percentageAppointments, numberOfAppointmentsAlreadyMade, numberOfVolunteers
+ * The fields that will be returned are: appointmentTimeId, siteId, scheduledDate,  scheduledTime, percentageAppointments, numberOfAppointmentsAlreadyMade, numberOfPreparers
  */
 function getAppointmentTimes($data) {
 	GLOBAL $DB_CONN;
@@ -23,10 +23,11 @@ function getAppointmentTimes($data) {
 		$after = $data['after'];
 	}
 
-	$stmt = $DB_CONN->prepare('SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, TIME(scheduledTime) AS scheduledTime, percentageAppointments, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, COUNT(DISTINCT us.userShiftId) AS numberOfVolunteers, apt.minimumNumberOfAppointments, apt.maximumNumberOfAppointments
+	$stmt = $DB_CONN->prepare('SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, TIME(scheduledTime) AS scheduledTime, percentageAppointments, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, COUNT(DISTINCT us.userShiftId) AS numberOfPreparers, apt.minimumNumberOfAppointments, apt.maximumNumberOfAppointments
 		FROM AppointmentTime apt
 		LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
-		LEFT JOIN UserShift us ON us.shiftId IN (SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId AND s.startTime <= apt.scheduledTime AND s.endTime >= apt.scheduledTime)
+		LEFT JOIN UserShift us ON us.shiftId IN (SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId AND s.startTime <= apt.scheduledTime AND s.endTime >= apt.scheduledTime) 
+			AND us.roleId = (SELECT roleId FROM Role WHERE lookupName = "preparer")
 		LEFT JOIN Site s ON s.siteId = apt.siteId
 		WHERE YEAR(apt.scheduledTime) = ? AND apt.scheduledTime > ?
 		GROUP BY apt.appointmentTimeId
@@ -45,11 +46,11 @@ function getAppointmentTimes($data) {
 	echo json_encode($dstMap);
 }
 
-function calculateRemainingAppointmentsAvailable($appointmentCount, $percentAppointments, $volunteerCount, $minimum, $maximum) {
+function calculateRemainingAppointmentsAvailable($appointmentCount, $percentAppointments, $preparerCount, $minimum, $maximum) {
 	if (isset($maximum)) {
 		$availableAppointmentSpots = $maximum;
 	} else {
-		$availableAppointmentSpots = max($minimum, $volunteerCount);
+		$availableAppointmentSpots = max($minimum, $preparerCount);
 	}
 	$availableAppointmentSpots *= $percentAppointments / 100;
 	if ($appointmentCount < $availableAppointmentSpots) {
@@ -63,7 +64,7 @@ class DateSiteTimeMap {
 
 	public function addDateSiteTimeObject($dstObject) {
 		// Get the number of appointments still available
-		$appointmentsAvailable = calculateRemainingAppointmentsAvailable($dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['percentageAppointments'], $dstObject['numberOfVolunteers'], $dstObject['minimumNumberOfAppointments'], $dstObject['maximumNumberOfAppointments']);
+		$appointmentsAvailable = calculateRemainingAppointmentsAvailable($dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['percentageAppointments'], $dstObject['numberOfPreparers'], $dstObject['minimumNumberOfAppointments'], $dstObject['maximumNumberOfAppointments']);
 
 		// Reformat the time to be h:i MM
 		$time = date_format(date_create($dstObject['scheduledTime']), 'g:i A');

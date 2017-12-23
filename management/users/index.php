@@ -67,10 +67,6 @@ if (!$USER->hasPermission('edit_user_permissions')) {
 								<label for="phone">Phone Number:</label>
 								<input type="text" class="form-control" id="phone">
 							</section>
-							<section class="form-group">
-								<label for="prepareTaxes">Prepares Taxes: <input type="checkbox" id="prepareTaxes">
-								</label>
-							</section>
 						</div>
 						<div class="modal-footer">
 							<button type="submit" class="btn btn-primary">Add User</button>

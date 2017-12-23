@@ -1,15 +1,15 @@
 USE vita;
 
 -- User
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes) 
-	VALUES ('Matthew', 'Meacham', 'mmeacham6@gmail.com', '', FALSE);
+INSERT INTO User (firstName, lastName, email, phoneNumber) 
+	VALUES ('Matthew', 'Meacham', 'mmeacham6@gmail.com', '');
 SET @userId = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ('Austin', 'Schmidt', 'schmidtwithad@hotmail.com', '', FALSE);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ('Austin', 'Schmidt', 'schmidtwithad@hotmail.com', '');
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ('Spencer', 'Collins', 'collinsspencer97@gmail.com', '', FALSE);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ('Spencer', 'Collins', 'collinsspencer97@gmail.com', '');
 -- End User
 
 
@@ -1815,3 +1815,25 @@ INSERT INTO PossibleAnswer (text)
 	VALUES ("2015 or later");
 SET @possibleAnswer_2015OrLaterId = LAST_INSERT_ID();
 -- End PossibleAnswer
+
+
+
+
+
+-- Role
+INSERT INTO Role (name, lookupName)
+	VALUES ("Site Administrator", "site_administrator");
+SET @role_siteAdministrator = LAST_INSERT_ID();
+
+INSERT INTO Role (name, lookupName)
+	VALUES ("Greeter", "greeter");
+SET @role_greeter = LAST_INSERT_ID();
+
+INSERT INTO Role (name, lookupName)
+	VALUES ("Preparer", "preparer");
+SET @role_preparer = LAST_INSERT_ID();
+
+INSERT INTO Role (name, lookupName)
+	VALUES ("Reviewer", "reviewer");
+SET @role_reviewer = LAST_INSERT_ID();
+-- End Role
