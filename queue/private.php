@@ -137,11 +137,10 @@
 		</div>
 	</div>
 
-	<!-- CHANGE BACK TO DIST -->
 	<?php require_once "$root/server/footer.php" ?>
 	<?php require_once "$root/server/angularjs_dependencies.php" ?>
-	<script src="/queue/queue.js"></script>
-	<script src="/queue/queue_service.js"></script>
-	<script src="/queue/queue_private.js"></script>
+	<script src="/dist/queue/queue.js"></script>
+	<script src="/dist/queue/queue_service.js"></script>
+	<script src="/dist/queue/queue_private.js"></script>
 </body>
 </html>
