@@ -4,10 +4,12 @@ SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE Answer;
 TRUNCATE ServicedAppointment;
 TRUNCATE Appointment;
+TRUNCATE DependentClient;
 TRUNCATE AppointmentTime;
 TRUNCATE Client;
 TRUNCATE UserShift;
 TRUNCATE Shift;
+TRUNCATE Role;
 TRUNCATE Site;
 TRUNCATE PossibleAnswer;
 TRUNCATE Question;
@@ -23,24 +25,24 @@ TRUNCATE User;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- users
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("Preparer", "McPreparer", "preparer@test.test", "555-123-4567", true);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("Preparer", "McPreparer", "preparer@test.test", "555-123-4567");
 SET @user_preparer1Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("Preparer2", "MacPreparer2", "preparer2@test.test", "555-902-7563", true);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("Preparer2", "MacPreparer2", "preparer2@test.test", "555-902-7563");
 SET @user_preparer2Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("Reviewer", "McReviewer", "reviewer@test.test", "555-952-7319", false);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("Reviewer", "McReviewer", "reviewer@test.test", "555-952-7319");
 SET @user_reviewer1Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("Receptionist", "McReceptionist", "receptionist@test.test", "555-987-6543", false);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("Receptionist", "McReceptionist", "receptionist@test.test", "555-987-6543");
 SET @user_receptionist1Id = LAST_INSERT_ID();
 
-INSERT INTO User (firstName, lastName, email, phoneNumber, preparesTaxes)
-	VALUES ("SiteAdmin", "McSiteAdmin", "siteadmin@test.test", "555-019-2837", false);
+INSERT INTO User (firstName, lastName, email, phoneNumber)
+	VALUES ("SiteAdmin", "McSiteAdmin", "siteadmin@test.test", "555-019-2837");
 SET @user_siteAdmin1Id = LAST_INSERT_ID();
 -- end users
 
@@ -148,32 +150,32 @@ INSERT INTO UserPermission (userId, permissionId, createdBy)
 
 
 -- site
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("Test Site", "1234 Test Ave. Lincoln, NE 86722", "555-203-2032", false, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("Test Site", "1234 Test Ave. Lincoln, NE 86722", "555-203-2032", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_site1Id = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("My new new site", "5656 Test test. Lincoln, NE 83747", "555-111-2345", false, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("My new new site", "5656 Test test. Lincoln, NE 83747", "555-111-2345", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_site2Id = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("No walkins site", "9876 Test St. Lincoln, NE 29384", "555-999-8888", true, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("No walkins site", "9876 Test St. Lincoln, NE 29384", "555-999-8888", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_site3Id = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("Nebraska East Union", "Holdrege and 35th Streets", "402-472-6150", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("Nebraska East Union", "Holdrege and 35th Streets", "402-472-6150", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_nebraskaEastUnion = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("Anderson Library", "3635 Touzalin Ave", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("Anderson Library", "3635 Touzalin Ave", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_andersonLibrary = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, appointmentOnly, createdBy, lastModifiedBy)
-	VALUES ("International Student Scholar", "1400 R St, Lincoln, NE 68588", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("International Student Scholar", "1400 R St, Lincoln, NE 68588", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_internationalStudentScholar = LAST_INSERT_ID();
 -- End Sites
 
@@ -766,33 +768,53 @@ SET @shift_site2Shift3Id = LAST_INSERT_ID();
 
 
 
+-- role
+INSERT INTO Role (name, lookupName)
+	VALUES ("Site Administrator", "site_administrator");
+SET @role_siteAdministrator = LAST_INSERT_ID();
+
+INSERT INTO Role (name, lookupName)
+	VALUES ("Greeter", "greeter");
+SET @role_greeter = LAST_INSERT_ID();
+
+INSERT INTO Role (name, lookupName)
+	VALUES ("Preparer", "preparer");
+SET @role_preparer = LAST_INSERT_ID();
+
+INSERT INTO Role (name, lookupName)
+	VALUES ("Reviewer", "reviewer");
+SET @role_reviewer = LAST_INSERT_ID();
+-- end role
+
+
+
 -- user shift
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_preparer1Id, @shift_site1Shift1Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_preparer1Id, @shift_site1Shift1Id, @role_preparer);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_preparer1Id, @shift_site1Shift2Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_preparer1Id, @shift_site1Shift2Id, @role_preparer);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_preparer2Id, @shift_site1Shift2Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_preparer2Id, @shift_site1Shift2Id, @role_preparer);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_preparer2Id, @shift_site2Shift3Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_preparer2Id, @shift_site2Shift3Id, @role_preparer);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_receptionist1Id, @shift_site1Shift1Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_receptionist1Id, @shift_site1Shift1Id, @role_greeter);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_receptionist1Id, @shift_site1Shift2Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_receptionist1Id, @shift_site1Shift2Id, @role_greeter);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_reviewer1Id, @shift_site2Shift1Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_reviewer1Id, @shift_site2Shift1Id, @role_reviewer);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_reviewer1Id, @shift_site2Shift2Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_reviewer1Id, @shift_site2Shift2Id, @role_reviewer);
 
-INSERT INTO UserShift (userId, shiftId)
-	VALUES (@user_reviewer1Id, @shift_site2Shift3Id);
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_reviewer1Id, @shift_site2Shift3Id, @role_reviewer);
 -- end user shift
 
 
@@ -818,6 +840,22 @@ INSERT INTO Client (firstName, lastName, emailAddress)
 	VALUES ("DoneBoy", "DoneTest", "doneboydonetest@test.test");
 SET @client_client5Id = LAST_INSERT_ID();
 -- end client
+
+
+
+-- dependent client
+INSERT INTO DependentClient (firstName, lastName, clientId)
+	VALUES ("Dependent1", "McClientFace", @client_client1Id);
+
+INSERT INTO DependentClient (firstName, lastName, clientId)
+	VALUES ("Depedent2", "McClientFace", @client_client1Id);
+
+INSERT INTO DependentClient (firstName, lastName, clientId)
+	VALUES ("Dependenty1", "Tester", @client_client2Id);
+
+INSERT INTO DependentClient (firstName, lastName, clientId)
+	VALUES ("Dependenty2", "Tester", @client_client2Id);
+-- end dependent client
 
 
 
@@ -965,8 +1003,8 @@ INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
 
 -- serviced appointment
 SET @timeIn = DATE_ADD((SELECT scheduledTime FROM AppointmentTime WHERE appointmentTimeId = (SELECT appointmentTimeId FROM Appointment WHERE appointmentId = @appointment_appointment5Id)), INTERVAL 5 MINUTE);
-INSERT INTO ServicedAppointment (timeIn, servicedBy, appointmentId)
-	VALUES (@timeIn, @user_preparer1Id, @appointment_appointment5Id);
+INSERT INTO ServicedAppointment (timeIn, servicedByStation, appointmentId)
+	VALUES (@timeIn, 1, @appointment_appointment5Id);
 -- end serviced appointment
 
 
