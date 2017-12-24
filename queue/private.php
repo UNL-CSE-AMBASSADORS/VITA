@@ -57,7 +57,6 @@
 						</div>
 					</div>
 					<p ng-show="(appointments | searchFor: clientSearch).length == 0">No results for "{{clientSearch}}"</p>
-					<!-- <p ng-hide="filteredBars.length">Nothing here!</p> -->
 				</div>
 				<!-- Default message if there are no appointments on the selected date -->
 				<div class="queue" ng-if="appointments.length == 0" ng-cloak>
@@ -85,17 +84,31 @@
 					</div>
 
 						<div class="client-progress d-flex flex-column">
-							<button type="button" class="btn" class="checkin" ng-disabled="client.checkedIn" ng-class="client.checkedIn ? 'btn-primary': 'btn-secondary' " ng-click="checkIn()">Checked In</button>
+							<button type="button" class="btn" class="checkin" 
+									ng-disabled="client.checkedIn" 
+									ng-class="client.checkedIn ? 'btn-primary': 'btn-secondary' " 
+									ng-click="checkIn()">Checked In</button>
 						</br>
-							<button type="button" class="btn" class="paperworkComplete" ng-disabled="!client.checkedIn" ng-class="client.paperworkComplete ? 'btn-primary': 'btn-secondary' " ng-click="pwFilledOut()">Completed Paperwork</button>
+							<button type="button" class="btn" class="paperworkComplete" 
+									ng-disabled="!client.checkedIn || client.paperworkComplete" 
+									ng-class="client.paperworkComplete ? 'btn-primary': 'btn-secondary' " 
+									ng-click="pwFilledOut()">Completed Paperwork</button>
 						</br>
-							<button type="button" class="btn" class="preparing" ng-disabled="!client.paperworkComplete" ng-class="client.preparing ? 'btn-primary': 'btn-secondary' " ng-click="nowPreparing()">Preparing</button>
+							<button type="button" class="btn" class="preparing" 
+									ng-disabled="!client.paperworkComplete || client.preparing" 
+									ng-class="client.preparing ? 'btn-primary': 'btn-secondary' "
+									ng-click="nowPreparing()">Preparing</button>
 						</br>
-							<select ng-disabled="!client.preparing" ng-model="client.selectedStationNumber" ng-options="stationNumber for stationNumber in stationNumbers">
+							<select ng-disabled="!client.preparing || client.ended" 
+									ng-model="client.selectedStationNumber"
+									ng-options="stationNumber for stationNumber in stationNumbers">
 								<option value="" style="display:none;">-- Select Station --</option>
 							</select>
 						</br>
-							<button type="button" class="btn" class="ended" ng-disabled="!client.preparing" ng-class="client.ended ? 'btn-primary': 'btn-secondary' " ng-click="completeAppointment()">Finished</button>
+							<button type="button" class="btn" class="ended" 
+									ng-disabled="!client.preparing || client.ended" 
+									ng-class="client.ended ? 'btn-primary': 'btn-secondary' " 
+									ng-click="completeAppointment()">Finished</button>
 						</div>
 
 						<div class="greeter-directions">
