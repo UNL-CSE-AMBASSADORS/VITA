@@ -20,78 +20,138 @@
 		default: break;
 	}
 
-	function checkIn($time, $id) {
-		$stmt = $GLOBALS['conn']->prepare(
-			"INSERT INTO ServicedAppointment (timeIn, appointmentId)
-					VALUES (?, ?)"
-		);
+	function checkIn($time, $appointmentId) {
+		$response = array();
+		$response['success'] = true;
 
-		$stmt->execute(array($time, $id));
-		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		echo json_encode($appointment);
+		try {
+			$stmt = $GLOBALS['conn']->prepare(
+				"INSERT INTO ServicedAppointment (timeIn, appointmentId)
+						VALUES (?, ?)"
+			);
+
+			if ($stmt->execute(array($time, $appointmentId)) == false) {
+				throw new Exception();
+			}
+		} catch (Exception $e) {
+			$response['success'] = false;
+			$response['error'] = 'Unable to check in the client. Please refresh the page and try again.';
+		}
+
+		echo json_encode($response);
 		$stmt = null;
 	}
 
-	function completePaperwork($time, $id) {
-		$stmt = $GLOBALS['conn']->prepare(
-			"UPDATE ServicedAppointment
-			SET timeReturnedPapers = ?
-			WHERE appointmentId = ?"
-		);
+	function completePaperwork($time, $appointmentId) {
+		$response = array();
+		$response['success'] = true;
 
-		$stmt->execute(array($time, $id));
-		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		echo json_encode($appointment);
+		try {
+			$stmt = $GLOBALS['conn']->prepare(
+				"UPDATE ServicedAppointment
+				SET timeReturnedPapers = ?
+				WHERE appointmentId = ?"
+			);
+
+			if ($stmt->execute(array($time, $appointmentId)) == false) {
+				throw new Exception();
+			}
+		} catch (Exception $e) {
+			$response['success'] = false;
+			$response['error'] = 'Unable to update the appointment. Please refresh the page and try again.';
+		}
+
+		echo json_encode($response);
 		$stmt = null;
 	}
 
-	function appointmentStart($time, $id) {
-		$stmt = $GLOBALS['conn']->prepare(
-			"UPDATE ServicedAppointment
-			SET timeAppointmentStarted = ?
-			WHERE appointmentId = ?"
-		);
+	function appointmentStart($time, $appointmentId) {
+		$response = array();
+		$response['success'] = true;
 
-		$stmt->execute(array($time, $id));
-		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		echo json_encode($appointment);
+		try {
+			$stmt = $GLOBALS['conn']->prepare(
+				"UPDATE ServicedAppointment
+				SET timeAppointmentStarted = ?
+				WHERE appointmentId = ?"
+			);
+
+			if ($stmt->execute(array($time, $appointmentId)) == false) {
+				throw new Exception();
+			}
+		} catch (Exception $e) {
+			$response['success'] = false;
+			$response['error'] = 'Unable to update the appointment. Please refresh the page and try again.';
+		}
+
+		echo json_encode($response);
 		$stmt = null;
 	}
 
-	function appointmentComplete($time, $id, $stationNumber) {
-		$stmt = $GLOBALS['conn']->prepare(
-			"UPDATE ServicedAppointment
-			SET timeAppointmentEnded = ?, completed = TRUE, servicedByStation = ?
-			WHERE appointmentId = ?"
-		);
+	function appointmentComplete($time, $appointmentId, $stationNumber) {
+		$response = array();
+		$response['success'] = true;
 
-		$stmt->execute(array($time, $stationNumber, $id));
-		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		echo json_encode($appointment);
+		try {
+			$stmt = $GLOBALS['conn']->prepare(
+				"UPDATE ServicedAppointment
+				SET timeAppointmentEnded = ?, servicedByStation = ?, completed = TRUE
+				WHERE appointmentId = ?"
+			);
+
+			if ($stmt->execute(array($time, $stationNumber, $appointmentId)) == false) {
+				throw new Exception();
+			}
+		} catch (Exception $e) {
+			$response['success'] = false;
+			$response['error'] = 'Unable to update the appointment. Please refresh the page and try again.';
+		}
+
+		echo json_encode($response);
 		$stmt = null;
 	}
 
-	function appointmentIncomplete($explanation, $id) {
-		$stmt = $GLOBALS['conn']->prepare(
-			"UPDATE ServicedAppointment
-			SET notCompletedDescription = ?, completed = FALSE
-			WHERE appointmentId = ?"
-		);
+	function appointmentIncomplete($explanation, $appointmentId) {
+		$response = array();
+		$response['success'] = true;
 
-		$stmt->execute(array($explanation, $id));
-		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		echo json_encode($appointment);
+		try {
+			$stmt = $GLOBALS['conn']->prepare(
+				"UPDATE ServicedAppointment
+				SET notCompletedDescription = ?, completed = FALSE
+				WHERE appointmentId = ?"
+			);
+
+			if ($stmt->execute(array($explanation, $appointmentId)) == false) {
+				throw new Exception();
+			}
+		} catch (Exception $e) {
+			$response['success'] = false;
+			$response['error'] = 'Unable to update the appointment. Please refresh the page and try again.';
+		}
+
+		echo json_encode($response);
 		$stmt = null;
 	}
 
-	function cancelledAppointment($id) {
-		$stmt = $GLOBALS['conn']->prepare(
-			"INSERT INTO ServicedAppointment (appointmentId, notCompletedDescription, completed)
-					VALUES (?, 'Cancelled Appointment', FALSE)"
-		);
+	function cancelledAppointment($appointmentId) {
+		$response = array();
+		$response['success'] = true;
 
-		$stmt->execute(array($id));
-		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		echo json_encode($appointment);
+		try {
+			$stmt = $GLOBALS['conn']->prepare(
+				"INSERT INTO ServicedAppointment (appointmentId, notCompletedDescription, completed)
+						VALUES (?, 'Cancelled Appointment', FALSE)"
+			);
+
+			if ($stmt->execute(array($appointmentId)) == false) {
+				throw new Exception();
+			}
+		} catch (Exception $e) {
+			$response['success'] = false;
+			$response['error'] = 'Unable to update the appointment. Please refresh the page and try again.';
+		}
+
+		echo json_encode($response);
 		$stmt = null;
 	}

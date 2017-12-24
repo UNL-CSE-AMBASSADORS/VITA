@@ -11,17 +11,32 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 
 	$scope.checkIn = function() {
 		$scope.client.checkedIn = true;
-		QueueService.checkInNow(new Date().toISOString(), $scope.client.appointmentId);
+		QueueService.checkInNow(new Date().toISOString(), $scope.client.appointmentId).then(function(result) {
+			if(!result.success) {
+				$scope.client.checkedIn = false;
+				alert(result.error);
+			}
+		});
 	};
 
 	$scope.pwFilledOut = function() {
 		$scope.client.paperworkComplete = true;
-		QueueService.turnInPapers(new Date().toISOString(), $scope.client.appointmentId);
+		QueueService.turnInPapers(new Date().toISOString(), $scope.client.appointmentId).then(function(result) {
+			if(!result.success) {
+				$scope.client.paperworkComplete = false;
+				alert(result.error);
+			}
+		});
 	};
 
 	$scope.nowPreparing = function() {
 		$scope.client.preparing = true;
-		QueueService.beginAppointment(new Date().toISOString(), $scope.client.appointmentId);
+		QueueService.beginAppointment(new Date().toISOString(), $scope.client.appointmentId).then(function(result) {
+			if(!result.success) {
+				$scope.client.preparing = false;
+				alert(result.error);
+			}
+		});
 	};
 
 	$scope.completeAppointment = function() {
@@ -31,19 +46,35 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 		}
 
 		$scope.client.ended = true;
-		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId, $scope.client.selectedStationNumber);
+		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId, $scope.client.selectedStationNumber).then(function(result) {
+			if(!result.success) {
+				$scope.client.ended = false;
+				alert(result.error);
+			}
+		});
 	};
 
 	$scope.incompleteAppointment = function(explanation) {
 		$scope.client.ended = true;
 		let urlSafeExplanation = fixedEncodeURIComponent(explanation);
-		QueueService.incompleteAppointment(urlSafeExplanation, $scope.client.appointmentId);
-		$('textarea').val('');
+		QueueService.incompleteAppointment(urlSafeExplanation, $scope.client.appointmentId).then(function(result) {
+			if(!result.success) {
+				$scope.client.ended = false;
+				alert(result.error);
+			} else {
+				$('textarea').val('');
+			}
+		});
 	};
 
 	$scope.cancelledAppointment = function() {
 		$scope.client.ended = true;
-		QueueService.cancelledAppointment($scope.client.appointmentId);
+		QueueService.cancelledAppointment($scope.client.appointmentId).then(function(result) {
+			if(!result.success) {
+				$scope.client.ended = false;
+				alert(result.error);
+			}
+		});
 	};
 
 	$scope.stationNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];

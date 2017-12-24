@@ -59,10 +59,10 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 		refreshClockContent();
 	}.bind(this), 1000);
 
-	// Create interval to update appointment information every 10 seconds
+	// Create interval to update appointment information every 60 seconds
 	var appointmentInterval = $interval(function(){
 		$scope.updateAppointmentInformation();
-	}.bind(this), 10000);
+	}.bind(this), 60000);
 
 	// Destroy the intervals when we leave this page
 	$scope.$on('$destroy', function () {
