@@ -17,7 +17,7 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 		
 		QueueService.getAppointments(year + "-" + month + "-" + day, siteId).then(function(data) {
 			if(data == null) {
-				console.log('server error');
+				alert('There was an error loading the queue. Please try refreshing the page.');
 			} else if(data.length > 0) {
 				$scope.appointments = data.map((appointment) => {
 					// We force the time into CST
@@ -38,7 +38,7 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 	$scope.getSites = function() {
 		QueueService.getSites().then(function(data) {
 			if(data == null) {
-				console.log('server error');
+				alert('There was an error loading the queue. Please try refreshing the page.');
 			} else if (data.length > 0) {
 				$scope.sites = data;
 			} else {
