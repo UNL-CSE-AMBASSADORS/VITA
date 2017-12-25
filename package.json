@@ -4,8 +4,14 @@
   "description": "Scheduling and Appointment Management for VITA",
   "main": "index.js",
   "scripts": {
-    "dev": "babel . -d dist --ignore node_modules/,dist/",
-    "production": "babel . -d dist --ignore node_modules/,dist/"
+    "transpile": "babel . -d ./dist --ignore ./node_modules/,./dist/",
+    "dev:css": "postcss ./**/*.css -d ./dist/ -b ./ --use postcss-cssnext",
+    "production:css": "postcss ./**/*.css -d ./dist/ -b ./ --use postcss-cssnext cssnano",
+    "cachebust": "hashmark ./dist/**/*.{js,css} {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\//g' | replaceinfiles -s ./**/*.php -d {dir}/{name}{ext}",
+    "dev": "npm run cleanWorkspace && npm run transpile && npm run dev:css && npm run removeUnnecessaryFiles",
+    "production": "npm run cleanWorkspace && npm run transpile && npm run production:css && npm run cachebust && npm run removeUnnecessaryFiles",
+    "cleanWorkspace": "rm -rf ./dist/",
+    "removeUnnecessaryFiles": "rm -rf ./dist/node_modules"
   },
   "repository": {
     "type": "git",
@@ -18,8 +24,13 @@
   },
   "homepage": "https://github.com/UNL-CSE-AMBASSADORS/VITA#readme",
   "devDependencies": {
+    "@songkick/replaceinfiles": "^1.1.6",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1"
+    "babel-preset-env": "^1.6.1",
+    "cssnano": "^3.10.0",
+    "hashmark": "^5.0.0",
+    "postcss-cli": "^4.1.1",
+    "postcss-cssnext": "^3.0.2"
   }
 }
