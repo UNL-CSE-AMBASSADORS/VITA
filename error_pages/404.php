@@ -3,8 +3,8 @@
 <html class="no-js" lang="">
 <head>
 	<title>Not Found</title>
-	<link rel="stylesheet" href="/assets/css/global.css">
-	<link rel="stylesheet" href="/error_pages/error_page.css">
+	<link rel="stylesheet" href="/dist/assets/css/global.css">
+	<link rel="stylesheet" href="/dist/error_pages/error_page.css">
 	<?php require_once "$root/server/header.php" ?>
 </head>
 <body>
