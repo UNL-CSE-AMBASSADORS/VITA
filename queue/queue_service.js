@@ -18,10 +18,9 @@ queueApp.factory("QueueService", function($http){
 			return $http({
 				url: "/server/queue/queue_priv.php",
 				method: 'POST',
-				params: {
-					"action": "checkIn",
-					"time": time,
-					"id": id
+				data: `action=checkIn&time=${time}&id=${id}`,
+				headers: {
+					'Content-Type': "application/x-www-form-urlencoded"
 				}
 			}).then(function(response){
 				return response.data;
@@ -33,10 +32,9 @@ queueApp.factory("QueueService", function($http){
 			return $http({
 				url: "/server/queue/queue_priv.php",
 				method: 'POST',
-				params: {
-					"action": "completePaperwork",
-					"time": time,
-					"id": id
+				data: `action=completePaperwork&time=${time}&id=${id}`,
+				headers: {
+					'Content-Type': "application/x-www-form-urlencoded"
 				}
 			}).then(function(response){
 				return response.data;
@@ -48,10 +46,9 @@ queueApp.factory("QueueService", function($http){
 			return $http({
 				url: "/server/queue/queue_priv.php",
 				method: 'POST',
-				params: {
-					"action": "appointmentStart",
-					"time": time,
-					"id": id
+				data: `action=appointmentStart&time=${time}&id=${id}`,
+				headers: {
+					'Content-Type': "application/x-www-form-urlencoded"
 				}
 			}).then(function(response){
 				return response.data;
@@ -63,11 +60,9 @@ queueApp.factory("QueueService", function($http){
 			return $http({
 				url: "/server/queue/queue_priv.php",
 				method: 'POST',
-				params: {
-					"action": "appointmentComplete",
-					"time": time,
-					"id": id,
-					"stationNumber": stationNumber
+				data: `action=appointmentComplete&time=${time}&id=${id}&stationNumber=${stationNumber}`,
+				headers: {
+					'Content-Type': "application/x-www-form-urlencoded"
 				}
 			}).then(function(response){
 				return response.data;
@@ -79,10 +74,9 @@ queueApp.factory("QueueService", function($http){
 			return $http({
 				url: "/server/queue/queue_priv.php",
 				method: 'POST',
-				params: {
-					"action": "appointmentIncomplete",
-					"explanation": explanation,
-					"id": id
+				data: `action=appointmentIncomplete&explanation=${explanation}&id=${id}`,
+				headers: {
+					'Content-Type': "application/x-www-form-urlencoded"
 				}
 			}).then(function(response){
 				return response.data;
@@ -94,9 +88,9 @@ queueApp.factory("QueueService", function($http){
 			return $http({
 				url: "/server/queue/queue_priv.php",
 				method: 'POST',
-				params: {
-					"action": "cancelledAppointment",
-					"id": id
+				data: `action=cancelledAppointment&id=${id}`,
+				headers: {
+					'Content-Type': "application/x-www-form-urlencoded"
 				}
 			}).then(function(response){
 				return response.data;
