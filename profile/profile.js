@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	loadProfileInformation();
 	loadAbilities();
+	loadRoles();
 	loadShifts();
 
 	initializeEventListeners();
@@ -64,6 +65,30 @@ let loadAbilities = function() {
 	});
 };
 
+let rolesMap = new Map();
+
+let loadRoles = function() {
+	$.ajax({
+		url: "/server/api/roles/getAll.php",
+		type: "GET",
+		dataType: "JSON",
+		data: {
+			roleId: true,
+			name: true
+		},
+		cache: false,
+		success: function(response) {
+			for (let i = 0; i < response.length; i++) {
+				let role = response[i];
+				rolesMap.set(role.roleId, role.name);
+			}
+		}, 
+		error: function(response) {
+			alert("Unable to load roles. Please refresh the page in a few minutes.");
+		}
+	});
+}
+
 // Maps a siteId -> dates that site is open -> shifts for that date
 let shiftsMap = new Map();
 // Maps a siteId to the title of the site
@@ -100,19 +125,19 @@ let loadShifts = function() {
 
 				// Append any shifts the person is already signed up for
 				if (shift.signedUp) {
-					appendSignedUpShift(shift.title, shift.dateString, shift.startTimeString, shift.endTimeString, shift.userShiftId, shift.siteId);
+					appendSignedUpShift(shift.title, shift.dateString, shift.startTimeString, shift.endTimeString, shift.userShiftId, shift.siteId, shift.roleName);
 				}
 			}
 		},
 		error: function(response) {
-			alert("Unable to load shift. Please refresh the page in a few minutes.");
+			alert("Unable to load shifts. Please refresh the page in a few minutes.");
 		}
 	});
 }
 
-let appendSignedUpShift = function(title, dateString, startTimeString, endTimeString, userShiftId, siteId) {
+let appendSignedUpShift = function(siteTitle, dateString, startTimeString, endTimeString, userShiftId, siteId, roleName) {
 	let shiftRow = $('<div></div>');
-	let shiftInformation = $('<span></span>').html(`${title}: ${dateString} ${startTimeString} - ${endTimeString}`);
+	let shiftInformation = $('<span></span>').html(`${siteTitle}: ${dateString} ${startTimeString} - ${endTimeString} (${roleName})`);
 	let removeButton = $('<i></i>').addClass('fa fa-trash-o icon clickable').click(function() {
 		$.ajax({
 			url: "/server/profile/profile.php",
@@ -222,10 +247,12 @@ let initializeEventListeners = function() {
 		let siteSelect = $('<select></select>').addClass("siteSelect");
 		let dateSelect = $('<select></select>').addClass("dateSelect").attr('disabled', true);
 		let timeSelect = $('<select></select>').addClass("timeSelect").attr('disabled', true);
+		let roleSelect = $('<select></select>').addClass("roleSelect");
 		
 		siteSelect.append($('<option disabled selected value="" style="display:none"> -- Select a site -- </option>'));
 		dateSelect.append($('<option disabled selected value="" style="display:none"> -- Select a date -- </option>'));
 		timeSelect.append($('<option disabled selected value="" style="display:none"> -- Select a time -- </option>'));
+		roleSelect.append($('<option disabled selected value="" style="display:none"> -- Select a role -- </option>'));
 
 		for (const [siteId, title] of sitesMap) {
 			siteSelect.append($('<option>', {
@@ -270,6 +297,13 @@ let initializeEventListeners = function() {
 			}
 		});
 
+		for (const [roleId, name] of rolesMap) {
+			roleSelect.append($('<option>', {
+				value: roleId,
+				text: name
+			}));
+		}
+
 		let cancelButton = $('<button type="button"></button>').addClass("btn btn-seconday").html("Cancel").click(function(){
 			$(this).parent().remove();
 		});
@@ -281,6 +315,7 @@ let initializeEventListeners = function() {
 			let siteId = siteSelect.val();
 			let dateString = dateSelect.val();
 			let shiftId = timeSelect.val();
+			let roleId = roleSelect.val();
 
 			$.ajax({
 				url: "/server/profile/profile.php",
@@ -288,6 +323,7 @@ let initializeEventListeners = function() {
 				dataType: "JSON",
 				data: {
 					shiftId: shiftId,
+					roleId: roleId,
 					action: "signUpForShift"
 				},
 				cache: false,
@@ -302,7 +338,8 @@ let initializeEventListeners = function() {
 								shift.userShiftId = response.userShiftId;
 
 								let title = sitesMap.get(siteId);
-								appendSignedUpShift(title, dateString, shift.startTime, shift.endTime, response.userShiftId, siteId);
+								let roleName = rolesMap.get(roleId);
+								appendSignedUpShift(title, dateString, shift.startTime, shift.endTime, response.userShiftId, siteId, roleName);
 								break;
 							}
 						}
@@ -322,7 +359,7 @@ let initializeEventListeners = function() {
 		});
 		
 
-		shiftRow.append(siteSelect, dateSelect, timeSelect, signUpButton, cancelButton);
+		shiftRow.append(siteSelect, dateSelect, timeSelect, roleSelect, signUpButton, cancelButton);
 		$("#shifts").append(shiftRow);	
 	});
 

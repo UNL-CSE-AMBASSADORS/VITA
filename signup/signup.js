@@ -19,7 +19,6 @@ $(document).ready(function() {
 	$(".form-textfield input").blur(function() {
 		var isBlank = $.trim($(this).val()).length > 0;
 		$(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
-
 	});
 });
 
@@ -291,18 +290,56 @@ function validateSignupForm() {
 	$("#vitaSignupForm").validate({
 		rules: {
 			email: {
-				required: true,
 				email: true
 			}
 		},
 		messages: {
 			email: {
-				required: "We need your email address to confirm your appointment",
 				email: "Your email address must be in the format of name@domain.com"
 			}
 		}
 	});
 }
+
+$("#addDependentButton").click(function(e) {
+	var currentLastName = $('#lastName').val();
+	var id = $('.firstName').length;
+
+	var dependentRow = $('<div></div>').addClass("dependent-div row");
+	var firstNameBlock = $('<div></div>').addClass("col-5 form-textfield");
+	var firstNameInput = $(`<input type="text" name="firstNameInput${id}" id="firstNameInput${id}" required/>`).addClass("firstName");
+	var firstNameSpan = $('<span></span>').addClass("form-bar");
+	var firstNameLabel = $(`<label for="firstNameInput${id}">First Name</label>`).addClass("form-label form-required");
+	firstNameBlock.append(firstNameInput, firstNameSpan, firstNameLabel);
+
+	var lastNameBlock = $('<div></div>').addClass("col-5 form-textfield");
+	var lastNameInput = $(`<input type="text" name="lastNameInput${id}" id="lastNameInput${id}" value="${currentLastName}" required/>`).addClass("lastName");
+	var lastNameSpan = $('<span></span>').addClass("form-bar");
+	var lastNameLabel = $(`<label for="lastNameInput${id}">Last Name</label>`).addClass("form-label form-required");
+	lastNameBlock.append(lastNameInput, lastNameSpan, lastNameLabel);
+
+	// Since the last name is inherited from the top-most last name input, we need to raise the label if there was a last name
+	if (currentLastName.trim().length > 0) lastNameLabel.addClass("form-label__floating");
+
+	var removeBlock = $('<button type="button"></button>').addClass("btn btn-danger col-2").html("Remove").click(function(){
+		$(this).parent().remove();
+	});
+
+	dependentRow.append(firstNameBlock, lastNameBlock, removeBlock);
+	$("#dependents").append(dependentRow);
+
+	// Since non-required fields are "valid" when they are empty, we need an
+	// alternate way to keep labels raised when there is content in their
+	// associated input field
+	firstNameInput.blur(function() {
+		var isBlank = $.trim($(this).val()).length > 0;
+		var label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
+	});
+	lastNameInput.blur(function() {
+		var isBlank = $.trim($(this).val()).length > 0;
+		var label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
+	});
+});
 
 // Form submission
 $('#vitaSignupForm').submit(function(e) {
@@ -333,6 +370,19 @@ $('#vitaSignupForm').submit(function(e) {
 		}
 	});
 
+	var dependents = [];
+	$(".dependent-div").each(function() { 
+		var dependentFirstName = $(this).find('.firstName').val().trim();
+		var dependentLastName = $(this).find('.lastName').val().trim();
+
+		if(dependentFirstName.length > 0 && dependentLastName.length > 0) { // empty strings
+			dependents.push({
+				firstName: dependentFirstName,
+				lastName: dependentLastName
+			});
+		}
+	});
+
 	var scheduledTime = new Date($("#dateInput").val() + " " + $("#timePickerSelect").val() + " GMT").toISOString();
 	var language = $('#language').find('input[type="radio"]:checked').val();
 
@@ -342,7 +392,8 @@ $('#vitaSignupForm').submit(function(e) {
 		"email":email.value,
 		"phone":phone.value,
 		"language":language,
-		"questions": questions,
+		"questions":questions,
+		"dependents":dependents,
 		"scheduledTime":scheduledTime,
 		"siteId":sitePickerSelect.value
 	};

@@ -4,7 +4,7 @@
 <head>
 	<title>Queue</title>
 	<?php require_once "$root/server/header.php" ?>
-	<link rel="stylesheet" href="/queue/queue.css">
+	<link rel="stylesheet" href="/dist/queue/queue.css">
 </head>
 <body ng-controller="QueueController">
 	<!--[if lt IE 8]>

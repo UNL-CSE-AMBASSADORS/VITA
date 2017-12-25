@@ -7,13 +7,6 @@ queueApp.factory("QueueService", function($http){
 				return null;
 			});
 		},
-		getVolunteers: function(date, siteId) {
-			return $http.get(`/server/queue/queue_priv.php?action=getVolunteers&date=${date}&siteId=${siteId}`).then(function(response){
-				return response.data;
-			},function(error){
-				return null;
-			});
-		},
 		getSites: function() {
 			return $http.get('/server/api/sites/getAll.php?siteId=true&title=true').then(function(response){
 				return response.data;
@@ -63,11 +56,11 @@ queueApp.factory("QueueService", function($http){
 				return null;
 			});
 		},
-		finishAppointment: function(time, id, servicedById) {
+		finishAppointment: function(time, id, stationNumber) {
 			return $http({
 				url: "/server/queue/queue_priv.php",
 				method: 'POST',
-				data: `action=appointmentComplete&time=${time}&id=${id}&servicedById=${servicedById}`,
+				data: `action=appointmentComplete&time=${time}&id=${id}&stationNumber=${stationNumber}`,
 				headers: {
 					'Content-Type': "application/x-www-form-urlencoded"
 				}

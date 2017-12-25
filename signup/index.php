@@ -4,8 +4,8 @@
 <head>
 	<title>VITA Appointment Signup</title>
 	<?php require_once "$root/server/header.php" ?>
-	<link rel="stylesheet" href="/assets/css/form.css">
-	<link rel="stylesheet" href="/signup/signup.css">
+	<link rel="stylesheet" href="/dist/assets/css/form.css">
+	<link rel="stylesheet" href="/dist/signup/signup.css">
 	<link rel="stylesheet" href="/assets/css/jquery-ui-datepicker.css">
 </head>
 <body>
@@ -51,9 +51,9 @@
 						</div>
 
 						<div class="form-textfield">
-							<input type="email" name="email" id="email" required>
+							<input type="email" name="email" id="email">
 							<span class="form-bar"></span>
-							<label class="form-label form-required" for="email">Email</label>
+							<label class="form-label" for="email">Email</label>
 						</div>
 
 						<div class="form-textfield">
@@ -62,6 +62,13 @@
 							<label class="form-label form-required" for="phone">Phone Number</label>
 						</div>
 
+
+						<h3 class="form-subheading">Add Filing Dependents</h3>
+						<p>Are any of your dependents filing a return during this appointment? If so, add them here.</p>
+						<div id="dependents" class="mb-3"></div>
+						<button type="button" class="btn mb-3" id="addDependentButton">Add Dependent</button>
+
+						
 						<h3 class="form-subheading">Background Information</h3>
 
 						<div class="form-radio row" id="language">
@@ -96,7 +103,7 @@
 						</div>
 
 						<div class="form-radio row" id="studentInt" style="display: none;">
-							<label for="2" class="col">Are you an International Student Scholar?</label>
+							<label for="2" class="col form-required">Are you an International Student Scholar?</label>
 							<div class="col btn-group" data-toggle="buttons">
 								<label class="btn btn-outline-secondary" for="studentIntyes">
 									<input type="radio" id="studentIntyes" value="1" name="2" required>Yes
@@ -108,7 +115,7 @@
 						</div>
 
 						<div class="form-radio row" id="studentIntVisa" style="display: none;">
-							<label for="3" class="col">What sort of visa are you on?</label>
+							<label for="3" class="col form-required">What sort of visa are you on?</label>
 							<div class="col btn-group" data-toggle="buttons">
 								<label class="btn btn-outline-secondary" for="f1">
 									<input type="radio" id="f1" value="4" name="3" required>F-1
@@ -123,32 +130,32 @@
 						</div>
 
 						<div class="form-radio row" id="studentf1" style="display: none;">
-							<label for="4" class="col">How long have you been in the United States?</label>
+							<label for="4" class="col form-required">How long have you been in the United States?</label>
 							<div class="col btn-group" data-toggle="buttons">
-								<label class="btn btn-outline-secondary" for="2011">
-									<input type="radio" id="2011" value="7" name="4" required>2011 or earlier
-								</label>
 								<label class="btn btn-outline-secondary" for="2012">
-									<input type="radio" id="2012" value="8" name="4" required>2012 or later
+									<input type="radio" id="2012" value="7" name="4" required>2012 or earlier
+								</label>
+								<label class="btn btn-outline-secondary" for="2013">
+									<input type="radio" id="2013" value="8" name="4" required>2013 or later
 								</label>
 							</div>
 						</div>
 
 						<div class="form-radio row" id="studentj1" style="display: none;">
-							<label for="4" class="col">How long have you been in the United States?</label>
+							<label for="4" class="col form-required">How long have you been in the United States?</label>
 							<div class="col btn-group" data-toggle="buttons">
-								<label class="btn btn-outline-secondary" for="2014">
-									<input type="radio" id="2014" value="9" name="4" required>2014 or earlier
-								</label>
 								<label class="btn btn-outline-secondary" for="2015">
-									<input type="radio" id="2015" value="10" name="4" required>2015 or later
+									<input type="radio" id="2015" value="9" name="4" required>2015 or earlier
+								</label>
+								<label class="btn btn-outline-secondary" for="2016">
+									<input type="radio" id="2016" value="10" name="4" required>2016 or later
 								</label>
 							</div>
 						</div>
 
 						<div class="form-radio row" id="studenth1b" style="display: none;">
 							<label for="5" class="col">Have you been on this visa for less than 183 days and in the United States for less than 5 years?</label>
-							<div class="col btn-group" data-toggle="buttons">
+							<div class="col btn-group form-required" data-toggle="buttons">
 								<label class="btn btn-outline-secondary" for="studenth1byes">
 									<input type="radio" id="studenth1byes" value="1" name="5" required>Yes
 								</label>

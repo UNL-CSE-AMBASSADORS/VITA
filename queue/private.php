@@ -4,8 +4,8 @@
 <head>
 	<title>Queue</title>
 	<?php require_once "$root/server/header.php" ?>
-	<link rel="stylesheet" href="/queue/queue.css">
-	<link rel="stylesheet" href="/queue/queue_private.css">
+	<link rel="stylesheet" href="/dist/queue/queue.css">
+	<link rel="stylesheet" href="/dist/queue/queue_private.css">
 </head>
 <body ng-controller="QueuePrivateController">
 	<!--[if lt IE 8]>
@@ -91,8 +91,8 @@
 						</br>
 							<button type="button" class="btn" class="preparing" ng-disabled="!client.paperworkComplete" ng-class="client.preparing ? 'btn-primary': 'btn-secondary' " ng-click="nowPreparing()">Preparing</button>
 						</br>
-							<select ng-disabled="!client.preparing" ng-model="client.selectedVolunteer" ng-options="volunteer.name for volunteer in volunteers track by volunteer.userId">
-								<option value="" style="display:none;">-- Select Preparer --</option>
+							<select ng-disabled="!client.preparing" ng-model="client.selectedStationNumber" ng-options="stationNumber for stationNumber in stationNumbers">
+								<option value="" style="display:none;">-- Select Station --</option>
 							</select>
 						</br>
 							<button type="button" class="btn" class="ended" ng-disabled="!client.preparing" ng-class="client.ended ? 'btn-primary': 'btn-secondary' " ng-click="completeAppointment()">Finished</button>
