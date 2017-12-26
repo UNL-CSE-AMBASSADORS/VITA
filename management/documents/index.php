@@ -14,7 +14,7 @@
 <head>
 	<title>Document Management</title>
 	<?php require_once "$root/server/header.php" ?>
-	<link rel="stylesheet" href="/management/documents/documents.css">
+	<link rel="stylesheet" href="/dist/management/documents/documents.css">
 </head>
 <body>
 	<?php
