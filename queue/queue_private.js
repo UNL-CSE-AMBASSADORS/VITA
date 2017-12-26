@@ -1,13 +1,6 @@
 queueApp.controller("QueuePrivateController", function($scope, $controller, QueueService) {
 	angular.extend(this, $controller('QueueController', {$scope: $scope}));
 
-	// We override the updateAppointmentInformation to update the volunteer select as well in the private queue on date changes
-	let parentUpdateAppointmentInformation = $scope.updateAppointmentInformation;
-	$scope.updateAppointmentInformation = function() {
-		parentUpdateAppointmentInformation();
-		$scope.getVolunteers();
-	}
-
 	function fixedEncodeURIComponent (str) {
   		return encodeURIComponent(str).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
 	}
@@ -35,8 +28,8 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 	};
 
 	$scope.completeAppointment = function() {
-		if ($scope.client.selectedVolunteer == null) {
-			alert('You must select who prepared the taxes');
+		if ($scope.client.selectedStationNumber == null) {
+			alert('You must select which station the taxes were prepared at');
 			return;
 		}
 
@@ -48,7 +41,7 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 		}
 
 		$scope.client.ended = true;
-		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId, $scope.client.selectedVolunteer.userId, selectedFilingStatuses);
+		QueueService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId, $scope.client.selectedStationNumber, selectedFilingStatuses);
 	};
 
 	$scope.incompleteAppointment = function(explanation) {
@@ -63,29 +56,6 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 		QueueService.cancelledAppointment($scope.client.appointmentId);
 	};
 
-	$scope.getVolunteers = function() {
-		let year = $scope.currentDate.getFullYear(),
-		month = $scope.currentDate.getMonth() + 1,
-		day = $scope.currentDate.getDate();
-		if (month < 10) month = "0" + month;
-
-		if ($scope.selectedSite == null || $scope.selectedSite.siteId == null) return;
-		let siteId = $scope.selectedSite.siteId;
-		
-		QueueService.getVolunteers(year + "-" + month + "-" + day, siteId).then(function(data) {
-			if(data == null) {
-				console.log('server error');
-			} else if(data.length > 0) {
-				$scope.volunteers = data.map((volunteer) => {
-					volunteer.name = `${volunteer.firstName} ${volunteer.lastName}`;
-					return volunteer;
-				});
-			} else {
-				$scope.volunteers = [];
-			}
-		});
-	}
-
 	$scope.getFilingStatuses = function() {
 		QueueService.getFilingStatuses().then(function(data) {
 			if(data == null) {
@@ -98,8 +68,9 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 		});
 	}
 
+	$scope.stationNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+
 	// Invoke initially
-	$scope.getVolunteers();
 	$scope.getFilingStatuses();
 });
 

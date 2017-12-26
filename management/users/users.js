@@ -31,8 +31,7 @@ $(function(){
 						firstName: $('#firstName').val(),
 						lastName: $('#lastName').val(),
 						email: $('#email').val(),
-						phone: $('#phone').val(),
-						prepareTaxes: (!!$('#prepareTaxes').prop('checked')) ? 1 : 0
+						phone: $('#phone').val()
 					},
 					success: function(response){
 						$('#add-user-form button[type=submit]').prop('disabled', false);

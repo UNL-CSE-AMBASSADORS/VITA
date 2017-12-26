@@ -6,9 +6,8 @@
 		$root = realpath($_SERVER['DOCUMENT_ROOT']);
 		require_once "$root/server/header.php" 
 	?>
-	<link rel="stylesheet" href="/assets/css/form.css">
-	<link rel="stylesheet" href="/questionnaire/questionnaire.css">
-	<link rel="stylesheet" href="/assets/css/jquery-ui-datepicker.css">
+	<link rel="stylesheet" href="/dist/assets/css/form.css">
+	<link rel="stylesheet" href="/dist/questionnaire/questionnaire.css">
 </head>
 <body>
 	<?php
