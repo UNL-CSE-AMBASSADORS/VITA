@@ -4,8 +4,8 @@
 <head>
 	<title>VITA Appointment Signup</title>
 	<?php require_once "$root/server/header.php" ?>
-	<link rel="stylesheet" href="/assets/css/form.css">
-	<link rel="stylesheet" href="/signup/signup.css">
+	<link rel="stylesheet" href="/dist/assets/css/form.css">
+	<link rel="stylesheet" href="/dist/signup/signup.css">
 	<link rel="stylesheet" href="/assets/css/jquery-ui-datepicker.css">
 </head>
 <body>
