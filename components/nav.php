@@ -43,16 +43,18 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/queue">Queue</a>
 				</li>
-			<?php if ($USER->hasPermission('use_admin_tools')): ?>
+			<?php if ($USER->isLoggedIn()): ?>
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+					<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
-						<a class="dropdown-item" href="/management/users">Manage Users</a>
-						<a class="dropdown-item" href="/management/documents">Print Documents</a>
+						<a class="dropdown-item" href="/management/appointments">Appointments</a>
+						<?php if ($USER->hasPermission('use_admin_tools')): ?>
+							<a class="dropdown-item" href="/management/users">Users</a>
+							<a class="dropdown-item" href="/management/documents">Documents</a>
+						<?php endif; ?>
 					</div>
 				</li>
-			<?php endif; ?>
-			<?php if ($USER->isLoggedIn()): ?>
+
 				<li class="nav-item">
 					<a class="nav-link" href="/profile">Profile</a>
 				</li>
