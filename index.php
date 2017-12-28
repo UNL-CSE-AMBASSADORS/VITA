@@ -112,5 +112,6 @@ function wdnInclude($path)
 		<?php wdnInclude("/wdn/templates_4.1/includes/noscript.html"); ?>
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
+	<?php require_once "$root/server/global_scripts.php"; ?>
 </body>
 </html>
