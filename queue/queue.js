@@ -26,6 +26,7 @@ var queueApp = angular.module("queueApp", ["ngMaterial", "ngMessages"])
 					appointment.paperworkComplete = appointment.timeReturnedPapers != null;
 					appointment.preparing = appointment.timeAppointmentStarted != null;
 					appointment.ended = appointment.timeAppointmentEnded != null;
+					appointment.name = appointment.firstName + " " + appointment.lastName;
 					return appointment;
 				});
 			} else {
