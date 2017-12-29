@@ -18,7 +18,7 @@ if (!$USER->hasPermission('edit_user_permissions')) {
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css" />
-	<link rel="stylesheet" href="users.css" />
+	<link rel="stylesheet" href="/dist/management/users/users.css" />
 </head>
 <body>
 	<?php require_once "$root/components/nav.php"; ?>
@@ -66,10 +66,6 @@ if (!$USER->hasPermission('edit_user_permissions')) {
 							<section class="form-group">
 								<label for="phone">Phone Number:</label>
 								<input type="text" class="form-control" id="phone">
-							</section>
-							<section class="form-group">
-								<label for="prepareTaxes">Prepares Taxes: <input type="checkbox" id="prepareTaxes">
-								</label>
 							</section>
 						</div>
 						<div class="modal-footer">

@@ -3,23 +3,22 @@
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 require_once "$root/server/config.php";
 
-getAllSites($_GET);
+getAllRoles($_GET);
 
 /*
- * The fields that CAN be returned are: siteId, title, address, and, phoneNumber
+ * The fields that CAN be returned are: roleId, name, and lookupName
  *
  * The data can be used to narrow down what is selected from the database:
  * {
- *   "siteId": true,
- *   "title": true,
- *   "address": false
+ *   "roleId": true,
+ *   "name": true
  * }
  *
  * If the database field is missing it is assumed that you DON'T want it.
  */
-function getAllSites($data) {
+function getAllRoles($data) {
 	GLOBAL $DB_CONN;
-	$defaultSelectColumns = array('siteId', 'title', 'address', 'phoneNumber');
+	$defaultSelectColumns = array('roleId', 'name', 'lookupName');
 
 	// construct select columns list
 	$selectColumns = [];
@@ -34,9 +33,9 @@ function getAllSites($data) {
 	}
 	$selectColumnsString = join(',', $selectColumns);
 
-	$stmt = $DB_CONN->prepare('SELECT ' . $selectColumnsString . ' FROM Site');
+	$stmt = $DB_CONN->prepare('SELECT ' . $selectColumnsString . ' FROM Role');
 	$stmt->execute();
-	$sites = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	$roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-	echo json_encode($sites);
+	echo json_encode($roles);
 }
