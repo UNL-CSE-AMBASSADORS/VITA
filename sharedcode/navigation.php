@@ -15,7 +15,21 @@
 		<ul>
 
 			<?php if ($USER->isLoggedIn()): ?>
-			<li><a href="<?php $root ?>/logout">Logout</a></li>
+			<li><a onclick="logout()">Logout</a></li>
+			<script type="text/javascript">
+				function logout() {
+					require(['jquery'], function($) {
+						$.ajax({
+							url : "/server/callbacks.php",
+							data: {"callback":"logout"},
+							type: "POST",
+							success: function() {
+								window.location.href = "/";
+							}
+						});
+					});
+				}
+			</script>
 			<li><a href="<?php $root ?>/profile">Profile</a></li>
 			<?php else: ?>
 			<li><a href="<?php $root ?>/login">Login</a></li>
