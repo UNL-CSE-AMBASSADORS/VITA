@@ -5,7 +5,7 @@
 	<title>VITA Appointment Signup</title>
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="/dist/assets/css/form.css">
-	<link rel="stylesheet" href="/dist/signup/signup.css">
+	<link rel="stylesheet" href="/dist/components/appointmentPicker/appointmentPicker.css">
 	<link rel="stylesheet" href="/assets/css/jquery-ui-datepicker.css">
 </head>
 <body>
@@ -167,25 +167,7 @@
 
 						<h3 class="form-subheading">Appointment Information</h3>
 
-						<div id="appointmentPicker">
-							<div id="studentScholarAppointmentPicker" style="display:none">
-								Student Scholar
-							</div>
-							<div id="datePicker" class="form-textfield">
-								<input type="text" id="dateInput" name="dateInput" placeholder="Select a Date" required>
-								<label class="form-label form-required form-label__always-floating">Date</label>
-							</div>
-							<div id="sitePicker" class="form-select" style="display: none;">
-								<label class="form-label form-required" for="sitePickerSelect">Site</label>
-								<select id="sitePickerSelect" name="sitePickerSelect" required></select>
-								<div class="form-select__arrow"></div>
-							</div>
-							<div id="timePicker" class="form-select" style="display: none;">
-								<label class="form-label form-required" for="timePickerSelect">Time</label>
-								<select id="timePickerSelect" name="timePickerSelect" required></select>
-								<div class="form-select__arrow"></div>
-							</div>
-						</div>
+						<?php require_once "$root/components/appointmentPicker/appointmentPicker.php" ?>
 
 						<input type="submit" value="Submit" class="submit btn btn-primary mb-5 vita-background-primary">
 					</form>
@@ -199,6 +181,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
 	<script src="/dist/signup/signup.js"></script>
+	<script src="/dist/components/appointmentPicker/appointmentPicker.js"></script>
 	<script src="/dist/assets/js/form.js"></script>
 </body>
 </html>
