@@ -15,8 +15,10 @@
 	<title>VITA Appointment Management</title>
 	<?php require_once "$root/server/header.php" ?>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-	<!-- TODO CHANGE TO DIST -->
-	<link rel="stylesheet" href="/management/appointments/appointments.css" />
+	<link rel="stylesheet" href="/dist/assets/css/form.css" />
+	<link rel="stylesheet" href="/dist/management/appointments/appointments.css" />
+	<link rel="stylesheet" href="/dist/components/appointmentPicker/appointmentPicker.css" />
+	<link rel="stylesheet" href="/assets/css/jquery-ui-datepicker.css">
 </head>
 <body ng-controller="AppointmentsController">
 	<?php
@@ -26,7 +28,7 @@
 
 	<div class="container">
 		<!-- Show when an appointment is selected -->
-		<div ng-if="appointment != null" ng-cloak>
+		<div ng-show="appointment != null" ng-cloak>
 			<div class="row my-2">
 				<i class="fa fa-arrow-left fa-pull-left fa-2x pointer" aria-hidden="true" title="Back" ng-click="deselectAppointment()"></i>
 			</div>
@@ -43,6 +45,14 @@
 					<span><b>Phone Number: </b>{{appointment.phoneNumber}}</span>
 				</div>
 				<div><b>Appointment ID: </b>{{appointment.appointmentId}}</div>
+			</div>
+
+			<div class="mt-5">
+				<h3>Reschedule Appointment</h3>
+				<form class="cmxform mb-5" id="rescheduleAppointmentForm">
+					<?php require_once "$root/components/appointmentPicker/appointmentPicker.php" ?>
+					<input type="submit" value="Reschedule" id="rescheduleButton" class="submit btn btn-primary mb-5 vita-background-primary" ng-click="rescheduleAppointment()">
+				</form>
 			</div>
 		</div>
 
@@ -93,8 +103,15 @@
 
 	<?php require_once "$root/server/footer.php" ?>
 	<?php require_once "$root/server/angularjs_dependencies.php" ?>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
+
 	<!-- TODO: CHANGE TO DIST -->
 	<script src="/management/appointments/appointments.js"></script>
 	<script src="/management/appointments/appointments_service.js"></script>
+	<script src="/dist/components/appointmentPicker/appointmentPicker.js"></script>
+	<script src="/dist/assets/js/form.js"></script>
 </body>
 </html>

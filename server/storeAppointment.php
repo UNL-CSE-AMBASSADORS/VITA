@@ -90,7 +90,8 @@ function storeAppointment($data){
 				?,
 				(SELECT appointmentTimeId FROM AppointmentTime
 					WHERE DATE(scheduledTime) = ? 
-					AND time_format(TIME(scheduledTime), '%l:%i %p') = ?),
+					AND TIME_FORMAT(TIME(scheduledTime), '%l:%i %p') = ?
+					AND siteId = ?),
 				?,
 				?
 			);";
@@ -100,6 +101,7 @@ function storeAppointment($data){
 			$clientId,
 			$dateTime->format('Y-m-d'),
 			$dateTime->format('g:i A'),
+			$data['siteId'],
 			$data['language'],
 			$_SERVER['REMOTE_ADDR']
 		);

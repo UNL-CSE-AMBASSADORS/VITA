@@ -3,18 +3,18 @@ let appointmentsApp = angular.module("appointmentsApp", ["ngMaterial", "ngMessag
 appointmentsApp.controller("AppointmentsController", function($scope, $interval, AppointmentsService) {
 	$scope.getAppointments = function() {
 		let year = new Date().getFullYear();
-		AppointmentsService.getAppointments(year).then(function(data) {
-			if(data == null) {
+		AppointmentsService.getAppointments(year).then(function(result) {
+			if(result == null) {
 				alert('There was an error loading the appointments. Please try refreshing the page.');
 			} else {
-				if (!data.success) {
+				if (!result.success) {
 					$scope.appointments = [];
-					alert(data.error);
+					alert(result.error);
 					return;
 				}
 
-				if (data.appointments.length > 0) {
-					$scope.appointments = data.appointments.map((appointment) => {
+				if (result.appointments.length > 0) {
+					$scope.appointments = result.appointments.map((appointment) => {
 						// We force the time into CST
 						appointment.scheduledTime = new Date(appointment.scheduledTime + ' CST');
 						appointment.name = appointment.firstName + " " + appointment.lastName;
@@ -26,6 +26,50 @@ appointmentsApp.controller("AppointmentsController", function($scope, $interval,
 			}
 		});
 	};
+
+	$scope.rescheduleAppointment = function() {
+		$('#rescheduleButton').prop('disabled', true);
+		let appointmentId = $scope.appointment.appointmentId;
+		let scheduledTime = new Date($('#dateInput').val() + ' ' + $('#timePickerSelect').val() + ' GMT').toISOString();
+		let siteId = sitePickerSelect.value;
+
+		AppointmentsService.rescheduleAppointment(appointmentId, scheduledTime, siteId).then(function(result) {
+			if (result.success) {
+				// We force it to be in CST
+				$scope.appointment.scheduledTime = new Date($('#dateInput').val() + ' ' + $('#timePickerSelect').val() + ' CST');
+				$scope.appointment.title = $('#sitePickerSelect').text();
+
+				// Clear the selected values
+				$('#dateInput').val('');
+				$('#sitePicker').hide();
+				$('#timePicker').hide();
+				$('#timePickerSelect').html('');
+				$('#sitePickerSelect').html('');
+
+				// Let the user know it was successful
+				let rescheduleButton = $('#rescheduleButton');
+				rescheduleButton.removeClass('btn-primary').addClass('btn-success').val('Successfully Rescheduled');
+				window.setTimeout(function() {
+					rescheduleButton.val('Reschedule')
+						.removeClass('btn-success')
+						.addClass('btn-primary')
+						.prop('disabled', false);
+				}, 1500);
+			} else {
+				alert(result.error);
+
+				// Let the user know it failed
+				let rescheduleButton = $('#rescheduleButton');
+				rescheduleButton.removeClass('btn-primary').addClass('btn-danger').val('Failed to Reschedule');
+				window.setTimeout(function() {
+					rescheduleButton.val('Reschedule')
+						.removeClass('btn-danger')
+						.addClass('btn-primary')
+						.prop('disabled', false);
+				}, 1500);
+			}
+		});
+	}
 
 	$scope.selectAppointment = function(appointment) {
 		$scope.appointment = appointment;

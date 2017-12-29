@@ -1,6 +1,3 @@
-const NUM_SECONDS_IN_HOUR = 60*60; // 3600
-const NUM_SECONDS_IN_DAY = 24*60*60; // 86400
-
 $(document).ready(function() {
 	// Listen for changes to all of the other conditional form fields
 	conditionalFormFields();

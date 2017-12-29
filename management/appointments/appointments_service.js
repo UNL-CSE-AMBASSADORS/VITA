@@ -5,7 +5,21 @@ appointmentsApp.factory("AppointmentsService", function($http){
 				return response.data;
 			},function(error){
 				return null;
-			});	
+			});
+		},
+		rescheduleAppointment: function(appointmentId, scheduledTime, siteId) {
+			return $http({
+				url: "/server/management/appointments/appointments.php",
+				method: 'POST',
+				data: `action=reschedule&id=${appointmentId}&scheduledTime=${scheduledTime}&siteId=${siteId}`,
+				headers: {
+					'Content-Type': "application/x-www-form-urlencoded"
+				}
+			}).then(function(response){
+				return response.data;
+			},function(error){
+				return null;
+			});
 		}
 	}
 });
