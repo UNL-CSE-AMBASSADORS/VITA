@@ -81,53 +81,63 @@ function wdnInclude($path)
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
 				<div class="wdn-band">
-					<!-- <div class="wdn-inner-wrapper"> -->
-					<div id="login_panel" class="wdn-inner-wrapper wdn-inner-padding-no-top">
-						<form id="login_form">
-							<fieldset>
-								<legend>User Login</legend>
-								<section class="form-group">
-									<label>E-mail Address</label>
-									<input id="login_email" class="form-control" placeholder="E-mail" type="text" autocomplete="off" />
-								</section>
-								<section class="form-group">
-									<label>Password</label>
-									<input id="login_password" class="form-control" placeholder="Password" type="password" />
-								</section>
-							</fieldset>
-							<input type="submit" value="Login" />
-						</form>
-
-						<a id="login_register_link" href="javascript:void(0);" class="toggle_form" tabindex="-1">
-							Forgot Password/Register
-						</a>
+					<div id="login_panel" class="wdn-grid-set wdn-inner-wrapper wdn-inner-padding-no-top">
+						<div class="bp768-wdn-col-one-half wdn-pull-right">
+							<form id="login_form">
+								<fieldset>
+									<legend>User Login</legend>
+									<section class="form-group">
+										<label>E-mail Address</label>
+										<input id="login_email" class="form-control" placeholder="E-mail" type="text" autocomplete="off" />
+									</section>
+									<section class="form-group">
+										<label>Password</label>
+										<input id="login_password" class="form-control" placeholder="Password" type="password" />
+									</section>
+								</fieldset>
+								<input type="submit" value="Login" />
+							</form>
+						</div>
+						<div class="bp768-wdn-col-one-half">
+							<p>
+								<a href="/volunteer">Information about volunteering</a>
+							</p>
+							<p>
+								<a id="login_register_link" href="javascript:void(0);" class="toggle_form" tabindex="-1">
+									Forgot Password/Register
+								</a>
+							</p>
+						</div>
 					</div>
-				</div>
-				<div class="wdn-band">
-					<div id="register_panel" class="wdn-inner-wrapper wdn-inner-padding-no-top" style="display:none;">
-						<form id="register_form" accept-charset="UTF-8" role="form">
-							<fieldset>
-								<legend>Reset Password/Register</legend>
-								<p id="register_info">
-									Please provide the e-mail address associated with your account. Once the form is submitted, you will receive an e-mail with further instructions.
-								</p>
-								<div class="form-group">
-									<label>E-mail Address</label>
-									<input id="register_email" class="form-control" placeholder="E-mail" type="text" autocomplete="off" />
-								</div>
-							</fieldset>
-							<input id="register_submit" type="submit" value="Reset Password/Register" />
-						</form>
-						<p id="register_success" style="display:none;">
-							<span style="font-weight:bold; color:#288700;">
-								Your request was received successfully. Please check your email for further instructions.
-							</span>
-						</p>
-
-						<a id="register_back_link" href="javascript:void(0);" class="toggle_form">
-							<span class="wdn-icon-angle-double-left" aria-hidden="true"></span><span class="wdn-text-hidden">double left arrow icon</span>
-							Back To Login Form
-						</a>
+					<div id="register_panel" class="wdn-grid-set wdn-inner-wrapper wdn-inner-padding-no-top" style="display:none;">
+						<div class="bp768-wdn-col-one-half wdn-pull-right">
+							<form id="register_form" accept-charset="UTF-8" role="form">
+								<fieldset>
+									<legend>Reset Password/Register</legend>
+									<p id="register_info">
+										Please provide the e-mail address associated with your account. Once the form is submitted, you will receive an e-mail with further instructions.
+									</p>
+									<div class="form-group">
+										<label>E-mail Address</label>
+										<input id="register_email" class="form-control" placeholder="E-mail" type="text" autocomplete="off" />
+									</div>
+								</fieldset>
+								<input id="register_submit" type="submit" value="Reset Password/Register" />
+							</form>
+							<p id="register_success" style="display:none;">
+								<span style="font-weight:bold; color:#288700;">
+									Your request was received successfully. Please check your email for further instructions.
+								</span>
+							</p>
+						</div>
+						<div class="bp768-wdn-col-one-half">
+							<p>
+								<a id="register_back_link" href="javascript:void(0);" class="toggle_form">
+									<span class="wdn-icon-angle-double-left" aria-hidden="true"></span><span class="wdn-text-hidden">double left arrow icon</span>
+									Back To Login Form
+								</a>
+							</p>
+						</div>
 					</div>
 				</div>
 				<!-- TemplateEndEditable -->
