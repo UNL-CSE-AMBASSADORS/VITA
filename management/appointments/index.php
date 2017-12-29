@@ -104,13 +104,9 @@
 	<?php require_once "$root/server/footer.php" ?>
 	<?php require_once "$root/server/angularjs_dependencies.php" ?>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
-
-	<!-- TODO: CHANGE TO DIST -->
-	<script src="/management/appointments/appointments.js"></script>
-	<script src="/management/appointments/appointments_service.js"></script>
+	<script src="/dist/management/appointments/appointments.js"></script>
+	<script src="/dist/management/appointments/appointments_service.js"></script>
 	<script src="/dist/components/appointmentPicker/appointmentPicker.js"></script>
 	<script src="/dist/assets/js/form.js"></script>
 </body>
