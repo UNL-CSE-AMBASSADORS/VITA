@@ -41,7 +41,7 @@ appointmentsApp.controller("AppointmentsController", function($scope, $interval,
 			if (result.success) {
 				// We force it to be in CST
 				$scope.appointment.scheduledTime = new Date($('#dateInput').val() + ' ' + $('#timePickerSelect').val() + ' CST');
-				$scope.appointment.title = $('#sitePickerSelect').text();
+				$scope.appointment.title = $('#sitePickerSelect option:selected').text();
 
 				// Clear the selected values
 				$('#dateInput').val('');
