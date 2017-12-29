@@ -28,6 +28,10 @@ appointmentsApp.controller("AppointmentsController", function($scope, $interval,
 	};
 
 	$scope.rescheduleAppointment = function() {
+		if (!$('#rescheduleForm').valid() || !$("#sitePickerSelect").valid() || !$("#timePickerSelect").valid()) {
+			return false;
+		}
+
 		$('#rescheduleButton').prop('disabled', true);
 		let appointmentId = $scope.appointment.appointmentId;
 		let scheduledTime = new Date($('#dateInput').val() + ' ' + $('#timePickerSelect').val() + ' GMT').toISOString();

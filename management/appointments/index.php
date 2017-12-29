@@ -49,7 +49,7 @@
 
 			<div class="mt-5">
 				<h3>Reschedule Appointment</h3>
-				<form class="cmxform mb-5" id="rescheduleAppointmentForm">
+				<form class="cmxform mb-5" id="rescheduleForm">
 					<?php require_once "$root/components/appointmentPicker/appointmentPicker.php" ?>
 					<input type="submit" value="Reschedule" id="rescheduleButton" class="submit btn btn-primary mb-5 vita-background-primary" ng-click="rescheduleAppointment()">
 				</form>
