@@ -321,7 +321,7 @@ WDN.initializePlugin('jqueryui', [function () {
 			var currentLastName = $('#lastName').val();
 			var id = $('.firstName').length;
 
-			var dependentRow = $('<li></li>').addClass("wdn-grid-set");
+			var dependentRow = $('<li></li>').addClass("wdn-grid-set dependent");
 			var firstNameBlock = $('<div></div>').addClass("bp768-wdn-col-two-fifths");
 			var firstNameLabel = $(`<label for="firstNameInput${id}">First Name</label>`).addClass("form-label form-required");
 			var firstNameInput = $(`<input type="text" name="firstNameInput${id}" id="firstNameInput${id}" required/>`).addClass("firstName");
@@ -372,7 +372,7 @@ WDN.initializePlugin('jqueryui', [function () {
 			});
 
 			var dependents = [];
-			$(".dependent-div").each(function() { 
+			$(".dependent").each(function() { 
 				var dependentFirstName = $(this).find('.firstName').val().trim();
 				var dependentLastName = $(this).find('.lastName').val().trim();
 
