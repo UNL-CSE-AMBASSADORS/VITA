@@ -1,5 +1,11 @@
 <?php
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
+require_once "$root/server/user.class.php";
+$USER = new User();
+if (!$USER->hasPermission('use_admin_tools')) {
+	header("Location: /unauthorized");
+	die();
+}
 function wdnInclude($path)
 {
 	$documentRoot = 'https://unlcms.unl.edu';
@@ -20,9 +26,10 @@ function wdnInclude($path)
 -->
 <?php wdnInclude("/wdn/templates_4.1/includes/scriptsandstyles.html"); ?>
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+<title>Print Documents | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
+<link rel="stylesheet" href="/dist/management/documents/documents.css">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -54,7 +61,8 @@ function wdnInclude($path)
 				<ul>
 					<li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
 					<li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
-					<li>Home</li>
+					<li><a href="/management" title="Management">Admin</a></li>
+					<li>Print Documents</li>
 				</ul>
 				<!-- TemplateEndEditable -->
 			</nav>
@@ -113,6 +121,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
-	<!-- <script src="/dist/*.js"></script> -->
+	<script src="/dist/management/documents/documents.js"></script>
 </body>
 </html>
