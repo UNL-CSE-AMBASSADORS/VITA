@@ -109,12 +109,12 @@ function wdnInclude($path)
 								<ul>
 									<li class="form-textfield">
 										<label class="form-label form-required" for="firstName">First Name</label>
-										<input type="text" name="firstName" id="firstName" required>
+										<input class="error-placement" type="text" name="firstName" id="firstName" required>
 									</li>
 
 									<li class="form-textfield">
 										<label class="form-label form-required" for="lastName">Last Name</label>
-										<input type="text" name="lastName" id="lastName" required>
+										<input class="error-placement" type="text" name="lastName" id="lastName" required>
 									</li>
 
 									<li class="form-textfield">
@@ -124,7 +124,7 @@ function wdnInclude($path)
 
 									<li class="form-textfield">
 										<label class="form-label form-required" for="phone">Phone Number</label>
-										<input type="text" name="phone" id="phone" required>
+										<input class="error-placement" type="text" name="phone" id="phone" required>
 									</li>
 								</ul>
 
@@ -140,7 +140,7 @@ function wdnInclude($path)
 								<ul>
 									<li class="form-radio" id="language">
 										<label for="language" class="form-required">Which language will you require?</label>
-										<div class="error-group">
+										<div class="error-placement">
 											<div class="btn-group" data-toggle="buttons">
 												<!-- NOTE: the values here are the ISO 639-2/T specfication for language codes (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) -->
 												<label class="wdn-button btn" for="languageEnglish">
@@ -161,7 +161,7 @@ function wdnInclude($path)
 
 									<li class="form-radio" id="studentUNL">
 										<label for="1" class="form-required">Are you a University of Nebraska-Lincoln student?</label>
-										<div class="error-group">
+										<div class="error-placement">
 											<div class="btn-group" data-toggle="buttons">
 												<label class="wdn-button btn" for="studentyes">
 													<input type="radio" id="studentyes" value="1" name="1" required>Yes
@@ -175,7 +175,7 @@ function wdnInclude($path)
 
 									<li class="form-radio" id="studentInt" style="display: none;">
 										<label for="2" class="form-required">Are you an International Student Scholar?</label>
-										<div class="error-group">
+										<div class="error-placement">
 											<div class="btn-group" data-toggle="buttons">
 												<label class="wdn-button btn" for="studentIntyes">
 													<input type="radio" id="studentIntyes" value="1" name="2" required>Yes
@@ -189,7 +189,7 @@ function wdnInclude($path)
 
 									<li class="form-radio" id="studentIntVisa" style="display: none;">
 										<label for="3" class="form-required">What sort of visa are you on?</label>
-										<div class="error-group">
+										<div class="error-placement">
 											<div class="btn-group" data-toggle="buttons">
 												<label class="wdn-button btn" for="f1">
 													<input type="radio" id="f1" value="4" name="3" required>F-1
@@ -206,7 +206,7 @@ function wdnInclude($path)
 
 									<li class="form-radio" id="studentf1" style="display: none;">
 										<label for="4" class="form-required">How long have you been in the United States?</label>
-										<div class="error-group">
+										<div class="error-placement">
 											<div class="btn-group" data-toggle="buttons">
 												<label class="wdn-button btn" for="2012">
 													<input type="radio" id="2012" value="7" name="4" required>2012 or earlier
@@ -220,7 +220,7 @@ function wdnInclude($path)
 
 									<li class="form-radio" id="studentj1" style="display: none;">
 										<label for="4" class="form-required">How long have you been in the United States?</label>
-										<div class="error-group">
+										<div class="error-placement">
 											<div class="btn-group" data-toggle="buttons">
 												<label class="wdn-button btn" for="2015">
 													<input type="radio" id="2015" value="9" name="4" required>2015 or earlier
@@ -234,7 +234,7 @@ function wdnInclude($path)
 
 									<li class="form-radio" id="studenth1b" style="display: none;">
 										<label for="5" class="">Have you been on this visa for less than 183 days and in the United States for less than 5 years?</label>
-										<div class="error-group">
+										<div class="error-placement">
 											<div class="btn-group form-required" data-toggle="buttons">
 												<label class="wdn-button btn" for="studenth1byes">
 													<input type="radio" id="studenth1byes" value="1" name="5" required>Yes

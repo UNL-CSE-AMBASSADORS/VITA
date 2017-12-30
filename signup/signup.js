@@ -29,13 +29,6 @@ WDN.initializePlugin('jqueryui', [function () {
 			// Add validation to the form
 			validateSignupForm();
 
-			// Since non-required fields are "valid" when they are empty, we need an
-			// alternate way to keep labels raised when there is content in their
-			// associated input field
-			$(".form-textfield input").blur(function() {
-				var isBlank = $.trim($(this).val()).length > 0;
-				$(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
-			});
 		});
 
 		/** Class representing a map of dates => sites => times => remaining spots. */
@@ -313,6 +306,9 @@ WDN.initializePlugin('jqueryui', [function () {
 					email: {
 						email: "Your email address must be in the format of name@domain.com"
 					}
+				},
+				errorPlacement: function(error, element) {
+					error.insertAfter( element.closest(".error-placement") );
 				}
 			});
 		}
@@ -324,12 +320,12 @@ WDN.initializePlugin('jqueryui', [function () {
 			var dependentRow = $('<li></li>').addClass("wdn-grid-set dependent");
 			var firstNameBlock = $('<div></div>').addClass("bp768-wdn-col-two-fifths");
 			var firstNameLabel = $(`<label for="firstNameInput${id}">First Name</label>`).addClass("form-label form-required");
-			var firstNameInput = $(`<input type="text" name="firstNameInput${id}" id="firstNameInput${id}" required/>`).addClass("firstName");
+			var firstNameInput = $(`<input type="text" name="firstNameInput${id}" id="firstNameInput${id}" required/>`).addClass("firstName error-placement");
 			firstNameBlock.append(firstNameLabel, firstNameInput);
 
 			var lastNameBlock = $('<div></div>').addClass("bp768-wdn-col-two-fifths");
 			var lastNameLabel = $(`<label for="lastNameInput${id}">Last Name</label>`).addClass("form-label form-required");
-			var lastNameInput = $(`<input type="text" name="lastNameInput${id}" id="lastNameInput${id}" value="${currentLastName}" required/>`).addClass("lastName");
+			var lastNameInput = $(`<input type="text" name="lastNameInput${id}" id="lastNameInput${id}" value="${currentLastName}" required/>`).addClass("lastName error-placement");
 			lastNameBlock.append(lastNameLabel, lastNameInput);
 
 			var removeBlock = $('<div></div>').addClass("bp768-wdn-col-one-fifth px-1rem");

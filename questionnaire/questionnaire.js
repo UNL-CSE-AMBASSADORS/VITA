@@ -14,16 +14,13 @@ require(['jquery', 'jqueryvalidation'], function ($) {
 	require(['bootstrap/button']);
 
 	$(document).ready(function() {
-		// Add a star to required fields
-		$("label.form-required").after("<span class='required'> *</span>")
-
 		initializeConditionalFormFields();
 		initializeCantHelpListeners();
 
 		// Add in form validation
 		$("#vitaQuestionnaireForm").validate({
 			errorPlacement: function(error, element) {
-				error.insertAfter( element.closest(".error-group") );
+				error.insertAfter( element.closest(".error-placement") );
 			}
 		});
 	});

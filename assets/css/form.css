@@ -2,6 +2,12 @@
 	color: #d00000;
 }
 
+label.form-required::after {
+	content: " *";
+	color: #d00000;
+	font-size: 1.247rem;
+}
+
 .btn-group .wdn-button {
 	border: 1px solid #2e240c;
 }
