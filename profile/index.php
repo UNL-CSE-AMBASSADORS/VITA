@@ -113,6 +113,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
-	<!-- <script src="/dist/*.js"></script> -->
+	<script src="/dist/profile/profile.js"></script>
 </body>
 </html>
