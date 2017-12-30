@@ -20,7 +20,7 @@ function wdnInclude($path)
 -->
 <?php wdnInclude("/wdn/templates_4.1/includes/scriptsandstyles.html"); ?>
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>Singup for an Appointment | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+<title>Sign Up for a VITA Appointment | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
 <!-- TemplateEndEditable -->
@@ -55,7 +55,7 @@ function wdnInclude($path)
 					<li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
 					<li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
 					<li>Need Assistance</li>
-					<li>Signup for an Appointment</li>
+					<li>Sign Up for a VITA Appointment</li>
 				</ul>
 				<!-- TemplateEndEditable -->
 			</nav>
@@ -76,7 +76,7 @@ function wdnInclude($path)
 			<div id="maincontent" class="wdn-main">
 				<div id="pagetitle">
 					<!-- TemplateBeginEditable name="pagetitle" -->
-					<h1>Signup for an Appointment</h1>
+					<h1>Sign Up for a VITA Appointment</h1>
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->

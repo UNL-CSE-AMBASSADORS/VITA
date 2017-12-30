@@ -7,7 +7,7 @@
 	<li><a href="<?php $root ?>/" title="Need Assistance">Need Assistance</a>
 		<ul>
 			<li><a href="<?php $root ?>/questionnaire" title="VITA questionnaire">Can VITA help you?</a></li>
-			<li><a href="<?php $root ?>/signup" title="Signup for an Appointment">Signup for an Appointment</a></li>
+			<li><a href="<?php $root ?>/signup" title="Signup for an Appointment">Sign Up for a VITA Appointment</a></li>
 		</ul>
 	</li>
 
