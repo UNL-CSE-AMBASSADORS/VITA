@@ -20,9 +20,10 @@ function wdnInclude($path)
 -->
 <?php wdnInclude("/wdn/templates_4.1/includes/scriptsandstyles.html"); ?>
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+<title>Profile | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
+<link rel="stylesheet" href="/dist/profile/profile.css">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -54,7 +55,8 @@ function wdnInclude($path)
 				<ul>
 					<li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
 					<li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
-					<li>Home</li>
+					<li><a href="/Volunteer" title="Volunteer">Volunteer</a></li>
+					<li>Profile</li>
 				</ul>
 				<!-- TemplateEndEditable -->
 			</nav>
@@ -75,13 +77,74 @@ function wdnInclude($path)
 			<div id="maincontent" class="wdn-main">
 				<div id="pagetitle">
 					<!-- TemplateBeginEditable name="pagetitle" -->
-					<h1>VITA Lincoln</h1>
+					<h1>Profile</h1>
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
+				<div class="wdn-band wdn-light-neutral-band">
+					<div class="wdn-inner-wrapper">
+						<div class="personal-info">
+							<h2>Personal Information</h2>
+							<button class="wdn-button wdn-pull-right" id="personalInformationEditButton">Edit</button>
+
+							<div>
+								<label for="firstName" id="firstNameLabel">First Name:</label>
+								<span id="firstNameText"></span>
+								<input type="text" id="firstNameInput" style="display:none;" />
+							</div>
+
+							<div>
+								<label for="lastName" id="lastNameLabel">Last Name:</label>
+								<span id="lastNameText"></span>
+								<input type="text" id="lastNameInput" style="display:none;" />
+							</div>
+
+							<div>
+								<label for="email" id="emailLabel">Email:</label>
+								<span id="emailText"></span>
+								<input type="text" id="emailInput" style="display:none;" disabled />
+							</div>
+
+							<div>
+								<label for="phoneNumber" id="phoneNumberLabel">Phone Number:</label>
+								<span id="phoneNumberText"></span>
+								<input type="text" id="phoneNumberInput" style="display:none;" />
+							</div>
+
+							<button class="wdn-button wdn-button-triad" id="personalInformationSaveButton" style="display:none;">Save</button>
+							<button class="wdn-button wdn-button-brand" id="personalInformationCancelButton" style="display:none;">Cancel</button>
+						</div>
+					</div>
+				</div>
+
 				<div class="wdn-band">
 					<div class="wdn-inner-wrapper">
-						<p>Impress your audience with awesome content!</p>
+						<h2>Abilities</h2>
+						<button class="wdn-button wdn-pull-right" id="abilitiesEditButton">Edit</button>
+						<button class="wdn-button wdn-pull-right wdn-button-brand" id="abilitiesCancelButton" style="display:none;">Cancel</button>
+						<div id="abilitiesSelect" multiple=true></div>
+					</div>
+				</div>
+							
+				<div class="wdn-band wdn-light-neutral-band">
+					<div class="wdn-inner-wrapper">
+						<div>
+							<h2>Certifications</h2>
+							<p><b>NOTE</b>: These must be verified by your site administrator.</p>
+							<div id ="certificationsDiv"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="wdn-band">
+					<div class="wdn-inner-wrapper">
+						<div>
+							<h2>Shifts You're Signed Up For</h2>
+							<div id="shifts">
+								<div id="shiftsSignedUpFor"></div>
+							</div>
+							<button class="wdn-button" id="addShiftButton"><span class="wdn-icon-plus" aria-hidden="true"></span>  Sign Up for a Shift</button>
+						</div>
 					</div>
 				</div>
 				<!-- TemplateEndEditable -->

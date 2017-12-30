@@ -8,7 +8,7 @@ require(['jquery'], function($) {
 		initializeEventListeners();
 	});
 
-	let loadProfileInformation = function() {
+	function loadProfileInformation() {
 		$.ajax({
 			url: "/server/profile/profile.php",
 			type: "GET",
@@ -29,7 +29,7 @@ require(['jquery'], function($) {
 		});
 	};
 
-	let loadAbilities = function() {
+	function loadAbilities() {
 		$.ajax({
 			url: "/server/profile/profile.php",
 			type: "GET",
@@ -39,14 +39,22 @@ require(['jquery'], function($) {
 			},
 			cache: false,
 			success: function(response) {
-				$('#abilitiesSelect').find('option').remove();
+				$("#abilitiesEditButton").show();
+				$("#abilitiesCancelButton").hide()
+				$('#abilitiesSelect').empty();
 				for (let i = 0; i < response.abilities.length; i++) {
 					let ability = response.abilities[i];
-					let modifiers = ability.has ? `data-userAbilityId=${ability.userAbilityId} selected` : '';
-					let option = $(`<option value=${ability.abilityId} ${modifiers}>${ability.name}</option>`);
-					$('#abilitiesSelect').append(option);
+					let modifiers = ability.has ? `data-userAbilityId=${ability.userAbilityId} checked` : '';
+					let checkbox = $(`<input id=${i} type="checkbox" value=${ability.abilityId} ${modifiers} />`);
+					let editLabel = $(`<label for=${i}>${ability.name}</label>`);
+					let editContainer = $(`<div style="display:none;"></div>`).addClass("editView");
+					editContainer.append(checkbox, editLabel);
+					let status = $(`<span aria-hidden="true"></span>`).addClass(ability.has ? "wdn-icon-ok green-icon" : "wdn-icon-cancel red-icon");
+					let label = $(`<label>${ability.name}</label>`);
+					let container = $(`<div></div>`).addClass("preview");
+					container.append(status, label);
+					$('#abilitiesSelect').append(editContainer, container);
 				}
-				$('#abilitiesSelect').selectpicker();
 
 				$('#certificationsDiv').find('div').remove();
 				for (let i = 0; i < response.abilitiesRequiringVerification.length; i++) {
@@ -54,9 +62,9 @@ require(['jquery'], function($) {
 					
 					let abilityDiv = $('<div></div>');
 					let abilityName = $('<span></span>').html(ability.name);
-					let abilityStatus = $('<i></i>').addClass(`${ability.has ? 'fa fa-check icon green-icon' : 'fa fa-times icon red-icon'}`);
+					let abilityStatus = $('<span aria-hidden="true"></span>').addClass(ability.has ? "wdn-icon-ok green-icon" : "wdn-icon-cancel red-icon");
 
-					abilityDiv.append(abilityName, abilityStatus);
+					abilityDiv.append(abilityStatus, abilityName);
 					$('#certificationsDiv').append(abilityDiv);
 				}
 			},
@@ -68,7 +76,7 @@ require(['jquery'], function($) {
 
 	let rolesMap = new Map();
 
-	let loadRoles = function() {
+	function loadRoles() {
 		$.ajax({
 			url: "/server/api/roles/getAll.php",
 			type: "GET",
@@ -95,7 +103,7 @@ require(['jquery'], function($) {
 	// Maps a siteId to the title of the site
 	let sitesMap = new Map(); 
 
-	let loadShifts = function() {
+	function loadShifts() {
 		$.ajax({
 			url: "/server/profile/profile.php",
 			type: "GET",
@@ -136,7 +144,7 @@ require(['jquery'], function($) {
 		});
 	}
 
-	let appendSignedUpShift = function(siteTitle, dateString, startTimeString, endTimeString, userShiftId, siteId, roleName) {
+	function appendSignedUpShift(siteTitle, dateString, startTimeString, endTimeString, userShiftId, siteId, roleName) {
 		let shiftRow = $('<div></div>');
 		let shiftInformation = $('<span></span>').html(`${siteTitle}: ${dateString} ${startTimeString} - ${endTimeString} (${roleName})`);
 		let removeButton = $('<i></i>').addClass('fa fa-trash-o icon clickable').click(function() {
@@ -175,7 +183,7 @@ require(['jquery'], function($) {
 		$('#shiftsSignedUpFor').append(shiftRow);
 	}
 
-	let initializeEventListeners = function() {
+	function initializeEventListeners() {
 		$("#personalInformationEditButton").click(function(e) {
 			$("#firstNameInput").val($("#firstNameText").html());
 			$("#lastNameInput").val($("#lastNameText").html());
@@ -183,11 +191,25 @@ require(['jquery'], function($) {
 			$("#phoneNumberInput").val($("#phoneNumberText").html());
 			
 			$(".personal-info").find('input').show();		
-			$(".personal-info").find('p').hide();
+			$(".personal-info").find('span').hide();
 
 			$(this).hide();
 			$("#personalInformationSaveButton").show();
 			$("#personalInformationCancelButton").show();
+		});
+
+		$("#abilitiesEditButton").click(function(e) {
+			$("#abilitiesSelect").find('.editView').show();		
+			$("#abilitiesSelect").find('.preview').hide();
+			$(this).hide();
+			$("#abilitiesCancelButton").show()
+		});
+
+		$("#abilitiesCancelButton").click(function(e) {
+			$("#abilitiesSelect").find('.editView').hide();		
+			$("#abilitiesSelect").find('.preview').show();
+			$(this).hide();
+			$("#abilitiesEditButton").show()
 		});
 
 		$("#personalInformationCancelButton").click(function(e) {
@@ -195,7 +217,7 @@ require(['jquery'], function($) {
 			$("#personalInformationSaveButton").hide();
 			$("#personalInformationEditButton").show();
 
-			$(".personal-info").find('p').show();
+			$(".personal-info").find('span').show();
 			$(".personal-info").find('input').hide();
 		});
 
@@ -364,14 +386,14 @@ require(['jquery'], function($) {
 			$("#shifts").append(shiftRow);	
 		});
 
-		$('#abilitiesSelect').on('changed.bs.select', function(event){
+		$('#abilitiesSelect').on('change', function(event){
 			// abilities to be removed - all non-selected options with set ids
-			let removeUserAbilityIds = $(this).children('option:not(:selected)[data-userAbilityId]').map(function(index, ele){
+			let removeUserAbilityIds = $(this).children('.editView').children('input:not(:checked)[data-userAbilityId]').map(function(index, ele){
 				return ele.dataset.userabilityid; // note this is case-sensitive and should be all lowercase
 			}).get();
 
 			// abilities to be added - all selected options w/o ids
-			let addAbilityIds = $(this).children('option:selected:not([data-userAbilityId])').map(function(index, ele){
+			let addAbilityIds = $(this).children('.editView').children('input:checked:not([data-userAbilityId])').map(function(index, ele){
 				return ele.value;
 			}).get();
 
