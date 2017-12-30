@@ -102,8 +102,8 @@ function wdnInclude($path)
 					<!-- AFTER SIGN UP BEGINS -->
 					<div class="wdn-band">
 						<div class="wdn-inner-wrapper wdn-inner-padding-no-top">
-							<div id="responsePlaceholder" class="mt-5" style="display: none;"></div>
-							<form class="cmxform mb-5" id="vitaSignupForm" method="post" action="" autocomplete="off">
+							<div id="responsePlaceholder" style="display: none;"></div>
+							<form class="cmxform" id="vitaSignupForm" method="post" action="" autocomplete="off">
 								<p mt-2 mb-3>Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
 
 								<ul>
@@ -132,7 +132,8 @@ function wdnInclude($path)
 								<h3 class="form-subheading">Add Filing Dependents</h3>
 								<p>Are any of your dependents filing a return during this appointment? If so, add them here.</p>
 								<ul id="dependents"></ul>
-								<button type="button" class="btn mb-3" id="addDependentButton">Add Dependent</button>
+								<br>
+								<button type="button" class="wdn-button wdn-button-triad" id="addDependentButton">Add Dependent</button>
 
 
 								<h3 class="form-subheading">Background Information</h3>
