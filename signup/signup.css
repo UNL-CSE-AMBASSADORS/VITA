@@ -10,3 +10,7 @@ td.ui-state-disabled.full {
 	padding-top: 1rem;
 	padding-bottom: 1rem;
 }
+
+.ui-datepicker tbody .ui-state-disabled {
+	border: transparent;
+}
