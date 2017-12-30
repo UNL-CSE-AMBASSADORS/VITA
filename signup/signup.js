@@ -321,40 +321,25 @@ WDN.initializePlugin('jqueryui', [function () {
 			var currentLastName = $('#lastName').val();
 			var id = $('.firstName').length;
 
-			var dependentRow = $('<div></div>').addClass("dependent-div row");
-			var firstNameBlock = $('<div></div>').addClass("col-5 form-textfield");
-			var firstNameInput = $(`<input type="text" name="firstNameInput${id}" id="firstNameInput${id}" required/>`).addClass("firstName");
-			var firstNameSpan = $('<span></span>').addClass("form-bar");
+			var dependentRow = $('<li></li>').addClass("wdn-grid-set");
+			var firstNameBlock = $('<div></div>').addClass("bp768-wdn-col-two-fifths");
 			var firstNameLabel = $(`<label for="firstNameInput${id}">First Name</label>`).addClass("form-label form-required");
-			firstNameBlock.append(firstNameInput, firstNameSpan, firstNameLabel);
+			var firstNameInput = $(`<input type="text" name="firstNameInput${id}" id="firstNameInput${id}" required/>`).addClass("firstName");
+			firstNameBlock.append(firstNameLabel, firstNameInput);
 
-			var lastNameBlock = $('<div></div>').addClass("col-5 form-textfield");
-			var lastNameInput = $(`<input type="text" name="lastNameInput${id}" id="lastNameInput${id}" value="${currentLastName}" required/>`).addClass("lastName");
-			var lastNameSpan = $('<span></span>').addClass("form-bar");
+			var lastNameBlock = $('<div></div>').addClass("bp768-wdn-col-two-fifths");
 			var lastNameLabel = $(`<label for="lastNameInput${id}">Last Name</label>`).addClass("form-label form-required");
-			lastNameBlock.append(lastNameInput, lastNameSpan, lastNameLabel);
+			var lastNameInput = $(`<input type="text" name="lastNameInput${id}" id="lastNameInput${id}" value="${currentLastName}" required/>`).addClass("lastName");
+			lastNameBlock.append(lastNameLabel, lastNameInput);
 
-			// Since the last name is inherited from the top-most last name input, we need to raise the label if there was a last name
-			if (currentLastName.trim().length > 0) lastNameLabel.addClass("form-label__floating");
-
-			var removeBlock = $('<button type="button"></button>').addClass("btn btn-danger col-2").html("Remove").click(function(){
-				$(this).parent().remove();
+			var removeBlock = $('<div></div>').addClass("bp768-wdn-col-one-fifth px-1rem");
+			var removeButton = $('<button type="button"></button>').addClass("wdn-button wdn-button-brand").html("Remove Dependent").click(function(){
+				$(this).parent().parent().remove();
 			});
+			removeBlock.append(removeButton);
 
 			dependentRow.append(firstNameBlock, lastNameBlock, removeBlock);
 			$("#dependents").append(dependentRow);
-
-			// Since non-required fields are "valid" when they are empty, we need an
-			// alternate way to keep labels raised when there is content in their
-			// associated input field
-			firstNameInput.blur(function() {
-				var isBlank = $.trim($(this).val()).length > 0;
-				var label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
-			});
-			lastNameInput.blur(function() {
-				var isBlank = $.trim($(this).val()).length > 0;
-				var label = $(this).siblings(".form-label").toggleClass( "form-label__floating", isBlank );
-			});
 		});
 
 		// Form submission
