@@ -23,6 +23,7 @@ function wdnInclude($path)
 <title>Register | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
+<link rel="stylesheet" href="/dist/assets/css/form.css">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -80,11 +81,75 @@ function wdnInclude($path)
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
-				<div class="wdn-band">
-					<div class="wdn-inner-wrapper">
-						<p>Impress your audience with awesome content!</p>
+				<?php
+					require_once "$root/server/config.php";
+
+					if(isset($_REQUEST['token']) && strlen($_REQUEST['token']) == 32){
+						## Define Passed Variables
+						$token = $_REQUEST['token'];
+
+						## Make Sure There Is A Row With That Token
+						$stmt = $DB_CONN->prepare("SELECT * FROM PasswordReset WHERE token = ?");
+						$stmt->execute(array($token));
+						if(count($stmt->fetchAll()) === 1){
+				?>
+					<div class="wdn-band">
+						<div class="wdn-inner-wrapper wdn-inner-padding-no-top">
+							<h3 class="panel-title">Password Reset</h3>
+
+							<section id="reset_password_success" style="display:none;">
+								<p>Your password has been reset successfully. You may now <a href="/login">login to your account.</a></p>
+							</section>
+
+							<section id="reset_password_info">
+								<p>Please provide your current password, and your new password below. Your password must meet the following requirements:</p>
+								<ul>
+									<li class="text-primary"><b>At least 8 characters</b></li>
+									<li><b>At least 1 uppercase</b></li>
+									<li><b>At least 1 lowercase</b></li>
+									<li><b>At least 1 number or special character</b></li>
+								</ul>
+							</section>
+
+							<form id="reset_password_form">
+								<input id="reset_password_token" type="hidden" value="<?php echo $_REQUEST["token"]; ?>" />
+								<section class="form-group">
+									<label class="form-required">Email Address</label>
+									<input id="reset_password_email" type="text" placeholder="john.doe@email.com" autocomplete="off" required />
+								</section>
+								<section class="form-group">
+									<label class="form-required">New Password</label>
+									<input id="reset_password_npassword" type="password" required />
+								</section>
+								<section class="form-group">
+									<label class="form-required">Confirm Password</label>
+									<input id="reset_password_vpassword" type="password" required />
+								</section>
+								<br>
+								<button type="submit" class="wdn-button wdn-button-triad">Submit</button>
+							</form>
+						</div>
 					</div>
-				</div>
+				<?php
+						}else{
+				?>
+							<div class="wdn-band">
+								<div class="wdn-inner-wrapper">
+									<a href="/login">Your password reset link has expired. Please request a new one here.</a>
+								</div>
+							</div>
+				<?php
+						}
+					}else{
+				?>
+						<div class="wdn-band">
+							<div class="wdn-inner-wrapper">
+								<a href="/">You appear to have reached this page in error. Please click this link to return home.</a>
+							</div>
+						</div>
+				<?php
+					}
+				?>
 				<!-- TemplateEndEditable -->
 			</div>
 		</main>
@@ -114,6 +179,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
-	<!-- <script src="/dist/*.js"></script> -->
+	<script src="/dist/register/register.js"></script>
 </body>
 </html>

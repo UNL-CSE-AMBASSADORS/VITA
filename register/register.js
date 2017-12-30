@@ -1,10 +1,10 @@
-required(['jquery'], function ($) {
+require(['jquery'], function ($) {
 	$(document).ready(function(){
 		console.log("%cSTOP! \n%cDo NOT paste/type anything here under any circumstance.", "color: red; font-size:36px;", "color: black; font-size: 12pt");
 		PasswordResetControls();
 	});
 
-	var PasswordResetControls = function(){
+	function PasswordResetControls(){
 		// Validate Form
 		$("#reset_password_form").on('submit', function(e) {
 
