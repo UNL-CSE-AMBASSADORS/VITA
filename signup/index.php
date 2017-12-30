@@ -80,11 +80,6 @@ function wdnInclude($path)
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
-				<div class="wdn-band">
-					<div class="wdn-inner-wrapper">
-						<p>Impress your audience with awesome content!</p>
-					</div>
-				</div>
 				<?php 
 					// TODO, THIS CODE WILL NEED TO BE REMOVED ONCE APPOINTMENT SIGN UP ACTUALLY STARTS
 					date_default_timezone_set('America/Chicago'); // Use CST
@@ -95,8 +90,10 @@ function wdnInclude($path)
 					if ($now < $signupBeginsDate && !$USER->isLoggedIn()) {
 				?>
 					<!-- BEFORE SIGN UP BEGINS -->
-					<div class="container">
-						<h2 class="pt-5">Appointment signup does not begin until January 15th, 2018. Please check back then.</h2>
+					<div class="wdn-band">
+						<div class="wdn-inner-wrapper wdn-inner-padding-no-top">
+							<h3>Appointment signup does not begin until January 15th, 2018. Please check back then.</h3>
+						</div>
 					</div>
 				<?php } else { ?>
 					<!-- AFTER SIGN UP BEGINS -->
@@ -105,8 +102,6 @@ function wdnInclude($path)
 							<div class="col col-12 col-sm-8">
 								<div id="responsePlaceholder" class="mt-5" style="display: none;"></div>
 								<form class="cmxform mb-5" id="vitaSignupForm" method="post" action="" autocomplete="off">
-									<h2 class="pt-5">Sign Up for a VITA Appointment</h2>
-
 									<p mt-2 mb-3>Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
 
 									<div class="form-textfield">
