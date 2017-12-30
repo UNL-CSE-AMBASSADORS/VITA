@@ -53,7 +53,7 @@ function wdnInclude($path)
 				<!-- TemplateBeginEditable name="breadcrumbs" -->
 				<ul>
 					<li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
-					<li>VITA Lincoln</li>
+					<li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
 					<li>Need Assistance</li>
 					<li>Signup for an Appointment</li>
 				</ul>
@@ -114,6 +114,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
-	<!-- <script src="/dist/*.js"></script> -->
+	<script src="/dist/signup/signup.js"></script>
 </body>
 </html>
