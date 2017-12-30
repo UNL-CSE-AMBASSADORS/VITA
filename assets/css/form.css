@@ -2,6 +2,10 @@
 	color: #d00000;
 }
 
+.btn-group .wdn-button {
+	border: 1px solid #2e240c;
+}
+
 .wdn-button.active {
 	background-color: #2e240c;
 }

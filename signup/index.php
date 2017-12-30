@@ -23,6 +23,7 @@ function wdnInclude($path)
 <title>Sign Up for a VITA Appointment | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
+<link rel="stylesheet" href="/assets/css/bootstrap.btn-group.min.css">
 <link rel="stylesheet" href="/dist/assets/css/form.css">
 <link rel="stylesheet" href="/dist/signup/signup.css">
 <!-- TemplateEndEditable -->
@@ -133,102 +134,119 @@ function wdnInclude($path)
 								<ul id="dependents"></ul>
 								<button type="button" class="btn mb-3" id="addDependentButton">Add Dependent</button>
 
-								
+
 								<h3 class="form-subheading">Background Information</h3>
 
-								<div class="form-radio row" id="language">
-									<label for="language" class="col form-required">Which language will you require?</label>
-									<div class="col btn-group" data-toggle="buttons">
-										<!-- NOTE: the values here are the ISO 639-2/T specfication for language codes (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) -->
-										<label class="btn btn-outline-secondary" for="languageEnglish">
-											<input type="radio" id="languageEnglish" value="eng" name="languageRadio" required>English
-										</label>
-										<label class="btn btn-outline-secondary" for="languageSpanish">
-											<input type="radio" id="languageSpanish" value="spa" name="languageRadio" required>Spanish
-										</label>
-										<label class="btn btn-outline-secondary" for="languageArabic">
-											<input type="radio" id="languageArabic" value="ara" name="languageRadio" required>Arabic
-										</label>
-										<label class="btn btn-outline-secondary" for="languageVietnamese">
-											<input type="radio" id="languageVietnamese" value="vie" name="languageRadio" required>Vietnamese
-										</label>
-									</div>
-								</div>
+								<ul>
+									<li class="form-radio" id="language">
+										<label for="language" class="form-required">Which language will you require?</label>
+										<div class="error-group">
+											<div class="btn-group" data-toggle="buttons">
+												<!-- NOTE: the values here are the ISO 639-2/T specfication for language codes (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) -->
+												<label class="wdn-button btn" for="languageEnglish">
+													<input type="radio" id="languageEnglish" value="eng" name="languageRadio" required>English
+												</label>
+												<label class="wdn-button btn" for="languageSpanish">
+													<input type="radio" id="languageSpanish" value="spa" name="languageRadio" required>Spanish
+												</label>
+												<label class="wdn-button btn" for="languageArabic">
+													<input type="radio" id="languageArabic" value="ara" name="languageRadio" required>Arabic
+												</label>
+												<label class="wdn-button btn" for="languageVietnamese">
+													<input type="radio" id="languageVietnamese" value="vie" name="languageRadio" required>Vietnamese
+												</label>
+											</div>
+										</div>
+									</li>
 
-								<div class="form-radio row" id="studentUNL">
-									<label for="1" class="col form-required">Are you a University of Nebraska-Lincoln student?</label>
-									<div class="col btn-group" data-toggle="buttons">
-										<label class="btn btn-outline-secondary" for="studentyes">
-											<input type="radio" id="studentyes" value="1" name="1" required>Yes
-										</label>
-										<label class="btn btn-outline-secondary" for="studentno">
-											<input type="radio" id="studentno" value="2" name="1" required>No
-										</label>
-									</div>
-								</div>
+									<li class="form-radio" id="studentUNL">
+										<label for="1" class="form-required">Are you a University of Nebraska-Lincoln student?</label>
+										<div class="error-group">
+											<div class="btn-group" data-toggle="buttons">
+												<label class="wdn-button btn" for="studentyes">
+													<input type="radio" id="studentyes" value="1" name="1" required>Yes
+												</label>
+												<label class="wdn-button btn" for="studentno">
+													<input type="radio" id="studentno" value="2" name="1" required>No
+												</label>
+											</div>
+										</div>
+									</li>
 
-								<div class="form-radio row" id="studentInt" style="display: none;">
-									<label for="2" class="col form-required">Are you an International Student Scholar?</label>
-									<div class="col btn-group" data-toggle="buttons">
-										<label class="btn btn-outline-secondary" for="studentIntyes">
-											<input type="radio" id="studentIntyes" value="1" name="2" required>Yes
-										</label>
-										<label class="btn btn-outline-secondary" for="studentIntno">
-											<input type="radio" id="studentIntno" value="2" name="2" required>No
-										</label>
-									</div>
-								</div>
+									<li class="form-radio" id="studentInt" style="display: none;">
+										<label for="2" class="form-required">Are you an International Student Scholar?</label>
+										<div class="error-group">
+											<div class="btn-group" data-toggle="buttons">
+												<label class="wdn-button btn" for="studentIntyes">
+													<input type="radio" id="studentIntyes" value="1" name="2" required>Yes
+												</label>
+												<label class="wdn-button btn" for="studentIntno">
+													<input type="radio" id="studentIntno" value="2" name="2" required>No
+												</label>
+											</div>
+										</div>
+									</>
 
-								<div class="form-radio row" id="studentIntVisa" style="display: none;">
-									<label for="3" class="col form-required">What sort of visa are you on?</label>
-									<div class="col btn-group" data-toggle="buttons">
-										<label class="btn btn-outline-secondary" for="f1">
-											<input type="radio" id="f1" value="4" name="3" required>F-1
-										</label>
-										<label class="btn btn-outline-secondary" for="j1">
-											<input type="radio" id="j1" value="5" name="3" required>J-1
-										</label>
-										<label class="btn btn-outline-secondary" for="h1b">
-											<input type="radio" id="h1b" value="6" name="3" required>H1B
-										</label>
-									</div>
-								</div>
+									<li class="form-radio" id="studentIntVisa" style="display: none;">
+										<label for="3" class="form-required">What sort of visa are you on?</label>
+										<div class="error-group">
+											<div class="btn-group" data-toggle="buttons">
+												<label class="wdn-button btn" for="f1">
+													<input type="radio" id="f1" value="4" name="3" required>F-1
+												</label>
+												<label class="wdn-button btn" for="j1">
+													<input type="radio" id="j1" value="5" name="3" required>J-1
+												</label>
+												<label class="wdn-button btn" for="h1b">
+													<input type="radio" id="h1b" value="6" name="3" required>H1B
+												</label>
+											</div>
+										</div>
+									</li>
 
-								<div class="form-radio row" id="studentf1" style="display: none;">
-									<label for="4" class="col form-required">How long have you been in the United States?</label>
-									<div class="col btn-group" data-toggle="buttons">
-										<label class="btn btn-outline-secondary" for="2012">
-											<input type="radio" id="2012" value="7" name="4" required>2012 or earlier
-										</label>
-										<label class="btn btn-outline-secondary" for="2013">
-											<input type="radio" id="2013" value="8" name="4" required>2013 or later
-										</label>
-									</div>
-								</div>
+									<li class="form-radio" id="studentf1" style="display: none;">
+										<label for="4" class="form-required">How long have you been in the United States?</label>
+										<div class="error-group">
+											<div class="btn-group" data-toggle="buttons">
+												<label class="wdn-button btn" for="2012">
+													<input type="radio" id="2012" value="7" name="4" required>2012 or earlier
+												</label>
+												<label class="wdn-button btn" for="2013">
+													<input type="radio" id="2013" value="8" name="4" required>2013 or later
+												</label>
+											</div>
+										</div>
+									</li>
 
-								<div class="form-radio row" id="studentj1" style="display: none;">
-									<label for="4" class="col form-required">How long have you been in the United States?</label>
-									<div class="col btn-group" data-toggle="buttons">
-										<label class="btn btn-outline-secondary" for="2015">
-											<input type="radio" id="2015" value="9" name="4" required>2015 or earlier
-										</label>
-										<label class="btn btn-outline-secondary" for="2016">
-											<input type="radio" id="2016" value="10" name="4" required>2016 or later
-										</label>
-									</div>
-								</div>
+									<li class="form-radio" id="studentj1" style="display: none;">
+										<label for="4" class="form-required">How long have you been in the United States?</label>
+										<div class="error-group">
+											<div class="btn-group" data-toggle="buttons">
+												<label class="wdn-button btn" for="2015">
+													<input type="radio" id="2015" value="9" name="4" required>2015 or earlier
+												</label>
+												<label class="wdn-button btn" for="2016">
+													<input type="radio" id="2016" value="10" name="4" required>2016 or later
+												</label>
+											</div>
+										</div>
+									</li>
 
-								<div class="form-radio row" id="studenth1b" style="display: none;">
-									<label for="5" class="col">Have you been on this visa for less than 183 days and in the United States for less than 5 years?</label>
-									<div class="col btn-group form-required" data-toggle="buttons">
-										<label class="btn btn-outline-secondary" for="studenth1byes">
-											<input type="radio" id="studenth1byes" value="1" name="5" required>Yes
-										</label>
-										<label class="btn btn-outline-secondary" for="studenth1bno">
-											<input type="radio" id="studenth1bno" value="2" name="5" required>No
-										</label>
-									</div>
-								</div>
+									<li class="form-radio" id="studenth1b" style="display: none;">
+										<label for="5" class="">Have you been on this visa for less than 183 days and in the United States for less than 5 years?</label>
+										<div class="error-group">
+											<div class="btn-group form-required" data-toggle="buttons">
+												<label class="wdn-button btn" for="studenth1byes">
+													<input type="radio" id="studenth1byes" value="1" name="5" required>Yes
+												</label>
+												<label class="wdn-button btn" for="studenth1bno">
+													<input type="radio" id="studenth1bno" value="2" name="5" required>No
+												</label>
+											</div>
+										</div>
+									</li>
+								</ul>
+
 
 								<h3 class="form-subheading">Appointment Information</h3>
 
