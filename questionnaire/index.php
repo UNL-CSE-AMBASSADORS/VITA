@@ -23,6 +23,8 @@ function wdnInclude($path)
 <title>Questionnaire | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
+<link rel="stylesheet" href="/assets/css/bootstrap.btn-group.min.css">
+<link rel="stylesheet" href="/dist/questionnaire/questionnaire.css?v=3">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -75,15 +77,214 @@ function wdnInclude($path)
 			<div id="maincontent" class="wdn-main">
 				<div id="pagetitle">
 					<!-- TemplateBeginEditable name="pagetitle" -->
-					<h1>VITA Lincoln</h1>
+					<h1>Questionnaire</h1>
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
+
+				<!-- Questions -->
 				<div class="wdn-band">
-					<div class="wdn-inner-wrapper">
-						<p>Impress your audience with awesome content!</p>
+					<div class="wdn-inner-wrapper wdn-inner-padding-no-top">
+						<h2>Can VITA Help You?</h2>
+						<p><b>Please note:</b> The scope of work that can be done within a VITA site is defined by the IRS. If your return is considered “out of scope” for a site, our VITA Volunteers will not be able to prepare your return.</p>
+
+						<form class="cmxform" id="vitaQuestionnaireForm" action="" autocomplete="off">
+							<div class="form-radio" id="depreciationSchedule">
+								<label for="depreciation_schedule" class="form-required">Will you require a Depreciation Schedule?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="1yes">
+											<input type="radio" id="1yes" value="1" name="1" required>Yes
+										</label>
+										<label class="wdn-button btn" for="1no">
+											<input type="radio" id="1no" value="2" name="1" required>No
+										</label>
+									</div>
+								</div>
+								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes requiring a depreciation schedule.</p>
+							</div>
+							<div class="form-radio" id="scheduleF">
+								<label for="schedule_f" class="form-required">Will you require a Schedule F (Farm)?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="2yes">
+											<input type="radio" id="2yes" value="1" name="2" required>Yes
+										</label>
+										<label class="wdn-button btn" for="2no">
+											<input type="radio" id="2no" value="2" name="2" required>No
+										</label>
+									</div>
+								</div>
+								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes requiring a schedule F.</p>
+							</div>
+							<div class="form-radio" id="homeBased">
+								<label for="self_employed" class="form-required">Are you self-employed or own a home-based business?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="3yes">
+											<input type="radio" id="3yes" value="1" name="3" required>Yes
+										</label>
+										<label class="wdn-button btn" for="3no">
+											<input type="radio" id="3no" value="2" name="3" required>No
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-radio" id="homeBasedNetLoss" style="display: none;">
+								<label for="net_loss" class="form-required">Does your home-based business or self-employment have a net loss?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="4yes">
+											<input type="radio" id="4yes" value="1" name="4" required>Yes
+										</label>
+										<label class="wdn-button btn" for="4no">
+											<input type="radio" id="4no" value="2" name="4" required>No
+										</label>
+									</div>
+								</div>
+								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes when the home-based business has a net loss.</p>
+							</div>
+							<div class="form-radio" id="homeBased10000" style="display: none;" >
+								<label for="more_than_10000_expenses" class="form-required">Does your home-based business or self-employment have more than $10,000 in expenses?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="5yes">
+											<input type="radio" id="5yes" value="1" name="5" required>Yes
+										</label>
+										<label class="wdn-button btn" for="5no">
+											<input type="radio" id="5no" value="2" name="5" required>No
+										</label>
+									</div>
+								</div>
+								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes when the home-based business has more than $10,000 in expenses.</p>
+							</div>
+							<div class="form-radio" id="homeBasedSEP" style="display: none;">
+								<label for="retirement_plans" class="form-required">Does your home-based business or self-employment have self-employed, SEP, SIMPLE, or qualified retirement plans?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="6yes">
+											<input type="radio" id="6yes" value="1" name="6" required>Yes
+										</label>
+										<label class="wdn-button btn" for="6no">
+											<input type="radio" id="6no" value="2" name="6" required>No
+										</label>
+									</div>
+								</div>
+								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes when the home-based business has retirement plans.</p>
+							</div>
+							<div class="form-radio" id="homeBasedEmployees" style="display: none;">
+								<label for="any_employees" class="form-required">Does your home-based business or self-employment have employees?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="7yes">
+											<input type="radio" id="7yes" value="1" name="7" required>Yes
+										</label>
+										<label class="wdn-button btn" for="7no">
+											<input type="radio" id="7no" value="2" name="7" required>No
+										</label>
+									</div>
+								</div>
+								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes when the home-based business has employees.</p>
+							</div>
+							<div class="form-radio" id="casualtyLosses">
+								<label for="casualty_losses" class="form-required">Will your return have casualty losses?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="8yes">
+											<input type="radio" id="8yes" value="1" name="8" required>Yes
+										</label>
+										<label class="wdn-button btn" for="8no">
+											<input type="radio" id="8no" value="2" name="8" required>No
+										</label>
+									</div>
+								</div>
+								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes which will have casualty losses.</p>
+							</div>
+							<div class="form-radio" id="theftLosses">
+								<label for="theft_losses" class="form-required">Will your return have theft losses?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="9yes">
+											<input type="radio" id="9yes" value="1" name="9" required>Yes
+										</label>
+										<label class="wdn-button btn" for="9no">
+											<input type="radio" id="9no" value="2" name="9" required>No
+										</label>
+									</div>
+								</div>
+								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes which will have theft losses.</p>
+							</div>
+							<div class="form-radio" id="scheduleE">
+								<label for="schedule_e" class="form-required">Will you require a Schedule E (rental income)?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="10yes">
+											<input type="radio" id="10yes" value="1" name="10" required>Yes
+										</label>
+										<label class="wdn-button btn" for="10no">
+											<input type="radio" id="10no" value="2" name="10" required>No
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-radio" id="scheduleK1">
+								<label for="schedule_k-1" class="form-required">Will you require a Schedule K-1 (partnership or trust income)?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="11yes">
+											<input type="radio" id="11yes" value="1" name="11" required>Yes
+										</label>
+										<label class="wdn-button btn" for="11no">
+											<input type="radio" id="11no" value="2" name="11" required>No
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-radio" id="dividendsIncome">
+								<label for="dividends_income" class="form-required">Do you have income from dividends, capital gains, or minimal brokerage transactions?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="12yes">
+											<input type="radio" id="12yes" value="1" name="12" required>Yes
+										</label>
+										<label class="wdn-button btn" for="12no">
+											<input type="radio" id="12no" value="2" name="12" required>No
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-radio" id="currentBankruptcy">
+								<label for="current_bankruptcy" class="form-required">Will your return involve a current bankruptcy?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="13yes">
+											<input type="radio" id="13yes" value="1" name="13" required>Yes
+										</label>
+										<label class="wdn-button btn" for="13no">
+											<input type="radio" id="13no" value="2" name="13" required>No
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-radio" id="multipleStates">
+								<label for="multiple_states" class="form-required">Will your return involve income from more than one state?</label>
+								<div class="error-group">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="wdn-button btn" for="14yes">
+											<input type="radio" id="14yes" value="1" name="14" required>Yes
+										</label>
+										<label class="wdn-button btn" for="14no">
+											<input type="radio" id="14no" value="2" name="14" required>No
+										</label>
+									</div>
+								</div>
+							</div>
+							<br>
+							<input id="vitaQuestionnaireSubmit" type="submit" value="Schedule An Appointment"/>
+						</form>
 					</div>
 				</div>
+
 				<!-- TemplateEndEditable -->
 			</div>
 		</main>
@@ -113,6 +314,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
-	<!-- <script src="/dist/*.js"></script> -->
+	<script src="/dist/questionnaire/questionnaire.js"></script>
 </body>
 </html>
