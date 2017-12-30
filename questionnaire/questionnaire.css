@@ -1,21 +1,3 @@
 .cant-help-text {
 	color: #d00000;
 }
-
-.error {
-	color: #d00000;
-}
-
-.wdn-button.active {
-	background-color: #2e240c;
-}
-
-.wdn-button:focus, 
-.wdn-button:active:focus, 
-.wdn-button.active:focus, 
-.wdn-button.focus, 
-.wdn-button:active.focus, 
-.wdn-button.active.focus {
-	box-shadow: 0 0 0 3px rgba(134,142,150,.5);
-	outline: 5px auto rgba(134,142,150,.5);
-}
