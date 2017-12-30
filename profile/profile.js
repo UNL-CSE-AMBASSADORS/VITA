@@ -266,11 +266,11 @@ require(['jquery'], function($) {
 		});
 
 		$("#addShiftButton").click(function(e) {
-			let shiftRow = $('<div></div>').addClass("add-shift-div");
-			let siteSelect = $('<select></select>').addClass("siteSelect");
-			let dateSelect = $('<select></select>').addClass("dateSelect").attr('disabled', true);
-			let timeSelect = $('<select></select>').addClass("timeSelect").attr('disabled', true);
-			let roleSelect = $('<select></select>').addClass("roleSelect");
+			let shiftRow = $('<div></div>').addClass("add-shift-div wdn-grid-set wdn-inner-wrapper wdn-inner-padding-sm centered");
+			let siteSelect = $('<select></select>').addClass("siteSelect bp768-wdn-col-one-fourth mb-1rem");
+			let dateSelect = $('<select></select>').addClass("dateSelect bp768-wdn-col-one-fourth mb-1rem").attr('disabled', true);
+			let timeSelect = $('<select></select>').addClass("timeSelect bp768-wdn-col-one-fourth mb-1rem").attr('disabled', true);
+			let roleSelect = $('<select></select>').addClass("roleSelect bp768-wdn-col-one-fourth mb-1rem");
 			
 			siteSelect.append($('<option disabled selected value="" style="display:none"> -- Select a site -- </option>'));
 			dateSelect.append($('<option disabled selected value="" style="display:none"> -- Select a date -- </option>'));
@@ -327,11 +327,11 @@ require(['jquery'], function($) {
 				}));
 			}
 
-			let cancelButton = $('<button type="button"></button>').addClass("btn btn-seconday").html("Cancel").click(function(){
+			let cancelButton = $('<button type="button"></button>').addClass("wdn-button wdn-button-brand wdn-pull-right").html("Cancel").click(function(){
 				$(this).parent().remove();
 			});
 
-			let signUpButton = $('<button type="button"></button>').addClass('btn btn-primary').html('Sign Up').click(function() {
+			let signUpButton = $('<button type="button"></button>').addClass('wdn-button wdn-button-triad wdn-pull-right').html('Sign Up').click(function() {
 				$(this).prop('disabled', true);
 				cancelButton.prop('disabled', true);
 
@@ -382,7 +382,7 @@ require(['jquery'], function($) {
 			});
 			
 
-			shiftRow.append(siteSelect, dateSelect, timeSelect, roleSelect, signUpButton, cancelButton);
+			shiftRow.append(siteSelect, dateSelect, timeSelect, roleSelect, cancelButton, signUpButton);
 			$("#shifts").append(shiftRow);	
 		});
 
