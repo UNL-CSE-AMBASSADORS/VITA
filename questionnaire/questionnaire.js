@@ -1,6 +1,6 @@
 require.config({
 	shim: {
-		/* Bootstrap dependencies */
+		/* Bootstrap is dependent on jquery */
 		'bootstrap/button': { deps: ['jquery'] },
 	},
 	paths: {
@@ -8,8 +8,6 @@ require.config({
 		jqueryvalidation: 'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min'
 	}
 });
-// bootstrap: '/assets/js/bootstrap',
-// bootstrap: "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min",
 
 require(['jquery', 'jqueryvalidation'], function ($) {
 	window.jQuery = $;
