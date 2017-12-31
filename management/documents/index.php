@@ -135,6 +135,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
-	<script src="/management/documents/documents.js"></script>
+	<script src="/dist/management/documents/documents.js"></script>
 </body>
 </html>
