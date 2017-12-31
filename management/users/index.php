@@ -92,12 +92,45 @@ function wdnInclude($path)
 				<!-- TemplateBeginEditable name="maincontentarea" -->
 				<div class="wdn-band">
 					<div class="wdn-inner-wrapper wdn-inner-padding-sm">
-						<button class="wdn-button wdn-pull-right" id="btn-add-user">Add User</button>
+						<a class="wdn-button wdn-pull-right" id="add-user" href="#add-user-modal">Add User</a>
 					</div>
 					<div class="wdn-inner-wrapper wdn-inner-padding-no-top" id="user-management-table-row">
 						<table class="table table-condensed table-hover wdn_responsive_table" id="user-management-table">
 							<!-- table data injected through JS -->
 						</table>
+					</div>
+				</div>
+				<div class="hidden">
+					<div class="modal" id="add-user-modal" tabindex="-1" role="dialog" aria-hidden="true">
+						<div class="wdn-band">
+							<div class="wdn-inner-wrapper">
+								<h4>Add a new user</h4>
+								<form id="add-user-form">
+									<fieldset>
+										<section class="form-group">
+											<label for="firstName">First Name:</label>
+											<input type="text" class="form-control" id="firstName">
+										</section>
+										<section class="form-group">
+											<label for="lastName">Last Name:</label>
+											<input type="text" class="form-control" id="lastName">
+										</section>
+										<section class="form-group">
+											<label for="email">Email Address:</label>
+											<input type="text" class="form-control" id="email" placeholder="student@huskers.unl.edu">
+										</section>
+										<section class="form-group">
+											<label for="phone">Phone Number:</label>
+											<input type="text" class="form-control" id="phone">
+										</section>
+									</fieldset>
+									<div>
+										<button type="submit" class="wdn-button wdn-button-triad">Add User</button>
+										<button type="button" class="wdn-button wdn-button-brand close-modal-button">Close</button>
+									</div>
+								</form>
+							</div>
+						</div>
 					</div>
 				</div>
 				<!-- TemplateEndEditable -->
