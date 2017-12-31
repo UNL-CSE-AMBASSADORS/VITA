@@ -159,30 +159,14 @@ WDN.initializePlugin('jqueryui', [function () {
 			});
 		}
 
-		function scrollDown(height, animationTime = 0) {
-			$('html, body').animate({
-				scrollTop: '+=' + height
-			}, animationTime);
-		}
-
-		function scrollToElement(element, animationTime = 0) {
-			$('.navbar-collapse.collapse').collapse('hide');
-			var offset = element.offset().top;
-			$('html, body').animate({
-				scrollTop: offset - $('.navbar').height() - 50
-			}, animationTime);
-		}
-
-		function showAppointmentPicker(animationTime = 300) {
+		function showAppointmentPicker() {
 			$("#studentScholarAppointmentPicker").hide();
 			$("#appointmentPicker").show();
-			scrollToElement($("#appointmentPicker"), animationTime);
 		}
 
-		function showStudentScholarAppointmentPicker(animationTime = 300) {
+		function showStudentScholarAppointmentPicker() {
 			// $("#appointmentPicker").hide();
 			$("#studentScholarAppointmentPicker").show();
-			scrollToElement($("#studentScholarAppointmentPicker"), animationTime);
 		}
 
 		function conditionalFormFields() {
@@ -220,7 +204,6 @@ WDN.initializePlugin('jqueryui', [function () {
 				if(value === "1"){
 					studentInt.slideDown(animationTime);
 					studentIntValues.change();
-					scrollDown(studentUNL.height(), animationTime);
 				} else if(value === "2"){
 					showAppointmentPicker();
 				}
@@ -235,7 +218,6 @@ WDN.initializePlugin('jqueryui', [function () {
 					allUnderStudentIntValues.slideUp(animationTime);
 					if(value === "1"){
 						studentIntVisa.slideDown(animationTime);
-						scrollDown(studentInt.height(), animationTime);
 						studentIntVisaValues.change();
 					} else if(value === "2"){
 						showAppointmentPicker();
@@ -273,11 +255,9 @@ WDN.initializePlugin('jqueryui', [function () {
 				var value = this.value;
 				if(this.checked){
 					if(value === "8"){
-						scrollDown(appointmentPicker.height(), animationTime);
-						showStudentScholarAppointmentPicker(animationTime);
+						showStudentScholarAppointmentPicker();
 					} else {
-						scrollDown(studentScholarAppointmentPicker.height(), animationTime);
-						showAppointmentPicker(animationTime);
+						showAppointmentPicker();
 					}
 				}
 			});
@@ -285,13 +265,13 @@ WDN.initializePlugin('jqueryui', [function () {
 			// Independent field = #studentj1
 			// Dependent field = any --> appointmentPicker
 			studentj1Values.change(function() {
-				showAppointmentPicker(animationTime);
+				showAppointmentPicker();
 			});
 
 			// Independent field = #studenth1b
 			// Dependent field = any --> appointmentPicker
 			studenth1bValues.change(function() {
-				showAppointmentPicker(animationTime);
+				showAppointmentPicker();
 			});
 		}
 
