@@ -1,5 +1,11 @@
 <?php
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
+require_once "$root/server/user.class.php";
+$USER = new User();
+if (!$USER->hasPermission('edit_user_permissions')) {
+	header("Location: /unauthorized");
+	die();
+}
 function wdnInclude($path)
 {
 	$documentRoot = 'https://unlcms.unl.edu';
@@ -20,9 +26,13 @@ function wdnInclude($path)
 -->
 <?php wdnInclude("/wdn/templates_4.1/includes/scriptsandstyles.html"); ?>
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+<title>User Management | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /> -->
+<!-- <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" /> -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css" /> -->
+<link rel="stylesheet" href="/management/users/users.css" />
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -54,7 +64,8 @@ function wdnInclude($path)
 				<ul>
 					<li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
 					<li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
-					<li>Home</li>
+					<li><a href="/management" title="Management">Admin</a></li>
+					<li>User Management</li>
 				</ul>
 				<!-- TemplateEndEditable -->
 			</nav>
@@ -75,13 +86,18 @@ function wdnInclude($path)
 			<div id="maincontent" class="wdn-main">
 				<div id="pagetitle">
 					<!-- TemplateBeginEditable name="pagetitle" -->
-					<h1>VITA Lincoln</h1>
+					<h1>User Management</h1>
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
 				<div class="wdn-band">
-					<div class="wdn-inner-wrapper">
-						<p>Impress your audience with awesome content!</p>
+					<div class="wdn-inner-wrapper wdn-inner-padding-sm">
+						<button class="wdn-button wdn-pull-right" id="btn-add-user">Add User</button>
+					</div>
+					<div class="wdn-inner-wrapper wdn-inner-padding-no-top" id="user-management-table-row">
+						<table class="table table-condensed table-hover wdn_responsive_table" id="user-management-table">
+							<!-- table data injected through JS -->
+						</table>
 					</div>
 				</div>
 				<!-- TemplateEndEditable -->
@@ -113,6 +129,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
-	<!-- <script src="/dist/*.js"></script> -->
+	<script src="/management/users/users.js"></script>
 </body>
 </html>
