@@ -83,20 +83,28 @@ function wdnInclude($path)
 			<div id="maincontent" class="wdn-main">
 				<div id="pagetitle">
 					<!-- TemplateBeginEditable name="pagetitle" -->
-					<h1>VITA Lincoln</h1>
+					<h1>Download Documents</h1>
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
 				<div class="wdn-band">
-					<div class="wdn-inner-wrapper wdn-inner-padding-no-top">
-						<h2> Download Documents </h2>
-						<input type="date" id="dateInput"/>
-						<select id="siteSelect">
-							<!-- Sites injected through JS -->
-						</select>
-						<button class="wdn-button" onclick="downloadAppointmentSchedule();">Download Appointment Schedule</button>
-						<button class="wdn-button" onclick="downloadVolunteerSchedule();">Download Volunteer Schedule</button>
-					</div>
+					<form class="wdn-inner-wrapper wdn-inner-padding-no-top wdn-set-grid">
+						<div class="bp768-wdn-col-one-half">
+							<label for="dateInput">Date</label>
+							<input type="text" id="dateInput"/>
+							<input type="hidden" id="isoFormattedDate"/>
+						</div>
+						<div class="bp768-wdn-col-one-half">
+							<label for="siteSelect">Site</label>
+							<select id="siteSelect">
+								<!-- Sites injected through JS -->
+							</select>
+						</div>
+						<div class="wdn-col">
+							<button class="wdn-button mt-1rem" onclick="downloadAppointmentSchedule();">Download Appointment Schedule</button>
+							<button class="wdn-button mt-1rem" onclick="downloadVolunteerSchedule();">Download Volunteer Schedule</button>
+						</div>
+					</form>
 				</div>
 				<!-- TemplateEndEditable -->
 			</div>
@@ -127,6 +135,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
-	<script src="/dist/management/documents/documents.js"></script>
+	<script src="/management/documents/documents.js"></script>
 </body>
 </html>
