@@ -126,7 +126,7 @@ WDN.initializePlugin('jqueryui', [function () {
 				var date = this.value;
 
 				dateSitesTimes.updateGlobalSites(date);
-				siteSelect.append($('<option disabled selected value="" style="display:none"> -- select an option -- </option>'));
+				siteSelect.append($('<option disabled selected value="" style="display:none"> -- Select a Site -- </option>'));
 				for(let site in sites) {
 					if (!sites[site]["hasTimeSlotsRemaining"]) continue;
 					siteSelect.append($('<option>', {
@@ -148,7 +148,7 @@ WDN.initializePlugin('jqueryui', [function () {
 
 				dateSitesTimes.updateGlobalTimes(date, site);
 				var timeSelect = $("#timePicker select")
-				timeSelect.append($('<option disabled selected value="" style="display:none"> -- select an option -- </option>'));
+				timeSelect.append($('<option disabled selected value="" style="display:none"> -- Select a Time -- </option>'));
 				for(const time in times) {
 					timeSelect.append($('<option>', {
 						value: time,

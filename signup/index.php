@@ -257,7 +257,7 @@ function wdnInclude($path)
 									</div>
 									<div id="datePicker" class="form-textfield">
 										<label class="form-label form-required">Date</label>
-										<input type="text" id="dateInput" name="dateInput" placeholder="Select a Date" required>
+										<input type="text" id="dateInput" name="dateInput" placeholder=" -- Select a Date -- " required>
 									</div>
 									<div id="sitePicker" class="form-select" style="display: none;">
 										<label class="form-label form-required" for="sitePickerSelect">Site</label>
