@@ -94,8 +94,8 @@ function wdnInclude($path)
 						<select id="siteSelect">
 							<!-- Sites injected through JS -->
 						</select>
-						<button onclick="downloadAppointmentSchedule();">Download Appointment Schedule</button>
-						<button onclick="downloadVolunteerSchedule();">Download Volunteer Schedule</button>
+						<button class="wdn-button" onclick="downloadAppointmentSchedule();">Download Appointment Schedule</button>
+						<button class="wdn-button" onclick="downloadVolunteerSchedule();">Download Volunteer Schedule</button>
 					</div>
 				</div>
 				<!-- TemplateEndEditable -->

@@ -1,5 +1,8 @@
 require(['jquery'], function($) {
 	$(document).ready(function() {
+		window.downloadAppointmentSchedule = downloadAppointmentSchedule;
+		window.downloadVolunteerSchedule = downloadVolunteerSchedule;
+		
 		loadAllSites();
 		$("#dateInput").val(getCurrentDateString());
 	});
