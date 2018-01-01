@@ -4,8 +4,8 @@ require.config({
 		'bootstrap/button': { deps: ['jquery'] },
 	},
 	paths: {
-		'bootstrap/button': '/assets/js/bootstrap/button',
-		jqueryvalidation: 'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min'
+		'bootstrap/button': '/dist/assets/js/bootstrap/button.min',
+		jqueryvalidation: '//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min'
 	}
 });
 
