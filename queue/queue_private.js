@@ -51,6 +51,7 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 				$scope.client.ended = false;
 				alert(result.error);
 			}
+			$scope.updateAppointmentInformation();
 		});
 	};
 
@@ -64,6 +65,7 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 			} else {
 				$('textarea').val('');
 			}
+			$scope.updateAppointmentInformation();
 		});
 	};
 
@@ -74,6 +76,7 @@ queueApp.controller("QueuePrivateController", function($scope, $controller, Queu
 				$scope.client.ended = false;
 				alert(result.error);
 			}
+			$scope.updateAppointmentInformation();
 		});
 	};
 
