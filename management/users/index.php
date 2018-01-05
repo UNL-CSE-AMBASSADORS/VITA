@@ -29,10 +29,7 @@ function wdnInclude($path)
 <title>User Management | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /> -->
-<!-- <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" /> -->
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css" /> -->
-<link rel="stylesheet" href="/management/users/users.css" />
+<link rel="stylesheet" href="/dist/management/users/users.css" />
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -162,6 +159,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
-	<script src="/management/users/users.js"></script>
+	<script src="/dist/management/users/users.js"></script>
 </body>
 </html>
