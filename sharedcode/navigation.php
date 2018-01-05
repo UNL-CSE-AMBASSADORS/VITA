@@ -15,7 +15,7 @@
 		<ul>
 
 			<?php if ($USER->isLoggedIn()): ?>
-			<li><a onclick="logout()">Logout</a></li>
+			<li><a href="" onclick="logout()">Logout</a></li>
 			<script type="text/javascript">
 				function logout() {
 					require(['jquery'], function($) {
