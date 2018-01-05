@@ -244,7 +244,7 @@ require(['jquery'], function($) {
 						$("#emailText").html($("#emailInput").val());
 						$("#phoneNumberText").html($("#phoneNumberInput").val());
 
-						$(".personal-info").find('p').show();		
+						$(".personal-info").find('span').show();		
 						$(".personal-info").find('input').hide();
 
 						$("#personalInformationSaveButton").hide();
