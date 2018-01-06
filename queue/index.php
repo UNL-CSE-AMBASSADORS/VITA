@@ -20,7 +20,7 @@ function wdnInclude($path)
 -->
 <?php wdnInclude("/wdn/templates_4.1/includes/scriptsandstyles.html"); ?>
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+<title>Queue | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
 <!-- TemplateEndEditable -->
@@ -54,7 +54,7 @@ function wdnInclude($path)
 				<ul>
 					<li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
 					<li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
-					<li>Home</li>
+					<li>Queue</li>
 				</ul>
 				<!-- TemplateEndEditable -->
 			</nav>
@@ -75,15 +75,29 @@ function wdnInclude($path)
 			<div id="maincontent" class="wdn-main">
 				<div id="pagetitle">
 					<!-- TemplateBeginEditable name="pagetitle" -->
-					<h1>VITA Lincoln</h1>
+					<h1>Queue</h1>
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
-				<div class="wdn-band">
-					<div class="wdn-inner-wrapper">
-						<p>Impress your audience with awesome content!</p>
+				<?php
+					require_once "$root/server/user.class.php";
+					$USER = new User();
+					if ($USER->isLoggedIn() && !isset($_REQUEST['public'])) { // we enable logged in users to get to the public queue by having ?public in the URL
+				?>
+					<div ng-app="queueApp">
+						<div private-queue></div>
+						<script src="/queue/queuePrivate.js"></script>
 					</div>
-				</div>
+				<?php
+					} else {
+				?>
+					<div ng-app="queueApp">
+						<div public-queue></div>
+						<script src="/queue/queuePublic.js"></script>
+					</div>
+				<?php
+					}
+				?>
 				<!-- TemplateEndEditable -->
 			</div>
 		</main>
