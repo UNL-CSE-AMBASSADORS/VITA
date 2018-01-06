@@ -11,7 +11,17 @@ td.ui-state-disabled.full {
 		size: portrait;
 	}
 
-	#google_translate_element, button, .btn, .navbar {
+	#google_translate_element, 
+	#wdn_menu_toggle, 
+	header, 
+	#wdn_logo_lockup,
+	#wdn_navigation_bar, 
+	.wdn-menu-trigger,
+	nav,
+	#pagetitle,
+	button,
+	.btn,
+	footer {
 		display: none;
 	}
 
