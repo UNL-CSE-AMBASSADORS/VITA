@@ -17,6 +17,11 @@ require.config({
 			deps: ['ngAnimate', 'ngAria']
 		},
 		'ngMessages': ['angular'],
+		'queueDataService': ['angular'],
+		'queueController': ['angular'],
+		'queuePrivateController': ['angular'],
+		'queueSearchFilter': ['angular'],
+
 	}
 });
 
