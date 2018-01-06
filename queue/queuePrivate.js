@@ -55,5 +55,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 		});
 		queueApp.filter('searchFor', QueueSearchFilter);
 
+		angular.bootstrap(document.getElementById('queueApp'), ['queueApp']);
+
 	});
 });
