@@ -23,6 +23,8 @@ function wdnInclude($path)
 <title>Queue | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
+<link rel="stylesheet" href="/queue/queue.css">
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -84,15 +86,13 @@ function wdnInclude($path)
 					$USER = new User();
 					if ($USER->isLoggedIn() && !isset($_REQUEST['public'])) { // we enable logged in users to get to the public queue by having ?public in the URL
 				?>
-					<div ng-app="queueApp">
-						<div private-queue></div>
+					<div id="queueApp" class="wdn-band" private-queue>
 						<script src="/queue/queuePrivate.js"></script>
 					</div>
 				<?php
 					} else {
 				?>
-					<div ng-app="queueApp">
-						<div public-queue></div>
+					<div id="queueApp" class="wdn-band" public-queue>
 						<script src="/queue/queuePublic.js"></script>
 					</div>
 				<?php

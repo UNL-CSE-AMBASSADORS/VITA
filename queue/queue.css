@@ -1,16 +1,55 @@
-.dashboard, .md-datepicker-input {
-	font-family: Bebas_Neue;
-	font-weight: bold;
-	font-size: 2rem !important;
-	line-height: 2rem;
+.dashboard {
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	padding: 30px 0;
+}
+
+.queue-count {
+	font-size: 2rem;
+	font-family: 'Tungsten A','Tungsten B','Arial Narrow',Arial,sans-serif;
+}
+
+.queue-size-count {
+	font-weight: 600;
+	padding-left: 5px;
 }
 
 .clock-time {
-	font-size: 2em;
+	font-size: 3.5rem;
+	color: #474746;
+	font-family: 'Tungsten A','Tungsten B','Arial Narrow',Arial,sans-serif;
+	font-weight: 600;
+	font-style: normal;
+	line-height: 1;
+}
+
+.clock-period {
+	font-size: 1.75rem;
+	color: #474746;
+	font-family: 'Tungsten A','Tungsten B','Arial Narrow',Arial,sans-serif;
+	font-weight: 400;
+	font-style: normal;
+	line-height: 1;
 }
 
 .inactive-period {
 	opacity: 0.15;
+}
+
+.left-half {
+	text-align: right;
+	width: 50%;
+	float: left;
+}
+
+.right-half {
+	width: 50%;
+	float: left;
+}
+
+select, input {
+	height: 34px;
 }
 
 /* Center the datepicker calendar on mobile */
@@ -18,5 +57,15 @@
 	.md-datepicker-calendar-pane.md-pane-open {
 		left: 50% !important;
 		transform: translateX(-50%) !important;
+	}
+
+	.bp-768-d-none {
+		display: none;
+	}
+}
+
+@media (max-width: 479px) {
+	.dashboard {
+		flex-direction: column;
 	}
 }

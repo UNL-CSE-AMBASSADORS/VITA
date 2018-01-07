@@ -1,9 +1,6 @@
 <?php $root = realpath($_SERVER["DOCUMENT_ROOT"]) ?>
 
-<div>
-	<link rel="stylesheet" href="/dist/queue/queue.css">
-	<link rel="stylesheet" href="/dist/queue/queue_private.css">
-</div>
+<link rel="stylesheet" href="/dist/queue/queue_private.css">
 
 <!-- Header section -->
 <?php

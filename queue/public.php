@@ -1,10 +1,5 @@
 <?php $root = realpath($_SERVER["DOCUMENT_ROOT"]) ?>
 
-<div>
-	<link rel="stylesheet" href="/dist/queue/queue.css">
-	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
-</div>
-
 <!-- Header section -->
 <?php
 	require_once "$root/queue/queue_header.php";

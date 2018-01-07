@@ -2,20 +2,24 @@ define('queueController', [], function() {
 
 	function queueController($scope, $interval, QueueDataService) {
 		$scope.today = new Date();
-		$scope.currentDate = $scope.today;
+		$scope.currentDay = $scope.today.getDate();
+		$scope.currentMonth = $scope.today.getMonth();
+		$scope.currentYear = $scope.today.getFullYear();
 		$scope.selectedSite = -1;
 
 		// Load the appointment info every 10 seconds
 		$scope.updateAppointmentInformation = function() {
-			let year = $scope.currentDate.getFullYear(),
-				month = $scope.currentDate.getMonth() + 1,
-				day = $scope.currentDate.getDate();
+			let year = $scope.currentYear,
+				month = $scope.currentMonth + 1,
+				day = $scope.currentDay;
 			if (month < 10) month = "0" + month;
+
+			let isoFormattedDate = year + "-" + month + "-" + day;
 
 			if ($scope.selectedSite == null || $scope.selectedSite.siteId == null) return;
 			let siteId = $scope.selectedSite.siteId;
 			
-			QueueDataService.getAppointments(year + "-" + month + "-" + day, siteId).then(function(data) {
+			QueueDataService.getAppointments(isoFormattedDate, siteId).then(function(data) {
 				if(data == null) {
 					console.log('server error');
 				} else if(data.length > 0) {
@@ -74,6 +78,21 @@ define('queueController', [], function() {
 		$scope.getSites();
 		$scope.updateAppointmentInformation();
 		refreshClockContent();
+
+		WDN.initializePlugin('jqueryui', [function () {
+			require(['jquery'], function($){
+				$("#dateInput").datepicker({
+					dateFormat : 'mm/dd/yy',
+					onSelect   : function(dateTime, inst) {
+						// Update the currentDay, currentMonth, currentYear variables with values from in the inst variable
+						$scope.currentDay = inst.currentDay;
+						$scope.currentMonth = inst.currentMonth;
+						$scope.currentYear = inst.currentYear;
+						$scope.updateAppointmentInformation();
+					}
+				}).datepicker( "setDate", $scope.today );
+			});
+		}]);
 
 	}
 
