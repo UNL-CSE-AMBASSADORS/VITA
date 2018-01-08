@@ -66,7 +66,7 @@
 
 
 <!-- Client/Appointment Info Section -->
-<div class="client-info-section wdn-inner-wrapper" ng-if="client != null" ng-cloak>
+<div class="client-info-section wdn-inner-wrapper" ng-if="appointments != null && client != null" ng-cloak>
 	<!-- Provide a way to get back to the queue -->
 	<button type="button" class="wdn-button" ng-click="unselectClient()">Back to Queue</button>
 

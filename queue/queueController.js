@@ -37,6 +37,9 @@ define('queueController', [], function() {
 					$scope.appointments = [];
 				}
 			});
+
+			// Ensure the client is not selected
+			$scope.client = null;
 		}
 
 		$scope.getSites = function() {
