@@ -5,6 +5,11 @@
 	require_once "$root/queue/queue_header.php";
 ?>
 
+<!-- Default Section -->
+<div class="wdn-inner-wrapper wdn-inner-padding-sm wdn-inner-padding-no-top wdn-center" ng-if="appointments == null">
+	Select a site and date.
+</div>
+
 <!-- Body Section with list of clients -->
 <table class="wdn_responsive_table queue" ng-if="appointments.length > 0" ng-cloak>
 	<thead>
@@ -15,8 +20,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr 
-			ng-repeat="appointment in appointments | orderBy:['timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime']" 
+		<tr ng-repeat="appointment in appointments | orderBy:['timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime']" 
 			ng-if="appointment.completed == null">
 			<th class="queue-name" data-header="Name">{{appointment.firstName}} {{appointment.lastName}}</th>
 			<td class="queue-progress" data-header="Progress">
@@ -30,6 +34,7 @@
 	</tbody>
 </table>
 
+<!-- Default message if there are no appointments on the selected date -->
 <div class="wdn-inner-wrapper wdn-center queue" ng-if="appointments.length == 0" ng-cloak>
 	There are no appointments on this day.
 </div>
