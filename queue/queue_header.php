@@ -1,4 +1,4 @@
-<div class="wdn-band" ng-cloak>
+<div class="wdn-band wdn-light-neutral-band" ng-cloak>
 	<div class="wdn-grid-set dashboard">
 
 		<div class="queue-count bp768-wdn-col-one-fourth bp480-wdn-col-one-third">

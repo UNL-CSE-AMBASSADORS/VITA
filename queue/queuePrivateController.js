@@ -10,6 +10,10 @@ define('queuePrivateController', [], function() {
 		$scope.selectClient = function(client) {
 			$scope.client = client;
 		};
+
+		$scope.unselectClient = function() {
+			$scope.client = null;
+		}
 	
 		$scope.checkIn = function() {
 			$scope.client.checkedIn = true;

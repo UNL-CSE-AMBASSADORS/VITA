@@ -8,7 +8,7 @@
 ?>
 
 <!-- Default Section -->
-<div class="wdn-inner-wrapper wdn-inner-padding-sm wdn-inner-padding-no-top wdn-center" ng-if="appointments == null">
+<div class="wdn-inner-wrapper wdn-center" ng-if="appointments == null">
 	Select a site and date.
 </div>
 <!-- End of Default Section -->
@@ -66,11 +66,20 @@
 
 
 <!-- Client/Appointment Info Section -->
-<div class="client-info-section container-fluid d-flex py-3" ng-if="client != null" ng-cloak>
+<div class="client-info-section wdn-inner-wrapper" ng-if="client != null" ng-cloak>
+	<!-- Provide a way to get back to the queue -->
+	<button type="button" class="wdn-button" ng-click="unselectClient()">Back to Queue</button>
+
 	<!-- Currently selected client -->
-	<div class="client align-items-start w-100">
-		<div class="mb-3">
-			<div class="client-name">{{client.firstName}} {{client.lastName}}</div>
+	<div class="client">
+		<div class="client-information">
+			<h2 class="client-name">{{client.firstName}} {{client.lastName}}</h2>
+			<div>
+				<span class="pill" ng-class="client.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
+				<span class="pill" ng-class="client.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
+				<span class="pill" ng-class="client.preparing ? 'pill-complete': 'pill-incomplete'">Preparing</span>
+				<span class="pill" ng-class="client.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
+			</div>
 			<div class="client-time"><b>Scheduled Appointment Time: </b>{{client.scheduledTime | date: "h:mm a"}}</div>
 			<div class="client-email" ng-if="client.emailAddress != null" ng-cloak>
 				<span><b>Email:</b> {{client.emailAddress}}</span>
@@ -80,43 +89,77 @@
 			</div>
 		</div>
 
-			<div class="client-progress d-flex flex-column">
-				<button type="button" class="btn" class="checkin" ng-disabled="client.checkedIn" ng-class="client.checkedIn ? 'btn-primary': 'btn-secondary' " ng-click="checkIn()">Checked In</button>
-			</br>
-				<button type="button" class="btn" class="paperworkComplete" ng-disabled="!client.checkedIn" ng-class="client.paperworkComplete ? 'btn-primary': 'btn-secondary' " ng-click="pwFilledOut()">Completed Paperwork</button>
-			</br>
-				<button type="button" class="btn" class="preparing" ng-disabled="!client.paperworkComplete" ng-class="client.preparing ? 'btn-primary': 'btn-secondary' " ng-click="nowPreparing()">Preparing</button>
-			</br>
-				<select ng-disabled="!client.preparing" ng-model="client.selectedStationNumber" ng-options="stationNumber for stationNumber in stationNumbers">
-					<option value="" style="display:none;">-- Select Station --</option>
-				</select>
-			</br>
-				<button type="button" class="btn" class="ended" ng-disabled="!client.preparing" ng-class="client.ended ? 'btn-primary': 'btn-secondary' " ng-click="completeAppointment()">Finished</button>
-			</div>
+		<div class="client-progress">
+			<h4>Update Progress:</h4>
+			<button type="button" 
+				class="wdn-button wdn-button-triad checkin" 
+				ng-show="!client.checkedIn"
+				ng-click="checkIn()">
+				Checked In
+			</button>
+			<button type="button"
+				class="wdn-button wdn-button-triad paperworkComplete" 
+				ng-show="client.checkedIn && !client.paperworkComplete"
+				ng-click="pwFilledOut()">
+				Completed Paperwork
+			</button>
+			<button type="button" 
+				class="wdn-button wdn-button-triad preparing" 
+				ng-show="client.paperworkComplete && !client.preparing"
+				ng-click="nowPreparing()">
+				Preparing
+			</button>
+			<select ng-show="client.preparing"
+				ng-model="client.selectedStationNumber" 
+				ng-options="stationNumber for stationNumber in stationNumbers">
+				<option value="" style="display:none;">-- Select Station --</option>
+			</select>
+			<button type="button" 
+				class="wdn-button wdn-button-triad ended" 
+				ng-show="client.preparing"
+				ng-disabled="client.selectedStationNumber == null"
+				ng-click="completeAppointment()">
+				Finished
+			</button>
+		</div>
 
-			<div class="greeter-directions">
-				<br>
-				<strong>INSTRUCTIONS:</strong>
-				<br>
+		<div class="greeter-directions">
+			<h4>Instructions:</h4>
+			<p>
 				Once a client has completed a step, click on the corresponding button. This will log the time at which each step is completed. PROGRESS CANNOT BE UNDONE, so
 				be sure to verify that the step is fully completed before clicking to progress the client. If, for any reason, a client does not complete their appointment,
 				fill out the form below and explain (in 255 characters or less) why the appointment was not completed. Appointments will disappear shortly after being marked
 				complete or incomplete.
-			</div>
-			<br>
-			<br>
-			<div class="appointment-not-complete">
-				<form>
-					<div class="form-group">
-						<label><strong>Appointment Not Completed:</strong></label>
-						<textarea ng-model="explanation" placeholder="Explain why the appointment was not completed." class="form-control" cols="300" rows="3" ng-maxlength="255"></textarea>
-						<br>
-						<button class="btn btn-danger" ng-disabled="!client.checkedIn" ng-click="incompleteAppointment(explanation)">Submit Incomplete Appointment</button>
-				</div>
-				</form>
-				<button class="btn btn-danger" ng-disabled="client.checkedIn" ng-click="cancelledAppointment()">Submit Cancelled Appointment</button>
-			</div>
-			<div class="client-appointmentId my-2"><b>Appointment ID: </b>{{client.appointmentId}}</div>
+			</p>
+		</div>
+		
+		<div class="appointment-not-complete">
+			<form>
+				<h4>Appointment Not Completed:</h4>
+				<label>Explain why the appointment was not completed.</label>
+				<textarea ng-model="explanation" 
+					placeholder="-- Expanation --" 
+					class="form-control" 
+					cols="300" 
+					rows="3" 
+					maxlength="255" 
+					ng-maxlength="255">
+				</textarea>
+				<span class="wdn-pull-right">{{ explanation ? explanation.length : 0 }}/255</span>
+				<button class="wdn-button wdn-button-brand" 
+					ng-show="client.checkedIn" 
+					ng-click="incompleteAppointment(explanation)">
+					Submit Incomplete Appointment
+				</button>
+				<button class="wdn-button wdn-button-brand" 
+					ng-show="!client.checkedIn" 
+					ng-click="cancelledAppointment()">
+					Submit Cancelled Appointment
+				</button>
+			</form>
+		</div>
+
+		<div class="client-appointmentId"><b>Appointment ID: </b>{{client.appointmentId}}</div>
 	</div>
 </div>
 <!-- End of Client/Appointment Info Section -->

@@ -6,7 +6,7 @@
 ?>
 
 <!-- Default Section -->
-<div class="wdn-inner-wrapper wdn-inner-padding-sm wdn-inner-padding-no-top wdn-center" ng-if="appointments == null">
+<div class="wdn-inner-wrapper wdn-center" ng-if="appointments == null">
 	Select a site and date.
 </div>
 
