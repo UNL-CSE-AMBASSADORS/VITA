@@ -1,7 +1,5 @@
 <?php $root = realpath($_SERVER["DOCUMENT_ROOT"]) ?>
 
-<link rel="stylesheet" href="/dist/queue/queue_private.css">
-
 <!-- Header section -->
 <?php
 	require_once "$root/queue/queue_header.php";
