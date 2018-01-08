@@ -37,8 +37,19 @@ define('queueController', [], function() {
 					$scope.appointments = [];
 				}
 			});
+		}
 
-			// Ensure the client is not selected
+		$scope.siteChanged = function() {
+			$scope.updateAppointmentInformation();
+
+			// Ensure the client is no longer selected
+			$scope.client = null;
+		}
+
+		$scope.dateChanged = function() {
+			$scope.updateAppointmentInformation();
+
+			// Ensure the client is no longer selected
 			$scope.client = null;
 		}
 
@@ -91,7 +102,7 @@ define('queueController', [], function() {
 						$scope.currentDay = inst.currentDay;
 						$scope.currentMonth = inst.currentMonth;
 						$scope.currentYear = inst.currentYear;
-						$scope.updateAppointmentInformation();
+						$scope.dateChanged();
 					}
 				}).datepicker( "setDate", $scope.today );
 			});

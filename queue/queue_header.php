@@ -8,12 +8,10 @@
 
 		<div class="bp768-wdn-col-one-fourth bp480-wdn-col-one-third">
 			<label for="siteSelect">Site</label>
-			<select 
-				class="dropdown-toggle wdn-col" 
+			<select class="dropdown-toggle wdn-col" 
 				ng-model="selectedSite" 
 				ng-options="site.title for site in sites track by site.siteId"
-				ng-change="updateAppointmentInformation()">
-				
+				ng-change="siteChanged()">
 				<option value="" style="display:none;">-- Select A Site --</option>
 			</select> 
 		</div>
