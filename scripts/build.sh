@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "$1" == "production" ] || [ "$1" == "prod" ]; then
-    npm run production
+    npm run build:prod
 else
-    npm run dev
+    npm run build:dev
 fi
