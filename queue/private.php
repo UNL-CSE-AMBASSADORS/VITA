@@ -91,34 +91,35 @@
 			<h4>Update Progress:</h4>
 			<button type="button" 
 				class="wdn-button wdn-button-triad checkin" 
-				ng-show="!client.checkedIn"
+				ng-show="!client.checkedIn && !client.ended" 
 				ng-click="checkIn()">
 				Checked In
 			</button>
-			<button type="button"
+			<button type="button" 
 				class="wdn-button wdn-button-triad paperworkComplete" 
-				ng-show="client.checkedIn && !client.paperworkComplete"
+				ng-show="client.checkedIn && !client.paperworkComplete && !client.ended" 
 				ng-click="pwFilledOut()">
 				Completed Paperwork
 			</button>
 			<button type="button" 
 				class="wdn-button wdn-button-triad preparing" 
-				ng-show="client.paperworkComplete && !client.preparing"
+				ng-show="client.paperworkComplete && !client.preparing && !client.ended" 
 				ng-click="nowPreparing()">
 				Preparing
 			</button>
-			<select ng-show="client.preparing"
+			<select ng-show="client.preparing && !client.ended" 
 				ng-model="client.selectedStationNumber" 
 				ng-options="stationNumber for stationNumber in stationNumbers">
 				<option value="" style="display:none;">-- Select Station --</option>
 			</select>
 			<button type="button" 
 				class="wdn-button wdn-button-triad ended" 
-				ng-show="client.preparing"
-				ng-disabled="client.selectedStationNumber == null"
+				ng-show="client.preparing && !client.ended" 
+				ng-disabled="client.selectedStationNumber == null" 
 				ng-click="completeAppointment()">
 				Finished
 			</button>
+			<p ng-show="client.ended">Finished!</p>
 		</div>
 
 		<div class="greeter-directions">
@@ -134,23 +135,27 @@
 		<div class="appointment-not-complete">
 			<form>
 				<h4>Appointment Not Completed:</h4>
-				<label>Explain why the appointment was not completed.</label>
-				<textarea ng-model="explanation" 
+				<label ng-show="client.checkedIn">Explain why the appointment was not completed.</label>
+				<textarea ng-model="client.explanation" 
 					placeholder="-- Expanation --" 
 					class="form-control" 
 					cols="300" 
 					rows="3" 
 					maxlength="255" 
+					ng-show="client.checkedIn" 
+					ng-disabled="client.ended" 
 					ng-maxlength="255">
 				</textarea>
-				<span class="wdn-pull-right">{{ explanation ? explanation.length : 0 }}/255</span>
+				<span class="wdn-pull-right" ng-show="client.checkedIn">{{ explanation ? explanation.length : 0 }}/255</span>
 				<button class="wdn-button wdn-button-brand" 
 					ng-show="client.checkedIn" 
+					ng-disabled="client.ended" 
 					ng-click="incompleteAppointment(explanation)">
 					Submit Incomplete Appointment
 				</button>
 				<button class="wdn-button wdn-button-brand" 
 					ng-show="!client.checkedIn" 
+					ng-disabled="client.ended" 
 					ng-click="cancelledAppointment()">
 					Submit Cancelled Appointment
 				</button>
