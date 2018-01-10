@@ -77,7 +77,6 @@ function wdnInclude($path)
 			<div id="maincontent" class="wdn-main">
 				<div id="pagetitle">
 					<!-- TemplateBeginEditable name="pagetitle" -->
-					<h1>Queue</h1>
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
