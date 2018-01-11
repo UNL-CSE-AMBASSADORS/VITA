@@ -352,10 +352,6 @@ WDN.initializePlugin('jqueryui', [function () {
 				var dependentFirstName = $(this).find('.firstName').val().trim();
 				var dependentLastName = $(this).find('.lastName').val().trim();
 
-<<<<<<< HEAD
-	return false;
-});
-=======
 				if(dependentFirstName.length > 0 && dependentLastName.length > 0) { // empty strings
 					dependents.push({
 						firstName: dependentFirstName,
@@ -408,4 +404,3 @@ WDN.initializePlugin('jqueryui', [function () {
 
 	});
 }]);
->>>>>>> dev
