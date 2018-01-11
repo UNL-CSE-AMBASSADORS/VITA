@@ -395,14 +395,14 @@ WDN.initializePlugin('jqueryui', [function () {
 						$(responsePlaceholder).show();
 						responsePlaceholder.innerHTML = response.message;
 
-						var printButton = $('<button type="button">Print</button>').addClass('mb-3 btn btn-primary').click(function() {
+						var printButton = $('<button type="button">Print</button>').addClass('mb-3 wdn-button btn wdn-button-triad').click(function() {
 							window.print();
 						});
 						$(responsePlaceholder).append(printButton);
 
 						if (emailValue.length > 0) {
-							var emailMeButton = $('<button type="button">Email Me this Confirmation</button>').addClass('mb-3 ml-2 btn btn-primary').click(function() {
-								$(this).prop('disabled', true).removeClass('btn-primary').addClass('btn-secondary');
+							var emailMeButton = $('<button type="button">Email Me this Confirmation</button>').addClass('mb-3 wdn-button btn wdn-button-triad email-confirmation-button').click(function() {
+								$(this).prop('disabled', true);
 								$.ajax({
 									url: "/server/storeAppointment.php",
 									type: "POST",
@@ -428,7 +428,6 @@ WDN.initializePlugin('jqueryui', [function () {
 										alert('There was a problem on the server. Please try again or print this page instead.');
 									}
 								});
-								$(this).html('Sent!').removeClass('btn-primary').addClass('btn-secondary').prop('disabled', true);
 							});
 							$(responsePlaceholder).append(emailMeButton);
 						}

@@ -6,6 +6,10 @@ td.ui-state-disabled.full {
 	opacity: 0.65;
 }
 
+.email-confirmation-button {
+	margin-left: 5px;
+}
+
 @media print {
 	@page {
 		size: portrait;
@@ -44,6 +48,7 @@ td.ui-state-disabled.full {
 		font-weight: normal;
 	}
 }
+
 .px-1rem {
 	padding-top: 1rem;
 	padding-bottom: 1rem;
