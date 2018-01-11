@@ -50,11 +50,11 @@ function getUserTable($data){
 		$abilitiesList = getUserAbilityOptionList($row['userId']);
 
 		$tbody.= "<tr data-user-id='".$row['userId']."'>";
-		$tbody.= "<td>".$row['firstName']." ".$row['lastName']."</td>";
-		$tbody.= "<td>".$row['email']."</td>";
-		$tbody.= "<td><select class='userPermissionList userPermissionsSelectPicker' multiple=true>".implode('', $permissionsList['options'])."</select></td>";
-		$tbody.= "<td><select class='userAbilityList userAbilitiesSelectPicker' multiple=true>".implode('', $abilitiesList)."</select></td>";		
-		$tbody.= "<td>".$permissionsList['hasPermissionCount']."</td>";
+		$tbody.= "<th data-header='Name'>".$row['firstName']." ".$row['lastName']."</th>";
+		$tbody.= "<td data-header='Email'>".$row['email']."</td>";
+		$tbody.= "<td data-header='Permissions'><select class='userPermissionList userPermissionsSelectPicker' data-style='wdn-button' multiple=true>".implode('', $permissionsList['options'])."</select></td>";
+		$tbody.= "<td data-header='Certifications'><select class='userAbilityList userAbilitiesSelectPicker' data-style='wdn-button' multiple=true>".implode('', $abilitiesList)."</select></td>";		
+		$tbody.= "<td data-header='Permissions Count'>".$permissionsList['hasPermissionCount']."</td>";
 		$tbody.= "</tr>";
 	}
 	$tbody.= "</tbody>";
@@ -72,9 +72,9 @@ function getUserPermissionOptionList($userId){
 	$stmt = $DB_CONN->prepare("SELECT 
 		permissionId,
 		name,
-        description,
-        lookupName,
-        (SELECT userPermissionId FROM UserPermission WHERE userId = ? AND permissionId = p.permissionId) as userPermissionId
+		description,
+		lookupName,
+		(SELECT userPermissionId FROM UserPermission WHERE userId = ? AND permissionId = p.permissionId) as userPermissionId
 	FROM Permission p");
 
 	$stmt->execute(array($userId));

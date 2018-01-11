@@ -1609,7 +1609,7 @@ SET @scheduledTime = "2018-04-03 16:00:00";
 INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 15, @site_internationalStudentScholar);
 
-SET @scheduledTime = "2018-04-05 17:00:00";
+SET @scheduledTime = "2018-04-03 17:00:00";
 INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 10, @site_internationalStudentScholar);
 

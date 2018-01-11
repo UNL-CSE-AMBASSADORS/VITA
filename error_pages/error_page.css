@@ -1,34 +1,32 @@
 .error-number {
-	font-size: 320px;
-	line-height: 320px;
-	font-family: Bebas_Neue;
+	font-size: 200px;
+	line-height: 120px;
 	font-weight: bold;
 	text-align: center;
 }
 
 .error-name {
-	font-size: 192px;
-	line-height: 192px;
-	font-family: Bebas_Neue;
+	font-size: 96px;
+	line-height: 96px;
 	font-weight: bold;
 	text-align: center;
+	margin-top: 0;
 }
 
 .error-description {
 	font-size: 24px;
-	font-family: Verdana;
 	text-align: center;
 }
 
 @media only screen and (max-width: 1000px) {
 	.error-number {
-		font-size: 192px;
-		line-height: 192px;
+		font-size: 160px;
+		line-height: 100px;
 	}
 
 	.error-name {
-		font-size: 96px;
-		line-height: 96px;
+		font-size: 76px;
+		line-height: 76px;
 	}
 
 	.error-description {
@@ -38,8 +36,8 @@
 
 @media only screen and (max-width: 600px) {
 	.error-number {
-		font-size: 96px;
-		line-height: 96px;
+		font-size: 120px;
+		line-height: 80px;
 	}
 
 	.error-name {
