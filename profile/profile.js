@@ -147,7 +147,7 @@ require(['jquery'], function($) {
 	function appendSignedUpShift(siteTitle, dateString, startTimeString, endTimeString, userShiftId, siteId, roleName) {
 		let shiftRow = $('<div></div>');
 		let shiftInformation = $('<span></span>').html(`${siteTitle}: ${dateString} ${startTimeString} - ${endTimeString} (${roleName})`);
-		let removeButton = $('<i></i>').addClass('fa fa-trash-o icon clickable').click(function() {
+		let removeButton = $('<span></span>').html(' [Cancel]').addClass('red-icon pointer').click(function() {
 			$.ajax({
 				url: "/server/profile/profile.php",
 				type: "POST",
