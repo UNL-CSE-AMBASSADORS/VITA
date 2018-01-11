@@ -9,6 +9,9 @@ define('queuePrivateController', [], function() {
 	
 		$scope.selectClient = function(client) {
 			$scope.client = client;
+			for (let filingStatus of $scope.filingStatuses) {
+				filingStatus.checked = false;
+			}
 		};
 
 		$scope.unselectClient = function() {
@@ -37,7 +40,8 @@ define('queuePrivateController', [], function() {
 			}
 	
 			let selectedFilingStatuses = [];
-			for (let filingStatus of $scope.client.filingStatuses) {
+			for (let filingStatus of $scope.filingStatuses) {
+				console.log(filingStatus);
 				if (filingStatus.checked) {
 					selectedFilingStatuses.push(filingStatus.filingStatusId);
 				}
@@ -60,7 +64,7 @@ define('queuePrivateController', [], function() {
 		};
 
 		$scope.getFilingStatuses = function() {
-			QueueService.getFilingStatuses().then(function(data) {
+			QueueDataService.getFilingStatuses().then(function(data) {
 				if(data == null) {
 					console.log('server error');
 				} else if(data.length > 0) {

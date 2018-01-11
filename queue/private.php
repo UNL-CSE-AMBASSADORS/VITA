@@ -55,33 +55,12 @@
 		</table>
 	</div>
 
-<<<<<<< HEAD
-						<div class="client-progress d-flex flex-column">
-							<button type="button" class="btn" class="checkin" ng-disabled="client.checkedIn" ng-class="client.checkedIn ? 'btn-primary': 'btn-secondary' " ng-click="checkIn()">Checked In</button>
-						</br>
-							<button type="button" class="btn" class="paperworkComplete" ng-disabled="!client.checkedIn" ng-class="client.paperworkComplete ? 'btn-primary': 'btn-secondary' " ng-click="pwFilledOut()">Completed Paperwork</button>
-						</br>
-							<button type="button" class="btn" class="preparing" ng-disabled="!client.paperworkComplete" ng-class="client.preparing ? 'btn-primary': 'btn-secondary' " ng-click="nowPreparing()">Preparing</button>
-						</br>
-							<select ng-disabled="!client.preparing" ng-model="client.selectedStationNumber" ng-options="stationNumber for stationNumber in stationNumbers">
-								<option value="" style="display:none;">-- Select Station --</option>
-							</select>
-							<div class="mt-2 row">
-								<div class="col-sm-6" ng-repeat="filingStatus in filingStatuses">
-									<input type="checkbox" ng-disabled="!client.preparing" ng-model="filingStatus.checked"/> {{filingStatus.text}}
-								</div>
-							</div>
-						</br>
-							<button type="button" class="btn" class="ended" ng-disabled="!client.preparing" ng-class="client.ended ? 'btn-primary': 'btn-secondary' " ng-click="completeAppointment()">Finished</button>
-						</div>
-=======
 	<!-- Default message if there are no appointments on the selected date -->
 	<div class="wdn-inner-wrapper wdn-center" ng-if="appointments.length == 0">
 		There are no appointments on this day.
 	</div>
 </div>
 <!-- End of Queue Section -->
->>>>>>> 941f3d44fd0bfab6d582e675b3d9c93b88a86aff
 
 
 <!-- Client/Appointment Info Section -->
@@ -128,9 +107,9 @@
 				ng-click="nowPreparing()">
 				Preparing
 			</button>
-			<div class="mt-2 row" ng-show="client.preparing && !client.ended">
-				<div class="col-sm-6" ng-repeat="filingStatus in filingStatuses">
-					<input type="checkbox" ng-model="client.filingStatus.checked"/> {{filingStatus.text}}
+			<div ng-show="client.preparing && !client.ended">
+				<div class="bp768-wdn-col-one-half" ng-repeat="filingStatus in filingStatuses">
+					<input type="checkbox" ng-model="filingStatus.checked"/> {{filingStatus.text}}
 				</div>
 			</div>
 			<select ng-show="client.preparing && !client.ended" 
