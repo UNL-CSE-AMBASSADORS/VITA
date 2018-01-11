@@ -106,8 +106,8 @@ function wdnInclude($path)
 							</div>
 							<div class="bp768-wdn-col-one-half">
 								The UNL Tax Credit Campaign prepares tax returns for low-income, working families and students for free.
-								It is sponsored by the University of Nebraska-Lincoln's Center for Civic Engagement in conjunction
-								with the Lincoln Volunteer Income Tax Assistance (VITA) Coalition.
+								It is sponsored by the University of Nebraska&ndash;Lincoln's Center for Civic Engagement in conjunction
+								with the Lincoln EITC Coalition.
 							</div>
 						</div>
 					</div>
@@ -121,10 +121,11 @@ function wdnInclude($path)
 							</div>
 							<div class="bp768-wdn-col-one-half">
 								<p class="col col-12 col-sm-8">
-									Residential appointments begin January 21st and run through April 8th. Appointments for international
-									returns begin March 6th and run through April 10th. You can sign up for appointments at the Nebraska East
-									Union, Anderson Library, and Jackie Gaughan Multicultural Center sites through this site. Download the schedule
-									to see all times for all sites and how to contact the sites. 
+									Resident appointments begin January 21st and run through April 8th. 
+									Appointments for International Student Scholars tax appointments begin March 6th and run 
+									through April 10th. Appointments are available at the following sites: Nebraska East Union, 
+									Anderson Library, and Jackie Gaughan Multicultural Center. To see the days and times for 
+									all the locations, please download site schedule. 
 								</p>
 								<div class="bp768-wdn-col-one-half visual-island">
 									<a class="wdn-button wdn-button-brand" href="/signup">Make an Appointment</a>
@@ -146,11 +147,11 @@ function wdnInclude($path)
 							<ul class="bp768-wdn-col-one-half">
 								<li>Social Security Card and photo identification</li>
 								<li>Social Security numbers and birth dates for all dependents</li>
-								<li>Forms W-2 and all other income forms and tax documents for 2016</li>
-								<li>Bank routing and account number for deposit/debit of any tax balance</li>
+								<li>Forms W-2 and all other income forms for 2017 (ex: 1099-MISC, 1099-R, etc.)</li>
+								<li>Banking information for deposit/debit, routing number and account number</li>
 								<li>Tax identification numbers for any and all daycare providers</li>
 								<li>Spouse, if filing jointly (both must be present to sign the return)</li>
-								<li>If a post secondary student, you must bring your 1098T and student account information showing payment of tuition and qualified fees</li>
+								<li>If a college student, you must bring your 1098T and student account information showing payment of tuition and qualified fees</li>
 							</ul>
 						</div>
 					</div>

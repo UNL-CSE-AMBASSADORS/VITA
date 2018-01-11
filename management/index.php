@@ -87,7 +87,7 @@ function wdnInclude($path)
 				<!-- TemplateBeginEditable name="maincontentarea" -->
 				<div class="wdn-band">
 					<div class="wdn-inner-wrapper">
-						<p>Impress your audience with awesome content!</p>
+						<p>This page isn't quite ready. Check back later for updates!</p>
 					</div>
 				</div>
 				<!-- TemplateEndEditable -->

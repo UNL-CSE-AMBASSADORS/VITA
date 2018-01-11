@@ -10,6 +10,10 @@ define('queuePrivateController', [], function() {
 		$scope.selectClient = function(client) {
 			$scope.client = client;
 		};
+
+		$scope.unselectClient = function() {
+			$scope.client = null;
+		}
 	
 		$scope.checkIn = function() {
 			$scope.client.checkedIn = true;
@@ -40,7 +44,7 @@ define('queuePrivateController', [], function() {
 			$scope.client.ended = true;
 			let urlSafeExplanation = fixedEncodeURIComponent(explanation);
 			QueueDataService.incompleteAppointment(urlSafeExplanation, $scope.client.appointmentId);
-			$('textarea').val('');
+			$scope.client.explanation = "";
 		};
 	
 		$scope.cancelledAppointment = function() {

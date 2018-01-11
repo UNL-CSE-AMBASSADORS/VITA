@@ -5,10 +5,10 @@ require.config({
 		ngAria: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min',
 		ngMessages: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min',
 		ngMaterial: '//ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min',
-		queueDataService: '/queue/queueDataService',
-		queueController: '/queue/queueController',
-		queuePrivateController: '/queue/queuePrivateController',
-		queueSearchFilter: '/queue/queueSearchFilter'
+		queueDataService: '/dist/queue/queueDataService',
+		queueController: '/dist/queue/queueController',
+		queuePrivateController: '/dist/queue/queuePrivateController',
+		queueSearchFilter: '/dist/queue/queueSearchFilter'
 	},
 	shim: {
 		'ngAnimate': ['angular'],
@@ -17,6 +17,11 @@ require.config({
 			deps: ['ngAnimate', 'ngAria']
 		},
 		'ngMessages': ['angular'],
+		'queueDataService': ['angular'],
+		'queueController': ['angular'],
+		'queuePrivateController': ['angular'],
+		'queueSearchFilter': ['angular'],
+
 	}
 });
 
@@ -49,6 +54,8 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 			};
 		});
 		queueApp.filter('searchFor', QueueSearchFilter);
+
+		angular.bootstrap(document.getElementById('queueApp'), ['queueApp']);
 
 	});
 });
