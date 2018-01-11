@@ -199,7 +199,9 @@ class Login
 		$response['success'] = true;
 
 		## Kill Session
-		session_destroy();
+		if (session_status() == PHP_SESSION_ACTIVE) {
+			session_destroy();
+		}
 
 		## Set Redirect
 		$response['expired'] = true;
