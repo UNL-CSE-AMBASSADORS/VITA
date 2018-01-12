@@ -41,12 +41,14 @@
 	<li><a href="<?php $root ?>/queue" title="Queue">Queue</a>
 	</li>
 
-	<?php if ($USER->hasPermission('use_admin_tools')): ?>
-	<li><a href="<?php $root ?>/management" title="Site Admin">Admin</a>
+	<li><a href="<?php $root ?>/management" title="Management Tools">Manage</a>
 		<ul>
-			<li><a href="<?php $root ?>/management/users" title="Manage Users">Manage Users</a></li>
+			<li><a href="<?php $root ?>/management/appointments" title="Appointment Management">Appointment Management</a></li>
+			
+			<?php if ($USER->hasPermission('use_admin_tools')): ?>
+			<li><a href="<?php $root ?>/management/users" title="User Management">User Management</a></li>
 			<li><a href="<?php $root ?>/management/documents" title="Print Documents">Print Documents</a></li>
+			<?php endif; ?>
 		</ul>
 	</li>
-	<?php endif; ?>
 </ul>
