@@ -22,7 +22,8 @@
 		</form>
 
 		<!-- Message if there are no appointments that match the search -->
-		<p class="wdn-inner-wrapper wdn-inner-padding-sm wdn-inner-padding-no-top wdn-center" ng-show="(appointments | searchFor: clientSearch).length == 0">
+		<p class="wdn-inner-wrapper wdn-inner-padding-sm wdn-inner-padding-no-top wdn-center" 
+			ng-show="(appointments | searchFor: clientSearch).length == 0">
 			No results for "{{clientSearch}}".
 		</p>
 
@@ -166,4 +167,3 @@
 	</div>
 </div>
 <!-- End of Client/Appointment Info Section -->
-
