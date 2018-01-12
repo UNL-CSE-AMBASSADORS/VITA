@@ -86,26 +86,9 @@ define('appointmentsController', [], function() {
 		// Invoke initially
 		$scope.getAppointments();
 
-		// // Create interval to update appointment information every 10 seconds
-		// var appointmentInterval = $interval(function() {
-		// 	$scope.updateAppointmentInformation();
-		// }.bind(this), 10000);
-
-		// // Destroy the intervals when we leave this page
-		// $scope.$on('$destroy', function () {
-		// 	$interval.cancel(clockInterval);
-		// 	$interval.cancel(appointmentInterval);
-		// });
-
-		// // Invoke initially
-		// $scope.getSites();
-		// $scope.updateAppointmentInformation();
-		// refreshClockContent();
-
-
 	}
 
-	appointmentsController.$inject = ['$scope', 'appointmentsDataService'];
+	appointmentsController.$inject = ['$scope', '$controller', 'appointmentsDataService'];
 
 	return appointmentsController;
 

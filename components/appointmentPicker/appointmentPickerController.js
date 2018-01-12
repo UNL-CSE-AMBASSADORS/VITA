@@ -1,13 +1,11 @@
 define('appointmentPickerController', [], function() {
 
-	function appointmentsController($scope, AppointmentPickerDataService) {
+	function appointmentsController($scope, AppointmentPickerDataService, sharedPropertiesService) {
 		$scope.times = [];
 		$scope.sites = [];
 		$scope.dates = [];
 		$scope.today = new Date();
-		$scope.selectedDate = null;
-		$scope.selectedSite = null;
-		$scope.selectedTime = null;
+		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
 
 		$scope.getAppointments = function() {
 			let year = new Date().getFullYear();
@@ -67,22 +65,22 @@ define('appointmentPickerController', [], function() {
 		}
 
 		$scope.dateChanged = function(dateInput) {
-			$scope.selectedDate = dateInput;
-			$scope.selectedSite = null;
-			$scope.selectedTime = null;
+			$scope.sharedProperties.selectedDate = dateInput;
+			$scope.sharedProperties.selectedSite = null;
+			$scope.sharedProperties.selectedTime = null;
 			$scope.updateGlobalSites(dateInput);
 		}
 
 		$scope.siteChanged = function(site) {
-			$scope.selectedTime = null;
-			$scope.updateGlobalTimes($scope.selectedDate, site)
+			$scope.sharedProperties.selectedTime = null;
+			$scope.updateGlobalTimes($scope.sharedProperties.selectedDate, site)
 		}
 
 		$scope.getAppointments();
 
 	}
 
-	appointmentsController.$inject = ['$scope', 'appointmentPickerDataService'];
+	appointmentsController.$inject = ['$scope', 'appointmentPickerDataService', 'sharedPropertiesService'];
 
 	return appointmentsController;
 

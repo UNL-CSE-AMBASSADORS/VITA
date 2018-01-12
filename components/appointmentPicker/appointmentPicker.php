@@ -33,12 +33,12 @@ td.available .ui-state-default {
 	</div>
 	<div id="sitePicker" 
 		class="form-select" 
-		ng-show="selectedDate != null">
+		ng-show="sharedProperties.selectedDate != null">
 		<label class="form-label form-required" for="sitePickerSelect">Site</label>
 		<select id="sitePickerSelect" 
 			name="sitePickerSelect" 
-			ng-model="selectedSite" 
-			ng-change="siteChanged(selectedSite)" 
+			ng-model="sharedProperties.selectedSite" 
+			ng-change="siteChanged(sharedProperties.selectedSite)" 
 			ng-options="key as site.site_title for (key, site) in sites track by key" 
 			required>
 			<option value="" style="display:none;">-- Select a Site --</option>
@@ -46,12 +46,12 @@ td.available .ui-state-default {
 	</div>
 	<div id="timePicker" 
 		class="form-select" 
-		ng-show="selectedDate != null && selectedSite != null">
+		ng-show="sharedProperties.selectedDate != null && sharedProperties.selectedSite != null">
 		<label class="form-label form-required" for="timePickerSelect">Time</label>
 		<select id="timePickerSelect" 
 			name="timePickerSelect" 
 			ng-options="time as time disable when (remaining <= 0) for (time, remaining) in times track by time" 
-			ng-model="selectedTime"
+			ng-model="sharedProperties.selectedTime"
 			required>
 			<option value="" style="display:none;">-- Select a Time --</option>
 		</select>
