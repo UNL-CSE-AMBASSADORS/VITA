@@ -3,6 +3,7 @@ define('appointmentsController', [], function() {
 	function appointmentsController($scope, AppointmentsService, sharedPropertiesService) {
 
 		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
+		$scope.submittingReschedule = false;
 
 		$scope.getAppointments = function() {
 			let year = new Date().getFullYear();
@@ -31,9 +32,12 @@ define('appointmentsController', [], function() {
 		};
 
 		$scope.rescheduleAppointment = function() {
-			if ($scope.sharedProperties.selectedDate == null || $scope.sharedProperties.selectedSite == null || $scope.sharedProperties.selectedTime == null) {
+
+			if ($scope.sharedProperties.selectedDate == null || $scope.sharedProperties.selectedSite == null || $scope.sharedProperties.selectedTime == null || $scope.submittingReschedule) {
 				return false;
 			}
+
+			$scope.submittingReschedule = true;
 
 			let appointmentId = $scope.appointment.appointmentId;
 			let scheduledTime = new Date($scope.sharedProperties.selectedDate + ' ' + $scope.sharedProperties.selectedTime + ' GMT').toISOString();
@@ -49,6 +53,8 @@ define('appointmentsController', [], function() {
 					$scope.sharedProperties.selectedDate = null;
 					$scope.sharedProperties.selectedSite = null;
 					$scope.sharedProperties.selectedTime = null;
+
+					$scope.submittingReschedule = false;
 					
 					// Let the user know it was successful
 					WDN.initializePlugin('notice');
@@ -66,6 +72,8 @@ define('appointmentsController', [], function() {
 						</div>`);  
 				} else {
 					alert(result.error);
+
+					$scope.submittingReschedule = false;
 
 					// Let the user know it failed
 					WDN.initializePlugin('notice');

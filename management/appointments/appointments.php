@@ -27,7 +27,8 @@
 			value="Reschedule" 
 			id="rescheduleButton" 
 			class="submit wdn-button wdn-button-triad" 
-			ng-disabled="sharedProperties.selectedDate == null || sharedProperties.selectedSite == null || sharedProperties.selectedTime == null" 
+			ng-disabled="sharedProperties.selectedDate == null || sharedProperties.selectedSite == null || sharedProperties.selectedTime == null || submittingReschedule" 
+			ng-model="submittingReschedule" 
 			ng-click="rescheduleAppointment()">
 	</form>
 </div>
