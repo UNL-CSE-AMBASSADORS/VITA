@@ -41,7 +41,8 @@
 	<li><a href="<?php $root ?>/queue" title="Queue">Queue</a>
 	</li>
 
-	<li><a href="<?php $root ?>/management" title="Management Tools">Manage</a>
+	<?php if ($USER->isLoggedIn()): ?>
+	<li><a href="<?php $root ?>/management" title="Management Tools">Management</a>
 		<ul>
 			<li><a href="<?php $root ?>/management/appointments" title="Appointment Management">Appointment Management</a></li>
 			
@@ -51,4 +52,5 @@
 			<?php endif; ?>
 		</ul>
 	</li>
+	<?php endif; ?>
 </ul>
