@@ -22,7 +22,7 @@
 	<!-- Reschedule Section -->
 	<h3>Reschedule Appointment</h3>
 	<form class="cmxform" id="rescheduleForm">
-		<?php // require_once "$root/components/appointmentPicker/appointmentPicker.php" ?>
+		<div appointment-picker></div>
 		<input type="submit" 
 			value="Reschedule" 
 			id="rescheduleButton" 

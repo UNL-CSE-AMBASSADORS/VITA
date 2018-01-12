@@ -7,7 +7,9 @@ require.config({
 		ngMaterial: '//ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min',
 		appointmentsDataService: '/dist/management/appointments/appointmentsDataService',
 		appointmentsController: '/dist/management/appointments/appointmentsController',
-		appointmentsSearchFilter: '/dist/management/appointments/appointmentsSearchFilter'
+		appointmentsSearchFilter: '/dist/management/appointments/appointmentsSearchFilter',
+		appointmentPickerDataService: '/dist/components/appointmentPicker/appointmentPickerDataService',
+		appointmentPickerController: '/dist/components/appointmentPicker/appointmentPickerController'
 	},
 	shim: {
 		'ngAnimate': ['angular'],
@@ -19,6 +21,8 @@ require.config({
 		'appointmentsDataService': ['angular'],
 		'appointmentsController': ['angular'],
 		'appointmentsSearchFilter': ['angular'],
+		'appointmentPickerDataService': ['angular'],
+		'appointmentPickerController': ['angular']
 	}
 });
 
@@ -27,12 +31,16 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 	require([
 		'appointmentsDataService',
 		'appointmentsController',
-		'appointmentsSearchFilter'
+		'appointmentsSearchFilter',
+		'appointmentPickerDataService',
+		'appointmentPickerController'
 	],
 	function (
 		AppointmentsDataService,
 		AppointmentsController, 
-		AppointmentsSearchFilter
+		AppointmentsSearchFilter,
+		AppointmentPickerDataService,
+		AppointmentPickerController
 	) {
 		'use strict';
 
@@ -49,7 +57,30 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 		});
 		appointmentsApp.filter('searchFor', AppointmentsSearchFilter);
 
+		// Contents for the appointmentPickerApp module
+		appointmentsApp.factory('appointmentPickerDataService', AppointmentPickerDataService);
+		appointmentsApp.controller('appointmentPickerController', AppointmentPickerController);
+		appointmentsApp.directive('appointmentPicker', function () {
+			return {
+				controller: 'appointmentPickerController',
+				templateUrl: '/components/appointmentPicker/appointmentPicker.php'
+			};
+		});
+
 		angular.bootstrap(document.getElementById('appointmentsApp'), ['appointmentsApp']);
 
+		// var appointmentPickerApp = angular.module('appointmentPickerApp', []);
+
+		// appointmentPickerApp.factory('appointmentPickerDataService', AppointmentPickerDataService);
+		// appointmentPickerApp.controller('appointmentPickerController', AppointmentPickerController);
+		// appointmentPickerApp.directive('appointmentPicker', function () {
+		// 	return {
+		// 		controller: 'appointmentPickerController',
+		// 		templateUrl: '/components/appointmentPicker/appointmentPicker.php'
+		// 	};
+		// });
+
+		// angular.bootstrap(document.getElementById('appointmentPickerApp'), ['appointmentPickerApp']);
+		console.log("done!");
 	});
 });
