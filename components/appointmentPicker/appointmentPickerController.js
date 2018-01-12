@@ -5,7 +5,9 @@ define('appointmentPickerController', [], function() {
 		$scope.sites = [];
 		$scope.dates = [];
 		$scope.today = new Date();
-		$scope.selectedDate = [];
+		$scope.selectedDate = null;
+		$scope.selectedSite = null;
+		$scope.selectedTime = null;
 
 		$scope.getAppointments = function() {
 			let year = new Date().getFullYear();
@@ -13,7 +15,7 @@ define('appointmentPickerController', [], function() {
 				if(result == null) {
 					alert('There was an error loading the appointments. Please try refreshing the page.');
 				} else {
-					$scope.dates = result;
+					$scope.dates = result.dates;
 					WDN.initializePlugin('jqueryui', [function () {
 						require(['jquery'], function($){
 							$("#dateInput").datepicker({
@@ -21,26 +23,22 @@ define('appointmentPickerController', [], function() {
 								onSelect   : function(dateTime, inst) {
 									// Update the currentDay, currentMonth, currentYear variables with values from in the inst variable
 									$scope.dateChanged(dateTime);
+									$scope.$apply();
 								},
 								// Good example: https://stackoverflow.com/a/1962849/7577035
 								// called for every date before it is displayed
 								beforeShowDay: function(date) {
-									if (dateSitesTimes.hasDate(date)) {
-										if (dateSitesTimes.hasTimeSlotsRemaining(date)) {
-											return [true, ''];
+									if ($scope.hasDate(date)) {
+										if ($scope.hasTimeSlotsRemaining(date)) {
+											return [true, 'available'];
 										} else {
 											return [false, 'full'];
 										}
 									} else {
 										return [false, ''];
 									}
-								},
-								beforeShow: function() {
-									setTimeout(function(){
-										angular.element('.ui-datepicker').css('z-index', 100);
-									}, 0);
 								}
-							}).datepicker( "setDate", $scope.today );
+							});
 						});
 					}]);
 				}
@@ -59,15 +57,7 @@ define('appointmentPickerController', [], function() {
 		$scope.updateGlobalSites = function(dateInput) {
 			let dateObj = new Date(dateInput);
 			let date = dateObj.toISOString().substring(0, 10);
-			let localSites = $scope.dates[date]["sites"];
-			$scope.sites = [];
-			for (let site in localSites) {
-				$scope.sites.push({
-					"siteId": site,
-					"title": localSites[site]["site_title"],
-					"hasTimeSlotsRemaining": localSites[site]["hasAvailability"]
-				});
-			}
+			$scope.sites = $scope.dates[date]["sites"];
 		}
 	
 		$scope.updateGlobalTimes = function(dateInput, site) {
@@ -78,12 +68,18 @@ define('appointmentPickerController', [], function() {
 
 		$scope.dateChanged = function(dateInput) {
 			$scope.selectedDate = dateInput;
+			$scope.selectedSite = null;
+			$scope.selectedTime = null;
 			$scope.updateGlobalSites(dateInput);
 		}
 
 		$scope.siteChanged = function(site) {
+			$scope.selectedTime = null;
 			$scope.updateGlobalTimes($scope.selectedDate, site)
 		}
+
+		$scope.getAppointments();
+
 	}
 
 	appointmentsController.$inject = ['$scope', 'appointmentPickerDataService'];

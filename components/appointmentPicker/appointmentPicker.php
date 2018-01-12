@@ -3,36 +3,57 @@
 	min-height: 300px;
 }
 
-td.ui-state-disabled.full {
-	opacity: 0.65;
+td.ui-state-disabled.full, 
+td.ui-state-disabled.full .ui-state-default {
+	background: transparent;
+}
+
+td.ui-state-disabled.full .ui-state-default {
+	box-shadow: 0 0 0px 5px #fff inset;
+}
+
+td.available .ui-state-default {
+	box-shadow: 0 0 0px 5px #d5d5d2 inset;
 }
 
 .px-1rem {
 	padding-top: 1rem;
 	padding-bottom: 1rem;
 }
-
-.ui-datepicker tbody .ui-state-disabled {
-	border: transparent;
-}
 </style>
 
 <div id="appointmentPicker">
-	<div id="studentScholarAppointmentPicker" style="display:none">
-		Student Scholar
-	</div>
 	<div id="datePicker" class="form-textfield">
-		<input type="text" id="dateInput" name="dateInput" placeholder="Select a Date" required>
-		<label class="form-label form-required form-label__always-floating">Date</label>
+		<label class="form-label form-required">Date</label>
+		<input type="text" 
+			id="dateInput" 
+			name="dateInput" 
+			placeholder=" -- Select a Date -- " 
+			required>
 	</div>
-	<div id="sitePicker" class="form-select" style="display: none;">
+	<div id="sitePicker" 
+		class="form-select" 
+		ng-show="selectedDate != null">
 		<label class="form-label form-required" for="sitePickerSelect">Site</label>
-		<select id="sitePickerSelect" name="sitePickerSelect" required></select>
-		<div class="form-select__arrow"></div>
+		<select id="sitePickerSelect" 
+			name="sitePickerSelect" 
+			ng-model="selectedSite" 
+			ng-change="siteChanged(selectedSite)" 
+			ng-options="key as site.site_title for (key, site) in sites track by key" 
+			required>
+			<option value="" style="display:none;">-- Select a Site --</option>
+		</select>
 	</div>
-	<div id="timePicker" class="form-select" style="display: none;">
+	<div id="timePicker" 
+		class="form-select" 
+		ng-show="selectedDate != null && selectedSite != null">
 		<label class="form-label form-required" for="timePickerSelect">Time</label>
-		<select id="timePickerSelect" name="timePickerSelect" required></select>
-		<div class="form-select__arrow"></div>
+		<select id="timePickerSelect" 
+			name="timePickerSelect" 
+			ng-options="time as time disable when (remaining <= 0) for (time, remaining) in times track by time" 
+			ng-model="selectedTime"
+			required>
+			<option value="" style="display:none;">-- Select a Time --</option>
+		</select>
 	</div>
 </div>

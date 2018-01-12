@@ -25,7 +25,6 @@ function wdnInclude($path)
 <!-- TemplateBeginEditable name="head" -->
 <link rel="stylesheet" href="/assets/css/bootstrap.btn-group.min.css">
 <link rel="stylesheet" href="/dist/assets/css/form.css">
-<link rel="stylesheet" href="/dist/signup/signup.css">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -186,7 +185,7 @@ function wdnInclude($path)
 												</label>
 											</div>
 										</div>
-									</>
+									</li>
 
 									<li class="form-radio" id="studentIntVisa" style="display: none;">
 										<label for="3" class="form-required">What sort of visa are you on?</label>
@@ -251,23 +250,7 @@ function wdnInclude($path)
 
 								<h3 class="form-subheading">Appointment Information</h3>
 
-								<div id="appointmentPicker">
-									<div id="studentScholarAppointmentPicker" style="display:none">
-										Student Scholar
-									</div>
-									<div id="datePicker" class="form-textfield">
-										<label class="form-label form-required">Date</label>
-										<input type="text" id="dateInput" name="dateInput" placeholder=" -- Select a Date -- " required>
-									</div>
-									<div id="sitePicker" class="form-select" style="display: none;">
-										<label class="form-label form-required" for="sitePickerSelect">Site</label>
-										<select id="sitePickerSelect" name="sitePickerSelect" required></select>
-									</div>
-									<div id="timePicker" class="form-select" style="display: none;">
-										<label class="form-label form-required" for="timePickerSelect">Time</label>
-										<select id="timePickerSelect" name="timePickerSelect" required></select>
-									</div>
-								</div>
+								<div id="appointmentPickerApp" appointment-picker></div>
 
 								<input type="submit" value="Submit" class="submit btn btn-primary mb-5 vita-background-primary">
 							</form>
@@ -304,10 +287,6 @@ function wdnInclude($path)
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
 	<script src="/dist/signup/signup.js"></script>
-<<<<<<< HEAD
 	<script src="/dist/components/appointmentPicker/appointmentPicker.js"></script>
-	<script src="/dist/assets/js/form.js"></script>
-=======
->>>>>>> dev
 </body>
 </html>
