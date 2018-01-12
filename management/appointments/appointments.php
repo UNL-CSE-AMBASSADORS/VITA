@@ -1,32 +1,34 @@
 <?php $root = realpath($_SERVER["DOCUMENT_ROOT"]) ?>
 
 <!-- Show when an appointment is selected -->
-<div ng-show="appointment != null" ng-cloak>
-	<div class="row my-2">
-		<i class="fa fa-arrow-left fa-pull-left fa-2x pointer" aria-hidden="true" title="Back" ng-click="deselectAppointment()"></i>
-	</div>
+<div class="wdn-inner-wrapper wdn-inner-padding-no-top" ng-show="appointment != null" ng-cloak>
 
-	<div class="mb-3">
-		<div class="mb-1 client-name">{{appointment.firstName}} {{appointment.lastName}}</div>
-		<div><b>Scheduled Appointment Time: </b>{{appointment.scheduledTime | date: "MMM dd, yyyy h:mm a"}}</div>
-		<div><b>Site: </b>{{appointment.title}}</div>
-		<div><b>Requested Language: </b>{{appointment.language}}</div>
-		<div ng-if="appointment.emailAddress != null">
-			<span><b>Email: </b>{{appointment.emailAddress}}</span>
-		</div>
-		<div ng-if="appointment.phoneNumber != null">
-			<span><b>Phone Number: </b>{{appointment.phoneNumber}}</span>
-		</div>
-		<div><b>Appointment ID: </b>{{appointment.appointmentId}}</div>
-	</div>
+	<!-- Provide a way back to list of appointments -->
+	<button type="button" class="wdn-button" ng-click="deselectAppointment()">Back to List of Appointments</button>
 
-	<div class="mt-5">
-		<h3>Reschedule Appointment</h3>
-		<form class="cmxform mb-5" id="rescheduleForm">
-			<?php // require_once "$root/components/appointmentPicker/appointmentPicker.php" ?>
-			<input type="submit" value="Reschedule" id="rescheduleButton" class="submit btn btn-primary mb-5 vita-background-primary" ng-click="rescheduleAppointment()">
-		</form>
+	<!-- Information Section -->
+	<h2 class="client-name">{{appointment.firstName}} {{appointment.lastName}}</h2>
+	<div><b>Scheduled Appointment Time: </b>{{appointment.scheduledTime | date: "MMM dd, yyyy h:mm a"}}</div>
+	<div><b>Site: </b>{{appointment.title}}</div>
+	<div><b>Requested Language: </b>{{appointment.language}}</div>
+	<div ng-if="appointment.emailAddress != null">
+		<span><b>Email: </b>{{appointment.emailAddress}}</span>
 	</div>
+	<div ng-if="appointment.phoneNumber != null">
+		<span><b>Phone Number: </b>{{appointment.phoneNumber}}</span>
+	</div>
+	<div><b>Appointment ID: </b>{{appointment.appointmentId}}</div>
+
+	<!-- Reschedule Section -->
+	<h3>Reschedule Appointment</h3>
+	<form class="cmxform" id="rescheduleForm">
+		<?php // require_once "$root/components/appointmentPicker/appointmentPicker.php" ?>
+		<input type="submit" 
+			value="Reschedule" 
+			id="rescheduleButton" 
+			class="submit wdn-button wdn-button-triad" 
+			ng-click="rescheduleAppointment()">
+	</form>
 </div>
 
 <!-- Show if no selected appointment -->
