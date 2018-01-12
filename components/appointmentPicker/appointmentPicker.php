@@ -1,3 +1,22 @@
+<style>
+#appointmentPicker {
+	min-height: 300px;
+}
+
+td.ui-state-disabled.full {
+	opacity: 0.65;
+}
+
+.px-1rem {
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+}
+
+.ui-datepicker tbody .ui-state-disabled {
+	border: transparent;
+}
+</style>
+
 <div id="appointmentPicker">
 	<div id="studentScholarAppointmentPicker" style="display:none">
 		Student Scholar
