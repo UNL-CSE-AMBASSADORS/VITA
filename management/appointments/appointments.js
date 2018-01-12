@@ -69,18 +69,5 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 
 		angular.bootstrap(document.getElementById('appointmentsApp'), ['appointmentsApp']);
 
-		// var appointmentPickerApp = angular.module('appointmentPickerApp', []);
-
-		// appointmentPickerApp.factory('appointmentPickerDataService', AppointmentPickerDataService);
-		// appointmentPickerApp.controller('appointmentPickerController', AppointmentPickerController);
-		// appointmentPickerApp.directive('appointmentPicker', function () {
-		// 	return {
-		// 		controller: 'appointmentPickerController',
-		// 		templateUrl: '/components/appointmentPicker/appointmentPicker.php'
-		// 	};
-		// });
-
-		// angular.bootstrap(document.getElementById('appointmentPickerApp'), ['appointmentPickerApp']);
-		console.log("done!");
 	});
 });
