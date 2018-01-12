@@ -86,11 +86,7 @@ function wdnInclude($path)
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
-				<div class="wdn-band">
-					<div class="wdn-inner-wrapper">
-						<p>Impress your audience with awesome content!</p>
-					</div>
-				</div>
+				<div id="appointmentsApp" class="wdn-band" appointments></div>
 				<!-- TemplateEndEditable -->
 			</div>
 		</main>
@@ -120,6 +116,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
-	<!-- <script src="/dist/*.js"></script> -->
+	<script src="/dist/management/appointments/appointments.js"></script>
 </body>
 </html>
