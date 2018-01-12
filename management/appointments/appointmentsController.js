@@ -1,6 +1,9 @@
 define('appointmentsController', [], function() {
 
-	function appointmentsController($scope, AppointmentsService) {
+	function appointmentsController($scope, AppointmentsService, sharedPropertiesService) {
+
+		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
+
 		$scope.getAppointments = function() {
 			let year = new Date().getFullYear();
 			AppointmentsService.getAppointments(year).then(function(result) {
@@ -26,69 +29,76 @@ define('appointmentsController', [], function() {
 				}
 			});
 		};
-	
+
 		$scope.rescheduleAppointment = function() {
-			if (!$('#rescheduleForm').valid() || !$("#sitePickerSelect").valid() || !$("#timePickerSelect").valid()) {
+			if ($scope.sharedProperties.selectedDate == null || $scope.sharedProperties.selectedSite == null || $scope.sharedProperties.selectedTime == null) {
 				return false;
 			}
-	
-			$('#rescheduleButton').prop('disabled', true);
+
 			let appointmentId = $scope.appointment.appointmentId;
-			let scheduledTime = new Date($('#dateInput').val() + ' ' + $('#timePickerSelect').val() + ' GMT').toISOString();
-			let siteId = sitePickerSelect.value;
-	
+			let scheduledTime = new Date($scope.sharedProperties.selectedDate + ' ' + $scope.sharedProperties.selectedTime + ' GMT').toISOString();
+			let siteId = $scope.sharedProperties.selectedSite;
+
 			AppointmentsService.rescheduleAppointment(appointmentId, scheduledTime, siteId).then(function(result) {
 				if (result.success) {
 					// We force it to be in CST
-					$scope.appointment.scheduledTime = new Date($('#dateInput').val() + ' ' + $('#timePickerSelect').val() + ' CST');
-					$scope.appointment.title = $('#sitePickerSelect option:selected').text();
-	
+					$scope.appointment.scheduledTime = new Date($scope.sharedProperties.selectedDate + ' ' + $scope.sharedProperties.selectedTime + ' CST');
+					$scope.appointment.title = $scope.sharedProperties.selectedSiteTitle;
+
 					// Clear the selected values
-					$('#dateInput').val('');
-					$('#sitePicker').hide();
-					$('#timePicker').hide();
-					$('#timePickerSelect').html('');
-					$('#sitePickerSelect').html('');
-	
+					$scope.sharedProperties.selectedDate = null;
+					$scope.sharedProperties.selectedSite = null;
+					$scope.sharedProperties.selectedTime = null;
+					
 					// Let the user know it was successful
-					let rescheduleButton = $('#rescheduleButton');
-					rescheduleButton.removeClass('btn-primary').addClass('btn-success').val('Successfully Rescheduled');
-					window.setTimeout(function() {
-						rescheduleButton.val('Reschedule')
-							.removeClass('btn-success')
-							.addClass('btn-primary')
-							.prop('disabled', false);
-					}, 1500);
+					WDN.initializePlugin('notice');
+					var body = angular.element( document.querySelector( 'body' ) );
+					body.append(`
+						<div class="wdn_notice affirm" data-overlay="maincontent" data-duration="10">
+							<div class="close">
+								<a href="#">Close this notice</a>
+							</div>
+							<div class="message">
+								<p class="title">Success!</p>
+								<p>This appointment was successfully rescheduled.</a>
+								</p>
+							</div>
+						</div>`);  
 				} else {
 					alert(result.error);
-	
+
 					// Let the user know it failed
-					let rescheduleButton = $('#rescheduleButton');
-					rescheduleButton.removeClass('btn-primary').addClass('btn-danger').val('Failed to Reschedule');
-					window.setTimeout(function() {
-						rescheduleButton.val('Reschedule')
-							.removeClass('btn-danger')
-							.addClass('btn-primary')
-							.prop('disabled', false);
-					}, 1500);
+					WDN.initializePlugin('notice');
+					var body = angular.element( document.querySelector( 'body' ) );
+					body.append(`
+						<div class="wdn_notice negate" data-overlay="maincontent" data-duration="10">
+							<div class="close">
+								<a href="#">Close this notice</a>
+							</div>
+							<div class="message">
+								<p class="title">Failure</p>
+								<p>Something went wrong and this appointment was not rescheduled!</a>
+								</p>
+							</div>
+						</div>`);
 				}
 			});
 		}
-	
+
 		$scope.selectAppointment = function(appointment) {
 			$scope.appointment = appointment;
 		};
-	
+
 		$scope.deselectAppointment = function() {
 			$scope.appointment = null;
 		}
-	
+
 		// Invoke initially
 		$scope.getAppointments();
 
 	}
 
-	appointmentsController.$inject = ['$scope', '$controller', 'appointmentsDataService'];
+	appointmentsController.$inject = ['$scope', 'appointmentsDataService', 'sharedPropertiesService'];
 
 	return appointmentsController;
 

@@ -8,6 +8,7 @@ require.config({
 		appointmentsDataService: '/dist/management/appointments/appointmentsDataService',
 		appointmentsController: '/dist/management/appointments/appointmentsController',
 		appointmentsSearchFilter: '/dist/management/appointments/appointmentsSearchFilter',
+		appointmentPickerSharedPropertiesService: '/dist/components/appointmentPicker/appointmentPickerSharedPropertiesService',
 		appointmentPickerDataService: '/dist/components/appointmentPicker/appointmentPickerDataService',
 		appointmentPickerController: '/dist/components/appointmentPicker/appointmentPickerController'
 	},
@@ -21,6 +22,7 @@ require.config({
 		'appointmentsDataService': ['angular'],
 		'appointmentsController': ['angular'],
 		'appointmentsSearchFilter': ['angular'],
+		'sharedPropertiesService': ['angular'],
 		'appointmentPickerDataService': ['angular'],
 		'appointmentPickerController': ['angular']
 	}
@@ -32,6 +34,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 		'appointmentsDataService',
 		'appointmentsController',
 		'appointmentsSearchFilter',
+		'appointmentPickerSharedPropertiesService',
 		'appointmentPickerDataService',
 		'appointmentPickerController'
 	],
@@ -39,6 +42,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 		AppointmentsDataService,
 		AppointmentsController, 
 		AppointmentsSearchFilter,
+		SharedPropertiesService,
 		AppointmentPickerDataService,
 		AppointmentPickerController
 	) {
@@ -47,6 +51,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 		// Create the module
 		var appointmentsApp = angular.module('appointmentsApp', []);
 
+		appointmentsApp.service('sharedPropertiesService', SharedPropertiesService)
 		appointmentsApp.factory('appointmentsDataService', AppointmentsDataService);
 		appointmentsApp.controller('appointmentsController', AppointmentsController);
 		appointmentsApp.directive('appointments', function () {

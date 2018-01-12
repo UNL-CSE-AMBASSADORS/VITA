@@ -7,6 +7,7 @@ define('appointmentPickerSharedPropertiesService', [], function() {
 		var sharedProperties = {
 			selectedDate: null,
 			selectedSite: null,
+			selectedSiteTitle: null,
 			selectedTime: null
 		};
 

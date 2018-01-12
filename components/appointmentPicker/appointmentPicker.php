@@ -29,6 +29,7 @@ td.available .ui-state-default {
 			id="dateInput" 
 			name="dateInput" 
 			placeholder=" -- Select a Date -- " 
+			ng-model="sharedProperties.selectedDate"
 			required>
 	</div>
 	<div id="sitePicker" 
