@@ -7,9 +7,9 @@ define('appointmentPickerController', [], function() {
 		$scope.today = new Date();
 		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
 
-		$scope.getAppointments = function() {
+		$scope.getAppointments = function(studentScholar = false) {
 			let year = new Date().getFullYear();
-			AppointmentPickerDataService.loadAllAppointments(year).then(function(result) {
+			AppointmentPickerDataService.loadAllAppointments(year, studentScholar).then(function(result) {
 				if(result == null) {
 					alert('There was an error loading the appointments. Please try refreshing the page.');
 				} else {
@@ -76,6 +76,17 @@ define('appointmentPickerController', [], function() {
 			$scope.sharedProperties.selectedTime = null;
 			$scope.updateGlobalTimes($scope.sharedProperties.selectedDate, site)
 		}
+
+		$scope.$watch(
+			function() { return $scope.sharedProperties.studentScholar; }, 
+			function(newValue, oldValue) {
+				if(newValue) {
+					console.log("Student Scholar Appointment!");
+				} else {
+					console.log("Standard Appointment")
+				}
+			}
+		);
 
 		$scope.getAppointments();
 

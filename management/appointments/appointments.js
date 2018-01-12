@@ -3,8 +3,6 @@ require.config({
 		angular: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min',
 		ngAnimate: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min',
 		ngAria: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min',
-		ngMessages: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min',
-		ngMaterial: '//ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min',
 		appointmentsDataService: '/dist/management/appointments/appointmentsDataService',
 		appointmentsController: '/dist/management/appointments/appointmentsController',
 		appointmentsSearchFilter: '/dist/management/appointments/appointmentsSearchFilter',
@@ -15,10 +13,6 @@ require.config({
 	shim: {
 		'ngAnimate': ['angular'],
 		'ngAria': ['angular'],
-		'ngMaterial': {
-			deps: ['ngAnimate', 'ngAria']
-		},
-		'ngMessages': ['angular'],
 		'appointmentsDataService': ['angular'],
 		'appointmentsController': ['angular'],
 		'appointmentsSearchFilter': ['angular'],
@@ -28,7 +22,7 @@ require.config({
 	}
 });
 
-require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function(){
+require(['angular', 'ngAnimate', 'ngAria'], function(){
 
 	require([
 		'appointmentsDataService',

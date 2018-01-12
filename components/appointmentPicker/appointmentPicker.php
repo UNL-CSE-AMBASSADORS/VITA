@@ -3,6 +3,10 @@
 	min-height: 300px;
 }
 
+div#ui-datepicker-div {
+	z-index: 50 !important;
+}
+
 td.ui-state-disabled.full, 
 td.ui-state-disabled.full .ui-state-default {
 	background: transparent;
@@ -31,6 +35,9 @@ td.available .ui-state-default {
 			placeholder=" -- Select a Date -- " 
 			ng-model="sharedProperties.selectedDate"
 			required>
+		<div ng-show="form.$submitted || form.dateInput.$touched">
+			<label class="error" ng-show="form.dateInput.$error.required">This field is required.</label>
+		</div>
 	</div>
 	<div id="sitePicker" 
 		class="form-select" 
@@ -44,6 +51,9 @@ td.available .ui-state-default {
 			required>
 			<option value="" style="display:none;">-- Select a Site --</option>
 		</select>
+		<div ng-show="form.$submitted || form.sitePickerSelect.$touched">
+			<label class="error" ng-show="form.sitePickerSelect.$error.required">This field is required.</label>
+		</div>
 	</div>
 	<div id="timePicker" 
 		class="form-select" 
@@ -56,5 +66,8 @@ td.available .ui-state-default {
 			required>
 			<option value="" style="display:none;">-- Select a Time --</option>
 		</select>
+		<div ng-show="form.$submitted || form.timePickerSelect.$touched">
+			<label class="error" ng-show="form.timePickerSelect.$error.required">This field is required.</label>
+		</div>
 	</div>
 </div>
