@@ -49,7 +49,7 @@
 						<span class="pill" ng-class="appointment.preparing ? 'pill-complete': 'pill-incomplete'">Preparing</span>
 						<span class="pill" ng-class="appointment.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
 					</td>
-					<td class="queue-time" data-header="Scheduled Time">{{appointment.scheduledTime | date: "h:mm a"}}</td>
+					<td class="queue-time" data-header="Scheduled Time">{{appointment.scheduledTime}}</td>
 					<td class="queue-id" data-header="Appointment ID">#{{appointment.appointmentId}}</td>
 				</tr>
 			</tbody>
@@ -79,7 +79,7 @@
 				<span class="pill" ng-class="client.preparing ? 'pill-complete': 'pill-incomplete'">Preparing</span>
 				<span class="pill" ng-class="client.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
 			</div>
-			<div class="client-time"><b>Scheduled Appointment Time: </b>{{client.scheduledTime | date: "h:mm a"}}</div>
+			<div class="client-time"><b>Scheduled Appointment Time: </b>{{client.scheduledTime}}</div>
 			<div class="client-email" ng-if="client.emailAddress != null" ng-cloak>
 				<span><b>Email:</b> {{client.emailAddress}}</span>
 			</div>
