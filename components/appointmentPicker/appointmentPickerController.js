@@ -14,6 +14,7 @@ define('appointmentPickerController', [], function() {
 					alert('There was an error loading the appointments. Please try refreshing the page.');
 				} else {
 					$scope.dates = result.dates;
+					$scope.sharedProperties.hasAvailability = result.hasAvailability;
 					WDN.initializePlugin('jqueryui', [function () {
 						require(['jquery'], function($){
 							$("#dateInput").datepicker({
@@ -86,10 +87,12 @@ define('appointmentPickerController', [], function() {
 					console.log("Standard Appointment");
 				}
 				$scope.getAppointments(newValue);
+				$scope.sharedProperties.selectedDate = null;
+				$scope.sharedProperties.selectedSite = null;
+				$scope.sharedProperties.selectedTime = null;
+	
 			}
 		);
-
-		$scope.getAppointments();
 
 	}
 

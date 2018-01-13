@@ -1,6 +1,6 @@
 <style>
 #appointmentPicker {
-	min-height: 300px;
+	padding-bottom: 30px
 }
 
 div#ui-datepicker-div {
@@ -26,8 +26,12 @@ td.available .ui-state-default {
 }
 </style>
 
-<div id="appointmentPicker">
-	<div id="datePicker" class="form-textfield">
+<div id="appointmentPicker" ng-cloak>
+	<div ng-show="sharedProperties.studentScholar == true">International Student Scholar</div>
+	<div ng-show="sharedProperties.hasAvailability == false">Sorry! There are currently no remaining appointments available.</div>
+	<div id="datePicker" 
+		class="form-textfield" 
+		ng-show="sharedProperties.hasAvailability == true">
 		<label class="form-label form-required">Date</label>
 		<input type="text" 
 			id="dateInput" 
