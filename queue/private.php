@@ -107,6 +107,11 @@
 				ng-click="nowPreparing()">
 				Preparing
 			</button>
+			<div ng-show="client.preparing && !client.ended">
+				<div class="bp768-wdn-col-one-half" ng-repeat="filingStatus in filingStatuses">
+					<input type="checkbox" ng-model="filingStatus.checked"/> {{filingStatus.text}}
+				</div>
+			</div>
 			<select ng-show="client.preparing && !client.ended" 
 				ng-model="client.selectedStationNumber" 
 				ng-options="stationNumber for stationNumber in stationNumbers">

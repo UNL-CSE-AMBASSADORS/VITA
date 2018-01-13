@@ -9,6 +9,9 @@ define('queuePrivateController', [], function() {
 	
 		$scope.selectClient = function(client) {
 			$scope.client = client;
+			for (let filingStatus of $scope.filingStatuses) {
+				filingStatus.checked = false;
+			}
 		};
 
 		$scope.unselectClient = function() {
@@ -36,8 +39,15 @@ define('queuePrivateController', [], function() {
 				return;
 			}
 	
+			let selectedFilingStatuses = [];
+			for (let filingStatus of $scope.filingStatuses) {
+				if (filingStatus.checked) {
+					selectedFilingStatuses.push(filingStatus.filingStatusId);
+				}
+			}
+
 			$scope.client.ended = true;
-			QueueDataService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId, $scope.client.selectedStationNumber);
+			QueueDataService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId, $scope.client.selectedStationNumber, selectedFilingStatuses);
 		};
 	
 		$scope.incompleteAppointment = function(explanation) {
@@ -51,8 +61,23 @@ define('queuePrivateController', [], function() {
 			$scope.client.ended = true;
 			QueueDataService.cancelledAppointment($scope.client.appointmentId);
 		};
+
+		$scope.getFilingStatuses = function() {
+			QueueDataService.getFilingStatuses().then(function(data) {
+				if(data == null) {
+					alert('There was an error loading data from the server. Please refresh the page and try again in a few minutes.');
+				} else if(data.length > 0) {
+					$scope.filingStatuses = data;
+				} else {
+					$scope.filingStatuses = [];
+				}
+			});
+		}
 	
 		$scope.stationNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+
+		// Invoke initially
+ 		$scope.getFilingStatuses();
 	}
 
 	queuePrivateController.$inject = ['$scope', '$controller', 'queueDataService'];

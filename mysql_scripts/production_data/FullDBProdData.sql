@@ -1727,6 +1727,24 @@ SET @permission_viewClientInformationId = LAST_INSERT_ID();
 
 
 
+-- FilingStatuses
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('State E-file', 'state_efile');
+
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('Federal E-file', 'federal_efile');
+
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('State Paper', 'state_paper');
+
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('Federal Paper', 'federal_paper');
+-- End FilingStatuses
+
+
+
+
+
 -- Questions
 INSERT INTO Question (text, lookupName)
 	VALUES ("Are you a University of Nebraska - Lincoln student?", "unl_student");
