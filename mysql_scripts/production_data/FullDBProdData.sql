@@ -1533,28 +1533,7 @@ INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximum
 
 
 -- Sunday
-SET @shiftStartTime = "2018-04-01 13:00:00";
-SET @shiftEndTime = "2018-04-01 15:00:00";
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @userId, @userId);
-
-SET @shiftStartTime = "2018-04-01 14:30:00";
-SET @shiftEndTime = "2018-04-01 16:00:00";
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @userId, @userId);
-
-SET @scheduledTime = "2018-04-01 13:00:00";
-INSERT INTO AppointmentTime (scheduledTime, siteId)
-	VALUES (@scheduledTime, @site_jackieGaughanMulticulturalCenter);
-
-SET @scheduledTime = "2018-04-01 14:00:00";
-INSERT INTO AppointmentTime (scheduledTime, siteId)
-	VALUES (@scheduledTime, @site_jackieGaughanMulticulturalCenter);
-
-SET @scheduledTime = "2018-04-01 15:00:00";
-INSERT INTO AppointmentTime (scheduledTime, siteId)
-	VALUES (@scheduledTime, @site_jackieGaughanMulticulturalCenter);
-
+-- Easter Sunday, no appointments/shifts
 
 -- Tuesday, AL
 SET @shiftStartTime = "2018-04-03 16:30:00";
