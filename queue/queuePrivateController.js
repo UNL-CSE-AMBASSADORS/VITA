@@ -20,17 +20,32 @@ define('queuePrivateController', [], function() {
 	
 		$scope.checkIn = function() {
 			$scope.client.checkedIn = true;
-			QueueDataService.checkInNow(new Date().toISOString(), $scope.client.appointmentId);
+			QueueDataService.checkInNow(new Date().toISOString(), $scope.client.appointmentId).then(function(result) {
+				if(!result.success) {
+					$scope.client.checkedIn = false;
+					alert(result.error);
+				}
+			});
 		};
 	
 		$scope.pwFilledOut = function() {
 			$scope.client.paperworkComplete = true;
-			QueueDataService.turnInPapers(new Date().toISOString(), $scope.client.appointmentId);
+			QueueDataService.turnInPapers(new Date().toISOString(), $scope.client.appointmentId).then(function(result) {
+				if(!result.success) {
+					$scope.client.paperworkComplete = false;
+					alert(result.error);
+				}
+			});
 		};
 	
 		$scope.nowPreparing = function() {
 			$scope.client.preparing = true;
-			QueueDataService.beginAppointment(new Date().toISOString(), $scope.client.appointmentId);
+			QueueDataService.beginAppointment(new Date().toISOString(), $scope.client.appointmentId).then(function(result) {
+				if(!result.success) {
+					$scope.client.preparing = false;
+					alert(result.error);
+				}
+			});
 		};
 	
 		$scope.completeAppointment = function() {
@@ -47,19 +62,38 @@ define('queuePrivateController', [], function() {
 			}
 
 			$scope.client.ended = true;
-			QueueDataService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId, $scope.client.selectedStationNumber, selectedFilingStatuses);
+			QueueDataService.finishAppointment(new Date().toISOString(), $scope.client.appointmentId, $scope.client.selectedStationNumber, selectedFilingStatuses).then(function(result) {
+				if(!result.success) {
+					$scope.client.ended = false;
+					alert(result.error);
+				}
+				$scope.updateAppointmentInformation();
+			});
 		};
 	
 		$scope.incompleteAppointment = function(explanation) {
 			$scope.client.ended = true;
 			let urlSafeExplanation = fixedEncodeURIComponent(explanation);
-			QueueDataService.incompleteAppointment(urlSafeExplanation, $scope.client.appointmentId);
-			$scope.client.explanation = "";
+			QueueDataService.incompleteAppointment(urlSafeExplanation, $scope.client.appointmentId).then(function(result) {
+				if(!result.success) {
+					$scope.client.ended = false;
+					alert(result.error);
+				} else {
+					$scope.client.explanation = "";
+				}
+				$scope.updateAppointmentInformation();
+			});
 		};
 	
 		$scope.cancelledAppointment = function() {
 			$scope.client.ended = true;
-			QueueDataService.cancelledAppointment($scope.client.appointmentId);
+			QueueDataService.cancelledAppointment($scope.client.appointmentId).then(function(result) {
+				if(!result.success) {
+					$scope.client.ended = false;
+					alert(result.error);
+				}
+				$scope.updateAppointmentInformation();
+			});
 		};
 
 		$scope.getFilingStatuses = function() {
