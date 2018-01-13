@@ -14,10 +14,12 @@ define('signupController', [], function() {
 
 			var questions = [];
 			Object.keys($scope.questions).forEach(function(key) {
-				questions.push({
-					id: key,
-					value: $scope.questions[key]
-				});
+				if($scope.questions[key] != null) {
+					questions.push({
+						id: key,
+						value: $scope.questions[key]
+					});
+				}
 			});
 
 			console.log($scope.data.firstName);
@@ -42,15 +44,15 @@ define('signupController', [], function() {
 				"siteId": $scope.sharedProperties.selectedSite
 			};
 
-			$scope.successMessage = data;
+			// $scope.successMessage = data;
 
-			// SignupService.storeAppointments(data).then(function(response) {
-			// 	if(typeof response !== 'undefined' && response && response.success){
-			// 		$scope.successMessage = response.message;
-			// 	}else{
-			// 		alert('There was an error on the server! Please refresh the page in a few minutes and try again.');
-			// 	}
-			// });
+			SignupService.storeAppointments(data).then(function(response) {
+				if(typeof response !== 'undefined' && response && response.success){
+					$scope.successMessage = response.message;
+				}else{
+					alert('There was an error on the server! Please refresh the page in a few minutes and try again.');
+				}
+			});
 		}
 
 		$scope.intStudentChanged = function() {
@@ -72,6 +74,21 @@ define('signupController', [], function() {
 
 		$scope.studentScholarAppointment = function() {
 			$scope.sharedProperties.studentScholar = true;
+		}
+
+		$scope.addDependent = function() {
+			$scope.dependents.push({
+				firstName: '',
+				lastName: $scope.data.lastName ? $scope.data.lastName : ''
+			});
+		}
+
+		$scope.removeDependent = function(dependent) {
+			console.log(dependent);
+			var index = $scope.dependents.indexOf(dependent);
+			if (index > -1) {
+				$scope.dependents.splice(index, 1);
+			}
 		}
 
 	}

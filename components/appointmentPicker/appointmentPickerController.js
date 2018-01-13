@@ -83,8 +83,9 @@ define('appointmentPickerController', [], function() {
 				if(newValue) {
 					console.log("Student Scholar Appointment!");
 				} else {
-					console.log("Standard Appointment")
+					console.log("Standard Appointment");
 				}
+				$scope.getAppointments(newValue);
 			}
 		);
 

@@ -42,9 +42,44 @@
 
 		<h3 class="form-subheading">Add Filing Dependents</h3>
 		<p>Are any of your dependents filing a return during this appointment? If so, add them here.</p>
-		<ul id="dependents"></ul>
+		<ul id="dependents">
+			<li class="wdn-grid-set dependent" ng-repeat="dependent in dependents">
+				<ng-form name="innerForm" class="flex">
+					<div class="bp768-wdn-col-two-fifths">
+						<label for="firstNameInput1" class="form-label form-required">First Name</label>
+						<input class="firstName" type="text" name="dependentFirstName" ng-model="dependent.firstName" required>
+						<div ng-show="form.$submitted || innerForm.dependentFirstName.$touched">
+							<label class="error" ng-show="innerForm.dependentFirstName.$error.required">This field is required.</label>
+						</div>
+					</div>
+					<div class="bp768-wdn-col-two-fifths">
+						<label for="lastNameInput1" class="form-label form-required">Last Name</label>
+						<input class="lastName" type="text" name="dependentLastName" ng-model="dependent.lastName" required>
+						<div ng-show="form.$submitted || innerForm.dependentLastName.$touched">
+							<label class="error" ng-show="innerForm.dependentLastName.$error.required">This field is required.</label>
+						</div>
+					</div>
+					<div class="bp768-wdn-col-one-fifth removeDependentButton px-1rem">
+						<button type="button" class="wdn-button wdn-button-brand" ng-click="removeDependent(dependent)">Remove Dependent</button>
+					</div>
+				</ng-form>
+			</li>
+		</ul>
 		<br>
-		<button type="button" class="wdn-button wdn-button-triad" id="addDependentButton">Add Dependent</button>
+		<button type="button" class="wdn-button wdn-button-triad" id="addDependentButton" ng-click="addDependent()">Add Dependent</button>
+
+		<style>
+		@media (min-width: 768px) {
+			.flex {
+				display: flex;
+			}
+
+			.removeDependentButton {
+				padding-bottom: 0;
+				align-self: flex-end;
+			}
+		}
+		</style>
 
 
 		<h3 class="form-subheading">Background Information</h3>
