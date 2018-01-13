@@ -1,38 +1,96 @@
 <?php
-	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
-	require_once "$root/server/config.php";
-	require_once "$root/server/user.class.php";
-	$conn = $DB_CONN;
-	$USER = new User();
 
-	$canViewClientInformation = $USER->isLoggedIn() && $USER->hasPermission('view_client_information');
+$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+require_once "$root/server/config.php";
+require_once "$root/server/user.class.php";
 
-	$query = "SELECT Appointment.appointmentId, scheduledTime,
-		firstName, lastName, timeIn, timeReturnedPapers,
-		timeAppointmentStarted, timeAppointmentEnded, completed ";
-	if ($canViewClientInformation) {
-		$query .= ", phoneNumber, emailAddress ";
-	}
-	$query .= "FROM Appointment
-		LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
-		JOIN Client ON Appointment.clientId = Client.clientId
-		JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
-		WHERE DATE(AppointmentTime.scheduledTime) = ?
-			AND AppointmentTime.siteId = ?
-			AND Appointment.archived = FALSE
-		ORDER BY AppointmentTime.scheduledTime ASC";
+$USER = new User();
+if ($USER->isLoggedIn()) { 
+	loadPrivateQueue($_GET);
+} else {
+	loadPublicQueue($_GET);
+}
 
-	$stmt = $conn->prepare($query);
+function loadPublicQueue($data) {
+	GLOBAL $DB_CONN;
+	$query = "SELECT Appointment.appointmentId, scheduledTime, firstName, lastName, timeIn, timeReturnedPapers,
+				timeAppointmentStarted, timeAppointmentEnded, completed
+			FROM Appointment
+			LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
+			JOIN Client ON Appointment.clientId = Client.clientId
+			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+			WHERE DATE(AppointmentTime.scheduledTime) = ?
+				AND AppointmentTime.siteId = ?
+				AND Appointment.archived = FALSE
+			ORDER BY AppointmentTime.scheduledTime ASC";
+	$stmt = $DB_CONN->prepare($query);
 
-	$stmt->execute(array($_GET['displayDate'], $_GET['siteId']));
+	$stmt->execute(array($data['displayDate'], $data['siteId']));
 	$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 	foreach ($appointments as &$appointment) {
+		$appointment['lastName'] = substr($appointment['lastName'], 0, 1).'.';
+	}
+
+	echo json_encode($appointments);
+	$stmt = null;
+}
+
+function loadPrivateQueue($data) {
+	GLOBAL $DB_CONN, $USER;
+	$canViewClientInformation = $USER->hasPermission('view_client_information');
+
+	$query = "SELECT Appointment.appointmentId, scheduledTime, firstName, 
+				lastName, timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, 
+				completed, language, Client.clientId, 
+				(SELECT COUNT(dependentClientId) FROM DependentClient WHERE DependentClient.clientId = Client.clientId) AS numberOfDependents";
+	if ($canViewClientInformation) {
+		$query .= ", phoneNumber, emailAddress";
+	}
+	$query .= " FROM Appointment
+			LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
+			JOIN Client ON Appointment.clientId = Client.clientId
+			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+			WHERE DATE(AppointmentTime.scheduledTime) = ?
+				AND AppointmentTime.siteId = ?
+				AND Appointment.archived = FALSE
+			ORDER BY AppointmentTime.scheduledTime ASC";
+	$stmt = $DB_CONN->prepare($query);
+	$stmt->execute(array($data['displayDate'], $data['siteId']));
+	$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+	foreach ($appointments as &$appointment) {
+		$appointment['language'] = expandLanguageCode($appointment['language']);
+
 		// Shorten last name to only the initial if user doesn't have permission to view entire last name
 		if (!$canViewClientInformation) {
-			$appointment['lastName'] = substr($appointment['lastName'], 0, 1).'.'; // concat period since this is a last initial
+			$appointment['lastName'] = substr($appointment['lastName'], 0, 1).'.';
+		}
+
+		if ($appointment['numberOfDependents'] > 0) {
+			$query = "SELECT firstName, lastName FROM DependentClient WHERE clientId = ?";
+			$stmt = $DB_CONN->prepare($query);
+			$stmt->execute(array($appointment['clientId']));
+			$dependents = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			foreach ($dependents as &$dependent) {
+				if (!$canViewClientInformation) {
+					$dependent['lastName'] = substr($dependent['lastName'], 0, 1).'.';
+				}
+			}
+
+			$appointment['dependents'] = $dependents;
 		}
 	}
 
 	echo json_encode($appointments);
 	$stmt = null;
+}
+
+function expandLanguageCode($languageCode) {
+	if ($languageCode === 'eng') return 'English';
+	if ($languageCode === 'vie') return 'Vietnamese';
+	if ($languageCode === 'spa') return 'Spanish';
+	if ($languageCode === 'ara') return 'Arabic';
+	return 'Unknown';
+}

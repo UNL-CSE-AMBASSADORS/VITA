@@ -79,11 +79,20 @@
 				<span class="pill" ng-class="client.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
 			</div>
 			<div class="client-time"><b>Scheduled Appointment Time: </b>{{client.scheduledTime | date: "h:mm a"}}</div>
+			<div class="client-language">
+				<span><b>Language:</b> {{client.language}}</span>
+			</div>
 			<div class="client-email" ng-if="client.emailAddress != null" ng-cloak>
 				<span><b>Email:</b> {{client.emailAddress}}</span>
 			</div>
 			<div class="client-phoneNumber" ng-if="client.phoneNumber != null" ng-cloak>
 				<span><b>Phone Number:</b> {{client.phoneNumber}}</span>
+			</div>
+			<div class="client-dependents" ng-if="client.dependents != null" ng-cloak>
+				<b>Dependents:</b>
+				<ul>
+					<li ng-repeat="dependent in client.dependents">{{dependent.firstName}} {{dependent.lastName}}</li>
+				</ul>
 			</div>
 		</div>
 
