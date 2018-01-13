@@ -48,7 +48,7 @@
 	float: left;
 }
 
-select, input {
+.dashboard select, .dashboard input {
 	height: 34px;
 }
 
