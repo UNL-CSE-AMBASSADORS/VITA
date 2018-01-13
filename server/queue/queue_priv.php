@@ -14,7 +14,7 @@
 		case 'checkIn': checkIn($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'completePaperwork': completePaperwork($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentStart': appointmentStart($_REQUEST['time'], $_REQUEST['id']); break;
-		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id'], $_REQUEST['stationNumber']); break;
+		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id'], $_REQUEST['stationNumber'], $_REQUEST['filingStatusIds']); break;
 		case 'appointmentIncomplete': appointmentIncomplete($_REQUEST['explanation'], $_REQUEST['id']); break;
 		case 'cancelledAppointment': cancelledAppointment($_REQUEST['id']); break;
 		default: break;
@@ -88,21 +88,34 @@
 		$stmt = null;
 	}
 
-	function appointmentComplete($time, $appointmentId, $stationNumber) {
+	function appointmentComplete($time, $appointmentId, $stationNumber, $filingStatusIds) {
+		GLOBAL $DB_CONN;
+		
 		$response = array();
 		$response['success'] = true;
 
 		try {
-			$stmt = $GLOBALS['conn']->prepare(
-				"UPDATE ServicedAppointment
+			$DB_CONN->beginTransaction();
+
+			$stmt = $DB_CONN->prepare("UPDATE ServicedAppointment
 				SET timeAppointmentEnded = ?, servicedByStation = ?, completed = TRUE
-				WHERE appointmentId = ?"
-			);
+				WHERE appointmentId = ?");
 
 			if ($stmt->execute(array($time, $stationNumber, $appointmentId)) == false) {
 				throw new Exception();
 			}
+
+			$stmt = $DB_CONN->prepare("INSERT INTO AppointmentFilingStatus (servicedAppointmentId, filingStatusId)
+				VALUES ((SELECT servicedAppointmentId FROM ServicedAppointment WHERE appointmentId = ?), ?)");
+			foreach ($filingStatusIds as $filingStatusId) {
+				if ($stmt->execute(array($appointmentId, $filingStatusId)) == false) {
+					throw new Exception();
+				}
+			}
+
+			$DB_CONN->commit();
 		} catch (Exception $e) {
+			$DB_CONN->rollBack();
 			$response['success'] = false;
 			$response['error'] = 'Unable to update the appointment. Please refresh the page and try again.';
 		}
