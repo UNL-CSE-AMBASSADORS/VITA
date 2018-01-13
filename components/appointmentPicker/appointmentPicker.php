@@ -65,7 +65,7 @@ td.available .ui-state-default {
 		<label class="form-label form-required" for="timePickerSelect">Time</label>
 		<select id="timePickerSelect" 
 			name="timePickerSelect" 
-			ng-options="time as time disable when (remaining <= 0) for (time, remaining) in times track by time" 
+			ng-options="time as (remaining <= 0) ? (time + ' - FULL') : time disable when (remaining <= 0) for (time, remaining) in times track by time" 
 			ng-model="sharedProperties.selectedTime"
 			required>
 			<option value="" style="display:none;">-- Select a Time --</option>
