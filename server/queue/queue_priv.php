@@ -14,7 +14,7 @@
 		case 'checkIn': checkIn($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'completePaperwork': completePaperwork($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentStart': appointmentStart($_REQUEST['time'], $_REQUEST['id']); break;
-		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id'], $_REQUEST['stationNumber']); break;
+		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id'], $_REQUEST['stationNumber'], $_REQUEST['filingStatusIds']); break;
 		case 'appointmentIncomplete': appointmentIncomplete($_REQUEST['explanation'], $_REQUEST['id']); break;
 		case 'cancelledAppointment': cancelledAppointment($_REQUEST['id']); break;
 		default: break;
@@ -58,16 +58,28 @@
 		$stmt = null;
 	}
 
-	function appointmentComplete($time, $id, $stationNumber) {
-		$stmt = $GLOBALS['conn']->prepare(
-			"UPDATE ServicedAppointment
-			SET timeAppointmentEnded = ?, completed = TRUE, servicedByStation = ?
-			WHERE appointmentId = ?"
-		);
+	function appointmentComplete($time, $id, $stationNumber, $filingStatusIds) {
+		GLOBAL $DB_CONN;
+		
+		$DB_CONN->beginTransaction();
 
-		$stmt->execute(array($time, $stationNumber, $id));
-		$appointment = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		echo json_encode($appointment);
+		try {
+			$stmt = $DB_CONN->prepare("UPDATE ServicedAppointment
+				SET timeAppointmentEnded = ?, completed = TRUE, servicedByStation = ?
+				WHERE appointmentId = ?");
+			$stmt->execute(array($time, $stationNumber, $id));
+
+			$stmt = $DB_CONN->prepare("INSERT INTO AppointmentFilingStatus (servicedAppointmentId, filingStatusId)
+				VALUES ((SELECT servicedAppointmentId FROM ServicedAppointment WHERE appointmentId = ?), ?)");
+			foreach ($filingStatusIds as $filingStatusId) {
+				$stmt->execute(array($id, $filingStatusId));
+			}
+
+			$DB_CONN->commit();
+		} catch (Exception $e) {
+			$DB_CONN->rollBack();
+		}
+
 		$stmt = null;
 	}
 
