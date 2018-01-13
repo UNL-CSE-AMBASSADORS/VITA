@@ -76,11 +76,6 @@ define('queueDataService', [], function() {
 						"stationNumber": stationNumber,
 						"filingStatusIds[]": filingStatusIds
 					}
-					/*
-					headers: {
-						'Content-Type': "application/x-www-form-urlencoded"
-					}
-					*/
 				}).then(function(response){
 					return response.data;
 				},function(error){

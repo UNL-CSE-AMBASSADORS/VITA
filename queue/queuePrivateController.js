@@ -41,7 +41,6 @@ define('queuePrivateController', [], function() {
 	
 			let selectedFilingStatuses = [];
 			for (let filingStatus of $scope.filingStatuses) {
-				console.log(filingStatus);
 				if (filingStatus.checked) {
 					selectedFilingStatuses.push(filingStatus.filingStatusId);
 				}
@@ -66,7 +65,7 @@ define('queuePrivateController', [], function() {
 		$scope.getFilingStatuses = function() {
 			QueueDataService.getFilingStatuses().then(function(data) {
 				if(data == null) {
-					console.log('server error');
+					alert('There was an error loading data from the server. Please refresh the page and try again in a few minutes.');
 				} else if(data.length > 0) {
 					$scope.filingStatuses = data;
 				} else {
