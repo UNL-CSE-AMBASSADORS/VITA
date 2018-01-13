@@ -81,11 +81,6 @@ define('appointmentPickerController', [], function() {
 		$scope.$watch(
 			function() { return $scope.sharedProperties.studentScholar; }, 
 			function(newValue, oldValue) {
-				if(newValue) {
-					console.log("Student Scholar Appointment!");
-				} else {
-					console.log("Standard Appointment");
-				}
 				$scope.getAppointments(newValue);
 				$scope.sharedProperties.selectedDate = null;
 				$scope.sharedProperties.selectedSite = null;

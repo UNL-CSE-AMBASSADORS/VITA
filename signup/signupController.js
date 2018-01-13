@@ -22,15 +22,8 @@ define('signupController', [], function() {
 				}
 			});
 
-			console.log($scope.data.firstName);
-			console.log($scope.data.lastName);
-			console.log($scope.data.email);
-			console.log($scope.data.phone);
-			console.log($scope.data.language)
-			console.log(questions);
-			console.log($scope.dependents);
-			console.log(scheduledTime);
-			console.log($scope.sharedProperties.selectedSite);
+			//TODO assume english for right now until support for other languages is added
+			$scope.data.language = "eng";
 
 			var data = {
 				"firstName": $scope.data.firstName,
@@ -43,8 +36,6 @@ define('signupController', [], function() {
 				"scheduledTime": scheduledTime,
 				"siteId": $scope.sharedProperties.selectedSite
 			};
-
-			// $scope.successMessage = data;
 
 			SignupService.storeAppointments(data).then(function(response) {
 				if(typeof response !== 'undefined' && response && response.success){
@@ -84,7 +75,6 @@ define('signupController', [], function() {
 		}
 
 		$scope.removeDependent = function(dependent) {
-			console.log(dependent);
 			var index = $scope.dependents.indexOf(dependent);
 			if (index > -1) {
 				$scope.dependents.splice(index, 1);

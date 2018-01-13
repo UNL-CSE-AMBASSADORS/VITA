@@ -85,11 +85,12 @@
 		<h3 class="form-subheading">Background Information</h3>
 
 		<ul>
+			<!--
 			<li class="form-radio" id="language">
 				<label for="language" class="form-required">Which language will you require?</label>
 				<div>
 					<div class="btn-group" data-toggle="buttons">
-						<!-- NOTE: the values here are the ISO 639-2/T specfication for language codes (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) -->
+						NOTE: the values here are the ISO 639-2/T specfication for language codes (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
 						<label class="wdn-button btn" 
 							name="language" 
 							ng-model="data.language" 
@@ -120,9 +121,10 @@
 					<label class="error" ng-show="form.language.$error.required">This field is required.</label>
 				</div>
 			</li>
+			-->
 
 			<li class="form-radio" id="studentUNL">
-				<label for="1" class="form-required">Are you a University of Nebraska-Lincoln student?</label>
+				<label for="1" class="form-required">Are you a University of Nebraska-Lincoln or Nebraska Wesleyan student?</label>
 				<div>
 					<div class="btn-group" data-toggle="buttons">
 						<label class="wdn-button btn" 
@@ -145,7 +147,7 @@
 			</li>
 
 			<li class="form-radio" id="studentInt">
-				<label for="2" class="form-required">Are you an International Student Scholar?</label>
+				<label for="2" class="form-required">Are you on a visa?</label>
 				<div>
 					<div class="btn-group" data-toggle="buttons">
 						<label class="wdn-button btn" 
@@ -291,12 +293,9 @@
 
 		<div appointment-picker></div>
 
-		<div>Form valid? {{form.$valid}}</div>
-
 		<input type="submit" 
 			value="Submit" 
 			class="submit wdn-button wdn-button-triad" >
-			<!-- ng-click="storeAppointments()"> -->
 	</form>
 </div>
 

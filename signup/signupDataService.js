@@ -4,9 +4,6 @@ define('signupDataService', [], function() {
 		return {
 			storeAppointments: function(data){
 
-				console.log("post");
-				console.log(data);
-
 				// The code for the transformRequest came from this post:
 				// https://stackoverflow.com/a/24964658
 				return $http({
