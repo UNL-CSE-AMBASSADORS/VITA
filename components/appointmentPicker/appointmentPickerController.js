@@ -75,7 +75,11 @@ define('appointmentPickerController', [], function() {
 		$scope.siteChanged = function(site) {
 			$scope.sharedProperties.selectedSiteTitle = $scope.sites[site]['site_title'];
 			$scope.sharedProperties.selectedTime = null;
-			$scope.updateGlobalTimes($scope.sharedProperties.selectedDate, site)
+			$scope.updateGlobalTimes($scope.sharedProperties.selectedDate, site);
+		}
+
+		$scope.timeChanged = function(time) {
+			$scope.sharedProperties.selectedAppointmentTimeId = $scope.times[time]['appointmentTimeId'];
 		}
 
 		$scope.$watch(

@@ -24,8 +24,6 @@ define('queueController', [], function() {
 					console.log('server error');
 				} else if(data.length > 0) {
 					$scope.appointments = data.map((appointment) => {
-						// We force the time into CST
-						appointment.scheduledTime = new Date(appointment.scheduledTime + ' CST');
 						appointment.checkedIn = appointment.timeIn != null;
 						appointment.paperworkComplete = appointment.timeReturnedPapers != null;
 						appointment.preparing = appointment.timeAppointmentStarted != null;

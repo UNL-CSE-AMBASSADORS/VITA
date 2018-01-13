@@ -7,7 +7,7 @@
 
 	$canViewClientInformation = $USER->isLoggedIn() && $USER->hasPermission('view_client_information');
 
-	$query = "SELECT Appointment.appointmentId, scheduledTime,
+	$query = "SELECT Appointment.appointmentId, TIME_FORMAT(scheduledTime, '%l:%i %p') AS scheduledTime,
 		firstName, lastName, timeIn, timeReturnedPapers,
 		timeAppointmentStarted, timeAppointmentEnded, completed ";
 	if ($canViewClientInformation) {

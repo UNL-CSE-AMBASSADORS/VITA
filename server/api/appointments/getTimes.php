@@ -81,7 +81,8 @@ class DateSiteTimeMap {
 
 		// Add the appointmentTime to the map
 		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["site_title"] = $dstObject['title'];
-		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["times"][$time] = $appointmentsAvailable;
+		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["times"][$time]['appointmentsAvailable'] = $appointmentsAvailable;
+		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["times"][$time]['appointmentTimeId'] = $dstObject['appointmentTimeId'];
 	}
 
 	public function updateAvailability() {
@@ -91,7 +92,7 @@ class DateSiteTimeMap {
 			foreach (array_keys($this->dates[$date]["sites"]) as $site) {
 				$siteHasTimes = false;
 				foreach ($this->dates[$date]["sites"][$site]["times"] as $time) {
-					if($time > 0) {
+					if($time['appointmentsAvailable'] > 0) {
 						$this->hasAvailability = true;
 						$dateHasTimes = true;
 						$siteHasTimes = true;

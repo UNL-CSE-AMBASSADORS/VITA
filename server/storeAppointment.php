@@ -88,20 +88,14 @@ function storeAppointment($data){
 			VALUES
 			(
 				?,
-				(SELECT appointmentTimeId FROM AppointmentTime
-					WHERE DATE(scheduledTime) = ? 
-					AND TIME_FORMAT(TIME(scheduledTime), '%l:%i %p') = ?
-					AND siteId = ?),
+				?,
 				?,
 				?
 			);";
 
-		$dateTime = new DateTime($data['scheduledTime']);
 		$appointmentParams = array(
 			$clientId,
-			$dateTime->format('Y-m-d'),
-			$dateTime->format('g:i A'),
-			$data['siteId'],
+			$data['appointmentTimeId'],
 			$data['language'],
 			$_SERVER['REMOTE_ADDR']
 		);
@@ -150,8 +144,15 @@ function storeAppointment($data){
 		$siteAddress = $siteInfo['address'];
 		$sitePhoneNumber = $siteInfo['phoneNumber'];
 
+		// get appointment time information
+		$appointmentTimeQuery = "SELECT scheduledTime FROM AppointmentTime WHERE appointmentTimeId = ?";
+		$stmt = $DB_CONN->prepare($appointmentTimeQuery);
+		$stmt->execute(array($data['appointmentTimeId']));
+
+		$scheduledTime = $stmt->fetch()['scheduledTime'];
+
 		// TODO: Make sound better
-		$response['message'] = $data['firstName'].", thank you for signing up! Your appointment will be located at $siteAddress. Please arrive by ".$data['scheduledTime']." with all necessary materials. Please call $sitePhoneNumber for additional details or to reschedule. Thank you from Lincoln VITA.";
+		$response['message'] = $data['firstName'].", thank you for signing up! Your appointment will be located at $siteAddress. Please arrive by ".$scheduledTime." with all necessary materials. Please call $sitePhoneNumber for additional details or to reschedule. Thank you from Lincoln VITA.";
 
 		// if email is set and passes simple validation (x@x)
 		if($data['email'] && preg_match('/.+@.+/', $data['email'])){

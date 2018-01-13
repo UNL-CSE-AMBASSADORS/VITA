@@ -13,7 +13,7 @@ require_once "$root/server/config.php";
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
 		case 'getAppointments': getAppointments($_GET['year']); break;
-		case 'reschedule': rescheduleAppointment($_POST['id'], $_POST['scheduledTime'], $_POST['siteId']); break;
+		case 'reschedule': rescheduleAppointment($_POST['id'], $_POST['appointmentTimeId']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -29,17 +29,18 @@ function getAppointments($year) {
 	$canViewClientInformation = $USER->isLoggedIn() && $USER->hasPermission('view_client_information');
 
 	try {
-		$query = 'SELECT appointmentId, language, scheduledTime, title, firstName, lastName ';
+		$query = 'SELECT appointmentId, language, DATE_FORMAT(scheduledTime, "%b %D %l:%i %p") AS scheduledTime, title, 
+			firstName, lastName, scheduledTime AS originalScheduledTime ';
 		if ($canViewClientInformation) {
-			$query .= ", Client.phoneNumber, emailAddress ";
+			$query .= ', Client.phoneNumber, emailAddress ';
 		}
-
 		$query .= 'FROM Appointment
 				JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 				JOIN Site ON AppointmentTime.siteId = Site.siteId
 				JOIN Client ON Appointment.clientId = Client.clientId
 			WHERE Appointment.archived = FALSE AND
-				YEAR(scheduledTime) = ?';
+				YEAR(scheduledTime) = ?
+			ORDER BY originalScheduledTime';
 	
 		$stmt = $DB_CONN->prepare($query);
 		$stmt->execute(array($year));
@@ -51,6 +52,7 @@ function getAppointments($year) {
 				$appointment['lastName'] = substr($appointment['lastName'], 0, 1).'.'; // concat period since this is a last initial
 			}
 			$appointment['language'] = expandLanguageCode($appointment['language']);
+			unset($appointment['originalScheduledTime']);
 		}
 
 		$response['appointments'] = $appointments;
@@ -62,7 +64,7 @@ function getAppointments($year) {
 	echo json_encode($response);
 }
 
-function rescheduleAppointment($appointmentId, $scheduledTime, $siteId) {
+function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 	GLOBAL $DB_CONN;
 	
 	$response = array();
@@ -70,18 +72,12 @@ function rescheduleAppointment($appointmentId, $scheduledTime, $siteId) {
 
 	try {
 		$query = "UPDATE Appointment
-			SET appointmentTimeId = (SELECT appointmentTimeId FROM AppointmentTime
-					WHERE DATE(scheduledTime) = ? 
-					AND TIME_FORMAT(TIME(scheduledTime), '%l:%i %p') = ?
-					AND siteId = ?)
+			SET appointmentTimeId = ?
 			WHERE appointmentId = ?";
 		$stmt = $DB_CONN->prepare($query);
 
-		$dateTime = new DateTime($scheduledTime);
 		$success = $stmt->execute(array(
-			$dateTime->format('Y-m-d'),
-			$dateTime->format('g:i A'),
-			$siteId,
+			$appointmentTimeId,
 			$appointmentId
 		));
 		if ($success == false) {

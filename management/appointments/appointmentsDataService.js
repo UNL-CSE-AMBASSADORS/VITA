@@ -9,11 +9,11 @@ define('appointmentsDataService', [], function($http) {
 					return null;
 				});
 			},
-			rescheduleAppointment: function(appointmentId, scheduledTime, siteId) {
+			rescheduleAppointment: function(appointmentId, appointmentTimeId) {
 				return $http({
 					url: "/server/management/appointments/appointments.php",
 					method: 'POST',
-					data: `action=reschedule&id=${appointmentId}&scheduledTime=${scheduledTime}&siteId=${siteId}`,
+					data: `action=reschedule&id=${appointmentId}&appointmentTimeId=${appointmentTimeId}`,
 					headers: {
 						'Content-Type': "application/x-www-form-urlencoded"
 					}

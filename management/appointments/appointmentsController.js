@@ -19,8 +19,6 @@ define('appointmentsController', [], function() {
 	
 					if (result.appointments.length > 0) {
 						$scope.appointments = result.appointments.map((appointment) => {
-							// We force the time into CST
-							appointment.scheduledTime = new Date(appointment.scheduledTime + ' CST');
 							appointment.name = appointment.firstName + " " + appointment.lastName;
 							return appointment;
 						});
@@ -40,13 +38,11 @@ define('appointmentsController', [], function() {
 			$scope.submittingReschedule = true;
 
 			let appointmentId = $scope.appointment.appointmentId;
-			let scheduledTime = new Date($scope.sharedProperties.selectedDate + ' ' + $scope.sharedProperties.selectedTime + ' GMT').toISOString();
-			let siteId = $scope.sharedProperties.selectedSite;
+			let appointmentTimeId = $scope.sharedProperties.selectedAppointmentTimeId;
 
-			AppointmentsService.rescheduleAppointment(appointmentId, scheduledTime, siteId).then(function(result) {
+			AppointmentsService.rescheduleAppointment(appointmentId, appointmentTimeId).then(function(result) {
 				if (result.success) {
-					// We force it to be in CST
-					$scope.appointment.scheduledTime = new Date($scope.sharedProperties.selectedDate + ' ' + $scope.sharedProperties.selectedTime + ' CST');
+					$scope.appointment.scheduledTime = $scope.sharedProperties.selectedDate + ' ' + $scope.sharedProperties.selectedTime;
 					$scope.appointment.title = $scope.sharedProperties.selectedSiteTitle;
 
 					// Clear the selected values

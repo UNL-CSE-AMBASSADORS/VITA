@@ -10,8 +10,6 @@ define('signupController', [], function() {
 		
 		$scope.storeAppointments = function() {
 
-			var scheduledTime = new Date($scope.sharedProperties.selectedDate + " " + $scope.sharedProperties.selectedTime + " GMT").toISOString();
-
 			var questions = [];
 			Object.keys($scope.questions).forEach(function(key) {
 				if($scope.questions[key] != null) {
@@ -33,7 +31,7 @@ define('signupController', [], function() {
 				"language": $scope.data.language,
 				"questions": questions,
 				"dependents": $scope.dependents,
-				"scheduledTime": scheduledTime,
+				"appointmentTimeId": $scope.sharedProperties.selectedAppointmentTimeId,
 				"siteId": $scope.sharedProperties.selectedSite
 			};
 

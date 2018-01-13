@@ -8,7 +8,7 @@
 
 	<!-- Information Section -->
 	<h2 class="client-name">{{appointment.firstName}} {{appointment.lastName}}</h2>
-	<div><b>Scheduled Appointment Time: </b>{{appointment.scheduledTime | date: "MMM dd, yyyy h:mm a"}}</div>
+	<div><b>Scheduled Appointment Time: </b>{{appointment.scheduledTime}}</div>
 	<div><b>Site: </b>{{appointment.title}}</div>
 	<div><b>Requested Language: </b>{{appointment.language}}</div>
 	<div ng-if="appointment.emailAddress != null">
@@ -52,10 +52,10 @@
 		<table class="wdn_responsive_table queue" ng-show="(appointments | searchFor: appointmentSearch).length > 0">
 			<tbody>
 				<tr class="pointer"
-					ng-repeat="appointment in appointments | orderBy:'scheduledTime' | searchFor: appointmentSearch"
+					ng-repeat="appointment in appointments | searchFor: appointmentSearch"
 					ng-click="selectAppointment(appointment)">
 					<td data-header="Name">{{appointment.firstName}} {{appointment.lastName}}</td>
-					<td data-header="Scheduled Time">{{appointment.scheduledTime | date: "MMM d h:mm a"}} at {{appointment.title}}</td>
+					<td data-header="Scheduled Time">{{appointment.scheduledTime}} at {{appointment.title}}</td>
 					<td data-header="Appointment ID">#{{appointment.appointmentId}}</td>
 				</tr>
 			</tbody>
