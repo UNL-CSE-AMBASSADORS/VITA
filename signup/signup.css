@@ -1,3 +1,14 @@
+@media (min-width: 768px) {
+	.flex {
+		display: flex;
+	}
+
+	.removeDependentButton {
+		padding-bottom: 0;
+		align-self: flex-end;
+	}
+}
+
 .email-confirmation-button {
 	margin-left: 5px;
 }

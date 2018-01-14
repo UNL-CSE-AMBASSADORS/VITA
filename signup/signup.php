@@ -68,20 +68,6 @@
 		<br>
 		<button type="button" class="wdn-button wdn-button-triad" id="addDependentButton" ng-click="addDependent()">Add Dependent</button>
 
-		<style>
-		@media (min-width: 768px) {
-			.flex {
-				display: flex;
-			}
-
-			.removeDependentButton {
-				padding-bottom: 0;
-				align-self: flex-end;
-			}
-		}
-		</style>
-
-
 		<h3 class="form-subheading">Background Information</h3>
 
 		<ul>
