@@ -168,7 +168,7 @@ function wdnInclude($path)
 								<form id="cancellation-reason-form">
 									<fieldset>
 										<section class="form-group">
-											<textarea id="reason" class="form-control"></textarea>
+											<textarea id="reason" class="form-control" required></textarea>
 										</section>
 									</fieldset>
 									<div>

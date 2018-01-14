@@ -154,58 +154,59 @@ WDN.initializePlugin('modal', [function() {
 			.colorbox({
 				inline:true,
 				width:'50%'
-			}).prop('href', '#cancellation-reason-modal');
+			})
+			.prop('href', '#cancellation-reason-modal')
+			.click(function() {
+				// modal submit functionality
+				$('#cancellation-reason-form').on('submit', function(event) {
+					event.preventDefault();
+					$('#cancellation-reason-form button[type=submit]').prop('disabled', true);
+	
+					let reason = $('#reason').val();
+					let valid = reason.length > 0;
+
+					if(valid) {
+						$.ajax({
+							url: "/server/profile/profile.php",
+							type: "POST",
+							dataType: "JSON",
+							data: {
+								action: 'removeShift',
+								userShiftId: userShiftId,
+								reason: reason
+							},
+							cache: false,
+							success: function(response) {
+								$('#cancellation-reason-form button[type=submit]').prop('disabled', false);
+								if (response.success) {
+									shiftRow.remove();
+									$('#reason').val('');
+									$.colorbox.close();
+									
+									// Find the shift that just got removed and make it so we're not signed up for it anymore
+									for (const shift of shiftsMap.get(siteId).get(dateString)) {
+										if (shift.userShiftId === userShiftId) {
+											shift.signedUp = false;
+											shift.userShiftId = null;
+											break;
+										}
+									}
+								} else {
+									alert(response.error);
+								}
+							},
+							error: function(response) {
+								alert('Unable to communicate with server. Try again in a few minutes.');
+							}
+						});
+					}else{
+						$('#cancellation-reason-form button[type=submit]').prop('disabled', false);
+					}
+				});
+			});
 			
 			$('.close-modal-button').click(function(){
 				$.colorbox.close();
-			});
-
-			$('#cancellation-reason-form').on('submit', function(event) {
-				event.preventDefault();
-				$('#cancellation-reason-form button[type=submit]').prop('disabled', true);
-
-				let reason = $('#reason').val();
-				let valid = reason.length > 0;
-
-				$('#reason').toggleClass('is-invalid', valid);
-
-				if(valid) {
-					$.ajax({
-						url: "/server/profile/profile.php",
-						type: "POST",
-						dataType: "JSON",
-						data: {
-							action: 'removeShift',
-							userShiftId: userShiftId,
-							reason: reason
-						},
-						cache: false,
-						success: function(response) {
-							$('#cancellation-reason-form button[type=submit]').prop('disabled', false);
-							if (response.success) {
-								shiftRow.remove();
-								$('#reason').val('');
-								$.colorbox.close();
-								
-								// Find the shift that just got removed and make it so we're not signed up for it anymore
-								for (const shift of shiftsMap.get(siteId).get(dateString)) {
-									if (shift.userShiftId === userShiftId) {
-										shift.signedUp = false;
-										shift.userShiftId = null;
-										break;
-									}
-								}
-							} else {
-								alert(response.error);
-							}
-						},
-						error: function(response) {
-							alert('Unable to communicate with server. Try again in a few minutes.');
-						}
-					});
-				}else{
-					$('#cancellation-reason-form button[type=submit]').prop('disabled', false);
-				}
 			});
 
 			shiftRow.append(shiftInformation, removeButton);
