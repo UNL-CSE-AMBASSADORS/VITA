@@ -1,12 +1,15 @@
 define('signupController', [], function() {
 
-	function signupController($scope, SignupService, sharedPropertiesService) {
+	function signupController($scope, $sce, SignupService, sharedPropertiesService) {
 		
 		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
 		$scope.successMessage = null;
 		$scope.data = {};
 		$scope.questions = [];
 		$scope.dependents = [];
+		$scope.emailButton = {};
+		$scope.emailButton.disabled = false
+		$scope.emailButton.text = 'Email Me this Confirmation';
 		
 		$scope.storeAppointments = function() {
 
@@ -24,6 +27,7 @@ define('signupController', [], function() {
 			$scope.data.language = "eng";
 
 			var data = {
+				"action": "storeAppointment",
 				"firstName": $scope.data.firstName,
 				"lastName": $scope.data.lastName,
 				"email": $scope.data.email,
@@ -37,9 +41,35 @@ define('signupController', [], function() {
 
 			SignupService.storeAppointments(data).then(function(response) {
 				if(typeof response !== 'undefined' && response && response.success){
-					$scope.successMessage = response.message;
+					document.body.scrollTop = document.documentElement.scrollTop = 0;
+					$scope.successMessage = $sce.trustAsHtml(response.message);
 				}else{
 					alert('There was an error on the server! Please refresh the page in a few minutes and try again.');
+				}
+			});
+		}
+
+		$scope.emailConfirmation = function() {
+			$scope.emailButton.disabled = true;
+			var data = {
+				"action": "emailConfirmation",
+				"firstName": $scope.data.firstName,
+				"email": $scope.data.email,
+				"siteId": $scope.sharedProperties.selectedSite,
+				"appointmentTimeId": $scope.sharedProperties.selectedAppointmentTimeId
+			};
+
+			SignupService.emailConfirmation(data).then(function(response) {
+				if(typeof response !== 'undefined' && response){
+					if (response.success) {
+						$scope.emailButton.text = "Sent!";
+					} else {
+						alert(response.error);
+						$scope.emailButton.disabled = false;
+					}
+				}else{
+					alert('There was an error on the server! Try again or please print this page instead.');
+					$scope.emailButton.disabled = false;
 				}
 			});
 		}
@@ -81,7 +111,7 @@ define('signupController', [], function() {
 
 	}
 
-	signupController.$inject = ['$scope', 'signupDataService', 'sharedPropertiesService'];
+	signupController.$inject = ['$scope', '$sce', 'signupDataService', 'sharedPropertiesService'];
 
 	return signupController;
 

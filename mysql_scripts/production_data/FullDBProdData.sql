@@ -1533,28 +1533,7 @@ INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximum
 
 
 -- Sunday
-SET @shiftStartTime = "2018-04-01 13:00:00";
-SET @shiftEndTime = "2018-04-01 15:00:00";
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @userId, @userId);
-
-SET @shiftStartTime = "2018-04-01 14:30:00";
-SET @shiftEndTime = "2018-04-01 16:00:00";
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @userId, @userId);
-
-SET @scheduledTime = "2018-04-01 13:00:00";
-INSERT INTO AppointmentTime (scheduledTime, siteId)
-	VALUES (@scheduledTime, @site_jackieGaughanMulticulturalCenter);
-
-SET @scheduledTime = "2018-04-01 14:00:00";
-INSERT INTO AppointmentTime (scheduledTime, siteId)
-	VALUES (@scheduledTime, @site_jackieGaughanMulticulturalCenter);
-
-SET @scheduledTime = "2018-04-01 15:00:00";
-INSERT INTO AppointmentTime (scheduledTime, siteId)
-	VALUES (@scheduledTime, @site_jackieGaughanMulticulturalCenter);
-
+-- Easter Sunday, no appointments/shifts
 
 -- Tuesday, AL
 SET @shiftStartTime = "2018-04-03 16:30:00";
@@ -1743,6 +1722,24 @@ INSERT INTO Permission (name, description, lookupName)
 	VALUES ("View All Client Information", "Can view all client information (full last name, email, phone number)", "view_client_information");
 SET @permission_viewClientInformationId = LAST_INSERT_ID();
 -- End Permissions
+
+
+
+
+
+-- FilingStatuses
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('State E-file', 'state_efile');
+
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('Federal E-file', 'federal_efile');
+
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('State Paper', 'state_paper');
+
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('Federal Paper', 'federal_paper');
+-- End FilingStatuses
 
 
 

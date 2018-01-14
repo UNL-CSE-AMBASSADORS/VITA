@@ -1,4 +1,4 @@
-
+<!-- Appointment Signup with no success -->
 <div class="wdn-inner-wrapper wdn-inner-padding-no-top" ng-if="successMessage == null">
 	<form class="cmxform" 
 		id="vitaSignupForm" 
@@ -299,4 +299,16 @@
 	</form>
 </div>
 
-<div class="wdn-inner-wrapper wdn-inner-padding-no-top" ng-if="successMessage != null">{{successMessage}}</div>
+<!-- Successful Signup Screen -->
+<div class="wdn-inner-wrapper wdn-inner-padding-no-top" ng-if="successMessage != null">
+	<ng-bind-html ng-bind-html="successMessage"></ng-bind-html>
+
+	<div>
+		<button type="button" class="mb-3 wdn-button btn wdn-button-triad" onclick="window.print();">Print</button>
+		<button type="button" 
+			class="mb-3 wdn-button btn wdn-button-triad email-confirmation-button" 
+			ng-if="data.email != null && data.email.length > 0"
+			ng-disabled="emailButton.disabled"
+			ng-click="emailConfirmation()">{{emailButton.text}}</button>
+	</div>
+</div>

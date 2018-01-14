@@ -30,7 +30,7 @@ function getAppointments($year) {
 
 	try {
 		$query = 'SELECT appointmentId, language, DATE_FORMAT(scheduledTime, "%b %D %l:%i %p") AS scheduledTime, title, 
-			firstName, lastName, scheduledTime AS originalScheduledTime ';
+			firstName, lastName ';
 		if ($canViewClientInformation) {
 			$query .= ', Client.phoneNumber, emailAddress ';
 		}
@@ -39,8 +39,8 @@ function getAppointments($year) {
 				JOIN Site ON AppointmentTime.siteId = Site.siteId
 				JOIN Client ON Appointment.clientId = Client.clientId
 			WHERE Appointment.archived = FALSE AND
-				YEAR(scheduledTime) = ?
-			ORDER BY originalScheduledTime';
+				YEAR(AppointmentTime.scheduledTime) = ?
+			ORDER BY AppointmentTime.scheduledTime';
 	
 		$stmt = $DB_CONN->prepare($query);
 		$stmt->execute(array($year));
@@ -52,7 +52,6 @@ function getAppointments($year) {
 				$appointment['lastName'] = substr($appointment['lastName'], 0, 1).'.'; // concat period since this is a last initial
 			}
 			$appointment['language'] = expandLanguageCode($appointment['language']);
-			unset($appointment['originalScheduledTime']);
 		}
 
 		$response['appointments'] = $appointments;
