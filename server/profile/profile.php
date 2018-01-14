@@ -17,7 +17,7 @@ if (isset($_REQUEST['action'])) {
 		case 'getShifts': getShifts(); break;
 		case 'updatePersonalInformation': updatePersonalInformation($_REQUEST); break;
 		case 'updateAbilities': updateAbilities($_REQUEST); break;
-		case 'removeShift': removeShift($_REQUEST['userShiftId']); break;
+		case 'removeShift': removeShift($_POST['userShiftId'], $_POST['reason']); break;
 		case 'signUpForShift': signUpForShift($_REQUEST['shiftId'], $_REQUEST['roleId']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
@@ -165,22 +165,81 @@ function updatePersonalInformation($data) {
 	echo json_encode($response);
 }
 
-function removeShift($userShiftId) {
+function removeShift($userShiftId, $reason) {
 	GLOBAL $USER, $DB_CONN;
 	$userId = $USER->getUserId();
 
 	$response = array();
 	$response['success'] = true;
 
-	$query = "DELETE FROM UserShift WHERE userShiftId = ? AND userId = ?";
-	$stmt = $DB_CONN->prepare($query);
-	$success = $stmt->execute(array($userShiftId, $userId));
-	if ($success == false) {
+	try {
+		$shiftDetails = getShiftDetails($userShiftId, $userId);
+
+		$query = "DELETE FROM UserShift WHERE userShiftId = ? AND userId = ?";
+		$stmt = $DB_CONN->prepare($query);
+		$success = $stmt->execute(array($userShiftId, $userId));
+		if ($success == false) {
+			throw new Exception();
+		}
+	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'Unable to remove shift. Refresh the page and try again later.';
 	}
 
+	
+
+	if ($success) {
+		notifyForCancelledShift(
+			$shiftDetails['firstName'],
+			$shiftDetails['lastName'],
+			$shiftDetails['title'],
+			$shiftDetails['dateStr'],
+			$shiftDetails['startTimeStr'],
+			$shiftDetails['endTimeStr'],
+			$shiftDetails['roleName'],
+			$reason
+		);
+	}
+
 	echo json_encode($response);
+}
+
+function getShiftDetails($userShiftId, $userId) {
+	GLOBAL $DB_CONN;
+	$query = 'SELECT firstName, lastName, Site.title, DATE_FORMAT(startTime, "%m/%d/%Y") AS dateStr,
+			TIME_FORMAT(startTime, "%l:%i %p") AS startTimeStr, TIME_FORMAT(endTime, "%l:%i %p") AS endTimeStr,
+			Role.name AS roleName
+		FROM UserShift
+			JOIN User ON UserShift.userId = User.userId
+			JOIN Shift ON UserShift.shiftId = Shift.shiftId
+			JOIN Role ON UserShift.roleId = Role.roleId
+			JOIN Site ON Shift.siteID = Site.siteId
+		WHERE userShiftId = ? AND User.userId = ?';
+	$stmt = $DB_CONN->prepare($query);
+	$stmt->execute(array($userShiftId, $userId));
+	return $stmt->fetch();
+}
+
+function notifyForCancelledShift($firstName, $lastName, $siteTitle, $dateStr, $startTimeStr, $endTimeStr, $role, $reason) {
+	if (PROD) {
+		$handle = @fopen('./notificationEmails.txt', 'r');
+		if ($handle != false) {
+			while(!feof($handle)) {
+				$email = fgets($handle);
+				$cancellationMessage = "A volunteer has cancelled one of their shifts:
+					<b>First Name:</b> $firstName <br/>
+					<b>Last Name:</b> $lastName <br/>
+					<b>Site:</b> $siteTitle <br/>
+					<b>Date:</b> $dateStr <br/>
+					<b>Start Time:</b> $startTimeStr <br/>
+					<b>End Time:</b> $endTimeStr <br/>
+					<b>Role:</b> $role <br/>
+					<b>Reason:</b> $reason";
+				mail($email, 'VITA -- Shift Cancellation', $cancellationMessage);
+			}
+			fclose($handle);
+		}
+	}
 }
 
 function signUpForShift($shiftId, $roleId) {
