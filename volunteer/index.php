@@ -26,7 +26,7 @@ function wdnInclude($path)
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
-<body class="@@(_document['class'])@@" data-version="4.1">
+<body class="hide-wdn_identity_management" data-version="4.1">
 	<?php wdnInclude("/wdn/templates_4.1/includes/skipnav.html"); ?>
 	<div id="wdn_wrapper">
 		<input type="checkbox" id="wdn_menu_toggle" value="Show navigation menu" class="wdn-content-slide wdn-input-driver" />
