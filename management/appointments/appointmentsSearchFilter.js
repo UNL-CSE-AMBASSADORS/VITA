@@ -1,4 +1,4 @@
-define('queueSearchFilter', [], function() {
+define('appointmentsSearchFilter', [], function() {
 
 	function searchFor() {
 

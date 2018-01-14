@@ -23,16 +23,25 @@ function getAppointmentTimes($data) {
 		$after = $data['after'];
 	}
 
-	$stmt = $DB_CONN->prepare('SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, TIME(scheduledTime) AS scheduledTime, percentageAppointments, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, COUNT(DISTINCT us.userShiftId) AS numberOfPreparers, apt.minimumNumberOfAppointments, apt.maximumNumberOfAppointments
-		FROM AppointmentTime apt
-		LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
-		LEFT JOIN UserShift us ON us.shiftId IN (SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId AND s.startTime <= apt.scheduledTime AND s.endTime >= apt.scheduledTime) 
-			AND us.roleId = (SELECT roleId FROM Role WHERE lookupName = "preparer")
-		LEFT JOIN Site s ON s.siteId = apt.siteId
-		WHERE YEAR(apt.scheduledTime) = ? AND apt.scheduledTime > ?
-		GROUP BY apt.appointmentTimeId
-		ORDER BY apt.scheduledTime');
-	$stmt->execute(array($year, $after));
+	$needsInternational = false;
+	if (isset($data['studentScholar'])) {
+		$needsInternational = ($data['studentScholar'] === 'true');
+	}
+
+	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, TIME(scheduledTime) AS scheduledTime, percentageAppointments, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, COUNT(DISTINCT us.userShiftId) AS numberOfPreparers, apt.minimumNumberOfAppointments, apt.maximumNumberOfAppointments
+	FROM AppointmentTime apt
+	LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
+	LEFT JOIN UserShift us ON us.shiftId IN (SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId AND s.startTime <= apt.scheduledTime AND s.endTime >= apt.scheduledTime) 
+		AND us.roleId = (SELECT roleId FROM Role WHERE lookupName = "preparer")
+	LEFT JOIN Site s ON s.siteId = apt.siteId
+	WHERE YEAR(apt.scheduledTime) = ? 
+		AND apt.scheduledTime > ? 
+		AND s.doesInternational = ?
+	GROUP BY apt.appointmentTimeId
+	ORDER BY apt.scheduledTime';
+
+	$stmt = $DB_CONN->prepare($query);
+	$stmt->execute(array($year, $after, $needsInternational));
 	$appointmentTimes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 	$dstMap = new DateSiteTimeMap();
@@ -61,6 +70,7 @@ function calculateRemainingAppointmentsAvailable($appointmentCount, $percentAppo
 
 class DateSiteTimeMap {
 	public $dates = [];
+	public $hasAvailability = false;
 
 	public function addDateSiteTimeObject($dstObject) {
 		// Get the number of appointments still available
@@ -71,16 +81,19 @@ class DateSiteTimeMap {
 
 		// Add the appointmentTime to the map
 		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["site_title"] = $dstObject['title'];
-		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["times"][$time] = $appointmentsAvailable;
+		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["times"][$time]['appointmentsAvailable'] = $appointmentsAvailable;
+		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["times"][$time]['appointmentTimeId'] = $dstObject['appointmentTimeId'];
 	}
 
 	public function updateAvailability() {
+		$this->hasAvailability = false;
 		foreach (array_keys($this->dates) as $date) {
 			$dateHasTimes = false;
 			foreach (array_keys($this->dates[$date]["sites"]) as $site) {
 				$siteHasTimes = false;
 				foreach ($this->dates[$date]["sites"][$site]["times"] as $time) {
-					if($time > 0) {
+					if($time['appointmentsAvailable'] > 0) {
+						$this->hasAvailability = true;
 						$dateHasTimes = true;
 						$siteHasTimes = true;
 					}

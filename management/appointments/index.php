@@ -2,7 +2,7 @@
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 require_once "$root/server/user.class.php";
 $USER = new User();
-if (!$USER->hasPermission('use_admin_tools')) {
+if (!$USER->isLoggedIn()) {
 	header("Location: /unauthorized");
 	die();
 }
@@ -26,14 +26,14 @@ function wdnInclude($path)
 -->
 <?php wdnInclude("/wdn/templates_4.1/includes/scriptsandstyles.html"); ?>
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>Print Documents | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+<title>Appointment Management | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
-<link rel="stylesheet" href="/dist/management/documents/documents.css">
+<link rel="stylesheet" href="/dist/management/appointments/appointments.css">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
-<body class="hide-wdn_identity_management" data-version="4.1">
+<body class="@@(_document['class'])@@" data-version="4.1">
 	<?php wdnInclude("/wdn/templates_4.1/includes/skipnav.html"); ?>
 	<div id="wdn_wrapper">
 		<input type="checkbox" id="wdn_menu_toggle" value="Show navigation menu" class="wdn-content-slide wdn-input-driver" />
@@ -62,7 +62,7 @@ function wdnInclude($path)
 					<li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
 					<li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
 					<li><a href="/management" title="Management">Management</a></li>
-					<li>Print Documents</li>
+					<li>Appointment Management</li>
 				</ul>
 				<!-- TemplateEndEditable -->
 			</nav>
@@ -83,29 +83,11 @@ function wdnInclude($path)
 			<div id="maincontent" class="wdn-main">
 				<div id="pagetitle">
 					<!-- TemplateBeginEditable name="pagetitle" -->
-					<h1>Download Documents</h1>
+					<h1>Appointment Management</h1>
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
-				<div class="wdn-band">
-					<form class="wdn-inner-wrapper wdn-inner-padding-no-top wdn-set-grid">
-						<div class="bp768-wdn-col-one-half">
-							<label for="dateInput">Date</label>
-							<input type="text" id="dateInput"/>
-							<input type="hidden" id="isoFormattedDate"/>
-						</div>
-						<div class="bp768-wdn-col-one-half">
-							<label for="siteSelect">Site</label>
-							<select id="siteSelect">
-								<!-- Sites injected through JS -->
-							</select>
-						</div>
-						<div class="wdn-col">
-							<button class="wdn-button mt-1rem" onclick="downloadAppointmentSchedule();">Download Appointment Schedule</button>
-							<button class="wdn-button mt-1rem" onclick="downloadVolunteerSchedule();">Download Volunteer Schedule</button>
-						</div>
-					</form>
-				</div>
+				<div id="appointmentsApp" class="wdn-band" appointments></div>
 				<!-- TemplateEndEditable -->
 			</div>
 		</main>
@@ -135,6 +117,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
-	<script src="/dist/management/documents/documents.js"></script>
+	<script src="/dist/management/appointments/appointments.js"></script>
 </body>
 </html>

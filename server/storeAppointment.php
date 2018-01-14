@@ -25,33 +25,6 @@ if (isset($_REQUEST['action'])) {
 	}
 }
 
-function emailConfirmation($data) {
-	$response = array();
-	$response['success'] = false;
-
-	try {
-		if (!isset($data['email']) || !preg_match('/.+@.+/', $data['email'])) throw new Exception('Invalid email address given. Unable to send email.', MY_EXCEPTION);
-		if (!isset($data['firstName']) || !isset($data['siteId']) || !isset($data['scheduledTime'])) throw new Exception('Invalid information received. Unable to send email.', MY_EXCEPTION); 
-
-		$confirmationMessage = generateConfirmation($data['firstName'], $data['siteId'], $data['scheduledTime']);
-
-		if (PROD) {
-			mail($data['email'], 'VITA Appointment Confirmation', $confirmationMessage);
-		} else {
-			$response['message'] = $confirmationMessage;
-		}
-		$response['success'] = true;
-	} catch (Exception $e) {
-		if ($e->getCode() === MY_EXCEPTION) {
-			$response['error'] = $e->getMessage();
-		} else {
-			$response['error'] = 'There was an error on the server, please try again. If the problem persists, please print this page instead.';
-		}
-	}
-
-	echo json_encode($response);
-}
-
 function storeAppointment($data){
 	GLOBAL $DB_CONN;
 
@@ -123,24 +96,20 @@ function storeAppointment($data){
 			VALUES
 			(
 				?,
-				(SELECT appointmentTimeId FROM AppointmentTime
-					WHERE DATE(scheduledTime) = ? 
-					AND time_format(TIME(scheduledTime), '%l:%i %p') = ?),
+				?,
 				?,
 				?
 			);";
 
-		$dateTime = new DateTime($data['scheduledTime']);
 		$appointmentParams = array(
 			$clientId,
-			$dateTime->format('Y-m-d'),
-			$dateTime->format('g:i A'),
+			$data['appointmentTimeId'],
 			$data['language'],
 			$_SERVER['REMOTE_ADDR']
 		);
 		$stmt = $DB_CONN->prepare($appointmentInsert);
 		if(!$stmt->execute($appointmentParams)){
-			throw new Exception("There was an issue on the server. Please refresh the page and try again.", 999);
+			throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
 		}
 
 		$appointmentId = $DB_CONN->lastInsertId();
@@ -173,8 +142,7 @@ function storeAppointment($data){
 		$DB_CONN->commit();
 		$response['success'] = true;
 		$response['appointmentId'] = $appointmentId;
-		$response['message'] = generateConfirmation($data['firstName'], $data['siteId'], $data['scheduledTime']);
-
+		$response['message'] = generateConfirmation($data['firstName'], $data['siteId'], $data['appointmentTimeId']);
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
 		
@@ -186,24 +154,46 @@ function storeAppointment($data){
 	print json_encode($response);
 }
 
-function generateConfirmation($firstName, $siteId, $scheduledTime) {
-	GLOBAL $DB_CONN;
+function emailConfirmation($data) {
+	$response = array();
+	$response['success'] = false;
 
-	// get site information
-	$siteQuery = "SELECT address, phoneNumber, title FROM Site WHERE siteId = ?";
-	$stmt = $DB_CONN->prepare($siteQuery);
-	$stmt->execute(array($siteId));
+	try {
+		if (!isset($data['email']) || !preg_match('/.+@.+/', $data['email'])) throw new Exception('Invalid email address given. Unable to send email.', MY_EXCEPTION);
+		if (!isset($data['firstName']) || !isset($data['siteId']) || !isset($data['appointmentTimeId'])) throw new Exception('Invalid information received. Unable to send email.', MY_EXCEPTION); 
 
-	$siteInfo = $stmt->fetch();
-	$siteAddress = $siteInfo['address'];
-	$siteTitle = $siteInfo['title'];
-	$sitePhoneNumber = $siteInfo['phoneNumber'];
+		$confirmationMessage = generateConfirmation($data['firstName'], $data['siteId'], $data['appointmentTimeId']);
 
-	$dateTime = new DateTime($scheduledTime);
+		if (PROD) {
+			mail($data['email'], 'VITA Appointment Confirmation', $confirmationMessage);
+		} else {
+			$response['message'] = $confirmationMessage;
+		}
+		$response['success'] = true;
+	} catch (Exception $e) {
+		if ($e->getCode() === MY_EXCEPTION) {
+			$response['error'] = $e->getMessage();
+		} else {
+			$response['error'] = 'There was an error on the server, please try again. If the problem persists, please print this page instead.';
+		}
+	}
+
+	echo json_encode($response);
+}
+
+function generateConfirmation($firstName, $siteId, $appointmentTimeId) {
+	$siteInformation = getSiteInformation($siteId);
+	$appointmentTimeInformation = getAppointmentTimeInformation($appointmentTimeId);
+
+	$siteTitle = $siteInformation['title'];
+	$siteAddress = $siteInformation['address'];
+	$sitePhoneNumber = $siteInformation['phoneNumber'];
+	$dateStr = $appointmentTimeInformation['dateStr'];
+	$timeStr = $appointmentTimeInformation['timeStr'];
 
 	$message = "<h2>Appointment Confirmation</h2>".
 			$firstName.", thank you for signing up! Your appointment will be located at the $siteTitle site ($siteAddress). 
-			Please arrive no later than ".$dateTime->format("g:i A")." on ".$dateTime->format("l, F jS, Y")." with all necessary materials (listed below). 
+			Please arrive no later than $timeStr on $dateStr with all necessary materials (listed below). 
 			Please call $sitePhoneNumber if you have any questions or would like to reschedule. 
 			Thank you from Lincoln VITA.
 			<h2 class='mt-3'>What to Bring for your Appointment</h2>
@@ -236,4 +226,29 @@ function generateConfirmation($firstName, $siteId, $scheduledTime) {
 			</ul>";
 
 	return $message;
+}
+
+function getSiteInformation($siteId) {
+	GLOBAL $DB_CONN;
+
+	$query = "SELECT address, phoneNumber, title 
+		FROM Site 
+		WHERE siteId = ?";
+	$stmt = $DB_CONN->prepare($query);
+	$stmt->execute(array($siteId));
+
+	return $stmt->fetch();
+}
+
+function getAppointmentTimeInformation($appointmentTimeId) {
+	GLOBAL $DB_CONN;
+
+	$query = "SELECT DATE_FORMAT(scheduledTime, '%W, %M %D, %Y') AS dateStr, 
+			TIME_FORMAT(scheduledTime, '%l:%i %p') as timeStr
+		FROM AppointmentTime
+		WHERE appointmentTimeId = ?";
+	$stmt = $DB_CONN->prepare($query);
+	$stmt->execute(array($appointmentTimeId));
+
+	return $stmt->fetch();
 }

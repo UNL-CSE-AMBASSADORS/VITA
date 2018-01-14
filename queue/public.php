@@ -29,7 +29,7 @@
 				<span class="pill" ng-class="appointment.preparing ? 'pill-complete': 'pill-incomplete'">Appointment in Progress</span>
 				<span class="pill" ng-class="appointment.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
 			</td>
-			<td class="queue-time" data-header="Scheduled Time">{{appointment.scheduledTime | date: "h:mm a"}}</td>
+			<td class="queue-time" data-header="Scheduled Time">{{appointment.scheduledTime}}</td>
 		</tr>
 	</tbody>
 </table>
