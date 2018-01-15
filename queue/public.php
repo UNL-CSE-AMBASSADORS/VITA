@@ -1,56 +1,40 @@
 <?php $root = realpath($_SERVER["DOCUMENT_ROOT"]) ?>
-<!DOCTYPE html>
-<html class="no-js theme-light" lang="" ng-app="queueApp">
-<head>
-	<title>Queue</title>
-	<?php require_once "$root/server/header.php" ?>
-	<link rel="stylesheet" href="/dist/queue/queue.css">
-</head>
-<body ng-controller="QueueController">
-	<!--[if lt IE 8]>
-		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-	<![endif]-->
-	<?php
-		require_once "$root/components/nav.php";
-	?>
 
-	<!-- Header section -->
-	<?php
-		require_once "$root/queue/queue_header.php";
-	?>
+<!-- Header section -->
+<?php
+	require_once "$root/queue/queue_header.php";
+?>
 
-	<!-- Body Section with list of clients -->
-	<div class="container-fluid queue" ng-if="appointments.length > 0" ng-cloak>
-		<div class="row queue-header py-2 bg-secondary text-light font-weight-bold">
-			<div class="col col-4 queue-name">Name</div>
-			<div class="col col-5 queue-progress">Progress</div>
-			<div class="col col-3 queue-time">Scheduled Time</div>
-		</div>
-		<div class="row queue-row" 
-				ng-repeat="appointment in appointments | orderBy:['timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime']" 
-				ng-if="appointment.completed == null" 
-				ng-class-even="'bg-light'">
-			<div class="col col-4 queue-name" style="size:8em">{{appointment.firstName}} {{appointment.lastName}}</div>
-			<div class="col col-5 queue-progress">
-				<span class="badge badge-pill" ng-class="appointment.checkedIn ? 'badge-primary': 'badge-secondary'">Checked In</span>
-				<span class="badge badge-pill" ng-class="appointment.paperworkComplete ? 'badge-primary': 'badge-secondary'">Completed Paperwork</span>
-				<span class="badge badge-pill" ng-class="appointment.preparing ? 'badge-primary': 'badge-secondary'">Appointment in Progress</span>
-				<span class="badge badge-pill" ng-class="appointment.ended ? 'badge-primary': 'badge-secondary'">Appointment Complete</span>
-			</div>
-			<div class="col col-3 queue-time">{{appointment.scheduledTime | date: "h:mm a"}}</div>
-		</div>
-	</div>
-	<div class="container-fluid queue" ng-if="appointments.length == 0" ng-cloak>
-		<div class="row d-flex justify-content-center">
-			<div class="my-5">
-				There are no appointments on this day.
-			</div>
-		</div>
-	</div>
+<!-- Default Section -->
+<div class="wdn-inner-wrapper wdn-center" ng-if="appointments == null">
+	Select a site and date.
+</div>
 
-	<?php require_once "$root/server/footer.php" ?>
-	<?php require_once "$root/server/angularjs_dependencies.php" ?>
-	<script src="/dist/queue/queue.js"></script>
-	<script src="/dist/queue/queue_service.js"></script>
-</body>
-</html>
+<!-- Body Section with list of clients -->
+<table class="wdn_responsive_table queue" ng-if="appointments.length > 0" ng-cloak>
+	<thead>
+		<tr>
+			<th class="queue-name">Name</th>
+			<th class="queue-progress">Progress</th>
+			<th class="queue-time">Scheduled Time</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="appointment in appointments | orderBy:['timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime']" 
+			ng-if="appointment.completed == null">
+			<th class="queue-name" data-header="Name">{{appointment.firstName}} {{appointment.lastName}}</th>
+			<td class="queue-progress" data-header="Progress">
+				<span class="pill" ng-class="appointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
+				<span class="pill" ng-class="appointment.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
+				<span class="pill" ng-class="appointment.preparing ? 'pill-complete': 'pill-incomplete'">Appointment in Progress</span>
+				<span class="pill" ng-class="appointment.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
+			</td>
+			<td class="queue-time" data-header="Scheduled Time">{{appointment.scheduledTime}}</td>
+		</tr>
+	</tbody>
+</table>
+
+<!-- Default message if there are no appointments on the selected date -->
+<div class="wdn-inner-wrapper wdn-center queue" ng-if="appointments.length == 0" ng-cloak>
+	There are no appointments on this day.
+</div>

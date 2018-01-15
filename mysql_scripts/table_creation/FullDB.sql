@@ -1,6 +1,8 @@
 USE vita;
 
 DROP TABLE IF EXISTS Answer;
+DROP TABLE IF EXISTS AppointmentFilingStatus;
+DROP TABLE IF EXISTS FilingStatus;
 DROP TABLE IF EXISTS ServicedAppointment;
 DROP TABLE IF EXISTS Appointment;
 DROP TABLE IF EXISTS DependentClient;
@@ -51,6 +53,8 @@ CREATE TABLE Site (
 	title VARCHAR(255) NOT NULL,
 	address VARCHAR(255) NOT NULL,
 	phoneNumber VARCHAR(20) NOT NULL,
+	doesMultilingual BOOLEAN NOT NULL DEFAULT FALSE,
+	doesInternational BOOLEAN NOT NULL DEFAULT FALSE,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
 	lastModifiedDate DATETIME,
 	archived BOOLEAN NOT NULL DEFAULT FALSE,
@@ -120,6 +124,21 @@ CREATE TABLE ServicedAppointment (
 	servicedByStation INTEGER UNSIGNED NULL,
 	appointmentId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId)
+);
+
+CREATE TABLE FilingStatus (
+	filingStatusId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	text VARCHAR(255) NOT NULL,
+    lookupName VARCHAR(255) NOT NULL,
+    CONSTRAINT uniqueLookupName UNIQUE INDEX(lookupName)
+);
+
+CREATE TABLE AppointmentFilingStatus (
+	appointmentFilingStatusId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	servicedAppointmentId INTEGER UNSIGNED NOT NULL,
+	FOREIGN KEY (servicedAppointmentId) REFERENCES ServicedAppointment(servicedAppointmentId),
+	filingStatusId INTEGER UNSIGNED NOT NULL,
+	FOREIGN KEY (filingStatusId) REFERENCES FilingStatus(filingStatusId)
 );
 
 CREATE TABLE Login (

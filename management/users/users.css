@@ -1,61 +1,115 @@
-#btn-add-user{
-	cursor: pointer;
+#cboxContent {
+	background: transparent !important;
 }
 
-#user-management-table-row{
-	overflow-x: auto;
+#cboxLoadedContent {
+	background: #ddd !important;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0,0,0,.15);
+	border-radius: 4px;
+	padding: 0 0 2rem 0 !important;
 }
+
 /*
-Make bootstrap-select work with bootstrap 4 see:
-https://github.com/silviomoreto/bootstrap-select/issues/1135
+Without bootstrap or the bootstrap-select css, the following css is needed to make the bootstrap-select elements look and function properly
 */
-.dropdown-toggle.btn-default {
-	color: #292b2c;
-	background-color: #fff;
-	border-color: #ccc;
-}
-.bootstrap-select.show > .dropdown-menu > .dropdown-menu {
-	display: block;
-}
-.bootstrap-select > .dropdown-menu > .dropdown-menu li.hidden {
+
+.dropdown-menu {
+	position: absolute;
+	top: 100%;
+	box-sizing: border-box;
+	left: 0;
+	z-index: 1000;
 	display: none;
+	float: left;
+	min-height: 160px;
+	min-width: 160px;
+	padding: 5px 0;
+	margin: 2px 0 0;
+	font-size: 14px;
+	text-align: left;
+	list-style: none;
+	background-color: #fff;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0,0,0,.15);
+	border-radius: 4px;
+	-webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+	box-shadow: 0 6px 12px rgba(0,0,0,.175);
 }
-.bootstrap-select > .dropdown-menu > .dropdown-menu li a {
+
+.open>.dropdown-menu {
 	display: block;
-	width: 100%;
-	padding: 3px 1.5rem;
+}
+
+.bootstrap-select.btn-group .dropdown-menu.inner {
+	position: static;
+	float: none;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	border-radius: 0;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.bootstrap-select.btn-group .dropdown-menu {
+	min-width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.bootstrap-select.btn-group .dropdown-menu li {
+	position: relative;
+}
+
+.dropdown-menu>li>a {
+	display: block;
+	padding: 3px 20px;
 	clear: both;
 	font-weight: 400;
-	color: #292b2c;
-	text-align: inherit;
+	line-height: 1.42857143;
+	color: #333;
 	white-space: nowrap;
-	background: 0 0;
-	border: 0;
-	text-decoration: none;
-}
-.bootstrap-select > .dropdown-menu > .dropdown-menu li a:hover {
-	background-color: #f4f4f4;
-}
-.bootstrap-select > .dropdown-toggle {
-	width: 100%;
-}
-.dropdown-menu > li.active > a {
-	color: #fff !important;
-	background-color: #337ab7 !important;
-}
-.bootstrap-select .check-mark {
-	line-height: 14px;
-}
-.bootstrap-select .check-mark::after {
-	font-family: "FontAwesome";
-	content: "\f00c";
-}
-.bootstrap-select button {
-	overflow: hidden;
-	text-overflow: ellipsis;
+	border-bottom: none;
 }
 
-/* Make filled out selects be the same size as empty selects */
-.bootstrap-select.btn-group .dropdown-toggle .filter-option {
-	display: inline !important;
+.bootstrap-select.btn-group .dropdown-menu li a {
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+	width: 220px;
+}
+
+.bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*=col-] {
+	float: none;
+	display: inline-block;
+	margin-left: 0;
+}
+
+.btn-group, .btn-group-vertical {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.bootstrap-select.btn-group .dropdown-menu li a span.check-mark {
+	display: none;
+}
+
+.bootstrap-select.btn-group.show-tick .dropdown-menu li a span.text {
+	margin-right: 34px;
+}
+
+.bootstrap-select.btn-group.show-tick .dropdown-menu li.selected a span.check-mark {
+	position: absolute;
+	display: inline-block;
+	right: 15px;
 }

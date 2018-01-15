@@ -25,12 +25,12 @@ INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
 	VALUES ("Anderson Library", "3635 Touzalin Ave", "402-472-9638", @userId, @userId);
 SET @site_andersonLibrary = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
-	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", @userId, @userId);
+INSERT INTO Site (title, address, phoneNumber, doesMultilingual, createdBy, lastModifiedBy)
+	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", TRUE, @userId, @userId);
 SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
-	VALUES ("International Student Scholar", "Nebraska Union -- Colonial Room", "402-472-9638", @userId, @userId);
+INSERT INTO Site (title, address, phoneNumber, doesInternational, createdBy, lastModifiedBy)
+	VALUES ("International Student Scholar", "Nebraska Union -- Colonial Room", "402-472-9638", TRUE, @userId, @userId);
 SET @site_internationalStudentScholar = LAST_INSERT_ID();
 -- End Sites
 
@@ -1417,7 +1417,7 @@ INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
 
 SET @scheduledTime = "2018-03-20 15:00:00";
 INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
-	VALUES (@scheduledTime, 20, @site_internationalStudentScholar);
+	VALUES (@scheduledTime, 10, @site_internationalStudentScholar);
 
 
 -- Wednesday
@@ -1533,28 +1533,7 @@ INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximum
 
 
 -- Sunday
-SET @shiftStartTime = "2018-04-01 13:00:00";
-SET @shiftEndTime = "2018-04-01 15:00:00";
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @userId, @userId);
-
-SET @shiftStartTime = "2018-04-01 14:30:00";
-SET @shiftEndTime = "2018-04-01 16:00:00";
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @userId, @userId);
-
-SET @scheduledTime = "2018-04-01 13:00:00";
-INSERT INTO AppointmentTime (scheduledTime, siteId)
-	VALUES (@scheduledTime, @site_jackieGaughanMulticulturalCenter);
-
-SET @scheduledTime = "2018-04-01 14:00:00";
-INSERT INTO AppointmentTime (scheduledTime, siteId)
-	VALUES (@scheduledTime, @site_jackieGaughanMulticulturalCenter);
-
-SET @scheduledTime = "2018-04-01 15:00:00";
-INSERT INTO AppointmentTime (scheduledTime, siteId)
-	VALUES (@scheduledTime, @site_jackieGaughanMulticulturalCenter);
-
+-- Easter Sunday, no appointments/shifts
 
 -- Tuesday, AL
 SET @shiftStartTime = "2018-04-03 16:30:00";
@@ -1609,7 +1588,7 @@ SET @scheduledTime = "2018-04-03 16:00:00";
 INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 15, @site_internationalStudentScholar);
 
-SET @scheduledTime = "2018-04-05 17:00:00";
+SET @scheduledTime = "2018-04-03 17:00:00";
 INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 10, @site_internationalStudentScholar);
 
@@ -1743,6 +1722,24 @@ INSERT INTO Permission (name, description, lookupName)
 	VALUES ("View All Client Information", "Can view all client information (full last name, email, phone number)", "view_client_information");
 SET @permission_viewClientInformationId = LAST_INSERT_ID();
 -- End Permissions
+
+
+
+
+
+-- FilingStatuses
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('State E-file', 'state_efile');
+
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('Federal E-file', 'federal_efile');
+
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('State Paper', 'state_paper');
+
+INSERT INTO FilingStatus (text, lookupName)
+	VALUES ('Federal Paper', 'federal_paper');
+-- End FilingStatuses
 
 
 
