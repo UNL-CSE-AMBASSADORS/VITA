@@ -163,9 +163,11 @@ function emailConfirmation($data) {
 		if (!isset($data['firstName']) || !isset($data['siteId']) || !isset($data['appointmentTimeId'])) throw new Exception('Invalid information received. Unable to send email.', MY_EXCEPTION); 
 
 		$confirmationMessage = generateConfirmation($data['firstName'], $data['siteId'], $data['appointmentTimeId']);
+		$headers = 'MIME-Version: 1.0' . "\r\n";
+		$headers .= 'Content-type: text/html; charset=iso-8859-1';
 
 		if (PROD) {
-			mail($data['email'], 'VITA Appointment Confirmation', $confirmationMessage);
+			mail($data['email'], 'VITA Appointment Confirmation', $confirmationMessage, $headers);
 		} else {
 			$response['message'] = $confirmationMessage;
 		}
