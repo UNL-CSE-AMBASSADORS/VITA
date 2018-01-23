@@ -224,6 +224,10 @@ function notifyForCancelledShift($firstName, $lastName, $siteTitle, $dateStr, $s
 	if (PROD) {
 		$handle = @fopen('./notificationEmails.txt', 'r');
 		if ($handle != false) {
+			$headers = "From: noreply@vita.unl.edu\r\n";
+			$headers .= 'MIME-Version: 1.0' . "\r\n";
+			$headers .= 'Content-type: text/html; charset=iso-8859-1';
+
 			while(!feof($handle)) {
 				$email = fgets($handle);
 				$cancellationMessage = "A volunteer has cancelled one of their shifts:
@@ -235,7 +239,7 @@ function notifyForCancelledShift($firstName, $lastName, $siteTitle, $dateStr, $s
 					<b>End Time:</b> $endTimeStr <br/>
 					<b>Role:</b> $role <br/>
 					<b>Reason:</b> $reason";
-				mail($email, 'VITA -- Shift Cancellation', $cancellationMessage);
+				mail($email, 'VITA -- Shift Cancellation', $cancellationMessage, $headers);
 			}
 			fclose($handle);
 		}
