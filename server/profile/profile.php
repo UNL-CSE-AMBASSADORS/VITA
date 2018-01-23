@@ -192,6 +192,7 @@ function removeShift($userShiftId, $reason) {
 		notifyForCancelledShift(
 			$shiftDetails['firstName'],
 			$shiftDetails['lastName'],
+			$shiftDetails['email'],
 			$shiftDetails['title'],
 			$shiftDetails['dateStr'],
 			$shiftDetails['startTimeStr'],
@@ -206,7 +207,7 @@ function removeShift($userShiftId, $reason) {
 
 function getShiftDetails($userShiftId, $userId) {
 	GLOBAL $DB_CONN;
-	$query = 'SELECT firstName, lastName, Site.title, DATE_FORMAT(startTime, "%m/%d/%Y") AS dateStr,
+	$query = 'SELECT firstName, lastName, User.email, Site.title, DATE_FORMAT(startTime, "%m/%d/%Y") AS dateStr,
 			TIME_FORMAT(startTime, "%l:%i %p") AS startTimeStr, TIME_FORMAT(endTime, "%l:%i %p") AS endTimeStr,
 			Role.name AS roleName
 		FROM UserShift
@@ -220,7 +221,7 @@ function getShiftDetails($userShiftId, $userId) {
 	return $stmt->fetch();
 }
 
-function notifyForCancelledShift($firstName, $lastName, $siteTitle, $dateStr, $startTimeStr, $endTimeStr, $role, $reason) {
+function notifyForCancelledShift($firstName, $lastName, $email, $siteTitle, $dateStr, $startTimeStr, $endTimeStr, $role, $reason) {
 	if (PROD) {
 		$handle = @fopen('./notificationEmails.txt', 'r');
 		if ($handle != false) {
@@ -233,6 +234,7 @@ function notifyForCancelledShift($firstName, $lastName, $siteTitle, $dateStr, $s
 				$cancellationMessage = "A volunteer has cancelled one of their shifts:
 					<b>First Name:</b> $firstName <br/>
 					<b>Last Name:</b> $lastName <br/>
+					<b>Email:</b> $email <br/>
 					<b>Site:</b> $siteTitle <br/>
 					<b>Date:</b> $dateStr <br/>
 					<b>Start Time:</b> $startTimeStr <br/>
