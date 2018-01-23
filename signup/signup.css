@@ -1,9 +1,12 @@
-#appointmentPicker {
-	min-height: 300px;
-}
+@media (min-width: 768px) {
+	.flex {
+		display: flex;
+	}
 
-td.ui-state-disabled.full {
-	opacity: 0.65;
+	.removeDependentButton {
+		padding-bottom: 0;
+		align-self: flex-end;
+	}
 }
 
 .email-confirmation-button {
@@ -47,13 +50,4 @@ td.ui-state-disabled.full {
 		font-size: 14pt;
 		font-weight: normal;
 	}
-}
-
-.px-1rem {
-	padding-top: 1rem;
-	padding-bottom: 1rem;
-}
-
-.ui-datepicker tbody .ui-state-disabled {
-	border: transparent;
 }

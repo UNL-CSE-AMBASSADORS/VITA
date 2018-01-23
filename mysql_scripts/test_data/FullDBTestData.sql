@@ -188,12 +188,12 @@ INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
 	VALUES ("Anderson Library", "3635 Touzalin Ave", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_andersonLibrary = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
-	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, doesMultilingual, createdBy, lastModifiedBy)
+	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
-	VALUES ("International Student Scholar", "1400 R St, Lincoln, NE 68588", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, doesInternational, createdBy, lastModifiedBy)
+	VALUES ("International Student Scholar", "1400 R St, Lincoln, NE 68588", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_internationalStudentScholar = LAST_INSERT_ID();
 -- End Sites
 
@@ -719,11 +719,13 @@ SET @shiftStartTime = "2018-04-01 13:00:00";
 SET @shiftEndTime = "2018-04-01 15:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+SET @shift_jackieGaughan1 = LAST_INSERT_ID();
 
 SET @shiftStartTime = "2018-04-01 14:30:00";
 SET @shiftEndTime = "2018-04-01 16:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+SET @shift_jackieGaughan2 = LAST_INSERT_ID();
 
 
 -- Tuesday
@@ -745,11 +747,13 @@ SET @shiftStartTime = "2018-04-08 13:00:00";
 SET @shiftEndTime = "2018-04-08 15:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+SET @shift_jackieGaughan3 = LAST_INSERT_ID();
 
 SET @shiftStartTime = "2018-04-08 14:30:00";
 SET @shiftEndTime = "2018-04-08 16:00:00";
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_jackieGaughanMulticulturalCenter, @user_siteAdmin1Id, @user_siteAdmin1Id);
+SET @shift_jackieGaughan4 = LAST_INSERT_ID();
 
 
 -- Other test data shifts
@@ -833,6 +837,19 @@ INSERT INTO UserShift (userId, shiftId, roleId)
 
 INSERT INTO UserShift (userId, shiftId, roleId)
 	VALUES (@user_reviewer1Id, @shift_site2Shift3Id, @role_reviewer);
+
+-- user shifts for Jackie Gaughan site
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_preparer1Id, @shift_jackieGaughan1, @role_preparer);
+    
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_preparer1Id, @shift_jackieGaughan2, @role_preparer);
+    
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_preparer1Id, @shift_jackieGaughan3, @role_preparer);
+    
+INSERT INTO UserShift (userId, shiftId, roleId)
+	VALUES (@user_preparer1Id, @shift_jackieGaughan4, @role_preparer);
 -- end user shift
 
 
@@ -974,6 +991,31 @@ SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 45 MINUTE);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, maximumNumberOfAppointments)
 	VALUES (@appointmentTime, 100, @site_site2Id, 30);
 SET @appointmentTime_site2AppointmentTime9Id = LAST_INSERT_ID();
+
+-- appointmentTimes for Jackie Gaughan Site
+SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_jackieGaughan1), INTERVAL 0 MINUTE);
+INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, minimumNumberOfAppointments)
+	VALUES (@appointmentTime, 100, @site_jackieGaughanMulticulturalCenter, 5);
+    
+SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_jackieGaughan1), INTERVAL 60 MINUTE);
+INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, minimumNumberOfAppointments)
+	VALUES (@appointmentTime, 100, @site_jackieGaughanMulticulturalCenter, 5);
+
+SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_jackieGaughan2), INTERVAL 30 MINUTE);
+INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, minimumNumberOfAppointments)
+	VALUES (@appointmentTime, 100, @site_jackieGaughanMulticulturalCenter, 5);
+    
+SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_jackieGaughan3), INTERVAL 0 MINUTE);
+INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, minimumNumberOfAppointments)
+	VALUES (@appointmentTime, 100, @site_jackieGaughanMulticulturalCenter, 5);
+    
+SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_jackieGaughan3), INTERVAL 60 MINUTE);
+INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, minimumNumberOfAppointments)
+	VALUES (@appointmentTime, 100, @site_jackieGaughanMulticulturalCenter, 5);
+
+SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_jackieGaughan4), INTERVAL 30 MINUTE);
+INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, minimumNumberOfAppointments)
+	VALUES (@appointmentTime, 100, @site_jackieGaughanMulticulturalCenter, 5);
 -- end appointmentTime
 
 

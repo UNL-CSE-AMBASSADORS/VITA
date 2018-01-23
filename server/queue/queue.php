@@ -13,8 +13,8 @@ if ($USER->isLoggedIn()) {
 
 function loadPublicQueue($data) {
 	GLOBAL $DB_CONN;
-	$query = "SELECT Appointment.appointmentId, scheduledTime, firstName, lastName, timeIn, timeReturnedPapers,
-				timeAppointmentStarted, timeAppointmentEnded, completed
+	$query = "SELECT Appointment.appointmentId, TIME_FORMAT(scheduledTime, '%l:%i %p') AS scheduledTime, firstName, lastName, 
+				timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, completed
 			FROM Appointment
 			LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId
@@ -40,14 +40,14 @@ function loadPrivateQueue($data) {
 	GLOBAL $DB_CONN, $USER;
 	$canViewClientInformation = $USER->hasPermission('view_client_information');
 
-	$query = "SELECT Appointment.appointmentId, scheduledTime, firstName, 
+	$query = "SELECT Appointment.appointmentId, TIME_FORMAT(scheduledTime, '%l:%i %p') AS scheduledTime, firstName, 
 				lastName, timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, 
 				completed, language, Client.clientId, 
-				(SELECT COUNT(dependentClientId) FROM DependentClient WHERE DependentClient.clientId = Client.clientId) AS numberOfDependents";
+				(SELECT COUNT(dependentClientId) FROM DependentClient WHERE DependentClient.clientId = Client.clientId) AS numberOfDependents ";
 	if ($canViewClientInformation) {
-		$query .= ", phoneNumber, emailAddress";
+		$query .= ", phoneNumber, emailAddress ";
 	}
-	$query .= " FROM Appointment
+	$query .= "FROM Appointment
 			LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId
 			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
