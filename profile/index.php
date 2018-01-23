@@ -165,10 +165,11 @@ function wdnInclude($path)
 						<div class="wdn-band">
 							<div class="wdn-inner-wrapper">
 								<h4>Please explain the reason you are cancelling your shift.</h4>
+								<p id="cancellation-reason-details"></p>
 								<form id="cancellation-reason-form">
 									<fieldset>
 										<section class="form-group">
-											<textarea id="reason" class="form-control" required></textarea>
+											<textarea id="cancellation-reason" class="form-control" required></textarea>
 										</section>
 									</fieldset>
 									<div>

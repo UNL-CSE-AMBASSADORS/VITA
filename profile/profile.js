@@ -147,63 +147,70 @@ WDN.initializePlugin('modal', [function() {
 	
 		function appendSignedUpShift(siteTitle, dateString, startTimeString, endTimeString, userShiftId, siteId, roleName) {
 			let shiftRow = $('<div></div>');
-			let shiftInformation = $('<span></span>').html(`${siteTitle}: ${dateString} ${startTimeString} - ${endTimeString} (${roleName})`);
+			let shiftInformation = $('<span></span>').text(`${siteTitle}: ${dateString} ${startTimeString} - ${endTimeString} (${roleName})`);
 			let removeButton = $('<a></a>')
-			.html(' [Cancel]')
+			.text(' [Cancel]')
 			.addClass('red-icon pointer')
 			.colorbox({
 				inline:true,
-				width:'50%'
-			})
-			.prop('href', '#cancellation-reason-modal')
-			.click(function() {
-				// modal submit functionality
-				$('#cancellation-reason-form').on('submit', function(event) {
-					event.preventDefault();
-					$('#cancellation-reason-form button[type=submit]').prop('disabled', true);
+				width:'50%',
+				onOpen: function() {
+					$('#cancellation-reason-details').text(`${siteTitle}: ${dateString} ${startTimeString} - ${endTimeString} (${roleName})`);
+					
+					// modal submit functionality
+					$('#cancellation-reason-form').on('submit', function(event) {
+						event.preventDefault();
+						$('#cancellation-reason-form button[type=submit]').prop('disabled', true);
+		
+						let reason = $('#cancellation-reason').val();
+						let valid = reason.length > 0;
 	
-					let reason = $('#reason').val();
-					let valid = reason.length > 0;
-
-					if(valid) {
-						$.ajax({
-							url: "/server/profile/profile.php",
-							type: "POST",
-							dataType: "JSON",
-							data: {
-								action: 'removeShift',
-								userShiftId: userShiftId,
-								reason: reason
-							},
-							cache: false,
-							success: function(response) {
-								$('#cancellation-reason-form button[type=submit]').prop('disabled', false);
-								if (response.success) {
-									shiftRow.remove();
-									$('#reason').val('');
-									$.colorbox.close();
-									
-									// Find the shift that just got removed and make it so we're not signed up for it anymore
-									for (const shift of shiftsMap.get(siteId).get(dateString)) {
-										if (shift.userShiftId === userShiftId) {
-											shift.signedUp = false;
-											shift.userShiftId = null;
-											break;
+						if(valid) {
+							$.ajax({
+								url: "/server/profile/profile.php",
+								type: "POST",
+								dataType: "JSON",
+								data: {
+									action: 'removeShift',
+									userShiftId: userShiftId,
+									reason: reason
+								},
+								cache: false,
+								success: function(response) {
+									$('#cancellation-reason-form button[type=submit]').prop('disabled', false);
+									if (response.success) {
+										shiftRow.remove();
+										$('#cancellation-reason').val('');
+										$.colorbox.close();
+										
+										// Find the shift that just got removed and make it so we're not signed up for it anymore
+										for (const shift of shiftsMap.get(siteId).get(dateString)) {
+											if (shift.userShiftId === userShiftId) {
+												shift.signedUp = false;
+												shift.userShiftId = null;
+												break;
+											}
 										}
+									} else {
+										alert(response.error);
 									}
-								} else {
-									alert(response.error);
+								},
+								error: function(response) {
+									alert('Unable to communicate with server. Try again in a few minutes.');
 								}
-							},
-							error: function(response) {
-								alert('Unable to communicate with server. Try again in a few minutes.');
-							}
-						});
-					}else{
-						$('#cancellation-reason-form button[type=submit]').prop('disabled', false);
-					}
-				});
-			});
+							});
+						}else{
+							$('#cancellation-reason-form button[type=submit]').prop('disabled', false);
+						}
+					});
+				},
+				onCleanup: function() {
+					$('#cancellation-reason-details').text('');
+					$('#cancellation-reason').val('');
+					// Remove cancellation modal submit event listeners
+					$('#cancellation-reason-form').off();
+				}
+			}).prop('href', '#cancellation-reason-modal');
 			
 			$('.close-modal-button').click(function(){
 				$.colorbox.close();
