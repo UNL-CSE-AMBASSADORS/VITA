@@ -19,10 +19,13 @@ define('queuePrivateController', [], function() {
 		}
 	
 		$scope.checkIn = function() {
+			const noshow = $scope.client.noshow;
 			$scope.client.checkedIn = true;
+			$scope.client.noshow = false;
 			QueueDataService.checkInNow(new Date().toISOString(), $scope.client.appointmentId).then(function(result) {
 				if(!result.success) {
 					$scope.client.checkedIn = false;
+					$scope.client.noshow = noshow;
 					alert(result.error);
 				}
 			});
