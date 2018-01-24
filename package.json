@@ -9,7 +9,7 @@
     "process-css:dev": "postcss ./**/*.css -d ./dist/ -b ./ --use postcss-cssnext",
     "process-css:prod": "postcss ./**/*.css -d ./dist/ -b ./ --use postcss-cssnext cssnano",
     "minify-js:prod": "run-for-every-file --src \"./dist/\" --dest \"./dist/\" --file \"**/*.js\" --not-file \"**/*/\" --run \"uglifyjs {{src-file}} -o {{dest-file}} --compress drop_console --mangle --keep-fnames\"",
-    "cache-bust:prod": "hashmark ./dist/**/*.{js,css} {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\//g' | replaceinfiles -s ./**/*.php -d {dir}/{name}{ext}",
+    "cache-bust:prod": "hashmark ./dist/**/*.{js,css} {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\//g' > replace-map.json && cat replace-map.json | replaceinfiles -s ./**/*.php -d {dir}/{name}{ext} && cat replace-map.json | sed 's/\\\\.js//g' | replaceinfiles -s ./dist/**/*.js -d {dir}/{name}{ext} && rm replace-map.json",
     "clean-end": "rm -rf ./dist/node_modules",
     "build:dev": "npm run clean-start && npm run transpile-js && npm run process-css:dev && npm run clean-end",
     "build:prod": "npm run clean-start && npm run transpile-js && npm run minify-js:prod && npm run process-css:prod && npm run cache-bust:prod && npm run clean-end"
