@@ -231,7 +231,7 @@ function notifyForCancelledShift($firstName, $lastName, $email, $siteTitle, $dat
 
 			while(!feof($handle)) {
 				$email = fgets($handle);
-				$cancellationMessage = "A volunteer has cancelled one of their shifts:
+				$cancellationMessage = "A volunteer has cancelled one of their shifts: <br/>
 					<b>First Name:</b> $firstName <br/>
 					<b>Last Name:</b> $lastName <br/>
 					<b>Email:</b> $email <br/>
