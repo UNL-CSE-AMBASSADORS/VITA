@@ -87,6 +87,8 @@ function wdnInclude($path)
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
+
+				<!-- Personal Information -->
 				<div class="wdn-band wdn-light-neutral-band">
 					<div class="wdn-inner-wrapper">
 						<div class="personal-info">
@@ -123,6 +125,7 @@ function wdnInclude($path)
 					</div>
 				</div>
 
+				<!-- Abilities -->
 				<div class="wdn-band">
 					<div class="wdn-inner-wrapper">
 						<h2>Abilities</h2>
@@ -131,7 +134,8 @@ function wdnInclude($path)
 						<div id="abilitiesSelect" multiple=true></div>
 					</div>
 				</div>
-							
+
+				<!-- Certifications -->		
 				<div class="wdn-band wdn-light-neutral-band">
 					<div class="wdn-inner-wrapper">
 						<div>
@@ -142,6 +146,7 @@ function wdnInclude($path)
 					</div>
 				</div>
 
+				<!-- Shifts -->
 				<div class="wdn-band">
 					<div class="wdn-inner-wrapper">
 						<div>
@@ -150,6 +155,29 @@ function wdnInclude($path)
 								<div id="shiftsSignedUpFor"></div>
 							</div>
 							<button class="wdn-button" id="addShiftButton"><span class="wdn-icon-plus" aria-hidden="true"></span>  Sign Up for a Shift</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Shift Cancellation Reason Modal -->
+				<div class="hidden">
+					<div class="modal" id="cancellation-reason-modal" tabindex="-1" role="dialog" aria-hidden="true">
+						<div class="wdn-band">
+							<div class="wdn-inner-wrapper">
+								<h4>Please explain the reason you are cancelling your shift.</h4>
+								<p id="cancellation-reason-details"></p>
+								<form id="cancellation-reason-form">
+									<fieldset>
+										<section class="form-group">
+											<textarea id="cancellation-reason" class="form-control" required></textarea>
+										</section>
+									</fieldset>
+									<div>
+										<button type="submit" class="wdn-button wdn-button-triad">Finish</button>
+										<button type="button" class="wdn-button wdn-button-brand close-modal-button">Close</button>
+									</div>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
