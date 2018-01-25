@@ -4,14 +4,15 @@
   "description": "Scheduling and Appointment Management for VITA",
   "main": "index.js",
   "scripts": {
-    "transpile": "babel . -d ./dist --ignore ./node_modules/,./dist/",
-    "dev:css": "postcss ./**/*.css -d ./dist/ -b ./ --use postcss-cssnext",
-    "production:css": "postcss ./**/*.css -d ./dist/ -b ./ --use postcss-cssnext cssnano",
-    "cachebust": "hashmark ./dist/**/*.{js,css} {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\//g' | replaceinfiles -s ./**/*.php -d {dir}/{name}{ext}",
-    "dev": "npm run cleanWorkspace && npm run transpile && npm run dev:css && npm run removeUnnecessaryFiles",
-    "production": "npm run cleanWorkspace && npm run transpile && npm run production:css && npm run cachebust && npm run removeUnnecessaryFiles",
-    "cleanWorkspace": "rm -rf ./dist/",
-    "removeUnnecessaryFiles": "rm -rf ./dist/node_modules"
+    "clean-start": "rm -rf ./dist/",
+    "transpile-js": "babel . -d ./dist --ignore ./node_modules/,./dist/",
+    "process-css:dev": "postcss ./**/*.css -d ./dist/ -b ./ --use postcss-cssnext",
+    "process-css:prod": "postcss ./**/*.css -d ./dist/ -b ./ --use postcss-cssnext cssnano",
+    "minify-js:prod": "run-for-every-file --src \"./dist/\" --dest \"./dist/\" --file \"**/*.js\" --not-file \"**/*/\" --run \"uglifyjs {{src-file}} -o {{dest-file}} --compress drop_console --mangle --keep-fnames\"",
+    "cache-bust:prod": "hashmark ./dist/**/*.{js,css} {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\//g' | replaceinfiles -s ./**/*.php -d {dir}/{name}{ext}",
+    "clean-end": "rm -rf ./dist/node_modules",
+    "build:dev": "npm run clean-start && npm run transpile-js && npm run process-css:dev && npm run clean-end",
+    "build:prod": "npm run clean-start && npm run transpile-js && npm run minify-js:prod && npm run process-css:prod && npm run cache-bust:prod && npm run clean-end"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,8 @@
     "cssnano": "^3.10.0",
     "hashmark": "^5.0.0",
     "postcss-cli": "^4.1.1",
-    "postcss-cssnext": "^3.0.2"
+    "postcss-cssnext": "^3.0.2",
+    "run-for-every-file": "^1.1.0",
+    "uglify-js": "^3.3.5"
   }
 }

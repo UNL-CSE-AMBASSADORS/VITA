@@ -12,6 +12,7 @@ define('queuePrivateController', [], function() {
 			for (let filingStatus of $scope.filingStatuses) {
 				filingStatus.checked = false;
 			}
+			document.body.scrollTop = document.documentElement.scrollTop = 0;
 		};
 
 		$scope.unselectClient = function() {
@@ -19,10 +20,13 @@ define('queuePrivateController', [], function() {
 		}
 	
 		$scope.checkIn = function() {
+			const noshow = $scope.client.noshow;
 			$scope.client.checkedIn = true;
+			$scope.client.noshow = false;
 			QueueDataService.checkInNow(new Date().toISOString(), $scope.client.appointmentId).then(function(result) {
 				if(!result.success) {
 					$scope.client.checkedIn = false;
+					$scope.client.noshow = noshow;
 					alert(result.error);
 				}
 			});
