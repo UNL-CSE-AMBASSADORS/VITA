@@ -75,6 +75,11 @@
 	border: 1px solid grey;
 }
 
+.pill-noshow {
+	color: #fff;
+	background-color: #D00000;
+}
+
 /* Center the datepicker calendar on mobile */
 @media (max-width: 767px) {
 	.md-datepicker-calendar-pane.md-pane-open {

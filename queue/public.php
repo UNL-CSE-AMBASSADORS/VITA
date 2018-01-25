@@ -20,14 +20,17 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="appointment in appointments | orderBy:['timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime']" 
+		<tr ng-repeat="appointment in appointments | orderBy:['noshow', 'timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime']" 
 			ng-if="appointment.completed == null">
 			<th class="queue-name" data-header="Name">{{appointment.firstName}} {{appointment.lastName}}</th>
 			<td class="queue-progress" data-header="Progress">
-				<span class="pill" ng-class="appointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
-				<span class="pill" ng-class="appointment.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
-				<span class="pill" ng-class="appointment.preparing ? 'pill-complete': 'pill-incomplete'">Appointment in Progress</span>
-				<span class="pill" ng-class="appointment.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
+				<span class="pill pill-noshow" ng-if="appointment.noshow">No-show</span>
+				<span ng-if="!appointment.noshow">
+					<span class="pill" ng-class="appointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
+					<span class="pill" ng-class="appointment.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
+					<span class="pill" ng-class="appointment.preparing ? 'pill-complete': 'pill-incomplete'">Appointment in Progress</span>
+					<span class="pill" ng-class="appointment.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
+				</span>
 			</td>
 			<td class="queue-time" data-header="Scheduled Time">{{appointment.scheduledTime}}</td>
 		</tr>
