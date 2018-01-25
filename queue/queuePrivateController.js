@@ -12,6 +12,7 @@ define('queuePrivateController', [], function() {
 			for (let filingStatus of $scope.filingStatuses) {
 				filingStatus.checked = false;
 			}
+			document.body.scrollTop = document.documentElement.scrollTop = 0;
 		};
 
 		$scope.unselectClient = function() {

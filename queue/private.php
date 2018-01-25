@@ -45,10 +45,12 @@
 					<th class="queue-name" data-header="Name">{{appointment.firstName}} {{appointment.lastName}}</th>
 					<td class="queue-status" data-header="Progress">
 						<span class="pill pill-noshow" ng-if="appointment.noshow">No-show</span>
-						<span class="pill" ng-class="appointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
-						<span class="pill" ng-class="appointment.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
-						<span class="pill" ng-class="appointment.preparing ? 'pill-complete': 'pill-incomplete'">Preparing</span>
-						<span class="pill" ng-class="appointment.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
+						<span ng-if="!appointment.noshow">
+							<span class="pill" ng-class="appointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
+							<span class="pill" ng-class="appointment.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
+							<span class="pill" ng-class="appointment.preparing ? 'pill-complete': 'pill-incomplete'">Preparing</span>
+							<span class="pill" ng-class="appointment.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
+						</span>
 					</td>
 					<td class="queue-time" data-header="Scheduled Time">{{appointment.scheduledTime}}</td>
 					<td class="queue-id" data-header="Appointment ID">#{{appointment.appointmentId}}</td>
@@ -76,10 +78,12 @@
 			<h2 class="client-name">{{client.firstName}} {{client.lastName}}</h2>
 			<div>
 				<span class="pill pill-noshow" ng-if="client.noshow">No-show</span>
-				<span class="pill" ng-class="client.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
-				<span class="pill" ng-class="client.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
-				<span class="pill" ng-class="client.preparing ? 'pill-complete': 'pill-incomplete'">Preparing</span>
-				<span class="pill" ng-class="client.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
+				<span ng-if="!client.noshow">
+					<span class="pill" ng-class="client.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
+					<span class="pill" ng-class="client.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
+					<span class="pill" ng-class="client.preparing ? 'pill-complete': 'pill-incomplete'">Preparing</span>
+					<span class="pill" ng-class="client.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
+				</span>
 			</div>
 			<div class="client-time"><b>Scheduled Appointment Time: </b>{{client.scheduledTime}}</div>
 			<div class="client-language">
