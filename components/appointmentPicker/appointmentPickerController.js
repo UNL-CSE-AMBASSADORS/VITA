@@ -15,6 +15,7 @@ define('appointmentPickerController', [], function() {
 				} else {
 					$scope.dates = result.dates;
 					$scope.sharedProperties.hasAvailability = result.hasAvailability;
+					$scope.sharedProperties.isLoggedIn = result.isLoggedIn;
 					WDN.initializePlugin('jqueryui', [function () {
 						require(['jquery'], function($){
 							$("#dateInput").datepicker({
