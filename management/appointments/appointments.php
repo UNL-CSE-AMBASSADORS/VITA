@@ -22,6 +22,13 @@
 	<!-- Reschedule Section -->
 	<h3>Reschedule Appointment</h3>
 	<form class="cmxform" id="rescheduleForm">
+		<label>
+			<div>International Student Scholar</div>
+			<span class="switch">
+				<input type="checkbox" ng-model="sharedProperties.studentScholar">
+				<span class="slider round"></span>
+			</span>
+		</label>
 		<div appointment-picker></div>
 		<input type="submit" 
 			value="Reschedule" 
