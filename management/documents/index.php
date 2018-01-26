@@ -103,6 +103,7 @@ function wdnInclude($path)
 						<div class="wdn-col">
 							<button class="wdn-button mt-1rem" onclick="downloadAppointmentSchedule();">Download Appointment Schedule</button>
 							<button class="wdn-button mt-1rem" onclick="downloadVolunteerSchedule();">Download Volunteer Schedule</button>
+							<button class="wdn-button mt-1rem" onclick="downloadAppointmentsFilingStatuses();">Download Appointments Filing Statuses</button>
 						</div>
 					</form>
 				</div>
