@@ -69,10 +69,7 @@ function calculateRemainingAppointmentsAvailable($appointmentCount, $percentAppo
 		$availableAppointmentSpots = max($minimum, $preparerCount);
 	}
 	$availableAppointmentSpots *= $percentAppointments / 100;
-	if ($appointmentCount < $availableAppointmentSpots) {
-		return $availableAppointmentSpots - $appointmentCount;
-	}
-	return 0;
+	return $availableAppointmentSpots - $appointmentCount;
 }
 
 class DateSiteTimeMap {
