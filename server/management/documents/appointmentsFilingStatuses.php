@@ -42,7 +42,7 @@ function executeAppointmentQuery($data) {
 
 	$query = 'SELECT Client.firstName, Client.lastName, Appointment.appointmentId,
 		ServicedAppointment.completed, ServicedAppointment.notCompletedDescription, ServicedAppointment.servicedAppointmentId,
-		Site.title
+		Site.title, Site.siteId
 		FROM Appointment
 		LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 		JOIN Client ON Appointment.clientId = Client.clientId
