@@ -7,8 +7,7 @@
 		autocomplete="off" 
 		novalidate>
 		<p mt-2 mb-3>Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
-		<!-- TODO MAYBE REPHRASE THIS? -->
-		<p><b>If any of your dependents also need taxes done, please schedule another appointment for each dependent</b></p>
+		<p><b>NOTE: Please create a separate appointment for every tax return that needs to be done.</b></p>
 
 		<ul>
 			<li class="form-textfield">
