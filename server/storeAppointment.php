@@ -21,7 +21,11 @@ function storeAppointment($data){
 
 	$DB_CONN->beginTransaction();
 	try {
-
+		$email = '';
+		if (isset($data['email'])) {
+			$email = $data['email'];
+		}
+		
 		$clientInsert = "INSERT INTO Client
 			(
 				firstName,
@@ -39,7 +43,7 @@ function storeAppointment($data){
 		$clientParams = array(
 			$data['firstName'],
 			$data['lastName'],
-			$data['email'],
+			$email,
 			$data['phone']
 		);
 		$stmt = $DB_CONN->prepare($clientInsert);
