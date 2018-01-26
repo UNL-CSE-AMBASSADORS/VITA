@@ -7,7 +7,7 @@ if (!$USER->hasPermission('use_admin_tools')) {
 	header("Location: /unauthorized");
 	die();
 }
-$HEADER_COLUMN_NAMES = array('Scheduled Time', 'First Name', 'Last Name', 'Phone Number', 'Email Address', 'Appointment ID', 'Number of Returns');
+$HEADER_COLUMN_NAMES = array('Scheduled Time', 'First Name', 'Last Name', 'Phone Number', 'Email Address', 'Appointment ID');
 $ALL_SITES_ID = -1;
 
 require_once "$root/server/config.php";
@@ -41,7 +41,7 @@ function executeAppointmentQuery($data) {
 	GLOBAL $DB_CONN, $ALL_SITES_ID;
 
 	$query = "SELECT TIME_FORMAT(scheduledTime, '%l:%i %p') AS scheduledTime, Client.firstName, Client.lastName, 
-			Client.phoneNumber, emailAddress, appointmentId, AppointmentTime.siteId, Site.title, (SELECT COUNT(*) FROM DependentClient WHERE DependentClient.clientId = Client.clientId) AS numberOfReturns
+			Client.phoneNumber, emailAddress, appointmentId, AppointmentTime.siteId, Site.title
 		FROM Appointment
 		JOIN Client ON Appointment.clientId = Client.clientId
 		JOIN AppointmentTime ON AppointmentTime.appointmentTimeId = Appointment.appointmentTimeId
@@ -60,10 +60,6 @@ function executeAppointmentQuery($data) {
 	}
 	$stmt->execute($filterParams);
 	$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-	foreach ($appointments as &$appointment) {
-		$appointment['numberOfReturns']++; // Add one to include the client themselves (numberOfReturns returned by the database simply counts the dependents)		
-	}
 
 	return $appointments;
 }

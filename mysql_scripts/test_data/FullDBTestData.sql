@@ -6,7 +6,6 @@ TRUNCATE AppointmentFilingStatus;
 TRUNCATE FilingStatus;
 TRUNCATE ServicedAppointment;
 TRUNCATE Appointment;
-TRUNCATE DependentClient;
 TRUNCATE AppointmentTime;
 TRUNCATE Client;
 TRUNCATE UserShift;
@@ -875,22 +874,6 @@ INSERT INTO Client (firstName, lastName, emailAddress)
 	VALUES ("DoneBoy", "DoneTest", "doneboydonetest@test.test");
 SET @client_client5Id = LAST_INSERT_ID();
 -- end client
-
-
-
--- dependent client
-INSERT INTO DependentClient (firstName, lastName, clientId)
-	VALUES ("Dependent1", "McClientFace", @client_client1Id);
-
-INSERT INTO DependentClient (firstName, lastName, clientId)
-	VALUES ("Depedent2", "McClientFace", @client_client1Id);
-
-INSERT INTO DependentClient (firstName, lastName, clientId)
-	VALUES ("Dependenty1", "Tester", @client_client2Id);
-
-INSERT INTO DependentClient (firstName, lastName, clientId)
-	VALUES ("Dependenty2", "Tester", @client_client2Id);
--- end dependent client
 
 
 

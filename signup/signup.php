@@ -7,6 +7,8 @@
 		autocomplete="off" 
 		novalidate>
 		<p mt-2 mb-3>Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
+		<!-- TODO MAYBE REPHRASE THIS? -->
+		<p><b>If any of your dependents also need taxes done, please schedule another appointment for each dependent</b></p>
 
 		<ul>
 			<li class="form-textfield">
@@ -39,34 +41,6 @@
 			</li>
 		</ul>
 
-
-		<h3 class="form-subheading">Add Filing Dependents</h3>
-		<p>Are any of your dependents filing a return during this appointment? If so, add them here.</p>
-		<ul id="dependents">
-			<li class="wdn-grid-set dependent" ng-repeat="dependent in dependents">
-				<ng-form name="innerForm" class="flex">
-					<div class="bp768-wdn-col-two-fifths">
-						<label for="firstNameInput1" class="form-label form-required">First Name</label>
-						<input class="firstName" type="text" name="dependentFirstName" ng-model="dependent.firstName" required>
-						<div ng-show="form.$submitted || innerForm.dependentFirstName.$touched">
-							<label class="error" ng-show="innerForm.dependentFirstName.$error.required">This field is required.</label>
-						</div>
-					</div>
-					<div class="bp768-wdn-col-two-fifths">
-						<label for="lastNameInput1" class="form-label form-required">Last Name</label>
-						<input class="lastName" type="text" name="dependentLastName" ng-model="dependent.lastName" required>
-						<div ng-show="form.$submitted || innerForm.dependentLastName.$touched">
-							<label class="error" ng-show="innerForm.dependentLastName.$error.required">This field is required.</label>
-						</div>
-					</div>
-					<div class="bp768-wdn-col-one-fifth removeDependentButton px-1rem">
-						<button type="button" class="wdn-button wdn-button-brand" ng-click="removeDependent(dependent)">Remove Dependent</button>
-					</div>
-				</ng-form>
-			</li>
-		</ul>
-		<br>
-		<button type="button" class="wdn-button wdn-button-triad" id="addDependentButton" ng-click="addDependent()">Add Dependent</button>
 
 		<h3 class="form-subheading">Background Information</h3>
 
