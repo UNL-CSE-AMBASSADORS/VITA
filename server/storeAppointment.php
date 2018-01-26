@@ -56,7 +56,7 @@ function storeAppointment($data){
 		$clientParams = array(
 			$data['firstName'],
 			$data['lastName'],
-			$data['email'],
+			$email,
 			$data['phone']
 		);
 		$stmt = $DB_CONN->prepare($clientInsert);
