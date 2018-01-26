@@ -277,6 +277,7 @@
 
 		<h3 class="form-subheading">Appointment Information</h3>
 
+		<div ng-show="sharedProperties.studentScholar == true">International Student Scholar</div>
 		<div appointment-picker></div>
 
 		<input type="submit" 

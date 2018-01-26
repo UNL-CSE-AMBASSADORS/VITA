@@ -27,7 +27,6 @@ td.available .ui-state-default {
 </style>
 
 <div id="appointmentPicker" ng-cloak>
-	<div ng-show="sharedProperties.studentScholar == true">International Student Scholar</div>
 	<div ng-show="sharedProperties.hasAvailability == false">Sorry! There are currently no remaining appointments available.</div>
 	<div id="datePicker" 
 		class="form-textfield" 
