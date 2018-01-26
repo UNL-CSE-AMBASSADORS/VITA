@@ -230,7 +230,7 @@ function notifyForCancelledShift($firstName, $lastName, $email, $siteTitle, $dat
 			$headers .= 'Content-type: text/html; charset=iso-8859-1';
 
 			while(!feof($handle)) {
-				$email = fgets($handle);
+				$toEmail = fgets($handle);
 				$cancellationMessage = "A volunteer has cancelled one of their shifts: <br/>
 					<b>First Name:</b> $firstName <br/>
 					<b>Last Name:</b> $lastName <br/>
@@ -241,7 +241,7 @@ function notifyForCancelledShift($firstName, $lastName, $email, $siteTitle, $dat
 					<b>End Time:</b> $endTimeStr <br/>
 					<b>Role:</b> $role <br/>
 					<b>Reason:</b> $reason";
-				mail($email, 'VITA -- Shift Cancellation', $cancellationMessage, $headers);
+				mail($toEmail, 'VITA -- Shift Cancellation', $cancellationMessage, $headers);
 			}
 			fclose($handle);
 		}
