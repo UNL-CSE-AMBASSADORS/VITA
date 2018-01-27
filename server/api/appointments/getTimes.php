@@ -2,13 +2,18 @@
 
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 require_once "$root/server/config.php";
+require_once "$root/server/user.class.php";
+$USER = new User();
 
-getAppointmentTimes($_GET);
+$isLoggedIn = $USER->isLoggedIn();
+
+
+getAppointmentTimes($_GET, $isLoggedIn);
 
 /*
  * The fields that will be returned are: appointmentTimeId, siteId, scheduledDate,  scheduledTime, percentageAppointments, numberOfAppointmentsAlreadyMade, numberOfPreparers
  */
-function getAppointmentTimes($data) {
+function getAppointmentTimes($data, $isLoggedIn) {
 	GLOBAL $DB_CONN;
 
 	date_default_timezone_set('America/Chicago');
@@ -52,6 +57,8 @@ function getAppointmentTimes($data) {
 
 	$dstMap->updateAvailability();
 
+	$dstMap->isLoggedIn = $isLoggedIn;
+
 	echo json_encode($dstMap);
 }
 
@@ -62,15 +69,13 @@ function calculateRemainingAppointmentsAvailable($appointmentCount, $percentAppo
 		$availableAppointmentSpots = max($minimum, $preparerCount);
 	}
 	$availableAppointmentSpots *= $percentAppointments / 100;
-	if ($appointmentCount < $availableAppointmentSpots) {
-		return $availableAppointmentSpots - $appointmentCount;
-	}
-	return 0;
+	return $availableAppointmentSpots - $appointmentCount;
 }
 
 class DateSiteTimeMap {
 	public $dates = [];
 	public $hasAvailability = false;
+	public $isLoggedIn = false;
 
 	public function addDateSiteTimeObject($dstObject) {
 		// Get the number of appointments still available
