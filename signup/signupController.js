@@ -6,7 +6,6 @@ define('signupController', [], function() {
 		$scope.successMessage = null;
 		$scope.data = {};
 		$scope.questions = [];
-		$scope.dependents = [];
 		$scope.emailButton = {};
 		$scope.emailButton.disabled = false
 		$scope.emailButton.text = 'Email Me this Confirmation';
@@ -34,7 +33,6 @@ define('signupController', [], function() {
 				"phone": $scope.data.phone,
 				"language": $scope.data.language,
 				"questions": questions,
-				"dependents": $scope.dependents,
 				"appointmentTimeId": $scope.sharedProperties.selectedAppointmentTimeId,
 				"siteId": $scope.sharedProperties.selectedSite
 			};
@@ -93,20 +91,6 @@ define('signupController', [], function() {
 
 		$scope.studentScholarAppointment = function() {
 			$scope.sharedProperties.studentScholar = true;
-		}
-
-		$scope.addDependent = function() {
-			$scope.dependents.push({
-				firstName: '',
-				lastName: $scope.data.lastName ? $scope.data.lastName : ''
-			});
-		}
-
-		$scope.removeDependent = function(dependent) {
-			var index = $scope.dependents.indexOf(dependent);
-			if (index > -1) {
-				$scope.dependents.splice(index, 1);
-			}
 		}
 
 	}
