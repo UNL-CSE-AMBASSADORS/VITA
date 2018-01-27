@@ -15,7 +15,7 @@ function loadPublicQueue($data) {
 	GLOBAL $DB_CONN;
 	$query = "SELECT Appointment.appointmentId, TIME_FORMAT(scheduledTime, '%l:%i %p') AS scheduledTime, firstName, lastName, 
 				timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, completed,
-				(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 5 MINUTE) < NOW() AND timeIn IS NULL) AS noshow 
+				(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 15 MINUTE) < NOW() AND timeIn IS NULL) AS noshow 
 			FROM Appointment
 			LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId
@@ -44,8 +44,7 @@ function loadPrivateQueue($data) {
 	$query = "SELECT Appointment.appointmentId, TIME_FORMAT(AppointmentTime.scheduledTime, '%l:%i %p') AS scheduledTime, 
 				firstName, lastName, timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, 
 				completed, language, Client.clientId, 
-				(SELECT COUNT(dependentClientId) FROM DependentClient WHERE DependentClient.clientId = Client.clientId) AS numberOfDependents,
-				(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 5 MINUTE) < NOW() AND timeIn IS NULL) AS noshow ";
+				(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 15 MINUTE) < NOW() AND timeIn IS NULL) AS noshow ";
 	if ($canViewClientInformation) {
 		$query .= ", phoneNumber, emailAddress ";
 	}
@@ -67,21 +66,6 @@ function loadPrivateQueue($data) {
 		// Shorten last name to only the initial if user doesn't have permission to view entire last name
 		if (!$canViewClientInformation) {
 			$appointment['lastName'] = substr($appointment['lastName'], 0, 1).'.';
-		}
-
-		if ($appointment['numberOfDependents'] > 0) {
-			$query = "SELECT firstName, lastName FROM DependentClient WHERE clientId = ?";
-			$stmt = $DB_CONN->prepare($query);
-			$stmt->execute(array($appointment['clientId']));
-			$dependents = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-			foreach ($dependents as &$dependent) {
-				if (!$canViewClientInformation) {
-					$dependent['lastName'] = substr($dependent['lastName'], 0, 1).'.';
-				}
-			}
-
-			$appointment['dependents'] = $dependents;
 		}
 	}
 

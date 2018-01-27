@@ -7,22 +7,22 @@ if (!$USER->hasPermission('use_admin_tools')) {
 	header("Location: /unauthorized");
 	die();
 }
-$HEADER_COLUMN_NAMES = array('Scheduled Time', 'First Name', 'Last Name', 'Phone Number', 'Email Address', 'Appointment ID');
+$HEADER_COLUMN_NAMES = array('First Name', 'Last Name', 'Appointment ID', 'Appointment Completed', 'Reason if Not Completed', 'State E-File', 'Federal E-File', 'State Paper', 'Federal Paper');
 $ALL_SITES_ID = -1;
 
 require_once "$root/server/config.php";
 require_once "$root/server/libs/wrappers/PHPExcelWrapper.class.php";
 
-getAppointmentsScheduleExcelFile($_GET);
+getAppointmentsFilingStatusesExcelFile($_GET);
 
-function getAppointmentsScheduleExcelFile($data) {
+function getAppointmentsFilingStatusesExcelFile($data) {
 	$appointments = executeAppointmentQuery($data);
-	$phpExcelWrapper = createAppointmentExcelFile($appointments);
+	$phpExcelWrapper = createAppointmentsFilingStatusesExcelFile($appointments);
 
 	ob_clean();
 	ob_end_clean();
 
-	$fileName = $data['date'] . '_AppointmentSchedule' . '.xlsx';
+	$fileName = $data['date'] . '_AppointmentFilingStatuses' . '.xlsx';
 	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 	header('Content-Disposition: attachment;filename="'. $fileName .'"');
 	header('Cache-Control: max-age=0');
@@ -40,18 +40,20 @@ function getAppointmentsScheduleExcelFile($data) {
 function executeAppointmentQuery($data) {
 	GLOBAL $DB_CONN, $ALL_SITES_ID;
 
-	$query = "SELECT TIME_FORMAT(scheduledTime, '%l:%i %p') AS scheduledTime, Client.firstName, Client.lastName, 
-			Client.phoneNumber, emailAddress, appointmentId, AppointmentTime.siteId, Site.title
+	$query = 'SELECT Client.firstName, Client.lastName, Appointment.appointmentId,
+		ServicedAppointment.completed, ServicedAppointment.notCompletedDescription, ServicedAppointment.servicedAppointmentId,
+		Site.title, Site.siteId
 		FROM Appointment
+		LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 		JOIN Client ON Appointment.clientId = Client.clientId
-		JOIN AppointmentTime ON AppointmentTime.appointmentTimeId = Appointment.appointmentTimeId
+		JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 		JOIN Site ON AppointmentTime.siteId = Site.siteId
 		WHERE DATE(AppointmentTime.scheduledTime) = ?
-			AND Appointment.archived = FALSE";
+			AND Appointment.archived = FALSE';
 	if ($data['siteId'] != $ALL_SITES_ID) {
 		$query .= ' AND AppointmentTime.siteId = ?';
 	}
-	$query .= ' ORDER BY AppointmentTime.siteId ASC, AppointmentTime.scheduledTime ASC';
+	$query .= ' ORDER BY AppointmentTime.siteId ASC, ServicedAppointment.completed DESC, AppointmentTime.scheduledTime ASC';
 	$stmt = $DB_CONN->prepare($query);
 
 	$filterParams = array($data['date']);
@@ -61,10 +63,34 @@ function executeAppointmentQuery($data) {
 	$stmt->execute($filterParams);
 	$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+	$filingStatusQuery = 'SELECT lookupName 
+		FROM AppointmentFilingStatus
+		JOIN FilingStatus ON AppointmentFilingStatus.filingStatusId = FilingStatus.filingStatusId
+		WHERE AppointmentFilingStatus.servicedAppointmentId = ?';
+	$stmt = $DB_CONN->prepare($filingStatusQuery);
+	foreach ($appointments as &$appointment) {
+		$appointment['stateEFile'] = false;
+		$appointment['federalEFile'] = false;
+		$appointment['statePaper'] = false;
+		$appointment['federalPaper'] = false;
+
+		if (!isset($appointment['servicedAppointmentId'])) continue;
+
+		$stmt->execute(array($appointment['servicedAppointmentId']));
+		$filingStatuses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		foreach ($filingStatuses as $filingStatus) {
+			if ($filingStatus['lookupName'] === 'state_efile') $appointment['stateEFile'] = true;
+			else if ($filingStatus['lookupName'] === 'federal_efile') $appointment['federalEFile'] = true;
+			else if ($filingStatus['lookupName'] === 'state_paper') $appointment['statePaper'] = true;
+			else if ($filingStatus['lookupName'] === 'federal_paper') $appointment['federalPaper'] = true;
+		}
+	}
+
 	return $appointments;
 }
 
-function createAppointmentExcelFile($appointments) {
+function createAppointmentsFilingStatusesExcelFile($appointments) {
 	GLOBAL $HEADER_COLUMN_NAMES;
 	$phpExcelWrapper = new PHPExcelWrapper();
 
@@ -95,8 +121,14 @@ function createAppointmentExcelFile($appointments) {
 
 			# Insert Appointment Data
 			foreach ($row as $key => $value) {
-				if ($key === 'siteId' || $key === 'title') continue;
+				if ($key === 'siteId' || $key === 'title' || $key === 'servicedAppointmentId') continue;
 				if (!$value) $row[$key] = ''; # Change any null data to just be an empty string
+				if ($key === 'stateEFile' || $key === 'federalEFile' || $key === 'statePaper' || $key === 'federalPaper') {
+					$row[$key] = ($value == true ? 'Yes' : '');
+				}
+				if ($key === 'completed') {
+					$row[$key] = ($value == true ? 'Yes' : 'No');
+				}
 
 				$phpExcelWrapper->insertData($row[$key]);
 				$phpExcelWrapper->nextColumn();

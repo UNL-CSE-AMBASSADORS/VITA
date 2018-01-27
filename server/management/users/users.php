@@ -240,7 +240,7 @@ function addUser($data){
 		$res = $stmt->execute(array(
 			$data['firstName'],
 			$data['lastName'],
-			$data['email'],
+			trim($data['email']),
 			$data['phone']
 		));
 

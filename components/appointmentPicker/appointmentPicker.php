@@ -27,7 +27,6 @@ td.available .ui-state-default {
 </style>
 
 <div id="appointmentPicker" ng-cloak>
-	<div ng-show="sharedProperties.studentScholar == true">International Student Scholar</div>
 	<div ng-show="sharedProperties.hasAvailability == false">Sorry! There are currently no remaining appointments available.</div>
 	<div id="datePicker" 
 		class="form-textfield" 
@@ -65,7 +64,7 @@ td.available .ui-state-default {
 		<label class="form-label form-required" for="timePickerSelect">Time</label>
 		<select id="timePickerSelect" 
 			name="timePickerSelect" 
-			ng-options="time as (info.appointmentsAvailable <= 0) ? (time + ' - FULL') : time disable when (info.appointmentsAvailable <= 0) for (time, info) in times track by time" 
+			ng-options="time as (info.appointmentsAvailable <= 0) ? (time + ' - FULL' + (sharedProperties.isLoggedIn && info.appointmentsAvailable < 0 ? ' - overscheduled by ' + -info.appointmentsAvailable + ' appointments' : '')) : time disable when (info.appointmentsAvailable <= 0 && sharedProperties.isLoggedIn != true) for (time, info) in times track by time" 
 			ng-model="sharedProperties.selectedTime"
 			ng-change="timeChanged(sharedProperties.selectedTime)"
 			required>
