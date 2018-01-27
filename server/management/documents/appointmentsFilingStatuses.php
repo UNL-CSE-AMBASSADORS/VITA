@@ -53,7 +53,7 @@ function executeAppointmentQuery($data) {
 	if ($data['siteId'] != $ALL_SITES_ID) {
 		$query .= ' AND AppointmentTime.siteId = ?';
 	}
-	$query .= ' ORDER BY AppointmentTime.siteId ASC, AppointmentTime.scheduledTime ASC';
+	$query .= ' ORDER BY AppointmentTime.siteId ASC, ServicedAppointment.completed DESC, AppointmentTime.scheduledTime ASC';
 	$stmt = $DB_CONN->prepare($query);
 
 	$filterParams = array($data['date']);
