@@ -39,6 +39,7 @@ function getUserTable($data){
 
 	$stmt = $DB_CONN->prepare("SELECT userId, firstName, lastName, email, archived 
 		FROM User
+		WHERE archived = FALSE
 		ORDER BY firstName, lastName");
 
 	$stmt->execute(array());
