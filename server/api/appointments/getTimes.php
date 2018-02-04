@@ -23,7 +23,7 @@ function getAppointmentTimes($data, $isLoggedIn) {
 		$year = $data['year'];
 	}
 
-	$after = date("Y-m-d H:i:s");
+	$after = date("Y-m-d H:i:s", time() - 3600);
 	if (isset($data['after'])) {
 		$after = $data['after'];
 	}
@@ -55,9 +55,9 @@ function getAppointmentTimes($data, $isLoggedIn) {
 		$dstMap->addDateSiteTimeObject($appointmentTime);
 	}
 
-	$dstMap->updateAvailability();
-
 	$dstMap->isLoggedIn = $isLoggedIn;
+
+	$dstMap->updateAvailability();
 
 	echo json_encode($dstMap);
 }
@@ -97,15 +97,15 @@ class DateSiteTimeMap {
 			foreach (array_keys($this->dates[$date]["sites"]) as $site) {
 				$siteHasTimes = false;
 				foreach ($this->dates[$date]["sites"][$site]["times"] as $time) {
-					if($time['appointmentsAvailable'] > 0) {
+					if($this->isLoggedIn || $time['appointmentsAvailable'] > 0) {
 						$this->hasAvailability = true;
 						$dateHasTimes = true;
 						$siteHasTimes = true;
 					}
 				}
-				$this->dates[$date]["sites"][$site]["hasAvailability"] = $siteHasTimes;
+				$this->dates[$date]["sites"][$site]["hasAvailability"] = $this->isLoggedIn || $siteHasTimes;
 			}
-			$this->dates[$date]["hasAvailability"] = $dateHasTimes;
+			$this->dates[$date]["hasAvailability"] = $this->isLoggedIn || $dateHasTimes;
 		}
 	}
 }
