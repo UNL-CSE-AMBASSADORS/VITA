@@ -166,7 +166,7 @@
 			</li>
 
 			<li class="form-radio" id="studentf1" ng-show="questions[2] == 1 && questions[3] == 4">
-				<label for="4" class="form-required">How long have you been in the United States?</label>
+				<label for="4" class="form-required">What year did you arrive in the United States?</label>
 				<div>
 					<div class="btn-group" data-toggle="buttons">
 						<label class="wdn-button btn" 
@@ -183,7 +183,7 @@
 							uib-btn-radio="'8'" 
 							ng-required="questions[3] == 4" 
 							ng-click="studentScholarAppointment()"
-							required>2013 or later
+							required>2013, 2014, 2015, 2016, or 2017
 						</label>
 					</div>
 				</div>
@@ -193,7 +193,7 @@
 			</li>
 
 			<li class="form-radio" id="studentj1" ng-show="questions[2] == 1 && questions[3] == 5">
-				<label for="4" class="form-required">How long have you been in the United States?</label>
+				<label for="4" class="form-required">What year did you arrive in the United States?</label>
 				<div>
 					<div class="btn-group" data-toggle="buttons">
 						<label class="wdn-button btn" 
@@ -210,7 +210,7 @@
 							uib-btn-radio="'10'" 
 							ng-required="questions[3] == 5" 
 							ng-click="studentScholarAppointment()"
-							required>2016 or later
+							required>2016 or 2017
 						</label>
 					</div>
 				</div>
@@ -250,7 +250,7 @@
 
 		<h3 class="form-subheading">Appointment Information</h3>
 
-		<div ng-show="sharedProperties.studentScholar == true">International Student Scholar</div>
+		<div ng-show="sharedProperties.studentScholar == true"><b>International Student Scholar appointments begin March 6th.</b></div>
 		<div appointment-picker></div>
 
 		<input type="submit" 
