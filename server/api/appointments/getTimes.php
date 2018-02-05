@@ -23,7 +23,7 @@ function getAppointmentTimes($data, $isLoggedIn) {
 		$year = $data['year'];
 	}
 
-	$after = date("Y-m-d H:i:s", time() - 3600);
+	$after = date("Y-m-d H:i:s", time() - ($isLoggedIn ? 3600 : 0));
 	if (isset($data['after'])) {
 		$after = $data['after'];
 	}
