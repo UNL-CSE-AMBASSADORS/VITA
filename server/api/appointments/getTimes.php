@@ -36,7 +36,7 @@ function getAppointmentTimes($data, $isLoggedIn) {
 	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, TIME(scheduledTime) AS scheduledTime, percentageAppointments, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, COUNT(DISTINCT us.userShiftId) AS numberOfPreparers, apt.minimumNumberOfAppointments, apt.maximumNumberOfAppointments
 	FROM AppointmentTime apt
 	LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
-	LEFT JOIN UserShift us ON us.shiftId IN (SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId AND s.startTime <= apt.scheduledTime AND s.endTime >= apt.scheduledTime) 
+	LEFT JOIN UserShift us ON us.shiftId IN (SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId AND s.startTime <= apt.scheduledTime AND s.endTime >= apt.scheduledTime AND s.endTime - apt.scheduledTime >= 60) 
 		AND us.roleId = (SELECT roleId FROM Role WHERE lookupName = "preparer")
 	LEFT JOIN Site s ON s.siteId = apt.siteId
 	WHERE YEAR(apt.scheduledTime) = ? 
