@@ -5,7 +5,7 @@ require_once "$root/server/config.php";
 class AppointmentConfirmationUtilities {
 
 	public static function generateAppointmentConfirmation($appointmentId) {
-		$data = getAppointmentInformation($appointmentId);
+		$data = self::getAppointmentInformation($appointmentId);
 	
 		$firstName = $data['firstName'];
 		$siteTitle = $data['title'];
@@ -15,19 +15,19 @@ class AppointmentConfirmationUtilities {
 		$timeStr = $data['timeStr'];
 		$doesInternational = $data['doesInternational'];
 	
-		$message = introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber);
+		$message = self::introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber);
 		if ($doesInternational) {
 			// If it is an international appointment, there is a different list of what to brings than for residential appointments
-			$message .= internationalInformation(); 
+			$message .= self::internationalInformation(); 
 		} else {
-			$message .= residentialInformation();
+			$message .= self::residentialInformation();
 		}
-		$message .= miscellaneousInformation();
+		$message .= self::miscellaneousInformation();
 	
 		return $message;
 	}
 	
-	private function getAppointmentInformation($appointmentId) {
+	private static function getAppointmentInformation($appointmentId) {
 		GLOBAL $DB_CONN;
 	
 		$query = "SELECT Site.address, Site.phoneNumber, Site.title, Site.doesInternational, Client.firstName, 
@@ -44,7 +44,7 @@ class AppointmentConfirmationUtilities {
 		return $stmt->fetch();
 	}
 	
-	private function introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber) {
+	private static function introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber) {
 		return "<h2>Appointment Confirmation</h2>
 				$firstName, thank you for signing up! Your appointment will be located at the $siteTitle site ($siteAddress). 
 				Please arrive no later than $timeStr on $dateStr with all necessary materials (listed below). 
@@ -53,7 +53,7 @@ class AppointmentConfirmationUtilities {
 				<h2 class='mt-3'>What to Bring for your Appointment</h2>";
 	}
 	
-	private function residentialInformation() {
+	private static function residentialInformation() {
 		return "<h5>Identification:</h5>
 				<ul>
 					<li><b>Social Security cards</b> or <b>ITIN Letters</b> for <b>EVERYONE</b> who will be included on the return</li>
@@ -78,7 +78,7 @@ class AppointmentConfirmationUtilities {
 				</ul>";
 	}
 	
-	private function internationalInformation() {
+	private static function internationalInformation() {
 		return "<h5>Identification:</h5>
 				<ul>
 					<li><b>Social Security card</b> or <b>ITIN Letters</b> for <b>EVERYONE</b> who will be included on the return</li>
@@ -97,7 +97,7 @@ class AppointmentConfirmationUtilities {
 				</ul>";
 	}
 	
-	private function miscellaneousInformation() {
+	private static function miscellaneousInformation() {
 		return "<h5>Miscellaneous:</h5>
 				<ul>
 					<li>Checking or savings account information for direct deposit/direct debit</li>

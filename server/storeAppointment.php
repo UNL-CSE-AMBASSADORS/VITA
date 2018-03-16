@@ -110,7 +110,7 @@ function storeAppointment($data){
 		$DB_CONN->commit();
 		$response['success'] = true;
 		$response['appointmentId'] = $appointmentId;
-		$response['message'] = generateAppointmentConfirmation($appointmentId);
+		$response['message'] = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
 		
