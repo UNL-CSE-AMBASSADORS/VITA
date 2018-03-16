@@ -22,6 +22,20 @@ define('appointmentsDataService', [], function($http) {
 				},function(error){
 					return null;
 				});
+			},
+			cancelAppointment: function(appointmentId) {
+				return $http({
+					url: "/server/management/appointments/appointments.php",
+					method: 'POST',
+					data: `action=cancel&id=${appointmentId}`,
+					headers: {
+						'Content-Type': "application/x-www-form-urlencoded"
+					}
+				}).then(function(response){
+					return response.data;
+				},function(error){
+					return null;
+				});
 			}
 		}
 	}

@@ -9,11 +9,13 @@ if (!$USER->isLoggedIn()) {
 }
 
 require_once "$root/server/config.php";
+require_once "$root/server/accessors/appointmentAccessor.class.php";
 
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
 		case 'getAppointments': getAppointments($_GET['year']); break;
 		case 'reschedule': rescheduleAppointment($_POST['id'], $_POST['appointmentTimeId']); break;
+		case 'cancel': cancelAppointment($_POST['id']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -102,6 +104,21 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error rescheduling the appointment on the server. Please refresh the page and try again.';
+	}
+
+	echo json_encode($response);
+}
+
+function cancelAppointment($appointmentId) {
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		$appointmentAccessor = new AppointmentAccessor();
+		$appointmentAccessor->cancelAppointment($appointmentId);
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = 'There was an error cancelling the appointment on the server. Please refresh the page and try again.';
 	}
 
 	echo json_encode($response);
