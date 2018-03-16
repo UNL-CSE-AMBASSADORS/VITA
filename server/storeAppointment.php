@@ -1,8 +1,8 @@
 <?php
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 require_once "$root/server/config.php";
-require_once "$root/server/utilities/emailUtilities.php";
-require_once "$root/server/utilities/appointmentConfirmationUtilities.php";
+require_once "$root/server/utilities/emailUtilities.class.php";
+require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
 
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
@@ -130,10 +130,10 @@ function emailConfirmation($data) {
 		if (!isset($data['email']) || !preg_match('/.+@.+/', $data['email'])) throw new Exception('Invalid email address given. Unable to send email.', MY_EXCEPTION);
 		if (!isset($data['appointmentId'])) throw new Exception('Invalid information received. Unable to send email.', MY_EXCEPTION); 
 
-		$confirmationMessage = generateAppointmentConfirmation($data['appointmentId']);
+		$confirmationMessage = AppointmentConfirmationUtilities::generateAppointmentConfirmation($data['appointmentId']);
 		
 		if (PROD) {
-			sendHtmlFormattedEmail($data['email'], 'VITA Appointment Confirmation', $confirmationMessage, 'noreply@vita.unl.edu');
+			EmailUtilities::sendHtmlFormattedEmail($data['email'], 'VITA Appointment Confirmation', $confirmationMessage, 'noreply@vita.unl.edu');
 		} else {
 			$response['message'] = $confirmationMessage;
 		}

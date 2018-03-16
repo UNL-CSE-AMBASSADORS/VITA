@@ -9,8 +9,8 @@ if (!$USER->isLoggedIn()) {
 }
 
 require_once "$root/server/config.php";
-require_once "$root/server/utilities/emailUtilities.php";
-require_once "$root/server/utilities/appointmentConfirmationUtilities.php";
+require_once "$root/server/utilities/emailUtilities.class.php";
+require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
 
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
@@ -114,8 +114,8 @@ function sendEmailConfirmation($appointmentId) {
 		$data = $stmt->fetch();
 		if (!isset($data) || !isset($data['email'])) return;
 
-		$confirmationMessage = generateAppointmentConfirmation($appointmentId);
-		sendHtmlFormattedEmail($data['email'], 'VITA Appointment Rescheduled', $confirmationMessage, 'noreply@vita.unl.edu');
+		$confirmationMessage = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
+		EmailUtilities::sendHtmlFormattedEmail($data['email'], 'VITA Appointment Rescheduled', $confirmationMessage, 'noreply@vita.unl.edu');
 	} catch (Exception $e) {
 		// do nothing, we just won't send an email
 	}
