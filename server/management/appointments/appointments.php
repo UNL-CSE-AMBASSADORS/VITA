@@ -98,10 +98,12 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 }
 
 function sendEmailConfirmation($appointmentId) {
+	GLOBAL $DB_CONN;
+	
 	try {
 		$query = "SELECT email FROM Appointment
 			JOIN Client ON Appointment.clientId = Client.clientId
-			WHERE appointmentId  = ?";
+			WHERE appointmentId = ?";
 		$stmt = $DB_CONN->prepare($query);
 		$success = $stmt->execute(array($appointmentId));
 
