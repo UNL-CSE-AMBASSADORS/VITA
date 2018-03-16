@@ -37,6 +37,7 @@
 			ng-disabled="sharedProperties.selectedDate == null || sharedProperties.selectedSite == null || sharedProperties.selectedTime == null || submittingReschedule" 
 			ng-model="submittingReschedule" 
 			ng-click="rescheduleAppointment()">
+		<p>An email will automatically be sent to the client with the rescheduled information if the client has an email on record.</p>
 	</form>
 </div>
 
