@@ -61,15 +61,15 @@
 			ng-disabled="sharedProperties.selectedDate == null || sharedProperties.selectedSite == null || sharedProperties.selectedTime == null || submittingReschedule" 
 			ng-model="submittingReschedule" 
 			ng-click="rescheduleAppointment()">
-	</form>
 
-	<!-- Cancel Button -->
-	<button type="button" 
-		value="Cancel"
-		id="cancelButton"
-		class="submit wdn-button wdn-button-brand"
-		ng-show="appointment.notStarted && !appointment.cancelled"
-		ng-click="cancelAppointment()">Cancel Appointment</button>
+		<!-- Cancel Button -->
+		<button type="button" 
+			value="Cancel"
+			id="cancelButton"
+			class="submit wdn-button wdn-button-brand"
+			ng-show="appointment.notStarted && !appointment.cancelled"
+			ng-click="cancelAppointment()">Cancel Appointment</button>
+	</form>
 
 </div>
 
