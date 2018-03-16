@@ -9,6 +9,8 @@ if (!$USER->isLoggedIn()) {
 }
 
 require_once "$root/server/config.php";
+require_once "$root/server/utilities/emailUtilities.php";
+require_once "$root/server/utilities/appointmentConfirmationUtilities.php";
 
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
@@ -87,7 +89,32 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 		$response['error'] = 'There was an error rescheduling the appointment on the server. Please refresh the page and try again.';
 	}
 
+	if ($success) { // only send an email confirmation if the reschedule was successful
+		if (PROD) {
+			sendEmailConfirmation($appointmentId);
+		}
+	}
+
 	echo json_encode($response);
+}
+
+function sendEmailConfirmation($appointmentId) {
+	try {
+		$query = "SELECT email FROM Appointment
+			JOIN Client ON Appointment.clientId = Client.clientId
+			WHERE appointmentId  = ?";
+		$stmt = $DB_CONN->prepare($query);
+		$success = $stmt->execute(array($appointmentId));
+
+		if ($success == false) return;
+
+		$data = $stmt->fetch();
+
+		$confirmationMessage = generateAppointmentConfirmation($appointmentId);
+		sendHtmlFormattedEmail($data['email'], 'VITA Appointment Rescheduled', $confirmationMessage, 'noreply@vita.unl.edu');
+	} catch (Exception $e) {
+		// do nothing, we just won't send an email
+	}
 }
 
 function expandLanguageCode($languageCode) {

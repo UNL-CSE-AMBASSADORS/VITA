@@ -41,6 +41,8 @@ define('appointmentsController', [], function() {
 			let appointmentTimeId = $scope.sharedProperties.selectedAppointmentTimeId;
 
 			AppointmentsService.rescheduleAppointment(appointmentId, appointmentTimeId).then(function(result) {
+				document.body.scrollTop = document.documentElement.scrollTop = 0;
+				
 				if (result.success) {
 					$scope.appointment.scheduledTime = $scope.sharedProperties.selectedDate + ' ' + $scope.sharedProperties.selectedTime;
 					$scope.appointment.title = $scope.sharedProperties.selectedSiteTitle;
@@ -91,6 +93,7 @@ define('appointmentsController', [], function() {
 
 		$scope.selectAppointment = function(appointment) {
 			$scope.appointment = appointment;
+			document.body.scrollTop = document.documentElement.scrollTop = 0;
 		};
 
 		$scope.deselectAppointment = function() {
