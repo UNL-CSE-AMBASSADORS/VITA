@@ -29,12 +29,17 @@ function getAppointments($year) {
 	$canViewClientInformation = $USER->isLoggedIn() && $USER->hasPermission('view_client_information');
 
 	try {
-		$query = 'SELECT appointmentId, language, DATE_FORMAT(scheduledTime, "%b %D %l:%i %p") AS scheduledTime, title, 
-			firstName, lastName ';
+		$query = 'SELECT Appointment.appointmentId, language, DATE_FORMAT(scheduledTime, "%b %D %l:%i %p") AS scheduledTime, 
+			Site.title, firstName, lastName, TIME_FORMAT(timeIn, "%l:%i %p") AS timeIn, 
+			TIME_FORMAT(timeReturnedPapers, "%l:%i %p") AS timeReturnedPapers, 
+			TIME_FORMAT(timeAppointmentStarted, "%l:%i %p") AS timeAppointmentStarted, 
+			TIME_FORMAT(timeAppointmentEnded, "%l:%i %p") AS timeAppointmentEnded, 
+			completed, notCompletedDescription, servicedByStation, servicedAppointmentId ';
 		if ($canViewClientInformation) {
 			$query .= ', Client.phoneNumber, emailAddress ';
 		}
 		$query .= 'FROM Appointment
+				LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 				JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 				JOIN Site ON AppointmentTime.siteId = Site.siteId
 				JOIN Client ON Appointment.clientId = Client.clientId
@@ -46,12 +51,24 @@ function getAppointments($year) {
 		$stmt->execute(array($year));
 		$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+		$filingStatusQuery = 'SELECT text
+			FROM AppointmentFilingStatus
+			JOIN FilingStatus ON AppointmentFilingStatus.filingStatusId = FilingStatus.filingStatusId
+			WHERE AppointmentFilingStatus.servicedAppointmentId = ?';
+		$filingStatusStmt = $DB_CONN->prepare($filingStatusQuery);
 		foreach ($appointments as &$appointment) {
 			// Shorten last name to only the initial if user doesn't have permission to view entire last name
 			if (!$canViewClientInformation) {
 				$appointment['lastName'] = substr($appointment['lastName'], 0, 1).'.'; // concat period since this is a last initial
 			}
 			$appointment['language'] = expandLanguageCode($appointment['language']);
+
+			// Get appointment filing statuses
+			$appointment['filingStatuses'] = array();
+			if (isset($appointment['servicedAppointmentId'])) {
+				$filingStatusStmt->execute(array($appointment['servicedAppointmentId']));
+				$appointment['filingStatuses'] = $filingStatusStmt->fetchAll(PDO::FETCH_ASSOC);
+			}
 		}
 
 		$response['appointments'] = $appointments;
