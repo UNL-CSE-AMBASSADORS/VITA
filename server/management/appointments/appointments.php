@@ -109,6 +109,7 @@ function sendEmailConfirmation($appointmentId) {
 		if ($success == false) return;
 
 		$data = $stmt->fetch();
+		if (!isset($data) || !isset($data['email'])) return;
 
 		$confirmationMessage = generateAppointmentConfirmation($appointmentId);
 		sendHtmlFormattedEmail($data['email'], 'VITA Appointment Rescheduled', $confirmationMessage, 'noreply@vita.unl.edu');
