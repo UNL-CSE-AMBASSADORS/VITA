@@ -65,6 +65,8 @@ function getAppointments($year) {
 	echo json_encode($response);
 }
 
+// NOTE: Upon a successful reschedule, an appointment rescheduled confirmation email is automatically sent to the client
+// whose appointment was rescheduled
 function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 	GLOBAL $DB_CONN;
 	
