@@ -20,6 +20,14 @@ define('appointmentsController', [], function() {
 					if (result.appointments.length > 0) {
 						$scope.appointments = result.appointments.map((appointment) => {
 							appointment.name = appointment.firstName + " " + appointment.lastName;
+							appointment.completed = appointment.completed == true; // Do this since the SQL returns 0/1, and we want it to be false/true
+							
+							appointment.statusText = "Complete";
+							if (!appointment.completed) {
+								if (appointment.notCompletedDescription === "Cancelled Appointment") appointment.statusText = "Cancelled";
+								else appointment.statusText = "Incomplete";
+							}
+
 							return appointment;
 						});
 					} else {
