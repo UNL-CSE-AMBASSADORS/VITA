@@ -24,7 +24,10 @@
 		</div>
 
 		<div class="wdn-col-one-half">
-			<div><b>Status: </b><span ng-class="appointment.completed ? 'status-complete' : 'status-incomplete'">{{appointment.statusText}}</span></div>
+			<div><b>Status: </b><span 
+				ng-class="{'status-in-progress': appointment.inProgress || appointment.notStarted, 'status-incomplete': appointment.incomplete || appointment.cancelled, 'status-complete': appointment.completed}">
+				{{appointment.statusText}}
+			</span></div>
 			<div><b>Time Arrived: </b>{{appointment.timeIn != null ? appointment.timeIn : "N/A"}}</div>
 			<div><b>Time Paperwork Completed: </b>{{appointment.timeReturnedPapers != null ? appointment.timeReturnedPapers : "N/A"}}</div>
 			<div><b>Time Appointment Started: </b>{{appointment.timeAppointmentStarted != null ? appointment.timeAppointmentStarted : "N/A"}}</div>

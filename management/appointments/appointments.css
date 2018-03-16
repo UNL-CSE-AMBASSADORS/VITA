@@ -6,6 +6,10 @@
 	color: red;
 }
 
+.status-in-progress {
+	color: #3399ff;
+}
+
 .status-complete {
 	color: green;
 }
