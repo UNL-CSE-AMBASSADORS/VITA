@@ -81,18 +81,17 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 			$appointmentTimeId,
 			$appointmentId
 		));
+
 		if ($success == false) {
 			throw new Exception();
+		} else {
+			if (PROD) {
+				sendEmailConfirmation($appointmentId);
+			}
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error rescheduling the appointment on the server. Please refresh the page and try again.';
-	}
-
-	if ($success) { // only send an email confirmation if the reschedule was successful
-		if (PROD) {
-			sendEmailConfirmation($appointmentId);
-		}
 	}
 
 	echo json_encode($response);
