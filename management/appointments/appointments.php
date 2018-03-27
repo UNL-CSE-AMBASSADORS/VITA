@@ -69,6 +69,8 @@
 			class="submit wdn-button wdn-button-brand"
 			ng-show="appointment.notStarted && !appointment.cancelled"
 			ng-click="cancelAppointment()">Cancel Appointment</button>
+		
+		<p>An email will automatically be sent to the client with the rescheduled information if the client has an email on record.</p>
 	</form>
 
 </div>
