@@ -68,7 +68,7 @@ define('appointmentsController', [], function() {
 					$scope.submittingReschedule = false;
 					
 					// Let the user know it was successful
-					$scope.giveNotice("Success!", "This appointment was successfully rescheduled.", true);
+					$scope.giveNotice("Success!", "This appointment was successfully rescheduled.");
 				} else {
 					alert(result.error);
 
