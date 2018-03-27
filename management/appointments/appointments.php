@@ -8,16 +8,40 @@
 
 	<!-- Information Section -->
 	<h2 class="client-name">{{appointment.firstName}} {{appointment.lastName}}</h2>
-	<div><b>Scheduled Appointment Time: </b>{{appointment.scheduledTime}}</div>
-	<div><b>Site: </b>{{appointment.title}}</div>
-	<div><b>Requested Language: </b>{{appointment.language}}</div>
-	<div ng-if="appointment.emailAddress != null">
-		<span><b>Email: </b>{{appointment.emailAddress}}</span>
+	<div class="wdn-grid-set">
+
+		<div class="wdn-col-one-half">
+			<div><b>Scheduled Appointment Time: </b>{{appointment.scheduledTime}}</div>
+			<div><b>Site: </b>{{appointment.title}}</div>
+			<div><b>Requested Language: </b>{{appointment.language}}</div>
+			<div ng-if="appointment.emailAddress != null">
+				<span><b>Email: </b>{{appointment.emailAddress}}</span>
+			</div>
+			<div ng-if="appointment.phoneNumber != null">
+				<span><b>Phone Number: </b>{{appointment.phoneNumber}}</span>
+			</div>
+			<div><b>Appointment ID: </b>{{appointment.appointmentId}}</div>
+		</div>
+
+		<div class="wdn-col-one-half">
+			<div><b>Status: </b><span 
+				ng-class="{'status-in-progress': appointment.inProgress || appointment.notStarted, 'status-incomplete': appointment.incomplete || appointment.cancelled, 'status-complete': appointment.completed}">
+				{{appointment.statusText}}
+			</span></div>
+			<div><b>Time Arrived: </b>{{appointment.timeIn != null ? appointment.timeIn : "N/A"}}</div>
+			<div><b>Time Paperwork Completed: </b>{{appointment.timeReturnedPapers != null ? appointment.timeReturnedPapers : "N/A"}}</div>
+			<div><b>Time Appointment Started: </b>{{appointment.timeAppointmentStarted != null ? appointment.timeAppointmentStarted : "N/A"}}</div>
+			<div><b>Time Appointment Ended: </b>{{appointment.timeAppointmentEnded != null ? appointment.timeAppointmentEnded : "N/A"}}</div>
+			<div><b>Prepared at Station: </b>{{appointment.servicedByStation != null ? appointment.servicedByStation : "N/A"}}</div>
+		</div>
 	</div>
-	<div ng-if="appointment.phoneNumber != null">
-		<span><b>Phone Number: </b>{{appointment.phoneNumber}}</span>
+	<div ng-if="appointment.notCompletedDescription != null"><b>Not Completed Reason: </b>{{appointment.notCompletedDescription}}</div>
+	<div ng-if="appointment.filingStatuses.length > 0">
+		<div><b>Filed: </b></div>
+		<ul>
+			<li ng-repeat="filingStatus in appointment.filingStatuses">{{filingStatus.text}}</li>
+		</ul>
 	</div>
-	<div><b>Appointment ID: </b>{{appointment.appointmentId}}</div>
 
 	<!-- Reschedule Section -->
 	<h3>Reschedule Appointment</h3>
