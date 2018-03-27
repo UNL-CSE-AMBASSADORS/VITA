@@ -9,6 +9,7 @@ if (!$USER->isLoggedIn()) {
 }
 
 require_once "$root/server/config.php";
+require_once "$root/server/accessors/appointmentAccessor.class.php";
 require_once "$root/server/utilities/emailUtilities.class.php";
 require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
 
@@ -16,6 +17,7 @@ if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
 		case 'getAppointments': getAppointments($_GET['year']); break;
 		case 'reschedule': rescheduleAppointment($_POST['id'], $_POST['appointmentTimeId']); break;
+		case 'cancel': cancelAppointment($_POST['id']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -91,6 +93,7 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 	$response['success'] = true;
 
 	try {
+		// Reschedule the appointment
 		$query = "UPDATE Appointment
 			SET appointmentTimeId = ?
 			WHERE appointmentId = ?";
@@ -100,17 +103,39 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 			$appointmentTimeId,
 			$appointmentId
 		));
+		if ($success == false) throw new Exception();
 
-		if ($success == false) {
-			throw new Exception();
-		} else {
-			if (PROD) {
-				sendEmailConfirmation($appointmentId);
-			}
+		if (PROD) {
+			sendEmailConfirmation($appointmentId);
 		}
+
+		// Reset fields in the associated serviced appointment if applicable
+		$query = "UPDATE ServicedAppointment
+			SET timeIn = NULL, timeReturnedPapers = NULL, timeAppointmentStarted = NULL, timeAppointmentEnded = NULL,
+				completed = FALSE, notCompletedDescription = NULL, servicedByStation = NULL
+			WHERE appointmentId = ?";
+		$stmt = $DB_CONN->prepare($query);
+
+		$success = $stmt->execute(array($appointmentId));
+		if ($success == false) throw new Exception();
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error rescheduling the appointment on the server. Please refresh the page and try again.';
+	}
+
+	echo json_encode($response);
+}
+
+function cancelAppointment($appointmentId) {
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		$appointmentAccessor = new AppointmentAccessor();
+		$appointmentAccessor->cancelAppointment($appointmentId);
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = 'There was an error cancelling the appointment on the server. Please refresh the page and try again.';
 	}
 
 	echo json_encode($response);

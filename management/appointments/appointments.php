@@ -35,7 +35,7 @@
 			<div><b>Prepared at Station: </b>{{appointment.servicedByStation != null ? appointment.servicedByStation : "N/A"}}</div>
 		</div>
 	</div>
-	<div ng-if="appointment.notCompletedDescription != null"><b>Not Completed Reason: </b>{{appointment.notCompletedDescription}}</div>
+	<div ng-show="appointment.notCompletedDescription != null"><b>Not Completed Reason: </b>{{appointment.notCompletedDescription}}</div>
 	<div ng-if="appointment.filingStatuses.length > 0">
 		<div><b>Filed: </b></div>
 		<ul>
@@ -61,8 +61,18 @@
 			ng-disabled="sharedProperties.selectedDate == null || sharedProperties.selectedSite == null || sharedProperties.selectedTime == null || submittingReschedule" 
 			ng-model="submittingReschedule" 
 			ng-click="rescheduleAppointment()">
+
+		<!-- Cancel Button -->
+		<button type="button" 
+			value="Cancel"
+			id="cancelButton"
+			class="submit wdn-button wdn-button-brand"
+			ng-show="appointment.notStarted && !appointment.cancelled"
+			ng-click="cancelAppointment()">Cancel Appointment</button>
+		
 		<p>An email will automatically be sent to the client with the rescheduled information if the client has an email on record.</p>
 	</form>
+
 </div>
 
 <!-- Show if no selected appointment -->

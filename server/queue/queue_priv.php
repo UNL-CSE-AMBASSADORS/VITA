@@ -1,7 +1,6 @@
 <?php
 	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
 	require_once "$root/server/config.php";
-	$conn = $DB_CONN;
 
 	require_once "$root/server/user.class.php";
 	$USER = new User();
@@ -9,6 +8,8 @@
 		header("Location: /unauthorized");
 		die();
 	}
+
+	require_once "$root/server/accessors/appointmentAccessor.class.php";
 
 	switch($_REQUEST['action']) {
 		case 'checkIn': checkIn($_REQUEST['time'], $_REQUEST['id']); break;
@@ -21,11 +22,13 @@
 	}
 
 	function checkIn($time, $appointmentId) {
+		GLOBAL $DB_CONN;
+
 		$response = array();
 		$response['success'] = true;
 
 		try {
-			$stmt = $GLOBALS['conn']->prepare(
+			$stmt = $DB_CONN->prepare(
 				"INSERT INTO ServicedAppointment (timeIn, appointmentId)
 						VALUES (?, ?)"
 			);
@@ -43,11 +46,13 @@
 	}
 
 	function completePaperwork($time, $appointmentId) {
+		GLOBAL $DB_CONN;
+
 		$response = array();
 		$response['success'] = true;
 
 		try {
-			$stmt = $GLOBALS['conn']->prepare(
+			$stmt = $DB_CONN->prepare(
 				"UPDATE ServicedAppointment
 				SET timeReturnedPapers = ?
 				WHERE appointmentId = ?"
@@ -66,11 +71,13 @@
 	}
 
 	function appointmentStart($time, $appointmentId) {
+		GLOBAL $DB_CONN;
+
 		$response = array();
 		$response['success'] = true;
 
 		try {
-			$stmt = $GLOBALS['conn']->prepare(
+			$stmt = $DB_CONN->prepare(
 				"UPDATE ServicedAppointment
 				SET timeAppointmentStarted = ?
 				WHERE appointmentId = ?"
@@ -125,11 +132,13 @@
 	}
 
 	function appointmentIncomplete($explanation, $appointmentId) {
+		GLOBAL $DB_CONN;
+
 		$response = array();
 		$response['success'] = true;
 
 		try {
-			$stmt = $GLOBALS['conn']->prepare(
+			$stmt = $DB_CONN->prepare(
 				"UPDATE ServicedAppointment
 				SET notCompletedDescription = ?, completed = FALSE
 				WHERE appointmentId = ?"
@@ -152,14 +161,8 @@
 		$response['success'] = true;
 
 		try {
-			$stmt = $GLOBALS['conn']->prepare(
-				"INSERT INTO ServicedAppointment (appointmentId, notCompletedDescription, completed)
-						VALUES (?, 'Cancelled Appointment', FALSE)"
-			);
-
-			if ($stmt->execute(array($appointmentId)) == false) {
-				throw new Exception();
-			}
+			$appointmentAccessor = new AppointmentAccessor();
+			$appointmentAccessor->cancelAppointment($appointmentId);
 		} catch (Exception $e) {
 			$response['success'] = false;
 			$response['error'] = 'Unable to update the appointment. Please refresh the page and try again.';
