@@ -115,7 +115,7 @@ function sendEmailConfirmation($appointmentId) {
 		if (!isset($data) || !isset($data['email'])) return;
 
 		$confirmationMessage = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
-		EmailUtilities::sendHtmlFormattedEmail($data['email'], 'VITA Appointment Rescheduled', $confirmationMessage, 'noreply@vita.unl.edu');
+		EmailUtilities::sendHtmlFormattedEmail($data['email'], 'VITA Appointment Rescheduled', $confirmationMessage);
 	} catch (Exception $e) {
 		// do nothing, we just won't send an email
 	}
