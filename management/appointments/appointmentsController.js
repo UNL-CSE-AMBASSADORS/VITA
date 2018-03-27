@@ -23,14 +23,14 @@ define('appointmentsController', [], function() {
 							appointment.completed = appointment.completed == true; // Do this since the SQL returns 0/1, and we want it to be false/true
 							
 							appointment.cancelled = appointment.notCompletedDescription === "Cancelled Appointment";
-							appointment.incomplete = appointment.completed === false;
-							appointment.inProgress = appointment.incomplete && appointment.timeIn != null;
 							appointment.notStarted = !appointment.cancelled && appointment.timeIn == null;
+							appointment.incomplete = !appointment.cancelled && appointment.notCompletedDescription != null;
+							appointment.inProgress = !appointment.cancelled && !appointment.incomplete && appointment.timeIn != null && !appointment.completed;
 							
 							if (appointment.completed) appointment.statusText = "Complete";
 							else if (appointment.cancelled) appointment.statusText = "Cancelled";
-							else if (appointment.inProgress) appointment.statusText = "In Progress";
 							else if (appointment.notStarted) appointment.statusText = "Not Started";
+							else if (appointment.inProgress) appointment.statusText = "In Progress";
 							else if (appointment.incomplete) appointment.statusText = "Incomplete";
 							else appointment.statusText = "Unknown";
 
