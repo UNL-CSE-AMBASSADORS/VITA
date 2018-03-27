@@ -93,6 +93,7 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 	$response['success'] = true;
 
 	try {
+		// Reschedule the appointment
 		$query = "UPDATE Appointment
 			SET appointmentTimeId = ?
 			WHERE appointmentId = ?";
@@ -102,14 +103,21 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 			$appointmentTimeId,
 			$appointmentId
 		));
+		if ($success == false) throw new Exception();
 
-		if ($success == false) {
-			throw new Exception();
-		} else {
-			if (PROD) {
-				sendEmailConfirmation($appointmentId);
-			}
+		if (PROD) {
+			sendEmailConfirmation($appointmentId);
 		}
+
+		// Reset fields in the associated serviced appointment if applicable
+		$query = "UPDATE ServicedAppointment
+			SET timeIn = NULL, timeReturnedPapers = NULL, timeAppointmentStarted = NULL, timeAppointmentEnded = NULL,
+				completed = FALSE, notCompletedDescription = NULL, servicedByStation = NULL
+			WHERE appointmentId = ?";
+		$stmt = $DB_CONN->prepare($query);
+
+		$success = $stmt->execute(array($appointmentId));
+		if ($success == false) throw new Exception();
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error rescheduling the appointment on the server. Please refresh the page and try again.';
