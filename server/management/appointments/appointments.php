@@ -9,6 +9,8 @@ if (!$USER->isLoggedIn()) {
 }
 
 require_once "$root/server/config.php";
+require_once "$root/server/utilities/emailUtilities.class.php";
+require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
 
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
@@ -80,6 +82,8 @@ function getAppointments($year) {
 	echo json_encode($response);
 }
 
+// NOTE: Upon a successful reschedule, an appointment rescheduled confirmation email is automatically sent to the client
+// whose appointment was rescheduled
 function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 	GLOBAL $DB_CONN;
 	
@@ -96,8 +100,13 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 			$appointmentTimeId,
 			$appointmentId
 		));
+
 		if ($success == false) {
 			throw new Exception();
+		} else {
+			if (PROD) {
+				sendEmailConfirmation($appointmentId);
+			}
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -105,6 +114,28 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 	}
 
 	echo json_encode($response);
+}
+
+function sendEmailConfirmation($appointmentId) {
+	GLOBAL $DB_CONN;
+	
+	try {
+		$query = "SELECT email FROM Appointment
+			JOIN Client ON Appointment.clientId = Client.clientId
+			WHERE appointmentId = ?";
+		$stmt = $DB_CONN->prepare($query);
+		$success = $stmt->execute(array($appointmentId));
+
+		if ($success == false) return;
+
+		$data = $stmt->fetch();
+		if (!isset($data) || !isset($data['email'])) return;
+
+		$confirmationMessage = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
+		EmailUtilities::sendHtmlFormattedEmail($data['email'], 'VITA Appointment Rescheduled', $confirmationMessage);
+	} catch (Exception $e) {
+		// do nothing, we just won't send an email
+	}
 }
 
 function expandLanguageCode($languageCode) {

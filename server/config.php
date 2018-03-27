@@ -1,6 +1,7 @@
 <?php
 	define('PROD', false);
 	define('MY_EXCEPTION', 99999);
+	define('NOREPLY_EMAIL', 'noreply@vita.unl.edu');
 
 	if(!PROD){
 		error_reporting(E_ALL);
