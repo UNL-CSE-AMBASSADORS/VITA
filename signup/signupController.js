@@ -4,6 +4,7 @@ define('signupController', [], function() {
 		
 		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
 		$scope.successMessage = null;
+		$scope.appointmentId = null; // The id of the client's appointment once they successfully sign up
 		$scope.data = {};
 		$scope.questions = [];
 		$scope.emailButton = {};
@@ -40,6 +41,7 @@ define('signupController', [], function() {
 			SignupService.storeAppointments(data).then(function(response) {
 				if(typeof response !== 'undefined' && response && response.success){
 					document.body.scrollTop = document.documentElement.scrollTop = 0;
+					$scope.appointmentId = response.appointmentId;
 					$scope.successMessage = $sce.trustAsHtml(response.message);
 				}else{
 					alert('There was an error on the server! Please refresh the page in a few minutes and try again.');
@@ -51,10 +53,8 @@ define('signupController', [], function() {
 			$scope.emailButton.disabled = true;
 			var data = {
 				"action": "emailConfirmation",
-				"firstName": $scope.data.firstName,
-				"email": $scope.data.email,
-				"siteId": $scope.sharedProperties.selectedSite,
-				"appointmentTimeId": $scope.sharedProperties.selectedAppointmentTimeId
+				"appointmentId": $scope.appointmentId,
+				"email": $scope.data.email
 			};
 
 			SignupService.emailConfirmation(data).then(function(response) {
