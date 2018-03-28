@@ -67,6 +67,14 @@ define('appointmentsController', [], function() {
 					$scope.sharedProperties.selectedSite = null;
 					$scope.sharedProperties.selectedTime = null;
 
+					// Reset the status properties on the appointment
+					$scope.appointment.cancelled = false;
+					$scope.appointment.completed = false;
+					$scope.appointment.notStarted = true;
+					$scope.appointment.incomplete = false;
+					$scope.appointment.inProgress = false;
+					$scope.appointment.statusText = "Not Started";
+
 					$scope.submittingReschedule = false;
 					
 					// Let the user know it was successful
