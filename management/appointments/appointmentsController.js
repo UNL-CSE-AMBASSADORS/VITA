@@ -67,13 +67,7 @@ define('appointmentsController', [], function() {
 					$scope.sharedProperties.selectedSite = null;
 					$scope.sharedProperties.selectedTime = null;
 
-					// Reset the status properties on the appointment
-					$scope.appointment.cancelled = false;
-					$scope.appointment.completed = false;
-					$scope.appointment.notStarted = true;
-					$scope.appointment.incomplete = false;
-					$scope.appointment.inProgress = false;
-					$scope.appointment.statusText = "Not Started";
+					$scope.resetAppointmentProperties($scope.appointment);
 
 					$scope.submittingReschedule = false;
 					
@@ -88,6 +82,23 @@ define('appointmentsController', [], function() {
 					$scope.giveNotice("Failure", "Something went wrong and this appointment was not rescheduled!", false);
 				}
 			});
+		}
+
+		$scope.resetAppointmentProperties = function(appointment) {
+			// Reset the status properties on the appointment
+			appointment.cancelled = false;
+			appointment.completed = false;
+			appointment.notStarted = true;
+			appointment.incomplete = false;
+			appointment.inProgress = false;
+			appointment.statusText = "Not Started";
+
+			// Reset times on the appointment
+			appointment.timeIn = null;
+			appointment.timeReturnedPapers = null;
+			appointment.timeAppointmentStarted = null;
+			appointment.timeAppointmentEnded = null;
+			appointment.servicedByStation = null;
 		}
 
 		$scope.cancelAppointment = function() {
