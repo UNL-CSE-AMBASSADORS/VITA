@@ -145,7 +145,7 @@ function sendEmailConfirmation($appointmentId) {
 	GLOBAL $DB_CONN;
 	
 	try {
-		$query = "SELECT email FROM Appointment
+		$query = "SELECT emailAddress FROM Appointment
 			JOIN Client ON Appointment.clientId = Client.clientId
 			WHERE appointmentId = ?";
 		$stmt = $DB_CONN->prepare($query);
@@ -154,10 +154,10 @@ function sendEmailConfirmation($appointmentId) {
 		if ($success == false) return;
 
 		$data = $stmt->fetch();
-		if (!isset($data) || !isset($data['email'])) return;
+		if (!isset($data) || !isset($data['emailAddress'])) return;
 
 		$confirmationMessage = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
-		EmailUtilities::sendHtmlFormattedEmail($data['email'], 'VITA Appointment Rescheduled', $confirmationMessage);
+		EmailUtilities::sendHtmlFormattedEmail($data['emailAddress'], 'VITA Appointment Rescheduled', $confirmationMessage);
 	} catch (Exception $e) {
 		// do nothing, we just won't send an email
 	}
