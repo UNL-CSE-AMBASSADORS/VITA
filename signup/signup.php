@@ -1,5 +1,7 @@
 <!-- Appointment Signup with no success -->
 <div class="wdn-inner-wrapper wdn-inner-padding-no-top" ng-if="successMessage == null">
+	<h4>VITA appointments have ended for the 2018 tax season. Check back during the 2019 tax season to sign up for an appointment.</h4>
+	<!--
 	<form class="cmxform" 
 		id="vitaSignupForm" 
 		name="form" 
@@ -44,7 +46,8 @@
 		<h3 class="form-subheading">Background Information</h3>
 
 		<ul>
-			<!--
+		--> 
+			<!-- TODO: NOTE THAT THIS WAS COMMENTED OUT, WE CURRENTLY DONT LET THEM SAY THE LANGUAGE THEY REQUIRED, WE LET IT DEFAULT TO ENGLISH
 			<li class="form-radio" id="language">
 				<label for="language" class="form-required">Which language will you require?</label>
 				<div>
@@ -82,6 +85,7 @@
 			</li>
 			-->
 
+			<!-- 
 			<li class="form-radio" id="studentUNL">
 				<label for="1" class="form-required">Are you a University of Nebraska-Lincoln or Nebraska Wesleyan student?</label>
 				<div>
@@ -257,6 +261,7 @@
 			value="Submit" 
 			class="submit wdn-button wdn-button-triad" >
 	</form>
+	--> 
 </div>
 
 <!-- Successful Signup Screen -->
