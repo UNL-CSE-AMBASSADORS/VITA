@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS Answer;
 DROP TABLE IF EXISTS AppointmentFilingStatus;
 DROP TABLE IF EXISTS FilingStatus;
 DROP TABLE IF EXISTS ServicedAppointment;
+DROP TABLE IF EXISTS Note;
 DROP TABLE IF EXISTS Appointment;
 DROP TABLE IF EXISTS AppointmentTime;
 DROP TABLE IF EXISTS Client;
@@ -95,6 +96,13 @@ CREATE TABLE Appointment (
 	FOREIGN KEY(appointmentTimeId) REFERENCES AppointmentTime(appointmentTimeId)
 );
 
+CREATE TABLE Note (
+	noteId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    appointmentId INTEGER UNSIGNED NOT NULL,
+    note VARCHAR(1000) NOT NULL, -- TODO: I question if the CSE DB will let us do a VARCHAR with more than 255 chars
+    FOREIGN KEY(appointmentId) REFERENCES User(userId)
+);
+
 CREATE TABLE Answer (
 	answerId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	possibleAnswerId INTEGER UNSIGNED NOT NULL,
@@ -112,7 +120,6 @@ CREATE TABLE ServicedAppointment (
     timeAppointmentStarted DATETIME NULL DEFAULT NULL,
     timeAppointmentEnded DATETIME NULL DEFAULT NULL,
     completed BOOLEAN NULL DEFAULT NULL,
-    notCompletedDescription VARCHAR(255) NULL DEFAULT NULL,
 	servicedByStation INTEGER UNSIGNED NULL,
 	appointmentId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId)
