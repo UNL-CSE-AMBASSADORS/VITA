@@ -38,7 +38,7 @@ function getAppointments($year) {
 			TIME_FORMAT(timeReturnedPapers, "%l:%i %p") AS timeReturnedPapers, 
 			TIME_FORMAT(timeAppointmentStarted, "%l:%i %p") AS timeAppointmentStarted, 
 			TIME_FORMAT(timeAppointmentEnded, "%l:%i %p") AS timeAppointmentEnded, 
-			completed, notCompletedDescription, servicedByStation, servicedAppointmentId ';
+			completed, cancelled, servicedByStation, servicedAppointmentId ';
 		if ($canViewClientInformation) {
 			$query .= ', Client.phoneNumber, emailAddress ';
 		}
