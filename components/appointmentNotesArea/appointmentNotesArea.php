@@ -14,7 +14,7 @@
 		ng-maxlength="255">
 	</textarea>
 	<span class="wdn-pull-right">{{ addNoteMessage ? addNoteMessage.length : 0 }}/255</span>
-	<button class="wdn-button wdn-button-brand" 
+	<button class="wdn-button wdn-button-triad" 
 		ng-click="addNote(addNoteMessage)">
 		Add Note
 	</button>

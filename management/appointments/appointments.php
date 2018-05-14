@@ -52,6 +52,7 @@
 	<h3>Notes</h3>
 	<div>
 		<ul>
+			<!-- TODO: SHOULD INCLUDE THE CREATED BY USERNAME AND THE CREATED AT -->
 			<li ng-repeat="note in appointment.notes">{{note.note}}</li>
 		</ul>
 	</div>
