@@ -56,35 +56,15 @@ function getAppointments($year) {
 		$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
-		$filingStatusQuery = 'SELECT text
-			FROM AppointmentFilingStatus
-			JOIN FilingStatus ON AppointmentFilingStatus.filingStatusId = FilingStatus.filingStatusId
-			WHERE AppointmentFilingStatus.servicedAppointmentId = ?';
-		$filingStatusStmt = $DB_CONN->prepare($filingStatusQuery);
-
-		$notesQuery = 'SELECT createdAt, note, firstName, lastName
-			FROM Note
-			JOIN User ON Note.createdBy = User.userId
-			WHERE Note.appointmentId = ?';
-		$notesStmt = $DB_CONN->prepare($notesQuery);
-		
 		foreach ($appointments as &$appointment) {
 			// Shorten last name to only the initial if user doesn't have permission to view entire last name
 			if (!$canViewClientInformation) {
-				$appointment['lastName'] = substr($appointment['lastName'], 0, 1).'.'; // concat period since this is a last initial
+				$appointment['lastName'] = getInitial($appointment['lastName']);
 			}
+
 			$appointment['language'] = expandLanguageCode($appointment['language']);
-
-			// Get appointment filing statuses
-			$appointment['filingStatuses'] = array();
-			if (isset($appointment['servicedAppointmentId'])) {
-				$filingStatusStmt->execute(array($appointment['servicedAppointmentId']));
-				$appointment['filingStatuses'] = $filingStatusStmt->fetchAll(PDO::FETCH_ASSOC);
-			}
-
-			// Get notes
-			$notesStmt->execute(array($appointment['appointmentId']));
-			$appointment['notes'] = $notesStmt->fetchAll(PDO::FETCH_ASSOC);
+			$appointment['filingStatuses'] = getFilingStatusesForAppointment($appointment['servicedAppointmentId']);
+			$appointment['notes'] = getNotesForAppointment($appointment['appointmentId']);
 		}
 
 		$response['appointments'] = $appointments;
@@ -151,6 +131,43 @@ function cancelAppointment($appointmentId) {
 	}
 
 	echo json_encode($response);
+}
+
+/*
+ * Private Methods
+ */
+function getInitial($name) {
+	return substr($name, 0, 1) . '.'; // concat period since this is an initial
+}
+
+function getFilingStatusesForAppointment($servicedAppointmentId) {
+	GLOBAL $DB_CONN;
+
+	if (!isset($appointment['servicedAppointmentId'])) {
+		return array();
+	}
+
+	$filingStatusQuery = 'SELECT text
+		FROM AppointmentFilingStatus
+		JOIN FilingStatus ON AppointmentFilingStatus.filingStatusId = FilingStatus.filingStatusId
+		WHERE AppointmentFilingStatus.servicedAppointmentId = ?';
+	$filingStatusStmt = $DB_CONN->prepare($filingStatusQuery);
+
+	$filingStatusStmt->execute(array($appointment['servicedAppointmentId']));
+	return $filingStatusStmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getNotesForAppointment($appointmentId) {
+	GLOBAL $DB_CONN;
+
+	$notesQuery = 'SELECT createdAt, note, firstName, lastName
+		FROM Note
+		JOIN User ON Note.createdBy = User.userId
+		WHERE Note.appointmentId = ?';
+	$notesStmt = $DB_CONN->prepare($notesQuery);
+	
+	$notesStmt->execute(array($appointmentId));
+	return $notesStmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function sendEmailConfirmation($appointmentId) {
