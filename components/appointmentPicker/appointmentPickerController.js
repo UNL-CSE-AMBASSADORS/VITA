@@ -96,7 +96,7 @@ define('appointmentPickerController', [], function() {
 
 	}
 
-	appointmentsController.$inject = ['$scope', 'appointmentPickerDataService', 'sharedPropertiesService'];
+	appointmentsController.$inject = ['$scope', 'appointmentPickerDataService', 'appointmentPickerSharedPropertiesService'];
 
 	return appointmentsController;
 

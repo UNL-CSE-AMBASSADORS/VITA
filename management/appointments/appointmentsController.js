@@ -1,8 +1,8 @@
 define('appointmentsController', [], function() {
 
-	function appointmentsController($scope, AppointmentsService, sharedPropertiesService) {
+	function appointmentsController($scope, AppointmentsService, AppointmentPickerSharedPropertiesService, AppointmentNotesAreaSharedPropertiesService) {
 
-		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
+		$scope.appointmentPickerSharedProperties = AppointmentPickerSharedPropertiesService.getSharedProperties();
 		$scope.submittingReschedule = false;
 		$scope.cancelling = false;
 
@@ -48,26 +48,26 @@ define('appointmentsController', [], function() {
 
 		$scope.rescheduleAppointment = function() {
 
-			if ($scope.sharedProperties.selectedDate == null || $scope.sharedProperties.selectedSite == null || $scope.sharedProperties.selectedTime == null || $scope.submittingReschedule) {
+			if ($scope.appointmentPickerSharedProperties.selectedDate == null || $scope.appointmentPickerSharedProperties.selectedSite == null || $scope.appointmentPickerSharedProperties.selectedTime == null || $scope.submittingReschedule) {
 				return false;
 			}
 
 			$scope.submittingReschedule = true;
 
 			let appointmentId = $scope.appointment.appointmentId;
-			let appointmentTimeId = $scope.sharedProperties.selectedAppointmentTimeId;
+			let appointmentTimeId = $scope.appointmentPickerSharedProperties.selectedAppointmentTimeId;
 
 			AppointmentsService.rescheduleAppointment(appointmentId, appointmentTimeId).then(function(result) {
 				document.body.scrollTop = document.documentElement.scrollTop = 0;
 				
 				if (result.success) {
-					$scope.appointment.scheduledTime = $scope.sharedProperties.selectedDate + ' ' + $scope.sharedProperties.selectedTime;
-					$scope.appointment.title = $scope.sharedProperties.selectedSiteTitle;
+					$scope.appointment.scheduledTime = $scope.appointmentPickerSharedProperties.selectedDate + ' ' + $scope.appointmentPickerSharedProperties.selectedTime;
+					$scope.appointment.title = $scope.appointmentPickerSharedProperties.selectedSiteTitle;
 
 					// Clear the selected values
-					$scope.sharedProperties.selectedDate = null;
-					$scope.sharedProperties.selectedSite = null;
-					$scope.sharedProperties.selectedTime = null;
+					$scope.appointmentPickerSharedProperties.selectedDate = null;
+					$scope.appointmentPickerSharedProperties.selectedSite = null;
+					$scope.appointmentPickerSharedProperties.selectedTime = null;
 
 					$scope.resetAppointmentProperties($scope.appointment);
 
@@ -162,7 +162,7 @@ define('appointmentsController', [], function() {
 
 	}
 
-	appointmentsController.$inject = ['$scope', 'appointmentsDataService', 'sharedPropertiesService'];
+	appointmentsController.$inject = ['$scope', 'appointmentsDataService', 'appointmentPickerSharedPropertiesService', 'appointmentNotesAreaSharedPropertiesService'];
 
 	return appointmentsController;
 

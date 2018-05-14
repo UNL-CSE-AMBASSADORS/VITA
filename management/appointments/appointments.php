@@ -46,7 +46,13 @@
 		</ul>
 	</div>
 
+
+
+	<!-- Notes Area -->
 	<div appointment-notes-area></div>
+	<!-- End Notes Area -->
+
+
 
 	<!-- Reschedule Section -->
 	<h3>Reschedule Appointment</h3>
