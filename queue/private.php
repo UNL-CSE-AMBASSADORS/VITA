@@ -155,25 +155,10 @@
 		
 		<div class="appointment-not-complete">
 			<form>
+				
+				<!-- TODO: ADD IN THE NOTE COMPONENT AROUND HERE -->
+				
 				<h4>Appointment Not Completed:</h4>
-				<label ng-show="client.checkedIn">Explain why the appointment was not completed.</label>
-				<textarea ng-model="client.explanation" 
-					placeholder="-- Expanation --" 
-					class="form-control" 
-					cols="300" 
-					rows="3" 
-					maxlength="255" 
-					ng-show="client.checkedIn" 
-					ng-disabled="client.ended" 
-					ng-maxlength="255">
-				</textarea>
-				<span class="wdn-pull-right" ng-show="client.checkedIn">{{ client.explanation ? client.explanation.length : 0 }}/255</span>
-				<button class="wdn-button wdn-button-brand" 
-					ng-show="client.checkedIn" 
-					ng-disabled="client.ended" 
-					ng-click="incompleteAppointment(client.explanation)">
-					Submit Incomplete Appointment
-				</button>
 				<button class="wdn-button wdn-button-brand" 
 					ng-show="!client.checkedIn" 
 					ng-disabled="client.ended" 

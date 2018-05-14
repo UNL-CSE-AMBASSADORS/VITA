@@ -46,6 +46,8 @@
 		</ul>
 	</div>
 
+	<div appointment-notes-area></div>
+
 	<!-- Reschedule Section -->
 	<h3>Reschedule Appointment</h3>
 	<form class="cmxform" id="rescheduleForm">

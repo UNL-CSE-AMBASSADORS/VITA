@@ -8,7 +8,10 @@ require.config({
 		appointmentsSearchFilter: '/dist/management/appointments/appointmentsSearchFilter',
 		appointmentPickerSharedPropertiesService: '/dist/components/appointmentPicker/appointmentPickerSharedPropertiesService',
 		appointmentPickerDataService: '/dist/components/appointmentPicker/appointmentPickerDataService',
-		appointmentPickerController: '/dist/components/appointmentPicker/appointmentPickerController'
+		appointmentPickerController: '/dist/components/appointmentPicker/appointmentPickerController',
+
+		appointmentNotesAreaDataService: '/dist/components/appointmentNotesArea/appointmentNotesAreaDataService',
+		appointmentNotesAreaController: '/dist/components/appointmentNotesArea/appointmentNotesAreaController'
 	},
 	shim: {
 		'ngAnimate': ['angular'],
@@ -18,7 +21,10 @@ require.config({
 		'appointmentsSearchFilter': ['angular'],
 		'sharedPropertiesService': ['angular'],
 		'appointmentPickerDataService': ['angular'],
-		'appointmentPickerController': ['angular']
+		'appointmentPickerController': ['angular'],
+
+		'appointmentNotesAreaDataService': ['angular'],
+		'appointmentNotesAreaController': ['angular']
 	}
 });
 
@@ -30,7 +36,10 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 		'appointmentsSearchFilter',
 		'appointmentPickerSharedPropertiesService',
 		'appointmentPickerDataService',
-		'appointmentPickerController'
+		'appointmentPickerController',
+
+		'appointmentNotesAreaDataService',
+		'appointmentNotesAreaController'
 	],
 	function (
 		AppointmentsDataService,
@@ -38,7 +47,10 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 		AppointmentsSearchFilter,
 		SharedPropertiesService,
 		AppointmentPickerDataService,
-		AppointmentPickerController
+		AppointmentPickerController,
+
+		AppointmentNotesAreaDataService,
+		AppointmentNotesAreaController
 	) {
 		'use strict';
 
@@ -63,6 +75,16 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 			return {
 				controller: 'appointmentPickerController',
 				templateUrl: '/components/appointmentPicker/appointmentPicker.php'
+			};
+		});
+
+		// Contents for the appointmentNotesAreaApp module
+		appointmentsApp.factory('appointmentNotesAreaDataService', AppointmentNotesAreaDataService);
+		appointmentsApp.controller('appointmentNotesAreaController', AppointmentNotesAreaController);
+		appointmentsApp.directive('appointmentNotesArea', function () {
+			return {
+				controller: 'appointmentNotesAreaController',
+				templateUrl: '/components/appointmentNotesArea/appointmentNotesArea.php'
 			};
 		});
 
