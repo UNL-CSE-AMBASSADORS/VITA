@@ -49,6 +49,13 @@
 
 
 	<!-- Notes Area -->
+	<h3>Notes</h3>
+	<div>
+		<ul>
+			<li ng-repeat="note in appointment.notes">{{note.note}}</li>
+		</ul>
+	</div>
+
 	<div appointment-notes-area></div>
 	<!-- End Notes Area -->
 

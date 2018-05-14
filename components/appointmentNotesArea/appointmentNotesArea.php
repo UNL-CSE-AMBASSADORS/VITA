@@ -4,11 +4,6 @@
 
 <!-- TODO: TRY TO PULL OUT THE 255 INTO LIKE A MAX_LENGTH VARIABLE SOMEWHERE -->
 <div id="appointmentNotesArea" ng-cloak>
-	<h3>Notes</h3>
-	<ul>
-		<li ng-repeat="note in notes">{{note.note}}</li>
-	</ul>
-
 	<h3>Add a Note</h3>
 	<textarea ng-model="addNoteMessage" 
 		placeholder="-- Expanation --" 

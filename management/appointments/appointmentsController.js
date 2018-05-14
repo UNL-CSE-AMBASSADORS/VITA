@@ -24,7 +24,6 @@ define('appointmentsController', [], function() {
 
 							appointment.completed = appointment.completed == true; // Do this since the SQL returns 0/1, and we want it to be false/true
 							appointment.cancelled = appointment.cancelled == true; // Do this since the SQL returns 0/1, and we want it to be false/true
-
 							appointment.notStarted = !appointment.cancelled && appointment.timeIn == null;
 							// TODO: Not sure this logic for incomplete is good
 							appointment.incomplete = !appointment.cancelled && !appointment.completed;

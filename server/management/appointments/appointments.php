@@ -55,11 +55,19 @@ function getAppointments($year) {
 		$stmt->execute(array($year));
 		$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
 		$filingStatusQuery = 'SELECT text
 			FROM AppointmentFilingStatus
 			JOIN FilingStatus ON AppointmentFilingStatus.filingStatusId = FilingStatus.filingStatusId
 			WHERE AppointmentFilingStatus.servicedAppointmentId = ?';
 		$filingStatusStmt = $DB_CONN->prepare($filingStatusQuery);
+
+		$notesQuery = 'SELECT createdAt, note, firstName, lastName
+			FROM Note
+			JOIN User ON Note.createdBy = User.userId
+			WHERE Note.appointmentId = ?';
+		$notesStmt = $DB_CONN->prepare($notesQuery);
+		
 		foreach ($appointments as &$appointment) {
 			// Shorten last name to only the initial if user doesn't have permission to view entire last name
 			if (!$canViewClientInformation) {
@@ -73,6 +81,10 @@ function getAppointments($year) {
 				$filingStatusStmt->execute(array($appointment['servicedAppointmentId']));
 				$appointment['filingStatuses'] = $filingStatusStmt->fetchAll(PDO::FETCH_ASSOC);
 			}
+
+			// Get notes
+			$notesStmt->execute(array($appointment['appointmentId']));
+			$appointment['notes'] = $notesStmt->fetchAll(PDO::FETCH_ASSOC);
 		}
 
 		$response['appointments'] = $appointments;
