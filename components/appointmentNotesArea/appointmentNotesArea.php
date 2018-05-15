@@ -4,6 +4,14 @@
 
 <!-- TODO: TRY TO PULL OUT THE 255 INTO LIKE A MAX_LENGTH VARIABLE SOMEWHERE -->
 <div id="appointmentNotesArea" ng-cloak>
+	<h3>Notes</h3>
+	<div>
+		<ul>
+			<!-- TODO: SHOULD INCLUDE THE CREATED BY USERNAME AND THE CREATED AT -->
+			<li ng-repeat="note in notes">{{note.note}} by {{note.createdByFirstName}} {{note.createdByLastName}} at {{note.createdAt}}</li>
+		</ul>
+	</div>
+
 	<h3>Add a Note</h3>
 	<textarea ng-model="addNoteMessage" 
 		placeholder="-- Expanation --" 
