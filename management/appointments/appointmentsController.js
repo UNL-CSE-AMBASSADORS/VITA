@@ -3,6 +3,7 @@ define('appointmentsController', [], function() {
 	function appointmentsController($scope, AppointmentsService, AppointmentPickerSharedPropertiesService, AppointmentNotesAreaSharedPropertiesService) {
 
 		$scope.appointmentPickerSharedProperties = AppointmentPickerSharedPropertiesService.getSharedProperties();
+		$scope.appointmentNotesAreaSharedProperties = AppointmentNotesAreaSharedPropertiesService.getSharedProperties();
 		$scope.submittingReschedule = false;
 		$scope.cancelling = false;
 
@@ -133,6 +134,7 @@ define('appointmentsController', [], function() {
 
 		$scope.selectAppointment = function(appointment) {
 			$scope.appointment = appointment;
+			$scope.appointmentNotesAreaSharedProperties.appointmentId = appointment.appointmentId;  // Need to share the appointment id so we can load/add notes
 			document.body.scrollTop = document.documentElement.scrollTop = 0;
 		};
 

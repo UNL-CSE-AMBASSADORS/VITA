@@ -56,7 +56,7 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 
 		// Create the module
 		var appointmentsApp = angular.module('appointmentsApp', []);
-
+		
 		appointmentsApp.service('appointmentPickerSharedPropertiesService', AppointmentPickerSharedPropertiesService)
 		appointmentsApp.service('appointmentNotesAreaSharedPropertiesService', AppointmentNotesAreaSharedPropertiesService)
 		appointmentsApp.factory('appointmentsDataService', AppointmentsDataService);

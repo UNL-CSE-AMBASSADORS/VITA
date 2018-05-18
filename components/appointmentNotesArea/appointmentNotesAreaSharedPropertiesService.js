@@ -4,7 +4,7 @@ define('appointmentNotesAreaSharedPropertiesService', [], function() {
 
 		// https://stackoverflow.com/questions/12008908/angularjs-how-can-i-pass-variables-between-controllers
 
-		var sharedProperties = {
+		let sharedProperties = {
 			appointmentId: null
 		};
 

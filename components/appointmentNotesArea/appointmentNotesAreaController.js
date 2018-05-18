@@ -1,18 +1,24 @@
 define('appointmentNotesAreaController', [], function() {
 
 	function appointmentNotesAreaController($scope, AppointmentNotesAreaDataService, AppointmentNotesAreaSharedPropertiesService) {
-		$scope.sharedProperties = AppointmentNotesAreaSharedPropertiesService.getSharedProperties();
+		
+		$scope.appointmentNotesAreaSharedProperties = AppointmentNotesAreaSharedPropertiesService.getSharedProperties();
 		$scope.notes = [];
 		$scope.noteToAddText = null; 
 		$scope.addingNote = false;
 
+		$scope.$watch(
+			function() { return $scope.appointmentNotesAreaSharedProperties.appointmentId }, 
+			function(newValue, oldValue) {
+				if (newValue == null) return;
+				
+				$scope.getNotes();
+			}
+		);
 
 		$scope.getNotes = function() {
-			// TODO: NEED TO FIGURE OUT WHERE THIS COMES FROM
-			const appointmentId = 1;
-			// const appointmentId = $scope.sharedProperties.appointmentId;
+			const appointmentId = $scope.appointmentNotesAreaSharedProperties.appointmentId;
 
-			console.log("CALLED GET NOTES");
 			AppointmentNotesAreaDataService.getNotesForAppointment(appointmentId).then(function(result) {
 				if (result == null || !result.success) {
 					alert(result ? result.error : 'There was an error ');
@@ -27,9 +33,9 @@ define('appointmentNotesAreaController', [], function() {
 				return false;
 			}
 			$scope.addingNote = true;
+			
+			const appointmentId = $scope.appointmentNotesAreaSharedProperties.appointmentId;
 
-			// TODO: NEED TO FIGURE OUT WHERE THIS COMES FROM
-			const appointmentId = 1;
 			AppointmentNotesAreaDataService.addNote(appointmentId, encodeUriString(noteText)).then(function(result) {
 				if(result == null || !result.success) {
 					alert(result ? result.error : 'There was an error adding the note. Please refresh the page and try again.');
@@ -51,9 +57,6 @@ define('appointmentNotesAreaController', [], function() {
 		function encodeUriString(str) {
 			return encodeURIComponent(str).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
 		}
-
-		// Invoke Initially
-		$scope.getNotes();
 	}
 
 	appointmentNotesAreaController.$inject = ['$scope', 'appointmentNotesAreaDataService', 'appointmentNotesAreaSharedPropertiesService'];
