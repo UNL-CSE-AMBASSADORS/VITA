@@ -30,7 +30,8 @@ define('appointmentNotesAreaController', [], function() {
 		}
 
 		$scope.addNote = function(noteText) {
-			if ($scope.addingNote) {
+			console.log(noteText);
+			if ($scope.addingNote || noteText == null || noteText === "") {
 				return false;
 			}
 			$scope.addingNote = true;
