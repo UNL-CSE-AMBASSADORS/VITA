@@ -4,7 +4,6 @@
 }
 </style>
 
-<!-- TODO: TRY TO PULL OUT THE 255 INTO LIKE A MAX_LENGTH VARIABLE SOMEWHERE -->
 <div id="appointmentNotesArea" ng-cloak>
 	<h3>Notes</h3>
 	<ul>
@@ -19,10 +18,10 @@
 		class="form-control note-textarea" 
 		cols="300" 
 		rows="3" 
-		maxlength="255" 
-		ng-maxlength="255">
+		maxlength="{{MAX_NOTE_LENGTH}}" 
+		ng-maxlength="MAX_NOTE_LENGTH">
 	</textarea>
-	<span class="wdn-pull-right">{{ noteToAddText ? noteToAddText.length : 0 }}/255</span>
+	<span class="wdn-pull-right">{{ noteToAddText ? noteToAddText.length : 0 }}/{{MAX_NOTE_LENGTH}}</span>
 	<button class="wdn-button wdn-button-triad" 
 		ng-click="addNote(noteToAddText)"
 		ng-disabled="noteToAddText == null || noteToAddText.length <= 0">

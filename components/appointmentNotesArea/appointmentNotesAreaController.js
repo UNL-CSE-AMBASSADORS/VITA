@@ -6,6 +6,7 @@ define('appointmentNotesAreaController', [], function() {
 		$scope.notes = [];
 		$scope.noteToAddText = null; 
 		$scope.addingNote = false;
+		$scope.MAX_NOTE_LENGTH = 255;
 
 		$scope.$watch(
 			function() { return $scope.appointmentNotesAreaSharedProperties.appointmentId }, 
