@@ -152,12 +152,11 @@
 				complete or incomplete.
 			</p>
 		</div>
+
+		<div appointment-notes-area></div>
 		
 		<div class="appointment-not-complete">
 			<form>
-				
-				<!-- TODO: ADD IN THE NOTE COMPONENT AROUND HERE -->
-				
 				<h4>Appointment Not Completed:</h4>
 				<button class="wdn-button wdn-button-brand" 
 					ng-show="!client.checkedIn" 

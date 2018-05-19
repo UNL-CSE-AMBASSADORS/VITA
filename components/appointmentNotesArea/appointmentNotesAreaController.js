@@ -44,7 +44,7 @@ define('appointmentNotesAreaController', [], function() {
 					console.log("TODO SUCCESSFULLY ADDED NOTE, NEED TO ADD IT TO THE NOTES");
 					$scope.notes.push({
 						note: noteText,
-						createdAt: new Date(),
+						createdAt: "Now",
 						createdByFirstName: "You",
 						createdByLastName: ""
 					});

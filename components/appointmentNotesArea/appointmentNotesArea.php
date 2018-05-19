@@ -8,6 +8,8 @@
 	<div>
 		<ul>
 			<!-- TODO: SHOULD INCLUDE THE CREATED BY USERNAME AND THE CREATED AT -->
+			<!-- TODO: MAKE NOTE AREA LOOK BETTER -->
+
 			<li ng-repeat="note in notes">{{note.note}} by {{note.createdByFirstName}} {{note.createdByLastName}} at {{note.createdAt}}</li>
 		</ul>
 	</div>
@@ -15,7 +17,7 @@
 	<h3>Add a Note</h3>
 	<textarea ng-model="noteToAddText" 
 		placeholder="-- Expanation --" 
-		class="form-control" 
+		class="form-control" /
 		cols="300" 
 		rows="3" 
 		maxlength="255" 

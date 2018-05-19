@@ -1,14 +1,17 @@
 define('queuePrivateController', [], function() {
 
-	function queuePrivateController($scope, $controller, QueueDataService) {
+	function queuePrivateController($scope, $controller, QueueDataService, AppointmentNotesAreaSharedPropertiesService) {
 		angular.extend(this, $controller('queueController', {$scope: $scope}));
 	
+		$scope.appointmentNotesAreaSharedProperties = AppointmentNotesAreaSharedPropertiesService.getSharedProperties();
+
 		function fixedEncodeURIComponent (str) {
 			return encodeURIComponent(str).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
 		}
 	
 		$scope.selectClient = function(client) {
 			$scope.client = client;
+			$scope.appointmentNotesAreaSharedProperties.appointmentId = $scope.client.appointmentId;
 			for (let filingStatus of $scope.filingStatuses) {
 				filingStatus.checked = false;
 			}
@@ -118,7 +121,7 @@ define('queuePrivateController', [], function() {
  		$scope.getFilingStatuses();
 	}
 
-	queuePrivateController.$inject = ['$scope', '$controller', 'queueDataService'];
+	queuePrivateController.$inject = ['$scope', '$controller', 'queueDataService', 'appointmentNotesAreaSharedPropertiesService'];
 
 	return queuePrivateController;
 
