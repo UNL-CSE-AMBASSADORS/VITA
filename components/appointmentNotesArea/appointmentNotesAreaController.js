@@ -17,8 +17,9 @@ define('appointmentNotesAreaController', [], function() {
 		);
 
 		$scope.getNotes = function() {
-			const appointmentId = $scope.appointmentNotesAreaSharedProperties.appointmentId;
+			$scope.notes = [];
 
+			const appointmentId = $scope.appointmentNotesAreaSharedProperties.appointmentId;
 			AppointmentNotesAreaDataService.getNotesForAppointment(appointmentId).then(function(result) {
 				if (result == null || !result.success) {
 					alert(result ? result.error : 'There was an error ');
@@ -35,7 +36,6 @@ define('appointmentNotesAreaController', [], function() {
 			$scope.addingNote = true;
 			
 			const appointmentId = $scope.appointmentNotesAreaSharedProperties.appointmentId;
-
 			AppointmentNotesAreaDataService.addNote(appointmentId, encodeUriString(noteText)).then(function(result) {
 				if(result == null || !result.success) {
 					alert(result ? result.error : 'There was an error adding the note. Please refresh the page and try again.');
@@ -48,10 +48,11 @@ define('appointmentNotesAreaController', [], function() {
 						createdByFirstName: "You",
 						createdByLastName: ""
 					});
+					$scope.noteToAddText = "";
 				}
-			});
 
-			$scope.addingNote = false;
+				$scope.addingNote = false;
+			});
 		}
 
 		function encodeUriString(str) {

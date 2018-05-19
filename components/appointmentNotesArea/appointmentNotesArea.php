@@ -13,7 +13,7 @@
 	</div>
 
 	<h3>Add a Note</h3>
-	<textarea ng-model="addNoteMessage" 
+	<textarea ng-model="noteToAddText" 
 		placeholder="-- Expanation --" 
 		class="form-control" 
 		cols="300" 
@@ -21,9 +21,9 @@
 		maxlength="255" 
 		ng-maxlength="255">
 	</textarea>
-	<span class="wdn-pull-right">{{ addNoteMessage ? addNoteMessage.length : 0 }}/255</span>
+	<span class="wdn-pull-right">{{ noteToAddText ? noteToAddText.length : 0 }}/255</span>
 	<button class="wdn-button wdn-button-triad" 
-		ng-click="addNote(addNoteMessage)">
+		ng-click="addNote(noteToAddText)">
 		Add Note
 	</button>
 
