@@ -99,7 +99,7 @@ CREATE TABLE Appointment (
 CREATE TABLE Note (
 	noteId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
-	note VARCHAR(1000) NOT NULL, -- TODO: I question if the CSE DB will let us do a VARCHAR with more than 255 chars
+	note VARCHAR(1000) NOT NULL,
     appointmentId INTEGER UNSIGNED NOT NULL,
     FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId),
 	createdBy INTEGER UNSIGNED NOT NULL,
