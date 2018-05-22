@@ -2,14 +2,17 @@
 .note-textarea {
 	width: 100%;
 }
+
+.margin-top {
+	margin-top: 0.5em;
+}
 </style>
 
 <div id="appointmentNotesArea" ng-cloak>
 	<h3>Notes</h3>
 	<ul>
-		<!-- TODO: SHOULD INCLUDE THE CREATED BY USERNAME AND THE CREATED AT -->
 		<!-- TODO: MAKE NOTE AREA LOOK BETTER -->
-		<li ng-repeat="note in notes">{{note.note}} -- {{note.createdByFirstName}} {{note.createdByLastName}}, {{note.createdAt}}</li>
+		<li ng-repeat="note in notes">{{note.note}} -- {{note.createdByFirstName}} {{note.createdByLastName}} ({{note.createdAt}})</li>
 	</ul>
 
 	<h4>Add a Note</h4>
@@ -21,8 +24,8 @@
 		maxlength="{{MAX_NOTE_LENGTH}}" 
 		ng-maxlength="MAX_NOTE_LENGTH">
 	</textarea>
-	<span class="wdn-pull-right">{{ noteToAddText ? noteToAddText.length : 0 }}/{{MAX_NOTE_LENGTH}}</span>
-	<button class="wdn-button wdn-button-triad" 
+	<span class="wdn-pull-right margin-top">{{ noteToAddText ? noteToAddText.length : 0 }}/{{MAX_NOTE_LENGTH}}</span>
+	<button class="wdn-button wdn-button-triad margin-top" 
 		ng-click="addNote(noteToAddText)"
 		ng-disabled="noteToAddText == null || noteToAddText.length <= 0">
 		Add
