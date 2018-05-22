@@ -9,7 +9,7 @@
 	<ul>
 		<!-- TODO: SHOULD INCLUDE THE CREATED BY USERNAME AND THE CREATED AT -->
 		<!-- TODO: MAKE NOTE AREA LOOK BETTER -->
-		<li ng-repeat="note in notes">{{note.note}} by {{note.createdByFirstName}} {{note.createdByLastName}} at {{note.createdAt}}</li>
+		<li ng-repeat="note in notes">{{note.note}} -- {{note.createdByFirstName}} {{note.createdByLastName}}, {{note.createdAt}}</li>
 	</ul>
 
 	<h4>Add a Note</h4>

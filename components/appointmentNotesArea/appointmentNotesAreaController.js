@@ -31,7 +31,6 @@ define('appointmentNotesAreaController', [], function() {
 		}
 
 		$scope.addNote = function(noteText) {
-			console.log(noteText);
 			if ($scope.addingNote || noteText == null || noteText === "") {
 				return false;
 			}
@@ -42,14 +41,13 @@ define('appointmentNotesAreaController', [], function() {
 				if(result == null || !result.success) {
 					alert(result ? result.error : 'There was an error adding the note. Please refresh the page and try again.');
 				} else {
-					// TODO: NEED TO DO THIS
-					console.log("TODO SUCCESSFULLY ADDED NOTE, NEED TO ADD IT TO THE NOTES");
 					$scope.notes.push({
 						note: noteText,
-						createdAt: "Now",
+						createdAt: "1 Minute Ago",
 						createdByFirstName: "You",
 						createdByLastName: ""
 					});
+
 					$scope.noteToAddText = "";
 				}
 
