@@ -78,15 +78,12 @@ define('queuePrivateController', [], function() {
 			});
 		};
 	
-		$scope.incompleteAppointment = function(explanation) {
+		$scope.incompleteAppointment = function() {
 			$scope.client.ended = true;
-			let urlSafeExplanation = fixedEncodeURIComponent(explanation);
-			QueueDataService.incompleteAppointment(urlSafeExplanation, $scope.client.appointmentId).then(function(result) {
+			QueueDataService.incompleteAppointment($scope.client.appointmentId).then(function(result) {
 				if(!result.success) {
 					$scope.client.ended = false;
 					alert(result.error);
-				} else {
-					$scope.client.explanation = "";
 				}
 				$scope.updateAppointmentInformation();
 			});

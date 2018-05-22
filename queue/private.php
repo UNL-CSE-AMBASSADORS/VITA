@@ -148,7 +148,7 @@
 			<p>
 				Once a client has completed a step, click on the corresponding button. This will log the time at which each step is completed. PROGRESS CANNOT BE UNDONE, so
 				be sure to verify that the step is fully completed before clicking to progress the client. If, for any reason, a client does not complete their appointment,
-				fill out the form below and explain (in 255 characters or less) why the appointment was not completed. Appointments will disappear shortly after being marked
+				click the incomplete appointment button below and leave a note explaining why. Appointments will disappear shortly after being marked
 				complete or incomplete.
 			</p>
 		</div>
@@ -162,7 +162,14 @@
 					ng-show="!client.checkedIn" 
 					ng-disabled="client.ended" 
 					ng-click="cancelledAppointment()">
-					Submit Cancelled Appointment
+					Cancel Appointment
+				</button>
+
+				<button class="wdn-button wdn-button-brand" 
+					ng-show="client.checkedIn" 
+					ng-disabled="client.ended" 
+					ng-click="incompleteAppointment()">
+					Mark as Incomplete
 				</button>
 			</form>
 		</div>

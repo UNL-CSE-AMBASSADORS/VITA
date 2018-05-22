@@ -12,6 +12,7 @@ require_once "$root/server/config.php";
 require_once "$root/server/accessors/appointmentAccessor.class.php";
 require_once "$root/server/utilities/emailUtilities.class.php";
 require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
+require_once "$root/server/accessors/notesAccessor.class.php";
 
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
@@ -79,7 +80,7 @@ function getAppointments($year) {
 // NOTE: Upon a successful reschedule, an appointment rescheduled confirmation email is automatically sent to the client
 // whose appointment was rescheduled
 function rescheduleAppointment($appointmentId, $appointmentTimeId) {
-	GLOBAL $DB_CONN;
+	GLOBAL $DB_CONN, $USER;
 	
 	$response = array();
 	$response['success'] = true;
@@ -91,10 +92,7 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 			WHERE appointmentId = ?";
 		$stmt = $DB_CONN->prepare($query);
 
-		$success = $stmt->execute(array(
-			$appointmentTimeId,
-			$appointmentId
-		));
+		$success = $stmt->execute(array($appointmentTimeId, $appointmentId));
 		if ($success == false) throw new Exception();
 
 		if (PROD) {
@@ -104,12 +102,18 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 		// Reset fields in the associated serviced appointment if applicable
 		$query = "UPDATE ServicedAppointment
 			SET timeIn = NULL, timeReturnedPapers = NULL, timeAppointmentStarted = NULL, timeAppointmentEnded = NULL,
-				completed = FALSE, notCompletedDescription = NULL, servicedByStation = NULL
+				completed = FALSE, servicedByStation = NULL
 			WHERE appointmentId = ?";
 		$stmt = $DB_CONN->prepare($query);
 
 		$success = $stmt->execute(array($appointmentId));
 		if ($success == false) throw new Exception();
+
+		// Add a note to the appointment saying it was rescheduled
+		$noteAccessor = new NoteAccessor();
+		$noteText = 'Rescheduled [Automatic Note]';
+		$userId = $USER->getUserId();
+		$notes = $noteAccessor->addNote($appointmentId, $noteText, $userId);
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error rescheduling the appointment on the server. Please refresh the page and try again.';
@@ -158,16 +162,8 @@ function getFilingStatusesForAppointment($servicedAppointmentId) {
 }
 
 function getNotesForAppointment($appointmentId) {
-	GLOBAL $DB_CONN;
-
-	$notesQuery = 'SELECT createdAt, note, firstName, lastName
-		FROM Note
-		JOIN User ON Note.createdBy = User.userId
-		WHERE Note.appointmentId = ?';
-	$notesStmt = $DB_CONN->prepare($notesQuery);
-	
-	$notesStmt->execute(array($appointmentId));
-	return $notesStmt->fetchAll(PDO::FETCH_ASSOC);
+	$noteAccessor = new NoteAccessor();
+	return $noteAccessor->getNotesForAppointment($appointmentId);
 }
 
 function sendEmailConfirmation($appointmentId) {

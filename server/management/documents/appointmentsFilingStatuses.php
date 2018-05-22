@@ -143,12 +143,8 @@ function getAppointments($siteId, $date) {
 }
 
 function getNotesForAppointment($appointmentId) {
-	GLOBAL $DB_CONN;
-
 	$noteAccessor = new NoteAccessor();
-	$notes = $noteAccessor->getNotesForAppointment($appointmentId);
-
-	return $notes;
+	return $noteAccessor->getNotesForAppointment($appointmentId);
 }
 
 function setFilingStatuses(&$appointment) {
