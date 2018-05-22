@@ -51,7 +51,7 @@ function getNotesForAppointment($appointmentId) {
 		$userId = $USER->getUserId();
 
 		$query = "SELECT noteId, note, firstName AS createdByFirstName, lastName AS createdByLastName,
-			DATE_FORMAT(createdAt, '%m/%d/%Y %l:%i %p') AS createdAt
+			DATE_FORMAT(createdAt, '%c/%d/%Y %l:%i %p') AS createdAt
 			FROM Note
 			JOIN User ON Note.createdBy = User.userId
 			WHERE appointmentId = ?
