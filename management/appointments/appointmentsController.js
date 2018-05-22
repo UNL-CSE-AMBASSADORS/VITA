@@ -8,7 +8,7 @@ define('appointmentsController', [], function() {
 		$scope.cancelling = false;
 
 		$scope.getAppointments = function() {
-			let year = new Date().getFullYear();
+			const year = new Date().getFullYear();
 			AppointmentsService.getAppointments(year).then(function(result) {
 				if(result == null) {
 					alert('There was an error loading the appointments. Please try refreshing the page.');
@@ -116,7 +116,6 @@ define('appointmentsController', [], function() {
 					$scope.appointment.cancelled = true;
 					$scope.appointment.notStarted = false;
 					$scope.appointment.statusText = "Cancelled";
-					$scope.appointment.notCompletedDescription = "Cancelled Appointment";
 
 					// Let the user know it was successful
 					$scope.giveNotice("Success!", "This appointment was successfully cancelled.", true);

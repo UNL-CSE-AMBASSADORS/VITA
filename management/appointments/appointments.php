@@ -35,10 +35,6 @@
 			<div><b>Prepared at Station: </b>{{appointment.servicedByStation != null ? appointment.servicedByStation : "N/A"}}</div>
 		</div>
 	</div>
-	<!-- 
-		TODO: NEED TO REMOVE THIS
-		<div ng-show="appointment.notCompletedDescription != null"><b>Not Completed Reason: </b>{{appointment.notCompletedDescription}}</div> 
-	-->
 	<div ng-if="appointment.filingStatuses.length > 0">
 		<div><b>Filed: </b></div>
 		<ul>
