@@ -42,28 +42,15 @@ function addNote($appointmentId, $noteText) {
 }
 
 function getNotesForAppointment($appointmentId) {
-	GLOBAL $DB_CONN, $USER;
+	GLOBAL $DB_CONN;
 
 	$response = array();
 	$response['success'] = true;
 
 	try {
-		$userId = $USER->getUserId();
-
-		$query = "SELECT noteId, note, firstName AS createdByFirstName, lastName AS createdByLastName,
-			DATE_FORMAT(createdAt, '%c/%d/%Y %l:%i %p') AS createdAt
-			FROM Note
-			JOIN User ON Note.createdBy = User.userId
-			WHERE appointmentId = ?
-			ORDER BY noteId ASC";
-		$stmt = $DB_CONN->prepare($query);
-
-		$success = $stmt->execute(array($appointmentId));
-		if ($success == false) {
-			throw new Exception();
-		}
-
-		$response['notes'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$noteAccessor = new NoteAccessor();
+		$notes = $noteAccessor->getNotesForAppointment($appointmentId);
+		$response['notes'] = $notes;
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error getting the notes for this appointment. Please refresh the page and try again.';
