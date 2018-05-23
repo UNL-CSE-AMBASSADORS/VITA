@@ -132,7 +132,6 @@
 		$stmt = null;
 	}
 
-	// TODO: HERE
 	function appointmentIncomplete($appointmentId) {
 		GLOBAL $DB_CONN, $USER;
 
