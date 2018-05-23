@@ -102,7 +102,7 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 		// Reset fields in the associated serviced appointment if applicable
 		$query = "UPDATE ServicedAppointment
 			SET timeIn = NULL, timeReturnedPapers = NULL, timeAppointmentStarted = NULL, timeAppointmentEnded = NULL,
-				completed = FALSE, servicedByStation = NULL
+				completed = FALSE, cancelled = FALSE, servicedByStation = NULL
 			WHERE appointmentId = ?";
 		$stmt = $DB_CONN->prepare($query);
 
