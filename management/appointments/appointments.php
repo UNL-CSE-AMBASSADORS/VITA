@@ -56,7 +56,7 @@
 		<label>
 			<div>International Student Scholar</div>
 			<span class="switch">
-				<input type="checkbox" ng-model="sharedProperties.studentScholar">
+				<input type="checkbox" ng-model="appointmentPickerSharedProperties.studentScholar">
 				<span class="slider round"></span>
 			</span>
 		</label>
@@ -65,7 +65,7 @@
 			value="Reschedule" 
 			id="rescheduleButton" 
 			class="submit wdn-button wdn-button-triad" 
-			ng-disabled="sharedProperties.selectedDate == null || sharedProperties.selectedSite == null || sharedProperties.selectedTime == null || submittingReschedule" 
+			ng-disabled="appointmentPickerSharedProperties.selectedDate == null || appointmentPickerSharedProperties.selectedSite == null || appointmentPickerSharedProperties.selectedTime == null || submittingReschedule" 
 			ng-model="submittingReschedule" 
 			ng-click="rescheduleAppointment()">
 
