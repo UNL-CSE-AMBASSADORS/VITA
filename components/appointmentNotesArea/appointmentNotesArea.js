@@ -31,17 +31,15 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 		'use strict';
 
 		// Create the module
-		var appointmentNotesAreaApp = angular.module('appointmentNotesAreaApp', []);
+		const appointmentNotesAreaApp = angular.module('appointmentNotesAreaApp', []);
 
 		appointmentNotesAreaApp.service('appointmentNotesAreaSharedPropertiesService', AppointmentNotesAreaSharedPropertiesService)
 		appointmentNotesAreaApp.factory('appointmentNotesAreaDataService', AppointmentNotesAreaDataService);
 		appointmentNotesAreaApp.controller('appointmentNotesAreaController', AppointmentNotesAreaController);
-		appointmentNotesAreaApp.directive('appointmentNotesArea', function () {
-			return {
-				controller: 'appointmentNotesAreaController',
-				templateUrl: '/components/appointmentNotesArea/appointmentNotesArea.php'
-			};
-		});
+		appointmentNotesAreaApp.directive('appointmentNotesArea', () => ({
+			controller: 'appointmentNotesAreaController',
+			templateUrl: '/components/appointmentNotesArea/appointmentNotesArea.php'
+		}));
 
 		angular.bootstrap(document.getElementById('appointmentNotesAreaApp'), ['appointmentNotesAreaApp']);
 
