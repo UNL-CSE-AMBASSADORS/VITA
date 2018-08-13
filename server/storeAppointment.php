@@ -32,8 +32,8 @@ function storeAppointment($data){
 		$appointmentId = insertAppointment($clientId, $data['appointmentTimeId'], $data['language'], $_SERVER['REMOTE_ADDR']);
 		$appointmentClientRescheduleId = insertAppointmentClientReschedule($appointmentId);
 		insertAnswers($appointmentId, $data['questions']);
-
 		$DB_CONN->commit();
+
 		$response['success'] = true;
 		$response['appointmentId'] = $appointmentId;
 		$response['message'] = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
@@ -53,21 +53,14 @@ function insertClient($firstName, $lastName, $email, $phoneNumber) {
 
 	$clientInsert = 'INSERT INTO Client (firstName, lastName, emailAddress, phoneNumber)
 		VALUES (?, ?, ?, ?);';
+	$clientParams = array($firstName, $lastName, $email, $phoneNumber);
 
-	$clientParams = array(
-		$firstName,
-		$lastName,
-		$email,
-		$phoneNumber
-	);
 	$stmt = $DB_CONN->prepare($clientInsert);
 	if (!$stmt->execute($clientParams)) {
 		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
 	}
 
-	$clientId = $DB_CONN->lastInsertId();
-
-	return $clientId;
+	return $DB_CONN->lastInsertId();
 }
 
 function insertAppointment($clientId, $appointmentTimeId, $language, $ipAddress) {
@@ -75,21 +68,14 @@ function insertAppointment($clientId, $appointmentTimeId, $language, $ipAddress)
 
 	$appointmentInsert = 'INSERT INTO Appointment (clientId, appointmentTimeId, language, ipAddress)
 		VALUES (?, ?, ?, ?)';
+	$appointmentParams = array($clientId, $appointmentTimeId, $language, $ipAddress);
 
-	$appointmentParams = array(
-		$clientId,
-		$appointmentTimeId,
-		$language,
-		$ipAddress
-	);
 	$stmt = $DB_CONN->prepare($appointmentInsert);
 	if(!$stmt->execute($appointmentParams)){
 		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
 	}
 
-	$appointmentId = $DB_CONN->lastInsertId();
-
-	return $appointmentId;
+	return $DB_CONN->lastInsertId();
 }
 
 function insertAppointmentClientReschedule($appointmentId) {
@@ -97,20 +83,15 @@ function insertAppointmentClientReschedule($appointmentId) {
 
 	$appointmentClientRescheduleInsert = 'INSERT INTO AppointmentClientReschedule (appointmentId, token)
 		VALUES (?, ?);';
-
 	$token = md5(strval($appointmentId));
-	$appointmentClientRescheduleParams = array(
-		$appointmentId,
-		$token
-	);
+	$appointmentClientRescheduleParams = array($appointmentId, $token);
+
 	$stmt = $DB_CONN->prepare($appointmentClientRescheduleInsert);
 	if (!$stmt->execute($appointmentClientRescheduleParams)) {
 		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
 	}
 
-	$appointmentClientRescheduleId = $DB_CONN->lastInsertId();
-
-	return $appointmentClientRescheduleId;
+	return $DB_CONN->lastInsertId();
 }
 
 function insertAnswers($appointmentId, $answers) {
@@ -121,11 +102,7 @@ function insertAnswers($appointmentId, $answers) {
 	$stmt = $DB_CONN->prepare($answerInsert);
 
 	foreach ($answers as $answer) {
-		$answerParams = array(
-			$appointmentId,
-			$answer['id'],
-			$answer['value']
-		);
+		$answerParams = array($appointmentId, $answer['id'], $answer['value']);
 
 		if (!$stmt->execute($answerParams)) {
 			throw new Exception("There was an issue on the server. Please refresh the page and try again", MY_EXCEPTION);
