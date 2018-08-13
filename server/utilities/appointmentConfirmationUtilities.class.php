@@ -14,6 +14,7 @@ class AppointmentConfirmationUtilities {
 		$dateStr = $data['dateStr'];
 		$timeStr = $data['timeStr'];
 		$doesInternational = $data['doesInternational'];
+		$clientRescheduleToken = $data['token'];
 	
 		$message = self::introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber);
 		if ($doesInternational) {
@@ -23,6 +24,7 @@ class AppointmentConfirmationUtilities {
 			$message .= self::residentialInformation();
 		}
 		$message .= self::miscellaneousInformation();
+		$message .= self::clientRescheduleInformation($clientRescheduleToken);
 	
 		return $message;
 	}
@@ -31,9 +33,12 @@ class AppointmentConfirmationUtilities {
 		GLOBAL $DB_CONN;
 	
 		$query = "SELECT Site.address, Site.phoneNumber, Site.title, Site.doesInternational, Client.firstName, 
-			DATE_FORMAT(scheduledTime, '%W, %M %D, %Y') AS dateStr, TIME_FORMAT(scheduledTime, '%l:%i %p') as timeStr
+				AppointmentClientReschedule.token, 
+				DATE_FORMAT(scheduledTime, '%W, %M %D, %Y') AS dateStr, 
+				TIME_FORMAT(scheduledTime, '%l:%i %p') as timeStr
 			FROM Appointment
 			JOIN Client ON Appointment.clientId = Client.clientId
+			JOIN AppointmentClientReschedule ON Appointment.appointmentId = AppointmentClientReschedule.appointmentId
 			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 			JOIN Site ON AppointmentTime.siteId = Site.siteId
 			WHERE Appointment.appointmentId = ?";
@@ -103,5 +108,11 @@ class AppointmentConfirmationUtilities {
 					<li>Checking or savings account information for direct deposit/direct debit</li>
 					<li>It is <b>STRONGLY RECOMMENDED</b> that you bring last year's tax return</li>
 				</ul>";
+	}
+
+	private static function clientRescheduleInformation($clientRescheduleToken) {
+		return "<h2 class='mt-3'>Rescheduling or Cancelling your Appointment</h2>
+				You can reschedule or cancel your appointment by navigating to this page: 
+				https://vita.unl.edu/appointment/reschedule?token=$clientRescheduleToken";
 	}
 }
