@@ -27,85 +27,11 @@ function storeAppointment($data){
 		if (isset($data['email'])) {
 			$email = $data['email'];
 		}
-		
-		$clientInsert = "INSERT INTO Client
-			(
-				firstName,
-				lastName,
-				emailAddress,
-				phoneNumber
-			)
-			VALUES
-			(
-				?,
-				?,
-				?,
-				?
-			);";
-		$clientParams = array(
-			$data['firstName'],
-			$data['lastName'],
-			$email,
-			$data['phone']
-		);
-		$stmt = $DB_CONN->prepare($clientInsert);
-		$stmt->execute($clientParams);
 
-		$clientId = $DB_CONN->lastInsertId();
-
-
-		$appointmentInsert = "INSERT INTO Appointment
-			(
-				clientId,
-				appointmentTimeId,
-				language,
-				ipAddress
-			)
-			VALUES
-			(
-				?,
-				?,
-				?,
-				?
-			);";
-
-		$appointmentParams = array(
-			$clientId,
-			$data['appointmentTimeId'],
-			$data['language'],
-			$_SERVER['REMOTE_ADDR']
-		);
-		$stmt = $DB_CONN->prepare($appointmentInsert);
-		if(!$stmt->execute($appointmentParams)){
-			throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
-		}
-
-		$appointmentId = $DB_CONN->lastInsertId();
-
-
-		$answerInsert = "INSERT INTO Answer
-			(
-				appointmentId,
-				questionId,
-				possibleAnswerId
-			)
-			VALUES
-			(
-				?,
-				?,
-				?
-			)";
-		$stmt = $DB_CONN->prepare($answerInsert);
-
-		foreach ($data['questions'] as $answer) {
-			$answerParams = array(
-				$appointmentId,
-				$answer['id'],
-				$answer['value']
-			);
-
-			$stmt->execute($answerParams);
-		}
+		$clientId = insertClient($data['firstName'], $data['lastName'], $email, $data['phone']);
+		$appointmentId = insertAppointment($clientId, $data['appointmentTimeId'], $data['language'], $_SERVER['REMOTE_ADDR']);
+		$appointmentClientRescheduleId = insertAppointmentClientReschedule($appointmentId);
+		insertAnswers($appointmentId, $data['questions']);
 
 		$DB_CONN->commit();
 		$response['success'] = true;
@@ -121,6 +47,92 @@ function storeAppointment($data){
 	## Return
 	print json_encode($response);
 }
+
+function insertClient($firstName, $lastName, $email, $phoneNumber) {
+	GLOBAL $DB_CONN;
+
+	$clientInsert = 'INSERT INTO Client (firstName, lastName, emailAddress, phoneNumber)
+		VALUES (?, ?, ?, ?);';
+
+	$clientParams = array(
+		$firstName,
+		$lastName,
+		$email,
+		$phoneNumber
+	);
+	$stmt = $DB_CONN->prepare($clientInsert);
+	if (!$stmt->execute($clientParams)) {
+		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
+	}
+
+	$clientId = $DB_CONN->lastInsertId();
+
+	return $clientId;
+}
+
+function insertAppointment($clientId, $appointmentTimeId, $language, $ipAddress) {
+	GLOBAL $DB_CONN;
+
+	$appointmentInsert = 'INSERT INTO Appointment (clientId, appointmentTimeId, language, ipAddress)
+		VALUES (?, ?, ?, ?)';
+
+	$appointmentParams = array(
+		$clientId,
+		$appointmentTimeId,
+		$language,
+		$ipAddress
+	);
+	$stmt = $DB_CONN->prepare($appointmentInsert);
+	if(!$stmt->execute($appointmentParams)){
+		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
+	}
+
+	$appointmentId = $DB_CONN->lastInsertId();
+
+	return $appointmentId;
+}
+
+function insertAppointmentClientReschedule($appointmentId) {
+	GLOBAL $DB_CONN;
+
+	$appointmentClientRescheduleInsert = 'INSERT INTO AppointmentClientReschedule (appointmentId, token)
+		VALUES (?, ?);';
+
+	$token = md5(strval($appointmentId));
+	$appointmentClientRescheduleParams = array(
+		$appointmentId,
+		$token
+	);
+	$stmt = $DB_CONN->prepare($appointmentClientRescheduleInsert);
+	if (!$stmt->execute($appointmentClientRescheduleParams)) {
+		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
+	}
+
+	$appointmentClientRescheduleId = $DB_CONN->lastInsertId();
+
+	return $appointmentClientRescheduleId;
+}
+
+function insertAnswers($appointmentId, $answers) {
+	GLOBAL $DB_CONN;
+
+	$answerInsert = 'INSERT INTO Answer (appointmentId, questionId, possibleAnswerId)
+		VALUES (?, ?, ?);';
+	$stmt = $DB_CONN->prepare($answerInsert);
+
+	foreach ($answers as $answer) {
+		$answerParams = array(
+			$appointmentId,
+			$answer['id'],
+			$answer['value']
+		);
+
+		if (!$stmt->execute($answerParams)) {
+			throw new Exception("There was an issue on the server. Please refresh the page and try again", MY_EXCEPTION);
+		}
+	}
+}
+
 
 function emailConfirmation($data) {
 	$response = array();
