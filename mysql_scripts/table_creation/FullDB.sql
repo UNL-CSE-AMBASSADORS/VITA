@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS Answer;
 DROP TABLE IF EXISTS AppointmentFilingStatus;
 DROP TABLE IF EXISTS FilingStatus;
 DROP TABLE IF EXISTS ServicedAppointment;
+DROP TABLE IF EXISTS AppointmentClientReschedule;
 DROP TABLE IF EXISTS Appointment;
 DROP TABLE IF EXISTS AppointmentTime;
 DROP TABLE IF EXISTS Client;
@@ -93,6 +94,13 @@ CREATE TABLE Appointment (
 	FOREIGN KEY(clientId) REFERENCES Client(clientId),
 	appointmentTimeId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(appointmentTimeId) REFERENCES AppointmentTime(appointmentTimeId)
+);
+
+CREATE TABLE AppointmentClientReschedule (
+	token VARCHAR(255) NOT NULL,
+	failedAppointmentRescheduleCount INT UNSIGNED NOT NULL DEFAULT 0,
+	appointmentId INTEGER UNSIGNED NOT NULL,
+	FOREIGN KEY (appointmentId) REFERENCES Appointment(appointmentId)
 );
 
 CREATE TABLE Answer (
