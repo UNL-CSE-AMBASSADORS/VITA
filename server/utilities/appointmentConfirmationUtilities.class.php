@@ -111,8 +111,10 @@ class AppointmentConfirmationUtilities {
 	}
 
 	private static function clientRescheduleInformation($clientRescheduleToken) {
+		$serverName = $_SERVER['SERVER_NAME'];
+		$clientRescheduleLink = "https://$serverName/appointment/reschedule?token=$clientRescheduleToken";
 		return "<h2 class='mt-3'>Rescheduling or Cancelling your Appointment</h2>
 				You can reschedule or cancel your appointment by navigating to this page: 
-				https://vita.unl.edu/appointment/reschedule?token=$clientRescheduleToken";
+				<a href='$clientRescheduleLink'>$clientRescheduleLink</a>";
 	}
 }
