@@ -34,7 +34,8 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 		clientRescheduleApp.directive('clientreschedule', function () {
 			return {
 				controller: 'clientRescheduleController',
-				templateUrl: '/appointment/reschedule/clientReschedule.php'
+				templateUrl: '/appointment/reschedule/clientReschedule.php',
+				scope: { token: '@' } // Passing a "token" attribute when this directive is used: https://stackoverflow.com/a/26409802/3732003
 			};
 		});
 

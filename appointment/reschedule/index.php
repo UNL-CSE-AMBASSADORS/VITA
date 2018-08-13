@@ -1,12 +1,18 @@
 <?php
-$root = realpath($_SERVER["DOCUMENT_ROOT"]);
-function wdnInclude($path)
-{
-	$documentRoot = 'https://unlcms.unl.edu';
+	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+	function wdnInclude($path)
+	{
+		$documentRoot = 'https://unlcms.unl.edu';
 
-	return readfile($documentRoot . $path);
-}
+		return readfile($documentRoot . $path);
+	}
+	
+	$token = '';
+	if (isset($_REQUEST['token']) && strlen($_REQUEST['token']) == 32) {
+		$token = $_REQUEST['token'];
+	}
 ?>
+
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
@@ -80,7 +86,7 @@ function wdnInclude($path)
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
-				<div id="clientRescheduleApp" class="wdn-band" clientreschedule></div>
+				<div id="clientRescheduleApp" class="wdn-band" clientreschedule token="<?php echo $token; ?>"></div>
 				<!-- TemplateEndEditable -->
 			</div>
 		</main>
