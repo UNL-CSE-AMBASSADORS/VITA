@@ -7,8 +7,9 @@
 		return readfile($documentRoot . $path);
 	}
 	
+	$EXPECTED_TOKEN_LENGTH = 32;
 	$token = '';
-	if (isset($_REQUEST['token']) && strlen($_REQUEST['token']) == 32) {
+	if (isset($_REQUEST['token']) && strlen($_REQUEST['token']) === $EXPECTED_TOKEN_LENGTH) {
 		$token = $_REQUEST['token'];
 	}
 ?>
