@@ -8,6 +8,7 @@ define('clientRescheduleController', [], function() {
 		$scope.clientData = {};
 		$scope.validatingClientInformation = false;
 		$scope.clientInformationValidated = false;
+		$scope.invalidClientInformation = false;
 
 
 		$scope.doesTokenExist = function(token) {
@@ -36,7 +37,6 @@ define('clientRescheduleController', [], function() {
 			if ($scope.validatingClientInformation || $scope.clientInformationValidated) {
 				return;
 			}
-			$scope.validatingClientInformation = true;
 			
 			const token = $scope.token;
 			const firstName = $scope.clientData.firstName;
@@ -45,11 +45,29 @@ define('clientRescheduleController', [], function() {
 			const phoneNumber = $scope.clientData.phone;
 
 			ClientRescheduleDataService.validateClientInformation(token, firstName, lastName, emailAddress, phoneNumber).then((result) => {
-				console.log(result);
+				if (result == null || !result.success) {
+					alert(result ? result.error : 'There was an error on the server. Please refresh the page and try again.');
+					$scope.validatingClientInformation = false;
+					return;
+				}
+
+				$scope.clientInformationValidated = result.validated;
+				if (result.validated === false) {
+					$scope.invalidClientInformation = true;
+					$scope.clientData = {};
+				}
 			});
 
 			$scope.validatingClientInformation = false;
 		};
+		
+		$scope.rescheduleAppointment = function() {
+			console.log('TODO RESCHEDULE APPOINTMENT');
+		};
+
+		$scope.cancelAppointment = function() {
+			console.log('TODO CANCEL APPOINTMENT');
+		}
 	}
 
 	clientRescheduleController.$inject = ['$scope', 'clientRescheduleDataService'];

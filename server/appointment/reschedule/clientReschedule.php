@@ -41,26 +41,12 @@ function doesTokenExist($token) {
 }
 
 function validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber) {	
-	GLOBAL $DB_CONN;
-
 	$response = array();
 	$response['success'] = true;
 
 	try {
-		$query = 'SELECT firstName, lastName, emailAddress, phoneNumber
-			FROM AppointmentClientReschedule
-			JOIN Appointment ON AppointmentClientReschedule.appointmentId = Appointment.appointmentId
-			JOIN Client ON Appointment.clientId = Client.clientId
-			WHERE token = ?';
-		
-		$stmt = $DB_CONN->prepare($query);
-		if (!$stmt->execute(array($token))) {
-			throw new Exception('There was an error on the server fetching information. Please refresh the page and try again.', MY_EXCEPTION);
-		}
-
-		$result = $stmt->fetch();
-
-		$clientInformationMatches = clientInformationMatches($result, $firstName, $lastName, $emailAddress, $phoneNumber);
+		$clientInformation = getClientInformationFromToken($token);
+		$clientInformationMatches = clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$response['validated'] = $clientInformationMatches;
 
 		if (!$clientInformationMatches) {
@@ -74,15 +60,32 @@ function validateClientInformation($token, $firstName, $lastName, $emailAddress,
 	echo json_encode($response);
 }
 
-function clientInformationMatches($clientQueryResult, $firstName, $lastName, $emailAddress, $phoneNumber) {
-	if ($clientQueryResult === false) { // PDOStatement::fetch returns false on failure http://php.net/manual/en/pdostatement.fetch.php
+function getClientInformationFromToken($token) {
+	GLOBAL $DB_CONN;
+
+	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber
+		FROM AppointmentClientReschedule
+		JOIN Appointment ON AppointmentClientReschedule.appointmentId = Appointment.appointmentId
+		JOIN Client ON Appointment.clientId = Client.clientId
+		WHERE token = ?';
+
+	$stmt = $DB_CONN->prepare($query);
+	if (!$stmt->execute(array($token))) {
+		throw new Exception('There was an error on the server fetching information. Please refresh the page and try again.', MY_EXCEPTION);
+	}
+
+	return $stmt->fetch();
+}
+
+function clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber) {
+	if ($clientInformation === false) { // PDOStatement::fetch returns false on failure http://php.net/manual/en/pdostatement.fetch.php
 		return false;
 	}
 
-	$firstNameMatches = isset($clientQueryResult['firstName']) && $clientQueryResult['firstName'] === $firstName;
-	$lastNameMatches = isset($clientQueryResult['lastName']) && $clientQueryResult['lastName'] === $lastName;
-	$emailAddressMatches = isset($clientQueryResult['emailAddress']) && $clientQueryResult['emailAddress'] === $emailAddress;
-	$phoneNumberMatches = isset($clientQueryResult['phoneNumber']) && $clientQueryResult['phoneNumber'] === $phoneNumber;
+	$firstNameMatches = isset($clientInformation['firstName']) && $clientInformation['firstName'] === $firstName;
+	$lastNameMatches = isset($clientInformation['lastName']) && $clientInformation['lastName'] === $lastName;
+	$emailAddressMatches = isset($clientInformation['emailAddress']) && $clientInformation['emailAddress'] === $emailAddress;
+	$phoneNumberMatches = isset($clientInformation['phoneNumber']) && $clientInformation['phoneNumber'] === $phoneNumber;
 
 	return $firstNameMatches && $lastNameMatches && $emailAddressMatches && $phoneNumberMatches;
 }

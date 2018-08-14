@@ -7,52 +7,86 @@
 	
 	<!-- Shown when the token is valid and exists -->
 	<div ng-if="tokenExists === true">
-		Your token exists {{token}}
 
-		<!-- Form to validate client information -->
-		<form class="cmxform" 
-		id="vitaSignupForm" 
-		name="form" 
-		ng-submit="form.$valid && validateClientInformation()" 
-		autocomplete="off" 
-		novalidate>
+		<!-- Shown when the client information is not yet validated -->
+		<div ng-if="clientInformationValidated === false">
+			<p>For security reasons, you must verify the information associated with your appointment</p>
+			<p ng-if="invalidClientInformation === true" class="error">
+				The information you provided did not match our records. Please try again.
+			</p>
 
-			<ul>
-				<li class="form-textfield">
-					<label class="form-label form-required" for="firstName">First Name</label>
-					<input type="text" name="firstName" id="firstName" ng-model="clientData.firstName" required>
-					<div ng-show="form.$submitted || form.firstName.$touched">
-						<label class="error" ng-show="form.firstName.$error.required">This field is required.</label>
-					</div>
-				</li>
+			<!-- Form to validate client information -->
+			<form class="cmxform" 
+					id="validateClientInformationForm"
+					name="form" 
+					ng-submit="form.$valid && validateClientInformation()" 
+					autocomplete="off" 
+					novalidate>
 
-				<li class="form-textfield">
-					<label class="form-label form-required" for="lastName">Last Name</label>
-					<input type="text" name="lastName" id="lastName" ng-model="clientData.lastName" required>
-					<div ng-show="form.$submitted || form.lastName.$touched">
-						<label class="error" ng-show="form.lastName.$error.required">This field is required.</label>
-					</div>
-				</li>
+				<ul>
+					<li class="form-textfield">
+						<label class="form-label form-required" for="firstName">First Name</label>
+						<input type="text" name="firstName" id="firstName" ng-model="clientData.firstName" required>
+						<div ng-show="form.$submitted || form.firstName.$touched">
+							<label class="error" ng-show="form.firstName.$error.required">This field is required.</label>
+						</div>
+					</li>
 
-				<li class="form-textfield">
-					<label class="form-label" for="email">Email</label>
-					<input type="email" name="email" id="email" ng-model="clientData.email">
-				</li>
+					<li class="form-textfield">
+						<label class="form-label form-required" for="lastName">Last Name</label>
+						<input type="text" name="lastName" id="lastName" ng-model="clientData.lastName" required>
+						<div ng-show="form.$submitted || form.lastName.$touched">
+							<label class="error" ng-show="form.lastName.$error.required">This field is required.</label>
+						</div>
+					</li>
 
-				<li class="form-textfield">
-					<label class="form-label form-required" for="phone">Phone Number</label>
-					<input type="text" name="phone" id="phone" ng-model="clientData.phone" required>
-					<div ng-show="form.$submitted || form.phone.$touched">
-						<label class="error" ng-show="form.phone.$error.required">This field is required.</label>
-					</div>
-				</li>
-			</ul>
+					<li class="form-textfield">
+						<label class="form-label" for="email">Email</label>
+						<input type="email" name="email" id="email" ng-model="clientData.email">
+					</li>
 
-			<input type="submit" 
-				value="Submit" 
-				class="submit wdn-button wdn-button-triad" >
-		</form>
-		<!-- End form to validate client information -->
+					<li class="form-textfield">
+						<label class="form-label form-required" for="phone">Phone Number</label>
+						<input type="text" name="phone" id="phone" ng-model="clientData.phone" required>
+						<div ng-show="form.$submitted || form.phone.$touched">
+							<label class="error" ng-show="form.phone.$error.required">This field is required.</label>
+						</div>
+					</li>
+				</ul>
+
+				<input type="submit" 
+					value="Submit" 
+					class="submit wdn-button wdn-button-triad"
+					ng-model="validatingClientInformation" 
+					ng-disabled="!form.$valid || validatingClientInformation">
+			</form>
+		</div>
+
+		<!-- Shown once the client information has been validated -->
+		<div ng-if="clientInformationValidated === true">
+			<p>Thank you for verifying your information. You may now reschedule or cancel your appointment.</p>
+
+			<form class="cmxform" id="rescheduleForm">
+				<div appointment-picker></div>
+				<input type="submit" 
+					value="Reschedule" 
+					id="rescheduleButton" 
+					class="submit wdn-button wdn-button-triad" 
+					ng-disabled="sharedProperties.selectedDate == null || sharedProperties.selectedSite == null || sharedProperties.selectedTime == null || submittingReschedule" 
+					ng-model="submittingReschedule" 
+					ng-click="rescheduleAppointment()">
+
+				<!-- Cancel Button -->
+				<!-- TODO: NEED TO CONTROL WHEN THIS SHOWS UP? -->
+				<button type="button" 
+					value="Cancel"
+					id="cancelButton"
+					class="submit wdn-button wdn-button-brand"
+					ng-click="cancelAppointment()">Cancel Appointment</button>
+				
+				<p>If you have an email on record, an email will automatically be sent to you confirming the change.</p>
+			</form>
+		</div>
 
 	</div>
 
