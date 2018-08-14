@@ -30,6 +30,8 @@
 <title>Reschedule a VITA Appointment | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
+<link rel="stylesheet" href="/assets/css/bootstrap.btn-group.min.css">
+<link rel="stylesheet" href="/dist/assets/css/form.css">
 <link rel="stylesheet" href="/dist/appointment/reschedule/clientReschedule.css">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
@@ -87,7 +89,7 @@
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
-				<div id="clientRescheduleApp" class="wdn-band" clientreschedule token="<?php echo $token; ?>"></div>
+				<div id="clientRescheduleApp" class="wdn-band" client-reschedule token="<?php echo $token; ?>"></div>
 				<!-- TemplateEndEditable -->
 			</div>
 		</main>

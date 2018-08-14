@@ -3,8 +3,12 @@ define('clientRescheduleController', [], function() {
 	function clientRescheduleController($scope, ClientRescheduleDataService) {
 		$scope.token = '';
 		$scope.tokenExists = false;
-
 		const EXPECTED_TOKEN_LENGTH = 32;
+
+		$scope.clientData = {};
+		$scope.validatingClientInformation = false;
+		$scope.clientInformationValidated = false;
+
 
 		$scope.doesTokenExist = function(token) {
 			if (!token || 0 === token.length || EXPECTED_TOKEN_LENGTH !== token.length) {
@@ -27,6 +31,25 @@ define('clientRescheduleController', [], function() {
 		$scope.$watch('token', (newValue, oldValue) => {
 			$scope.doesTokenExist(newValue);
 		});
+
+		$scope.validateClientInformation = function() {
+			if ($scope.validatingClientInformation || $scope.clientInformationValidated) {
+				return;
+			}
+			$scope.validatingClientInformation = true;
+			
+			const token = $scope.token;
+			const firstName = $scope.clientData.firstName;
+			const lastName = $scope.clientData.lastName;
+			const emailAddress = $scope.clientData.email;
+			const phoneNumber = $scope.clientData.phone;
+
+			ClientRescheduleDataService.validateClientInformation(token, firstName, lastName, emailAddress, phoneNumber).then((result) => {
+				console.log(result);
+			});
+
+			$scope.validatingClientInformation = false;
+		};
 	}
 
 	clientRescheduleController.$inject = ['$scope', 'clientRescheduleDataService'];

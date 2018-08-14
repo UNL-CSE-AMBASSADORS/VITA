@@ -31,7 +31,7 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 
 		clientRescheduleApp.factory('clientRescheduleDataService', ClientRescheduleDataService);
 		clientRescheduleApp.controller('clientRescheduleController', ClientRescheduleController);
-		clientRescheduleApp.directive('clientreschedule', function () {
+		clientRescheduleApp.directive('clientReschedule', function () {
 			return {
 				controller: 'clientRescheduleController',
 				templateUrl: '/appointment/reschedule/clientReschedule.php',
