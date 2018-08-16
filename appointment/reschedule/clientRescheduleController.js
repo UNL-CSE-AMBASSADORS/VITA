@@ -1,6 +1,6 @@
 define('clientRescheduleController', [], function() {
 
-	function clientRescheduleController($scope, ClientRescheduleDataService) {
+	function clientRescheduleController($scope, ClientRescheduleDataService, AppointmentPickerSharedPropertiesService) {
 		$scope.token = '';
 		$scope.tokenExists = false;
 		const EXPECTED_TOKEN_LENGTH = 32;
@@ -10,6 +10,8 @@ define('clientRescheduleController', [], function() {
 		$scope.clientInformationValidated = false;
 		$scope.invalidClientInformation = false;
 
+		$scope.appointmentPickerSharedProperties = AppointmentPickerSharedPropertiesService.getSharedProperties();
+		$scope.submittingReschedule = false;
 
 		$scope.doesTokenExist = function(token) {
 			if (!token || 0 === token.length || EXPECTED_TOKEN_LENGTH !== token.length) {
@@ -71,7 +73,7 @@ define('clientRescheduleController', [], function() {
 		}
 	}
 
-	clientRescheduleController.$inject = ['$scope', 'clientRescheduleDataService'];
+	clientRescheduleController.$inject = ['$scope', 'clientRescheduleDataService', 'appointmentPickerSharedPropertiesService'];
 
 	return clientRescheduleController;
 

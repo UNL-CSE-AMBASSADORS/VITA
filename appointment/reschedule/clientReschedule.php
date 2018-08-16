@@ -66,24 +66,27 @@
 		<div ng-if="clientInformationValidated === true">
 			<p>Thank you for verifying your information. You may now reschedule or cancel your appointment.</p>
 
+			<!-- TODO: NEED TO CONTROL WHEN THESE SHOW UP. I.E. NOT AFTER THE APPT HAS STARTED... -->
 			<form class="cmxform" id="rescheduleForm">
 				<div appointment-picker></div>
+
+				<!-- Reschedule button -->
 				<input type="submit" 
 					value="Reschedule" 
 					id="rescheduleButton" 
 					class="submit wdn-button wdn-button-triad" 
-					ng-disabled="sharedProperties.selectedDate == null || sharedProperties.selectedSite == null || sharedProperties.selectedTime == null || submittingReschedule" 
+					ng-disabled="appointmentPickerSharedProperties.selectedDate == null || appointmentPickerSharedProperties.selectedSite == null || appointmentPickerSharedProperties.selectedTime == null || submittingReschedule" 
 					ng-model="submittingReschedule" 
 					ng-click="rescheduleAppointment()">
 
 				<!-- Cancel Button -->
-				<!-- TODO: NEED TO CONTROL WHEN THIS SHOWS UP? -->
 				<button type="button" 
 					value="Cancel"
 					id="cancelButton"
 					class="submit wdn-button wdn-button-brand"
 					ng-click="cancelAppointment()">Cancel Appointment</button>
 				
+				<!-- TODO: NEED TO ACTUALLY SEND THIS EMAIL THEN... -->
 				<p>If you have an email on record, an email will automatically be sent to you confirming the change.</p>
 			</form>
 		</div>
