@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS AppointmentFilingStatus;
 DROP TABLE IF EXISTS FilingStatus;
 DROP TABLE IF EXISTS ServicedAppointment;
 DROP TABLE IF EXISTS AppointmentClientReschedule;
+DROP TABLE IF EXISTS Note;
 DROP TABLE IF EXISTS Appointment;
 DROP TABLE IF EXISTS AppointmentTime;
 DROP TABLE IF EXISTS Client;
@@ -103,6 +104,16 @@ CREATE TABLE AppointmentClientReschedule (
 	FOREIGN KEY (appointmentId) REFERENCES Appointment(appointmentId)
 );
 
+CREATE TABLE Note (
+	noteId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	createdAt DATETIME NOT NULL DEFAULT NOW(),
+	note VARCHAR(1000) NOT NULL,
+    appointmentId INTEGER UNSIGNED NOT NULL,
+    FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId),
+	createdBy INTEGER UNSIGNED NOT NULL,
+	FOREIGN KEY(createdBy) REFERENCES User(userId)
+);
+
 CREATE TABLE Answer (
 	answerId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	possibleAnswerId INTEGER UNSIGNED NOT NULL,
@@ -120,7 +131,7 @@ CREATE TABLE ServicedAppointment (
     timeAppointmentStarted DATETIME NULL DEFAULT NULL,
     timeAppointmentEnded DATETIME NULL DEFAULT NULL,
     completed BOOLEAN NULL DEFAULT NULL,
-    notCompletedDescription VARCHAR(255) NULL DEFAULT NULL,
+    cancelled BOOLEAN NOT NULL DEFAULT FALSE,
 	servicedByStation INTEGER UNSIGNED NULL,
 	appointmentId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId)
