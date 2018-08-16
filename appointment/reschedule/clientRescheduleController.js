@@ -56,9 +56,10 @@ define('clientRescheduleController', [], function() {
 					$scope.invalidClientInformation = true;
 					$scope.clientData = {};
 				}
-			});
 
-			$scope.validatingClientInformation = false;
+				document.body.scrollTop = document.documentElement.scrollTop = 0;
+				$scope.validatingClientInformation = false;
+			});
 		};
 		
 		$scope.rescheduleAppointment = function() {
