@@ -6,6 +6,10 @@ define('clientRescheduleController', [], function() {
 		$scope.tokenExists = null;
 		const EXPECTED_TOKEN_LENGTH = 32;
 
+		// Invalid for Reschedule Variables
+		$scope.validForReschedule = true;
+		$scope.invalidForRescheduleReason = null;
+		
 		// Client Info Validation Variables
 		// TODO: NEED TO REMOVE THIS TEST DATA
 		$scope.clientData = {
@@ -48,6 +52,10 @@ define('clientRescheduleController', [], function() {
 					$scope.tokenExists = false;
 				} else {
 					$scope.tokenExists = result.exists || false;
+					$scope.validForReschedule = result.valid;
+					if (result.valid === false) {
+						$scope.invalidForRescheduleReason = result.reason;
+					}
 				}
 			});
 		};

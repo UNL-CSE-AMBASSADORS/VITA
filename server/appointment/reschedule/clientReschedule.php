@@ -19,13 +19,6 @@ if (isset($_REQUEST['action'])) {
 	}
 }
 
-/*
-TODO: HERE ARE THE SCENARIOS I'M THINKING WHERE WE DISPLAY THAT THEY CAN'T RESCHEDULE/CANCEL THEIR APPT ANYMORE
-- Appointment has been cancelled and can no longer be rescheduled/cancelled
-- Current time is past that of the appointment start time, so it cannot be rescheduled/cancelled
-- Rare case, but if the appointment has been marked as started (even if the appointment time > current time)
-- Being locked out as well after so many invalid attempts
-*/
 
 function doesTokenExist($token) {
 	GLOBAL $DB_CONN;
@@ -34,15 +27,26 @@ function doesTokenExist($token) {
 	$response['success'] = true;
 
 	try {
-		$query = 'SELECT 1
+		$query = 'SELECT DATE_FORMAT(scheduledTime, "%Y-%m-%d %H:%i:%S") AS scheduledTime, cancelled, timeIn,
+				Site.phoneNumber
 			FROM AppointmentClientReschedule
+			JOIN Appointment ON AppointmentClientReschedule.appointmentId = Appointment.appointmentId
+			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+			JOIN Site ON AppointmentTime.siteId = Site.siteId
+			LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 			WHERE token = ?';
 
 		$stmt = $DB_CONN->prepare($query);
 		$stmt->execute(array($token));
-		$tokenExists = $stmt->fetchColumn() !== false;
+		$appointmentInformation = $stmt->fetch();
 
+		$tokenExists = $appointmentInformation != false;
 		$response['exists'] = $tokenExists;
+
+		if ($tokenExists) {
+			$appointmentValidForRescheduleArray = isAppointmentValidForReschedule($appointmentInformation);
+			$response = array_merge($response, $appointmentValidForRescheduleArray);
+		}
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error on the server validating the token. Please refresh the page and try again';
@@ -162,6 +166,45 @@ function emailConfirmationWithToken($token, $firstName, $lastName, $emailAddress
 /* 
  * Private functions
  */
+
+/*
+TODO: THIS LAST SCENARIO IS NOT ACCOUNT FOR YET
+- Being locked out as well after so many invalid attempts
+*/
+
+function isAppointmentValidForReschedule($appointmentInformation) {
+	// See if it has been cancelled
+	$isAppointmentCancelled = isset($appointmentInformation['cancelled']) && $appointmentInformation['cancelled'] == true;
+	if ($isAppointmentCancelled) {
+		return [
+			'valid' => false,
+			'reason' => 'Your appointment has already been cancelled.'
+		];
+	}
+	
+	// See if the appointment has already been started
+	$appointmentHasBeenStarted = isset($appointmentInformation['timeIn']);
+	if ($appointmentHasBeenStarted) {
+		return [
+			'valid' => false,
+			'reason' => 'Your appointment has been marked as started.'
+		];
+	}
+
+	// See if the current time is past the scheduled time
+	date_default_timezone_set('America/Chicago');
+	$now = date('Y-m-d H:i:s');
+	$scheduledTime = $appointmentInformation['scheduledTime'];
+	$pastScheduledTime = $now > $scheduledTime;
+	if ($pastScheduledTime) {
+		return [
+			'valid' => false,
+			'reason' => "Your appointment's scheduled time is in the past."
+		];
+	}
+
+	return [ 'valid' => true ];
+}
 
 function getClientInformationFromToken($token) {
 	GLOBAL $DB_CONN;

@@ -13,8 +13,17 @@
 	<!-- Shown when the token is valid and exists -->
 	<div ng-if="tokenExists === true" ng-cloak>
 
+		<!-- Shown when the appointment is not allowed to be rescheduled/cancelled for any reason -->
+		<div ng-if="!validForReschedule">
+			<p>Your appointment cannot be cancelled or rescheduled.</p>
+			<div>
+				<p><b>Reason:</b> {{invalidForRescheduleReason}}</p>
+			</div>
+			<p>If you believe this is a mistake, please call 402-472-9638 to speak with a VITA volunteer.</p>
+		</div>
+
 		<!-- Shown when the client information is not yet validated -->
-		<div ng-if="clientInformationValidated === false">
+		<div ng-if="validForReschedule && clientInformationValidated === false">
 			<p>For security reasons, you must verify the information associated with your appointment</p>
 			<p ng-if="invalidClientInformation === true" class="error">
 				The information you provided did not match our records. Please try again.

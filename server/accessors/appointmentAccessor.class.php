@@ -11,11 +11,14 @@ class AppointmentAccessor {
 	public function cancelAppointment($appointmentId) {
 		GLOBAL $DB_CONN;
 
-		$query = "INSERT INTO ServicedAppointment (appointmentId, cancelled, completed)
-			VALUES (?, TRUE, FALSE)";
-		$stmt = $DB_CONN->prepare($query);
+		$query = 'INSERT INTO ServicedAppointment (servicedAppointmentId, appointmentId, cancelled, completed)
+			VALUES (
+				(SELECT sa2.servicedAppointmentId FROM ServicedAppointment sa2 WHERE appointmentId = ?),
+				?, TRUE, FALSE
+			) ON DUPLICATE KEY UPDATE cancelled = TRUE, completed = FALSE;';
 
-		$success = $stmt->execute(array($appointmentId));
+		$stmt = $DB_CONN->prepare($query);
+		$success = $stmt->execute(array($appointmentId, $appointmentId));
 		if ($success == false) {
 			throw new Exception('Unable to cancel the appointment.', MY_EXCEPTION);
 		}
