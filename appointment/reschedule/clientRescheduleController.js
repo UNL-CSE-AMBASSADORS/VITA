@@ -1,17 +1,27 @@
 define('clientRescheduleController', [], function() {
 
-	function clientRescheduleController($scope, ClientRescheduleDataService, AppointmentPickerSharedPropertiesService) {
+	function clientRescheduleController($scope, $sce, ClientRescheduleDataService, AppointmentPickerSharedPropertiesService) {
+		// Token variables
 		$scope.token = '';
-		$scope.tokenExists = false;
+		$scope.tokenExists = null;
 		const EXPECTED_TOKEN_LENGTH = 32;
 
+		// Client Info Validation Variables
 		$scope.clientData = {};
 		$scope.validatingClientInformation = false;
 		$scope.clientInformationValidated = false;
 		$scope.invalidClientInformation = false;
 
+		// Reschedule variables
 		$scope.appointmentPickerSharedProperties = AppointmentPickerSharedPropertiesService.getSharedProperties();
 		$scope.submittingReschedule = false;
+
+		// Successful Reschedule Variables
+		$scope.rescheduleSuccessMessage = null;
+		$scope.emailButton = {
+			'disabled': false,
+			'text': 'Email Me this Confirmation'
+		};
 
 		$scope.doesTokenExist = function(token) {
 			if (!token || 0 === token.length || EXPECTED_TOKEN_LENGTH !== token.length) {
@@ -24,7 +34,7 @@ define('clientRescheduleController', [], function() {
 					alert('There was an error loading appointment information. Please refresh and try again.');
 					$scope.tokenExists = false;
 				} else {
-					$scope.tokenExists = result['exists'] || false;
+					$scope.tokenExists = result.exists || false;
 				}
 			});
 		};
@@ -46,15 +56,15 @@ define('clientRescheduleController', [], function() {
 			const emailAddress = $scope.clientData.email;
 			const phoneNumber = $scope.clientData.phone;
 
-			ClientRescheduleDataService.validateClientInformation(token, firstName, lastName, emailAddress, phoneNumber).then((result) => {
-				if (result == null || !result.success) {
-					alert(result ? result.error : 'There was an error on the server. Please refresh the page and try again.');
+			ClientRescheduleDataService.validateClientInformation(token, firstName, lastName, emailAddress, phoneNumber).then((response) => {
+				if (response == null || !response.success) {
+					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
 					$scope.validatingClientInformation = false;
 					return;
 				}
 
-				$scope.clientInformationValidated = result.validated;
-				if (result.validated === false) {
+				$scope.clientInformationValidated = response.validated;
+				if (response.validated === false) {
 					$scope.invalidClientInformation = true;
 					$scope.clientData = {};
 				}
@@ -63,17 +73,79 @@ define('clientRescheduleController', [], function() {
 				$scope.validatingClientInformation = false;
 			});
 		};
-		
+
 		$scope.rescheduleAppointment = function() {
-			console.log('TODO RESCHEDULE APPOINTMENT');
-		};
+			if ($scope.appointmentPickerSharedProperties.selectedDate == null || $scope.appointmentPickerSharedProperties.selectedSite == null || $scope.appointmentPickerSharedProperties.selectedTime == null || $scope.submittingReschedule) {
+				return false;
+			}
+
+			$scope.submittingReschedule = true;
+
+			const token = $scope.token;
+			const firstName = $scope.clientData.firstName;
+			const lastName = $scope.clientData.lastName;
+			const emailAddress = $scope.clientData.email;
+			const phoneNumber = $scope.clientData.phone;
+			const appointmentTimeId = $scope.appointmentPickerSharedProperties.selectedAppointmentTimeId;
+
+			ClientRescheduleDataService.rescheduleAppointment(token, firstName, lastName, emailAddress, phoneNumber, appointmentTimeId).then(function(response) {
+				document.body.scrollTop = document.documentElement.scrollTop = 0;
+				
+				if (response == null || !response.success) {
+					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
+					$scope.giveNotice("Failure", "Something went wrong and your appointment was not rescheduled! Please try again later.", false);
+					return;
+				}
+
+				$scope.rescheduleSuccessMessage = $sce.trustAsHtml(response.message);
+				$scope.giveNotice("Success!", "Your appointment was successfully rescheduled.");
+
+				$scope.submittingReschedule = false;
+			});
+		}
 
 		$scope.cancelAppointment = function() {
 			console.log('TODO CANCEL APPOINTMENT');
 		}
+
+		$scope.emailConfirmation = function() {
+			$scope.emailButton.disabled = true;
+
+			const token = $scope.token;
+			const firstName = $scope.clientData.firstName;
+			const lastName = $scope.clientData.lastName;
+			const emailAddress = $scope.clientData.email;
+			const phoneNumber = $scope.clientData.phone;
+
+			ClientRescheduleDataService.emailConfirmation(token, firstName, lastName, emailAddress, phoneNumber).then(function(response) {
+				if (response == null || !response.success) {
+					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
+					$scope.emailButton.disabled = false;
+					return;
+				} 
+
+				$scope.emailButton.text = 'Sent!';
+			});
+		}
+
+		$scope.giveNotice = function(title, message, affirmative = true) {
+			WDN.initializePlugin('notice');
+			var body = angular.element( document.querySelector( 'body' ) );
+			body.append(`
+				<div class="wdn_notice ${affirmative ? 'affirm' : 'negate'}" data-overlay="maincontent" data-duration="10">
+					<div class="close">
+						<a href="#">Close this notice</a>
+					</div>
+					<div class="message">
+						<p class="title">${title}</p>
+						<p>${message}</a>
+						</p>
+					</div>
+				</div>`);
+		}
 	}
 
-	clientRescheduleController.$inject = ['$scope', 'clientRescheduleDataService', 'appointmentPickerSharedPropertiesService'];
+	clientRescheduleController.$inject = ['$scope', '$sce', 'clientRescheduleDataService', 'appointmentPickerSharedPropertiesService'];
 
 	return clientRescheduleController;
 

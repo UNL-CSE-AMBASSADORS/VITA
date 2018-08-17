@@ -1,12 +1,16 @@
 <div class="wdn-inner-wrapper wdn-inner-padding-no-top">
 	
+	<div ng-if="tokenExists === null">
+		<p>We are checking our records, please wait.</p>
+	</div>
+
 	<!-- Shown when the token is invalid or does not exist --> 
-	<div ng-if="tokenExists === false">
+	<div ng-if="tokenExists === false" ng-cloak>
 		<a href="/">You appear to have reached this page in error. Please click here to the main page.</a>
 	</div>
 	
 	<!-- Shown when the token is valid and exists -->
-	<div ng-if="tokenExists === true">
+	<div ng-if="tokenExists === true" ng-cloak>
 
 		<!-- Shown when the client information is not yet validated -->
 		<div ng-if="clientInformationValidated === false">
@@ -64,67 +68,62 @@
 
 		<!-- Shown once the client information has been validated -->
 		<div ng-if="clientInformationValidated === true">
-			<p>Thank you for verifying your information. You may now reschedule or cancel your appointment.</p>
 
-			<!-- TODO: NEED TO CONTROL WHEN THESE SHOW UP. I.E. NOT AFTER THE APPT HAS STARTED... -->
-			<form class="cmxform" id="rescheduleForm">
-				<div appointment-picker></div>
+			<div ng-if="!rescheduleSuccessMessage">
+				<p>Thank you for verifying your information. You may now reschedule or cancel your appointment.</p>
 
-				<!-- Reschedule button -->
-				<input type="submit" 
-					value="Reschedule" 
-					id="rescheduleButton" 
-					class="submit wdn-button wdn-button-triad" 
-					ng-disabled="appointmentPickerSharedProperties.selectedDate == null || appointmentPickerSharedProperties.selectedSite == null || appointmentPickerSharedProperties.selectedTime == null || submittingReschedule" 
-					ng-model="submittingReschedule" 
-					ng-click="rescheduleAppointment()">
+				<!-- TODO: NEED TO CONTROL WHEN THESE SHOW UP. I.E. NOT AFTER THE APPT HAS STARTED... Or if it's been cancelled -->
+				<form class="cmxform" id="rescheduleForm">
+					<div appointment-picker></div>
 
-				<!-- Cancel Button -->
-				<button type="button" 
-					value="Cancel"
-					id="cancelButton"
-					class="submit wdn-button wdn-button-brand"
-					ng-click="cancelAppointment()">Cancel Appointment</button>
-				
-				<!-- TODO: NEED TO ACTUALLY SEND THIS EMAIL THEN... -->
-				<p>If you have an email on record, an email will automatically be sent to you confirming the change.</p>
-			</form>
+					<!-- Reschedule button -->
+					<input type="submit" 
+						value="Reschedule" 
+						id="rescheduleButton" 
+						class="submit wdn-button wdn-button-triad" 
+						ng-disabled="appointmentPickerSharedProperties.selectedDate == null || appointmentPickerSharedProperties.selectedSite == null || appointmentPickerSharedProperties.selectedTime == null || submittingReschedule" 
+						ng-model="submittingReschedule" 
+						ng-click="rescheduleAppointment()">
+
+					<!-- Cancel Button -->
+					<button type="button" 
+						value="Cancel"
+						id="cancelButton"
+						class="submit wdn-button wdn-button-brand"
+						ng-click="cancelAppointment()">Cancel Appointment</button>
+					
+					<!-- TODO: NEED TO ACTUALLY SEND THIS EMAIL THEN... -->
+					<p>If you have an email on record, an email will automatically be sent to you confirming the change.</p>
+				</form>
+			</div>
+
+
+
+			<!-- Successful Reschedule Screen -->
+			<div class="wdn-inner-wrapper wdn-inner-padding-no-top" ng-if="rescheduleSuccessMessage != null">
+				<ng-bind-html ng-bind-html="rescheduleSuccessMessage"></ng-bind-html>
+
+				<div>
+					<button type="button" class="mb-3 wdn-button btn wdn-button-triad" onclick="window.print();">Print</button>
+					<button type="button" 
+						class="mb-3 wdn-button btn wdn-button-triad email-confirmation-button" 
+						ng-if="clientData.email != null && clientData.email.length > 0"
+						ng-disabled="emailButton.disabled"
+						ng-click="emailConfirmation()">{{emailButton.text}}</button>
+				</div>
+			</div>
+
+
+
+
+
+
+
+
+
+
+
+
 		</div>
-
 	</div>
-
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </div>

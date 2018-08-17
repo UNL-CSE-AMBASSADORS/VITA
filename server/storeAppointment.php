@@ -21,8 +21,9 @@ function storeAppointment($data){
 	$response['success'] = false;
 
 
-	$DB_CONN->beginTransaction();
 	try {
+		$DB_CONN->beginTransaction();
+
 		$email = '';
 		if (isset($data['email'])) {
 			$email = $data['email'];
@@ -44,7 +45,6 @@ function storeAppointment($data){
 		// mail('vita@cse.unl.edu', 'Please help, everything is on fire?', print_r($e, true).print_r($data, true));
 	}
 
-	## Return
 	print json_encode($response);
 }
 
