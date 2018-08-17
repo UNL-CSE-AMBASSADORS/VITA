@@ -23,6 +23,10 @@ define('clientRescheduleController', [], function() {
 			'text': 'Email Me this Confirmation'
 		};
 
+		// Cancel Appointment Variables
+		$scope.cancellingAppointment = false;
+		$scope.appointmentCancelled = false;
+
 		$scope.doesTokenExist = function(token) {
 			if (!token || 0 === token.length || EXPECTED_TOKEN_LENGTH !== token.length) {
 				$scope.tokenExists = false;
@@ -60,13 +64,12 @@ define('clientRescheduleController', [], function() {
 				if (response == null || !response.success) {
 					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
 					$scope.validatingClientInformation = false;
-					return;
-				}
-
-				$scope.clientInformationValidated = response.validated;
-				if (response.validated === false) {
-					$scope.invalidClientInformation = true;
-					$scope.clientData = {};
+				} else {
+					$scope.clientInformationValidated = response.validated;
+					if (response.validated === false) {
+						$scope.invalidClientInformation = true;
+						$scope.clientData = {};
+					}
 				}
 
 				document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -78,7 +81,6 @@ define('clientRescheduleController', [], function() {
 			if ($scope.appointmentPickerSharedProperties.selectedDate == null || $scope.appointmentPickerSharedProperties.selectedSite == null || $scope.appointmentPickerSharedProperties.selectedTime == null || $scope.submittingReschedule) {
 				return false;
 			}
-
 			$scope.submittingReschedule = true;
 
 			const token = $scope.token;
@@ -94,18 +96,40 @@ define('clientRescheduleController', [], function() {
 				if (response == null || !response.success) {
 					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
 					$scope.giveNotice("Failure", "Something went wrong and your appointment was not rescheduled! Please try again later.", false);
-					return;
+				} else {
+					$scope.rescheduleSuccessMessage = $sce.trustAsHtml(response.message);
+					$scope.giveNotice("Success!", "Your appointment was successfully rescheduled.");
 				}
-
-				$scope.rescheduleSuccessMessage = $sce.trustAsHtml(response.message);
-				$scope.giveNotice("Success!", "Your appointment was successfully rescheduled.");
 
 				$scope.submittingReschedule = false;
 			});
 		}
 
 		$scope.cancelAppointment = function() {
-			console.log('TODO CANCEL APPOINTMENT');
+			if ($scope.cancellingAppointment) {
+				return;
+			}
+			$scope.cancellingAppointment = true;
+
+			const token = $scope.token;
+			const firstName = $scope.clientData.firstName;
+			const lastName = $scope.clientData.lastName;
+			const emailAddress = $scope.clientData.email;
+			const phoneNumber = $scope.clientData.phone;
+
+			ClientRescheduleDataService.cancelAppointment(token, firstName, lastName, emailAddress, phoneNumber).then(function(response) {
+				document.body.scrollTop = document.documentElement.scrollTop = 0;
+				
+				if (response == null || !response.success) {
+					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
+					$scope.giveNotice("Failure", "Something went wrong and your appointment was not cancelled! Please try again later.", false);
+				} else {
+					$scope.appointmentCancelled = true;
+					$scope.giveNotice("Success!", "Your appointment was successfully cancelled.");
+				}
+
+				$scope.cancellingAppointment = false;
+			});
 		}
 
 		$scope.emailConfirmation = function() {
@@ -122,7 +146,7 @@ define('clientRescheduleController', [], function() {
 					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
 					$scope.emailButton.disabled = false;
 					return;
-				} 
+				}
 
 				$scope.emailButton.text = 'Sent!';
 			});

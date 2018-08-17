@@ -69,7 +69,7 @@
 		<!-- Shown once the client information has been validated -->
 		<div ng-if="clientInformationValidated === true">
 
-			<div ng-if="!rescheduleSuccessMessage">
+			<div ng-if="!rescheduleSuccessMessage && appointmentCancelled === false">
 				<p>Thank you for verifying your information. You may now reschedule or cancel your appointment.</p>
 
 				<!-- TODO: NEED TO CONTROL WHEN THESE SHOW UP. I.E. NOT AFTER THE APPT HAS STARTED... Or if it's been cancelled -->
@@ -100,7 +100,7 @@
 
 
 			<!-- Successful Reschedule Screen -->
-			<div class="wdn-inner-wrapper wdn-inner-padding-no-top" ng-if="rescheduleSuccessMessage != null">
+			<div ng-if="rescheduleSuccessMessage != null">
 				<ng-bind-html ng-bind-html="rescheduleSuccessMessage"></ng-bind-html>
 
 				<div>
@@ -116,7 +116,11 @@
 
 
 
-
+			<!-- Successful Cancelling Screen -->
+			<!-- TODO MAKE THIS BETTER -->
+			<div ng-if="appointmentCancelled === true">
+				<p>Your appointment has been cancelled.</p>
+			</div>
 
 
 

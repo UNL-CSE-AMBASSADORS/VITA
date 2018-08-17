@@ -11,7 +11,8 @@ if (isset($_REQUEST['action'])) {
 		case 'doesTokenExist': doesTokenExist($_GET['token']); break;
 		case 'validateClientInformation': validateClientInformation($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'reschedule': rescheduleAppointmentWithToken($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber'], $_POST['appointmentTimeId']); break;
-		case 'emailConfirmation': emailConfirmation($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
+		case 'cancel': cancelAppointmentWithToken($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
+		case 'emailConfirmation': emailConfirmationWithToken($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -85,7 +86,6 @@ function rescheduleAppointmentWithToken($token, $firstName, $lastName, $emailAdd
 		}
 
 		$appointmentId = $clientInformation['appointmentId'];
-
 		$appointmentAccessor = new AppointmentAccessor();
 		$appointmentAccessor->rescheduleAppointment($appointmentId, $appointmentTimeId);
 
@@ -98,7 +98,32 @@ function rescheduleAppointmentWithToken($token, $firstName, $lastName, $emailAdd
 	echo json_encode($response);
 }
 
-function emailConfirmation($token, $firstName, $lastName, $emailAddress, $phoneNumber) {
+function cancelAppointmentWithToken($token, $firstName, $lastName, $emailAddress, $phoneNumber) {
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		$clientInformation = getClientInformationFromToken($token);
+		$clientInformationMatches = clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
+
+		if ($clientInformationMatches === false) {
+			http_response_code(401);
+			throw new Exception('Provided information does not match our records.', MY_EXCEPTION);
+		}
+
+		$appointmentId = $clientInformation['appointmentId'];
+		die($appointmentId);
+		$appointmentAccessor = new AppointmentAccessor();
+		$appointmentAccessor->cancelAppointment($appointmentId);
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'There was an error on the server cancelling the appointment. Please try again.';
+	}
+
+	echo json_encode($response);
+}
+
+function emailConfirmationWithToken($token, $firstName, $lastName, $emailAddress, $phoneNumber) {
 	$response = array();
 	$response['success'] = true;
 

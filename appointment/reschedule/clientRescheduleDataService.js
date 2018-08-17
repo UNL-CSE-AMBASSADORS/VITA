@@ -48,6 +48,25 @@ define('clientRescheduleDataService', [], function($http) {
 					return null;
 				});
 			},
+			cancelAppointment: function(token, firstName, lastName, emailAddress, phoneNumber) {
+				return $http({
+					url: '/server/appointment/reschedule/clientReschedule.php',
+					method: 'POST',
+					data: 'action=cancel' + 
+						`&token=${token}` +
+						`&firstName=${firstName}` +
+						`&lastName=${lastName}` +
+						`&emailAddress=${emailAddress}` +
+						`&phoneNumber=${phoneNumber}`,
+					headers: {
+						'Content-Type': "application/x-www-form-urlencoded"
+					}
+				}).then(function(response){
+					return response.data;
+				},function(error){
+					return null;
+				});
+			},
 			emailConfirmation: function(token, firstName, lastName, emailAddress, phoneNumber) {
 				return $http({
 					url: '/server/appointment/reschedule/clientReschedule.php',
