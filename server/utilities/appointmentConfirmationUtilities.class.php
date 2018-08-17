@@ -114,7 +114,7 @@ class AppointmentConfirmationUtilities {
 		$serverName = $_SERVER['SERVER_NAME'];
 		$clientRescheduleLink = "https://$serverName/appointment/reschedule?token=$clientRescheduleToken";
 		return "<h2 class='mt-3'>Rescheduling or Cancelling your Appointment</h2>
-				You can reschedule or cancel your appointment by navigating to this page: 
+				You can reschedule or cancel your appointment visiting this page: 
 				<a href='$clientRescheduleLink' target='_blank'>$clientRescheduleLink</a>";
 	}
 }

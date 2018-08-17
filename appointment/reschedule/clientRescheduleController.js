@@ -11,13 +11,7 @@ define('clientRescheduleController', [], function() {
 		$scope.invalidForRescheduleReason = null;
 		
 		// Client Info Validation Variables
-		// TODO: NEED TO REMOVE THIS TEST DATA
-		$scope.clientData = {
-			'firstName': 'Matthew',
-			'lastName': 'Meacham',
-			'email': 'mmeacham6@gmail.com',
-			'phone': '4029536746'
-		};
+		$scope.clientData = {};
 		$scope.validatingClientInformation = false;
 		$scope.clientInformationValidated = false;
 		$scope.invalidClientInformation = false;
