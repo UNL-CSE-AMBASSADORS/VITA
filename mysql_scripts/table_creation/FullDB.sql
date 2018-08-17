@@ -99,7 +99,6 @@ CREATE TABLE Appointment (
 
 CREATE TABLE AppointmentClientReschedule (
 	token VARCHAR(255) NOT NULL,
-	failedAppointmentRescheduleCount INT UNSIGNED NOT NULL DEFAULT 0,
 	appointmentId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY (appointmentId) REFERENCES Appointment(appointmentId)
 );

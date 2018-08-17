@@ -74,7 +74,7 @@ function validateClientInformation($token, $firstName, $lastName, $emailAddress,
 			);
 			$response['scheduledTime'] = $appointmentInformation['scheduledTimeStr'];
 		} else {
-			// TODO: increment failed count
+			handleClientInformationValidationFailure($token);
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -263,4 +263,8 @@ function getAppointmentInformationFromToken($token) {
 	}
 
 	return $appointmentInformation;
+}
+
+function handleClientInformationValidationFailure($token) {
+	// Not actually doing anything right now, but we could in the future.
 }
