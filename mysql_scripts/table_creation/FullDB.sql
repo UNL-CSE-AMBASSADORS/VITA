@@ -99,6 +99,7 @@ CREATE TABLE Appointment (
 
 CREATE TABLE AppointmentClientReschedule (
 	token VARCHAR(255) NOT NULL,
+	createdAt DATETIME NOT NULL DEFAULT NOW(),
 	appointmentId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY (appointmentId) REFERENCES Appointment(appointmentId)
 );
