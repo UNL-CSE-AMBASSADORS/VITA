@@ -19,6 +19,14 @@ if (isset($_REQUEST['action'])) {
 	}
 }
 
+/*
+TODO: HERE ARE THE SCENARIOS I'M THINKING WHERE WE DISPLAY THAT THEY CAN'T RESCHEDULE/CANCEL THEIR APPT ANYMORE
+- Appointment has been cancelled and can no longer be rescheduled/cancelled
+- Current time is past that of the appointment start time, so it cannot be rescheduled/cancelled
+- Rare case, but if the appointment has been marked as started (even if the appointment time > current time)
+- Being locked out as well after so many invalid attempts
+*/
+
 function doesTokenExist($token) {
 	GLOBAL $DB_CONN;
 
@@ -52,7 +60,16 @@ function validateClientInformation($token, $firstName, $lastName, $emailAddress,
 		$clientInformationMatches = clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$response['validated'] = $clientInformationMatches;
 
-		if (!$clientInformationMatches) {
+		if ($clientInformationMatches) {
+			// Grab appointment information so we can display the site/date/time
+			$appointmentInformation = getAppointmentInformationFromToken($token);
+
+			$response['site'] = array(
+				'title' => $appointmentInformation['title'],
+				'address' => $appointmentInformation['address']
+			);
+			$response['scheduledTime'] = $appointmentInformation['scheduledTimeStr'];
+		} else {
 			// TODO: increment failed count
 		}
 	} catch (Exception $e) {
@@ -66,15 +83,6 @@ function validateClientInformation($token, $firstName, $lastName, $emailAddress,
 function rescheduleAppointmentWithToken($token, $firstName, $lastName, $emailAddress, $phoneNumber, $appointmentTimeId) {
 	$response = array();
 	$response['success'] = true;
-
-	/*
-		TODO: 
-		1. Validate information with token
-		2. Get appointmentId (along with validation?)
-		3. actually reschedule the appointment
-		4. Give back the appointment confirmation information
-		5. Automatically send an email??
-	*/
 
 	try {
 		$clientInformation = getClientInformationFromToken($token);
@@ -112,7 +120,6 @@ function cancelAppointmentWithToken($token, $firstName, $lastName, $emailAddress
 		}
 
 		$appointmentId = $clientInformation['appointmentId'];
-		die($appointmentId);
 		$appointmentAccessor = new AppointmentAccessor();
 		$appointmentAccessor->cancelAppointment($appointmentId);
 	} catch (Exception $e) {
@@ -170,7 +177,12 @@ function getClientInformationFromToken($token) {
 		throw new Exception('There was an error on the server fetching information. Please refresh the page and try again.', MY_EXCEPTION);
 	}
 
-	return $stmt->fetch();
+	$clientInformation = $stmt->fetch();
+	if (!$clientInformation) {
+		throw new Exception('There was an error on the server fetching information. Please refresh the page and try again.', MY_EXCEPTION);
+	}
+
+	return $clientInformation;
 }
 
 function clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber) {
@@ -184,4 +196,28 @@ function clientInformationMatches($clientInformation, $firstName, $lastName, $em
 	$phoneNumberMatches = isset($clientInformation['phoneNumber']) && $clientInformation['phoneNumber'] === $phoneNumber;
 
 	return $firstNameMatches && $lastNameMatches && $emailAddressMatches && $phoneNumberMatches;
+}
+
+function getAppointmentInformationFromToken($token) {
+	GLOBAL $DB_CONN;
+
+	$query = 'SELECT DATE_FORMAT(scheduledTime, "%W, %M %D, %Y at %l:%i %p") AS scheduledTimeStr, 
+		Site.title, Site.address
+		FROM AppointmentClientReschedule
+		JOIN Appointment ON AppointmentClientReschedule.appointmentId = Appointment.appointmentId
+		JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+		JOIN Site ON AppointmentTime.siteId = Site.siteId
+		WHERE token = ?';
+	
+	$stmt = $DB_CONN->prepare($query);
+	if (!$stmt->execute(array($token))) {
+		throw new Exception('There was an error on the server fetching information. Please refresh the page and try again.', MY_EXCEPTION);
+	}
+
+	$appointmentInformation = $stmt->fetch();
+	if (!$appointmentInformation) {
+		throw new Exception('There was an error on the server fetching information. Please refresh the page and try again.', MY_EXCEPTION);
+	}
+
+	return $appointmentInformation;
 }

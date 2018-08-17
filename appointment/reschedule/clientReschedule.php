@@ -1,5 +1,6 @@
 <div class="wdn-inner-wrapper wdn-inner-padding-no-top">
 	
+	<!-- Shown when data is loading upon initial page load -->
 	<div ng-if="tokenExists === null">
 		<p>We are checking our records, please wait.</p>
 	</div>
@@ -66,13 +67,46 @@
 			</form>
 		</div>
 
+		<!-- TODO: NEED TO CONTROL WHEN THESE SHOW UP. I.E. NOT AFTER THE APPT HAS STARTED... Or if it's been cancelled -->
+
 		<!-- Shown once the client information has been validated -->
 		<div ng-if="clientInformationValidated === true">
 
 			<div ng-if="!rescheduleSuccessMessage && appointmentCancelled === false">
-				<p>Thank you for verifying your information. You may now reschedule or cancel your appointment.</p>
+				<p>Thank you for verifying your information. You may now cancel or reschedule your appointment below.</p>
 
-				<!-- TODO: NEED TO CONTROL WHEN THESE SHOW UP. I.E. NOT AFTER THE APPT HAS STARTED... Or if it's been cancelled -->
+				<!-- Current Appointment Information -->
+				<h4 class="clear-top">Current Appointment Information</h4>
+				<div>
+					<div>
+						<p class="clear-vertical"><b>Name:</b> {{clientData.firstName}} {{clientData.lastName}}</p>
+					</div>
+					<div>
+						<p class="clear-vertical"><b>Site:</b> {{currentAppointment.site.title}}</p>
+					</div>
+					<div>
+						<p class="clear-vertical"><b>Site Address:</b> {{currentAppointment.site.address}}</p>
+					</div>
+					<div>
+						<p class="clear-top"><b>Time:</b> {{currentAppointment.scheduledTime}}</p>
+					</div>
+
+					<!-- Cancel Button -->
+					<button type="button" 
+							value="Cancel"
+							id="cancelButton"
+							class="submit wdn-button wdn-button-brand"
+							ng-click="cancelAppointment()">Cancel Appointment</button>
+				</div>
+
+				
+				<!-- Horizontal separator -->
+				<div class="horizontal-line"></div>
+
+
+				<!-- Reschedule Section -->				
+				<h4 class="clear-top">Reschedule Appointment</h4>
+
 				<form class="cmxform" id="rescheduleForm">
 					<div appointment-picker></div>
 
@@ -85,18 +119,10 @@
 						ng-model="submittingReschedule" 
 						ng-click="rescheduleAppointment()">
 
-					<!-- Cancel Button -->
-					<button type="button" 
-						value="Cancel"
-						id="cancelButton"
-						class="submit wdn-button wdn-button-brand"
-						ng-click="cancelAppointment()">Cancel Appointment</button>
-					
 					<!-- TODO: NEED TO ACTUALLY SEND THIS EMAIL THEN... -->
 					<p>If you have an email on record, an email will automatically be sent to you confirming the change.</p>
 				</form>
 			</div>
-
 
 
 			<!-- Successful Reschedule Screen -->
@@ -114,20 +140,11 @@
 			</div>
 
 
-
-
 			<!-- Successful Cancelling Screen -->
 			<!-- TODO MAKE THIS BETTER -->
 			<div ng-if="appointmentCancelled === true">
 				<p>Your appointment has been cancelled.</p>
 			</div>
-
-
-
-
-
-
-
 		</div>
 	</div>
 </div>

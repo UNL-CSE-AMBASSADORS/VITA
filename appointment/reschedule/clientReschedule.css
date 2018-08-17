@@ -1,3 +1,13 @@
+.clear-vertical {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.horizontal-line {
+	border-bottom: 1px solid;
+	margin: 20px 0;
+}
+
 .email-confirmation-button {
 	margin-left: 5px;
 }

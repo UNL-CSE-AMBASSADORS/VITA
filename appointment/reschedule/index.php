@@ -64,7 +64,7 @@
 				<ul>
 					<li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
 					<li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
-					<li>Reschedule or Cancel Appointment</li>
+					<li>Cancel or Reschedule Appointment</li>
 				</ul>
 				<!-- TemplateEndEditable -->
 			</nav>
@@ -85,7 +85,7 @@
 			<div id="maincontent" class="wdn-main">
 				<div id="pagetitle">
 					<!-- TemplateBeginEditable name="pagetitle" -->
-					<h1>Reschedule or Cancel Appointment</h1>
+					<h1>Cancel or Reschedule Appointment</h1>
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->

@@ -7,10 +7,19 @@ define('clientRescheduleController', [], function() {
 		const EXPECTED_TOKEN_LENGTH = 32;
 
 		// Client Info Validation Variables
-		$scope.clientData = {};
+		// TODO: NEED TO REMOVE THIS TEST DATA
+		$scope.clientData = {
+			'firstName': 'Matthew',
+			'lastName': 'Meacham',
+			'email': 'mmeacham6@gmail.com',
+			'phone': '4029536746'
+		};
 		$scope.validatingClientInformation = false;
 		$scope.clientInformationValidated = false;
 		$scope.invalidClientInformation = false;
+
+		// Current Appointment Variables
+		$scope.currentAppointment = {};
 
 		// Reschedule variables
 		$scope.appointmentPickerSharedProperties = AppointmentPickerSharedPropertiesService.getSharedProperties();
@@ -66,9 +75,18 @@ define('clientRescheduleController', [], function() {
 					$scope.validatingClientInformation = false;
 				} else {
 					$scope.clientInformationValidated = response.validated;
-					if (response.validated === false) {
+					if (response.validated) {
+						$scope.currentAppointment = {
+							'site': {
+								'title': response.site.title,
+								'address': response.site.address
+							},
+							'scheduledTime': response.scheduledTime
+						}
+					} else {
 						$scope.invalidClientInformation = true;
 						$scope.clientData = {};
+						// TODO: DISPLAY A MESSAGE SAYING HOW MANY ATTEMPTS THEY HAVE LEFT?
 					}
 				}
 
