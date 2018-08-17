@@ -40,6 +40,7 @@ define('clientRescheduleController', [], function() {
 		$scope.cancellingAppointment = false;
 		$scope.appointmentCancelled = false;
 
+
 		$scope.doesTokenExist = function(token) {
 			if (!token || 0 === token.length || EXPECTED_TOKEN_LENGTH !== token.length) {
 				$scope.tokenExists = false;
@@ -90,7 +91,9 @@ define('clientRescheduleController', [], function() {
 								'address': response.site.address
 							},
 							'scheduledTime': response.scheduledTime
-						}
+						};
+
+						$scope.initializeCancelConfirmationModal();
 					} else {
 						$scope.invalidClientInformation = true;
 						$scope.clientData = {};
@@ -146,6 +149,11 @@ define('clientRescheduleController', [], function() {
 			ClientRescheduleDataService.cancelAppointment(token, firstName, lastName, emailAddress, phoneNumber).then(function(response) {
 				document.body.scrollTop = document.documentElement.scrollTop = 0;
 				
+				// Close the cancel confirmation modal
+				require(['jquery'], function($) {
+					$.colorbox.close();
+				});
+
 				if (response == null || !response.success) {
 					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
 					$scope.giveNotice("Failure", "Something went wrong and your appointment was not cancelled! Please try again later.", false);
@@ -180,7 +188,7 @@ define('clientRescheduleController', [], function() {
 
 		$scope.giveNotice = function(title, message, affirmative = true) {
 			WDN.initializePlugin('notice');
-			var body = angular.element( document.querySelector( 'body' ) );
+			const body = angular.element( document.querySelector( 'body' ) );
 			body.append(`
 				<div class="wdn_notice ${affirmative ? 'affirm' : 'negate'}" data-overlay="maincontent" data-duration="10">
 					<div class="close">
@@ -193,6 +201,23 @@ define('clientRescheduleController', [], function() {
 					</div>
 				</div>`);
 		}
+
+		$scope.initializeCancelConfirmationModal = function() {
+			WDN.initializePlugin('modal', [ function() {
+				require(['jquery'], function($) {
+					$(function() {
+						$('#confirm-cancel-modal-opener').colorbox({
+							inline: true
+						});
+
+						$('.close-modal-button').click(function(){
+							$.colorbox.close();
+						});
+					});
+				});
+			} ]);
+		}
+
 	}
 
 	clientRescheduleController.$inject = ['$scope', '$sce', 'clientRescheduleDataService', 'appointmentPickerSharedPropertiesService'];

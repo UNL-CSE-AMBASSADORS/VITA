@@ -1,5 +1,5 @@
 <div class="wdn-inner-wrapper wdn-inner-padding-no-top">
-	
+
 	<!-- Shown when data is loading upon initial page load -->
 	<div ng-if="tokenExists === null">
 		<p>We are checking our records, please wait.</p>
@@ -100,12 +100,27 @@
 						<p class="clear-top"><b>Time:</b> {{currentAppointment.scheduledTime}}</p>
 					</div>
 
+					<!-- Confirm Appointment Cancel Modal -->
+					<div class="hidden">
+						<div class="modal" id="confirm-cancel-modal" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="wdn-band">
+								<div class="wdn-inner-wrapper">
+									<h4>Are you sure you want to cancel your appointment?</h4>
+									<p>You cannot undo this.</p>
+									<div>
+										<button type="button" class="wdn-button wdn-button-triad close-modal-button">No, do not Cancel</button>
+										<button type="button" class="wdn-button wdn-button-brand" ng-click="cancelAppointment()">Yes, cancel</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- End Confirm Appointment Cancel Modal -->
+
 					<!-- Cancel Button -->
-					<button type="button" 
-							value="Cancel"
-							id="cancelButton"
-							class="submit wdn-button wdn-button-brand"
-							ng-click="cancelAppointment()">Cancel Appointment</button>
+					<a id="confirm-cancel-modal-opener"
+					   class="submit wdn-button wdn-button-brand"
+					   href="#confirm-cancel-modal">Cancel Appointment</a>
 				</div>
 
 				
