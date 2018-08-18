@@ -19,7 +19,7 @@
 			<div>
 				<p class="wdn-intro-p"><b>Reason:</b> {{invalidForRescheduleReason}}</p>
 			</div>
-			<p>If you believe this is a mistake, please call 402-472-9638 to speak with a VITA volunteer.</p>
+			<p>If you believe this is a mistake, please call {{phoneNumberToCall}} to speak with a VITA volunteer.</p>
 		</div>
 
 		<!-- Shown when the client information is not yet validated -->

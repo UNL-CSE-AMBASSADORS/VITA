@@ -9,6 +9,7 @@ define('clientRescheduleController', [], function() {
 		// Invalid for Reschedule Variables
 		$scope.validForReschedule = true;
 		$scope.invalidForRescheduleReason = null;
+		$scope.phoneNumberToCall = null;
 		
 		// Client Info Validation Variables
 		$scope.clientData = {};
@@ -50,6 +51,7 @@ define('clientRescheduleController', [], function() {
 					$scope.validForReschedule = result.valid;
 					if (result.valid === false) {
 						$scope.invalidForRescheduleReason = result.reason;
+						$scope.phoneNumberToCall = result.phoneNumber;
 					}
 				}
 			});

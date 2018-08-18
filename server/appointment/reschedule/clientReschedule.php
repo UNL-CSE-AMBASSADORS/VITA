@@ -44,8 +44,10 @@ function doesTokenExist($token) {
 
 		$tokenExists = $appointmentInformation != false;
 		$response['exists'] = $tokenExists;
-
+		
 		if ($tokenExists) {
+			$response['phoneNumber'] = $appointmentInformation['phoneNumber'];
+			
 			$appointmentValidForRescheduleArray = isAppointmentValidForReschedule($appointmentInformation);
 			$response = array_merge($response, $appointmentValidForRescheduleArray);
 		}
