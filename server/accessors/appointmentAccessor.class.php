@@ -5,9 +5,6 @@ require_once "$root/server/config.php";
 
 class AppointmentAccessor {
 
-	/**
-	 * Note that this method assumes no ServicedAppointment entry has been created for this appointment
-	 */
 	public function cancelAppointment($appointmentId) {
 		GLOBAL $DB_CONN;
 
