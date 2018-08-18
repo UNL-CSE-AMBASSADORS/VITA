@@ -5,7 +5,10 @@ require_once "$root/server/config.php";
 
 class NoteAccessor {
 
-	public function addNote($appointmentId, $noteText, $userId) {
+	/*
+	 * NOTE: If null is used as the userId, it is assumed to be created by "SYSTEM" user
+	 */
+	public function addNote($appointmentId, $noteText, $userId = null) {
 		GLOBAL $DB_CONN;
 
 		$query = "INSERT INTO Note (appointmentId, note, createdBy)
@@ -21,10 +24,11 @@ class NoteAccessor {
 	public function getNotesForAppointment($appointmentId) {
 		GLOBAL $DB_CONN;
 
-		$query = "SELECT noteId, note, firstName AS createdByFirstName, lastName AS createdByLastName,
-			DATE_FORMAT(createdAt, '%c/%d/%Y %l:%i %p') AS createdAt
+		$query = "SELECT noteId, note, COALESCE(firstName, 'SYSTEM') AS createdByFirstName, 
+				COALESCE(lastName, '') AS createdByLastName,
+				DATE_FORMAT(createdAt, '%c/%d/%Y %l:%i %p') AS createdAt
 			FROM Note
-			JOIN User ON Note.createdBy = User.userId
+				LEFT JOIN User ON Note.createdBy = User.userId
 			WHERE appointmentId = ?
 			ORDER BY noteId ASC";
 		$stmt = $DB_CONN->prepare($query);
@@ -35,6 +39,9 @@ class NoteAccessor {
 		}
 
 		$notes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		foreach ($notes as &$note) {
+			
+		}
 		
 		return $notes;
 	}

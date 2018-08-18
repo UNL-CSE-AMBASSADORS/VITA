@@ -110,7 +110,7 @@ CREATE TABLE Note (
 	note VARCHAR(1000) NOT NULL,
     appointmentId INTEGER UNSIGNED NOT NULL,
     FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId),
-	createdBy INTEGER UNSIGNED NOT NULL,
+	createdBy INTEGER UNSIGNED NULL,
 	FOREIGN KEY(createdBy) REFERENCES User(userId)
 );
 
