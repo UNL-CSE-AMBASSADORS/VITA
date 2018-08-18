@@ -5,6 +5,7 @@ $root = realpath($_SERVER['DOCUMENT_ROOT']);
 require_once "$root/server/config.php";
 require_once "$root/server/accessors/appointmentAccessor.class.php";
 require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
+require_once "$root/server/accessors/noteAccessor.class.php";
 
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
@@ -96,6 +97,9 @@ function rescheduleAppointmentWithToken($token, $firstName, $lastName, $emailAdd
 		$appointmentAccessor = new AppointmentAccessor();
 		$appointmentAccessor->rescheduleAppointment($appointmentId, $appointmentTimeId);
 
+		$noteAccessor = new NoteAccessor();
+		$notes = $noteAccessor->addNote($appointmentId, 'Rescheduled by client [Automatic Note]');
+
 		$response['message'] = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -115,6 +119,9 @@ function cancelAppointmentWithToken($token, $firstName, $lastName, $emailAddress
 		$appointmentId = $clientInformation['appointmentId'];
 		$appointmentAccessor = new AppointmentAccessor();
 		$appointmentAccessor->cancelAppointment($appointmentId);
+
+		$noteAccessor = new NoteAccessor();
+		$notes = $noteAccessor->addNote($appointmentId, 'Cancelled by client [Automatic Note]');
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'There was an error on the server cancelling the appointment. Please try again.';
