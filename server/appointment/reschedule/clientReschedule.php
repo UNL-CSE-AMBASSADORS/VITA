@@ -9,7 +9,7 @@ require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php"
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
 		case 'doesTokenExist': doesTokenExist($_GET['token']); break;
-		case 'validateClientInformation': validateClientInformation($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
+		case 'validateClientInformation': isClientInformationValid($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'reschedule': rescheduleAppointmentWithToken($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber'], $_POST['appointmentTimeId']); break;
 		case 'cancel': cancelAppointmentWithToken($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'emailConfirmation': emailConfirmationWithToken($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
@@ -18,6 +18,7 @@ if (isset($_REQUEST['action'])) {
 			break;
 	}
 }
+
 
 
 function doesTokenExist($token) {
@@ -55,7 +56,7 @@ function doesTokenExist($token) {
 	echo json_encode($response);
 }
 
-function validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber) {	
+function isClientInformationValid($token, $firstName, $lastName, $emailAddress, $phoneNumber) {	
 	$response = array();
 	$response['success'] = true;
 
@@ -89,14 +90,8 @@ function rescheduleAppointmentWithToken($token, $firstName, $lastName, $emailAdd
 	$response['success'] = true;
 
 	try {
-		$clientInformation = getClientInformationFromToken($token);
-		$clientInformationMatches = clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
-
-		if ($clientInformationMatches === false) {
-			http_response_code(401);
-			throw new Exception('Provided information does not match our records.', MY_EXCEPTION);
-		}
-
+		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
+		
 		$appointmentId = $clientInformation['appointmentId'];
 		$appointmentAccessor = new AppointmentAccessor();
 		$appointmentAccessor->rescheduleAppointment($appointmentId, $appointmentTimeId);
@@ -115,14 +110,8 @@ function cancelAppointmentWithToken($token, $firstName, $lastName, $emailAddress
 	$response['success'] = true;
 
 	try {
-		$clientInformation = getClientInformationFromToken($token);
-		$clientInformationMatches = clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
-
-		if ($clientInformationMatches === false) {
-			http_response_code(401);
-			throw new Exception('Provided information does not match our records.', MY_EXCEPTION);
-		}
-
+		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
+		
 		$appointmentId = $clientInformation['appointmentId'];
 		$appointmentAccessor = new AppointmentAccessor();
 		$appointmentAccessor->cancelAppointment($appointmentId);
@@ -139,13 +128,7 @@ function emailConfirmationWithToken($token, $firstName, $lastName, $emailAddress
 	$response['success'] = true;
 
 	try {
-		$clientInformation = getClientInformationFromToken($token);
-		$clientInformationMatches = clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
-
-		if ($clientInformationMatches === false) {
-			http_response_code(401);
-			throw new Exception('Provided information does not match our records.', MY_EXCEPTION);
-		}
+		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
 
 		$appointmentId = $clientInformation['appointmentId'];
 		$confirmationMessage = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
@@ -167,28 +150,23 @@ function emailConfirmationWithToken($token, $firstName, $lastName, $emailAddress
  * Private functions
  */
 
-/*
-TODO: THIS LAST SCENARIO IS NOT ACCOUNT FOR YET
-- Being locked out as well after so many invalid attempts
-*/
-
 function isAppointmentValidForReschedule($appointmentInformation) {
 	// See if it has been cancelled
 	$isAppointmentCancelled = isset($appointmentInformation['cancelled']) && $appointmentInformation['cancelled'] == true;
 	if ($isAppointmentCancelled) {
-		return [
+		return array(
 			'valid' => false,
 			'reason' => 'Your appointment has already been cancelled.'
-		];
+		);
 	}
 	
 	// See if the appointment has already been started
 	$appointmentHasBeenStarted = isset($appointmentInformation['timeIn']);
 	if ($appointmentHasBeenStarted) {
-		return [
+		return array(
 			'valid' => false,
 			'reason' => 'Your appointment has been marked as started.'
-		];
+		);
 	}
 
 	// See if the current time is past the scheduled time
@@ -197,13 +175,25 @@ function isAppointmentValidForReschedule($appointmentInformation) {
 	$scheduledTime = $appointmentInformation['scheduledTime'];
 	$pastScheduledTime = $now > $scheduledTime;
 	if ($pastScheduledTime) {
-		return [
+		return array(
 			'valid' => false,
 			'reason' => "Your appointment's scheduled time is in the past."
-		];
+		);
 	}
 
-	return [ 'valid' => true ];
+	return array('valid' => true);
+}
+
+function validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber) {
+	$clientInformation = getClientInformationFromToken($token);
+	$clientInformationMatches = clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
+
+	if ($clientInformationMatches === false) {
+		http_response_code(401);
+		throw new Exception('Provided information does not match our records.', MY_EXCEPTION);
+	}
+
+	return $clientInformation;
 }
 
 function getClientInformationFromToken($token) {
