@@ -47,7 +47,7 @@ function doesTokenExist($token) {
 		
 		if ($tokenExists) {
 			$response['phoneNumber'] = $appointmentInformation['phoneNumber'];
-			
+
 			$appointmentValidForRescheduleArray = isAppointmentValidForReschedule($appointmentInformation);
 			$response = array_merge($response, $appointmentValidForRescheduleArray);
 		}
@@ -77,8 +77,6 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 				'address' => $appointmentInformation['address']
 			);
 			$response['scheduledTime'] = $appointmentInformation['scheduledTimeStr'];
-		} else {
-			handleClientInformationValidationFailure($token);
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -262,8 +260,4 @@ function getAppointmentInformationFromToken($token) {
 	}
 
 	return $appointmentInformation;
-}
-
-function handleClientInformationValidationFailure($token) {
-	// Not actually doing anything right now, but we could in the future.
 }
