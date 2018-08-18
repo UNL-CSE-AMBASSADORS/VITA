@@ -43,8 +43,8 @@ define('clientRescheduleController', [], function() {
 
 			ClientRescheduleDataService.doesTokenExist(token).then((result) => {
 				if (result == null) {
-					alert('There was an error loading appointment information. Please refresh and try again.');
-					$scope.tokenExists = false;
+					NotificationUtilities.giveNotice('Failure', 'There was an error loading appointment information. Please refresh and try again.', false);
+					$scope.tokenExists = null;
 				} else {
 					$scope.tokenExists = result.exists || false;
 					$scope.validForReschedule = result.valid;
@@ -74,8 +74,8 @@ define('clientRescheduleController', [], function() {
 
 			ClientRescheduleDataService.validateClientInformation(token, firstName, lastName, emailAddress, phoneNumber).then((response) => {
 				if (response == null || !response.success) {
-					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
-					$scope.validatingClientInformation = false;
+					const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
+					NotificationUtilities.giveNotice('Failure', errorMessage, false);
 				} else {
 					$scope.clientInformationValidated = response.validated;
 					if (response.validated) {
@@ -91,7 +91,6 @@ define('clientRescheduleController', [], function() {
 					} else {
 						$scope.invalidClientInformation = true;
 						$scope.clientData = {};
-						// TODO: DISPLAY A MESSAGE SAYING HOW MANY ATTEMPTS THEY HAVE LEFT?
 					}
 				}
 
@@ -117,11 +116,11 @@ define('clientRescheduleController', [], function() {
 				document.body.scrollTop = document.documentElement.scrollTop = 0;
 				
 				if (response == null || !response.success) {
-					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
-					NotificationUtilities.giveNotice("Failure", "Something went wrong and your appointment was not rescheduled! Please try again later.", false);
+					const errorMessage = response ? response.error : 'Something went wrong and your appointment was not rescheduled! Please try again later.';
+					NotificationUtilities.giveNotice('Failure', errorMessage, false);
 				} else {
 					$scope.rescheduleSuccessMessage = $sce.trustAsHtml(response.message);
-					NotificationUtilities.giveNotice("Success!", "Your appointment was successfully rescheduled.");
+					NotificationUtilities.giveNotice('Success!', 'Your appointment was successfully rescheduled.');
 				}
 
 				$scope.submittingReschedule = false;
@@ -149,8 +148,8 @@ define('clientRescheduleController', [], function() {
 				});
 
 				if (response == null || !response.success) {
-					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
-					NotificationUtilities.giveNotice("Failure", "Something went wrong and your appointment was not cancelled! Please try again later.", false);
+					const errorMessage = response ? response.error : 'Something went wrong and your appointment was not cancelled! Please try again later.';
+					NotificationUtilities.giveNotice('Failure', errorMessage, false);
 				} else {
 					$scope.appointmentCancelled = true;
 					NotificationUtilities.giveNotice("Success!", "Your appointment was successfully cancelled.");
@@ -171,12 +170,12 @@ define('clientRescheduleController', [], function() {
 
 			ClientRescheduleDataService.emailConfirmation(token, firstName, lastName, emailAddress, phoneNumber).then(function(response) {
 				if (response == null || !response.success) {
-					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
+					const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
+					NotificationUtilities.giveNotice('Failure', errorMessage, false);
 					$scope.emailButton.disabled = false;
-					return;
+				} else {
+					$scope.emailButton.text = 'Sent!';	
 				}
-
-				$scope.emailButton.text = 'Sent!';
 			});
 		}
 
