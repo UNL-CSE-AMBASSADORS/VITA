@@ -9,6 +9,7 @@ if (!$USER->isLoggedIn()) {
 }
 
 require_once "$root/server/config.php";
+require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
 
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
@@ -225,10 +226,6 @@ function notifyForCancelledShift($firstName, $lastName, $email, $siteTitle, $dat
 	if (PROD) {
 		$handle = @fopen('./notificationEmails.txt', 'r');
 		if ($handle != false) {
-			$headers = "From: noreply@vita.unl.edu\r\n";
-			$headers .= 'MIME-Version: 1.0' . "\r\n";
-			$headers .= 'Content-type: text/html; charset=iso-8859-1';
-
 			while(!feof($handle)) {
 				$toEmail = fgets($handle);
 				$cancellationMessage = "A volunteer has cancelled one of their shifts: <br/>
@@ -241,7 +238,7 @@ function notifyForCancelledShift($firstName, $lastName, $email, $siteTitle, $dat
 					<b>End Time:</b> $endTimeStr <br/>
 					<b>Role:</b> $role <br/>
 					<b>Reason:</b> $reason";
-				mail($toEmail, 'VITA -- Shift Cancellation', $cancellationMessage, $headers);
+				EmailUtilities::sendHtmlFormattedEmail($toEmail, 'VITA -- Shift Cancellation', $cancellationMessage);
 			}
 			fclose($handle);
 		}

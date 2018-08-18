@@ -133,7 +133,7 @@ function emailConfirmation($data) {
 		$confirmationMessage = AppointmentConfirmationUtilities::generateAppointmentConfirmation($data['appointmentId']);
 		
 		if (PROD) {
-			EmailUtilities::sendHtmlFormattedEmail($data['email'], 'VITA Appointment Confirmation', $confirmationMessage, 'noreply@vita.unl.edu');
+			EmailUtilities::sendHtmlFormattedEmail($data['email'], 'VITA Appointment Confirmation', $confirmationMessage);
 		} else {
 			$response['message'] = $confirmationMessage;
 		}
