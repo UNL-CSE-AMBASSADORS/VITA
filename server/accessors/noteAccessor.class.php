@@ -39,9 +39,6 @@ class NoteAccessor {
 		}
 
 		$notes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		foreach ($notes as &$note) {
-			
-		}
 		
 		return $notes;
 	}
