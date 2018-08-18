@@ -62,11 +62,6 @@ class AppointmentAccessor {
 
 		$stmt = $DB_CONN->prepare($query);
 		$stmt->execute(array($appointmentId));
-		/*$success = $stmt->execute(array($appointmentId));
-		if ($success == false) {
-			throw new Exception('Unable to reschedule the appointment', MY_EXCEPTION);
-		}
-		*/
 	}
   
 }
