@@ -32,6 +32,7 @@
 <!-- TemplateBeginEditable name="head" -->
 <link rel="stylesheet" href="/assets/css/bootstrap.btn-group.min.css">
 <link rel="stylesheet" href="/dist/assets/css/form.css">
+<link rel="stylesheet" href="/dist/assets/css/printAppointmentConfirmation.css">
 <link rel="stylesheet" href="/dist/appointment/reschedule/clientReschedule.css">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
