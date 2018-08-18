@@ -7,7 +7,8 @@ require.config({
 		clientRescheduleController: '/dist/appointment/reschedule/clientRescheduleController',
 		appointmentPickerSharedPropertiesService: '/dist/components/appointmentPicker/appointmentPickerSharedPropertiesService',
 		appointmentPickerDataService: '/dist/components/appointmentPicker/appointmentPickerDataService',
-		appointmentPickerController: '/dist/components/appointmentPicker/appointmentPickerController'
+		appointmentPickerController: '/dist/components/appointmentPicker/appointmentPickerController',
+		notificationUtilities: '/dist/assets/js/utilities/notificationUtilities'
 	},
 	shim: {
 		'ngAnimate': ['angular'],
@@ -27,14 +28,16 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 		'clientRescheduleController',
 		'appointmentPickerSharedPropertiesService',
 		'appointmentPickerDataService',
-		'appointmentPickerController'
+		'appointmentPickerController',
+		'notificationUtilities'
 	],
 	function (
 		ClientRescheduleDataService,
 		ClientRescheduleController,
 		AppointmentPickerSharedPropertiesService,
 		AppointmentPickerDataService,
-		AppointmentPickerController
+		AppointmentPickerController,
+		NotificationUtilities
 	) {
 		'use strict';
 
@@ -61,6 +64,9 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 				templateUrl: '/components/appointmentPicker/appointmentPicker.php'
 			};
 		});
+
+		// Notification utilities
+		clientRescheduleApp.factory('notificationUtilities', NotificationUtilities);
 
 		angular.bootstrap(document.getElementById('clientRescheduleApp'), ['clientRescheduleApp']);
 

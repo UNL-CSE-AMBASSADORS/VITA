@@ -1,6 +1,6 @@
 define('clientRescheduleController', [], function() {
 
-	function clientRescheduleController($scope, $sce, ClientRescheduleDataService, AppointmentPickerSharedPropertiesService) {
+	function clientRescheduleController($scope, $sce, ClientRescheduleDataService, AppointmentPickerSharedPropertiesService, NotificationUtilities) {
 		// Token variables
 		$scope.token = '';
 		$scope.tokenExists = null;
@@ -118,10 +118,10 @@ define('clientRescheduleController', [], function() {
 				
 				if (response == null || !response.success) {
 					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
-					$scope.giveNotice("Failure", "Something went wrong and your appointment was not rescheduled! Please try again later.", false);
+					NotificationUtilities.giveNotice("Failure", "Something went wrong and your appointment was not rescheduled! Please try again later.", false);
 				} else {
 					$scope.rescheduleSuccessMessage = $sce.trustAsHtml(response.message);
-					$scope.giveNotice("Success!", "Your appointment was successfully rescheduled.");
+					NotificationUtilities.giveNotice("Success!", "Your appointment was successfully rescheduled.");
 				}
 
 				$scope.submittingReschedule = false;
@@ -150,10 +150,10 @@ define('clientRescheduleController', [], function() {
 
 				if (response == null || !response.success) {
 					alert(response ? response.error : 'There was an error on the server. Please refresh the page and try again.');
-					$scope.giveNotice("Failure", "Something went wrong and your appointment was not cancelled! Please try again later.", false);
+					NotificationUtilities.giveNotice("Failure", "Something went wrong and your appointment was not cancelled! Please try again later.", false);
 				} else {
 					$scope.appointmentCancelled = true;
-					$scope.giveNotice("Success!", "Your appointment was successfully cancelled.");
+					NotificationUtilities.giveNotice("Success!", "Your appointment was successfully cancelled.");
 				}
 
 				$scope.cancellingAppointment = false;
@@ -180,22 +180,6 @@ define('clientRescheduleController', [], function() {
 			});
 		}
 
-		$scope.giveNotice = function(title, message, affirmative = true) {
-			WDN.initializePlugin('notice');
-			const body = angular.element( document.querySelector( 'body' ) );
-			body.append(`
-				<div class="wdn_notice ${affirmative ? 'affirm' : 'negate'}" data-overlay="maincontent" data-duration="10">
-					<div class="close">
-						<a href="#">Close this notice</a>
-					</div>
-					<div class="message">
-						<p class="title">${title}</p>
-						<p>${message}</a>
-						</p>
-					</div>
-				</div>`);
-		}
-
 		$scope.initializeCancelConfirmationModal = function() {
 			WDN.initializePlugin('modal', [ function() {
 				require(['jquery'], function($) {
@@ -214,7 +198,7 @@ define('clientRescheduleController', [], function() {
 
 	}
 
-	clientRescheduleController.$inject = ['$scope', '$sce', 'clientRescheduleDataService', 'appointmentPickerSharedPropertiesService'];
+	clientRescheduleController.$inject = ['$scope', '$sce', 'clientRescheduleDataService', 'appointmentPickerSharedPropertiesService', 'notificationUtilities'];
 
 	return clientRescheduleController;
 
