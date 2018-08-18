@@ -142,9 +142,6 @@
 						ng-disabled="appointmentPickerSharedProperties.selectedDate == null || appointmentPickerSharedProperties.selectedSite == null || appointmentPickerSharedProperties.selectedTime == null || submittingReschedule" 
 						ng-model="submittingReschedule" 
 						ng-click="rescheduleAppointment()">
-
-					<!-- TODO: NEED TO ACTUALLY SEND THIS EMAIL THEN... -->
-					<p>If you have an email on record, an email will automatically be sent to you confirming the change.</p>
 				</form>
 			</div>
 
