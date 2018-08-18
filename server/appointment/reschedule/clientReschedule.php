@@ -159,7 +159,7 @@ function emailConfirmationWithToken($token, $firstName, $lastName, $emailAddress
 
 function isAppointmentValidForReschedule($appointmentInformation) {
 	// See if it has been cancelled
-	$isAppointmentCancelled = isset($appointmentInformation['cancelled']) && $appointmentInformation['cancelled'] == true;
+	$isAppointmentCancelled = isset($appointmentInformation['cancelled']) && (bool)$appointmentInformation['cancelled'] === true;
 	if ($isAppointmentCancelled) {
 		return array(
 			'valid' => false,
