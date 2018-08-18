@@ -76,7 +76,6 @@
 			</form>
 		</div>
 
-		<!-- TODO: NEED TO CONTROL WHEN THESE SHOW UP. I.E. NOT AFTER THE APPT HAS STARTED... Or if it's been cancelled -->
 
 		<!-- Shown once the client information has been validated -->
 		<div ng-if="clientInformationValidated === true">
