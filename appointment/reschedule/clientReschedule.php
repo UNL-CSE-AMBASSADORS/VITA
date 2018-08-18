@@ -161,7 +161,6 @@
 
 
 			<!-- Successful Cancelling Screen -->
-			<!-- TODO MAKE THIS BETTER -->
 			<div ng-if="appointmentCancelled === true">
 				<p>Your appointment has been cancelled.</p>
 			</div>
