@@ -17,7 +17,7 @@ require.config({
 		'ngTouch': ['angular'],
 		'signupDataService': ['angular'],
 		'signupController': ['angular'],
-		'sharedPropertiesService': ['angular'],
+		'appointmentPickerSharedPropertiesService': ['angular'],
 		'appointmentPickerDataService': ['angular'],
 		'appointmentPickerController': ['angular'],
 		'bootstrap-ui': ['angular']
@@ -36,7 +36,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(
 	function (
 		SignupDataService,
 		SignupController, 
-		SharedPropertiesService,
+		AppointmentPickerSharedPropertiesService,
 		AppointmentPickerDataService,
 		AppointmentPickerController
 	) {
@@ -45,7 +45,6 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(
 		// Create the module
 		var signupApp = angular.module('signupApp', ['ui.bootstrap']);
 
-		signupApp.service('sharedPropertiesService', SharedPropertiesService)
 		signupApp.factory('signupDataService', SignupDataService);
 		signupApp.controller('signupController', SignupController);
 		signupApp.directive('signup', function () {
@@ -56,6 +55,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(
 		});
 
 		// Contents for the appointmentPickerApp module
+		signupApp.service('appointmentPickerSharedPropertiesService', AppointmentPickerSharedPropertiesService)
 		signupApp.factory('appointmentPickerDataService', AppointmentPickerDataService);
 		signupApp.controller('appointmentPickerController', AppointmentPickerController);
 		signupApp.directive('appointmentPicker', function () {

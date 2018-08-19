@@ -8,7 +8,10 @@ require.config({
 		queueDataService: '/dist/queue/queueDataService',
 		queueController: '/dist/queue/queueController',
 		queuePrivateController: '/dist/queue/queuePrivateController',
-		queueSearchFilter: '/dist/queue/queueSearchFilter'
+		queueSearchFilter: '/dist/queue/queueSearchFilter',
+		appointmentNotesAreaSharedPropertiesService: '/dist/components/appointmentNotesArea/appointmentNotesAreaSharedPropertiesService',
+		appointmentNotesAreaDataService: '/dist/components/appointmentNotesArea/appointmentNotesAreaDataService',
+		appointmentNotesAreaController: '/dist/components/appointmentNotesArea/appointmentNotesAreaController'
 	},
 	shim: {
 		'ngAnimate': ['angular'],
@@ -21,7 +24,9 @@ require.config({
 		'queueController': ['angular'],
 		'queuePrivateController': ['angular'],
 		'queueSearchFilter': ['angular'],
-
+		'appointmentNotesAreaSharedPropertiesService': ['angular'],
+		'appointmentNotesAreaDataService': ['angular'],
+		'appointmentNotesAreaController': ['angular']
 	}
 });
 
@@ -31,13 +36,19 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 		'queueDataService',
 		'queueController',
 		'queuePrivateController',
-		'queueSearchFilter'
+		'queueSearchFilter',
+		'appointmentNotesAreaSharedPropertiesService',
+		'appointmentNotesAreaDataService',
+		'appointmentNotesAreaController'
 	],
 	function (
 		QueueDataService,
 		QueueController, 
 		QueuePrivateController,
-		QueueSearchFilter
+		QueueSearchFilter,
+		AppointmentNotesAreaSharedPropertiesService,
+		AppointmentNotesAreaDataService,
+		AppointmentNotesAreaController
 	) {
 		'use strict';
 
@@ -45,6 +56,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 		var queueApp = angular.module('queueApp', []);
 
 		queueApp.factory('queueDataService', QueueDataService);
+		queueApp.service('appointmentNotesAreaSharedPropertiesService', AppointmentNotesAreaSharedPropertiesService)
 		queueApp.controller('queueController', QueueController);
 		queueApp.controller('queuePrivateController', QueuePrivateController);
 		queueApp.directive('privateQueue', function () {
@@ -54,6 +66,16 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 			};
 		});
 		queueApp.filter('searchFor', QueueSearchFilter);
+
+		// Contents for the appointmentNotesAreaApp module
+		queueApp.factory('appointmentNotesAreaDataService', AppointmentNotesAreaDataService);
+		queueApp.controller('appointmentNotesAreaController', AppointmentNotesAreaController);
+		queueApp.directive('appointmentNotesArea', function () {
+			return {
+				controller: 'appointmentNotesAreaController',
+				templateUrl: '/components/appointmentNotesArea/appointmentNotesArea.php'
+			};
+		});
 
 		angular.bootstrap(document.getElementById('queueApp'), ['queueApp']);
 

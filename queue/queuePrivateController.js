@@ -1,14 +1,17 @@
 define('queuePrivateController', [], function() {
 
-	function queuePrivateController($scope, $controller, QueueDataService) {
+	function queuePrivateController($scope, $controller, QueueDataService, AppointmentNotesAreaSharedPropertiesService) {
 		angular.extend(this, $controller('queueController', {$scope: $scope}));
 	
+		$scope.appointmentNotesAreaSharedProperties = AppointmentNotesAreaSharedPropertiesService.getSharedProperties();
+
 		function fixedEncodeURIComponent (str) {
 			return encodeURIComponent(str).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
 		}
 	
 		$scope.selectClient = function(client) {
 			$scope.client = client;
+			$scope.appointmentNotesAreaSharedProperties.appointmentId = $scope.client.appointmentId;
 			for (let filingStatus of $scope.filingStatuses) {
 				filingStatus.checked = false;
 			}
@@ -75,15 +78,12 @@ define('queuePrivateController', [], function() {
 			});
 		};
 	
-		$scope.incompleteAppointment = function(explanation) {
+		$scope.incompleteAppointment = function() {
 			$scope.client.ended = true;
-			let urlSafeExplanation = fixedEncodeURIComponent(explanation);
-			QueueDataService.incompleteAppointment(urlSafeExplanation, $scope.client.appointmentId).then(function(result) {
+			QueueDataService.incompleteAppointment($scope.client.appointmentId).then(function(result) {
 				if(!result.success) {
 					$scope.client.ended = false;
 					alert(result.error);
-				} else {
-					$scope.client.explanation = "";
 				}
 				$scope.updateAppointmentInformation();
 			});
@@ -118,7 +118,7 @@ define('queuePrivateController', [], function() {
  		$scope.getFilingStatuses();
 	}
 
-	queuePrivateController.$inject = ['$scope', '$controller', 'queueDataService'];
+	queuePrivateController.$inject = ['$scope', '$controller', 'queueDataService', 'appointmentNotesAreaSharedPropertiesService'];
 
 	return queuePrivateController;
 

@@ -10,13 +10,14 @@
 	}
 
 	require_once "$root/server/accessors/appointmentAccessor.class.php";
+	require_once "$root/server/accessors/noteAccessor.class.php";
 
 	switch($_REQUEST['action']) {
 		case 'checkIn': checkIn($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'completePaperwork': completePaperwork($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentStart': appointmentStart($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id'], $_REQUEST['stationNumber'], array_key_exists('filingStatusIds', $_REQUEST) ? $_REQUEST['filingStatusIds'] : []); break;
-		case 'appointmentIncomplete': appointmentIncomplete($_REQUEST['explanation'], $_REQUEST['id']); break;
+		case 'appointmentIncomplete': appointmentIncomplete($_REQUEST['id']); break;
 		case 'cancelledAppointment': cancelledAppointment($_REQUEST['id']); break;
 		default: break;
 	}
@@ -131,22 +132,26 @@
 		$stmt = null;
 	}
 
-	function appointmentIncomplete($explanation, $appointmentId) {
-		GLOBAL $DB_CONN;
+	function appointmentIncomplete($appointmentId) {
+		GLOBAL $DB_CONN, $USER;
 
 		$response = array();
 		$response['success'] = true;
 
 		try {
-			$stmt = $DB_CONN->prepare(
-				"UPDATE ServicedAppointment
-				SET notCompletedDescription = ?, completed = FALSE
-				WHERE appointmentId = ?"
-			);
+			$query = 'UPDATE ServicedAppointment
+				SET completed = FALSE
+				WHERE appointmentId = ?';
+			$stmt = $DB_CONN->prepare($query);
 
-			if ($stmt->execute(array($explanation, $appointmentId)) == false) {
-				throw new Exception();
-			}
+			$success = $stmt->execute(array($appointmentId));
+			if ($success == false) throw new Exception();
+
+			# Insert an automatic note saying it was marked as incomplete
+			$noteAccessor = new NoteAccessor();
+			$noteText = 'Marked as Incomplete [Automatic Note]';
+			$userId = $USER->getUserId();
+			$noteAccessor->addNote($appointmentId, $noteText, $userId);
 		} catch (Exception $e) {
 			$response['success'] = false;
 			$response['error'] = 'Unable to update the appointment. Please refresh the page and try again.';
