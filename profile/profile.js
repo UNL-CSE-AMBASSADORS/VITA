@@ -30,6 +30,8 @@ WDN.initializePlugin('modal', [function() {
 				}
 			});
 		};
+
+
 	
 		function loadAbilities() {
 			$.ajax({
@@ -75,6 +77,8 @@ WDN.initializePlugin('modal', [function() {
 				}
 			});
 		};
+
+
 	
 		// Maps a roleId -> role name
 		let rolesMap = new Map();
@@ -101,6 +105,8 @@ WDN.initializePlugin('modal', [function() {
 			});
 		}
 
+
+
 		// Maps a roleId -> siteId -> maximumNumber of that role allowed for that site (shift can override)
 		const siteRoleLimitsMap = new Map();
 		// Maps a roleId -> shiftId -> maximumNumber of that role allowed for that shift
@@ -123,9 +129,6 @@ WDN.initializePlugin('modal', [function() {
 							addToShiftRoleLimitsMap(roleLimit);
 						}
 					}
-
-					console.log(siteRoleLimitsMap);
-					console.log(shiftRoleLimitsMap);
 				},
 				error: function(response) {
 					alert('Unable to load role limits. Please refresh the page in a few minutes.');
@@ -205,68 +208,68 @@ WDN.initializePlugin('modal', [function() {
 			let shiftRow = $('<div></div>');
 			let shiftInformation = $('<span></span>').text(`${siteTitle}: ${dateString} ${startTimeString} - ${endTimeString} (${roleName})`);
 			let removeButton = $('<a></a>')
-			.text(' [Cancel]')
-			.addClass('red-icon pointer')
-			.colorbox({
-				inline:true,
-				width:'50%',
-				onOpen: function() {
-					$('#cancellation-reason-details').text(`${siteTitle}: ${dateString} ${startTimeString} - ${endTimeString} (${roleName})`);
-					
-					// modal submit functionality
-					$('#cancellation-reason-form').on('submit', function(event) {
-						event.preventDefault();
-						$('#cancellation-reason-form button[type=submit]').prop('disabled', true);
+				.text(' [Cancel]')
+				.addClass('red-icon pointer')
+				.colorbox({
+					inline:true,
+					width:'50%',
+					onOpen: function() {
+						$('#cancellation-reason-details').text(`${siteTitle}: ${dateString} ${startTimeString} - ${endTimeString} (${roleName})`);
+						
+						// modal submit functionality
+						$('#cancellation-reason-form').on('submit', function(event) {
+							event.preventDefault();
+							$('#cancellation-reason-form button[type=submit]').prop('disabled', true);
+			
+							let reason = $('#cancellation-reason').val();
+							let valid = reason.length > 0;
 		
-						let reason = $('#cancellation-reason').val();
-						let valid = reason.length > 0;
-	
-						if(valid) {
-							$.ajax({
-								url: "/server/profile/profile.php",
-								type: "POST",
-								dataType: "JSON",
-								data: {
-									action: 'removeShift',
-									userShiftId: userShiftId,
-									reason: reason
-								},
-								cache: false,
-								success: function(response) {
-									$('#cancellation-reason-form button[type=submit]').prop('disabled', false);
-									if (response.success) {
-										shiftRow.remove();
-										$('#cancellation-reason').val('');
-										$.colorbox.close();
-										
-										// Find the shift that just got removed and make it so we're not signed up for it anymore
-										for (const shift of shiftsMap.get(siteId).get(dateString)) {
-											if (shift.userShiftId === userShiftId) {
-												shift.signedUp = false;
-												shift.userShiftId = null;
-												break;
+							if(valid) {
+								$.ajax({
+									url: "/server/profile/profile.php",
+									type: "POST",
+									dataType: "JSON",
+									data: {
+										action: 'removeShift',
+										userShiftId: userShiftId,
+										reason: reason
+									},
+									cache: false,
+									success: function(response) {
+										$('#cancellation-reason-form button[type=submit]').prop('disabled', false);
+										if (response.success) {
+											shiftRow.remove();
+											$('#cancellation-reason').val('');
+											$.colorbox.close();
+											
+											// Find the shift that just got removed and make it so we're not signed up for it anymore
+											for (const shift of shiftsMap.get(siteId).get(dateString)) {
+												if (shift.userShiftId === userShiftId) {
+													shift.signedUp = false;
+													shift.userShiftId = null;
+													break;
+												}
 											}
+										} else {
+											alert(response.error);
 										}
-									} else {
-										alert(response.error);
+									},
+									error: function(response) {
+										alert('Unable to communicate with server. Try again in a few minutes.');
 									}
-								},
-								error: function(response) {
-									alert('Unable to communicate with server. Try again in a few minutes.');
-								}
-							});
-						}else{
-							$('#cancellation-reason-form button[type=submit]').prop('disabled', false);
-						}
-					});
-				},
-				onCleanup: function() {
-					$('#cancellation-reason-details').text('');
-					$('#cancellation-reason').val('');
-					// Remove cancellation modal submit event listeners
-					$('#cancellation-reason-form').off();
-				}
-			}).prop('href', '#cancellation-reason-modal');
+								});
+							}else{
+								$('#cancellation-reason-form button[type=submit]').prop('disabled', false);
+							}
+						});
+					},
+					onCleanup: function() {
+						$('#cancellation-reason-details').text('');
+						$('#cancellation-reason').val('');
+						// Remove cancellation modal submit event listeners
+						$('#cancellation-reason-form').off();
+					}
+				}).prop('href', '#cancellation-reason-modal');
 			
 			$('.close-modal-button').click(function(){
 				$.colorbox.close();
@@ -452,13 +455,35 @@ WDN.initializePlugin('modal', [function() {
 						}));
 					}
 				});
+
+				timeSelect.change(() => {
+					roleSelect.children('option').remove();
+
+					for (const [roleId, name] of rolesMap) {
+						const siteId = siteSelect.val();
+						const shiftId = timeSelect.val();
 	
-				for (const [roleId, name] of rolesMap) {
-					roleSelect.append($('<option>', {
-						value: roleId,
-						text: name
-					}));
-				}
+						const siteRoleLimit = siteRoleLimitsMap.has(roleId) ? siteRoleLimitsMap.get(roleId).get(siteId) || -1 : -1;
+						const shiftRoleLimit = shiftRoleLimitsMap.has(roleId) ? shiftRoleLimitsMap.get(roleId).get(shiftId) || -1 : -1;
+	
+						let roleLimit = -1;
+						if (shiftRoleLimit !== -1) {
+							roleLimit = shiftRoleLimit;
+						} else if (siteRoleLimit !== -1) {
+							roleLimit = siteRoleLimit;
+						}
+	
+						let roleLimitText = '';
+						if (roleLimit !== -1) {
+							roleLimitText = ` - Limit ${roleLimit}`;
+						}
+	
+						roleSelect.append($('<option>', {
+							value: roleId,
+							text: `${name}${roleLimitText}`
+						}));
+					}
+				});
 	
 				let cancelButton = $('<button type="button"></button>').addClass("wdn-button wdn-button-brand wdn-pull-right").html("Cancel").click(function(){
 					$(this).parent().remove();
