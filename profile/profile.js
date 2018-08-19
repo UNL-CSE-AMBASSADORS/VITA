@@ -101,6 +101,11 @@ WDN.initializePlugin('modal', [function() {
 			});
 		}
 
+		// Maps a roleId -> siteId -> maximumNumber of that role allowed for that site (shift can override)
+		const siteRoleLimitsMap = new Map();
+		// Maps a roleId -> shiftId -> maximumNumber of that role allowed for that shift
+		const shiftRoleLimitsMap = new Map();
+
 		function loadRoleLimits() {
 			$.ajax({
 				url: '/server/api/roles/limits/getAll.php',
@@ -108,19 +113,47 @@ WDN.initializePlugin('modal', [function() {
 				dataType: 'JSON',
 				cache: false,
 				success: function(response) {
-					console.log('SUCCESS');
-					console.log(response);
-					
 					for (let i = 0; i < response.length; i++) {
 						const roleLimit = response[i];
-						console.log(roleLimit);
+
+						const isSiteRoleLimitEntry = roleLimit.shiftId == null;
+						if (isSiteRoleLimitEntry) {
+							addToSiteRoleLimitsMap(roleLimit);
+						} else {
+							addToShiftRoleLimitsMap(roleLimit);
+						}
 					}
+
+					console.log(siteRoleLimitsMap);
+					console.log(shiftRoleLimitsMap);
 				},
 				error: function(response) {
 					alert('Unable to load role limits. Please refresh the page in a few minutes.');
 				}
 			});
 		}
+
+		function addToSiteRoleLimitsMap(siteRoleLimit) {
+			const hasRoleIdAlready = siteRoleLimitsMap.has(siteRoleLimit.roleId);
+			if (!hasRoleIdAlready) {
+				siteRoleLimitsMap.set(siteRoleLimit.roleId, new Map());
+			} 
+
+			const siteLimitsMap = siteRoleLimitsMap.get(siteRoleLimit.roleId);
+			siteLimitsMap.set(siteRoleLimit.siteId, siteRoleLimit.maximumNumber);
+		}
+
+		function addToShiftRoleLimitsMap(shiftRoleLimit) {
+			const hasRoleIdAlready = shiftRoleLimitsMap.has(shiftRoleLimit.roleId);
+			if (!hasRoleIdAlready) {
+				shiftRoleLimitsMap.set(shiftRoleLimit.roleId, new Map());
+			}
+
+			const shiftLimitsMap = shiftRoleLimitsMap.get(shiftRoleLimit.roleId);
+			shiftLimitsMap.set(shiftRoleLimit.shiftId, shiftRoleLimit.maximumNumber);
+		}
+
+
 	
 		// Maps a siteId -> dates that site is open -> shifts for that date
 		let shiftsMap = new Map();
