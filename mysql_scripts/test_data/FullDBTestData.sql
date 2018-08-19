@@ -9,6 +9,7 @@ TRUNCATE Appointment;
 TRUNCATE AppointmentTime;
 TRUNCATE Client;
 TRUNCATE UserShift;
+TRUNCATE RoleLimit;
 TRUNCATE Shift;
 TRUNCATE Role;
 TRUNCATE Site;
