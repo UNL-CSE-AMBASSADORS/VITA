@@ -159,10 +159,12 @@ WDN.initializePlugin('modal', [function() {
 
 	
 		// Maps a siteId -> dates that site is open -> shifts for that date
-		let shiftsMap = new Map();
+		const shiftsMap = new Map();
 		// Maps a siteId -> the title of the site
-		let sitesMap = new Map(); 
-	
+		const sitesMap = new Map();
+		// Maps a shiftId -> roleId -> the number of volunteers signed up for that shift/role
+		const shiftRoleCountsMap = new Map();
+
 		function loadShifts() {
 			$.ajax({
 				url: "/server/profile/profile.php",
@@ -173,17 +175,18 @@ WDN.initializePlugin('modal', [function() {
 				},
 				cache: false,
 				success: function(response) {
+					// Constuct the shift and site maps
 					for (let i = 0; i < response.shifts.length; i++) {
-						let shift = response.shifts[i];
+						const shift = response.shifts[i];
 	
 						// Create the shiftsMap
 						if (!sitesMap.has(shift.siteId)) sitesMap.set(shift.siteId, shift.title);
 						if (!shiftsMap.has(shift.siteId)) shiftsMap.set(shift.siteId, new Map());
 	
-						let datesMap = shiftsMap.get(shift.siteId);
+						const datesMap = shiftsMap.get(shift.siteId);
 						if (!datesMap.has(shift.dateString)) datesMap.set(shift.dateString, []);
 	
-						let shiftTimes = datesMap.get(shift.dateString);
+						const shiftTimes = datesMap.get(shift.dateString);
 						shiftTimes.push({
 							'shiftId': shift.shiftId,
 							'startTime': shift.startTimeString,
@@ -196,6 +199,19 @@ WDN.initializePlugin('modal', [function() {
 						if (shift.signedUp) {
 							appendSignedUpShift(shift.title, shift.dateString, shift.startTimeString, shift.endTimeString, shift.userShiftId, shift.siteId, shift.roleName);
 						}
+					}
+
+					// Construct the shiftRoleCountsMap
+					for (let i = 0; i < response.shiftRoleCounts.length; i++) {
+						const shiftRoleCount = response.shiftRoleCounts[i];
+
+						const hasShiftIdAlready = shiftRoleCountsMap.has(shiftRoleCount.shiftId);
+						if (!hasShiftIdAlready) {
+							shiftRoleCountsMap.set(shiftRoleCount.shiftId, new Map());
+						}
+
+						const roleCountsMap = shiftRoleCountsMap.get(shiftRoleCount.shiftId);
+						roleCountsMap.set(shiftRoleCount.roleId, shiftRoleCount.numberSignedUp);
 					}
 				},
 				error: function(response) {
@@ -458,6 +474,8 @@ WDN.initializePlugin('modal', [function() {
 
 				timeSelect.change(() => {
 					roleSelect.children('option').remove();
+					roleSelect.append($('<option disabled selected value="" style="display:none"> -- Select a role -- </option>'));			
+					roleSelect.attr('disabled', false);
 
 					for (const [roleId, name] of rolesMap) {
 						const siteId = siteSelect.val();
@@ -465,7 +483,8 @@ WDN.initializePlugin('modal', [function() {
 	
 						const siteRoleLimit = siteRoleLimitsMap.has(roleId) ? siteRoleLimitsMap.get(roleId).get(siteId) || -1 : -1;
 						const shiftRoleLimit = shiftRoleLimitsMap.has(roleId) ? shiftRoleLimitsMap.get(roleId).get(shiftId) || -1 : -1;
-	
+						const shiftRoleCount = shiftRoleCountsMap.has(shiftId) ? shiftRoleCountsMap.get(shiftId).get(roleId) || 0 : 0;
+
 						let roleLimit = -1;
 						if (shiftRoleLimit !== -1) {
 							roleLimit = shiftRoleLimit;
@@ -474,13 +493,21 @@ WDN.initializePlugin('modal', [function() {
 						}
 	
 						let roleLimitText = '';
+						let disabled = false;
 						if (roleLimit !== -1) {
-							roleLimitText = ` - Limit ${roleLimit}`;
+							if (shiftRoleCount > roleLimit) {
+								disabled = true;
+								roleLimitText = ' - Limit Reached';
+							} else {
+								const spotsLeft = roleLimit - shiftRoleCount;
+								roleLimitText = ` - Limit ${roleLimit}, ${spotsLeft} spots left`;
+							}
 						}
 	
 						roleSelect.append($('<option>', {
 							value: roleId,
-							text: `${name}${roleLimitText}`
+							text: `${name}${roleLimitText}`,
+							disabled: disabled
 						}));
 					}
 				});

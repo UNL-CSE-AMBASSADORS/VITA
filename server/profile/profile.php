@@ -86,11 +86,28 @@ function getShifts() {
 		$shift['signedUp'] = isset($shift['userShiftId']);
 	}
 
+	$shiftRoleCounts = getEachRoleCountForAllShifts();
+
 	$result = array(
-		'shifts' => $shifts
+		'shifts' => $shifts,
+		'shiftRoleCounts' => $shiftRoleCounts
 	);
 
 	echo json_encode($result);
+}
+
+function getEachRoleCountForAllShifts() {
+	GLOBAL $DB_CONN;
+
+	$query = 'SELECT shiftId, roleId, COUNT(*) AS numberSignedUp
+		FROM UserShift
+		GROUP BY shiftId, roleId;';
+	
+	$stmt = $DB_CONN->prepare($query);
+	$stmt->execute();
+	$roleCounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+	return $roleCounts;
 }
 
 function updateAbilities($data) {
