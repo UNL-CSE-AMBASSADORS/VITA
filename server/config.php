@@ -3,13 +3,13 @@
 	define('MY_EXCEPTION', 99999);
 	define('NOREPLY_EMAIL', 'noreply@vita.unl.edu');
 
+	error_reporting(E_ALL);
 	if (PROD) {
 		ini_set('display_errors', 0);
 		ini_set('display_startup_errors', 0);
 		ini_set('log_errors', 1);
 		ini_set('error_log', './var/log/php-error.log');
 	} else {
-		error_reporting(E_ALL);
 		ini_set('display_errors', 1);
 	}
 
