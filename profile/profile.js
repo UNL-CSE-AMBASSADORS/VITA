@@ -4,6 +4,7 @@ WDN.initializePlugin('modal', [function() {
 			loadProfileInformation();
 			loadAbilities();
 			loadRoles();
+			loadRoleLimits();
 			loadShifts();
 
 			initializeEventListeners();
@@ -90,12 +91,33 @@ WDN.initializePlugin('modal', [function() {
 				cache: false,
 				success: function(response) {
 					for (let i = 0; i < response.length; i++) {
-						let role = response[i];
+						const role = response[i];
 						rolesMap.set(role.roleId, role.name);
 					}
 				}, 
 				error: function(response) {
 					alert("Unable to load roles. Please refresh the page in a few minutes.");
+				}
+			});
+		}
+
+		function loadRoleLimits() {
+			$.ajax({
+				url: '/server/api/roles/limits/getAll.php',
+				type: 'GET',
+				dataType: 'JSON',
+				cache: false,
+				success: function(response) {
+					console.log('SUCCESS');
+					console.log(response);
+					
+					for (let i = 0; i < response.length; i++) {
+						const roleLimit = response[i];
+						console.log(roleLimit);
+					}
+				},
+				error: function(response) {
+					alert('Unable to load role limits. Please refresh the page in a few minutes.');
 				}
 			});
 		}

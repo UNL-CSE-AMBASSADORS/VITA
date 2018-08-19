@@ -72,9 +72,9 @@ function getShifts() {
 			TIME_FORMAT(endTime, '%l:%i %p') AS endTimeString, DATE_FORMAT(startTime, '%b %D, %Y') AS dateString, 
 			title, Site.siteId, UserShift.userShiftId, Role.roleId, Role.name AS roleName
 		FROM Shift
-		LEFT JOIN UserShift ON Shift.shiftId = UserShift.shiftId AND UserShift.userId = ?
-		JOIN Site ON Shift.siteId = Site.siteId
-		LEFT JOIN Role ON UserShift.roleId = Role.roleId
+			JOIN Site ON Shift.siteId = Site.siteId
+			LEFT JOIN UserShift ON Shift.shiftId = UserShift.shiftId AND UserShift.userId = ?
+			LEFT JOIN Role ON UserShift.roleId = Role.roleId
 		WHERE Site.archived = FALSE AND Shift.archived = FALSE
 		ORDER BY startTime";
 
