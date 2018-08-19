@@ -75,6 +75,7 @@ WDN.initializePlugin('modal', [function() {
 			});
 		};
 	
+		// Maps a roleId -> role name
 		let rolesMap = new Map();
 	
 		function loadRoles() {
@@ -101,7 +102,7 @@ WDN.initializePlugin('modal', [function() {
 	
 		// Maps a siteId -> dates that site is open -> shifts for that date
 		let shiftsMap = new Map();
-		// Maps a siteId to the title of the site
+		// Maps a siteId -> the title of the site
 		let sitesMap = new Map(); 
 	
 		function loadShifts() {
@@ -219,8 +220,14 @@ WDN.initializePlugin('modal', [function() {
 			shiftRow.append(shiftInformation, removeButton);
 			$('#shiftsSignedUpFor').append(shiftRow);
 		}
-	
+
 		function initializeEventListeners() {
+			initializePersonalInformationEventListeners();
+			initializeAbilitiesEventListeners();
+			initializeShiftEventListeners();
+		}
+
+		function initializePersonalInformationEventListeners() {
 			$("#personalInformationEditButton").click(function(e) {
 				$("#firstNameInput").val($("#firstNameText").html());
 				$("#lastNameInput").val($("#lastNameText").html());
@@ -234,21 +241,7 @@ WDN.initializePlugin('modal', [function() {
 				$("#personalInformationSaveButton").show();
 				$("#personalInformationCancelButton").show();
 			});
-	
-			$("#abilitiesEditButton").click(function(e) {
-				$("#abilitiesSelect").find('.editView').show();		
-				$("#abilitiesSelect").find('.preview').hide();
-				$(this).hide();
-				$("#abilitiesCancelButton").show()
-			});
-	
-			$("#abilitiesCancelButton").click(function(e) {
-				$("#abilitiesSelect").find('.editView').hide();		
-				$("#abilitiesSelect").find('.preview').show();
-				$(this).hide();
-				$("#abilitiesEditButton").show()
-			});
-	
+
 			$("#personalInformationCancelButton").click(function(e) {
 				$(this).hide();
 				$("#personalInformationSaveButton").hide();
@@ -301,7 +294,55 @@ WDN.initializePlugin('modal', [function() {
 					}
 				});
 			});
+		}
 	
+		function initializeAbilitiesEventListeners() {
+			$("#abilitiesEditButton").click(function(e) {
+				$("#abilitiesSelect").find('.editView').show();		
+				$("#abilitiesSelect").find('.preview').hide();
+				$(this).hide();
+				$("#abilitiesCancelButton").show()
+			});
+	
+			$("#abilitiesCancelButton").click(function(e) {
+				$("#abilitiesSelect").find('.editView').hide();		
+				$("#abilitiesSelect").find('.preview').show();
+				$(this).hide();
+				$("#abilitiesEditButton").show()
+			});
+	
+			$('#abilitiesSelect').on('change', function(event){
+				// abilities to be removed - all non-selected options with set ids
+				let removeUserAbilityIds = $(this).children('.editView').children('input:not(:checked)[data-userAbilityId]').map(function(index, ele){
+					return ele.dataset.userabilityid; // note this is case-sensitive and should be all lowercase
+				}).get();
+	
+				// abilities to be added - all selected options w/o ids
+				let addAbilityIds = $(this).children('.editView').children('input:checked:not([data-userAbilityId])').map(function(index, ele){
+					return ele.value;
+				}).get();
+	
+				$.ajax({
+					dataType: 'JSON',
+					method: 'POST',
+					url: '/server/profile/profile.php',
+					data: {
+						action: 'updateAbilities',
+						removeAbilityArray: removeUserAbilityIds,
+						addAbilityArray: addAbilityIds
+					},
+					success: function(response){
+						if (response.success) {
+							loadAbilities();
+						} else {
+							alert(response.error);
+						}
+					}
+				});
+			});
+		}
+
+		function initializeShiftEventListeners() {
 			$("#addShiftButton").click(function(e) {
 				let shiftRow = $('<div></div>').addClass("add-shift-div wdn-grid-set wdn-inner-wrapper wdn-inner-padding-sm centered");
 				let siteSelect = $('<select></select>').addClass("siteSelect bp768-wdn-col-one-fourth mb-1rem");
@@ -422,36 +463,7 @@ WDN.initializePlugin('modal', [function() {
 				shiftRow.append(siteSelect, dateSelect, timeSelect, roleSelect, cancelButton, signUpButton);
 				$("#shifts").append(shiftRow);	
 			});
-	
-			$('#abilitiesSelect').on('change', function(event){
-				// abilities to be removed - all non-selected options with set ids
-				let removeUserAbilityIds = $(this).children('.editView').children('input:not(:checked)[data-userAbilityId]').map(function(index, ele){
-					return ele.dataset.userabilityid; // note this is case-sensitive and should be all lowercase
-				}).get();
-	
-				// abilities to be added - all selected options w/o ids
-				let addAbilityIds = $(this).children('.editView').children('input:checked:not([data-userAbilityId])').map(function(index, ele){
-					return ele.value;
-				}).get();
-	
-				$.ajax({
-					dataType: 'JSON',
-					method: 'POST',
-					url: '/server/profile/profile.php',
-					data: {
-						action: 'updateAbilities',
-						removeAbilityArray: removeUserAbilityIds,
-						addAbilityArray: addAbilityIds
-					},
-					success: function(response){
-						if (response.success) {
-							loadAbilities();
-						} else {
-							alert(response.error);
-						}
-					}
-				});
-			});
 		}
+
 	});
 }]);
