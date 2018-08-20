@@ -568,8 +568,6 @@ WDN.initializePlugin('modal', [function() {
 		function createRoleLimitText(roleLimit, shiftRoleCount) {
 			const thereIsARoleLimit = roleLimit !== -1
 			const roleLimitReached = thereIsARoleLimit && shiftRoleCount >= roleLimit;
-			const disabled = roleLimitReached;
-
 			let roleLimitText = '';
 			if (thereIsARoleLimit) {
 				if (roleLimitReached) {
@@ -580,7 +578,7 @@ WDN.initializePlugin('modal', [function() {
 				}
 			}
 
-			return { roleLimitText, disabled };
+			return { roleLimitText, disabled: roleLimitReached };
 		}
 
 	});
