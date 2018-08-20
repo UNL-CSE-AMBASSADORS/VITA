@@ -143,7 +143,7 @@ WDN.initializePlugin('modal', [function() {
 			} 
 
 			const siteLimitsMap = siteRoleLimitsMap.get(siteRoleLimit.roleId);
-			siteLimitsMap.set(siteRoleLimit.siteId, siteRoleLimit.maximumNumber);
+			siteLimitsMap.set(siteRoleLimit.siteId, parseInt(siteRoleLimit.maximumNumber));
 		}
 
 		function addToShiftRoleLimitsMap(shiftRoleLimit) {
@@ -153,7 +153,7 @@ WDN.initializePlugin('modal', [function() {
 			}
 
 			const shiftLimitsMap = shiftRoleLimitsMap.get(shiftRoleLimit.roleId);
-			shiftLimitsMap.set(shiftRoleLimit.shiftId, shiftRoleLimit.maximumNumber);
+			shiftLimitsMap.set(shiftRoleLimit.shiftId, parseInt(shiftRoleLimit.maximumNumber));
 		}
 
 
@@ -211,7 +211,7 @@ WDN.initializePlugin('modal', [function() {
 						}
 
 						const roleCountsMap = shiftRoleCountsMap.get(shiftRoleCount.shiftId);
-						roleCountsMap.set(shiftRoleCount.roleId, shiftRoleCount.numberSignedUp);
+						roleCountsMap.set(shiftRoleCount.roleId, parseInt(shiftRoleCount.numberSignedUp));
 					}
 				},
 				error: function(response) {
@@ -422,7 +422,7 @@ WDN.initializePlugin('modal', [function() {
 				let siteSelect = $('<select></select>').addClass("siteSelect bp768-wdn-col-one-fourth mb-1rem");
 				let dateSelect = $('<select></select>').addClass("dateSelect bp768-wdn-col-one-fourth mb-1rem").attr('disabled', true);
 				let timeSelect = $('<select></select>').addClass("timeSelect bp768-wdn-col-one-fourth mb-1rem").attr('disabled', true);
-				let roleSelect = $('<select></select>').addClass("roleSelect bp768-wdn-col-one-fourth mb-1rem");
+				let roleSelect = $('<select></select>').addClass("roleSelect bp768-wdn-col-one-fourth mb-1rem").attr('disabled', true);
 				
 				siteSelect.append($('<option disabled selected value="" style="display:none"> -- Select a site -- </option>'));
 				dateSelect.append($('<option disabled selected value="" style="display:none"> -- Select a date -- </option>'));
@@ -437,14 +437,11 @@ WDN.initializePlugin('modal', [function() {
 				}
 	
 				siteSelect.change(function() {
-					timeSelect.children('option').remove();
-					timeSelect.append($('<option disabled selected value="" style="display:none"> -- Select a time -- </option>'));
-					timeSelect.attr('disabled', true);			
-					dateSelect.children('option').remove();
-					dateSelect.append($('<option disabled selected value="" style="display:none"> -- Select a date -- </option>'));
-					dateSelect.attr('disabled', false);
-					
-					let siteId = $(this).val();
+					resetSelectInput(dateSelect, 'date', false);
+					resetSelectInput(timeSelect, 'time', true);
+					resetSelectInput(roleSelect, 'role', true);
+
+					const siteId = $(this).val();
 	
 					// populate dates select now based on which site was chosen
 					for (const dateString of shiftsMap.get(siteId).keys()) {
@@ -456,11 +453,11 @@ WDN.initializePlugin('modal', [function() {
 				});
 	
 				dateSelect.change(function() {
-					timeSelect.children('option').remove();
-					timeSelect.append($('<option disabled selected value="" style="display:none"> -- Select a time -- </option>'));			
-					timeSelect.attr('disabled', false);
-					let siteId = siteSelect.val();
-					let dateString = $(this).val();
+					resetSelectInput(timeSelect, 'time', false);
+					resetSelectInput(roleSelect, 'role', true);
+
+					const siteId = siteSelect.val();
+					const dateString = $(this).val();
 	
 					// populate shift times select now based on which date was chosen AND the user is not already signed up for it
 					for (const shift of shiftsMap.get(siteId).get(dateString)) {
@@ -472,38 +469,17 @@ WDN.initializePlugin('modal', [function() {
 					}
 				});
 
-				timeSelect.change(() => {
-					roleSelect.children('option').remove();
-					roleSelect.append($('<option disabled selected value="" style="display:none"> -- Select a role -- </option>'));			
-					roleSelect.attr('disabled', false);
+				timeSelect.change(function() {
+					resetSelectInput(roleSelect, 'role', false);
+
+					const siteId = siteSelect.val();
+					const shiftId = timeSelect.val();
 
 					for (const [roleId, name] of rolesMap) {
-						const siteId = siteSelect.val();
-						const shiftId = timeSelect.val();
-	
-						const siteRoleLimit = siteRoleLimitsMap.has(roleId) ? siteRoleLimitsMap.get(roleId).get(siteId) || -1 : -1;
-						const shiftRoleLimit = shiftRoleLimitsMap.has(roleId) ? shiftRoleLimitsMap.get(roleId).get(shiftId) || -1 : -1;
+						const roleLimit = determineRoleLimit(roleId, siteId, shiftId);
 						const shiftRoleCount = shiftRoleCountsMap.has(shiftId) ? shiftRoleCountsMap.get(shiftId).get(roleId) || 0 : 0;
+						const { roleLimitText, disabled } = createRoleLimitText(roleLimit, shiftRoleCount);
 
-						let roleLimit = -1;
-						if (shiftRoleLimit !== -1) {
-							roleLimit = shiftRoleLimit;
-						} else if (siteRoleLimit !== -1) {
-							roleLimit = siteRoleLimit;
-						}
-	
-						let roleLimitText = '';
-						let disabled = false;
-						if (roleLimit !== -1) {
-							if (shiftRoleCount > roleLimit) {
-								disabled = true;
-								roleLimitText = ' - Limit Reached';
-							} else {
-								const spotsLeft = roleLimit - shiftRoleCount;
-								roleLimitText = ` - Limit ${roleLimit}, ${spotsLeft} spots left`;
-							}
-						}
-	
 						roleSelect.append($('<option>', {
 							value: roleId,
 							text: `${name}${roleLimitText}`,
@@ -570,6 +546,41 @@ WDN.initializePlugin('modal', [function() {
 				shiftRow.append(siteSelect, dateSelect, timeSelect, roleSelect, cancelButton, signUpButton);
 				$("#shifts").append(shiftRow);	
 			});
+		}
+
+		function resetSelectInput($selectObj, name, disabled) {
+			$selectObj.children('option').remove();
+			$selectObj.append($(`<option disabled selected value="" style="display:none"> -- Select a ${name} -- </option>`));
+			$selectObj.attr('disabled', disabled);
+		}
+
+		function determineRoleLimit(roleId, siteId, shiftId) {
+			const siteRoleLimit = siteRoleLimitsMap.has(roleId) ? siteRoleLimitsMap.get(roleId).get(siteId) || -1 : -1;
+			const shiftRoleLimit = shiftRoleLimitsMap.has(roleId) ? shiftRoleLimitsMap.get(roleId).get(shiftId) || -1 : -1;
+			
+			if (shiftRoleLimit !== -1) { // A shift role limit overrules a site role limit
+				return shiftRoleLimit;
+			}
+
+			return siteRoleLimit;
+		}
+
+		function createRoleLimitText(roleLimit, shiftRoleCount) {
+			const thereIsARoleLimit = roleLimit !== -1
+			const roleLimitReached = thereIsARoleLimit && shiftRoleCount >= roleLimit;
+			const disabled = roleLimitReached;
+
+			let roleLimitText = '';
+			if (thereIsARoleLimit) {
+				if (roleLimitReached) {
+					roleLimitText = ' - Limit Reached';
+				} else {
+					const spotsLeft = roleLimit - shiftRoleCount;
+					roleLimitText = ` - Limit ${roleLimit}, ${spotsLeft} spots left`;
+				}
+			}
+
+			return { roleLimitText, disabled };
 		}
 
 	});
