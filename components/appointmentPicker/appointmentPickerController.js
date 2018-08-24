@@ -5,7 +5,7 @@ define('appointmentPickerController', [], function() {
 		$scope.sites = [];
 		$scope.dates = [];
 		$scope.today = new Date();
-		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
+		$scope.appointmentPickerSharedProperties = sharedPropertiesService.getSharedProperties();
 
 		$scope.getAppointments = function(studentScholar = false) {
 			let year = new Date().getFullYear();
@@ -14,8 +14,8 @@ define('appointmentPickerController', [], function() {
 					alert('There was an error loading the appointments. Please try refreshing the page.');
 				} else {
 					$scope.dates = result.dates;
-					$scope.sharedProperties.hasAvailability = result.hasAvailability;
-					$scope.sharedProperties.isLoggedIn = result.isLoggedIn;
+					$scope.appointmentPickerSharedProperties.hasAvailability = result.hasAvailability;
+					$scope.appointmentPickerSharedProperties.isLoggedIn = result.isLoggedIn;
 					WDN.initializePlugin('jqueryui', [function () {
 						require(['jquery'], function($){
 							$("#dateInput").datepicker({
@@ -67,36 +67,36 @@ define('appointmentPickerController', [], function() {
 		}
 
 		$scope.dateChanged = function(dateInput) {
-			$scope.sharedProperties.selectedDate = dateInput;
-			$scope.sharedProperties.selectedSite = null;
-			$scope.sharedProperties.selectedTime = null;
+			$scope.appointmentPickerSharedProperties.selectedDate = dateInput;
+			$scope.appointmentPickerSharedProperties.selectedSite = null;
+			$scope.appointmentPickerSharedProperties.selectedTime = null;
 			$scope.updateGlobalSites(dateInput);
 		}
 
 		$scope.siteChanged = function(site) {
-			$scope.sharedProperties.selectedSiteTitle = $scope.sites[site]['site_title'];
-			$scope.sharedProperties.selectedTime = null;
-			$scope.updateGlobalTimes($scope.sharedProperties.selectedDate, site);
+			$scope.appointmentPickerSharedProperties.selectedSiteTitle = $scope.sites[site]['site_title'];
+			$scope.appointmentPickerSharedProperties.selectedTime = null;
+			$scope.updateGlobalTimes($scope.appointmentPickerSharedProperties.selectedDate, site);
 		}
 
 		$scope.timeChanged = function(time) {
-			$scope.sharedProperties.selectedAppointmentTimeId = $scope.times[time]['appointmentTimeId'];
+			$scope.appointmentPickerSharedProperties.selectedAppointmentTimeId = $scope.times[time]['appointmentTimeId'];
 		}
 
 		$scope.$watch(
-			function() { return $scope.sharedProperties.studentScholar; }, 
+			function() { return $scope.appointmentPickerSharedProperties.studentScholar; }, 
 			function(newValue, oldValue) {
 				$scope.getAppointments(newValue);
-				$scope.sharedProperties.selectedDate = null;
-				$scope.sharedProperties.selectedSite = null;
-				$scope.sharedProperties.selectedTime = null;
+				$scope.appointmentPickerSharedProperties.selectedDate = null;
+				$scope.appointmentPickerSharedProperties.selectedSite = null;
+				$scope.appointmentPickerSharedProperties.selectedTime = null;
 	
 			}
 		);
 
 	}
 
-	appointmentsController.$inject = ['$scope', 'appointmentPickerDataService', 'sharedPropertiesService'];
+	appointmentsController.$inject = ['$scope', 'appointmentPickerDataService', 'appointmentPickerSharedPropertiesService'];
 
 	return appointmentsController;
 

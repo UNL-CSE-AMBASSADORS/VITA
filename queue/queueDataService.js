@@ -82,11 +82,11 @@ define('queueDataService', [], function() {
 					return null;
 				});
 			},
-			incompleteAppointment: function(explanation, id) {
+			incompleteAppointment: function(id) {
 				return $http({
 					url: "/server/queue/queue_priv.php",
 					method: 'POST',
-					data: `action=appointmentIncomplete&explanation=${explanation}&id=${id}`,
+					data: `action=appointmentIncomplete&id=${id}`,
 					headers: {
 						'Content-Type': "application/x-www-form-urlencoded"
 					}
