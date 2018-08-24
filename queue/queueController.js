@@ -14,10 +14,10 @@ define('queueController', [], function() {
 				day = $scope.currentDay;
 			if (month < 10) month = "0" + month;
 
-			let isoFormattedDate = year + "-" + month + "-" + day;
+			const isoFormattedDate = year + "-" + month + "-" + day;
 
 			if ($scope.selectedSite == null || $scope.selectedSite.siteId == null) return;
-			let siteId = $scope.selectedSite.siteId;
+			const siteId = $scope.selectedSite.siteId;
 			
 			QueueDataService.getAppointments(isoFormattedDate, siteId).then(function(data) {
 				if(data == null) {
@@ -30,6 +30,7 @@ define('queueController', [], function() {
 						appointment.ended = appointment.timeAppointmentEnded != null;
 						appointment.name = appointment.firstName + " " + appointment.lastName;
 						appointment.noShow = appointment.noShow == true; // Do this since the SQL returns 0/1 for false/true, and we want it to be true/false instead of 0/1
+						appointment.walkIn = appointment.walkIn == true; // ^ Similarly here.
 						return appointment;
 					});
 				} else {

@@ -4,10 +4,6 @@ define('queuePrivateController', [], function() {
 		angular.extend(this, $controller('queueController', {$scope: $scope}));
 	
 		$scope.appointmentNotesAreaSharedProperties = AppointmentNotesAreaSharedPropertiesService.getSharedProperties();
-
-		function fixedEncodeURIComponent (str) {
-			return encodeURIComponent(str).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
-		}
 	
 		$scope.selectClient = function(client) {
 			$scope.client = client;

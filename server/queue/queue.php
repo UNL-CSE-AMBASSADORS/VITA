@@ -16,7 +16,7 @@ function loadPublicQueue($data) {
 	$query = "SELECT Appointment.appointmentId, TIME_FORMAT(scheduledTime, '%l:%i %p') AS scheduledTime, firstName, lastName, 
 				timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, completed,
 				(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 15 MINUTE) < NOW() AND timeIn IS NULL) AS noShow,
-				(Appointment.scheduledTime < Appointment.createdAt) AS walkIn
+				(AppointmentTime.scheduledTime < Appointment.createdAt) AS walkIn
 			FROM Appointment
 				LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 				JOIN Client ON Appointment.clientId = Client.clientId
@@ -46,7 +46,7 @@ function loadPrivateQueue($data) {
 				firstName, lastName, timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, 
 				completed, language, Client.clientId, 
 				(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 15 MINUTE) < NOW() AND timeIn IS NULL) AS noShow,
-				(Appointment.scheduledTime < Appointment.createdAt) AS walkIn ";
+				(AppointmentTime.scheduledTime < Appointment.createdAt) AS walkIn ";
 	if ($canViewClientInformation) {
 		$query .= ", phoneNumber, emailAddress ";
 	}
