@@ -39,13 +39,13 @@
 			</thead>
 			<tbody>
 				<tr class="pointer"
-					ng-repeat="appointment in appointments | orderBy:['noshow', 'timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime'] | searchFor: clientSearch"
+					ng-repeat="appointment in appointments | orderBy:['noShow', 'timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime'] | searchFor: clientSearch"
 					ng-if="appointment.completed == null"
 					ng-click="selectClient(appointment)">
 					<th class="queue-name" data-header="Name">{{appointment.firstName}} {{appointment.lastName}}</th>
 					<td class="queue-status" data-header="Progress">
-						<span class="pill pill-noshow" ng-if="appointment.noshow">No-show</span>
-						<span ng-if="!appointment.noshow">
+						<span class="pill pill-noshow" ng-if="appointment.noShow">No-show</span>
+						<span ng-if="!appointment.noShow">
 							<span class="pill" ng-class="appointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
 							<span class="pill" ng-class="appointment.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
 							<span class="pill" ng-class="appointment.preparing ? 'pill-complete': 'pill-incomplete'">Preparing</span>
@@ -77,8 +77,8 @@
 		<div class="client-information">
 			<h2 class="client-name">{{client.firstName}} {{client.lastName}}</h2>
 			<div>
-				<span class="pill pill-noshow" ng-if="client.noshow">No-show</span>
-				<span ng-if="!client.noshow">
+				<span class="pill pill-noshow" ng-if="client.noShow">No-show</span>
+				<span ng-if="!client.noShow">
 					<span class="pill" ng-class="client.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
 					<span class="pill" ng-class="client.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
 					<span class="pill" ng-class="client.preparing ? 'pill-complete': 'pill-incomplete'">Preparing</span>
