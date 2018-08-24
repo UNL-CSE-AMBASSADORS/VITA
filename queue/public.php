@@ -20,12 +20,13 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="appointment in appointments | orderBy:['noShow', 'timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime']" 
+		<tr ng-repeat="appointment in appointments | orderBy:['noShow', 'timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime', 'walkIn']" 
 			ng-if="appointment.completed == null">
 			<th class="queue-name" data-header="Name">{{appointment.firstName}} {{appointment.lastName}}</th>
 			<td class="queue-progress" data-header="Progress">
 				<span class="pill pill-no-show" ng-if="appointment.noShow">No-show</span>
 				<span ng-if="!appointment.noShow">
+					<span class="pill pill-walk-in" ng-if="appointment.walkIn">Walk-In</span>
 					<span class="pill" ng-class="appointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
 					<span class="pill" ng-class="appointment.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
 					<span class="pill" ng-class="appointment.preparing ? 'pill-complete': 'pill-incomplete'">Appointment in Progress</span>

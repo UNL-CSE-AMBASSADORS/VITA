@@ -80,6 +80,11 @@
 	background-color: #D00000;
 }
 
+.pill-walk-in {
+	color: #fff;
+	background-color: #38764C;
+}
+
 /* Center the datepicker calendar on mobile */
 @media (max-width: 767px) {
 	.md-datepicker-calendar-pane.md-pane-open {
