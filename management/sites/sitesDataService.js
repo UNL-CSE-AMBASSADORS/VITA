@@ -8,6 +8,13 @@ define('sitesDataService', [], function($http) {
 				},function(error){
 					return null;
 				});
+			},
+			getSiteInformation: function(siteId) {
+				return $http.get(`/server/management/sites/sites.php?action=getSiteInformation&siteId=${siteId}`).then(function(response){
+					return response.data;
+				},function(error){
+					return null;
+				});
 			}
 		}
 	}
