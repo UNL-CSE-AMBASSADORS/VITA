@@ -29,7 +29,7 @@ function wdnInclude($path)
 <title>Appointment Management | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
-<link rel="stylesheet" href="/dist/management/shifts/shifts.css">
+<link rel="stylesheet" href="/dist/management/sites/sites.css">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -83,11 +83,11 @@ function wdnInclude($path)
 			<div id="maincontent" class="wdn-main">
 				<div id="pagetitle">
 					<!-- TemplateBeginEditable name="pagetitle" -->
-					<h1>Shift Management</h1>
+					<h1>Site Management</h1>
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
-				<div id="shiftsApp" class="wdn-band" shifts></div>
+				<div id="sitesApp" class="wdn-band" sites></div>
 				<!-- TemplateEndEditable -->
 			</div>
 		</main>
@@ -117,6 +117,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
-	<script src="/dist/management/shifts/shifts.js"></script>
+	<script src="/dist/management/sites/sites.js"></script>
 </body>
 </html>
