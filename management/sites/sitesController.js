@@ -1,7 +1,6 @@
 define('sitesController', [], function() {
 
 	function sitesController($scope, SitesDataService) {
-
 		$scope.selectedSite = null;
 		$scope.sites = [];
 
@@ -18,7 +17,6 @@ define('sitesController', [], function() {
 
 		// Invoke initially
 		$scope.loadSites();
-
 	}
 
 	sitesController.$inject = ['$scope', 'sitesDataService'];
