@@ -1,0 +1,35 @@
+.centered-text {
+	text-align: center;
+}
+
+/* List code adapted from https://designshack.net/articles/css/5-simple-and-practical-css-list-styles-you-can-copy-and-paste/ */
+.unstyled-list {
+	list-style-type: none;
+}
+
+.site-list-element {
+	border-bottom: 1px solid #CCC;
+}
+
+.site-list-element:last-child {
+	border: none;
+}
+
+.site-list-element a {
+	padding: 2px 0;
+	text-decoration: none;
+	border-bottom-style: none !important;
+	color: #000;
+	display: block;
+	cursor: pointer;
+
+	-webkit-transition: background-color 0.3s ease;
+	-moz-transition: background-color 0.3s ease;
+	-o-transition: background-color 0.3s ease;
+	-ms-transition: background-color 0.3s ease;
+	transition: background-color 0.3s ease;
+}
+
+.site-list-element a:hover {
+	background: #DDD;
+}

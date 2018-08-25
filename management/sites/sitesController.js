@@ -9,7 +9,12 @@ define('sitesController', [], function() {
 			SitesDataService.getSites().then((result) => {
 				$scope.sites = result;
 			});
-		}
+		};
+
+		$scope.selectSite = function(site) {
+			$scope.selectedSite = site;
+			console.log(site);
+		};
 
 		// Invoke initially
 		$scope.loadSites();

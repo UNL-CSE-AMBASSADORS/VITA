@@ -26,7 +26,7 @@ function wdnInclude($path)
 -->
 <?php wdnInclude("/wdn/templates_4.1/includes/scriptsandstyles.html"); ?>
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>Appointment Management | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+<title>Site Management | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
 <link rel="stylesheet" href="/dist/management/sites/sites.css">
