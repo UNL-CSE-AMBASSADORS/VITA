@@ -15,16 +15,26 @@
 		<div class="wdn-col-three-fourths">
 			<!-- Shown if a site is selected and loaded from backend -->
 			<div ng-if="selectedSite != null && siteInformation != null">
-				<h4 class="clear-top">{{siteInformation.title}}</h4>
+				<h3 class="clear-top">{{siteInformation.title}}</h3>
 				<div class="wdn-grid-set-halves">
 					<div class="wdn-col">
-						<div><b>Address: </b>{{siteInformation.address}}</div>
+						<div><b>Address:</b> {{siteInformation.address}}</div>
 						<div><b>Phone Number:</b> {{siteInformation.phoneNumber}}</div>
 					</div>
 					<div class="wdn-col">
 						<div><b>Does Multilingual:</b> {{siteInformation.doesMultilingual ? 'Yes' : 'No'}}</div>
 						<div><b>Does International:</b> {{siteInformation.doesInternational ? 'Yes' : 'No'}}</div>
 					</div>
+				</div>
+
+				<h4>Volunteer Shifts:</h4>
+				<div>
+					A bunch of shifts coming up!
+				</div>
+
+				<h4>Appointment Times:</h4>
+				<div>
+					A bunch of appointment times coming up!
 				</div>
 			</div>
 
