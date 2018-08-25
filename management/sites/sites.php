@@ -27,10 +27,51 @@
 					</div>
 				</div>
 
+
+
+
+
+
+
+
+
+
 				<h4>Volunteer Shifts:</h4>
-				<div>
-					A bunch of shifts coming up!
+				<div ng-if="siteInformation.shifts == undefined || siteInformation.shifts.length <= 0">
+					There are no shifts
 				</div>
+				<div>
+					<table class="wdn_responsive_table">
+						<caption>Volunteer Shifts</caption>
+						<thead>
+							<tr>
+								<th id="shiftDateHeader">Date</th>
+								<th id="shiftStartTimeHeader">Start Time</th>
+								<th id="shiftEndTimeHeader">End Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="shift in siteInformation.shifts">
+								<th id="shift{{shift.shiftId}}">{{shift.date}}</div>
+								<td headers="shiftStartTimeHeader shift{{shift.shiftId}}">{{shift.startTime}}</td>
+								<td headers="shiftEndTimeHeader shift{{shift.shiftId}}">{{shift.endTime}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 				<h4>Appointment Times:</h4>
 				<div>

@@ -26,7 +26,7 @@ function getSiteInformation($siteId) {
 	$response['success'] = true;
 
 	try {
-		$query = 'SELECT title, address, phoneNumber, doesMultilingual, doesInternational
+		$query = 'SELECT siteId, title, address, phoneNumber, doesMultilingual, doesInternational
 			FROM Site
 			WHERE siteId = ? AND archived = FALSE';
 		$stmt = $DB_CONN->prepare($query);
@@ -34,10 +34,53 @@ function getSiteInformation($siteId) {
 
 		$site = $stmt->fetch(PDO::FETCH_ASSOC);
 		$response['site'] = $site;
+		$response['site']['shifts'] = getShiftsForSite($siteId);
+		$response['site']['appointmentTimes'] = getAppointmentTimesForShift($siteId);
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error on the server retrieving site information. Please try again later.';
 	}
 
 	echo json_encode($response);
+}
+
+function getShiftsForSite($siteId, $year = null) {
+	GLOBAL $DB_CONN;
+
+	if (!isset($year)) {
+		date_default_timezone_set('America/Chicago');
+		$year = date('Y');
+	}
+
+	$query = 'SELECT shiftId, DATE_FORMAT(startTime, "%b %e, %Y") AS date, 
+			TIME_FORMAT(startTime, "%l:%i %p") AS startTime, TIME_FORMAT(endTime, "%l:%i %p") AS endTime
+		FROM Shift
+		WHERE siteId = ?
+			AND YEAR(startTime) = ?
+			AND archived = FALSE';
+	$stmt = $DB_CONN->prepare($query);
+	$stmt->execute(array($siteId, $year));
+
+	$shifts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	return $shifts;
+}
+
+function getAppointmentTimesForShift($siteId, $year = null) {
+	GLOBAL $DB_CONN;
+
+	if (!isset($year)) {
+		date_default_timezone_set('America/Chicago');
+		$year = date('Y');
+	}
+
+	$query = 'SELECT appointmentTimeId, scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments,
+			percentageAppointments, approximateLengthInMinutes
+		FROM AppointmentTime
+		WHERE siteId = ?
+			AND YEAR(scheduledTime) = ?';
+	$stmt = $DB_CONN->prepare($query);
+	$stmt->execute(array($siteId, $year));
+
+	$appointmentTimes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	return $appointmentTimes;
 }
