@@ -2,6 +2,10 @@
 	text-align: center;
 }
 
+.pointer {
+	cursor: pointer;
+}
+
 /* List code adapted from https://designshack.net/articles/css/5-simple-and-practical-css-list-styles-you-can-copy-and-paste/ */
 .unstyled-list {
 	list-style-type: none;

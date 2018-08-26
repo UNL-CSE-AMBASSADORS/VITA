@@ -62,7 +62,7 @@ function wdnInclude($path)
 					<li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
 					<li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
 					<li><a href="/management" title="Management">Management</a></li>
-					<li>Shift Management</li>
+					<li>Site Management</li>
 				</ul>
 				<!-- TemplateEndEditable -->
 			</nav>

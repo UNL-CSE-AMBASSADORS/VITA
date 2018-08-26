@@ -52,12 +52,13 @@ function getShiftsForSite($siteId, $year = null) {
 		$year = date('Y');
 	}
 
-	$query = 'SELECT shiftId, DATE_FORMAT(startTime, "%b %e, %Y") AS date, 
+	$query = 'SELECT shiftId, DATE_FORMAT(startTime, "%b %e, %Y (%W)") AS date, 
 			TIME_FORMAT(startTime, "%l:%i %p") AS startTime, TIME_FORMAT(endTime, "%l:%i %p") AS endTime
 		FROM Shift
 		WHERE siteId = ?
 			AND YEAR(startTime) = ?
-			AND archived = FALSE';
+			AND archived = FALSE
+		ORDER BY Shift.startTime';
 	$stmt = $DB_CONN->prepare($query);
 	$stmt->execute(array($siteId, $year));
 
@@ -73,11 +74,12 @@ function getAppointmentTimesForShift($siteId, $year = null) {
 		$year = date('Y');
 	}
 
-	$query = 'SELECT appointmentTimeId, scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments,
-			percentageAppointments, approximateLengthInMinutes
+	$query = 'SELECT appointmentTimeId, DATE_FORMAT(scheduledTime, "%b %e, %Y, %l:%i %p (%W)") AS scheduledTime, 
+			minimumNumberOfAppointments, maximumNumberOfAppointments, percentageAppointments, approximateLengthInMinutes
 		FROM AppointmentTime
 		WHERE siteId = ?
-			AND YEAR(scheduledTime) = ?';
+			AND YEAR(scheduledTime) = ?
+		ORDER BY AppointmentTime.scheduledTime';
 	$stmt = $DB_CONN->prepare($query);
 	$stmt->execute(array($siteId, $year));
 

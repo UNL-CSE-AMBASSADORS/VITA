@@ -24,12 +24,12 @@ define('sitesController', [], function() {
 				result.site.doesMultilingual = result.site.doesMultilingual == true; // Do this since we want true/false instead of 1/0
 				result.site.doesInternational = result.site.doesMultilingual == true; // Do this since we want true/false instead of 1/0
 				$scope.siteInformation = result.site;
-				console.log($scope.siteInformation.shifts);
 			});
 		};
 
 		// Invoke initially
 		$scope.loadSites();
+		WDN.initializePlugin('tooltip');
 	}
 
 	sitesController.$inject = ['$scope', 'sitesDataService'];
