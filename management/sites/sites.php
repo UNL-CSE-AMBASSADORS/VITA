@@ -38,9 +38,12 @@
 
 				<h4>Volunteer Shifts:</h4>
 				<div>
+					<!-- Displayed when there are no volunteer shifts -->
 					<div ng-if="siteInformation.shifts == undefined || siteInformation.shifts.length <= 0">
 						<p class="clear-top">There are no shifts</p>
 					</div>
+
+					<!-- Displayed when there are volunteer shifts -->
 					<div ng-if="siteInformation.shifts != undefined && siteInformation.shifts.length > 0">
 						<table class="wdn_responsive_table">
 							<thead>
@@ -59,6 +62,82 @@
 							</tbody>
 						</table>
 					</div>
+
+					<!-- Add volunteer shift section -->
+					<div ng-if="addShiftButtonClicked === true">
+						<h5>Add a Shift</h5>
+						<form class="cmxform"
+							id="addShiftForm"
+							name="form"
+							ng-submit="form.$valid && addShiftSaveButtonHandler()" 
+							autocomplete="off" 
+							novalidate>
+
+							<div id="datePicker" 
+								class="form-textfield">
+								<label class="form-label form-required">Date</label>
+								<input type="text" 
+									id="dateInput" 
+									name="dateInput" 
+									placeholder=" -- Select a Date -- " 
+									autocomplete="off"
+									required>
+								<div ng-show="form.$submitted || form.dateInput.$touched">
+									<label class="error" ng-show="form.dateInput.$error.required">This field is required.</label>
+								</div>
+							</div>
+
+							<div id="startTimeDiv" 
+								class="form-select">
+								<label class="form-label form-required" for="startTimeSelect">Start Time</label>
+								<select id="startTimeSelect" 
+									name="startTimeSelect" 
+									ng-model="addShiftInformation.selectedStartTime" 
+									ng-options="time for time in startTimeOptions"
+									ng-change="startTimeChanged(addShiftInformation.selectedStartTime)" 
+									required>
+									<option value="" style="display:none;">-- Select a Start Time --</option>
+								</select>
+								<div ng-show="form.$submitted || form.startTimeSelect.$touched">
+									<label class="error" ng-show="form.startTimeSelect.$error.required">This field is required.</label>
+								</div>
+							</div>
+
+							<div id="endTimeDiv" 
+								class="form-select">
+								<label class="form-label form-required" for="endTimeSelect">End Time</label>
+								<select id="endTimeSelect" 
+									name="endTimeSelect" 
+									ng-model="addShiftInformation.selectedEndTime" 
+									ng-options="time for time in endTimeOptions" 
+									required>
+									<option value="" style="display:none;">-- Select an End Time --</option>
+								</select>
+								<div ng-show="form.$submitted || form.endTimeSelect.$touched">
+									<label class="error" ng-show="form.endTimeSelect.$error.required">This field is required.</label>
+								</div>
+							</div>
+
+
+							<button type="button"
+								class="wdn-button wdn-button-brand"
+								ng-click="addShiftCancelButtonHandler()">Cancel</button>
+							<input type="submit" 
+								value="Save" 
+								class="submit wdn-button wdn-button-triad"
+								ng-disabled="form.$valid">
+						</form>
+
+
+
+
+
+						
+					</div>
+					<button class="wdn-button" 
+						ng-click="addShiftButtonHandler()" 
+						ng-if="addShiftButtonClicked === false">Add Shift</button>
+
 				</div>
 
 
@@ -83,9 +162,13 @@
 						<li>Scheduled time + approximate length in minutes must be within a volunteer shift</li>
 						<li>Two appointment times cannot have the same scheduled time</li>
 					</ul>
+
+					<!-- Displayed when there are no appointment times -->
 					<div ng-if="siteInformation.appointmentTimes == undefined || siteInformation.appointmentTimes.length <= 0">
 						<p class="clear-top">There are no appointment times</p>
 					</div>
+
+					<!-- Displayed when there are appointment times -->
 					<div ng-if="siteInformation.appointmentTimes != undefined && siteInformation.appointmentTimes.length > 0">
 						<table class="wdn_responsive_table">
 							<thead>
@@ -129,6 +212,7 @@
 						</table>
 					</div>
 				</div>
+
 				<h5>How number of appointments is calculated:</h5>
 				<ol>
 					<li>If max_appts is not N/A, set available_appointment_spots = max_appts. Otherwise, set available_appointment_spots = max(min_appts, number_of_preparers_signed_up)</li>

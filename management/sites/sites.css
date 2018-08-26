@@ -38,3 +38,8 @@
 	background: #DDD;
 }
 
+/* Override styling on the date picker */
+td.ui-state-disabled, 
+td.ui-state-disabled .ui-state-default {
+	background: transparent;
+}
