@@ -47,8 +47,9 @@ define('sitesController', [], function() {
 			const startTime = shiftInformation.selectedStartTime;
 			const endTime = shiftInformation.selectedEndTime;
 			SitesDataService.addShift(siteId, date, startTime, endTime).then((result) => {
-				console.log(result);
-				console.log('DONE');
+				if (result && !result.success) {
+					alert(result.error);
+				}
 
 				$scope.addShiftButtonClicked = false;
 			});

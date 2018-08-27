@@ -21,35 +21,7 @@ if (isset($_REQUEST['action'])) {
 	}
 }
 
-function addShift($siteId, $dateString, $startTimeString, $endTimeString) {
-	$response = array();
-	$response['success'] = true;
 
-	try {
-		$dateParts = DateTimeUtilities::extractDateParts($dateString, DateFormats::MM_DD_YYYY);
-		$startTimeParts = DateTimeUtilities::extractTimeParts($startTimeString, TimeFormats::HH_MM_PERIOD);
-		$endTimeParts = DateTimeUtilities::extractTimeParts($endTimeString, TimeFormats::HH_MM_PERIOD);
-
-		$endTimeParts = array(
-			'hours' => '08',
-			'minutes' => '00',
-			'seconds' => '00'
-		);
-
-		$timeComparison = DateTimeUtilities::compareTimeParts($startTimeParts, $endTimeParts);
-		if ($timeComparison & ComparerResults::EQUAL == true || $timeComparison & ComparerResults::GREATER == true) {
-			throw new Exception('End time cannot be before or same as start time', MY_EXCEPTION);
-		}
-
-		echo json_encode($startTimeParts);
-		die();
-	} catch (Exception $e) {
-		$response['success'] = false;
-		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'There was an error on the server adding the shift. Please refresh the page and try again.';
-	}
-
-	echo json_encode($response);
-}
 
 function getSiteInformation($siteId) {
 	GLOBAL $DB_CONN;
@@ -67,7 +39,7 @@ function getSiteInformation($siteId) {
 		$site = $stmt->fetch(PDO::FETCH_ASSOC);
 		$response['site'] = $site;
 		$response['site']['shifts'] = getShiftsForSite($siteId);
-		$response['site']['appointmentTimes'] = getAppointmentTimesForShift($siteId);
+		$response['site']['appointmentTimes'] = getAppointmentTimesForSite($siteId);
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error on the server retrieving site information. Please try again later.';
@@ -98,7 +70,7 @@ function getShiftsForSite($siteId, $year = null) {
 	return $shifts;
 }
 
-function getAppointmentTimesForShift($siteId, $year = null) {
+function getAppointmentTimesForSite($siteId, $year = null) {
 	GLOBAL $DB_CONN;
 
 	if (!isset($year)) {
@@ -117,4 +89,40 @@ function getAppointmentTimesForShift($siteId, $year = null) {
 
 	$appointmentTimes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	return $appointmentTimes;
+}
+
+function addShift($siteId, $dateString, $startTimeString, $endTimeString) {
+	GLOBAL $DB_CONN, $USER;
+
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		if (!isset($dateString) || !DateTimeUtilities::isValidDateString($dateString, DateFormats::MM_DD_YYYY)) throw new Exception('Invalid date given', MY_EXCEPTION);
+		if (!isset($startTimeString) || !DateTimeUtilities::isValidTimeString($startTimeString, TimeFormats::HH_MM_PERIOD)) throw new Exception('Invalid start time given', MY_EXCEPTION);
+		if (!isset($endTimeString) || !DateTimeUtilities::isValidTimeString($endTimeString, TimeFormats::HH_MM_PERIOD)) throw new Exception('Invalid end time given', MY_EXCEPTION);
+
+		$startTime = DateTime::createFromFormat('m-d-Y g:i A', $dateString . ' ' . $startTimeString);
+		$endTime = DateTime::createFromFormat('m-d-Y g:i A', $dateString . ' ' . $endTimeString);
+
+		if ($startTime >= $endTime) {
+			throw new Exception('End time cannot be before or same as start time', MY_EXCEPTION);
+		}
+
+		//Get into format for db, i.e. 2018-01-21 13:00:00
+		$startTimeForDb = $startTime->format('Y-m-d H:i:s');
+		$endTimeForDb = $endTime->format('Y-m-d H:i:s');
+
+		$userId = $USER->getUserId();
+
+		$query = 'INSERT INTO Shift (siteId, startTime, endTime, createdBy, lastModifiedBy)
+			VALUES (?, ?, ?, ?, ?)';
+		$stmt = $DB_CONN->prepare($query);
+		$stmt->execute(array($siteId, $startTimeForDb, $endTimeForDb, $userId, $userId));
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'There was an error on the server adding the shift. Please refresh the page and try again.';
+	}
+
+	echo json_encode($response);
 }
