@@ -9,14 +9,46 @@ if (!$USER->isLoggedIn()) {
 }
 
 require_once "$root/server/config.php";
+require_once "$root/server/utilities/dateTimeUtilities.class.php";
 
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
 		case 'getSiteInformation': getSiteInformation($_GET['siteId']); break;
+		case 'addShift': addShift($_POST['siteId'], $_POST['date'], $_POST['startTime'], $_POST['endTime']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
 	}
+}
+
+function addShift($siteId, $dateString, $startTimeString, $endTimeString) {
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		$dateParts = DateTimeUtilities::extractDateParts($dateString, DateFormats::MM_DD_YYYY);
+		$startTimeParts = DateTimeUtilities::extractTimeParts($startTimeString, TimeFormats::HH_MM_PERIOD);
+		$endTimeParts = DateTimeUtilities::extractTimeParts($endTimeString, TimeFormats::HH_MM_PERIOD);
+
+		$endTimeParts = array(
+			'hours' => '08',
+			'minutes' => '00',
+			'seconds' => '00'
+		);
+
+		$timeComparison = DateTimeUtilities::compareTimeParts($startTimeParts, $endTimeParts);
+		if ($timeComparison & ComparerResults::EQUAL == true || $timeComparison & ComparerResults::GREATER == true) {
+			throw new Exception('End time cannot be before or same as start time', MY_EXCEPTION);
+		}
+
+		echo json_encode($startTimeParts);
+		die();
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'There was an error on the server adding the shift. Please refresh the page and try again.';
+	}
+
+	echo json_encode($response);
 }
 
 function getSiteInformation($siteId) {

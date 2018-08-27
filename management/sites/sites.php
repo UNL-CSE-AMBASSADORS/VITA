@@ -11,6 +11,8 @@
 			</ul>
 		</div>
 
+
+
 		<!-- Site Information Area -->
 		<div class="wdn-col-three-fourths">
 			<!-- Shown if a site is selected and loaded from backend -->
@@ -28,14 +30,7 @@
 				</div>
 
 
-
-
-
-
-
-
-
-
+				<!-- Volunteer Shifts Section -->
 				<h4>Volunteer Shifts:</h4>
 				<div>
 					<!-- Displayed when there are no volunteer shifts -->
@@ -118,41 +113,26 @@
 								</div>
 							</div>
 
-
-							<button type="button"
-								class="wdn-button wdn-button-brand"
-								ng-click="addShiftCancelButtonHandler()">Cancel</button>
-							<input type="submit" 
-								value="Save" 
-								class="submit wdn-button wdn-button-triad"
-								ng-disabled="form.$valid">
+							<div class="margin-top-10">
+								<button type="button"
+									class="wdn-button wdn-button-brand"
+									ng-click="addShiftCancelButtonHandler()">Cancel</button>
+								<input type="submit" 
+									value="Save" 
+									class="submit wdn-button wdn-button-triad"
+									ng-disabled="!form.$valid">
+							</div>
 						</form>
-
-
-
-
-
-						
 					</div>
-					<button class="wdn-button" 
+
+					<!-- Button for adding a shift -->
+					<button class="wdn-button margin-top-10" 
 						ng-click="addShiftButtonHandler()" 
 						ng-if="addShiftButtonClicked === false">Add Shift</button>
-
 				</div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+				<!-- Appointment Times Section -->
 				<h4>Appointment Times:</h4>
 				<div>
 					<p>Appointment times represent a time slot in which a client can sign up for an appointment. Additionally, appointment times control the rules around the number of appointments that can be scheduled during the time slot.</p>
