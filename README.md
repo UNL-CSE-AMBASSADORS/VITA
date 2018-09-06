@@ -13,5 +13,7 @@ This project aims to alleviate the stresses experienced by the VITA volunteers b
 ## Metrics
 During the 2018 tax season, this solution helped Lincoln VITA schedule over 2,300 appointments and saved more than 40 volunteer hours.
 
-## Vision Statement
-The VITA Dev Team will assist Lincoln VITA through software that facilitates automated scheduling.
+## Technologies
+* Database: MySQL with MariaDB engine
+* Backend: vanilla PHP
+* Front-end: AngularJS, RequireJS, (some) JQuery, JavaScript, HTML, CSS, npm
