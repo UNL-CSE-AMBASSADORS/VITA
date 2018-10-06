@@ -1,11 +1,4 @@
-<style>
-	#google_translate_element {
-		position: fixed;
-		bottom: 0;
-	}
-</style>
-
-<div id="google_translate_element"></div>
+<div id="google_translate_element" style="position: fixed; bottom: 0"></div>
 <script type="text/javascript">
 	function googleTranslateElementInit() {
 		new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'ar,es,en,vi', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
