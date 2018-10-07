@@ -91,7 +91,7 @@ function wdnInclude($path)
 						<h2>Can VITA Help You?</h2>
 						<p><b>Please note:</b> The scope of work that can be done within a VITA site is defined by the IRS. If your return is considered “out of scope” for a site, our VITA Volunteers will not be able to prepare your return.</p>
 
-						<form class="cmxform" id="vitaQuestionnaireForm" action="" autocomplete="off">
+						<form class="cmxform" id="vitaQuestionnaireForm" autocomplete="off">
 							<div class="form-radio" id="depreciationSchedule">
 								<label for="depreciationSchedule" class="form-required">Will you require a Depreciation Schedule?</label>
 								<div class="error-placement">
