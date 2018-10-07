@@ -85,15 +85,15 @@ function wdnInclude($path)
 					$USER = new User();
 					if ($USER->isLoggedIn() && !isset($_REQUEST['public'])) { // we enable logged in users to get to the public queue by having ?public in the URL
 				?>
-					<div id="queueApp" class="wdn-band" private-queue>
+					<private-queue id="queueApp" class="wdn-band">
 						<script src="/dist/queue/queuePrivate.js"></script>
-					</div>
+					</private-queue>
 				<?php
 					} else {
 				?>
-					<div id="queueApp" class="wdn-band" public-queue>
+					<public-queue id="queueApp" class="wdn-band">
 						<script src="/dist/queue/queuePublic.js"></script>
-					</div>
+					</public-queue>
 				<?php
 					}
 				?>
