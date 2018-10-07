@@ -87,11 +87,11 @@ function wdnInclude($path)
 								<fieldset>
 									<legend>User Login</legend>
 									<section class="form-group">
-										<label>E-mail Address</label>
+										<label for="login_email">E-mail Address</label>
 										<input id="login_email" class="form-control" placeholder="E-mail" type="text" autocomplete="off" />
 									</section>
 									<section class="form-group">
-										<label>Password</label>
+										<label for="login_password">Password</label>
 										<input id="login_password" class="form-control" placeholder="Password" type="password" />
 									</section>
 								</fieldset>
@@ -118,7 +118,7 @@ function wdnInclude($path)
 										Please provide the e-mail address associated with your account. Once the form is submitted, you will receive an e-mail with further instructions.
 									</p>
 									<div class="form-group">
-										<label>E-mail Address</label>
+										<label for="register_email">E-mail Address</label>
 										<input id="register_email" class="form-control" placeholder="E-mail" type="text" autocomplete="off" />
 									</div>
 								</fieldset>
