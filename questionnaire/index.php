@@ -104,7 +104,7 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes requiring a depreciation schedule.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes requiring a depreciation schedule.</p>
 							</div>
 							<div class="form-radio" id="scheduleF">
 								<label for="schedule_f" class="form-required">Will you require a Schedule F (Farm)?</label>
@@ -118,7 +118,7 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes requiring a schedule F.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes requiring a schedule F.</p>
 							</div>
 							<div class="form-radio" id="homeBased">
 								<label for="self_employed" class="form-required">Are you self-employed or own a home-based business?</label>
@@ -145,7 +145,7 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes when the home-based business has a net loss.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes when the home-based business has a net loss.</p>
 							</div>
 							<div class="form-radio" id="homeBased10000" style="display: none;" >
 								<label for="more_than_10000_expenses" class="form-required">Does your home-based business or self-employment have more than $10,000 in expenses?</label>
@@ -159,7 +159,7 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes when the home-based business has more than $10,000 in expenses.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes when the home-based business has more than $10,000 in expenses.</p>
 							</div>
 							<div class="form-radio" id="homeBasedSEP" style="display: none;">
 								<label for="retirement_plans" class="form-required">Does your home-based business or self-employment have self-employed, SEP, SIMPLE, or qualified retirement plans?</label>
@@ -173,7 +173,7 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes when the home-based business has retirement plans.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes when the home-based business has retirement plans.</p>
 							</div>
 							<div class="form-radio" id="homeBasedEmployees" style="display: none;">
 								<label for="any_employees" class="form-required">Does your home-based business or self-employment have employees?</label>
@@ -187,7 +187,7 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes when the home-based business has employees.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes when the home-based business has employees.</p>
 							</div>
 							<div class="form-radio" id="casualtyLosses">
 								<label for="casualty_losses" class="form-required">Will your return have casualty losses?</label>
@@ -201,7 +201,7 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes which will have casualty losses.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes which will have casualty losses.</p>
 							</div>
 							<div class="form-radio" id="theftLosses">
 								<label for="theft_losses" class="form-required">Will your return have theft losses?</label>
@@ -215,7 +215,7 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes which will have theft losses.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes which will have theft losses.</p>
 							</div>
 							<div class="form-radio" id="scheduleE">
 								<label for="schedule_e" class="form-required">Will you require a Schedule E (rental income)?</label>
