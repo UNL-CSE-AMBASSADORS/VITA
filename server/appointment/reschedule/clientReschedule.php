@@ -42,7 +42,7 @@ function doesTokenExist($token) {
 		$stmt->execute(array($token));
 		$appointmentInformation = $stmt->fetch();
 
-		$tokenExists = $appointmentInformation != false;
+		$tokenExists = (bool)$appointmentInformation !== false;
 		$response['exists'] = $tokenExists;
 		
 		if ($tokenExists) {
@@ -193,8 +193,12 @@ function isAppointmentValidForReschedule($appointmentInformation) {
 
 function validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber) {
 	$clientInformation = getClientInformationFromToken($token);
-	$clientInformationMatches = clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
+	if ($clientInformation === false) { // PDOStatement::fetch returns false on failure http://php.net/manual/en/pdostatement.fetch.php
+		http_response_code(500);
+		throw new Exception('There was an error validating information. Please refresh the page and try again.', MY_EXCEPTION);
+	}
 
+	$clientInformationMatches = clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
 	if ($clientInformationMatches === false) {
 		http_response_code(401);
 		throw new Exception('Provided information does not match our records.', MY_EXCEPTION);
@@ -225,17 +229,19 @@ function getClientInformationFromToken($token) {
 	return $clientInformation;
 }
 
-function clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber) {
-	if ($clientInformation === false) { // PDOStatement::fetch returns false on failure http://php.net/manual/en/pdostatement.fetch.php
-		return false;
-	}
-
-	$firstNameMatches = isset($clientInformation['firstName']) && $clientInformation['firstName'] === $firstName;
-	$lastNameMatches = isset($clientInformation['lastName']) && $clientInformation['lastName'] === $lastName;
-	$emailAddressMatches = isset($clientInformation['emailAddress']) && $clientInformation['emailAddress'] === $emailAddress;
-	$phoneNumberMatches = isset($clientInformation['phoneNumber']) && $clientInformation['phoneNumber'] === $phoneNumber;
-
+function clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber) {	
+	$firstNameMatches = isset($clientInformation['firstName']) && strtolower($clientInformation['firstName']) === strtolower($firstName);
+	$lastNameMatches = isset($clientInformation['lastName']) && strtolower($clientInformation['lastName']) === strtolower($lastName);
+	$emailAddressMatches = isset($clientInformation['emailAddress']) && strtolower($clientInformation['emailAddress']) === strtolower($emailAddress);
+	$phoneNumberMatches = isset($clientInformation['phoneNumber']) && cleanPhoneNumber($clientInformation['phoneNumber']) === cleanPhoneNumber($phoneNumber);
+	
 	return $firstNameMatches && $lastNameMatches && $emailAddressMatches && $phoneNumberMatches;
+}
+
+function cleanPhoneNumber($phoneNumber) {
+	$find = array('(', ')', '+', '-', ' ');
+	$replace = '';
+	return str_replace($find, $replace, $phoneNumber);
 }
 
 function getAppointmentInformationFromToken($token) {

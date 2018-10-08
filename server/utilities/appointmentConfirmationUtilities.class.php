@@ -53,7 +53,7 @@ class AppointmentConfirmationUtilities {
 		return "<h2>Appointment Confirmation</h2>
 				$firstName, thank you for signing up! Your appointment will be located at the $siteTitle site ($siteAddress). 
 				Please arrive no later than $timeStr on $dateStr with all necessary materials (listed below). 
-				Please call $sitePhoneNumber if you have any questions or would like to reschedule. 
+				Please call $sitePhoneNumber if you have any questions. 
 				Thank you from Lincoln VITA.
 				<h2 class='mt-3'>What to Bring for your Appointment</h2>";
 	}
