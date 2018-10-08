@@ -33,12 +33,12 @@ class AppointmentConfirmationUtilities {
 		GLOBAL $DB_CONN;
 	
 		$query = "SELECT Site.address, Site.phoneNumber, Site.title, Site.doesInternational, Client.firstName, 
-				AppointmentClientReschedule.token, 
+				SelfServiceAppointmentRescheduleToken.token, 
 				DATE_FORMAT(scheduledTime, '%W, %M %D, %Y') AS dateStr, 
 				TIME_FORMAT(scheduledTime, '%l:%i %p') as timeStr
 			FROM Appointment
 			JOIN Client ON Appointment.clientId = Client.clientId
-			JOIN AppointmentClientReschedule ON Appointment.appointmentId = AppointmentClientReschedule.appointmentId
+			JOIN SelfServiceAppointmentRescheduleToken ON Appointment.appointmentId = SelfServiceAppointmentRescheduleToken.appointmentId
 			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 			JOIN Site ON AppointmentTime.siteId = Site.siteId
 			WHERE Appointment.appointmentId = ?";

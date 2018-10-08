@@ -31,7 +31,7 @@ function storeAppointment($data){
 
 		$clientId = insertClient($data['firstName'], $data['lastName'], $email, $data['phone']);
 		$appointmentId = insertAppointment($clientId, $data['appointmentTimeId'], $data['language'], $_SERVER['REMOTE_ADDR']);
-		$appointmentClientRescheduleId = insertAppointmentClientReschedule($appointmentId);
+		$selfServiceAppointmentRescheduleTokenId = insertSelfServiceAppointmentRescheduleToken($appointmentId);
 		insertAnswers($appointmentId, $data['questions']);
 		$DB_CONN->commit();
 
@@ -78,16 +78,16 @@ function insertAppointment($clientId, $appointmentTimeId, $language, $ipAddress)
 	return $DB_CONN->lastInsertId();
 }
 
-function insertAppointmentClientReschedule($appointmentId) {
+function insertSelfServiceAppointmentRescheduleToken($appointmentId) {
 	GLOBAL $DB_CONN;
 
-	$appointmentClientRescheduleInsert = 'INSERT INTO AppointmentClientReschedule (appointmentId, token)
+	$insertStatement = 'INSERT INTO SelfServiceAppointmentRescheduleToken (appointmentId, token)
 		VALUES (?, ?);';
 	$token = md5(strval($appointmentId));
-	$appointmentClientRescheduleParams = array($appointmentId, $token);
+	$params = array($appointmentId, $token);
 
-	$stmt = $DB_CONN->prepare($appointmentClientRescheduleInsert);
-	if (!$stmt->execute($appointmentClientRescheduleParams)) {
+	$stmt = $DB_CONN->prepare($insertStatement);
+	if (!$stmt->execute($params)) {
 		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
 	}
 

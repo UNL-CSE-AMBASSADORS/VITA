@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS Answer;
 DROP TABLE IF EXISTS AppointmentFilingStatus;
 DROP TABLE IF EXISTS FilingStatus;
 DROP TABLE IF EXISTS ServicedAppointment;
-DROP TABLE IF EXISTS AppointmentClientReschedule;
+DROP TABLE IF EXISTS SelfServiceAppointmentRescheduleToken;
 DROP TABLE IF EXISTS Note;
 DROP TABLE IF EXISTS Appointment;
 DROP TABLE IF EXISTS AppointmentTime;
@@ -97,7 +97,7 @@ CREATE TABLE Appointment (
 	FOREIGN KEY(appointmentTimeId) REFERENCES AppointmentTime(appointmentTimeId)
 );
 
-CREATE TABLE AppointmentClientReschedule (
+CREATE TABLE SelfServiceAppointmentRescheduleToken (
 	token VARCHAR(255) NOT NULL,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
 	appointmentId INTEGER UNSIGNED NOT NULL,

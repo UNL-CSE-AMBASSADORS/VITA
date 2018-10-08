@@ -31,8 +31,8 @@ function doesTokenExist($token) {
 	try {
 		$query = 'SELECT DATE_FORMAT(scheduledTime, "%Y-%m-%d %H:%i:%S") AS scheduledTime, cancelled, timeIn,
 				Site.phoneNumber
-			FROM AppointmentClientReschedule
-			JOIN Appointment ON AppointmentClientReschedule.appointmentId = Appointment.appointmentId
+			FROM SelfServiceAppointmentRescheduleToken
+			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 			JOIN Site ON AppointmentTime.siteId = Site.siteId
 			LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
@@ -211,8 +211,8 @@ function getClientInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
 	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, Appointment.appointmentId
-		FROM AppointmentClientReschedule
-		JOIN Appointment ON AppointmentClientReschedule.appointmentId = Appointment.appointmentId
+		FROM SelfServiceAppointmentRescheduleToken
+		JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 		JOIN Client ON Appointment.clientId = Client.clientId
 		WHERE token = ?';
 
@@ -249,8 +249,8 @@ function getAppointmentInformationFromToken($token) {
 
 	$query = 'SELECT DATE_FORMAT(scheduledTime, "%W, %M %D, %Y at %l:%i %p") AS scheduledTimeStr, 
 		Site.title, Site.address
-		FROM AppointmentClientReschedule
-		JOIN Appointment ON AppointmentClientReschedule.appointmentId = Appointment.appointmentId
+		FROM SelfServiceAppointmentRescheduleToken
+		JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 		JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 		JOIN Site ON AppointmentTime.siteId = Site.siteId
 		WHERE token = ?';
