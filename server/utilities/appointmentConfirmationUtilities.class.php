@@ -14,7 +14,7 @@ class AppointmentConfirmationUtilities {
 		$dateStr = $data['dateStr'];
 		$timeStr = $data['timeStr'];
 		$doesInternational = $data['doesInternational'];
-		$clientRescheduleToken = $data['token'];
+		$selfServiceAppointmentRescheduleToken = $data['token'];
 	
 		$message = self::introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber);
 		if ($doesInternational) {
@@ -24,7 +24,7 @@ class AppointmentConfirmationUtilities {
 			$message .= self::residentialInformation();
 		}
 		$message .= self::miscellaneousInformation();
-		$message .= self::clientRescheduleInformation($clientRescheduleToken);
+		$message .= self::selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken);
 	
 		return $message;
 	}
@@ -110,11 +110,11 @@ class AppointmentConfirmationUtilities {
 				</ul>";
 	}
 
-	private static function clientRescheduleInformation($clientRescheduleToken) {
+	private static function selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken) {
 		$serverName = $_SERVER['SERVER_NAME'];
-		$clientRescheduleLink = "https://$serverName/appointment/reschedule?token=$clientRescheduleToken";
+		$selfServiceAppointmentRescheduleLink = "https://$serverName/appointment/reschedule?token=$selfServiceAppointmentRescheduleToken";
 		return "<h2 class='mt-3'>Rescheduling or Cancelling your Appointment</h2>
 				You can reschedule or cancel your appointment by visiting 
-				<a href='$clientRescheduleLink' target='_blank'>$clientRescheduleLink</a>";
+				<a href='$selfServiceAppointmentRescheduleLink' target='_blank'>$selfServiceAppointmentRescheduleLink</a>";
 	}
 }

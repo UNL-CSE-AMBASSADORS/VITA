@@ -1,6 +1,6 @@
-define('clientRescheduleController', [], function() {
+define('selfServiceAppointmentRescheduleController', [], function() {
 
-	function clientRescheduleController($scope, $sce, ClientRescheduleDataService, AppointmentPickerSharedPropertiesService, NotificationUtilities) {
+	function selfServiceAppointmentRescheduleController($scope, $sce, SelfServiceAppointmentRescheduleDataService, AppointmentPickerSharedPropertiesService, NotificationUtilities) {
 		// Token variables
 		$scope.token = '';
 		$scope.tokenExists = null;
@@ -42,7 +42,7 @@ define('clientRescheduleController', [], function() {
 				return;
 			}
 
-			ClientRescheduleDataService.doesTokenExist(token).then((result) => {
+			SelfServiceAppointmentRescheduleDataService.doesTokenExist(token).then((result) => {
 				if (result == null) {
 					NotificationUtilities.giveNotice('Failure', 'There was an error loading appointment information. Please refresh and try again.', false);
 					$scope.tokenExists = null;
@@ -57,7 +57,7 @@ define('clientRescheduleController', [], function() {
 			});
 		};
 
-		// The token value isn't reflected in this controller until the DOM for the clientReschedule directive
+		// The token value isn't reflected in this controller until the DOM for the selfServiceAppointmentReschedule directive
 		// is actually created, so we have to watch for the value change instead of simply invoking the method 
 		$scope.$watch('token', (newValue, oldValue) => {
 			$scope.doesTokenExist(newValue);
@@ -74,7 +74,7 @@ define('clientRescheduleController', [], function() {
 			const emailAddress = $scope.clientData.email;
 			const phoneNumber = $scope.clientData.phone;
 
-			ClientRescheduleDataService.validateClientInformation(token, firstName, lastName, emailAddress, phoneNumber).then((response) => {
+			SelfServiceAppointmentRescheduleDataService.validateClientInformation(token, firstName, lastName, emailAddress, phoneNumber).then((response) => {
 				if (response == null || !response.success) {
 					const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
 					NotificationUtilities.giveNotice('Failure', errorMessage, false);
@@ -114,7 +114,7 @@ define('clientRescheduleController', [], function() {
 			const phoneNumber = $scope.clientData.phone;
 			const appointmentTimeId = $scope.appointmentPickerSharedProperties.selectedAppointmentTimeId;
 
-			ClientRescheduleDataService.rescheduleAppointment(token, firstName, lastName, emailAddress, phoneNumber, appointmentTimeId).then(function(response) {
+			SelfServiceAppointmentRescheduleDataService.rescheduleAppointment(token, firstName, lastName, emailAddress, phoneNumber, appointmentTimeId).then(function(response) {
 				document.body.scrollTop = document.documentElement.scrollTop = 0;
 				
 				if (response == null || !response.success) {
@@ -141,7 +141,7 @@ define('clientRescheduleController', [], function() {
 			const emailAddress = $scope.clientData.email;
 			const phoneNumber = $scope.clientData.phone;
 
-			ClientRescheduleDataService.cancelAppointment(token, firstName, lastName, emailAddress, phoneNumber).then(function(response) {
+			SelfServiceAppointmentRescheduleDataService.cancelAppointment(token, firstName, lastName, emailAddress, phoneNumber).then(function(response) {
 				document.body.scrollTop = document.documentElement.scrollTop = 0;
 				
 				// Close the cancel confirmation modal
@@ -170,7 +170,7 @@ define('clientRescheduleController', [], function() {
 			const emailAddress = $scope.clientData.email;
 			const phoneNumber = $scope.clientData.phone;
 
-			ClientRescheduleDataService.emailConfirmation(token, firstName, lastName, emailAddress, phoneNumber).then(function(response) {
+			SelfServiceAppointmentRescheduleDataService.emailConfirmation(token, firstName, lastName, emailAddress, phoneNumber).then(function(response) {
 				if (response == null || !response.success) {
 					const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
 					NotificationUtilities.giveNotice('Failure', errorMessage, false);
@@ -199,8 +199,8 @@ define('clientRescheduleController', [], function() {
 
 	}
 
-	clientRescheduleController.$inject = ['$scope', '$sce', 'clientRescheduleDataService', 'appointmentPickerSharedPropertiesService', 'notificationUtilities'];
+	selfServiceAppointmentRescheduleController.$inject = ['$scope', '$sce', 'selfServiceAppointmentRescheduleDataService', 'appointmentPickerSharedPropertiesService', 'notificationUtilities'];
 
-	return clientRescheduleController;
+	return selfServiceAppointmentRescheduleController;
 
 });

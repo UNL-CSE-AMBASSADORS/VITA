@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="/assets/css/bootstrap.btn-group.min.css">
 <link rel="stylesheet" href="/dist/assets/css/form.css">
 <link rel="stylesheet" href="/dist/assets/css/printAppointmentConfirmation.css">
-<link rel="stylesheet" href="/dist/appointment/reschedule/clientReschedule.css">
+<link rel="stylesheet" href="/dist/appointment/reschedule/selfServiceAppointmentReschedule.css">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -90,7 +90,7 @@
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
-				<div id="clientRescheduleApp" class="wdn-band" client-reschedule token="<?php echo $token; ?>"></div>
+				<div id="selfServiceAppointmentRescheduleApp" class="wdn-band" self-service-appointment-reschedule token="<?php echo $token; ?>"></div>
 				<!-- TemplateEndEditable -->
 			</div>
 		</main>
@@ -120,6 +120,6 @@
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
-	<script src="/dist/appointment/reschedule/clientReschedule.js"></script>
+	<script src="/dist/appointment/reschedule/selfServiceAppointmentReschedule.js"></script>
 </body>
 </html>

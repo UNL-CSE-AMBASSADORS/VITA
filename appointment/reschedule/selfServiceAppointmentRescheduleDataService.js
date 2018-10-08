@@ -1,9 +1,9 @@
-define('clientRescheduleDataService', [], function($http) {
+define('selfServiceAppointmentRescheduleDataService', [], function($http) {
 
-	function clientRescheduleDataService($http) {
+	function selfServiceAppointmentRescheduleDataService($http) {
 		return {
 			doesTokenExist: function(token) {
-				return $http.get(`/server/appointment/reschedule/clientReschedule.php?action=doesTokenExist&token=${token}`).then(function(response){
+				return $http.get(`/server/appointment/reschedule/selfServiceAppointmentReschedule.php?action=doesTokenExist&token=${token}`).then(function(response){
 					return response.data;
 				},function(error) {
 					return null;
@@ -11,7 +11,7 @@ define('clientRescheduleDataService', [], function($http) {
 			},
 			validateClientInformation: function(token, firstName, lastName, emailAddress, phoneNumber) {
 				return $http({
-					url: '/server/appointment/reschedule/clientReschedule.php',
+					url: '/server/appointment/reschedule/selfServiceAppointmentReschedule.php',
 					method: 'POST',
 					data: 'action=validateClientInformation' +
 						`&token=${token}` +
@@ -30,7 +30,7 @@ define('clientRescheduleDataService', [], function($http) {
 			},
 			rescheduleAppointment: function(token, firstName, lastName, emailAddress, phoneNumber, appointmentTimeId) {
 				return $http({
-					url: '/server/appointment/reschedule/clientReschedule.php',
+					url: '/server/appointment/reschedule/selfServiceAppointmentReschedule.php',
 					method: 'POST',
 					data: 'action=reschedule' + 
 						`&token=${token}` +
@@ -50,7 +50,7 @@ define('clientRescheduleDataService', [], function($http) {
 			},
 			cancelAppointment: function(token, firstName, lastName, emailAddress, phoneNumber) {
 				return $http({
-					url: '/server/appointment/reschedule/clientReschedule.php',
+					url: '/server/appointment/reschedule/selfServiceAppointmentReschedule.php',
 					method: 'POST',
 					data: 'action=cancel' + 
 						`&token=${token}` +
@@ -69,7 +69,7 @@ define('clientRescheduleDataService', [], function($http) {
 			},
 			emailConfirmation: function(token, firstName, lastName, emailAddress, phoneNumber) {
 				return $http({
-					url: '/server/appointment/reschedule/clientReschedule.php',
+					url: '/server/appointment/reschedule/selfServiceAppointmentReschedule.php',
 					method: 'POST',
 					data: 'action=emailConfirmation' + 
 						`&token=${token}` +
@@ -89,7 +89,7 @@ define('clientRescheduleDataService', [], function($http) {
 		};
 	}
 
-	clientRescheduleDataService.$inject = ['$http'];
+	selfServiceAppointmentRescheduleDataService.$inject = ['$http'];
 
-	return clientRescheduleDataService;
+	return selfServiceAppointmentRescheduleDataService;
 });
