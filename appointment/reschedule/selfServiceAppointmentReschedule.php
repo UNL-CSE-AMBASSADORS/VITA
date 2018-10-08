@@ -105,7 +105,6 @@
 							<div class="wdn-band">
 								<div class="wdn-inner-wrapper">
 									<h4>Are you sure you want to cancel your appointment?</h4>
-									<p>You cannot undo this.</p>
 									<div>
 										<button type="button" class="wdn-button wdn-button-triad close-modal-button">No, do not Cancel</button>
 										<button type="button" class="wdn-button wdn-button-brand" ng-click="cancelAppointment()">Yes, cancel</button>
