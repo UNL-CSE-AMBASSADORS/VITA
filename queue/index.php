@@ -12,7 +12,7 @@ function wdnInclude($path)
 <head>
 <?php wdnInclude("/wdn/templates_4.1/includes/metanfavico.html"); ?>
 <!--
-	Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at http://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
+	Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at https://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
 	All framework code is the property of the UNL Web Developer Network. The code seen in a source code view is not, and may not be used as, a template. You may not use this code, a reverse-engineered version of this code, or its associated visual presentation in whole or in part to create a derivative work.
 	This message may not be removed from any pages based on the UNLedu Web Framework.
 
@@ -35,7 +35,7 @@ function wdnInclude($path)
 		<?php wdnInclude("/wdn/templates_4.1/includes/noscript-padding.html"); ?>
 		<header id="header" role="banner" class="wdn-content-slide wdn-band">
 			<div id="wdn_header_top">
-				<span id="wdn_institution_title"><a href="http://www.unl.edu/">University of Nebraska&ndash;Lincoln</a></span>
+				<span id="wdn_institution_title"><a href="https://www.unl.edu/">University of Nebraska&ndash;Lincoln</a></span>
 				<div id="wdn_resources">
 					<?php wdnInclude("/wdn/templates_4.1/includes/wdnResources.html"); ?>
 					<?php wdnInclude("/wdn/templates_4.1/includes/idm.html"); ?>
@@ -54,7 +54,7 @@ function wdnInclude($path)
 			<nav id="breadcrumbs" class="wdn-inner-wrapper" role="navigation" aria-label="breadcrumbs">
 				<!-- TemplateBeginEditable name="breadcrumbs" -->
 				<ul>
-					<li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
+					<li><a href="https://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
 					<li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
 					<li>Queue</li>
 				</ul>
@@ -85,15 +85,15 @@ function wdnInclude($path)
 					$USER = new User();
 					if ($USER->isLoggedIn() && !isset($_REQUEST['public'])) { // we enable logged in users to get to the public queue by having ?public in the URL
 				?>
-					<div id="queueApp" class="wdn-band" private-queue>
+					<private-queue id="queueApp" class="wdn-band">
 						<script src="/dist/queue/queuePrivate.js"></script>
-					</div>
+					</private-queue>
 				<?php
 					} else {
 				?>
-					<div id="queueApp" class="wdn-band" public-queue>
+					<public-queue id="queueApp" class="wdn-band">
 						<script src="/dist/queue/queuePublic.js"></script>
-					</div>
+					</public-queue>
 				<?php
 					}
 				?>
