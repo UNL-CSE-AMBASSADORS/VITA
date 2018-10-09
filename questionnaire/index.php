@@ -93,7 +93,7 @@ function wdnInclude($path)
 
 						<form class="cmxform" id="vitaQuestionnaireForm" autocomplete="off">
 							<div class="form-radio" id="depreciationSchedule">
-								<label for="depreciationSchedule" class="form-required">Will you require a Depreciation Schedule?</label>
+								<p class="form-required question-text">Will you require a Depreciation Schedule?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="1yes">
@@ -108,7 +108,7 @@ function wdnInclude($path)
 							</div>
 
 							<div class="form-radio" id="scheduleF">
-								<label for="scheduleF" class="form-required">Will you require a Schedule F (Farm)?</label>
+								<p class="form-required question-text">Will you require a Schedule F (Farm)?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="2yes">
@@ -123,7 +123,7 @@ function wdnInclude($path)
 							</div>
 
 							<div class="form-radio" id="homeBased">
-								<label for="homeBased" class="form-required">Are you self-employed or own a home-based business?</label>
+								<p class="form-required question-text">Are you self-employed or own a home-based business?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="3yes">
@@ -137,7 +137,7 @@ function wdnInclude($path)
 							</div>
 
 							<div class="form-radio" id="homeBasedNetLoss" style="display: none;">
-								<label for="homeBasedNetLoss" class="form-required">Does your home-based business or self-employment have a net loss?</label>
+								<p class="form-required question-text">Does your home-based business or self-employment have a net loss?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="4yes">
@@ -152,7 +152,7 @@ function wdnInclude($path)
 							</div>
 
 							<div class="form-radio" id="homeBased10000" style="display: none;" >
-								<label for="homeBased10000" class="form-required">Does your home-based business or self-employment have more than $10,000 in expenses?</label>
+								<p class="form-required question-text">Does your home-based business or self-employment have more than $10,000 in expenses?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="5yes">
@@ -167,7 +167,7 @@ function wdnInclude($path)
 							</div>
 
 							<div class="form-radio" id="homeBasedSEP" style="display: none;">
-								<label for="homeBasedESP" class="form-required">Does your home-based business or self-employment have self-employed, SEP, SIMPLE, or qualified retirement plans?</label>
+								<p class="form-required question-text">Does your home-based business or self-employment have self-employed, SEP, SIMPLE, or qualified retirement plans?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="6yes">
@@ -182,7 +182,7 @@ function wdnInclude($path)
 							</div>
 
 							<div class="form-radio" id="homeBasedEmployees" style="display: none;">
-								<label for="homeBasedEmployees" class="form-required">Does your home-based business or self-employment have employees?</label>
+								<p class="form-required question-text">Does your home-based business or self-employment have employees?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="7yes">
@@ -197,7 +197,7 @@ function wdnInclude($path)
 							</div>
 
 							<div class="form-radio" id="casualtyLosses">
-								<label for="casualtyLosses" class="form-required">Will your return have casualty losses?</label>
+								<p class="form-required question-text">Will your return have casualty losses?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="8yes">
@@ -212,7 +212,7 @@ function wdnInclude($path)
 							</div>
 
 							<div class="form-radio" id="theftLosses">
-								<label for="theftLosses" class="form-required">Will your return have theft losses?</label>
+								<p class="form-required question-text">Will your return have theft losses?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="9yes">
@@ -227,7 +227,7 @@ function wdnInclude($path)
 							</div>
 
 							<div class="form-radio" id="scheduleE">
-								<label for="scheduleE" class="form-required">Will you require a Schedule E (rental income)?</label>
+								<p class="form-required question-text">Will you require a Schedule E (rental income)?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="10yes">
@@ -241,7 +241,7 @@ function wdnInclude($path)
 							</div>
 
 							<div class="form-radio" id="scheduleK1">
-								<label for="scheduleK1" class="form-required">Will you require a Schedule K-1 (partnership or trust income)?</label>
+								<p class="form-required question-text">Will you require a Schedule K-1 (partnership or trust income)?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="11yes">
@@ -255,7 +255,7 @@ function wdnInclude($path)
 							</div>
 
 							<div class="form-radio" id="dividendsIncome">
-								<label for="dividendsIncome" class="form-required">Do you have income from dividends, capital gains, or minimal brokerage transactions?</label>
+								<p class="form-required question-text">Do you have income from dividends, capital gains, or minimal brokerage transactions?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="12yes">
@@ -269,7 +269,7 @@ function wdnInclude($path)
 							</div>
 
 							<div class="form-radio" id="currentBankruptcy">
-								<label for="currentBankruptcy" class="form-required">Will your return involve a current bankruptcy?</label>
+								<p class="form-required question-text">Will your return involve a current bankruptcy?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="13yes">
@@ -283,7 +283,7 @@ function wdnInclude($path)
 							</div>
 
 							<div class="form-radio" id="multipleStates">
-								<label for="multipleStates" class="form-required">Will your return involve income from more than one state?</label>
+								<p class="form-required question-text">Will your return involve income from more than one state?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="14yes">
