@@ -1,3 +1,13 @@
 .cant-help-text {
 	color: #d00000;
 }
+
+.question-text {
+	margin-bottom: 0;
+}
+
+p.form-required::after {
+	content: " *";
+	color: #d00000;
+	font-size: 1.247rem;
+}
