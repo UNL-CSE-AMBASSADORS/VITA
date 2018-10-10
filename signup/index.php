@@ -83,7 +83,7 @@ function wdnInclude($path)
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
-				<signup class="wdn-band" id="signupApp"></signup>
+				<sign-up class="wdn-band" id="signupApp"></sign-up>
 				<!-- TemplateEndEditable -->
 			</div>
 		</main>
