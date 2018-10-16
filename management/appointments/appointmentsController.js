@@ -140,6 +140,21 @@ define('appointmentsController', [], function() {
 		}
 
 		$scope.initializeCancelConfirmationModal = function() {
+			WDN.initializePlugin('modal', [() => {
+				const $ = require('jquery');
+
+				$('#confirm-cancel-modal-opener').colorbox({
+					inline: true
+				});
+				$('.close-modal-button').click(function() {
+					$.colorbox.close();
+				});
+				$('#cancel-button').click(function() {
+					$.colorbox.close();
+				});
+			}]);
+
+			/*
 			WDN.initializePlugin('modal', [ function() {
 				require(['jquery'], function($) {
 					$(function() {
@@ -155,6 +170,7 @@ define('appointmentsController', [], function() {
 					});
 				});
 			} ]);
+			*/
 		}
 
 		$scope.giveNotice = function(title, message, affirmative = true) {
