@@ -47,7 +47,9 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(
 
 		signupApp.factory('signupDataService', SignupDataService);
 		signupApp.controller('signupController', SignupController);
-		signupApp.directive('signup', function () {
+		// Please note the slight discrepancy here "signUp" instead of "signup". 
+		// The UNL Web Audit didn't like the signup tag for some reason, but seems to be fine with the sign-up tag
+		signupApp.directive('signUp', function () {
 			return {
 				controller: 'signupController',
 				templateUrl: '/signup/signup.php'
