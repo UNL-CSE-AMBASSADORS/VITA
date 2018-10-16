@@ -94,8 +94,7 @@ WDN.initializePlugin('modal', [function() {
 				},
 				cache: false,
 				success: function(response) {
-					for (let i = 0; i < response.length; i++) {
-						const role = response[i];
+					for (const role of response) {
 						rolesMap.set(role.roleId, role.name);
 					}
 				}, 
@@ -119,9 +118,7 @@ WDN.initializePlugin('modal', [function() {
 				dataType: 'JSON',
 				cache: false,
 				success: function(response) {
-					for (let i = 0; i < response.length; i++) {
-						const roleLimit = response[i];
-
+					for (const roleLimit of response) {
 						const isSiteRoleLimitEntry = roleLimit.shiftId == null;
 						if (isSiteRoleLimitEntry) {
 							addToSiteRoleLimitsMap(roleLimit);
@@ -387,7 +384,7 @@ WDN.initializePlugin('modal', [function() {
 	
 			$('#abilitiesSelect').on('change', function(event){
 				// abilities to be removed - all non-selected options with set ids
-				let removeUserAbilityIds = $(this).children('.editView').children('input:not(:checked)[data-userAbilityId]').map(function(index, ele){
+				let removeUserAbilityIds = $(this).children('.editView').children('input:not(:checked)[data-userAbilityId]').map(function(index, ele) {
 					return ele.dataset.userabilityid; // note this is case-sensitive and should be all lowercase
 				}).get();
 	
