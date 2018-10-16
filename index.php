@@ -131,7 +131,7 @@ function wdnInclude($path)
 									<a class="wdn-button wdn-button-brand" href="/signup">Make an Appointment</a>
 								</div>
 								<div class="bp768-wdn-col-one-half visual-island">
-									<a class="wdn-button wdn-button-brand" href="/server/download/downloadFile.php?file=2018_Schedule.pdf">Download Site Schedule</a>
+									<button class="wdn-button wdn-button-brand" onClick="javascript:downloadSiteSchedule()">Download Site Schedule</button>
 								</div>
 							</div>
 						</div>
@@ -186,5 +186,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
+	<script src="/dist/index.js"></script>
 </body>
 </html>
