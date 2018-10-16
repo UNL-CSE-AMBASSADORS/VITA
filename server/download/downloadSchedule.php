@@ -1,8 +1,8 @@
 <?php
 
-downloadFile($_REQUEST['file']);
+downloadFile('2018_Schedule.pdf');
 
-function downloadFile($fileName) {	
+function downloadFile($fileName) {
 	$root = realpath($_SERVER['DOCUMENT_ROOT']);
 	$filePath = "$root/server/download/documents/$fileName";
 	

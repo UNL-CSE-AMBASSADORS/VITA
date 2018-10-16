@@ -35,7 +35,6 @@
 			<div><b>Prepared at Station: </b>{{appointment.servicedByStation != null ? appointment.servicedByStation : "N/A"}}</div>
 		</div>
 	</div>
-	<div ng-show="appointment.notCompletedDescription != null"><b>Not Completed Reason: </b>{{appointment.notCompletedDescription}}</div>
 	<div ng-if="appointment.filingStatuses.length > 0">
 		<div><b>Filed: </b></div>
 		<ul>
@@ -43,13 +42,21 @@
 		</ul>
 	</div>
 
+
+
+	<!-- Notes Area -->
+	<div appointment-notes-area></div>
+	<!-- End Notes Area -->
+
+
+
 	<!-- Reschedule Section -->
 	<h3>Reschedule Appointment</h3>
 	<form class="cmxform" id="rescheduleForm">
 		<label>
 			<div>International Student Scholar</div>
 			<span class="switch">
-				<input type="checkbox" ng-model="sharedProperties.studentScholar">
+				<input type="checkbox" ng-model="appointmentPickerSharedProperties.studentScholar">
 				<span class="slider round"></span>
 			</span>
 		</label>
@@ -58,7 +65,7 @@
 			value="Reschedule" 
 			id="rescheduleButton" 
 			class="submit wdn-button wdn-button-triad" 
-			ng-disabled="sharedProperties.selectedDate == null || sharedProperties.selectedSite == null || sharedProperties.selectedTime == null || submittingReschedule" 
+			ng-disabled="appointmentPickerSharedProperties.selectedDate == null || appointmentPickerSharedProperties.selectedSite == null || appointmentPickerSharedProperties.selectedTime == null || submittingReschedule" 
 			ng-model="submittingReschedule" 
 			ng-click="rescheduleAppointment()">
 

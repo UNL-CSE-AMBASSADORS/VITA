@@ -5,14 +5,17 @@
   "main": "index.js",
   "scripts": {
     "clean-start": "rm -rf ./dist/",
-    "transpile-js": "babel . -d ./dist --ignore ./node_modules/,./dist/",
-    "process-css:dev": "postcss ./**/*.css -d ./dist/ -b ./ --use postcss-cssnext",
-    "process-css:prod": "postcss ./**/*.css -d ./dist/ -b ./ --use postcss-cssnext cssnano",
+    "transpile-js": "babel . -d ./dist/ --ignore ./node_modules/,./dist/",
+    "process-css:dev": "postcss \"./!(dist|node_modules)/**/*.css\" -d ./dist/ -b ./ --use postcss-cssnext",
+    "process-css:prod": "postcss \"./!(dist|node_modules)/**/*.css\" -d ./dist/ -b ./ --use postcss-cssnext cssnano",
     "minify-js:prod": "run-for-every-file --src \"./dist/\" --dest \"./dist/\" --file \"**/*.js\" --not-file \"**/*/\" --run \"uglifyjs {{src-file}} -o {{dest-file}} --compress drop_console --mangle --keep-fnames\"",
     "cache-bust:prod": "hashmark ./dist/**/*.{js,css} {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\//g' > replace-map.json && cat replace-map.json | replaceinfiles -s ./**/*.php -d {dir}/{name}{ext} && cat replace-map.json | sed s/\\.js/\\\\\\x22/g | replaceinfiles -s ./dist/**/*.js -d {dir}/{name}{ext} && rm replace-map.json",
     "clean-end": "rm -rf ./dist/node_modules",
     "build:dev": "npm run clean-start && npm run transpile-js && npm run process-css:dev && npm run clean-end",
-    "build:prod": "npm run clean-start && npm run transpile-js && npm run minify-js:prod && npm run process-css:prod && npm run cache-bust:prod && npm run clean-end"
+    "build:prod": "npm run clean-start && npm run transpile-js && npm run minify-js:prod && npm run process-css:prod && npm run cache-bust:prod && npm run clean-end",
+    "watch-js": "npm run transpile-js -- --watch",
+    "watch-css": "npm run process-css:dev -- --watch",
+    "watch": "npm-run-all --parallel watch-js watch-css"
   },
   "repository": {
     "type": "git",
@@ -31,6 +34,7 @@
     "babel-preset-env": "^1.6.1",
     "cssnano": "^3.10.0",
     "hashmark": "^5.0.0",
+    "npm-run-all": "^4.1.3",
     "postcss-cli": "^4.1.1",
     "postcss-cssnext": "^3.0.2",
     "run-for-every-file": "^1.1.0",

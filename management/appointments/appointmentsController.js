@@ -1,13 +1,14 @@
 define('appointmentsController', [], function() {
 
-	function appointmentsController($scope, AppointmentsService, sharedPropertiesService) {
+	function appointmentsController($scope, AppointmentsService, AppointmentPickerSharedPropertiesService, AppointmentNotesAreaSharedPropertiesService) {
 
-		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
+		$scope.appointmentPickerSharedProperties = AppointmentPickerSharedPropertiesService.getSharedProperties();
+		$scope.appointmentNotesAreaSharedProperties = AppointmentNotesAreaSharedPropertiesService.getSharedProperties();
 		$scope.submittingReschedule = false;
 		$scope.cancelling = false;
 
 		$scope.getAppointments = function() {
-			let year = new Date().getFullYear();
+			const year = new Date().getFullYear();
 			AppointmentsService.getAppointments(year).then(function(result) {
 				if(result == null) {
 					alert('There was an error loading the appointments. Please try refreshing the page.');
@@ -21,11 +22,12 @@ define('appointmentsController', [], function() {
 					if (result.appointments.length > 0) {
 						$scope.appointments = result.appointments.map((appointment) => {
 							appointment.name = appointment.firstName + " " + appointment.lastName;
+
 							appointment.completed = appointment.completed == true; // Do this since the SQL returns 0/1, and we want it to be false/true
-							
-							appointment.cancelled = appointment.notCompletedDescription === "Cancelled Appointment";
+							appointment.cancelled = appointment.cancelled == true; // Do this since the SQL returns 0/1, and we want it to be false/true
 							appointment.notStarted = !appointment.cancelled && appointment.timeIn == null;
-							appointment.incomplete = !appointment.cancelled && appointment.notCompletedDescription != null;
+							// TODO: Not sure this logic for incomplete is good
+							appointment.incomplete = !appointment.cancelled && !appointment.completed;
 							appointment.inProgress = !appointment.cancelled && !appointment.incomplete && appointment.timeIn != null && !appointment.completed;
 							
 							if (appointment.completed) appointment.statusText = "Complete";
@@ -46,26 +48,26 @@ define('appointmentsController', [], function() {
 
 		$scope.rescheduleAppointment = function() {
 
-			if ($scope.sharedProperties.selectedDate == null || $scope.sharedProperties.selectedSite == null || $scope.sharedProperties.selectedTime == null || $scope.submittingReschedule) {
+			if ($scope.appointmentPickerSharedProperties.selectedDate == null || $scope.appointmentPickerSharedProperties.selectedSite == null || $scope.appointmentPickerSharedProperties.selectedTime == null || $scope.submittingReschedule) {
 				return false;
 			}
 
 			$scope.submittingReschedule = true;
 
 			let appointmentId = $scope.appointment.appointmentId;
-			let appointmentTimeId = $scope.sharedProperties.selectedAppointmentTimeId;
+			let appointmentTimeId = $scope.appointmentPickerSharedProperties.selectedAppointmentTimeId;
 
 			AppointmentsService.rescheduleAppointment(appointmentId, appointmentTimeId).then(function(result) {
 				document.body.scrollTop = document.documentElement.scrollTop = 0;
 				
 				if (result.success) {
-					$scope.appointment.scheduledTime = $scope.sharedProperties.selectedDate + ' ' + $scope.sharedProperties.selectedTime;
-					$scope.appointment.title = $scope.sharedProperties.selectedSiteTitle;
+					$scope.appointment.scheduledTime = $scope.appointmentPickerSharedProperties.selectedDate + ' ' + $scope.appointmentPickerSharedProperties.selectedTime;
+					$scope.appointment.title = $scope.appointmentPickerSharedProperties.selectedSiteTitle;
 
 					// Clear the selected values
-					$scope.sharedProperties.selectedDate = null;
-					$scope.sharedProperties.selectedSite = null;
-					$scope.sharedProperties.selectedTime = null;
+					$scope.appointmentPickerSharedProperties.selectedDate = null;
+					$scope.appointmentPickerSharedProperties.selectedSite = null;
+					$scope.appointmentPickerSharedProperties.selectedTime = null;
 
 					$scope.resetAppointmentProperties($scope.appointment);
 
@@ -114,7 +116,6 @@ define('appointmentsController', [], function() {
 					$scope.appointment.cancelled = true;
 					$scope.appointment.notStarted = false;
 					$scope.appointment.statusText = "Cancelled";
-					$scope.appointment.notCompletedDescription = "Cancelled Appointment";
 
 					// Let the user know it was successful
 					$scope.giveNotice("Success!", "This appointment was successfully cancelled.", true);
@@ -132,6 +133,7 @@ define('appointmentsController', [], function() {
 
 		$scope.selectAppointment = function(appointment) {
 			$scope.appointment = appointment;
+			$scope.appointmentNotesAreaSharedProperties.appointmentId = appointment.appointmentId;  // Need to share the appointment id so we can load/add notes
 			document.body.scrollTop = document.documentElement.scrollTop = 0;
 		};
 
@@ -194,7 +196,7 @@ define('appointmentsController', [], function() {
 		$scope.initializeCancelConfirmationModal();
 	}
 
-	appointmentsController.$inject = ['$scope', 'appointmentsDataService', 'sharedPropertiesService'];
+	appointmentsController.$inject = ['$scope', 'appointmentsDataService', 'appointmentPickerSharedPropertiesService', 'appointmentNotesAreaSharedPropertiesService'];
 
 	return appointmentsController;
 

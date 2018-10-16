@@ -95,7 +95,7 @@ define('signupController', [], function() {
 
 	}
 
-	signupController.$inject = ['$scope', '$sce', 'signupDataService', 'sharedPropertiesService'];
+	signupController.$inject = ['$scope', '$sce', 'signupDataService', 'appointmentPickerSharedPropertiesService'];
 
 	return signupController;
 
