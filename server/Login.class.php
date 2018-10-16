@@ -298,7 +298,7 @@ class Login
 			if (!PROD) {
 				print $mail_body;
 			}
-			$this->sendHtmlFormattedEmail($dbemail, $subject, $mail_body, $this->noreply_email);
+			$this->sendHtmlFormattedEmail($dbemail, $subject, $mail_body);
 
 			$response['success'] = true;
 		}catch(Exception $e){
@@ -376,7 +376,7 @@ class Login
 				}
 
 				## Send email
-				$this->sendHtmlFormattedEmail($dbemail, $subject, $mail_body, $this->noreply_email);
+				$this->sendHtmlFormattedEmail($dbemail, $subject, $mail_body);
 			}else{
 				## No Results Found For Email Address - Register Them
 				$response = $this->register($email);
@@ -490,7 +490,7 @@ class Login
 			}
 
 			## Send email
-			$this->sendHtmlFormattedEmail($dbemail, $subject, $mail_body, $this->noreply_email);
+			$this->sendHtmlFormattedEmail($dbemail, $subject, $mail_body);
 
 			$this->login($email, $password);
 		}catch(Exception $e){
@@ -678,10 +678,12 @@ class Login
 		$response['success'] = false;
 	}
 
-	private function sendHtmlFormattedEmail($toEmail, $subject, $body, $fromEmail) {
+	private function sendHtmlFormattedEmail($toEmail, $subject, $body) {
 		if (PROD) {
 			$root = realpath($_SERVER['DOCUMENT_ROOT']);
 			require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
+			
+			$fromEmail = $this->noreply_email;
 			EmailUtilities::sendHtmlFormattedEmail($toEmail, $subject, $body, $fromEmail);
 		}
 	}
