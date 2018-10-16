@@ -10,7 +10,7 @@ require.config({
 	shim: {
 		'ngAnimate': ['angular'],
 		'ngAria': ['angular'],
-		'sharedPropertiesService': ['angular'],
+		'appointmentPickerSharedPropertiesService': ['angular'],
 		'appointmentPickerDataService': ['angular'],
 		'appointmentPickerController': ['angular']
 	}
@@ -24,7 +24,7 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 		'appointmentPickerController'
 	],
 	function (
-		SharedPropertiesService,
+		AppointmentPickerSharedPropertiesService,
 		AppointmentPickerDataService,
 		AppointmentPickerController
 	) {
@@ -33,7 +33,7 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 		// Create the module
 		var appointmentPickerApp = angular.module('appointmentPickerApp', []);
 
-		appointmentPickerApp.service('sharedPropertiesService', SharedPropertiesService)
+		appointmentPickerApp.service('appointmentPickerSharedPropertiesService', AppointmentPickerSharedPropertiesService)
 		appointmentPickerApp.factory('appointmentPickerDataService', AppointmentPickerDataService);
 		appointmentPickerApp.controller('appointmentPickerController', AppointmentPickerController);
 		appointmentPickerApp.directive('appointmentPicker', function () {

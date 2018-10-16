@@ -8,7 +8,10 @@ require.config({
 		appointmentsSearchFilter: '/dist/management/appointments/appointmentsSearchFilter',
 		appointmentPickerSharedPropertiesService: '/dist/components/appointmentPicker/appointmentPickerSharedPropertiesService',
 		appointmentPickerDataService: '/dist/components/appointmentPicker/appointmentPickerDataService',
-		appointmentPickerController: '/dist/components/appointmentPicker/appointmentPickerController'
+		appointmentPickerController: '/dist/components/appointmentPicker/appointmentPickerController',
+		appointmentNotesAreaSharedPropertiesService: '/dist/components/appointmentNotesArea/appointmentNotesAreaSharedPropertiesService',
+		appointmentNotesAreaDataService: '/dist/components/appointmentNotesArea/appointmentNotesAreaDataService',
+		appointmentNotesAreaController: '/dist/components/appointmentNotesArea/appointmentNotesAreaController'
 	},
 	shim: {
 		'ngAnimate': ['angular'],
@@ -16,9 +19,12 @@ require.config({
 		'appointmentsDataService': ['angular'],
 		'appointmentsController': ['angular'],
 		'appointmentsSearchFilter': ['angular'],
-		'sharedPropertiesService': ['angular'],
+		'appointmentPickerSharedPropertiesService': ['angular'],
 		'appointmentPickerDataService': ['angular'],
-		'appointmentPickerController': ['angular']
+		'appointmentPickerController': ['angular'],
+		'appointmentNotesAreaSharedPropertiesService': ['angular'],
+		'appointmentNotesAreaDataService': ['angular'],
+		'appointmentNotesAreaController': ['angular']
 	}
 });
 
@@ -30,22 +36,29 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 		'appointmentsSearchFilter',
 		'appointmentPickerSharedPropertiesService',
 		'appointmentPickerDataService',
-		'appointmentPickerController'
+		'appointmentPickerController',
+		'appointmentNotesAreaSharedPropertiesService',
+		'appointmentNotesAreaDataService',
+		'appointmentNotesAreaController'
 	],
 	function (
 		AppointmentsDataService,
 		AppointmentsController, 
 		AppointmentsSearchFilter,
-		SharedPropertiesService,
+		AppointmentPickerSharedPropertiesService,
 		AppointmentPickerDataService,
-		AppointmentPickerController
+		AppointmentPickerController,
+		AppointmentNotesAreaSharedPropertiesService,
+		AppointmentNotesAreaDataService,
+		AppointmentNotesAreaController
 	) {
 		'use strict';
 
 		// Create the module
 		var appointmentsApp = angular.module('appointmentsApp', []);
-
-		appointmentsApp.service('sharedPropertiesService', SharedPropertiesService)
+		
+		appointmentsApp.service('appointmentPickerSharedPropertiesService', AppointmentPickerSharedPropertiesService)
+		appointmentsApp.service('appointmentNotesAreaSharedPropertiesService', AppointmentNotesAreaSharedPropertiesService)
 		appointmentsApp.factory('appointmentsDataService', AppointmentsDataService);
 		appointmentsApp.controller('appointmentsController', AppointmentsController);
 		appointmentsApp.directive('appointments', function () {
@@ -63,6 +76,16 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 			return {
 				controller: 'appointmentPickerController',
 				templateUrl: '/components/appointmentPicker/appointmentPicker.php'
+			};
+		});
+
+		// Contents for the appointmentNotesAreaApp module
+		appointmentsApp.factory('appointmentNotesAreaDataService', AppointmentNotesAreaDataService);
+		appointmentsApp.controller('appointmentNotesAreaController', AppointmentNotesAreaController);
+		appointmentsApp.directive('appointmentNotesArea', function () {
+			return {
+				controller: 'appointmentNotesAreaController',
+				templateUrl: '/components/appointmentNotesArea/appointmentNotesArea.php'
 			};
 		});
 
