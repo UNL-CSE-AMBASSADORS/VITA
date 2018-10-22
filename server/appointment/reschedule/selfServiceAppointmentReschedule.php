@@ -65,7 +65,7 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 
 	try {
 		$clientInformation = getClientInformationFromToken($token);
-		$clientInformationMatches = clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
+		$clientInformationMatches = doesClientInformationMatch($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$response['validated'] = $clientInformationMatches;
 
 		if ($clientInformationMatches) {
@@ -198,7 +198,7 @@ function validateClientInformation($token, $firstName, $lastName, $emailAddress,
 		throw new Exception('There was an error validating information. Please refresh the page and try again.', MY_EXCEPTION);
 	}
 
-	$clientInformationMatches = clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
+	$clientInformationMatches = doesClientInformationMatch($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
 	if ($clientInformationMatches === false) {
 		http_response_code(401);
 		throw new Exception('Provided information does not match our records.', MY_EXCEPTION);
@@ -229,7 +229,7 @@ function getClientInformationFromToken($token) {
 	return $clientInformation;
 }
 
-function clientInformationMatches($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber) {	
+function doesClientInformationMatch($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber) {	
 	$firstNameMatches = isset($clientInformation['firstName']) && strtolower($clientInformation['firstName']) === strtolower($firstName);
 	$lastNameMatches = isset($clientInformation['lastName']) && strtolower($clientInformation['lastName']) === strtolower($lastName);
 	$emailAddressMatches = isset($clientInformation['emailAddress']) && strtolower($clientInformation['emailAddress']) === strtolower($emailAddress);
