@@ -7,7 +7,7 @@
 
 	<!-- Shown when the token is invalid or does not exist --> 
 	<div ng-if="tokenExists === false" ng-cloak>
-		<a href="/">You appear to have reached this page in error. Please click here to the main page.</a>
+		<a href="/">You appear to have reached this page in error. Please click here to go to the main page.</a>
 	</div>
 	
 	<!-- Shown when the token is valid and exists -->

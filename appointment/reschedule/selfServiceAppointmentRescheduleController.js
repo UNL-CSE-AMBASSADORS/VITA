@@ -182,17 +182,16 @@ define('selfServiceAppointmentRescheduleController', [], function() {
 		}
 
 		$scope.initializeCancelConfirmationModal = function() {
-			WDN.initializePlugin('modal', [ function() {
-				require(['jquery'], function($) {
-					$(function() {
-						$('#confirm-cancel-modal-opener').colorbox({
-							inline: true
-						});
 
-						$('.close-modal-button').click(function(){
-							$.colorbox.close();
-						});
-					});
+			WDN.initializePlugin('modal', [ function() {
+				var $ = require('jquery');
+				
+				$('#confirm-cancel-modal-opener').colorbox({
+					inline: true
+				});
+
+				$('.close-modal-button').click(function(){
+					$.colorbox.close();
 				});
 			} ]);
 		}
