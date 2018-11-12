@@ -811,12 +811,6 @@ SET @role_reviewer = LAST_INSERT_ID();
 
 
 -- user shift
-# INSERT INTO UserShift (userId, shiftId, roleId)
-#	VALUES (@user_preparer1Id, @shift_site1Shift1Id, @role_preparer);
-
-# INSERT INTO UserShift (userId, shiftId, roleId)
-#	VALUES (@user_preparer1Id, @shift_site1Shift2Id, @role_preparer);
-
 INSERT INTO UserShift (userId, shiftId, roleId)
 	VALUES (@user_preparer2Id, @shift_site1Shift2Id, @role_preparer);
 
