@@ -1,6 +1,6 @@
 define('appointmentsController', [], function() {
 
-	function appointmentsController($scope, AppointmentsService, AppointmentPickerSharedPropertiesService, AppointmentNotesAreaSharedPropertiesService) {
+	function appointmentsController($scope, AppointmentsService, AppointmentPickerSharedPropertiesService, AppointmentNotesAreaSharedPropertiesService, NotificationUtilities) {
 
 		$scope.appointmentPickerSharedProperties = AppointmentPickerSharedPropertiesService.getSharedProperties();
 		$scope.appointmentNotesAreaSharedProperties = AppointmentNotesAreaSharedPropertiesService.getSharedProperties();
@@ -74,14 +74,14 @@ define('appointmentsController', [], function() {
 					$scope.submittingReschedule = false;
 					
 					// Let the user know it was successful
-					$scope.giveNotice("Success!", "This appointment was successfully rescheduled.");
+					NotificationUtilities.giveNotice("Success!", "This appointment was successfully rescheduled.");
 				} else {
 					alert(result.error);
 
 					$scope.submittingReschedule = false;
 
 					// Let the user know it failed
-					$scope.giveNotice("Failure", "Something went wrong and this appointment was not rescheduled!", false);
+					NotificationUtilities.giveNotice("Failure", "Something went wrong and this appointment was not rescheduled!", false);
 				}
 			});
 		}
@@ -118,13 +118,13 @@ define('appointmentsController', [], function() {
 					$scope.appointment.statusText = "Cancelled";
 
 					// Let the user know it was successful
-					$scope.giveNotice("Success!", "This appointment was successfully cancelled.", true);
+					NotificationUtilities.giveNotice("Success!", "This appointment was successfully cancelled.", true);
 				} else {
 					document.body.scrollTop = document.documentElement.scrollTop = 0;
 					alert(result.error);
 
 					// Let the user know it failed
-					$scope.giveNotice("Failure", "Something went wrong and this appointment was not cancelled!", false);
+					NotificationUtilities.giveNotice("Failure", "Something went wrong and this appointment was not cancelled!", false);
 				}
 
 				$scope.cancelling = false;
@@ -141,28 +141,12 @@ define('appointmentsController', [], function() {
 			$scope.appointment = null;
 		}
 
-		$scope.giveNotice = function(title, message, affirmative = true) {
-			WDN.initializePlugin('notice');
-			var body = angular.element( document.querySelector( 'body' ) );
-			body.append(`
-				<div class="wdn_notice ${affirmative ? 'affirm' : 'negate'}" data-overlay="maincontent" data-duration="10">
-					<div class="close">
-						<a href="#">Close this notice</a>
-					</div>
-					<div class="message">
-						<p class="title">${title}</p>
-						<p>${message}</a>
-						</p>
-					</div>
-				</div>`);
-		}
-
 		// Invoke initially
 		$scope.getAppointments();
 
 	}
 
-	appointmentsController.$inject = ['$scope', 'appointmentsDataService', 'appointmentPickerSharedPropertiesService', 'appointmentNotesAreaSharedPropertiesService'];
+	appointmentsController.$inject = ['$scope', 'appointmentsDataService', 'appointmentPickerSharedPropertiesService', 'appointmentNotesAreaSharedPropertiesService', 'notificationUtilities'];
 
 	return appointmentsController;
 

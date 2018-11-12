@@ -14,6 +14,7 @@ class AppointmentConfirmationUtilities {
 		$dateStr = $data['dateStr'];
 		$timeStr = $data['timeStr'];
 		$doesInternational = $data['doesInternational'];
+		$selfServiceAppointmentRescheduleToken = $data['token'];
 	
 		$message = self::introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber);
 		if ($doesInternational) {
@@ -23,6 +24,7 @@ class AppointmentConfirmationUtilities {
 			$message .= self::residentialInformation();
 		}
 		$message .= self::miscellaneousInformation();
+		$message .= self::selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken);
 	
 		return $message;
 	}
@@ -31,9 +33,12 @@ class AppointmentConfirmationUtilities {
 		GLOBAL $DB_CONN;
 	
 		$query = "SELECT Site.address, Site.phoneNumber, Site.title, Site.doesInternational, Client.firstName, 
-			DATE_FORMAT(scheduledTime, '%W, %M %D, %Y') AS dateStr, TIME_FORMAT(scheduledTime, '%l:%i %p') as timeStr
+				SelfServiceAppointmentRescheduleToken.token, 
+				DATE_FORMAT(scheduledTime, '%W, %M %D, %Y') AS dateStr, 
+				TIME_FORMAT(scheduledTime, '%l:%i %p') as timeStr
 			FROM Appointment
 			JOIN Client ON Appointment.clientId = Client.clientId
+			JOIN SelfServiceAppointmentRescheduleToken ON Appointment.appointmentId = SelfServiceAppointmentRescheduleToken.appointmentId
 			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 			JOIN Site ON AppointmentTime.siteId = Site.siteId
 			WHERE Appointment.appointmentId = ?";
@@ -48,7 +53,7 @@ class AppointmentConfirmationUtilities {
 		return "<h2>Appointment Confirmation</h2>
 				$firstName, thank you for signing up! Your appointment will be located at the $siteTitle site ($siteAddress). 
 				Please arrive no later than $timeStr on $dateStr with all necessary materials (listed below). 
-				Please call $sitePhoneNumber if you have any questions or would like to reschedule. 
+				Please call $sitePhoneNumber if you have any questions. 
 				Thank you from Lincoln VITA.
 				<h2 class='mt-3'>What to Bring for your Appointment</h2>";
 	}
@@ -103,5 +108,13 @@ class AppointmentConfirmationUtilities {
 					<li>Checking or savings account information for direct deposit/direct debit</li>
 					<li>It is <b>STRONGLY RECOMMENDED</b> that you bring last year's tax return</li>
 				</ul>";
+	}
+
+	private static function selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken) {
+		$serverName = $_SERVER['SERVER_NAME'];
+		$selfServiceAppointmentRescheduleLink = "https://$serverName/appointment/reschedule?token=$selfServiceAppointmentRescheduleToken";
+		return "<h2 class='mt-3'>Rescheduling or Cancelling your Appointment</h2>
+				You can reschedule or cancel your appointment by visiting 
+				<a href='$selfServiceAppointmentRescheduleLink' target='_blank'>$selfServiceAppointmentRescheduleLink</a>";
 	}
 }
