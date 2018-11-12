@@ -1,12 +1,19 @@
 <?php
-$root = realpath($_SERVER["DOCUMENT_ROOT"]);
-function wdnInclude($path)
-{
-	$documentRoot = 'https://unlcms.unl.edu';
+	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+	function wdnInclude($path)
+	{
+		$documentRoot = 'https://unlcms.unl.edu';
 
-	return readfile($documentRoot . $path);
-}
+		return readfile($documentRoot . $path);
+	}
+	
+	$EXPECTED_TOKEN_LENGTH = 32;
+	$token = '';
+	if (isset($_REQUEST['token']) && strlen($_REQUEST['token']) === $EXPECTED_TOKEN_LENGTH) {
+		$token = $_REQUEST['token'];
+	}
 ?>
+
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
@@ -20,10 +27,13 @@ function wdnInclude($path)
 -->
 <?php wdnInclude("/wdn/templates_4.1/includes/scriptsandstyles.html"); ?>
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>Not Found | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+<title>Reschedule a VITA Appointment | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
-<link rel="stylesheet" href="/dist/error_pages/error_page.css">
+<link rel="stylesheet" href="/assets/css/bootstrap.btn-group.min.css">
+<link rel="stylesheet" href="/dist/assets/css/form.css">
+<link rel="stylesheet" href="/dist/assets/css/printAppointmentConfirmation.css">
+<link rel="stylesheet" href="/dist/appointment/reschedule/selfServiceAppointmentReschedule.css">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -55,7 +65,7 @@ function wdnInclude($path)
 				<ul>
 					<li><a href="https://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
 					<li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
-					<li>Not Found</li>
+					<li>Cancel or Reschedule Appointment</li>
 				</ul>
 				<!-- TemplateEndEditable -->
 			</nav>
@@ -76,16 +86,11 @@ function wdnInclude($path)
 			<div id="maincontent" class="wdn-main">
 				<div id="pagetitle">
 					<!-- TemplateBeginEditable name="pagetitle" -->
+					<h1>Cancel or Reschedule Appointment</h1>
 					<!-- TemplateEndEditable -->
 				</div>
 				<!-- TemplateBeginEditable name="maincontentarea" -->
-				<div class="wdn-band">
-					<div class="wdn-inner-wrapper wdn-inner-padding-no-top">
-						<h1 class="error-number">404</h1>
-						<h2 class="error-name">Not Found</h2>
-						<div class="error-description">I couldn't find the page you were looking for.<br>Please contact vita@cse.unl.edu if you think this is an error.</div>
-					</div>
-				</div>
+				<div id="selfServiceAppointmentRescheduleApp" class="wdn-band" self-service-appointment-reschedule token="<?php echo $token; ?>"></div>
 				<!-- TemplateEndEditable -->
 			</div>
 		</main>
@@ -115,5 +120,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
+	<script src="/dist/appointment/reschedule/selfServiceAppointmentReschedule.js"></script>
 </body>
 </html>
