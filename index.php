@@ -12,7 +12,7 @@ function wdnInclude($path)
 <head>
 <?php wdnInclude("/wdn/templates_4.1/includes/metanfavico.html"); ?>
 <!--
-	Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at http://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
+	Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at https://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
 	All framework code is the property of the UNL Web Developer Network. The code seen in a source code view is not, and may not be used as, a template. You may not use this code, a reverse-engineered version of this code, or its associated visual presentation in whole or in part to create a derivative work.
 	This message may not be removed from any pages based on the UNLedu Web Framework.
 
@@ -33,7 +33,7 @@ function wdnInclude($path)
 		<?php wdnInclude("/wdn/templates_4.1/includes/noscript-padding.html"); ?>
 		<header id="header" role="banner" class="wdn-content-slide wdn-band">
 			<div id="wdn_header_top">
-				<span id="wdn_institution_title"><a href="http://www.unl.edu/">University of Nebraska&ndash;Lincoln</a></span>
+				<span id="wdn_institution_title"><a href="https://www.unl.edu/">University of Nebraska&ndash;Lincoln</a></span>
 				<div id="wdn_resources">
 					<?php wdnInclude("/wdn/templates_4.1/includes/wdnResources.html"); ?>
 					<?php wdnInclude("/wdn/templates_4.1/includes/idm.html"); ?>
@@ -52,7 +52,7 @@ function wdnInclude($path)
 			<nav id="breadcrumbs" class="wdn-inner-wrapper" role="navigation" aria-label="breadcrumbs">
 				<!-- TemplateBeginEditable name="breadcrumbs" -->
 				<ul>
-					<li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
+					<li><a href="https://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
 					<li>VITA Lincoln</li>
 					<li>Need Assistance</li>
 				</ul>
@@ -131,7 +131,7 @@ function wdnInclude($path)
 									<a class="wdn-button wdn-button-brand" href="/signup">Make an Appointment</a>
 								</div>
 								<div class="bp768-wdn-col-one-half visual-island">
-									<a class="wdn-button wdn-button-brand" href="/server/download/downloadFile.php?file=2018_Schedule.pdf">Download Site Schedule</a>
+									<button class="wdn-button wdn-button-brand" onClick="javascript:downloadSiteSchedule()">Download Site Schedule</button>
 								</div>
 							</div>
 						</div>
@@ -186,5 +186,6 @@ function wdnInclude($path)
 	</div>
 	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
 	<?php require_once "$root/server/global_includes.php"; ?>
+	<script src="/dist/index.js"></script>
 </body>
 </html>

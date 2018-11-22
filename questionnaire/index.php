@@ -12,7 +12,7 @@ function wdnInclude($path)
 <head>
 <?php wdnInclude("/wdn/templates_4.1/includes/metanfavico.html"); ?>
 <!--
-	Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at http://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
+	Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at https://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
 	All framework code is the property of the UNL Web Developer Network. The code seen in a source code view is not, and may not be used as, a template. You may not use this code, a reverse-engineered version of this code, or its associated visual presentation in whole or in part to create a derivative work.
 	This message may not be removed from any pages based on the UNLedu Web Framework.
 
@@ -36,7 +36,7 @@ function wdnInclude($path)
 		<?php wdnInclude("/wdn/templates_4.1/includes/noscript-padding.html"); ?>
 		<header id="header" role="banner" class="wdn-content-slide wdn-band">
 			<div id="wdn_header_top">
-				<span id="wdn_institution_title"><a href="http://www.unl.edu/">University of Nebraska&ndash;Lincoln</a></span>
+				<span id="wdn_institution_title"><a href="https://www.unl.edu/">University of Nebraska&ndash;Lincoln</a></span>
 				<div id="wdn_resources">
 					<?php wdnInclude("/wdn/templates_4.1/includes/wdnResources.html"); ?>
 					<?php wdnInclude("/wdn/templates_4.1/includes/idm.html"); ?>
@@ -55,7 +55,7 @@ function wdnInclude($path)
 			<nav id="breadcrumbs" class="wdn-inner-wrapper" role="navigation" aria-label="breadcrumbs">
 				<!-- TemplateBeginEditable name="breadcrumbs" -->
 				<ul>
-					<li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
+					<li><a href="https://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
 					<li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
 					<li>Need Assistance</li>
 					<li>Questionnaire</li>
@@ -91,9 +91,9 @@ function wdnInclude($path)
 						<h2>Can VITA Help You?</h2>
 						<p><b>Please note:</b> The scope of work that can be done within a VITA site is defined by the IRS. If your return is considered “out of scope” for a site, our VITA Volunteers will not be able to prepare your return.</p>
 
-						<form class="cmxform" id="vitaQuestionnaireForm" action="" autocomplete="off">
+						<form class="cmxform" id="vitaQuestionnaireForm" autocomplete="off">
 							<div class="form-radio" id="depreciationSchedule">
-								<label for="depreciation_schedule" class="form-required">Will you require a Depreciation Schedule?</label>
+								<p class="form-required question-text">Will you require a Depreciation Schedule?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="1yes">
@@ -104,10 +104,11 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes requiring a depreciation schedule.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes requiring a depreciation schedule.</p>
 							</div>
+
 							<div class="form-radio" id="scheduleF">
-								<label for="schedule_f" class="form-required">Will you require a Schedule F (Farm)?</label>
+								<p class="form-required question-text">Will you require a Schedule F (Farm)?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="2yes">
@@ -118,10 +119,11 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes requiring a schedule F.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes requiring a schedule F.</p>
 							</div>
+
 							<div class="form-radio" id="homeBased">
-								<label for="self_employed" class="form-required">Are you self-employed or own a home-based business?</label>
+								<p class="form-required question-text">Are you self-employed or own a home-based business?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="3yes">
@@ -133,8 +135,9 @@ function wdnInclude($path)
 									</div>
 								</div>
 							</div>
+
 							<div class="form-radio" id="homeBasedNetLoss" style="display: none;">
-								<label for="net_loss" class="form-required">Does your home-based business or self-employment have a net loss?</label>
+								<p class="form-required question-text">Does your home-based business or self-employment have a net loss?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="4yes">
@@ -145,10 +148,11 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes when the home-based business has a net loss.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes when the home-based business has a net loss.</p>
 							</div>
+
 							<div class="form-radio" id="homeBased10000" style="display: none;" >
-								<label for="more_than_10000_expenses" class="form-required">Does your home-based business or self-employment have more than $10,000 in expenses?</label>
+								<p class="form-required question-text">Does your home-based business or self-employment have more than $10,000 in expenses?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="5yes">
@@ -159,10 +163,11 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes when the home-based business has more than $10,000 in expenses.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes when the home-based business has more than $10,000 in expenses.</p>
 							</div>
+
 							<div class="form-radio" id="homeBasedSEP" style="display: none;">
-								<label for="retirement_plans" class="form-required">Does your home-based business or self-employment have self-employed, SEP, SIMPLE, or qualified retirement plans?</label>
+								<p class="form-required question-text">Does your home-based business or self-employment have self-employed, SEP, SIMPLE, or qualified retirement plans?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="6yes">
@@ -173,10 +178,11 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes when the home-based business has retirement plans.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes when the home-based business has retirement plans.</p>
 							</div>
+
 							<div class="form-radio" id="homeBasedEmployees" style="display: none;">
-								<label for="any_employees" class="form-required">Does your home-based business or self-employment have employees?</label>
+								<p class="form-required question-text">Does your home-based business or self-employment have employees?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="7yes">
@@ -187,10 +193,11 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes when the home-based business has employees.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes when the home-based business has employees.</p>
 							</div>
+
 							<div class="form-radio" id="casualtyLosses">
-								<label for="casualty_losses" class="form-required">Will your return have casualty losses?</label>
+								<p class="form-required question-text">Will your return have casualty losses?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="8yes">
@@ -201,10 +208,11 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes which will have casualty losses.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes which will have casualty losses.</p>
 							</div>
+
 							<div class="form-radio" id="theftLosses">
-								<label for="theft_losses" class="form-required">Will your return have theft losses?</label>
+								<p class="form-required question-text">Will your return have theft losses?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="9yes">
@@ -215,10 +223,11 @@ function wdnInclude($path)
 										</label>
 									</div>
 								</div>
-								<p class="cant-help-text" style="display:none;" name="cantHelp">Sorry, VITA can't prepare taxes which will have theft losses.</p>
+								<p class="cant-help-text" style="display:none;">Sorry, VITA can't prepare taxes which will have theft losses.</p>
 							</div>
+
 							<div class="form-radio" id="scheduleE">
-								<label for="schedule_e" class="form-required">Will you require a Schedule E (rental income)?</label>
+								<p class="form-required question-text">Will you require a Schedule E (rental income)?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="10yes">
@@ -230,8 +239,9 @@ function wdnInclude($path)
 									</div>
 								</div>
 							</div>
+
 							<div class="form-radio" id="scheduleK1">
-								<label for="schedule_k-1" class="form-required">Will you require a Schedule K-1 (partnership or trust income)?</label>
+								<p class="form-required question-text">Will you require a Schedule K-1 (partnership or trust income)?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="11yes">
@@ -243,8 +253,9 @@ function wdnInclude($path)
 									</div>
 								</div>
 							</div>
+
 							<div class="form-radio" id="dividendsIncome">
-								<label for="dividends_income" class="form-required">Do you have income from dividends, capital gains, or minimal brokerage transactions?</label>
+								<p class="form-required question-text">Do you have income from dividends, capital gains, or minimal brokerage transactions?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="12yes">
@@ -256,8 +267,9 @@ function wdnInclude($path)
 									</div>
 								</div>
 							</div>
+
 							<div class="form-radio" id="currentBankruptcy">
-								<label for="current_bankruptcy" class="form-required">Will your return involve a current bankruptcy?</label>
+								<p class="form-required question-text">Will your return involve a current bankruptcy?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="13yes">
@@ -269,8 +281,9 @@ function wdnInclude($path)
 									</div>
 								</div>
 							</div>
+
 							<div class="form-radio" id="multipleStates">
-								<label for="multiple_states" class="form-required">Will your return involve income from more than one state?</label>
+								<p class="form-required question-text">Will your return involve income from more than one state?</p>
 								<div class="error-placement">
 									<div class="btn-group" data-toggle="buttons">
 										<label class="wdn-button btn" for="14yes">

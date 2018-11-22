@@ -86,28 +86,12 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 	$response['success'] = true;
 
 	try {
-		// Reschedule the appointment
-		$query = "UPDATE Appointment
-			SET appointmentTimeId = ?
-			WHERE appointmentId = ?";
-		$stmt = $DB_CONN->prepare($query);
-
-		$success = $stmt->execute(array($appointmentTimeId, $appointmentId));
-		if ($success == false) throw new Exception();
+		$appointmentAccessor = new AppointmentAccessor();
+		$appointmentAccessor->rescheduleAppointment($appointmentId, $appointmentTimeId);
 
 		if (PROD) {
 			sendEmailConfirmation($appointmentId);
 		}
-
-		// Reset fields in the associated serviced appointment if applicable
-		$query = "UPDATE ServicedAppointment
-			SET timeIn = NULL, timeReturnedPapers = NULL, timeAppointmentStarted = NULL, timeAppointmentEnded = NULL,
-				completed = FALSE, cancelled = FALSE, servicedByStation = NULL
-			WHERE appointmentId = ?";
-		$stmt = $DB_CONN->prepare($query);
-
-		$success = $stmt->execute(array($appointmentId));
-		if ($success == false) throw new Exception();
 
 		// Add a note to the appointment saying it was rescheduled
 		$noteAccessor = new NoteAccessor();
