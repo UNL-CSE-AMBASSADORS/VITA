@@ -5,14 +5,14 @@ define('sitesDataService', [], function($http) {
 			getSites: function() {
 				return $http.get('/server/api/sites/getAll.php?siteId=true&title=true').then(function(response){
 					return response.data;
-				},function(error){
+				},function(error) {
 					return null;
 				});
 			},
 			getSiteInformation: function(siteId) {
 				return $http.get(`/server/management/sites/sites.php?action=getSiteInformation&siteId=${siteId}`).then(function(response){
 					return response.data;
-				},function(error){
+				},function(error) {
 					return null;
 				});
 			},
@@ -24,14 +24,28 @@ define('sitesDataService', [], function($http) {
 					headers: {
 						'Content-Type': "application/x-www-form-urlencoded"
 					}
-				}).then(function(response){
+				}).then(function(response) {
 					return response.data;
-				},function(error){
+				},function(error) {
+					return null;
+				});
+			},
+			addAppointmentTime: function(siteId, date, scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, percentageAppointments, approximateLengthInMinutes) {
+				return $http({
+					url: '/server/management/sites/sites.php',
+					method: 'POST',
+					data: `action=addAppointmentTime&siteId=${siteId}&date=${date}&scheduledTime=${scheduledTime}&minimumNumberOfAppointments=${minimumNumberOfAppointments}&maximumNumberOfAppointments=${maximumNumberOfAppointments}&percentageAppointments=${percentageAppointments}&approximateLengthInMinutes=${approximateLengthInMinutes}`,
+					headers: {
+						'Content-Type': "application/x-www-form-urlencoded"
+					}
+				}).then(function(response) {
+					return response.data;
+				},function(error) {
 					return null;
 				});
 			}
-		}
-	}
+		};
+	};
 
 	sitesDataService.$inject = ['$http'];
 

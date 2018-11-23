@@ -50,9 +50,9 @@
 							</thead>
 							<tbody>
 								<tr ng-repeat="shift in siteInformation.shifts">
-									<th id="shift{{shift.shiftId}}">{{shift.date}}</div>
-									<td headers="shiftStartTimeHeader shift{{shift.shiftId}}">{{shift.startTime}}</td>
-									<td headers="shiftEndTimeHeader shift{{shift.shiftId}}">{{shift.endTime}}</td>
+									<th id="shift{{shift.shiftId}}">{{shift.dateString}}</div>
+									<td headers="shiftStartTimeHeader shift{{shift.shiftId}}">{{shift.startTimeString}}</td>
+									<td headers="shiftEndTimeHeader shift{{shift.shiftId}}">{{shift.endTimeString}}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -68,11 +68,10 @@
 							autocomplete="off" 
 							novalidate>
 
-							<div id="datePicker" 
-								class="form-textfield">
+							<div class="form-textfield">
 								<label class="form-label form-required">Date</label>
 								<input type="text" 
-									id="dateInput" 
+									id="addShiftDateInput" 
 									name="dateInput" 
 									placeholder=" -- Select a Date -- " 
 									autocomplete="off"
@@ -82,14 +81,13 @@
 								</div>
 							</div>
 
-							<div id="startTimeDiv" 
-								class="form-select">
-								<label class="form-label form-required" for="startTimeSelect">Start Time</label>
-								<select id="startTimeSelect" 
+							<div class="form-select">
+								<label class="form-label form-required" for="addShiftStartTimeSelect">Start Time</label>
+								<select id="addShiftStartTimeSelect" 
 									name="startTimeSelect" 
 									ng-model="addShiftInformation.selectedStartTime" 
-									ng-options="time for time in startTimeOptions"
-									ng-change="startTimeChanged(addShiftInformation.selectedStartTime)" 
+									ng-options="time for time in addShiftStartTimeOptions"
+									ng-change="addShiftStartTimeChanged(addShiftInformation.selectedStartTime)" 
 									required>
 									<option value="" style="display:none;">-- Select a Start Time --</option>
 								</select>
@@ -98,13 +96,12 @@
 								</div>
 							</div>
 
-							<div id="endTimeDiv" 
-								class="form-select">
-								<label class="form-label form-required" for="endTimeSelect">End Time</label>
-								<select id="endTimeSelect" 
+							<div class="form-select">
+								<label class="form-label form-required" for="addShiftEndTimeSelect">End Time</label>
+								<select id="addShiftEndTimeSelect" 
 									name="endTimeSelect" 
 									ng-model="addShiftInformation.selectedEndTime" 
-									ng-options="time for time in endTimeOptions" 
+									ng-options="time for time in addShiftEndTimeOptions" 
 									required>
 									<option value="" style="display:none;">-- Select an End Time --</option>
 								</select>
@@ -156,7 +153,7 @@
 									<th id="appointmentTimeScheduledTimeHeader">Scheduled Time</th>
 									<th id="appointmentTimeMinimumNumberOfAppointmentsHeader">
 										Min Appts										
-										<a class="tooltip pointer" title="This is the minimum number of appointments for this time slot, meaning at least this many appointments will be allowed to be scheduled even if there are not enough preparers signed up during this time. Default is N/A.">
+										<a class="tooltip pointer" title="This is the minimum number of appointments for this time slot, meaning at least this many appointments will be allowed to be scheduled even if there are not enough preparers signed up during this time. Default is 0.">
 											<span class="wdn-icon-info" aria-hidden="true"></span>
 										</a>
 									</th>
@@ -182,7 +179,7 @@
 							</thead>
 							<tbody>
 								<tr ng-repeat="appointmentTime in siteInformation.appointmentTimes">
-									<th id="appointmentTime{{appointmentTime.appointmentTimeId}}">{{appointmentTime.scheduledTime}}</div>
+									<th id="appointmentTime{{appointmentTime.appointmentTimeId}}">{{appointmentTime.scheduledTimeString}}</div>
 									<td headers="appointmentTimeMinimumNumberOfAppointmentsHeader appointmentTime{{appointmentTime.appointmentTimeId}}">{{appointmentTime.minimumNumberOfAppointments == null ? 'N/A' : appointmentTime.minimumNumberOfAppointments}}</td>
 									<td headers="appointmentTimeMaximumNumberOfAppointmentsHeader appointmentTime{{appointmentTime.appointmentTimeId}}">{{appointmentTime.maximumNumberOfAppointments == null ? 'N/A' : appointmentTime.maximumNumberOfAppointments}}</td>
 									<td headers="appointmentTimePercentageAppointmentsHeader appointmentTime{{appointmentTime.appointmentTimeId}}">{{appointmentTime.percentageAppointments}}%</td>
@@ -191,6 +188,115 @@
 							</tbody>
 						</table>
 					</div>
+
+
+					<!-- Add appointment time section -->
+					<div ng-if="addAppointmentTimeButtonClicked === true">
+						<h5>Add an Appointment Time</h5>
+						<form class="cmxform"
+							id="addAppointmentTimeForm"
+							name="form"
+							ng-submit="form.$valid && addAppointmentTimeSaveButtonHandler()" 
+							autocomplete="off" 
+							novalidate>
+
+							<div class="form-textfield">
+								<label class="form-label form-required">Date</label>
+								<input type="text" 
+									id="addAppointmentTimeDateInput" 
+									name="dateInput" 
+									placeholder=" -- Select a Date -- " 
+									autocomplete="off"
+									required>
+								<div ng-show="form.$submitted || form.dateInput.$touched">
+									<label class="error" ng-show="form.dateInput.$error.required">This field is required.</label>
+								</div>
+							</div>
+
+							<div class="form-select">
+								<label class="form-label form-required" for="addAppointmentTimeScheduledTimeSelect">Scheduled Time</label>
+								<select id="addAppointmentTimeScheduledTimeSelect" 
+									name="scheduledTimeSelect" 
+									ng-model="addAppointmentTimeInformation.selectedScheduledTime" 
+									ng-options="time for time in addAppointmentTimeScheduledTimeOptions"
+									required>
+									<option value="" style="display:none;">-- Select a Scheduled Time --</option>
+								</select>
+								<div ng-show="form.$submitted || form.scheduledTimeSelect.$touched">
+									<label class="error" ng-show="form.scheduledTimeSelect.$error.required">This field is required.</label>
+								</div>
+							</div>
+
+							<div class="form-number">
+								<label class="form-label form-required" for="addAppointmentTimeMinimumNumberOfAppointments">Minimum Number of Appointments (default 0)</label>
+								<input id="addAppointmentTimeMinimumNumberOfAppointments"
+									type="number"
+									name="minimumNumberOfAppointments"
+									ng-model="addAppointmentTimeInformation.minimumNumberOfAppointments"
+									min="0"
+									required />
+								<div ng-show="form.$submitted || form.minimumNumberOfAppointments.$touched">
+									<label class="error" ng-show="form.minimumNumberOfAppointments.$error.required">This field is required.</label>
+								</div>
+							</div>
+
+							<div class="form-number">
+								<label class="form-label" for="addAppointmentTimeMaximumNumberOfAppointments">Maximum Number of Appointments (default N/A)</label>
+								<input id="addAppointmentTimeMaximumNumberOfAppointments"
+									type="number"
+									name="maximumNumberOfAppointments"
+									ng-model="addAppointmentTimeInformation.maximumNumberOfAppointments"
+									min="0"
+									placeholder="N/A" />
+								<div ng-show="form.$submitted || form.maximumNumberOfAppointments.$touched">
+									<label class="error" ng-show="form.maximumNumberOfAppointments.$error.required">This field is required.</label>
+								</div>
+							</div>
+
+							<div class="form-number">
+								<label class="form-label form-required" for="addAppointmentTimePercentageAppointments">Percentage Appointments (default 100)</label>
+								<input id="addAppointmentTimePercentageAppointments"
+									type="number"
+									name="percentageAppointments"
+									ng-model="addAppointmentTimeInformation.percentageAppointments"
+									min="0"
+									max="100"
+									required />
+								<div ng-show="form.$submitted || form.percentageAppointments.$touched">
+									<label class="error" ng-show="form.percentageAppointments.$error.required">This field is required.</label>
+								</div>
+							</div>
+
+							<div class="form-number">
+								<label class="form-label form-required" for="addAppointmentTimeApproximateLengthInMinutes">Approximate Length in Minutes (default 60)</label>
+								<input id="addAppointmentTimeApproximateLengthInMinutes"
+									type="number"
+									name="approximateLengthInMinutes"
+									ng-model="addAppointmentTimeInformation.approximateLengthInMinutes"
+									min="0"
+									required />
+								<div ng-show="form.$submitted || form.approximateLengthInMinutes.$touched">
+									<label class="error" ng-show="form.approximateLengthInMinutes.$error.required">This field is required.</label>
+								</div>
+							</div>
+
+
+							<div class="margin-top-10">
+								<button type="button"
+									class="wdn-button wdn-button-brand"
+									ng-click="addAppointmentTimeCancelButtonHandler()">Cancel</button>
+								<input type="submit" 
+									value="Save" 
+									class="submit wdn-button wdn-button-triad"
+									ng-disabled="!form.$valid">
+							</div>
+						</form>
+					</div>
+
+					<!-- Button for adding an appointment time -->
+					<button class="wdn-button margin-top-10" 
+						ng-click="addAppointmentTimeButtonHandler()" 
+						ng-if="addAppointmentTimeButtonClicked === false">Add Appointment Time</button>
 				</div>
 
 				<h5>How number of appointments is calculated:</h5>
