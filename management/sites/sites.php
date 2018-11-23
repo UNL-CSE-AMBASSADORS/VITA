@@ -180,7 +180,7 @@
 							<tbody>
 								<tr ng-repeat="appointmentTime in siteInformation.appointmentTimes">
 									<th id="appointmentTime{{appointmentTime.appointmentTimeId}}">{{appointmentTime.scheduledTimeString}}</div>
-									<td headers="appointmentTimeMinimumNumberOfAppointmentsHeader appointmentTime{{appointmentTime.appointmentTimeId}}">{{appointmentTime.minimumNumberOfAppointments == null ? 'N/A' : appointmentTime.minimumNumberOfAppointments}}</td>
+									<td headers="appointmentTimeMinimumNumberOfAppointmentsHeader appointmentTime{{appointmentTime.appointmentTimeId}}">{{appointmentTime.minimumNumberOfAppointments == null || appointmentTime.minimumNumberOfAppointments == 0 ? 'N/A' : appointmentTime.minimumNumberOfAppointments}}</td>
 									<td headers="appointmentTimeMaximumNumberOfAppointmentsHeader appointmentTime{{appointmentTime.appointmentTimeId}}">{{appointmentTime.maximumNumberOfAppointments == null ? 'N/A' : appointmentTime.maximumNumberOfAppointments}}</td>
 									<td headers="appointmentTimePercentageAppointmentsHeader appointmentTime{{appointmentTime.appointmentTimeId}}">{{appointmentTime.percentageAppointments}}%</td>
 									<td headers="appointmentTimeApproximateLengthInMinutesHeader appointmentTime{{appointmentTime.appointmentTimeId}}">{{appointmentTime.approximateLengthInMinutes}}</td>

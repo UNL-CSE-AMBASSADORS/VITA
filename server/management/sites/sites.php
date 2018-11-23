@@ -124,6 +124,8 @@ function addShift($siteId, $dateString, $startTimeString, $endTimeString) {
 			VALUES (?, ?, ?, ?, ?)';
 		$stmt = $DB_CONN->prepare($query);
 		$stmt->execute(array($siteId, $startTimeForDb, $endTimeForDb, $userId, $userId));
+
+		$response['shiftId'] = $DB_CONN->lastInsertId();
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'There was an error on the server adding the shift. Please refresh the page and try again.';
@@ -167,13 +169,21 @@ function addAppointmentTime($siteId, $dateString, $scheduledTimeString, $minimum
 			throw new Exception($isValidAppointmentTime['reason'], MY_EXCEPTION);
 		}
 
-		
+
 		// Insert into DB
+		$insertParams = array($siteId, $scheduledTimeForDb, $minimumNumberOfAppointments, $percentageAppointments, $approximateLengthInMinutes);
 		$query = 'INSERT INTO AppointmentTime (siteId, scheduledTime, minimumNumberOfAppointments, 
-				maximumNumberOfAppointments, percentageAppointments, approximateLengthInMinutes)
-			VALUES (?, ?, ?, ?, ?, ?)';
+				percentageAppointments, approximateLengthInMinutes';
+		if ($maximumNumberOfAppointments != null) {
+			$query .= ', maximumNumberOfAppointments) VALUES (?, ?, ?, ?, ?, ?)';
+			array_push($insertParams, $maximumNumberOfAppointments);
+		} else {
+			$query .= ') VALUES (?, ?, ?, ?, ?)';
+		}
 		$stmt = $DB_CONN->prepare($query);
-		$stmt->execute(array($siteId, $scheduledTimeForDb, $minimumNumberOfAppointments, $maximumNumberOfAppointments, $percentageAppointments, $approximateLengthInMinutes));
+		$stmt->execute($insertParams);
+
+		$response['appointmentTimeId'] = $DB_CONN->lastInsertId();
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'There was an error on the server adding the appointment time. Please refresh the page and try again.';
@@ -212,9 +222,10 @@ function doesAppointmentTimeFallWithinVolunteerShifts($siteId, $scheduledTime, $
 	$query = 'SELECT (Shift.startTime <= ?) AS appointmentTimeStartsWithinShift,
 			(Shift.endTime >= DATE_ADD(?, INTERVAL ? MINUTE)) AS appointmentTimeEndsWithinShift
 		FROM Shift
-		WHERE siteId = ? AND appointmentTimeStartsWithinShift AND appointmentTimeEndsWithinShift';
+		WHERE siteId = ?
+		HAVING appointmentTimeStartsWithinShift AND appointmentTimeEndsWithinShift';
 	$stmt = $DB_CONN->prepare($query);
-	$stmt->execute(array($scheduledTime, $scheduledTime, $approximateLengthInMinutes, $siteId));
+	$stmt->execute(array($scheduledTime, $scheduledTime, (int)$approximateLengthInMinutes, $siteId));
 	
 	$fallsWithinVolunteerShifts = (bool)$stmt->fetch() !== false;
 	return $fallsWithinVolunteerShifts;
@@ -224,7 +235,7 @@ function doesAppointmentTimeAlreadyExistWithScheduledTime($siteId, $scheduledTim
 	GLOBAL $DB_CONN;
 
 	$query = 'SELECT 1 FROM AppointmentTime
-		WHERE siteId = ? AND scheduledTime == ?';
+		WHERE siteId = ? AND scheduledTime = ?';
 	$stmt = $DB_CONN->prepare($query);
 	$stmt->execute(array($siteId, $scheduledTime));
 

@@ -1,6 +1,8 @@
 define('sitesController', [], function() {
 
 	function sitesController($scope, SitesDataService) {
+		const MINUTES_IN_DAY = 24 * 60;
+
 		// For the site select list
 		$scope.selectedSite = null;
 		$scope.sites = [];
@@ -45,7 +47,7 @@ define('sitesController', [], function() {
 		};
 		
 		$scope.addShiftButtonHandler = () => {
-			$scope.initializeDatePicker('addShiftDateInput', (date, inst) => {
+			$scope.initializeDatePicker('addShiftDateInput', (date) => {
 				$scope.addShiftInformation.selectedDate = date;
 				$scope.$apply();
 			}, (date) => $scope.isDateInPast(date));
@@ -54,7 +56,6 @@ define('sitesController', [], function() {
 
 		$scope.addShiftSaveButtonHandler = () => {
 			const shiftInformation = $scope.addShiftInformation;
-			$scope.addShiftInformation = {};
 
 			const siteId = $scope.selectedSite.siteId;
 			const date = shiftInformation.selectedDate;
@@ -63,8 +64,16 @@ define('sitesController', [], function() {
 			SitesDataService.addShift(siteId, date, startTime, endTime).then((result) => {
 				if (result && !result.success) {
 					alert(result.error);
+					return;
 				}
 
+				$scope.siteInformation.shifts.push({
+					'shiftId': result.shiftId,
+					'dateString': date,
+					'startTimeString': startTime,
+					'endTimeString': endTime
+				});
+				$scope.addShiftInformation = {};
 				$scope.addShiftButtonClicked = false;
 			});
 		};
@@ -79,7 +88,7 @@ define('sitesController', [], function() {
 				return new Date(new Date(shiftDate).toDateString()).getTime() === new Date(date.toDateString()).getTime();
 			};
 
-			$scope.initializeDatePicker('addAppointmentTimeDateInput', (date, inst) => {
+			$scope.initializeDatePicker('addAppointmentTimeDateInput', (date) => {
 				$scope.addAppointmentTimeInformation.selectedDate = date;
 				const shiftsOnThisDay = $scope.siteInformation.shifts
 					.filter(shift => isShiftDateEqualToDate(shift.startTime, new Date(date)));
@@ -105,7 +114,7 @@ define('sitesController', [], function() {
 
 			let times = [];
 
-			// Get the times in each shift
+			// Get the possible times within each shift
 			for (const shift of shifts) {
 				const startTime = getTime(shift.startTime);
 				const endTime = getTime(shift.endTime);
@@ -132,10 +141,7 @@ define('sitesController', [], function() {
 		}
 
 		$scope.addAppointmentTimeSaveButtonHandler = () => {
-			console.log($scope.addAppointmentTimeInformation);
-			
 			const appointmentTimeInformation = $scope.addAppointmentTimeInformation;
-			$scope.addAppointmentTimeInformation = DEFAULT_ADD_APPOINTMENT_TIME_INFORMATION;
 			
 			const siteId = $scope.selectedSite.siteId;
 			const date = appointmentTimeInformation.selectedDate;
@@ -148,8 +154,18 @@ define('sitesController', [], function() {
 			SitesDataService.addAppointmentTime(siteId, date, scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, percentageAppointments, approximateLengthInMinutes).then((result) => {
 				if (result && !result.success) {
 					alert(result.error);
+					return;
 				}
 
+				$scope.siteInformation.appointmentTimes.push({
+					'appointmentTimeId': result.appointmentTimeId,
+					'scheduledTimeString': `${date} ${scheduledTime}`,
+					'minimumNumberOfAppointments': minimumNumberOfAppointments,
+					'maximumNumberOfAppointments': maximumNumberOfAppointments,
+					'percentageAppointments': percentageAppointments,
+					'approximateLengthInMinutes': approximateLengthInMinutes
+				});
+				$scope.addAppointmentTimeInformation = DEFAULT_ADD_APPOINTMENT_TIME_INFORMATION;
 				$scope.addAppointmentTimeButtonClicked = false;
 			});
 		};
@@ -185,7 +201,6 @@ define('sitesController', [], function() {
 		};
 
 		// Time generation code adapted from https://stackoverflow.com/a/36126706/3732003
-		const MINUTES_IN_DAY = 24 * 60;
 		function generateTimes(interval, startTime = 0, endTime = MINUTES_IN_DAY) {
 			const times = [];
 			let time = startTime; // Start at 00:00 (12:00 AM)
