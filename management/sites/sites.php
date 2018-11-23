@@ -220,12 +220,27 @@
 								</div>
 							</div>
 
+							<div class="form-number">
+								<label class="form-label form-required" for="addAppointmentTimeApproximateLengthInMinutes">Approximate Length in Minutes (default 60)</label>
+								<input id="addAppointmentTimeApproximateLengthInMinutes"
+									type="number"
+									name="approximateLengthInMinutes"
+									ng-model="addAppointmentTimeInformation.approximateLengthInMinutes"
+									ng-change="addAppointmentTimeApproximateLengthInMinutesChanged(addAppointmentTimeInformation.approximateLengthInMinutes)" 
+									min="1"
+									required />
+								<div ng-show="form.$submitted || form.approximateLengthInMinutes.$touched">
+									<label class="error" ng-show="form.approximateLengthInMinutes.$error.required">This field is required.</label>
+								</div>
+							</div>
+
 							<div class="form-select">
 								<label class="form-label form-required" for="addAppointmentTimeScheduledTimeSelect">Scheduled Time</label>
 								<select id="addAppointmentTimeScheduledTimeSelect" 
 									name="scheduledTimeSelect" 
 									ng-model="addAppointmentTimeInformation.selectedScheduledTime" 
 									ng-options="time for time in addAppointmentTimeScheduledTimeOptions"
+									ng-disabled="addAppointmentTimeInformation.selectedDate == null || addAppointmentTimeInformation.approximateLengthInMinutes == null"
 									required>
 									<option value="" style="display:none;">-- Select a Scheduled Time --</option>
 								</select>
@@ -271,19 +286,6 @@
 									required />
 								<div ng-show="form.$submitted || form.percentageAppointments.$touched">
 									<label class="error" ng-show="form.percentageAppointments.$error.required">This field is required.</label>
-								</div>
-							</div>
-
-							<div class="form-number">
-								<label class="form-label form-required" for="addAppointmentTimeApproximateLengthInMinutes">Approximate Length in Minutes (default 60)</label>
-								<input id="addAppointmentTimeApproximateLengthInMinutes"
-									type="number"
-									name="approximateLengthInMinutes"
-									ng-model="addAppointmentTimeInformation.approximateLengthInMinutes"
-									min="0"
-									required />
-								<div ng-show="form.$submitted || form.approximateLengthInMinutes.$touched">
-									<label class="error" ng-show="form.approximateLengthInMinutes.$error.required">This field is required.</label>
 								</div>
 							</div>
 

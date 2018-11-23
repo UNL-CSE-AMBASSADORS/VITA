@@ -121,20 +121,14 @@ define('sitesController', [], function() {
 			$scope.addShiftEndTimeOptions = generateTimes(TIME_INTERVAL, time).map(time => time.timeString);
 		};
 
+		function isShiftDateEqualToDate(shiftDate, date) {
+			return new Date(new Date(shiftDate).toDateString()).getTime() === new Date(date.toDateString()).getTime();
+		};
 
 		$scope.addAppointmentTimeButtonHandler = () => {
-			const isShiftDateEqualToDate = (shiftDate, date) => {
-				return new Date(new Date(shiftDate).toDateString()).getTime() === new Date(date.toDateString()).getTime();
-			};
-
 			$scope.initializeDatePicker('addAppointmentTimeDateInput', (date) => {
 				$scope.addAppointmentTimeInformation.selectedDate = date;
-				const shiftsOnThisDay = $scope.siteInformation.shifts
-					.filter(shift => isShiftDateEqualToDate(shift.startTime, new Date(date)));
-
-				const times = $scope.getAvailableAppointmentTimes(shiftsOnThisDay);
-				$scope.addAppointmentTimeScheduledTimeOptions = times.map(time => time.timeString);
-				
+				$scope.updateAddAppointmentTimeScheduledTimeOptions();
 				$scope.$apply();
 			}, (date) => {
 				const dateInPast = isDateInPast(date);
@@ -145,7 +139,27 @@ define('sitesController', [], function() {
 			$scope.addAppointmentTimeButtonClicked = true;
 		};
 
-		$scope.getAvailableAppointmentTimes = (shifts) => {
+		$scope.addAppointmentTimeApproximateLengthInMinutesChanged = (newApproximateLengthInMinutes) => {
+			$scope.addAppointmentTimeInformation.approximateLengthInMinutes = newApproximateLengthInMinutes;
+			$scope.updateAddAppointmentTimeScheduledTimeOptions();
+		};
+ 
+		$scope.updateAddAppointmentTimeScheduledTimeOptions = () => {
+			const timeInterval = $scope.addAppointmentTimeInformation.approximateLengthInMinutes;
+			if (timeInterval == null || timeInterval <= 0) {
+				$scope.addAppointmentTimeScheduledTimeOptions = [];
+				return;
+			}
+
+			const date = $scope.addAppointmentTimeInformation.selectedDate;
+			const shiftsOnThisDay = $scope.siteInformation.shifts
+				.filter(shift => isShiftDateEqualToDate(shift.startTime, new Date(date)));
+
+			const times = $scope.getAvailableAppointmentTimes(shiftsOnThisDay, timeInterval);
+			$scope.addAppointmentTimeScheduledTimeOptions = times.map(time => time.timeString);
+		};
+
+		$scope.getAvailableAppointmentTimes = (shifts, timeInterval) => {
 			const getTime = (time) => {
 				const dateTime = new Date(time);
 				return dateTime.getHours() * 60 + dateTime.getMinutes();
@@ -158,7 +172,7 @@ define('sitesController', [], function() {
 				const startTime = getTime(shift.startTime);
 				const endTime = getTime(shift.endTime);
 
-				const generatedTimes = generateTimes(TIME_INTERVAL, startTime, endTime);
+				const generatedTimes = generateTimes(timeInterval, startTime, endTime);
 				for (const generatedTime of generatedTimes) {
 					const containsAlready = times.some(time => time.time == generatedTime.time);
 					if (!containsAlready) {
