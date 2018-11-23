@@ -34,7 +34,7 @@ define('sitesDataService', [], function($http) {
 				return $http({
 					url: '/server/management/sites/sites.php',
 					method: 'POST',
-					data: `action=addAppointmentTime&siteId=${siteId}&date=${date}&scheduledTime=${scheduledTime}&minimumNumberOfAppointments=${minimumNumberOfAppointments}&maximumNumberOfAppointments=${maximumNumberOfAppointments}&percentageAppointments=${percentageAppointments}&approximateLengthInMinutes=${approximateLengthInMinutes}`,
+					data: `action=addAppointmentTime&siteId=${siteId}&date=${date}&scheduledTime=${scheduledTime}&minimumNumberOfAppointments=${minimumNumberOfAppointments}&maximumNumberOfAppointments=${maximumNumberOfAppointments == null ? '' : maximumNumberOfAppointments}&percentageAppointments=${percentageAppointments}&approximateLengthInMinutes=${approximateLengthInMinutes}`,
 					headers: {
 						'Content-Type': "application/x-www-form-urlencoded"
 					}
