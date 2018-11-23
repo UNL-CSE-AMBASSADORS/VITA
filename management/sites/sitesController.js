@@ -76,7 +76,7 @@ define('sitesController', [], function() {
 			
 			const shiftInformation = $scope.addShiftInformation;
 
-			const siteId = $scope.selectedSite.siteId;
+			const siteId = $scope.siteInformation.siteId;
 			const date = shiftInformation.selectedDate;
 			const startTime = shiftInformation.selectedStartTime;
 			const endTime = shiftInformation.selectedEndTime;
@@ -84,21 +84,20 @@ define('sitesController', [], function() {
 				if (result == null || !result.success) {
 					const errorMessage = result.error || 'There was an error saving the shift. Please refresh and try again.';
 					NotificationUtilities.giveNotice('Failure', errorMessage, false);
-					$scope.savingShift = false;
-					return;
+				} else {
+					$scope.siteInformation.shifts.push({
+						'shiftId': result.shiftId,
+						'dateString': date,
+						'startTimeString': startTime,
+						'endTimeString': endTime
+					});
+					$scope.addShiftInformation = {};
+					$scope.addShiftButtonClicked = false;
+	
+					NotificationUtilities.giveNotice('Success', 'The shift was successfully created');
 				}
 
-				$scope.siteInformation.shifts.push({
-					'shiftId': result.shiftId,
-					'dateString': date,
-					'startTimeString': startTime,
-					'endTimeString': endTime
-				});
-				$scope.addShiftInformation = {};
-				$scope.addShiftButtonClicked = false;
 				$scope.savingShift = false;
-
-				NotificationUtilities.giveNotice('Success', 'The shift was successfully created');
 			});
 		};
 
@@ -188,7 +187,7 @@ define('sitesController', [], function() {
 
 			const appointmentTimeInformation = $scope.addAppointmentTimeInformation;
 			
-			const siteId = $scope.selectedSite.siteId;
+			const siteId = $scope.siteInformation.siteId;
 			const date = appointmentTimeInformation.selectedDate;
 			const scheduledTime = appointmentTimeInformation.selectedScheduledTime;
 			const minimumNumberOfAppointments = appointmentTimeInformation.minimumNumberOfAppointments;
@@ -200,23 +199,22 @@ define('sitesController', [], function() {
 				if (result == null || !result.success) {
 					const errorMessage = result.error || 'There was an error saving the appointment time. Please refresh and try again.';
 					NotificationUtilities.giveNotice('Failure', errorMessage, false);
-					$scope.savingAppointmentTime = false;
-					return;
+				} else {
+					$scope.siteInformation.appointmentTimes.push({
+						'appointmentTimeId': result.appointmentTimeId,
+						'scheduledTimeString': `${date} ${scheduledTime}`,
+						'minimumNumberOfAppointments': minimumNumberOfAppointments,
+						'maximumNumberOfAppointments': maximumNumberOfAppointments,
+						'percentageAppointments': percentageAppointments,
+						'approximateLengthInMinutes': approximateLengthInMinutes
+					});
+					$scope.addAppointmentTimeInformation = DEFAULT_ADD_APPOINTMENT_TIME_INFORMATION;
+					$scope.addAppointmentTimeButtonClicked = false;
+	
+					NotificationUtilities.giveNotice('Success', 'The appointment time was successfully created');
 				}
-				
-				$scope.siteInformation.appointmentTimes.push({
-					'appointmentTimeId': result.appointmentTimeId,
-					'scheduledTimeString': `${date} ${scheduledTime}`,
-					'minimumNumberOfAppointments': minimumNumberOfAppointments,
-					'maximumNumberOfAppointments': maximumNumberOfAppointments,
-					'percentageAppointments': percentageAppointments,
-					'approximateLengthInMinutes': approximateLengthInMinutes
-				});
-				$scope.addAppointmentTimeInformation = DEFAULT_ADD_APPOINTMENT_TIME_INFORMATION;
-				$scope.addAppointmentTimeButtonClicked = false;
-				$scope.savingAppointmentTime = false;
 
-				NotificationUtilities.giveNotice('Success', 'The appointment time was successfully created');
+				$scope.savingAppointmentTime = false;				
 			});
 		};
 
