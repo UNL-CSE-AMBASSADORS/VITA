@@ -9,7 +9,8 @@ require.config({
 		appointmentPickerSharedPropertiesService: '/dist/components/appointmentPicker/appointmentPickerSharedPropertiesService',
 		appointmentPickerDataService: '/dist/components/appointmentPicker/appointmentPickerDataService',
 		appointmentPickerController: '/dist/components/appointmentPicker/appointmentPickerController',
-		'bootstrap-ui': '/dist/assets/js/bootstrap/ui-bootstrap-buttons-2.5.0.min'
+		'bootstrap-ui': '/dist/assets/js/bootstrap/ui-bootstrap-buttons-2.5.0.min',
+		notificationUtilities: '/dist/assets/js/utilities/notificationUtilities'
 	},
 	shim: {
 		'ngAnimate': ['angular'],
@@ -31,14 +32,16 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(
 		'signupController',
 		'appointmentPickerSharedPropertiesService',
 		'appointmentPickerDataService',
-		'appointmentPickerController'
+		'appointmentPickerController',
+		'notificationUtilities'
 	],
 	function (
 		SignupDataService,
 		SignupController, 
 		AppointmentPickerSharedPropertiesService,
 		AppointmentPickerDataService,
-		AppointmentPickerController
+		AppointmentPickerController,
+		NotificationUtilities
 	) {
 		'use strict';
 
@@ -66,6 +69,9 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(
 				templateUrl: '/components/appointmentPicker/appointmentPicker.php'
 			};
 		});
+
+		// Notification utilities
+		signupApp.factory('notificationUtilities', NotificationUtilities);
 
 		angular.bootstrap(document.getElementById('signupApp'), ['signupApp']);
 
