@@ -9,7 +9,14 @@
 					<a>{{site.title}}</a>
 				</li>
 			</ul>
+
+			<!-- Shown when there are no sites -->
+			<div ng-if="sites == null" class="centered-text">
+				<p>There are no sites.</p>
+			</div>
 		</div>
+
+
 
 
 

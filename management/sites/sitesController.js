@@ -33,6 +33,11 @@ define('sitesController', [], function() {
 
 		$scope.loadSites = () => {
 			SitesDataService.getSites().then((result) => {
+				if (result == null) {
+					NotificationUtilities.giveNotice('Failure', 'Unable to load the sites.', false);
+					return;
+				}
+
 				$scope.sites = result;
 			});
 		};
