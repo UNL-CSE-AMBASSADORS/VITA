@@ -124,7 +124,7 @@
 								<input type="submit" 
 									value="Save" 
 									class="submit wdn-button wdn-button-triad"
-									ng-disabled="!form.$valid">
+									ng-disabled="!form.$valid || savingShift === true">
 							</div>
 						</form>
 					</div>
@@ -132,7 +132,6 @@
 					<!-- Button for adding a shift -->
 					<button class="wdn-button margin-top-10" 
 						ng-click="addShiftButtonHandler()" 
-						ng-disabled="savingShift === true;"
 						ng-if="addShiftButtonClicked === false">Add Shift</button>
 				</div>
 
@@ -296,7 +295,7 @@
 								<input type="submit" 
 									value="Save" 
 									class="submit wdn-button wdn-button-triad"
-									ng-disabled="!form.$valid">
+									ng-disabled="!form.$valid || savingAppointmentTime === true">
 							</div>
 						</form>
 					</div>
