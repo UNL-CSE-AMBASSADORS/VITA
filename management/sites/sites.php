@@ -125,6 +125,7 @@
 					<!-- Button for adding a shift -->
 					<button class="wdn-button margin-top-10" 
 						ng-click="addShiftButtonHandler()" 
+						ng-disabled="savingShift === true;"
 						ng-if="addShiftButtonClicked === false">Add Shift</button>
 				</div>
 
@@ -298,13 +299,6 @@
 						ng-click="addAppointmentTimeButtonHandler()" 
 						ng-if="addAppointmentTimeButtonClicked === false">Add Appointment Time</button>
 				</div>
-
-				<h5>How number of appointments is calculated:</h5>
-				<ol>
-					<li>If max_appts is not N/A, set available_appointment_spots = max_appts. Otherwise, set available_appointment_spots = max(min_appts, number_of_preparers_signed_up)</li>
-					<li>Next, set number_of_appointments_allowed_to_be_scheduled = available_appointment_spots * percentage_appointments</li>
-					<li>Finally, round up number_of_appointments_allowed_to_be_scheduled so get a whole number</li>
-				</ol>
 			</div>
 
 			<!-- Shown if no site is selected -->

@@ -4,7 +4,8 @@ require.config({
 		ngAnimate: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min',
 		ngAria: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min',
 		sitesDataService: '/dist/management/sites/sitesDataService',
-		sitesController: '/dist/management/sites/sitesController'
+		sitesController: '/dist/management/sites/sitesController',
+		notificationUtilities: '/dist/assets/js/utilities/notificationUtilities'
 	},
 	shim: {
 		'ngAnimate': ['angular'],
@@ -18,11 +19,13 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 
 	require([
 		'sitesDataService',
-		'sitesController'
+		'sitesController',
+		'notificationUtilities'
 	],
 	function (
 		SitesDataService,
-		SitesController
+		SitesController,
+		NotificationUtilities
 	) {
 		'use strict';
 
@@ -37,6 +40,9 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 				templateUrl: '/management/sites/sites.php'
 			};
 		});
+
+		// Set up Notification utilities
+		sitesApp.factory('notificationUtilities', NotificationUtilities);
 
 		angular.bootstrap(document.getElementById('sitesApp'), ['sitesApp']);
 
