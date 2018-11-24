@@ -47,11 +47,11 @@ WDN.initializePlugin('modal', [function() {
 							method: 'POST',
 							url: '/server/management/users/users.php',
 							data: {
-								callback: 'addUser',
+								action: 'addUser',
 								firstName: $('#firstName').val(),
 								lastName: $('#lastName').val(),
 								email: $('#email').val(),
-								phone: $('#phone').val()
+								phoneNumber: $('#phone').val()
 							},
 							success: function(response){
 								$('#add-user-form button[type=submit]').prop('disabled', false);
@@ -91,7 +91,7 @@ WDN.initializePlugin('modal', [function() {
 						method: 'POST',
 						url: '/server/management/users/users.php',
 						data: {
-							callback: 'updateUserPermissions',
+							action: 'updateUserPermissions',
 							userId: userId,
 							removePermissionArr: removePermissionArr,
 							addPermissionArr: addPermissionArr
@@ -125,7 +125,7 @@ WDN.initializePlugin('modal', [function() {
 						method: 'POST',
 						url: '/server/management/users/users.php',
 						data: {
-							callback: 'updateUserAbilities',
+							action: 'updateUserAbilities',
 							userId: userId,
 							removeAbilityArr: removeAbilityArr,
 							addAbilityArr: addAbilityArr
@@ -148,7 +148,7 @@ WDN.initializePlugin('modal', [function() {
 					method: 'POST',
 					url: '/server/management/users/users.php',
 					data: {
-						callback: 'getUserTable'
+						action: 'getUserTable'
 					},
 					success: function(response){
 						if(response.success){

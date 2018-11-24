@@ -6,24 +6,24 @@ require_once "$root/server/user.class.php";
 
 $USER = new User();
 
-if (!$USER->hasPermission('edit_user_permissions')) {
+if (!$USER->isLoggedIn() || !$USER->hasPermission('edit_user_permissions')) {
 	header("Location: /unauthorized");
 	die();
 }
 
-if(isset($_REQUEST['callback'])){
-	switch ($_REQUEST['callback']) {
+if(isset($_REQUEST['action'])){
+	switch ($_REQUEST['action']) {
 		case 'getUserTable':
-			getUserTable($_REQUEST);
+			getUserTable();
 			break;
 		case 'updateUserPermissions':
 			updateUserPermissions($_REQUEST);
 			break;
 		case 'updateUserAbilities':
-			updateUserAbilities($_REQUEST);
+			updateUserAbilities($_POST['userId'], $_POST['addAbilityArr'], $_POST['removeAbilityArr']);
 			break;
 		case 'addUser':
-			addUser($_REQUEST);
+			addUser($_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['phoneNumber']);
 			break;
 		default:
 			die('Unregistered command. This instance has been reported.');
@@ -31,7 +31,7 @@ if(isset($_REQUEST['callback'])){
 	}
 }
 
-function getUserTable($data){
+function getUserTable() {
 	GLOBAL $DB_CONN;
 
 	$response = array();
@@ -131,21 +131,20 @@ function getUserAbilityOptionList($userId) {
 	return $options;
 }
 
-function updateUserPermissions($data){
-	GLOBAL $DB_CONN;
-	GLOBAL $USER;
+function updateUserPermissions($userId, $addPermissionArr, $removePermissionArr){
+	GLOBAL $DB_CONN, $USER;
 
 	$response = array();
 	$response['success'] = true;
 
 	// This will disallow a person from removing their own permission that lets them edit permissions.
-	if($data['userId'] === $USER->getUserId()){
+	if($userId === $USER->getUserId()){
 		$stmt = $DB_CONN->prepare("SELECT lookupName 
 			FROM Permission
 				INNER JOIN UserPermission ON Permission.permissionId = UserPermission.permissionId
 			WHERE userPermissionId = ?");
 
-		foreach ($data['removePermissionArr'] as $userPermissionId) {
+		foreach ($removePermissionArr as $userPermissionId) {
 			$stmt->execute(array($userPermissionId));
 			$lookupName = $stmt->fetch(PDO::FETCH_ASSOC)['lookupName'];
 
@@ -162,23 +161,21 @@ function updateUserPermissions($data){
 
 	$DB_CONN->beginTransaction();
 
-	if(isset($data['removePermissionArr'])){
+	if(isset($removePermissionArr)){
 		$stmt = $DB_CONN->prepare("DELETE FROM UserPermission WHERE userPermissionId = ?");
 
-		foreach ($data['removePermissionArr'] as $userPermissionId) {
+		foreach ($removePermissionArr as $userPermissionId) {
 			$stmt->execute(array($userPermissionId));
 		}
 	}
 
-	if(isset($data['addPermissionArr'])){
-		$stmt = $DB_CONN->prepare("INSERT INTO UserPermission 
-				(userId, permissionId, createdBy)
-			VALUES 
-				(?, ?, ?)");
+	if(isset($addPermissionArr)){
+		$stmt = $DB_CONN->prepare("INSERT INTO UserPermission (userId, permissionId, createdBy) 
+			VALUES  (?, ?, ?)");
 
-		foreach ($data['addPermissionArr'] as $permissionId) {
+		foreach ($addPermissionArr as $permissionId) {
 			$stmt->execute(array(
-				$data['userId'],
+				$userId,
 				$permissionId, 
 				$USER->getUserId()
 			));
@@ -190,7 +187,7 @@ function updateUserPermissions($data){
 	print json_encode($response);
 }
 
-function updateUserAbilities($data) {
+function updateUserAbilities($userId, $addAbilityArr, $removeAbilityArr) {
 	GLOBAL $DB_CONN, $USER;
 
 	$response = array();
@@ -198,23 +195,21 @@ function updateUserAbilities($data) {
 
 	$DB_CONN->beginTransaction();
 	
-	if (isset($data['removeAbilityArr'])) {
-		$stmt = $DB_CONN->prepare("DELETE FROM UserAbility WHERE userAbilityId = ?");
+	if (isset($removeAbilityArr)) {
+		$stmt = $DB_CONN->prepare('DELETE FROM UserAbility WHERE userAbilityId = ?');
 
-		foreach ($data['removeAbilityArr'] as $userAbilityId) {
+		foreach ($removeAbilityArr as $userAbilityId) {
 			$stmt->execute(array($userAbilityId));
 		}
 	}
 
-	if (isset($data['addAbilityArr'])){
-		$stmt = $DB_CONN->prepare("INSERT INTO UserAbility 
-				(userId, abilityId, createdBy)
-			VALUES 
-				(?, ?, ?)");
+	if (isset($addAbilityArr)){
+		$stmt = $DB_CONN->prepare('INSERT INTO UserAbility (userId, abilityId, createdBy)
+			VALUES (?, ?, ?)');
 
-		foreach ($data['addAbilityArr'] as $abilityId) {
+		foreach ($addAbilityArr as $abilityId) {
 			$stmt->execute(array(
-				$data['userId'],
+				$userId,
 				$abilityId, 
 				$USER->getUserId()
 			));
@@ -226,37 +221,29 @@ function updateUserAbilities($data) {
 	print json_encode($response);
 }
 
-function addUser($data){
+function addUser($firstName, $lastName, $email, $phoneNumber){
 	GLOBAL $DB_CONN;
 
 	$response = array();
 	$response['success'] = true;
 
 	try {
-		$stmt = $DB_CONN->prepare("INSERT INTO User 
-				(firstName, lastName, email, phoneNumber)
-			VALUES 
-				(?, ?, ?, ?)");
+		$stmt = $DB_CONN->prepare('INSERT INTO User (firstName, lastName, email, phoneNumber)
+			VALUES (?, ?, ?, ?)');
 
-		$res = $stmt->execute(array(
-			$data['firstName'],
-			$data['lastName'],
-			trim($data['email']),
-			$data['phone']
+		$result = $stmt->execute(array(
+			$firstName,
+			$lastName,
+			trim($email),
+			$phoneNumber
 		));
 
-		if ($res == 0) {
+		if ($result == 0) {
 			throw new Exception('Unable to create the user, a user with that email may already exist.', MY_EXCEPTION);
 		}
-
-		$response['success'] = true;		
 	} catch (Exception $e) {
 		$response['success'] = false;
-		if($e->getCode() === MY_EXCEPTION){
-			$response['error'] = $e->getMessage();
-		}else{
-			$response['error'] = 'Sorry, there was an error reaching the server. Please try again later.';
-		}
+		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'Sorry, there was an error reaching the server. Please try again later.';
 	}
 
 	print json_encode($response);
