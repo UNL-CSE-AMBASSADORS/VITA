@@ -44,7 +44,7 @@ function getUserTable($data) {
 
 	$stmt->execute(array());
 
-	$thead = '<thead><tr><th>Name</th><th>Email</th><th>Permissions</th><th>Cerifications</th><th>Edit/Delete</th></tr></thead>';
+	$thead = '<thead><tr><th>Name</th><th>Email</th><th>Permissions</th><th>Cerifications</th><th>Edit</th></tr></thead>';
 	$tbody = '<tbody>';
 	while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 		$permissionsList = getUserPermissionOptionList($row['userId']);
@@ -55,7 +55,7 @@ function getUserTable($data) {
 		$tbody.= "<td data-header='Email'>".$row['email']."</td>";
 		$tbody.= "<td data-header='Permissions'><select class='userPermissionList userPermissionsSelectPicker' data-style='wdn-button' multiple=true>".implode('', $permissionsList)."</select></td>";
 		$tbody.= "<td data-header='Certifications'><select class='userAbilityList userAbilitiesSelectPicker' data-style='wdn-button' multiple=true>".implode('', $abilitiesList)."</select></td>";		
-		$tbody.= "<td data-header='Edit/Delete'>Hello</td>";		
+		$tbody.= "<td data-header='Edit'><a href='#edit-user-modal' class='userEditButton'>Edit</a></td>";	
 		$tbody.= "</tr>";
 	}
 	$tbody.= '</tbody>';

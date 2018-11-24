@@ -99,6 +99,8 @@ function wdnInclude($path)
 						</table>
 					</div>
 				</div>
+				
+				<!-- Add User Modal -->
 				<div class="hidden">
 					<div class="modal" id="add-user-modal" tabindex="-1" role="dialog" aria-hidden="true">
 						<div class="wdn-band">
@@ -132,6 +134,43 @@ function wdnInclude($path)
 						</div>
 					</div>
 				</div>
+
+
+				<!-- Edit User  Modal -->
+				<div class="hidden">
+					<div class="modal" id="edit-user-modal" tabindex="-1" role="dialog" aria-hidden="true">
+						<div class="wdn-band">
+							<div class="wdn-inner-wrapper">
+								<h4>Edit User Information</h4>
+								<form id="edit-user-form">
+									<fieldset>
+										<section class="form-group">
+											<label for="editFirstName">First Name:</label>
+											<input type="text" class="form-control" id="editFirstName">
+										</section>
+										<section class="form-group">
+											<label for="editLastName">Last Name:</label>
+											<input type="text" class="form-control" id="edtLastName">
+										</section>
+										<section class="form-group">
+											<label for="editEmail">Email Address:</label>
+											<input type="text" class="form-control" id="editEmail" placeholder="student@huskers.unl.edu">
+										</section>
+										<section class="form-group">
+											<label for="editPhoneNumber">Phone Number:</label>
+											<input type="text" class="form-control" id="editPhoneNumber">
+										</section>
+									</fieldset>
+									<div>
+										<button type="submit" class="wdn-button wdn-button-triad">Save</button>
+										<button type="button" class="wdn-button wdn-button-brand close-modal-button">Close</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
 				<!-- TemplateEndEditable -->
 
 				

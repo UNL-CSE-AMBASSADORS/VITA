@@ -16,6 +16,7 @@ WDN.initializePlugin('modal', [function() {
 				initializeAddUserModalEventHandlers();
 				initializeUserPermissionsSelectPickerEventHandlers();
 				initializeUserAbilitiesSelectPickerEventHandlers();
+				initializeEditButtonEventHandlers();
 
 				// Initially, create the user table
 				refreshUserTable();
@@ -147,6 +148,35 @@ WDN.initializePlugin('modal', [function() {
 							refreshUserTable();
 						}
 					});
+				});
+			};
+
+			function initializeEditButtonEventHandlers() {
+				// Initialize the modal handlers
+				// TODO: FIGURE OUT HOW TO GET THIS MODAL TO OPEN
+				$('.userEditButton').colorbox({
+					inline: true, 
+					width: '50%'
+				});
+				$('.close-modal-button').click(function() {
+					$.colorbox.close();
+				});
+
+				// Initialize the edit button handlers
+				$('#user-management-table').on('click', '.userEditButton', function(event) {
+					// event.preventDefault();
+
+					const userId = $(this).parents('tr').data('user-id');
+					console.log(`TODO: EDIT: ${userId}`);
+
+	
+					$('#edit-user-form').on('submit', function(event) {
+						event.preventDefault();
+						$('#edit-user-form button[type=submit]').prop('disabled', true);
+						console.log('TODO: SUBMIT WAS CLICKED');
+					});
+
+
 				});
 			};
 
