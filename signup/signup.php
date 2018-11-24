@@ -179,7 +179,7 @@
 							uib-btn-radio="'7'" 
 							ng-required="questions[3] == 4" 
 							ng-click="standardAppointment()"
-							required>2012 or earlier
+							required>2013 or earlier
 						</label>
 						<label class="wdn-button btn" 
 							name="f1date" 
@@ -187,7 +187,7 @@
 							uib-btn-radio="'8'" 
 							ng-required="questions[3] == 4" 
 							ng-click="studentScholarAppointment()"
-							required>2013, 2014, 2015, 2016, or 2017
+							required>2014, 2015, 2016, 2017, or 2018
 						</label>
 					</div>
 				</div>
@@ -206,7 +206,7 @@
 							uib-btn-radio="'9'" 
 							ng-required="questions[3] == 5" 
 							ng-click="standardAppointment()"
-							required>2015 or earlier
+							required>2016 or earlier
 						</label>
 						<label class="wdn-button btn" 
 							name="j1date" 
@@ -214,7 +214,7 @@
 							uib-btn-radio="'10'" 
 							ng-required="questions[3] == 5" 
 							ng-click="studentScholarAppointment()"
-							required>2016 or 2017
+							required>2017 or 2018
 						</label>
 					</div>
 				</div>
