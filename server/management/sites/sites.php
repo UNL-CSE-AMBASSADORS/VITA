@@ -14,6 +14,8 @@ require_once "$root/server/utilities/dateTimeUtilities.class.php";
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
 		case 'getSiteInformation': getSiteInformation($_GET['siteId']); break;
+		case 'getShifts': getShifts($_GET['siteId']); break;
+		case 'getAppointmentTimes': getAppointmentTimes($_GET['siteId']); break;
 		case 'addShift': addShift($_POST['siteId'], $_POST['date'], $_POST['startTime'], $_POST['endTime']); break;
 		case 'addAppointmentTime': addAppointmentTime($_POST['siteId'], $_POST['date'], $_POST['scheduledTime'], $_POST['minimumNumberOfAppointments'], $_POST['maximumNumberOfAppointments'], $_POST['percentageAppointments'], $_POST['approximateLengthInMinutes']); break;
 		default:
@@ -44,6 +46,38 @@ function getSiteInformation($siteId) {
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error on the server retrieving site information. Please try again later.';
+	}
+
+	echo json_encode($response);
+}
+
+function getShifts($siteId) {
+	GLOBAL $DB_CONN;
+
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		$response['shifts'] = getShiftsForSite($siteId);
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = 'There was an error on the server retrieving shifts. Please try again later.';
+	}
+
+	echo json_encode($response);
+}
+
+function getAppointmentTimes($siteId) {
+	GLOBAL $DB_CONN;
+
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		$response['appointmentTimes'] = getAppointmentTimesForSite($siteId);
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = 'There was an error on the server retrieving appointment times. Please try again later.';
 	}
 
 	echo json_encode($response);

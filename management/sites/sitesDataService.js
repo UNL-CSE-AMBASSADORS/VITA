@@ -16,6 +16,20 @@ define('sitesDataService', [], function($http) {
 					return null;
 				});
 			},
+			getShiftsForSite: function(siteId) {
+				return $http.get(`/server/management/sites/sites.php?action=getShifts&siteId=${siteId}`).then(function(response){
+					return response.data;
+				},function(error) {
+					return null;
+				});
+			},
+			getAppointmentTimesForSite: function(siteId) {
+				return $http.get(`/server/management/sites/sites.php?action=getAppointmentTimes&siteId=${siteId}`).then(function(response){
+					return response.data;
+				},function(error) {
+					return null;
+				});
+			},
 			addShift: function(siteId, date, startTime, endTime) {
 				return $http({
 					url: "/server/management/sites/sites.php",

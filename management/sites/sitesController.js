@@ -85,12 +85,7 @@ define('sitesController', [], function() {
 					const errorMessage = result.error || 'There was an error saving the shift. Please refresh and try again.';
 					NotificationUtilities.giveNotice('Failure', errorMessage, false);
 				} else {
-					$scope.siteInformation.shifts.push({
-						'shiftId': result.shiftId,
-						'dateString': date,
-						'startTimeString': startTime,
-						'endTimeString': endTime
-					});
+					$scope.updateShiftsTable();
 					$scope.addShiftInformation = {};
 					$scope.addShiftButtonClicked = false;
 	
@@ -98,6 +93,19 @@ define('sitesController', [], function() {
 				}
 
 				$scope.savingShift = false;
+			});
+		};
+
+		$scope.updateShiftsTable = () => {
+			const siteId = $scope.siteInformation.siteId;
+
+			SitesDataService.getShiftsForSite(siteId).then((result) => {
+				if (result == null || !result.success) {
+					const errorMessage = result.error || 'There was an error retrieving the shifts. Please refresh the page.';
+					NotificationUtilities.giveNotice('Failure', errorMessage, false);
+				} else {
+					$scope.siteInformation.shifts = result.shifts;
+				}
 			});
 		};
 
@@ -214,14 +222,7 @@ define('sitesController', [], function() {
 					const errorMessage = result.error || 'There was an error saving the appointment time. Please refresh and try again.';
 					NotificationUtilities.giveNotice('Failure', errorMessage, false);
 				} else {
-					$scope.siteInformation.appointmentTimes.push({
-						'appointmentTimeId': result.appointmentTimeId,
-						'scheduledTimeString': `${date} ${scheduledTime}`,
-						'minimumNumberOfAppointments': minimumNumberOfAppointments,
-						'maximumNumberOfAppointments': maximumNumberOfAppointments,
-						'percentageAppointments': percentageAppointments,
-						'approximateLengthInMinutes': approximateLengthInMinutes
-					});
+					$scope.updateAppointmentTimesTable();
 					$scope.addAppointmentTimeInformation = DEFAULT_ADD_APPOINTMENT_TIME_INFORMATION;
 					$scope.addAppointmentTimeButtonClicked = false;
 	
@@ -229,6 +230,19 @@ define('sitesController', [], function() {
 				}
 
 				$scope.savingAppointmentTime = false;				
+			});
+		};
+
+		$scope.updateAppointmentTimesTable = () => {
+			const siteId = $scope.siteInformation.siteId;
+
+			SitesDataService.getAppointmentTimesForSite(siteId).then((result) => {
+				if (result == null || !result.success) {
+					const errorMessage = result.error || 'There was an error retrieving the appointment times. Please refresh the page.';
+					NotificationUtilities.giveNotice('Failure', errorMessage, false);
+				} else {
+					$scope.siteInformation.appointmentTimes = result.appointmentTimes;
+				}
 			});
 		};
 
