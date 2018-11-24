@@ -13,35 +13,45 @@ WDN.initializePlugin('modal', [function() {
 		window.jQuery = $;
 		require(['bootstrap-select'], function() {
 			$(function(){
-				// display new user modal
+				initializeAddUserModalEventHandlers();
+				initializeUserPermissionsSelectPickerEventHandlers();
+				initializeUserAbilitiesSelectPickerEventHandlers();
+
+				// Initially, create the user table
+				refreshUserTable();
+			});
+
+			function initializeAddUserModalEventHandlers() {
 				$('#add-user').colorbox({
 					inline: true, 
 					width: '50%'
 				});
 
-				$('.close-modal-button').click(function(){
+				$('.close-modal-button').click(function() {
 					$.colorbox.close();
 				});
 
-				$('#add-user-form').on('submit', function(event){
+				$('#add-user-form').on('submit', function(event) {
 					event.preventDefault();
 					$('#add-user-form button[type=submit]').prop('disabled', true);
 					
-					var valid = true;
-	
+					let isValid = true;
+
 					$(this).find('input').each(function(){
-						var noValue = !$(this).val();
-						if(noValue){
-							valid = false;
+						const noValue = !$(this).val();
+						if (noValue) {
+							isValid = false;
 						}
-						$(this).toggleClass('is-invalid',noValue);
+						$(this).toggleClass('is-invalid', noValue);
 					});
 	
-					if(!$('#email').val().match(/.+@.+\..+/)){
-						valid = false;
+					const isValidEmail = $('#email').val().match(/.+@.+\..+/);
+					if (!isValidEmail){
+						isValid = false;
 						$('#email').addClass('is-invalid');
 					}
-					if(valid){
+
+					if (isValid) {
 						$.ajax({
 							dataType: 'json',
 							method: 'POST',
@@ -53,36 +63,36 @@ WDN.initializePlugin('modal', [function() {
 								email: $('#email').val(),
 								phoneNumber: $('#phone').val()
 							},
-							success: function(response){
+							success: function(response) {
 								$('#add-user-form button[type=submit]').prop('disabled', false);
 	
-								if(response.success){
+								if (response.success) {
 									// Clear inputs
 									$('#add-user-form input').val('');
-	
-									// Close box
 									$.colorbox.close();
+									
 									refreshUserTable();
-								}else{
+								} else {
 									alert(response.error);
 								}
 							}
 						});
-					}else{
+					} else {
 						$('#add-user-form button[type=submit]').prop('disabled', false);
 					}
 				});
+			};
 		
-				refreshUserTable();
+			function initializeUserPermissionsSelectPickerEventHandlers() {
 				$('#user-management-table').on('changed.bs.select', '.userPermissionsSelectPicker', function(event){
-					var userId = $(this).parents('tr').data('user-id');
+					const userId = $(this).parents('tr').data('user-id');
 		
 					// permissions to be removed - all non-selected options with set ids
-					var removePermissionArr = $(this).children('option:not(:selected)[data-userPermissionId]').map(function(index, ele){
+					const removePermissionArr = $(this).children('option:not(:selected)[data-userPermissionId]').map(function(index, ele){
 						return ele.dataset.userpermissionid; // note this is case-sensitive and should be all lowercase
 					}).get();
 					// permissions to be added - all selected options w/o ids
-					var addPermissionArr = $(this).children('option:selected:not([data-userPermissionId])').map(function(index, ele){
+					const addPermissionArr = $(this).children('option:selected:not([data-userPermissionId])').map(function(index, ele){
 						return ele.value;
 					}).get();
 		
@@ -97,26 +107,26 @@ WDN.initializePlugin('modal', [function() {
 							addPermissionArr: addPermissionArr
 						},
 						success: function(response){
-							if(response.success){
-								refreshUserTable();
-							}else{
-								refreshUserTable();
-								alert(response.error);
+							if (!response  || !response.success) {
+								alert(response.error || 'There was an error updating the permissions. Please refresh the page and try again');
 							}
+							refreshUserTable();
 						}
 					});
 				});
-		
+			};
+
+			function initializeUserAbilitiesSelectPickerEventHandlers() {
 				$('#user-management-table').on('changed.bs.select', '.userAbilitiesSelectPicker', function(event) {
-					let userId = $(this).parents('tr').data('user-id');
+					const userId = $(this).parents('tr').data('user-id');
 		
 					// abilities to be removed - all non-selected options with set ids
-					let removeAbilityArr = $(this).children('option:not(:selected)[data-userAbilityId]').map((index, element) => {
+					const removeAbilityArr = $(this).children('option:not(:selected)[data-userAbilityId]').map((index, element) => {
 						return element.dataset.userabilityid; // note this is case-sensitive and should be all lowercase
 					}).get();
 		
 					// abilities to be added - all selected options w/o ids
-					let addAbilityArr = $(this).children('option:selected:not([data-userAbilityId])').map((index, element) => {
+					const addAbilityArr = $(this).children('option:selected:not([data-userAbilityId])').map((index, element) => {
 						return element.value;
 					}).get();
 		
@@ -131,18 +141,16 @@ WDN.initializePlugin('modal', [function() {
 							addAbilityArr: addAbilityArr
 						},
 						success: function (response) {
-							if (response.success) {
-								refreshUserTable();
-							} else {
-								refreshUserTable();
-								alert(response.error);
+							if (!response || !response.success) {
+								alert(response.error || 'There was an error updating the abilities. Please refresh the page and try again');
 							}
+							refreshUserTable();
 						}
 					});
 				});
-			});
-		
-			function refreshUserTable(){
+			};
+
+			function refreshUserTable() {
 				$.ajax({
 					dataType: 'json',
 					method: 'POST',
@@ -151,40 +159,41 @@ WDN.initializePlugin('modal', [function() {
 						action: 'getUserTable'
 					},
 					success: function(response){
-						if(response.success){
-							$('#user-management-table').html(response.table);
-							$('#user-management-table .userPermissionsSelectPicker').selectpicker({
-								iconBase: '',
-								tickIcon: 'wdn-icon-ok',
-								multipleSeparator: ', <br>'
-							});
-							$('#user-management-table .userAbilitiesSelectPicker').selectpicker({
-								iconBase: '',
-								tickIcon: 'wdn-icon-ok',
-								multipleSeparator: ', <br>'
-							});
-							$('.dropdown-toggle').on('click', function(){
-								// Set up event listener for clicks outside of the element
-								$(document).on('click.dropdown', function(e){
-									var container = $('.bootstrap-select.open');
-									// If the click is not on a child element
-									if (container.has(e.target).length === 0) {
-										container.removeClass('open');
-										$(document).off('click.dropdown');
-									}
-								});
-								// Close all dropdowns
-								$('.bootstrap-select.open').removeClass('open');
-								// Open this dropdown
-								$(this).parent().toggleClass('open');
-							});
-							$('.dropdown-toggle').siblings('select').hide();
-						}else{
-							alert(response.error);
+						if (!response || !response.success) {
+							alert(response.error || 'There was an error fetching the data. Please refresh the page.');
+							return;
 						}
+						
+						$('#user-management-table').html(response.table);
+						$('#user-management-table .userPermissionsSelectPicker').selectpicker({
+							iconBase: '',
+							tickIcon: 'wdn-icon-ok',
+							multipleSeparator: ', <br>'
+						});
+						$('#user-management-table .userAbilitiesSelectPicker').selectpicker({
+							iconBase: '',
+							tickIcon: 'wdn-icon-ok',
+							multipleSeparator: ', <br>'
+						});
+						$('.dropdown-toggle').on('click', function(){
+							// Set up event listener for clicks outside of the element
+							$(document).on('click.dropdown', function(e){
+								const container = $('.bootstrap-select.open');
+								// If the click is not on a child element
+								if (container.has(e.target).length === 0) {
+									container.removeClass('open');
+									$(document).off('click.dropdown');
+								}
+							});
+							// Close all dropdowns
+							$('.bootstrap-select.open').removeClass('open');
+							// Open this dropdown
+							$(this).parent().toggleClass('open');
+						});
+						$('.dropdown-toggle').siblings('select').hide();
 					}
 				});
-			}
+			};
 		});
 	});
 }]);

@@ -81,6 +81,8 @@ function wdnInclude($path)
 		</div>
 		<main id="wdn_content_wrapper" role="main" class="wdn-content-slide" tabindex="-1">
 			<div id="maincontent" class="wdn-main">
+
+			
 				<div id="pagetitle">
 					<!-- TemplateBeginEditable name="pagetitle" -->
 					<h1>User Management</h1>
@@ -131,6 +133,8 @@ function wdnInclude($path)
 					</div>
 				</div>
 				<!-- TemplateEndEditable -->
+
+				
 			</div>
 		</main>
 		<footer id="footer" role="contentinfo" class="wdn-content-slide">
