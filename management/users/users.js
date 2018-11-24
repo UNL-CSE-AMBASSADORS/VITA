@@ -1,6 +1,6 @@
 require.config({
 	shim: {
-		/* Bootstrap is dependent on jquery */
+		/* Bootstrap select is dependent on jquery */
 		'bootstrap-select': { deps: ['jquery'] },
 	},
 	paths: {
@@ -12,7 +12,7 @@ WDN.initializePlugin('modal', [function() {
 	require(['jquery'], function($) {
 		window.jQuery = $;
 		require(['bootstrap-select'], function() {
-			$(function(){
+			$(function() {
 				initializeAddUserModalEventHandlers();
 				initializeUserPermissionsSelectPickerEventHandlers();
 				initializeUserAbilitiesSelectPickerEventHandlers();
@@ -163,7 +163,7 @@ WDN.initializePlugin('modal', [function() {
 							alert(response.error || 'There was an error fetching the data. Please refresh the page.');
 							return;
 						}
-						
+
 						$('#user-management-table').html(response.table);
 						$('#user-management-table .userPermissionsSelectPicker').selectpicker({
 							iconBase: '',

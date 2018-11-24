@@ -44,37 +44,32 @@ function getUserTable($data){
 
 	$stmt->execute(array());
 
-	$thead = "<thead><tr><th>Name</th><th>Email</th><th>Permissions</th><th>Cerifications</th><th>Permissions Count</th></tr>";
+	$thead = "<thead><tr><th>Name</th><th>Email</th><th>Permissions</th><th>Cerifications</th><th>Edit/Delete</th></tr></thead>";
 	$tbody = "<tbody>";
-	while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+	while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 		$permissionsList = getUserPermissionOptionList($row['userId']);
 		$abilitiesList = getUserAbilityOptionList($row['userId']);
 
 		$tbody.= "<tr data-user-id='".$row['userId']."'>";
 		$tbody.= "<th data-header='Name'>".$row['firstName']." ".$row['lastName']."</th>";
 		$tbody.= "<td data-header='Email'>".$row['email']."</td>";
-		$tbody.= "<td data-header='Permissions'><select class='userPermissionList userPermissionsSelectPicker' data-style='wdn-button' multiple=true>".implode('', $permissionsList['options'])."</select></td>";
+		$tbody.= "<td data-header='Permissions'><select class='userPermissionList userPermissionsSelectPicker' data-style='wdn-button' multiple=true>".implode('', $permissionsList)."</select></td>";
 		$tbody.= "<td data-header='Certifications'><select class='userAbilityList userAbilitiesSelectPicker' data-style='wdn-button' multiple=true>".implode('', $abilitiesList)."</select></td>";		
-		$tbody.= "<td data-header='Permissions Count'>".$permissionsList['hasPermissionCount']."</td>";
+		$tbody.= "<td data-header='Edit/Delete'>Hello</td>";		
 		$tbody.= "</tr>";
 	}
 	$tbody.= "</tbody>";
-	$thead.= "</tr></thead>";
 
 	$response['table'] = $thead.$tbody;
 
-	print json_encode($response);
+	echo json_encode($response);
 }
 
 // Returns string of html <option> elments with all permissions
-function getUserPermissionOptionList($userId){
+function getUserPermissionOptionList($userId) {
 	GLOBAL $DB_CONN;
 
-	$stmt = $DB_CONN->prepare("SELECT 
-		permissionId,
-		name,
-		description,
-		lookupName,
+	$stmt = $DB_CONN->prepare("SELECT permissionId, name, description, lookupName,
 		(SELECT userPermissionId FROM UserPermission WHERE userId = ? AND permissionId = p.permissionId) as userPermissionId
 	FROM Permission p");
 
@@ -82,34 +77,24 @@ function getUserPermissionOptionList($userId){
 
 	$options = array();
 
-	$count = 0;
-	while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-		if($row['userPermissionId']){
+	while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		$selected = '';
+		$data = '';
+		if ($row['userPermissionId']) {
 			$selected = 'selected=true';
 			$data = "data-userPermissionId='".$row['userPermissionId']."'";
-			$count++;
-		}else{
-			$selected = '';
-			$data = '';
 		}
 		$options[] = "<option $data value=".$row['permissionId']." $selected>".$row['name']."</option>";
 	}
 
-	return array(
-		'options' => $options,
-		'hasPermissionCount' => $count
-	);
+	return $options;
 }
 
 // Returns string of html <option> elments with all abilities
 function getUserAbilityOptionList($userId) {
 	GLOBAL $DB_CONN;
 
-	$stmt = $DB_CONN->prepare("SELECT 
-		abilityId, 
-		name, 
-		description, 
-		lookupName, 
+	$stmt = $DB_CONN->prepare("SELECT abilityId, name, description, lookupName, 
 		(SELECT userAbilityId FROM UserAbility WHERE userId = ? AND UserAbility.abilityId = Ability.abilityId) as userAbilityId
 	FROM Ability
 	ORDER BY !verificationRequired");
@@ -118,12 +103,11 @@ function getUserAbilityOptionList($userId) {
 
 	$options = array();
 	while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		$selected = '';
+		$data = '';
 		if ($row['userAbilityId']) {
 			$selected = 'selected=true';
 			$data = "data-userAbilityId='".$row['userAbilityId']."'";
-		} else {
-			$selected = '';
-			$data = '';
 		}
 		$options[] = "<option $data value=".$row['abilityId']." $selected>".$row['name']."</option>";
 	}
@@ -132,8 +116,7 @@ function getUserAbilityOptionList($userId) {
 }
 
 function updateUserPermissions($data){
-	GLOBAL $DB_CONN;
-	GLOBAL $USER;
+	GLOBAL $DB_CONN, $USER;
 
 	$response = array();
 	$response['success'] = true;
@@ -171,10 +154,8 @@ function updateUserPermissions($data){
 	}
 
 	if(isset($data['addPermissionArr'])){
-		$stmt = $DB_CONN->prepare("INSERT INTO UserPermission 
-				(userId, permissionId, createdBy)
-			VALUES 
-				(?, ?, ?)");
+		$stmt = $DB_CONN->prepare("INSERT INTO UserPermission (userId, permissionId, createdBy)
+			VALUES (?, ?, ?)");
 
 		foreach ($data['addPermissionArr'] as $permissionId) {
 			$stmt->execute(array(
@@ -187,7 +168,7 @@ function updateUserPermissions($data){
 
 	$DB_CONN->commit();
 
-	print json_encode($response);
+	echo json_encode($response);
 }
 
 function updateUserAbilities($data) {
@@ -207,10 +188,8 @@ function updateUserAbilities($data) {
 	}
 
 	if (isset($data['addAbilityArr'])){
-		$stmt = $DB_CONN->prepare("INSERT INTO UserAbility 
-				(userId, abilityId, createdBy)
-			VALUES 
-				(?, ?, ?)");
+		$stmt = $DB_CONN->prepare("INSERT INTO UserAbility (userId, abilityId, createdBy)
+			VALUES (?, ?, ?)");
 
 		foreach ($data['addAbilityArr'] as $abilityId) {
 			$stmt->execute(array(
@@ -223,7 +202,7 @@ function updateUserAbilities($data) {
 
 	$DB_CONN->commit();
 
-	print json_encode($response);
+	echo json_encode($response);
 }
 
 function addUser($data){
@@ -252,12 +231,8 @@ function addUser($data){
 		$response['success'] = true;		
 	} catch (Exception $e) {
 		$response['success'] = false;
-		if($e->getCode() === MY_EXCEPTION){
-			$response['error'] = $e->getMessage();
-		}else{
-			$response['error'] = 'Sorry, there was an error reaching the server. Please try again later.';
-		}
+		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'Sorry, there was an error reaching the server. Please try again later.';
 	}
 
-	print json_encode($response);
+	echo json_encode($response);
 }
