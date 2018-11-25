@@ -25,6 +25,12 @@ if(isset($_REQUEST['action'])){
 		case 'addUser':
 			addUser($_REQUEST);
 			break;
+		case 'getUserInformation':
+			getUserInformation($_GET['userId']);
+			break;
+		case 'updateUserInformation':
+			updateUserInformation($_POST['userId'], $_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['phoneNumber']);
+			break;
 		default:
 			die('Unregistered command. This instance has been reported.');
 			break;
@@ -227,6 +233,66 @@ function addUser($data){
 		}
 
 		$response['success'] = true;		
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'Sorry, there was an error reaching the server. Please try again later.';
+	}
+
+	echo json_encode($response);
+}
+
+function getUserInformation($userId) {
+	GLOBAL $DB_CONN;
+
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		$query = 'SELECT firstName, lastName, email, phoneNumber
+			FROM User
+			WHERE userId = ?';
+		$stmt = $DB_CONN->prepare($query);
+		$stmt->execute(array($userId));
+		$userData = $stmt->fetch();
+
+		$userExists = (bool)$userData !== false;
+		$response['user'] = array();
+		if ($userExists) {
+			$response['user'] = array(
+				'firstName' => $userData['firstName'],
+				'lastName' => $userData['lastName'],
+				'email' => $userData['email'],
+				'phoneNumber' => $userData['phoneNumber']
+			);
+		}
+
+		$response['success'] = true;
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'Sorry, there was an error reaching the server. Please try again later.';
+	}
+
+	echo json_encode($response);
+}
+
+function updateUserInformation($userId, $newFirstName, $newLastName, $newEmail, $newPhoneNumber) {
+	GLOBAL $DB_CONN;
+
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		$query = 'UPDATE User
+			SET firstName = ?, lastName = ?, email = ?, phoneNumber = ?
+			WHERE userId = ?';
+		$stmt = $DB_CONN->prepare($query);
+		$stmt->execute(array(
+			$newFirstName,
+			$newLastName,
+			trim($newEmail),
+			$newPhoneNumber,
+			$userId
+		));
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'Sorry, there was an error reaching the server. Please try again later.';

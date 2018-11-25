@@ -146,19 +146,20 @@ function wdnInclude($path)
 									<fieldset>
 										<section class="form-group">
 											<label for="editFirstName">First Name:</label>
-											<input type="text" class="form-control" id="editFirstName">
+											<input type="text" class="form-control" id="editFirstName" required>
 										</section>
 										<section class="form-group">
 											<label for="editLastName">Last Name:</label>
-											<input type="text" class="form-control" id="edtLastName">
+											<input type="text" class="form-control" id="editLastName" required>
 										</section>
 										<section class="form-group">
 											<label for="editEmail">Email Address:</label>
-											<input type="text" class="form-control" id="editEmail" placeholder="student@huskers.unl.edu">
+											<input type="text" class="form-control" id="editEmail" placeholder="student@huskers.unl.edu" required>
+											<p>Please note, changing the email address will affect the email a user logs in with. Do not do this unless you are absolutely certain of the change.</p>
 										</section>
 										<section class="form-group">
 											<label for="editPhoneNumber">Phone Number:</label>
-											<input type="text" class="form-control" id="editPhoneNumber">
+											<input type="text" class="form-control" id="editPhoneNumber" required>
 										</section>
 									</fieldset>
 									<div>

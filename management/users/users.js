@@ -153,30 +153,88 @@ WDN.initializePlugin('modal', [function() {
 
 			function initializeEditButtonEventHandlers() {
 				// Initialize the modal handlers
-				// TODO: FIGURE OUT HOW TO GET THIS MODAL TO OPEN
-				$('.userEditButton').colorbox({
-					inline: true, 
-					width: '50%'
-				});
 				$('.close-modal-button').click(function() {
 					$.colorbox.close();
 				});
 
 				// Initialize the edit button handlers
 				$('#user-management-table').on('click', '.userEditButton', function(event) {
-					// event.preventDefault();
+					event.preventDefault();
 
+					// Get user information
 					const userId = $(this).parents('tr').data('user-id');
-					console.log(`TODO: EDIT: ${userId}`);
-
-	
+					getUserInformation(userId, function(userData) {
+						$('#editFirstName').val(userData.firstName);
+						$('#editLastName').val(userData.lastName);
+						$('#editEmail').val(userData.email);
+						$('#editPhoneNumber').val(userData.phoneNumber);
+					});
+					
+					// Submit user information
 					$('#edit-user-form').on('submit', function(event) {
 						event.preventDefault();
 						$('#edit-user-form button[type=submit]').prop('disabled', true);
-						console.log('TODO: SUBMIT WAS CLICKED');
+
+						const newFirstName = $('#editFirstName').val();
+						const newLastName = $('#editLastName').val();
+						const newEmail = $('#editEmail').val();
+						const newPhoneNumber = $('#editPhoneNumber').val();
+
+						updateUserInformation(userId, newFirstName, newLastName, newEmail, newPhoneNumber, function() {
+							$.colorbox.close();
+							$('#edit-user-form button[type=submit]').prop('disabled', false);
+						});
 					});
+				});
+			};
 
+			function getUserInformation(userId, callbackFunction) {
+				$.ajax({
+					dataType: 'json',
+					method: 'GET',
+					url: '/server/management/users/users.php',
+					data: {
+						action: 'getUserInformation',
+						userId: userId
+					},
+					success: function(response) {
+						if (!response || !response.success) {
+							alert(response.error || 'There was an error fetching user data. Please refresh the page and try again.');
+							return;
+						}
 
+						callbackFunction({
+							'userId': userId,
+							'firstName': response.user.firstName,
+							'lastName': response.user.lastName,
+							'phoneNumber': response.user.phoneNumber,
+							'email': response.user.email
+						});
+					}
+				});
+			};
+
+			function updateUserInformation(userId, newFirstName, newLastName, newEmail, newPhoneNumber, callbackFunction) {
+				$.ajax({
+					dataType: 'json',
+					method: 'POST',
+					url: '/server/management/users/users.php',
+					data: {
+						action: 'updateUserInformation',
+						userId: userId,
+						firstName: newFirstName,
+						lastName: newLastName,
+						email: newEmail,
+						phoneNumber: newPhoneNumber
+					},
+					success: function(response) {
+						if (!response || !response.success) {
+							alert(response.error || 'There was an error fetching the data. Please refresh the page.');
+						}
+
+						callbackFunction();
+						refreshUserTable();
+					}
 				});
 			};
 
@@ -188,7 +246,7 @@ WDN.initializePlugin('modal', [function() {
 					data: {
 						action: 'getUserTable'
 					},
-					success: function(response){
+					success: function(response) {
 						if (!response || !response.success) {
 							alert(response.error || 'There was an error fetching the data. Please refresh the page.');
 							return;
@@ -205,6 +263,13 @@ WDN.initializePlugin('modal', [function() {
 							tickIcon: 'wdn-icon-ok',
 							multipleSeparator: ', <br>'
 						});
+
+						// Need to set up the colorbox modal after the data is received from back-end
+						$('#user-management-table .userEditButton').colorbox({
+							inline: true, 
+							width: '50%'
+						});
+
 						$('.dropdown-toggle').on('click', function(){
 							// Set up event listener for clicks outside of the element
 							$(document).on('click.dropdown', function(e){
