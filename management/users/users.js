@@ -161,6 +161,12 @@ WDN.initializePlugin('modal', [function() {
 				$('#user-management-table').on('click', '.userEditButton', function(event) {
 					event.preventDefault();
 
+					// Initialize the colorbox
+					$('#user-management-table .userEditButton').colorbox({
+						inline: true,
+						width: '50%'
+					});
+
 					// Get user information
 					const userId = $(this).parents('tr').data('user-id');
 					getUserInformation(userId, function(userData) {
@@ -184,6 +190,9 @@ WDN.initializePlugin('modal', [function() {
 							$.colorbox.close();
 							$('#edit-user-form button[type=submit]').prop('disabled', false);
 						});
+
+						// Need to remove the event handlers so that multiple don't exist after submitting the form
+						$(this).off();
 					});
 				});
 			};
@@ -262,12 +271,6 @@ WDN.initializePlugin('modal', [function() {
 							iconBase: '',
 							tickIcon: 'wdn-icon-ok',
 							multipleSeparator: ', <br>'
-						});
-
-						// Need to set up the colorbox modal after the data is received from back-end
-						$('#user-management-table .userEditButton').colorbox({
-							inline: true, 
-							width: '50%'
 						});
 
 						$('.dropdown-toggle').on('click', function(){
