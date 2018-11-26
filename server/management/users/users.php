@@ -218,6 +218,8 @@ function addUser($data){
 	$response['success'] = true;
 
 	try {
+		if (!preg_match('/.+@.+/', $data['email'])) throw new Exception('The email address given is invalid', MY_EXCEPTION);
+
 		$stmt = $DB_CONN->prepare('INSERT INTO User (firstName, lastName, email, phoneNumber)
 			VALUES (?, ?, ?, ?)');
 
@@ -282,6 +284,8 @@ function updateUserInformation($userId, $newFirstName, $newLastName, $newEmail, 
 	$response['success'] = true;
 
 	try {
+		if (!preg_match('/.+@.+/', $newEmail)) throw new Exception('The email address given is invalid', MY_EXCEPTION);
+
 		$query = 'UPDATE User
 			SET firstName = ?, lastName = ?, email = ?, phoneNumber = ?
 			WHERE userId = ?';

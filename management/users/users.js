@@ -47,7 +47,7 @@ WDN.initializePlugin('modal', [function() {
 					});
 	
 					const isValidEmail = $('#email').val().match(/.+@.+\..+/);
-					if (!isValidEmail){
+					if (isValidEmail == null){
 						isValid = false;
 						$('#email').addClass('is-invalid');
 					}
@@ -66,16 +66,16 @@ WDN.initializePlugin('modal', [function() {
 							},
 							success: function(response) {
 								$('#add-user-form button[type=submit]').prop('disabled', false);
-	
-								if (response.success) {
-									// Clear inputs
-									$('#add-user-form input').val('');
-									$.colorbox.close();
-									
-									refreshUserTable();
-								} else {
-									alert(response.error);
+								if (!response || !response.success) {
+									alert(response.error || 'There was an error adding the user. Please refresh the page and try again.');
+									return;
 								}
+
+								// Clear inputs
+								$('#add-user-form input').val('');
+								$.colorbox.close();
+								
+								refreshUserTable();
 							}
 						});
 					} else {
@@ -181,18 +181,37 @@ WDN.initializePlugin('modal', [function() {
 						event.preventDefault();
 						$('#edit-user-form button[type=submit]').prop('disabled', true);
 
-						const newFirstName = $('#editFirstName').val();
-						const newLastName = $('#editLastName').val();
-						const newEmail = $('#editEmail').val();
-						const newPhoneNumber = $('#editPhoneNumber').val();
-
-						updateUserInformation(userId, newFirstName, newLastName, newEmail, newPhoneNumber, function() {
-							$.colorbox.close();
-							$('#edit-user-form button[type=submit]').prop('disabled', false);
+						let isValid = true;
+						$(this).find('input').each(function() {
+							const noValue = !$(this).val();
+							if (noValue) {
+								isValid = false;
+							}
+							$(this).toggleClass('is-invalid', noValue);
 						});
+		
+						const isValidEmail = $('#editEmail').val().match(/.+@.+\..+/);
+						if (isValidEmail == null) {
+							isValid = false;
+							$('#editEmail').addClass('is-invalid');
+						}
 
-						// Need to remove the event handlers so that multiple don't exist after submitting the form
-						$(this).off();
+						if (isValid) {
+							const newFirstName = $('#editFirstName').val();
+							const newLastName = $('#editLastName').val();
+							const newEmail = $('#editEmail').val();
+							const newPhoneNumber = $('#editPhoneNumber').val();
+
+							updateUserInformation(userId, newFirstName, newLastName, newEmail, newPhoneNumber, function() {
+								$.colorbox.close();
+								$('#edit-user-form button[type=submit]').prop('disabled', false);
+							});
+
+							// Need to remove the event handlers so that multiple don't exist after submitting the form
+							$(this).off();
+						} else {
+							$('#edit-user-form button[type=submit]').prop('disabled', false);
+						}
 					});
 				});
 			};

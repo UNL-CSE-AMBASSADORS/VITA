@@ -26,7 +26,7 @@ function storeAppointment($data){
 
 		$email = '';
 		if (isset($data['email'])) {
-			$email = $data['email'];
+			$email = trim($data['email']);
 		}
 
 		$clientId = insertClient($data['firstName'], $data['lastName'], $email, $data['phone']);

@@ -118,7 +118,7 @@ function wdnInclude($path)
 										</section>
 										<section class="form-group">
 											<label for="email">Email Address:</label>
-											<input type="text" class="form-control" id="email" placeholder="student@huskers.unl.edu">
+											<input type="text" class="form-control" id="email" placeholder="student@huskers.unl.edu" required>
 										</section>
 										<section class="form-group">
 											<label for="phone">Phone Number:</label>
@@ -146,11 +146,11 @@ function wdnInclude($path)
 									<fieldset>
 										<section class="form-group">
 											<label for="editFirstName">First Name:</label>
-											<input type="text" class="form-control" id="editFirstName" required>
+											<input type="text" class="form-control" id="editFirstName">
 										</section>
 										<section class="form-group">
 											<label for="editLastName">Last Name:</label>
-											<input type="text" class="form-control" id="editLastName" required>
+											<input type="text" class="form-control" id="editLastName">
 										</section>
 										<section class="form-group">
 											<label for="editEmail">Email Address:</label>
@@ -159,7 +159,7 @@ function wdnInclude($path)
 										</section>
 										<section class="form-group">
 											<label for="editPhoneNumber">Phone Number:</label>
-											<input type="text" class="form-control" id="editPhoneNumber" required>
+											<input type="text" class="form-control" id="editPhoneNumber">
 										</section>
 									</fieldset>
 									<div>

@@ -1,3 +1,10 @@
+.is-invalid {
+	border: 1px solid red;
+}
+
+/*
+Override the colorbox default settings
+*/
 #cboxContent {
 	background: transparent !important;
 }
