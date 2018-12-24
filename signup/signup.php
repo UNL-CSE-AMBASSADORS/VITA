@@ -1,4 +1,5 @@
 <?php
+	date_default_timezone_set('America/Chicago');
 	$today = date('Y-m-d');
 	$taxDay = date('Y-04-15');
 	$taxYear = ($today > $taxDay) ? date('Y', strtotime('+1 year')) : date('Y');
