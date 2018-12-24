@@ -169,7 +169,7 @@ WDN.initializePlugin('modal', [function() {
 
 					// Get user information
 					const userId = $(this).parents('tr').data('user-id');
-					getUserInformation(userId, function(userData) {
+					getUserInformation(userId).then((userData) => {
 						$('#editFirstName').val(userData.firstName);
 						$('#editLastName').val(userData.lastName);
 						$('#editEmail').val(userData.email);
@@ -202,9 +202,10 @@ WDN.initializePlugin('modal', [function() {
 							const newEmail = $('#editEmail').val();
 							const newPhoneNumber = $('#editPhoneNumber').val();
 
-							updateUserInformation(userId, newFirstName, newLastName, newEmail, newPhoneNumber, function() {
+							updateUserInformation(userId, newFirstName, newLastName, newEmail, newPhoneNumber).then(() => {
 								$.colorbox.close();
 								$('#edit-user-form button[type=submit]').prop('disabled', false);
+								refreshUserTable();
 							});
 
 							// Need to remove the event handlers so that multiple don't exist after submitting the form
@@ -216,34 +217,27 @@ WDN.initializePlugin('modal', [function() {
 				});
 			};
 
-			function getUserInformation(userId, callbackFunction) {
-				$.ajax({
+			function getUserInformation(userId) {
+				return $.ajax({
 					dataType: 'json',
 					method: 'GET',
 					url: '/server/management/users/users.php',
 					data: {
 						action: 'getUserInformation',
 						userId: userId
-					},
-					success: function(response) {
-						if (!response || !response.success) {
-							alert(response.error || 'There was an error fetching user data. Please refresh the page and try again.');
-							return;
-						}
-
-						callbackFunction({
-							'userId': userId,
-							'firstName': response.user.firstName,
-							'lastName': response.user.lastName,
-							'phoneNumber': response.user.phoneNumber,
-							'email': response.user.email
-						});
 					}
+				}).then((response) => {
+					if (!response || !response.success) {
+						alert(response.error || 'There was an error fetching user data. Please refresh the page and try again.');
+						return;
+					}
+
+					return response.user;
 				});
 			};
 
 			function updateUserInformation(userId, newFirstName, newLastName, newEmail, newPhoneNumber, callbackFunction) {
-				$.ajax({
+				return $.ajax({
 					dataType: 'json',
 					method: 'POST',
 					url: '/server/management/users/users.php',
@@ -254,14 +248,10 @@ WDN.initializePlugin('modal', [function() {
 						lastName: newLastName,
 						email: newEmail,
 						phoneNumber: newPhoneNumber
-					},
-					success: function(response) {
-						if (!response || !response.success) {
-							alert(response.error || 'There was an error fetching the data. Please refresh the page.');
-						}
-
-						callbackFunction();
-						refreshUserTable();
+					}
+				}).then((response) => {
+					if (!response || !response.success) {
+						alert(response.error || 'There was an error fetching the data. Please refresh the page.');
 					}
 				});
 			};
