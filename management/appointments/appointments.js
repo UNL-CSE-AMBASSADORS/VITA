@@ -11,7 +11,8 @@ require.config({
 		appointmentPickerController: '/dist/components/appointmentPicker/appointmentPickerController',
 		appointmentNotesAreaSharedPropertiesService: '/dist/components/appointmentNotesArea/appointmentNotesAreaSharedPropertiesService',
 		appointmentNotesAreaDataService: '/dist/components/appointmentNotesArea/appointmentNotesAreaDataService',
-		appointmentNotesAreaController: '/dist/components/appointmentNotesArea/appointmentNotesAreaController'
+		appointmentNotesAreaController: '/dist/components/appointmentNotesArea/appointmentNotesAreaController',
+		notificationUtilities: '/dist/assets/js/utilities/notificationUtilities'
 	},
 	shim: {
 		'ngAnimate': ['angular'],
@@ -39,7 +40,8 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 		'appointmentPickerController',
 		'appointmentNotesAreaSharedPropertiesService',
 		'appointmentNotesAreaDataService',
-		'appointmentNotesAreaController'
+		'appointmentNotesAreaController',
+		'notificationUtilities'
 	],
 	function (
 		AppointmentsDataService,
@@ -50,7 +52,8 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 		AppointmentPickerController,
 		AppointmentNotesAreaSharedPropertiesService,
 		AppointmentNotesAreaDataService,
-		AppointmentNotesAreaController
+		AppointmentNotesAreaController,
+		NotificationUtilities
 	) {
 		'use strict';
 
@@ -88,6 +91,9 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 				templateUrl: '/components/appointmentNotesArea/appointmentNotesArea.php'
 			};
 		});
+
+		// Create the NotificationUtilities factory
+		appointmentsApp.factory('notificationUtilities', NotificationUtilities);
 
 		angular.bootstrap(document.getElementById('appointmentsApp'), ['appointmentsApp']);
 
