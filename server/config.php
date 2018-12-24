@@ -31,4 +31,9 @@
 		print_r($e);
 	} finally {
 		unset($db_pass);
+		unset($db_host);
+		unset($db_name);
+		unset($db_user);
+		unset($db_charset);
+		unset($data_source_name);
 	}
