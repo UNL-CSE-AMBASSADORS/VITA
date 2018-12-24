@@ -180,7 +180,7 @@ define('sitesController', [], function() {
 				const startTime = getTime(shift.startTime);
 				const endTime = getTime(shift.endTime);
 
-				const generatedTimes = generateTimes(timeInterval, startTime, endTime);
+				const generatedTimes = generateTimes(timeInterval, startTime, endTime - timeInterval, true);
 				for (const generatedTime of generatedTimes) {
 					const containsAlready = times.some(time => time.time == generatedTime.time);
 					if (!containsAlready) {
@@ -277,12 +277,12 @@ define('sitesController', [], function() {
 		};
 
 		// Time generation code adapted from https://stackoverflow.com/a/36126706/3732003
-		function generateTimes(interval, startTime = 0, endTime = MINUTES_IN_DAY) {
+		function generateTimes(interval, startTime = 0, endTime = MINUTES_IN_DAY, endTimeInclusive = false) {
 			const times = [];
 			let time = startTime; // Start at 00:00 (12:00 AM)
 			const periods = ['AM', 'PM'];
 
-			for (let i = 0; time < endTime; i++) {
+			for (let i = 0; endTimeInclusive ? (time <= endTime) : (time < endTime); i++) {
 				const hour = Math.floor(time / 60); // Get hours of day in 0-23 format
 				const minute = (time % 60); // Get minutes of the hour in 0-59 format
 				const hourString = ((hour === 12 || hour === 0) ? 12 : hour % 12); // Transform to 1-12 format
