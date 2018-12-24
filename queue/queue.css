@@ -75,9 +75,14 @@
 	border: 1px solid grey;
 }
 
-.pill-noshow {
+.pill-no-show {
 	color: #fff;
 	background-color: #D00000;
+}
+
+.pill-walk-in {
+	color: #fff;
+	background-color: #38764C;
 }
 
 /* Center the datepicker calendar on mobile */
