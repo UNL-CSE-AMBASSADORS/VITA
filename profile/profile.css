@@ -18,6 +18,10 @@
 	cursor: pointer;
 }
 
+.inline {
+	display: inline;
+}
+
 #cboxContent {
 	background: transparent !important;
 }

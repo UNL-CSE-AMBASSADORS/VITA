@@ -70,14 +70,28 @@
 			ng-click="rescheduleAppointment()">
 
 		<!-- Cancel Button -->
-		<button type="button" 
-			value="Cancel"
-			id="cancelButton"
+		<a id="confirm-cancel-modal-opener"
 			class="submit wdn-button wdn-button-brand"
 			ng-show="appointment.notStarted && !appointment.cancelled"
-			ng-click="cancelAppointment()">Cancel Appointment</button>
+			href="#confirm-cancel-modal">Cancel Appointment</a>
 		
 		<p>An email will automatically be sent to the client with the rescheduled information if the client has an email on record.</p>
+
+		<!-- Confirm Appointment Cancel Modal -->
+		<div class="hidden">
+			<div class="modal" id="confirm-cancel-modal" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="wdn-band">
+					<div class="wdn-inner-wrapper">
+						<h4>Are you sure you want to cancel this appointment?</h4>
+						<div>
+							<button type="button" class="wdn-button wdn-button-triad close-modal-button">No, do not Cancel</button>
+							<button type="button" id="cancel-button" class="wdn-button wdn-button-brand" ng-click="cancelAppointment()">Yes, cancel</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Confirm Appointment Cancel Modal -->
 	</form>
 
 </div>

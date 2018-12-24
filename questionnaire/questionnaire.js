@@ -57,7 +57,7 @@ require(['jquery', 'jqueryvalidation'], function ($) {
 			values[i].change(function() {
 				let value = this.value;
 				if (this.checked) {
-					let cantHelpText = buttons[i].find('p[name="cantHelp"]');
+					let cantHelpText = buttons[i].find('p[class="cant-help-text"]');
 					if (value === "1") {
 						cantHelpText.show();
 					} else {

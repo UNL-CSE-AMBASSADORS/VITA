@@ -18,7 +18,7 @@ function wdnInclude($path)
 <head>
 <?php wdnInclude("/wdn/templates_4.1/includes/metanfavico.html"); ?>
 <!--
-	Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at http://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
+	Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at https://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
 	All framework code is the property of the UNL Web Developer Network. The code seen in a source code view is not, and may not be used as, a template. You may not use this code, a reverse-engineered version of this code, or its associated visual presentation in whole or in part to create a derivative work.
 	This message may not be removed from any pages based on the UNLedu Web Framework.
 
@@ -40,7 +40,7 @@ function wdnInclude($path)
 		<?php wdnInclude("/wdn/templates_4.1/includes/noscript-padding.html"); ?>
 		<header id="header" role="banner" class="wdn-content-slide wdn-band">
 			<div id="wdn_header_top">
-				<span id="wdn_institution_title"><a href="http://www.unl.edu/">University of Nebraska&ndash;Lincoln</a></span>
+				<span id="wdn_institution_title"><a href="https://www.unl.edu/">University of Nebraska&ndash;Lincoln</a></span>
 				<div id="wdn_resources">
 					<?php wdnInclude("/wdn/templates_4.1/includes/wdnResources.html"); ?>
 					<?php wdnInclude("/wdn/templates_4.1/includes/idm.html"); ?>
@@ -59,7 +59,7 @@ function wdnInclude($path)
 			<nav id="breadcrumbs" class="wdn-inner-wrapper" role="navigation" aria-label="breadcrumbs">
 				<!-- TemplateBeginEditable name="breadcrumbs" -->
 				<ul>
-					<li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
+					<li><a href="https://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
 					<li><a href="/" title="VITA Lincoln">VITA Lincoln</a></li>
 					<li><a href="/Volunteer" title="Volunteer">Volunteer</a></li>
 					<li>Profile</li>
@@ -90,10 +90,10 @@ function wdnInclude($path)
 
 				<!-- Personal Information -->
 				<div class="wdn-band wdn-light-neutral-band">
-					<div class="wdn-inner-wrapper">
+					<div class="wdn-inner-wrapper wdn-inner-padding-sm">
 						<div class="personal-info">
-							<h2>Personal Information</h2>
-							<button class="wdn-button wdn-pull-right" id="personalInformationEditButton">Edit</button>
+							<h2 class="clear-top inline">Personal Information</h2>
+							<button class="wdn-button wdn-pull-right clear-top" id="personalInformationEditButton">Edit</button>
 
 							<div>
 								<label for="firstName" id="firstNameLabel">First Name:</label>
@@ -127,35 +127,32 @@ function wdnInclude($path)
 
 				<!-- Abilities -->
 				<div class="wdn-band">
-					<div class="wdn-inner-wrapper">
-						<h2>Abilities</h2>
+					<div class="wdn-inner-wrapper wdn-inner-padding-sm">
+						<h2 class="clear-top inline">Abilities</h2>
 						<button class="wdn-button wdn-pull-right" id="abilitiesEditButton">Edit</button>
-						<button class="wdn-button wdn-pull-right wdn-button-brand" id="abilitiesCancelButton" style="display:none;">Cancel</button>
+						<button class="wdn-button wdn-pull-right wdn-button-brand clear-top" id="abilitiesCancelButton" style="display:none;">Cancel</button>
 						<div id="abilitiesSelect" multiple=true></div>
 					</div>
 				</div>
 
 				<!-- Certifications -->		
 				<div class="wdn-band wdn-light-neutral-band">
-					<div class="wdn-inner-wrapper">
-						<div>
-							<h2>Certifications</h2>
-							<p><b>NOTE</b>: These must be verified by your site administrator.</p>
-							<div id ="certificationsDiv"></div>
-						</div>
+					<div class="wdn-inner-wrapper wdn-inner-padding-sm">
+						<h2 class="clear-top">Certifications</h2>
+						<p><b>NOTE</b>: These must be verified by your site administrator.</p>
+						<div id ="certificationsDiv"></div>
 					</div>
 				</div>
 
 				<!-- Shifts -->
 				<div class="wdn-band">
-					<div class="wdn-inner-wrapper">
-						<div>
-							<h2>Shifts You're Signed Up For</h2>
-							<div id="shifts">
-								<div id="shiftsSignedUpFor"></div>
-							</div>
-							<button class="wdn-button" id="addShiftButton"><span class="wdn-icon-plus" aria-hidden="true"></span>  Sign Up for a Shift</button>
+					<div class="wdn-inner-wrapper wdn-inner-padding-sm">
+						<h2 class="clear-top">Shifts You're Signed Up For</h2>
+						<div id="shifts">
+							<div id="shiftsSignedUpFor"></div>
 						</div>
+
+						<button class="wdn-button" id="addShiftButton"><span class="wdn-icon-plus" aria-hidden="true"></span>  Sign Up for a Shift</button>
 					</div>
 				</div>
 
