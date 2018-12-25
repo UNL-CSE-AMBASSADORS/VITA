@@ -172,7 +172,7 @@
 									</th>
 									<th id="appointmentTimePercentageAppointmentsHeader">
 										Percentage Appts
-										<a class="tooltip pointer" title="This specifies the percentage of the preparers that are allotted for appointments, that is: number of appointments allowed to be scheduled = number of preparers * percentage appointments. Default is 100%.">
+										<a class="tooltip pointer" title="This specifies the percentage of the preparers that are allotted for scheduled (as opposed to walk-in) appointments. That is: number of appointments allowed to be scheduled online = number of preparers * percentage appointments. Default is 100%.">
 											<span class="wdn-icon-info" aria-hidden="true"></span>
 										</a>
 									</th>
