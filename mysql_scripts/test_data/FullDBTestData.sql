@@ -9,6 +9,7 @@ TRUNCATE Appointment;
 TRUNCATE AppointmentTime;
 TRUNCATE Client;
 TRUNCATE UserShift;
+TRUNCATE RoleLimit;
 TRUNCATE Shift;
 TRUNCATE Role;
 TRUNCATE Site;
@@ -811,12 +812,6 @@ SET @role_reviewer = LAST_INSERT_ID();
 
 -- user shift
 INSERT INTO UserShift (userId, shiftId, roleId)
-	VALUES (@user_preparer1Id, @shift_site1Shift1Id, @role_preparer);
-
-INSERT INTO UserShift (userId, shiftId, roleId)
-	VALUES (@user_preparer1Id, @shift_site1Shift2Id, @role_preparer);
-
-INSERT INTO UserShift (userId, shiftId, roleId)
 	VALUES (@user_preparer2Id, @shift_site1Shift2Id, @role_preparer);
 
 INSERT INTO UserShift (userId, shiftId, roleId)
@@ -850,6 +845,16 @@ INSERT INTO UserShift (userId, shiftId, roleId)
 INSERT INTO UserShift (userId, shiftId, roleId)
 	VALUES (@user_preparer1Id, @shift_jackieGaughan4, @role_preparer);
 -- end user shift
+
+
+
+-- role limit
+INSERT INTO RoleLimit (maximumNumber, roleId, siteId)
+	VALUES (10, @role_preparer, @site_site1Id);
+
+INSERT INTO RoleLimit (maximumNumber, roleId, siteId, shiftId)
+	VALUES (15, @role_preparer, @site_site1Id, @shift_site1Shift2Id);
+-- end role limit
 
 
 
