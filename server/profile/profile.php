@@ -9,6 +9,7 @@ if (!$USER->isLoggedIn()) {
 }
 
 require_once "$root/server/config.php";
+require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
 
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
@@ -72,9 +73,9 @@ function getShifts() {
 			TIME_FORMAT(endTime, '%l:%i %p') AS endTimeString, DATE_FORMAT(startTime, '%b %D, %Y') AS dateString, 
 			title, Site.siteId, UserShift.userShiftId, Role.roleId, Role.name AS roleName
 		FROM Shift
-		LEFT JOIN UserShift ON Shift.shiftId = UserShift.shiftId AND UserShift.userId = ?
-		JOIN Site ON Shift.siteId = Site.siteId
-		LEFT JOIN Role ON UserShift.roleId = Role.roleId
+			JOIN Site ON Shift.siteId = Site.siteId
+			LEFT JOIN UserShift ON Shift.shiftId = UserShift.shiftId AND UserShift.userId = ?
+			LEFT JOIN Role ON UserShift.roleId = Role.roleId
 		WHERE Site.archived = FALSE AND Shift.archived = FALSE
 		ORDER BY startTime";
 
@@ -86,11 +87,28 @@ function getShifts() {
 		$shift['signedUp'] = isset($shift['userShiftId']);
 	}
 
+	$shiftRoleCounts = getEachRoleCountForAllShifts();
+
 	$result = array(
-		'shifts' => $shifts
+		'shifts' => $shifts,
+		'shiftRoleCounts' => $shiftRoleCounts
 	);
 
 	echo json_encode($result);
+}
+
+function getEachRoleCountForAllShifts() {
+	GLOBAL $DB_CONN;
+
+	$query = 'SELECT shiftId, roleId, COUNT(*) AS numberSignedUp
+		FROM UserShift
+		GROUP BY shiftId, roleId;';
+	
+	$stmt = $DB_CONN->prepare($query);
+	$stmt->execute();
+	$roleCounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+	return $roleCounts;
 }
 
 function updateAbilities($data) {
@@ -225,10 +243,6 @@ function notifyForCancelledShift($firstName, $lastName, $email, $siteTitle, $dat
 	if (PROD) {
 		$handle = @fopen('./notificationEmails.txt', 'r');
 		if ($handle != false) {
-			$headers = "From: noreply@vita.unl.edu\r\n";
-			$headers .= 'MIME-Version: 1.0' . "\r\n";
-			$headers .= 'Content-type: text/html; charset=iso-8859-1';
-
 			while(!feof($handle)) {
 				$toEmail = fgets($handle);
 				$cancellationMessage = "A volunteer has cancelled one of their shifts: <br/>
@@ -241,7 +255,7 @@ function notifyForCancelledShift($firstName, $lastName, $email, $siteTitle, $dat
 					<b>End Time:</b> $endTimeStr <br/>
 					<b>Role:</b> $role <br/>
 					<b>Reason:</b> $reason";
-				mail($toEmail, 'VITA -- Shift Cancellation', $cancellationMessage, $headers);
+				EmailUtilities::sendHtmlFormattedEmail($toEmail, 'VITA -- Shift Cancellation', $cancellationMessage);
 			}
 			fclose($handle);
 		}

@@ -14,6 +14,21 @@
 	color: green;
 }
 
+
+/* Override the default colors for the colorbox */
+#cboxContent {
+	background: transparent !important;
+}
+#cboxLoadedContent {
+	background: #ddd !important;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0,0,0,.15);
+	border-radius: 4px;
+	padding: 0 0 2rem 0 !important;
+}
+/* End overriding the default colors for the colorbox */
+
+
 /* Switch code adapted from https://www.w3schools.com/howto/howto_css_switch.asp */
 
 /* The switch - the box around the slider */
