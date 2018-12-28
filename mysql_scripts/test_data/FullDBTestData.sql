@@ -5,6 +5,7 @@ TRUNCATE Answer;
 TRUNCATE AppointmentFilingStatus;
 TRUNCATE FilingStatus;
 TRUNCATE ServicedAppointment;
+TRUNCATE Note;
 TRUNCATE Appointment;
 TRUNCATE AppointmentTime;
 TRUNCATE Client;
