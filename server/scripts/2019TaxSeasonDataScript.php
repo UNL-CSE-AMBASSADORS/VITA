@@ -32,6 +32,7 @@ function insert2019Data() {
 $siteCoordinatorRoleId = 1;
 $greeterRoleId = 2;
 $preparerRoleId = 3;
+$reviewerRoleId = 4;
 
 // Need to create the new sites
 // Create Shifts for each site
@@ -79,7 +80,12 @@ function insertNebraskaEastUnionData() {
 			$fifthAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 100, 60, $siteId);
 			$sixthAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 100, 60, $siteId);
 
-			// TODO: SEE IF WE ARE USING A DIFFERENT LIMIT FOR PREPARERS ON MEGA SATURDAYS
+			insertShiftRoleLimit(25, $preparerRoleId, $firstShiftId, $siteId);
+			insertShiftRoleLimit(25, $preparerRoleId, $secondShiftId, $siteId);
+			insertShiftRoleLimit(5, $greeterRoleId, $firstShiftId, $siteId);
+			insertShiftRoleLimit(5, $greeterRoleId, $secondShiftId, $siteId);
+			insertShiftRoleLimit(5, $reviewerRoleId, $firstShiftId, $siteId);
+			insertShiftRoleLimit(5, $reviewerRoleId, $secondShiftId, $siteId);
 		}
 
 		// Sundays
@@ -91,12 +97,19 @@ function insertNebraskaEastUnionData() {
 			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 200, 60, $siteId);
 			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 200, 60, $siteId);
 			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 100, 60, $siteId);
+
+			insertShiftRoleLimit(25, $preparerRoleId, $firstShiftId, $siteId);
+			insertShiftRoleLimit(25, $preparerRoleId, $secondShiftId, $siteId);
+			insertShiftRoleLimit(5, $greeterRoleId, $firstShiftId, $siteId);
+			insertShiftRoleLimit(5, $greeterRoleId, $secondShiftId, $siteId);
+			insertShiftRoleLimit(5, $reviewerRoleId, $firstShiftId, $siteId);
+			insertShiftRoleLimit(5, $reviewerRoleId, $secondShiftId, $siteId);
 		}
 
 		// Default Site Role Limits
-		insertRoleLimit(1, $siteCoordinatorRoleId, $siteId);
-		insertRoleLimit(1, $greeterRoleId, $siteId);
-		insertRoleLimit(6, $preparerRoleId, $siteId);
+		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
+		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
+		insertSiteRoleLimit(6, $preparerRoleId, $siteId);
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
@@ -132,9 +145,9 @@ function insertAndersonLibraryData() {
 		}
 
 		// Default Site Role Limits
-		insertRoleLimit(1, $siteCoordinatorRoleId, $siteId);
-		insertRoleLimit(1, $greeterRoleId, $siteId);
-		insertRoleLimit(4, $preparerRoleId, $siteId);
+		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
+		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
+		insertSiteRoleLimit(4, $preparerRoleId, $siteId);
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
@@ -169,10 +182,9 @@ function insertCenterForPeopleInNeedData() {
 		}
 
 		// Default Site Role Limits
-		insertRoleLimit(1, $siteCoordinatorRoleId, $siteId);
-		// TODO: NEED CONFIRMATION THAT THE GREETER ROLE EXISTS AT THIS SITE
-		insertRoleLimit(1, $greeterRoleId, $siteId);
-		insertRoleLimit(2, $preparerRoleId, $siteId);
+		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
+		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
+		insertSiteRoleLimit(2, $preparerRoleId, $siteId);
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
@@ -214,9 +226,9 @@ function insertLorenEiseleyLibraryData() {
 		}
 
 		// Default Site Role Limits
-		insertRoleLimit(1, $siteCoordinatorRoleId, $siteId);
-		insertRoleLimit(1, $greeterRoleId, $siteId);
-		insertRoleLimit(6, $preparerRoleId, $siteId);
+		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
+		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
+		insertSiteRoleLimit(6, $preparerRoleId, $siteId);
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
@@ -248,9 +260,9 @@ function insertBennettMartinLibraryData() {
 		}
 
 		// Default Site Role Limits
-		insertRoleLimit(1, $siteCoordinatorRoleId, $siteId);
-		insertRoleLimit(1, $greeterRoleId, $siteId);
-		insertRoleLimit(4, $preparerRoleId, $siteId);
+		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
+		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
+		insertSiteRoleLimit(4, $preparerRoleId, $siteId);
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
@@ -320,12 +332,27 @@ function insertAppointmentTime($scheduledTime, $percentageAppointments, $approxi
 	return $DB_CONN->lastInsertId();
 }
 
-function insertRoleLimit($maximumNumber, $roleId, $siteId) {
+function insertSiteRoleLimit($maximumNumber, $roleId, $siteId) {
 	GLOBAL $DB_CONN;
 
 	$query = 'INSERT INTO RoleLimit (maximumNumber, roleId, siteId)
 		VALUES (?, ?, ?)';
 	$params = array($maximumNumber, $roleId, $siteId);
+
+	$stmt = $DB_CONN->prepare($query);
+	if (!$stmt->execute($params)) {
+		throw new Exception("Unable to insert role limit", MY_EXCEPTION);
+	}
+
+	return $DB_CONN->lastInsertId();
+}
+
+function insertShiftRoleLimit($maximumNumber, $roleId, $shiftId, $siteId) {
+	GLOBAL $DB_CONN;
+
+	$query = 'INSERT INTO RoleLimit (maximumNumber, roleId, shiftId, siteId)
+		VALUES (?, ?, ?, ?)';
+	$params = array($maximumNumber, $roleId, $shiftId, $siteId);
 
 	$stmt = $DB_CONN->prepare($query);
 	if (!$stmt->execute($params)) {
