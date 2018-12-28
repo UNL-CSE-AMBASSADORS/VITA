@@ -12,7 +12,7 @@ WDN.initializePlugin('jqueryui', [function () {
 				dateFormat : 'mm/dd/yy',
 				altFormat  : "yy-mm-dd",
 				altField   : '#isoFormattedDate'
-			}).datepicker( "setDate", new Date() );;
+			}).datepicker( "setDate", new Date() );
 			$("#isoFormattedDate").val(getCurrentDateString());
 		});
 
