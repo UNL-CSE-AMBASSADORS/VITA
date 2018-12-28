@@ -1,6 +1,6 @@
 define('signupController', [], function() {
 
-	function signupController($scope, $sce, SignupService, sharedPropertiesService) {
+	function signupController($scope, $sce, SignupService, sharedPropertiesService, NotificationUtilities) {
 		
 		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
 		$scope.successMessage = null;
@@ -43,8 +43,9 @@ define('signupController', [], function() {
 					document.body.scrollTop = document.documentElement.scrollTop = 0;
 					$scope.appointmentId = response.appointmentId;
 					$scope.successMessage = $sce.trustAsHtml(response.message);
-				}else{
-					alert('There was an error on the server! Please refresh the page in a few minutes and try again.');
+					NotificationUtilities.giveNotice('Success', 'You have successfully scheduled an appointment!');
+				} else {
+					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
 				}
 			});
 		}
@@ -61,13 +62,14 @@ define('signupController', [], function() {
 				if(typeof response !== 'undefined' && response){
 					if (response.success) {
 						$scope.emailButton.text = "Sent!";
+						NotificationUtilities.giveNotice('Success', 'The email has been sent!');
 					} else {
-						alert(response.error);
 						$scope.emailButton.disabled = false;
+						NotificationUtilities.giveNotice('Failure', response.error, false);
 					}
 				}else{
-					alert('There was an error on the server! Try again or please print this page instead.');
 					$scope.emailButton.disabled = false;
+					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Try again or please print this page instead.', false);
 				}
 			});
 		}
@@ -95,7 +97,7 @@ define('signupController', [], function() {
 
 	}
 
-	signupController.$inject = ['$scope', '$sce', 'signupDataService', 'appointmentPickerSharedPropertiesService'];
+	signupController.$inject = ['$scope', '$sce', 'signupDataService', 'appointmentPickerSharedPropertiesService', 'notificationUtilities'];
 
 	return signupController;
 

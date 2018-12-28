@@ -4,10 +4,6 @@ define('queuePrivateController', [], function() {
 		angular.extend(this, $controller('queueController', {$scope: $scope}));
 	
 		$scope.appointmentNotesAreaSharedProperties = AppointmentNotesAreaSharedPropertiesService.getSharedProperties();
-
-		function fixedEncodeURIComponent (str) {
-			return encodeURIComponent(str).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
-		}
 	
 		$scope.selectClient = function(client) {
 			$scope.client = client;
@@ -23,13 +19,13 @@ define('queuePrivateController', [], function() {
 		}
 	
 		$scope.checkIn = function() {
-			const noshow = $scope.client.noshow;
+			const noShow = $scope.client.noShow;
 			$scope.client.checkedIn = true;
-			$scope.client.noshow = false;
+			$scope.client.noShow = false;
 			QueueDataService.checkInNow(new Date().toISOString(), $scope.client.appointmentId).then(function(result) {
 				if(!result.success) {
 					$scope.client.checkedIn = false;
-					$scope.client.noshow = noshow;
+					$scope.client.noShow = noShow;
 					alert(result.error);
 				}
 			});
