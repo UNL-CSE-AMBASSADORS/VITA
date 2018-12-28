@@ -9,8 +9,7 @@ if (!$USER->isLoggedIn() || $USER->getUserId() !== 1) {
 	die();
 }
 
-// TODO: I'm assuming the check constraint for percentageAppointments has been removed already
-// TODO: The JG Site needs to be archived
+// TODO: Need to update the `$dataAlreadyInserted` values before this query will run successfully
 
 
 insert2019Data();
@@ -170,7 +169,6 @@ function insertCenterForPeopleInNeedData() {
 
 		// Tuesdays and Wednesdays are the same
 		$tuesdayDates = array('2019-02-05', '2019-02-12', '2019-02-19', '2019-02-26');
-		// TODO: NEED VERIFICATION THAT Mar 3 IS A DATE THEY ARE PREPARING
 		$wednesdayDates = array('2019-03-06', '2019-03-13', '2019-03-27');
 		$dates = array_merge($tuesdayDates, $wednesdayDates);
 		foreach ($dates as $date) {
