@@ -80,7 +80,7 @@ function getAppointments($year) {
 // NOTE: Upon a successful reschedule, an appointment rescheduled confirmation email is automatically sent to the client
 // whose appointment was rescheduled
 function rescheduleAppointment($appointmentId, $appointmentTimeId) {
-	GLOBAL $DB_CONN, $USER;
+	GLOBAL $DB_CONN;
 	
 	$response = array();
 	$response['success'] = true;
@@ -93,11 +93,7 @@ function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 			sendEmailConfirmation($appointmentId);
 		}
 
-		// Add a note to the appointment saying it was rescheduled
-		$noteAccessor = new NoteAccessor();
-		$noteText = 'Rescheduled [Automatic Note]';
-		$userId = $USER->getUserId();
-		$notes = $noteAccessor->addNote($appointmentId, $noteText, $userId);
+		addNote($appointmentId, 'Rescheduled [Automatic Note]');
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error rescheduling the appointment on the server. Please refresh the page and try again.';
@@ -113,6 +109,8 @@ function cancelAppointment($appointmentId) {
 	try {
 		$appointmentAccessor = new AppointmentAccessor();
 		$appointmentAccessor->cancelAppointment($appointmentId);
+
+		addNote($appointmentId, 'Cancelled [Automatic Note]');
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error cancelling the appointment on the server. Please refresh the page and try again.';
@@ -178,4 +176,12 @@ function expandLanguageCode($languageCode) {
 	if ($languageCode === 'vie') return 'Vietnamese';
 	if ($languageCode === 'ara') return 'Arabic';
 	return 'Unknown';
+}
+
+function addNote($appointmentId, $noteText) {
+	GLOBAL $USER;
+
+	$noteAccessor = new NoteAccessor();
+	$userId = $USER->getUserId();
+	$notes = $noteAccessor->addNote($appointmentId, $noteText, $userId);
 }
