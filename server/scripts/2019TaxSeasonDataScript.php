@@ -4,7 +4,7 @@
 $root = realpath($_SERVER['DOCUMENT_ROOT']);
 require_once "$root/server/user.class.php";
 $USER = new User();
-if (!$USER->isLoggedIn() || $USER->getUserId() !== 1) {
+if (!$USER->isLoggedIn() || $USER->getUserId() !== '1') {
 	header("Location: /unauthorized");
 	die();
 }
@@ -14,7 +14,7 @@ if (!$USER->isLoggedIn() || $USER->getUserId() !== 1) {
 
 insert2019Data();
 
-function insert2019Data() {
+function insert2019Data() {	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The data has already been inserted');
@@ -25,13 +25,10 @@ function insert2019Data() {
 	insertCenterForPeopleInNeedData();
 	insertLorenEiseleyLibraryData();
 	insertBennettMartinLibraryData();
-	insertInternationalStudentScholarSiteData();
-}
+	// insertInternationalStudentScholarSiteData();
 
-$siteCoordinatorRoleId = 1;
-$greeterRoleId = 2;
-$preparerRoleId = 3;
-$reviewerRoleId = 4;
+	die('SUCCESS');
+}
 
 // Need to create the new sites
 // Create Shifts for each site
@@ -41,6 +38,11 @@ $reviewerRoleId = 4;
 // The first shifts for NEU start 30 mins prior to the first appointment and the second shift ends at last appt time end time
 function insertNebraskaEastUnionData() {
 	GLOBAL $DB_CONN;
+
+	$siteCoordinatorRoleId = 1;
+	$greeterRoleId = 2;
+	$preparerRoleId = 3;
+	$reviewerRoleId = 4;
 
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
@@ -121,6 +123,11 @@ function insertNebraskaEastUnionData() {
 function insertAndersonLibraryData() {
 	GLOBAL $DB_CONN;
 
+	$siteCoordinatorRoleId = 1;
+	$greeterRoleId = 2;
+	$preparerRoleId = 3;
+	$reviewerRoleId = 4;
+
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The AL data has already been inserted');
@@ -157,6 +164,13 @@ function insertAndersonLibraryData() {
 }
 
 function insertCenterForPeopleInNeedData() {
+	GLOBAL $DB_CONN;
+
+	$siteCoordinatorRoleId = 1;
+	$greeterRoleId = 2;
+	$preparerRoleId = 3;
+	$reviewerRoleId = 4;
+	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The Center for People in Need data has already been inserted');
@@ -193,6 +207,13 @@ function insertCenterForPeopleInNeedData() {
 }
 
 function insertLorenEiseleyLibraryData() {
+	GLOBAL $DB_CONN;
+
+	$siteCoordinatorRoleId = 1;
+	$greeterRoleId = 2;
+	$preparerRoleId = 3;
+	$reviewerRoleId = 4;
+	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The Eiseley data has already been inserted');
@@ -237,6 +258,13 @@ function insertLorenEiseleyLibraryData() {
 }
 
 function insertBennettMartinLibraryData() {
+	GLOBAL $DB_CONN;
+
+	$siteCoordinatorRoleId = 1;
+	$greeterRoleId = 2;
+	$preparerRoleId = 3;
+	$reviewerRoleId = 4;
+	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The Bennett Martin data has already been inserted');
