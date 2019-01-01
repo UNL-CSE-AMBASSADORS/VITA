@@ -34,7 +34,7 @@ function getAllSites($data) {
 	}
 	$selectColumnsString = join(',', $selectColumns);
 
-	$stmt = $DB_CONN->prepare('SELECT ' . $selectColumnsString . ' FROM Site');
+	$stmt = $DB_CONN->prepare('SELECT ' . $selectColumnsString . ' FROM Site WHERE archived = FALSE');
 	$stmt->execute();
 	$sites = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

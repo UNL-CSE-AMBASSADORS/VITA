@@ -81,7 +81,7 @@ CREATE TABLE AppointmentTime (
 	maximumNumberOfAppointments INTEGER UNSIGNED DEFAULT NULL,
 	percentageAppointments INTEGER UNSIGNED NOT NULL DEFAULT 100,
 	approximateLengthInMinutes INTEGER UNSIGNED NOT NULL DEFAULT 60,
-	CONSTRAINT percentageCheck CHECK (percentageAppointments>=0 AND percentageAppointments<=100),
+	CONSTRAINT percentageCheck CHECK (percentageAppointments>=0 AND percentageAppointments<=300),
 	siteId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(siteId) REFERENCES Site(siteId)
 );
