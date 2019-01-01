@@ -172,7 +172,7 @@
 									</th>
 									<th id="appointmentTimePercentageAppointmentsHeader">
 										Percentage Appts
-										<a class="tooltip pointer" title="This specifies the percentage of the preparers that are allotted for scheduled (as opposed to walk-in) appointments. That is: number of appointments allowed to be scheduled online = number of preparers * percentage appointments. Default is 100%.">
+										<a class="tooltip pointer" title="This specifies the percentage of the preparers that are allotted for scheduled (as opposed to walk-in) appointments. That is: number of appointments allowed to be scheduled online = number of preparers * percentage appointments. Default is 100%, max is 300%.">
 											<span class="wdn-icon-info" aria-hidden="true"></span>
 										</a>
 									</th>
@@ -282,7 +282,7 @@
 									name="percentageAppointments"
 									ng-model="addAppointmentTimeInformation.percentageAppointments"
 									min="0"
-									max="100"
+									max="300"
 									required />
 								<div ng-show="form.$submitted || form.percentageAppointments.$touched">
 									<label class="error" ng-show="form.percentageAppointments.$error.required">This field is required.</label>
