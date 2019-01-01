@@ -186,7 +186,7 @@ function addAppointmentTime($siteId, $dateString, $scheduledTimeString, $minimum
 		}
 
 		if (!isset($percentageAppointments)) throw new Exception('Invalid percent appointments given', MY_EXCEPTION);
-		if (isset($percentageAppointments) && ((int)$percentageAppointments < 0 || (int)$percentageAppointments > 100)) throw new Exception('Invalid percent appointments given', MY_EXCEPTION);
+		if (isset($percentageAppointments) && ((int)$percentageAppointments < 0 || (int)$percentageAppointments > 300)) throw new Exception('Invalid percent appointments given', MY_EXCEPTION);
 
 		if (!isset($approximateLengthInMinutes)) throw new Exception('Invalid approximate length in minutes given', MY_EXCEPTION);
 		if (isset($approximateLengthInMinutes) && ((int)$approximateLengthInMinutes < 0)) throw new Exception('Invalid approximate length in minutes given', MY_EXCEPTION);
