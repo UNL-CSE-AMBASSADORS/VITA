@@ -73,7 +73,7 @@ function getShifts() {
 	$year = date('Y');
 
 	$query = "SELECT Shift.shiftId, TIME_FORMAT(startTime, '%l:%i %p') AS startTimeString, 
-			TIME_FORMAT(endTime, '%l:%i %p') AS endTimeString, DATE_FORMAT(startTime, '%b %D, %Y') AS dateString, 
+			TIME_FORMAT(endTime, '%l:%i %p') AS endTimeString, DATE_FORMAT(startTime, '%W, %b %D, %Y') AS dateString, 
 			title, Site.siteId, UserShift.userShiftId, Role.roleId, Role.name AS roleName
 		FROM Shift
 			JOIN Site ON Shift.siteId = Site.siteId
