@@ -10,9 +10,9 @@ define('appointmentPickerSharedPropertiesService', [], function() {
 			selectedSiteTitle: null,
 			selectedTime: null,
 			selectedAppointmentTimeId: null,
-			studentScholar: false,
 			hasAvailability: null,
-			isLoggedIn: false
+			isLoggedIn: false,
+			appointmentType: null
 		};
 
 		return {
