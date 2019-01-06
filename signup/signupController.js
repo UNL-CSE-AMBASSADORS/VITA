@@ -144,12 +144,14 @@ define('signupController', [], function() {
 			$scope.questions[3] = null;
 			$scope.questions[4] = null;
 			$scope.questions[5] = null;
+			$scope.questions[6] = null;
 			$scope.sharedProperties.appointmentType = 'residential';
 		};
 
 		$scope.visaChanged = function() {
 			$scope.questions[4] = null;
 			$scope.questions[5] = null;
+			$scope.questions[6] = null;
 			$scope.sharedProperties.appointmentType = 'residential';
 		};
 
@@ -158,7 +160,9 @@ define('signupController', [], function() {
 		};
 
 		$scope.studentCountryChanged = function(country) {
-			$scope.sharedProperties.appointmentType = country.treatyType;
+			if (country) {
+				$scope.sharedProperties.appointmentType = country.treatyType;
+			}
 		};
 
 	}
