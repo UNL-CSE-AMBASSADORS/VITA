@@ -88,24 +88,24 @@ function getInternationalAppointmentTimes($year, $after, $treatyType) {
 
 	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, 
 		TIME(scheduledTime) AS scheduledTime, percentageAppointments, 
-		COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, 
+		COUNT(DISTINCT ans.answerId) AS numberOfAppointmentsAlreadyMade, 
 		apt.minimumNumberOfAppointments, apt.maximumNumberOfAppointments
 	FROM AppointmentTime apt
 		LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
 		LEFT JOIN ServicedAppointment sa ON sa.appointmentId = a.appointmentId
 		LEFT JOIN Answer ans ON ans.appointmentId = a.appointmentId 
+			AND ans.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")
+			AND ans.possibleAnswerId = (SELECT possibleAnswerId FROM PossibleAnswer WHERE text = ?)
 		LEFT JOIN Site s ON s.siteId = apt.siteId
 	WHERE YEAR(apt.scheduledTime) = ? 
 		AND apt.scheduledTime > ? 
 		AND s.doesInternational = TRUE
 		AND (sa.cancelled IS NULL OR sa.cancelled = FALSE)
-		AND (ans.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")
-			AND ans.possibleAnswerId = (SELECT possibleAnswerId FROM PossibleAnswer WHERE text = ?))
 	GROUP BY apt.appointmentTimeId
-	ORDER BY apt.scheduledTime';
+	ORDER BY apt.scheduledTime;';
 
 	$stmt = $DB_CONN->prepare($query);
-	$stmt->execute(array($year, $after, $treatyType));
+	$stmt->execute(array($treatyType, $year, $after));
 	$appointmentTimes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 	return $appointmentTimes;

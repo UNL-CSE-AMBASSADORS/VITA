@@ -14,7 +14,7 @@ define('signupController', [], function() {
 		$scope.countries = [ 
 			{ 'name': 'China', 'treatyType': 'china' },
 			{ 'name': 'India', 'treatyType': 'india' },
-			
+
 			{ 'name': 'Armenia', 'treatyType': 'treaty' },
 			{ 'name': 'Azerbaijan', 'treatyType': 'treaty' },
 			{ 'name': 'Bangladesh', 'treatyType': 'treaty' },
@@ -60,7 +60,6 @@ define('signupController', [], function() {
 		];
 		
 		$scope.storeAppointments = function() {
-
 			let questions = [];
 			Object.keys($scope.questions).forEach(function(key) {
 				if($scope.questions[key] != null) {
@@ -71,9 +70,24 @@ define('signupController', [], function() {
 				}
 			});
 
-			console.log('QUESTIONS');
-			console.log(questions);
-			console.log('\n');
+			// The country question has to give the treatyType instead of the entire country object
+			const countryQuestionDatabaseId = "6";
+			const indexOfCountryQuestionInQuestionsArray = questions.findIndex((question) => question.id === countryQuestionDatabaseId);
+			if (questions[indexOfCountryQuestionInQuestionsArray]) {
+				let country = questions[indexOfCountryQuestionInQuestionsArray].value;
+
+				// These ids were pulled manually from the database
+				let answerDatabaseId = -1;
+				if(country.treatyType === 'china') answerDatabaseId = "11";
+				else if(country.treatyType === 'india') answerDatabaseId = "12";
+				else if(country.treatyType === 'treaty') answerDatabaseId = "13";
+				else if(country.treatyType === 'non-treaty') answerDatabaseId = "14";
+				
+				questions[indexOfCountryQuestionInQuestionsArray] = {
+					id: countryQuestionDatabaseId,
+					value: answerDatabaseId
+				};
+			}
 
 			// TODO: assume english for right now until support for other languages is added
 			$scope.data.language = "eng";
