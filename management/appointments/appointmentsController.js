@@ -62,6 +62,7 @@ define('appointmentsController', [], function() {
 				if (result.success) {
 					$scope.appointment.scheduledTime = $scope.appointmentPickerSharedProperties.selectedDate + ' ' + $scope.appointmentPickerSharedProperties.selectedTime;
 					$scope.appointment.title = $scope.appointmentPickerSharedProperties.selectedSiteTitle;
+					$scope.appointment.appointmentType = $scope.appointmentPickerSharedProperties.appointmentType;
 
 					// Clear the selected values
 					$scope.appointmentPickerSharedProperties.selectedDate = null;

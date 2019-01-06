@@ -20,6 +20,7 @@
 			<div ng-if="appointment.phoneNumber != null">
 				<span><b>Phone Number: </b>{{appointment.phoneNumber}}</span>
 			</div>
+			<div><b>Tax Type: </b>{{appointment.appointmentType}}</div>
 			<div><b>Appointment ID: </b>{{appointment.appointmentId}}</div>
 		</div>
 
@@ -53,14 +54,18 @@
 	<!-- Reschedule Section -->
 	<h3>Reschedule Appointment</h3>
 	<form class="cmxform" id="rescheduleForm">
-		<label>
-			<div>International Student Scholar</div>
-			<span class="switch">
-				<input type="checkbox" ng-model="appointmentPickerSharedProperties.studentScholar">
-				<span class="slider round"></span>
-			</span>
-		</label>
+
+		<div>Tax Type (currently: {{appointmentPickerSharedProperties.appointmentType}})</div>
+		<div class="btn-group">
+			<button class="wdn-button btn" type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'residential'">Residential</button>
+			<button class="wdn-button btn" type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'china'">China</button>
+			<button class="wdn-button btn" type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'india'">India</button>
+			<button class="wdn-button btn" type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'treaty'">Treaty</button>
+			<button class="wdn-button btn" type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'non-treaty'">Non-Treaty</button>
+		</div>
+		
 		<div appointment-picker></div>
+
 		<input type="submit" 
 			value="Reschedule" 
 			id="rescheduleButton" 

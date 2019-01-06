@@ -29,6 +29,7 @@ function wdnInclude($path)
 <title>Appointment Management | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
+<link rel="stylesheet" href="/dist/assets/css/form.css">
 <link rel="stylesheet" href="/dist/management/appointments/appointments.css">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
