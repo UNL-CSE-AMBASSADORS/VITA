@@ -38,7 +38,7 @@ function getAppointmentTimes($data, $isLoggedIn) {
 		$appointmentTimes = getInternationalAppointmentTimes($year, $after, $data['appointmentType']);
 	}
 
-	$dstMap = new DateSiteTimeMap($appointmentType);
+	$dstMap = new DateSiteTimeMap($data['appointmentType']);
 
 	foreach ($appointmentTimes as $appointmentTime) {
 		$dstMap->addDateSiteTimeObject($appointmentTime);
@@ -89,7 +89,6 @@ function getInternationalAppointmentTimes($year, $after, $treatyType) {
 	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, 
 		TIME(scheduledTime) AS scheduledTime, percentageAppointments, 
 		COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, 
-		COUNT(DISTINCT us.userShiftId) AS numberOfPreparers, 
 		apt.minimumNumberOfAppointments, apt.maximumNumberOfAppointments
 	FROM AppointmentTime apt
 		LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
@@ -101,7 +100,7 @@ function getInternationalAppointmentTimes($year, $after, $treatyType) {
 		AND s.doesInternational = TRUE
 		AND (sa.cancelled IS NULL OR sa.cancelled = FALSE)
 		AND (ans.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")
-			AND ans.possibleAnswerId = (SELECT possibleAnswerId FROM PossibleAnswer WHERE text = "?"))
+			AND ans.possibleAnswerId = (SELECT possibleAnswerId FROM PossibleAnswer WHERE text = ?))
 	GROUP BY apt.appointmentTimeId
 	ORDER BY apt.scheduledTime';
 
@@ -148,7 +147,7 @@ class DateSiteTimeMap {
 	public function addDateSiteTimeObject($dstObject) {
 		// Get the number of appointments still available
 		$appointmentsAvailable = 0;
-		if ($appointmentType === 'residential') {
+		if ($this->appointmentType === 'residential') {
 			$appointmentsAvailable = calculateRemainingAppointmentsAvailableForResidentialAppointment($dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['percentageAppointments'], $dstObject['numberOfPreparers'], $dstObject['minimumNumberOfAppointments'], $dstObject['maximumNumberOfAppointments']);
 		} else {
 			$appointmentsAvailable = calculateRemainingAppointmentsAvailableForInternationalAppointment($this->appointmentType, $dstObject['numberOfAppointmentsAlreadyMade']);
