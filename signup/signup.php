@@ -262,7 +262,6 @@
 					</div>
 				</li>
 
-				<!-- TODO: NEED TO CREATE ANOTHER QUESTION (+ ANSWERS?) IN THE DB -->
 				<li class="form-select" id="studentCountry" ng-show="questions[4] == 8 || questions[4] == 10 || questions[5] == 1">
 					<label for="6" class="form-required">What country are you a citizen or resident of?</label>
 					<div>
