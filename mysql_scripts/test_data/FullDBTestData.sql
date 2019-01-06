@@ -235,7 +235,7 @@ SET @shift_site2Shift3Id = LAST_INSERT_ID();
 
 -- Shift for international site
 SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
-SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 2 HOUR);
+SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
 INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
 	VALUES (@shiftStartTime, @shiftEndTime, @site_internationalStudentScholar, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @shift_internationalSiteShift1Id = LAST_INSERT_ID();
@@ -320,19 +320,19 @@ INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
 SET @client_client5Id = LAST_INSERT_ID();
 
 -- International clients
-INSERT INTO Client (firstName, lastName, phoneNumber, emaillAddress)
+INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
 	VALUES ("ChinaInternational", "InternationalTest", "402-555-3212", "chinainternationaltest@test.test");
 SET @client_chinaInternationalId = LAST_INSERT_ID();
 
-INSERT INTO Client (firstName, lastName, phoneNumber, emaillAddress)
+INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
 	VALUES ("IndiaInternational", "InternationalTest", "402-555-6323", "indiainternationaltest@test.test");
 SET @client_indiaInternationalId = LAST_INSERT_ID();
 
-INSERT INTO Client (firstName, lastName, phoneNumber, emaillAddress)
+INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
 	VALUES ("TreatyInternational", "InternationalTest", "402-555-8273", "treatyinternationaltest@test.test");
 SET @client_treatyInternationalId = LAST_INSERT_ID();
 
-INSERT INTO Client (firstName, lastName, phoneNumber, emaillAddress)
+INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
 	VALUES ("NonTreatyInternational", "InternationalTest", "402-555-4329", "nontreatyinternationaltest@test.test");
 SET @client_nonTreatyInternationalId = LAST_INSERT_ID();
 -- end client
