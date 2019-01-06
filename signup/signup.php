@@ -268,7 +268,7 @@
 
 			<h3 class="form-subheading">Appointment Information</h3>
 
-			<div ng-show="sharedProperties.studentScholar == true"><b>International Student Scholar appointments begin March 6th.</b></div>
+			<div ng-show="sharedProperties.studentScholar == true"><b>International Student Scholar appointments begin March 5th.</b></div>
 			<div appointment-picker></div>
 
 			<input type="submit" 
