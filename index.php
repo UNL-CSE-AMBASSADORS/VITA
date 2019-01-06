@@ -121,11 +121,12 @@ function wdnInclude($path)
 							</div>
 							<div class="bp768-wdn-col-one-half">
 								<p class="col col-12 col-sm-8">
-									Resident appointments begin January 21st and run through April 8th. 
-									Appointments for International Student Scholars tax appointments begin March 6th and run 
-									through April 10th. Appointments are available at the following sites: Nebraska East Union, 
-									Anderson Library, and Jackie Gaughan Multicultural Center. To see the days and times for 
-									all the locations, please download site schedule. 
+									Resident appointments begin January 20th and run through April 11th. 
+									Appointments for International Student Scholars tax appointments begin March 5th and run 
+									through April 9th. Appointments are available at the following sites: Nebraska East Union, 
+									Anderson Library, Center for People in Need, Loren Eiseley Library, and Bennett Martin 
+									Library. To see the days and times for all the locations, please download 
+									the site schedule. 
 								</p>
 								<div class="bp768-wdn-col-one-half visual-island">
 									<a class="wdn-button wdn-button-brand" href="/signup">Make an Appointment</a>
