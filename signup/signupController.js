@@ -74,7 +74,7 @@ define('signupController', [], function() {
 			const countryQuestionDatabaseId = "6";
 			const indexOfCountryQuestionInQuestionsArray = questions.findIndex((question) => question.id === countryQuestionDatabaseId);
 			if (questions[indexOfCountryQuestionInQuestionsArray]) {
-				let country = questions[indexOfCountryQuestionInQuestionsArray].value;
+				const country = questions[indexOfCountryQuestionInQuestionsArray].value;
 
 				// These ids were pulled manually from the database
 				let answerDatabaseId = -1;
