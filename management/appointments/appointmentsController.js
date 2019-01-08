@@ -131,6 +131,7 @@ define('appointmentsController', [], function() {
 		$scope.selectAppointment = function(appointment) {
 			$scope.appointment = appointment;
 			$scope.appointmentNotesAreaSharedProperties.appointmentId = appointment.appointmentId;  // Need to share the appointment id so we can load/add notes
+			$scope.appointmentPickerSharedProperties.appointmentType = appointment.appointmentType;
 			document.body.scrollTop = document.documentElement.scrollTop = 0;
 		};
 
