@@ -1,7 +1,7 @@
 <?php
 	date_default_timezone_set('America/Chicago');
 	$today = date('Y-m-d');
-	$dateAppointmentSignUpsStart = date('Y-01-10');
+	$dateAppointmentSignUpsStart = date('Y-04-10');
 	$taxDay = date('Y-04-15');
 	
 	$taxYear = ($today > $taxDay) ? date('Y', strtotime('+1 year')) : date('Y');
@@ -12,7 +12,7 @@
 	<?php if ($today > $taxDay) { ?>
 		<h4>VITA appointments have ended for the <?php echo date('Y') ?> tax season. Check back during the <?php echo $taxYear ?> tax season to sign up for an appointment.</h4>
 	<?php } else if ($today < $dateAppointmentSignUpsStart) { ?>
-		<h4>VITA appointment sign-ups begin January 10th, check back then to schedule your appointment.</h4>
+		<h4>Due to the government shutdown, VITA appointments will not begin until a later date. Please check back soon.</h4>
 	<?php } else { ?>
 		<form class="cmxform" 
 			id="vitaSignupForm" 
