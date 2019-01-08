@@ -122,7 +122,7 @@ function wdnInclude($path)
 							<div class="bp768-wdn-col-one-half">
 								<p class="col col-12 col-sm-8">
 									Resident appointments begin January 20th and run through April 11th. 
-									Appointments for International Student Scholars tax appointments begin March 5th and run 
+									Tax Appointments for International Student Scholars begin March 5th and run 
 									through April 9th. Appointments are available at the following sites: Nebraska East Union, 
 									Anderson Library, Center for People in Need, Loren Eiseley Library, and Bennett Martin 
 									Library. To see the days and times for all the locations, please download 
