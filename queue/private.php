@@ -97,12 +97,6 @@
 			<div class="client-phoneNumber" ng-if="client.phoneNumber != null" ng-cloak>
 				<span><b>Phone Number:</b> {{client.phoneNumber}}</span>
 			</div>
-			<div class="client-dependents" ng-if="client.dependents != null" ng-cloak>
-				<b>Dependents:</b>
-				<ul>
-					<li ng-repeat="dependent in client.dependents">{{dependent.firstName}} {{dependent.lastName}}</li>
-				</ul>
-			</div>
 		</div>
 
 		<div class="client-progress">

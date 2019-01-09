@@ -35,7 +35,8 @@ function getAppointments($year) {
 
 	try {
 		$query = 'SELECT Appointment.appointmentId, language, DATE_FORMAT(scheduledTime, "%b %D %l:%i %p") AS scheduledTime, 
-			Site.title, firstName, lastName, TIME_FORMAT(timeIn, "%l:%i %p") AS timeIn, 
+			Site.title, firstName, lastName, PossibleAnswer.text AS countryText,
+			TIME_FORMAT(timeIn, "%l:%i %p") AS timeIn, 
 			TIME_FORMAT(timeReturnedPapers, "%l:%i %p") AS timeReturnedPapers, 
 			TIME_FORMAT(timeAppointmentStarted, "%l:%i %p") AS timeAppointmentStarted, 
 			TIME_FORMAT(timeAppointmentEnded, "%l:%i %p") AS timeAppointmentEnded, 
@@ -48,6 +49,9 @@ function getAppointments($year) {
 				JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 				JOIN Site ON AppointmentTime.siteId = Site.siteId
 				JOIN Client ON Appointment.clientId = Client.clientId
+				LEFT JOIN Answer ON Answer.appointmentId = Appointment.appointmentId
+					AND Answer.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")
+				LEFT JOIN PossibleAnswer ON PossibleAnswer.possibleAnswerId = Answer.possibleAnswerId
 			WHERE Appointment.archived = FALSE AND
 				YEAR(AppointmentTime.scheduledTime) = ?
 			ORDER BY AppointmentTime.scheduledTime';
@@ -63,6 +67,7 @@ function getAppointments($year) {
 				$appointment['lastName'] = getInitial($appointment['lastName']);
 			}
 
+			$appointment['appointmentType'] = isset($appointment['countryText']) ? $appointment['countryText'] : 'residential';
 			$appointment['language'] = expandLanguageCode($appointment['language']);
 			$appointment['filingStatuses'] = getFilingStatusesForAppointment($appointment['servicedAppointmentId']);
 			$appointment['notes'] = getNotesForAppointment($appointment['appointmentId']);

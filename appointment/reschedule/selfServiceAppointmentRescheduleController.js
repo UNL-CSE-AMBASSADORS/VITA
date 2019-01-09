@@ -71,7 +71,7 @@ define('selfServiceAppointmentRescheduleController', [], function() {
 			const token = $scope.token;
 			const firstName = $scope.clientData.firstName;
 			const lastName = $scope.clientData.lastName;
-			const emailAddress = $scope.clientData.email;
+			const emailAddress = $scope.clientData.email || '';
 			const phoneNumber = $scope.clientData.phone;
 
 			SelfServiceAppointmentRescheduleDataService.validateClientInformation(token, firstName, lastName, emailAddress, phoneNumber).then((response) => {
@@ -88,6 +88,7 @@ define('selfServiceAppointmentRescheduleController', [], function() {
 							},
 							'scheduledTime': response.scheduledTime
 						};
+						$scope.appointmentPickerSharedProperties.appointmentType = response.appointmentType;
 
 						$scope.initializeCancelConfirmationModal();
 					} else {
