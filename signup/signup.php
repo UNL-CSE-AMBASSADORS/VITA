@@ -1,7 +1,7 @@
 <?php
 	date_default_timezone_set('America/Chicago');
 	$today = date('Y-m-d');
-	$dateAppointmentSignUpsStart = date('Y-01-10');
+	$dateAppointmentSignUpsStart = date('Y-04-10');
 	$taxDay = date('Y-04-15');
 	
 	$taxYear = ($today > $taxDay) ? date('Y', strtotime('+1 year')) : date('Y');
@@ -12,7 +12,7 @@
 	<?php if ($today > $taxDay) { ?>
 		<h4>VITA appointments have ended for the <?php echo date('Y') ?> tax season. Check back during the <?php echo $taxYear ?> tax season to sign up for an appointment.</h4>
 	<?php } else if ($today < $dateAppointmentSignUpsStart) { ?>
-		<h4>VITA appointment sign-ups begin January 10th, check back then to schedule your appointment.</h4>
+		<h4>Due to the government shutdown, VITA appointments will not begin until a later date. Please check back soon.</h4>
 	<?php } else { ?>
 		<form class="cmxform" 
 			id="vitaSignupForm" 
@@ -188,7 +188,7 @@
 								ng-model="questions[4]" 
 								uib-btn-radio="'7'" 
 								ng-required="questions[3] == 4" 
-								ng-click="standardAppointment()"
+								ng-click="residentialAppointment()"
 								required><?php echo $taxYear - 6 ?> or earlier
 							</label>
 							<label class="wdn-button btn" 
@@ -196,7 +196,6 @@
 								ng-model="questions[4]" 
 								uib-btn-radio="'8'" 
 								ng-required="questions[3] == 4" 
-								ng-click="studentScholarAppointment()"
 								required><?php echo $taxYear - 5 ?>, 
 									<?php echo $taxYear - 4 ?>, 
 									<?php echo $taxYear - 3 ?>, 
@@ -219,7 +218,7 @@
 								ng-model="questions[4]" 
 								uib-btn-radio="'9'" 
 								ng-required="questions[3] == 5" 
-								ng-click="standardAppointment()"
+								ng-click="residentialAppointment()"
 								required><?php echo $taxYear - 3 ?> or earlier
 							</label>
 							<label class="wdn-button btn" 
@@ -227,7 +226,6 @@
 								ng-model="questions[4]" 
 								uib-btn-radio="'10'" 
 								ng-required="questions[3] == 5" 
-								ng-click="studentScholarAppointment()"
 								required><?php echo $taxYear - 2?> or <?php echo $taxYear - 1 ?>
 							</label>
 						</div>
@@ -246,7 +244,6 @@
 								ng-model="questions[5]" 
 								uib-btn-radio="'1'" 
 								ng-required="questions[3] == 6" 
-								ng-click="studentScholarAppointment()"
 								required>Yes
 							</label>
 							<label class="wdn-button btn" 
@@ -254,7 +251,7 @@
 								ng-model="questions[5]" 
 								uib-btn-radio="'2'" 
 								ng-required="questions[3] == 6" 
-								ng-click="standardAppointment()"
+								ng-click="residentialAppointment()"
 								required>No
 							</label>
 						</div>
@@ -263,12 +260,31 @@
 						<label class="error" ng-show="form.h1bdate.$error.required">This field is required.</label>
 					</div>
 				</li>
+
+				<li class="form-select" id="studentCountry" ng-show="questions[4] == 8 || questions[4] == 10 || questions[5] == 1">
+					<label for="6" class="form-required">What country are you a citizen or resident of?</label>
+					<div>
+						<select id="studentCountrySelect" 
+								name="studentCountrySelect" 
+								ng-model="questions[6]"
+								ng-required="questions[4] == 8 || questions[4] == 10 || questions[5] == 1"
+								ng-change="studentCountryChanged(questions[6])" 
+								ng-options="country.name for country in countries"
+								required>
+								<option value="" style="display:none;">-- Select a Country --</option>
+						</select>
+					</div>
+					<div ng-show="form.$submitted || form.studentCountry.$touched">
+						<label class="error" ng-show="form.studentCountry.$error.required">This field is required.</label>
+					</div>
+				</li>
+
 			</ul>
 
 
 			<h3 class="form-subheading">Appointment Information</h3>
 
-			<div ng-show="sharedProperties.studentScholar == true"><b>International Student Scholar appointments begin March 6th.</b></div>
+			<div ng-show="sharedProperties.appointmentType != 'residential'"><b>International tax appointments begin March 5th.</b></div>
 			<div appointment-picker></div>
 
 			<input type="submit" 

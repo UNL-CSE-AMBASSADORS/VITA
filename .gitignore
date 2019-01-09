@@ -2,5 +2,4 @@
 /server/config.php
 /mysql_scripts/RefreshTestDatabase.ps1
 /node_modules/
-package-lock.json
 /dist/

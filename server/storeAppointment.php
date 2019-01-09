@@ -24,7 +24,7 @@ function storeAppointment($data){
 	try {
 		$DB_CONN->beginTransaction();
 
-		$email = '';
+		$email = null;
 		if (isset($data['email'])) {
 			$email = $data['email'];
 		}
