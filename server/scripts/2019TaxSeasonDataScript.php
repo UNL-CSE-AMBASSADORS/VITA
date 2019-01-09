@@ -20,12 +20,12 @@ function insert2019Data() {
 		die('The data has already been inserted');
 	}
 
-	insertNebraskaEastUnionData();
-	insertAndersonLibraryData();
-	insertCenterForPeopleInNeedData();
-	insertLorenEiseleyLibraryData();
-	insertBennettMartinLibraryData();
-	// insertInternationalStudentScholarSiteData();
+	// insertNebraskaEastUnionData();
+	// insertAndersonLibraryData();
+	// insertCenterForPeopleInNeedData();
+	// insertLorenEiseleyLibraryData();
+	// insertBennettMartinLibraryData();
+	insertInternationalStudentScholarSiteData();
 
 	die('SUCCESS');
 }
@@ -300,12 +300,53 @@ function insertBennettMartinLibraryData() {
 }
 
 function insertInternationalStudentScholarSiteData() {
+	GLOBAL $DB_CONN;
+
+	$siteCoordinatorRoleId = 1;
+	$greeterRoleId = 2;
+	$preparerRoleId = 3;
+	$reviewerRoleId = 4;
+	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The ISS data has already been inserted');
 	}
 
-	// TODO: NEED TO FINISH UPDATED STATION LIMITING CODE BEFORE I CAN ENTER THIS
+	$siteId = 4; // Pulled from the PROD DB
+
+	try {
+		$DB_CONN->beginTransaction();
+
+		// Tuesdays
+		$dates = array('2019-03-05', '2019-03-12', '2019-03-26', '2019-04-02', '2019-04-09');
+		foreach ($dates as $date) {
+			$shift1Id = insertShift("$date 13:00:00", "$date 16:00:00", $siteId);
+			$shift2Id = insertShift("$date 15:30:00", "$date 18:00:00", $siteId);
+
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 100, 60, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 100, 60, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 100, 60, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 100, 60, $siteId);
+			$fifthAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 100, 60, $siteId);
+		}
+
+		// Spring break Tuesday (different than the others)
+		$date = '2019-03-19';
+		$shiftId = insertShift("$date 13:00:00", "$date 16:00:00", $siteId);
+		$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 100, 60, $siteId);
+		$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 100, 60, $siteId);
+		$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 100, 60, $siteId);
+
+		// Default Site Role Limits
+		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
+		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
+
+		$DB_CONN->commit();
+	} catch (Exception $e) {
+		$DB_CONN->rollback();
+		throw new Exception('Failed inserting ISS data', MY_EXCEPTION);
+		die();
+	}
 
 }
 
