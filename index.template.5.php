@@ -120,6 +120,7 @@ return readfile($documentRoot . $path);
 <?php wdnInclude("/wdn/templates_5.0/includes/global/noscript.html"); ?>
 <?php wdnInclude("/wdn/templates_5.0/includes/global/js-body.html"); ?>
 <!-- TemplateBeginEditable name="jsbody" -->
+<?php require_once "$root/server/global_includes.php"; ?>
 <!-- put your custom javascript here -->
 <!-- TemplateEndEditable -->
 </body>
