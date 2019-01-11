@@ -113,7 +113,7 @@ return readfile($documentRoot . $path);
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/footer-global-1.html"); ?>
 	<!-- TemplateBeginEditable name="contactinfo" -->
-		<?php wdnInclude("/wdn/templates_5.0/includes/local/footer-local.html"); ?>
+		<?php include "$root/sharedcode/localFooter.html"; ?>
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/footer-global-2.html"); ?>
 </footer>
