@@ -50,7 +50,7 @@ WDN.initializePlugin('modal', [function() {
 						let ability = response.abilities[i];
 						let modifiers = ability.has ? `data-userAbilityId=${ability.userAbilityId} checked` : '';
 						let checkbox = $(`<input id=${i} type="checkbox" value=${ability.abilityId} ${modifiers} />`);
-						let editLabel = $(`<label for=${i}>${ability.name}</label>`);
+						let editLabel = $(`<label for=${i} class="dcf-pl-1">${ability.name}</label>`);
 						let editContainer = $(`<div style="display:none;"></div>`).addClass("editView");
 						editContainer.append(checkbox, editLabel);
 						let status = $(`<span aria-hidden="true"></span>`).addClass(ability.has ? "wdn-icon-ok green-icon" : "wdn-icon-cancel red-icon");
