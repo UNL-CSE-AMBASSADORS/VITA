@@ -1,17 +1,16 @@
 <!-- Appointment Signup with no success -->
-<div class="wdn-inner-wrapper wdn-inner-padding-no-top" ng-if="successMessage == null">
+<div class="dcf-pb-7" ng-if="successMessage == null">
 	<h4>VITA appointments have ended for the 2018 tax season. Check back during the 2019 tax season to sign up for an appointment.</h4>
-	<!--
 	<form class="cmxform" 
 		id="vitaSignupForm" 
 		name="form" 
 		ng-submit="form.$valid && storeAppointments()" 
 		autocomplete="off" 
 		novalidate>
-		<p mt-2 mb-3>Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
+		<p dcf-mt-2 dcf-mb-3>Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
 		<p><b>NOTE: Please create a separate appointment for every tax return that needs to be done.</b></p>
 
-		<ul>
+		<ul class="dcf-pl-0">
 			<li class="form-textfield">
 				<label class="form-label form-required" for="firstName">First Name</label>
 				<input type="text" name="firstName" id="firstName" ng-model="data.firstName" required>
@@ -45,33 +44,32 @@
 
 		<h3 class="form-subheading">Background Information</h3>
 
-		<ul>
-		--> 
+		<ul class="dcf-pl-0">
 			<!-- TODO: NOTE THAT THIS WAS COMMENTED OUT, WE CURRENTLY DONT LET THEM SAY THE LANGUAGE THEY REQUIRED, WE LET IT DEFAULT TO ENGLISH
 			<li class="form-radio" id="language">
 				<label for="language" class="form-required">Which language will you require?</label>
 				<div>
-					<div class="btn-group" data-toggle="buttons">
+					<div class="dcf-btn-group" data-toggle="buttons">
 						NOTE: the values here are the ISO 639-2/T specfication for language codes (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
-						<label class="wdn-button btn" 
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="language" 
 							ng-model="data.language" 
 							uib-btn-radio="'eng'" 
 							required>English
 						</label>
-						<label class="wdn-button btn" 
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="language" 
 							ng-model="data.language" 
 							uib-btn-radio="'spa'" 
 							required>Spanish
 						</label>
-						<label class="wdn-button btn"
+						<label class="dcf-btn dcf-btn-secondary"
 							name="language" 
 							ng-model="data.language" 
 							uib-btn-radio="'ara'" 
 							required>Arabic
 						</label>
-						<label class="wdn-button btn" 
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="language" 
 							ng-model="data.language" 
 							uib-btn-radio="'vie'" 
@@ -85,18 +83,17 @@
 			</li>
 			-->
 
-			<!-- 
 			<li class="form-radio" id="studentUNL">
 				<label for="1" class="form-required">Are you a University of Nebraska-Lincoln or Nebraska Wesleyan student?</label>
 				<div>
-					<div class="btn-group" data-toggle="buttons">
-						<label class="wdn-button btn" 
+					<div class="dcf-btn-group" data-toggle="buttons">
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="unlStudent" 
 							ng-model="questions[1]" 
 							uib-btn-radio="'1'" 
 							required>Yes
 						</label>
-						<label class="wdn-button btn" 
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="unlStudent" 
 							ng-model="questions[1]" 
 							uib-btn-radio="'2'" 
@@ -112,15 +109,15 @@
 			<li class="form-radio" id="studentInt">
 				<label for="2" class="form-required">Are you on a visa?</label>
 				<div>
-					<div class="btn-group" data-toggle="buttons">
-						<label class="wdn-button btn" 
+					<div class="dcf-btn-group" data-toggle="buttons">
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="intStudent" 
 							ng-model="questions[2]" 
 							uib-btn-radio="'1'" 
 							ng-change="intStudentChanged()" 
 							required>Yes
 						</label>
-						<label class="wdn-button btn" 
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="intStudent" 
 							ng-model="questions[2]" 
 							uib-btn-radio="'2'" 
@@ -137,8 +134,8 @@
 			<li class="form-radio" id="studentIntVisa" ng-show="questions[2] == 1">
 				<label for="3" class="form-required">What sort of visa are you on?</label>
 				<div>
-					<div class="btn-group" data-toggle="buttons">
-						<label class="wdn-button btn" 
+					<div class="dcf-btn-group" data-toggle="buttons">
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="visa" 
 							ng-model="questions[3]" 
 							uib-btn-radio="'4'" 
@@ -146,7 +143,7 @@
 							ng-change="visaChanged()" 
 							required>F-1
 						</label>
-						<label class="wdn-button btn" 
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="visa" 
 							ng-model="questions[3]" 
 							uib-btn-radio="'5'" 
@@ -154,7 +151,7 @@
 							ng-change="visaChanged()" 
 							required>J-1
 						</label>
-						<label class="wdn-button btn" 
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="visa" 
 							ng-model="questions[3]" 
 							uib-btn-radio="'6'" 
@@ -172,8 +169,8 @@
 			<li class="form-radio" id="studentf1" ng-show="questions[2] == 1 && questions[3] == 4">
 				<label for="4" class="form-required">What year did you arrive in the United States?</label>
 				<div>
-					<div class="btn-group" data-toggle="buttons">
-						<label class="wdn-button btn" 
+					<div class="dcf-btn-group" data-toggle="buttons">
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="f1date" 
 							ng-model="questions[4]" 
 							uib-btn-radio="'7'" 
@@ -181,7 +178,7 @@
 							ng-click="standardAppointment()"
 							required>2012 or earlier
 						</label>
-						<label class="wdn-button btn" 
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="f1date" 
 							ng-model="questions[4]" 
 							uib-btn-radio="'8'" 
@@ -199,8 +196,8 @@
 			<li class="form-radio" id="studentj1" ng-show="questions[2] == 1 && questions[3] == 5">
 				<label for="4" class="form-required">What year did you arrive in the United States?</label>
 				<div>
-					<div class="btn-group" data-toggle="buttons">
-						<label class="wdn-button btn" 
+					<div class="dcf-btn-group" data-toggle="buttons">
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="j1date" 
 							ng-model="questions[4]" 
 							uib-btn-radio="'9'" 
@@ -208,7 +205,7 @@
 							ng-click="standardAppointment()"
 							required>2015 or earlier
 						</label>
-						<label class="wdn-button btn" 
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="j1date" 
 							ng-model="questions[4]" 
 							uib-btn-radio="'10'" 
@@ -226,8 +223,8 @@
 			<li class="form-radio" id="studenth1b" ng-show="questions[2] == 1 && questions[3] == 6">
 				<label for="5" class="form-required">Have you been on this visa for less than 183 days and in the United States for less than 5 years?</label>
 				<div>
-					<div class="btn-group form-required" data-toggle="buttons">
-						<label class="wdn-button btn" 
+					<div class="dcf-btn-group form-required" data-toggle="buttons">
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="h1bdate" 
 							ng-model="questions[5]" 
 							uib-btn-radio="'1'" 
@@ -235,7 +232,7 @@
 							ng-click="studentScholarAppointment()"
 							required>Yes
 						</label>
-						<label class="wdn-button btn" 
+						<label class="dcf-btn dcf-btn-secondary" 
 							name="h1bdate" 
 							ng-model="questions[5]" 
 							uib-btn-radio="'2'" 
@@ -261,17 +258,16 @@
 			value="Submit" 
 			class="submit wdn-button wdn-button-triad" >
 	</form>
-	--> 
 </div>
 
 <!-- Successful Signup Screen -->
-<div class="wdn-inner-wrapper wdn-inner-padding-no-top" ng-if="successMessage != null">
+<div class="dcf-pb-7" ng-if="successMessage != null">
 	<ng-bind-html ng-bind-html="successMessage"></ng-bind-html>
 
 	<div>
-		<button type="button" class="mb-3 wdn-button btn wdn-button-triad" onclick="window.print();">Print</button>
+		<button type="button" class="dcf-btn wdn-button-triad" onclick="window.print();">Print</button>
 		<button type="button" 
-			class="mb-3 wdn-button btn wdn-button-triad email-confirmation-button" 
+			class="dcf-btn wdn-button-triad email-confirmation-button" 
 			ng-if="data.email != null && data.email.length > 0"
 			ng-disabled="emailButton.disabled"
 			ng-click="emailConfirmation()">{{emailButton.text}}</button>
