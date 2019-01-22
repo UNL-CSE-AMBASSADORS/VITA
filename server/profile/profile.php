@@ -9,7 +9,7 @@ if (!$USER->isLoggedIn()) {
 }
 
 require_once "$root/server/config.php";
-require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
+require_once "$root/server/utilities/emailUtilities.class.php";
 
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
