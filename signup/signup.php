@@ -12,7 +12,7 @@
 	<?php if ($today > $taxDay) { ?>
 		<h4>VITA appointments have ended for the <?php echo date('Y') ?> tax season. Check back during the <?php echo $taxYear ?> tax season to sign up for an appointment.</h4>
 	<?php } else if ($today < $dateAppointmentSignUpsStart) { ?>
-		<h4>Due to the government shutdown, VITA appointments will not begin until a later date. Please check back soon.</h4>
+		<h4>Tax appointments cannot yet be scheduled. Please check back soon.</h4>
 	<?php } else { ?>
 		<form class="cmxform" 
 			id="vitaSignupForm" 
@@ -284,7 +284,6 @@
 
 			<h3 class="form-subheading">Appointment Information</h3>
 
-			<div ng-show="sharedProperties.appointmentType != 'residential'"><b>International tax appointments begin March 5th.</b></div>
 			<div appointment-picker></div>
 
 			<input type="submit" 
