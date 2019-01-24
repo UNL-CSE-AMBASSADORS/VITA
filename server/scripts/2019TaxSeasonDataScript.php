@@ -25,9 +25,60 @@ function insert2019Data() {
 	// insertCenterForPeopleInNeedData();
 	// insertLorenEiseleyLibraryData();
 	// insertBennettMartinLibraryData();
-	insertInternationalStudentScholarSiteData();
+	// insertInternationalStudentScholarSiteData();
+	insertFStreetCommunityCenterData();
 
 	die('SUCCESS');
+}
+
+function insertFStreetCommunityCenterData() {
+	GLOBAL $DB_CONN;
+
+	$siteCoordinatorRoleId = 1;
+	$greeterRoleId = 2;
+	$preparerRoleId = 3;
+	$reviewerRoleId = 4;
+
+	$dataAlreadyInserted = true;
+	if ($dataAlreadyInserted) {
+		die('The F Street Community Center data has already been inserted');
+	}
+	
+	try {
+		$DB_CONN->beginTransaction();
+
+		$siteId = insertSite('F Street Community Center', '1225 F Street, Lincoln, NE 68508', '402-472-9638', FALSE, FALSE);
+
+		// Fridays
+		$dates = array('2019-02-08', '2019-02-15', '2019-02-22', '2019-03-01', '2019-03-08', '2019-03-15', '2019-03-22', '2019-03-29', '2019-04-05');
+		foreach ($dates as $date) {
+			$shiftId = insertShift("$date 14:00:00", "$date 17:00:00", $siteId);
+
+			$firstAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 200, 60, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 200, 60, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 100, 60, $siteId);
+		}
+
+		// Mondays
+		$dates = array('2019-03-04', '2019-03-11', '2019-03-18', '2019-03-25', '2019-04-01', '2019-04-08');
+		foreach ($dates as $date) {
+			$shiftId = insertShift("$date 17:00:00", "$date 19:00:00", $siteId);
+
+			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 200, 60, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 100, 60, $siteId);
+		}
+
+		// Default Site Role Limits
+		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
+		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
+		insertSiteRoleLimit(4, $preparerRoleId, $siteId);
+
+		$DB_CONN->commit();
+	} catch (Exception $e) {
+		$DB_CONN->rollback();
+		throw new Exception('Failed inserting F Street Community Center data', MY_EXCEPTION);
+		die();
+	}
 }
 
 // Need to create the new sites
