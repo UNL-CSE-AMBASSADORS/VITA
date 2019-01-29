@@ -108,20 +108,20 @@ function wdnInclude($path)
 								<h4>Add a new user</h4>
 								<form id="add-user-form">
 									<fieldset>
-										<section class="form-group">
-											<label for="firstName">First Name:</label>
-											<input type="text" class="form-control" id="firstName">
+										<section class="form-group required-input">
+											<label for="firstName">First Name</label>
+											<input type="text" class="form-control" id="firstName" required>
 										</section>
-										<section class="form-group">
-											<label for="lastName">Last Name:</label>
-											<input type="text" class="form-control" id="lastName">
+										<section class="form-group required-input">
+											<label for="lastName">Last Name</label>
+											<input type="text" class="form-control" id="lastName" required>
 										</section>
-										<section class="form-group">
-											<label for="email">Email Address:</label>
+										<section class="form-group required-input">
+											<label for="email">Email Address</label>
 											<input type="text" class="form-control" id="email" placeholder="student@huskers.unl.edu" required>
 										</section>
 										<section class="form-group">
-											<label for="phone">Phone Number:</label>
+											<label for="phone">Phone Number</label>
 											<input type="text" class="form-control" id="phone">
 										</section>
 									</fieldset>
@@ -144,15 +144,15 @@ function wdnInclude($path)
 								<h4>Edit User Information</h4>
 								<form id="edit-user-form">
 									<fieldset>
-										<section class="form-group">
+										<section class="form-group required-input">
 											<label for="editFirstName">First Name:</label>
 											<input type="text" class="form-control" id="editFirstName">
 										</section>
-										<section class="form-group">
+										<section class="form-group required-input">
 											<label for="editLastName">Last Name:</label>
 											<input type="text" class="form-control" id="editLastName">
 										</section>
-										<section class="form-group">
+										<section class="form-group required-input">
 											<label for="editEmail">Email Address:</label>
 											<input type="text" class="form-control" id="editEmail" placeholder="student@huskers.unl.edu" required>
 											<p>Please note, changing the email address will affect the email a user logs in with. Do not do this unless you are absolutely certain of the change.</p>

@@ -17,6 +17,12 @@ Override the colorbox default settings
 	padding: 0 0 2rem 0 !important;
 }
 
+.required-input label::after {
+	color: red;
+	content: ' *';
+	display: inline;
+}
+
 /*
 Without bootstrap or the bootstrap-select css, the following css is needed to make the bootstrap-select elements look and function properly
 */

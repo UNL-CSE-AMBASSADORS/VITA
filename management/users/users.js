@@ -40,10 +40,13 @@ WDN.initializePlugin('modal', [function() {
 
 					$(this).find('input').each(function(){
 						const noValue = !$(this).val();
-						if (noValue) {
+						const isRequired = $(this).prop('required');
+						const isInvalid = isRequired && noValue;
+						
+						if (isInvalid) {
 							isValid = false;
 						}
-						$(this).toggleClass('is-invalid', noValue);
+						$(this).toggleClass('is-invalid', isInvalid);
 					});
 	
 					const isValidEmail = $('#email').val().match(/.+@.+\..+/);
@@ -62,7 +65,7 @@ WDN.initializePlugin('modal', [function() {
 								firstName: $('#firstName').val(),
 								lastName: $('#lastName').val(),
 								email: $('#email').val(),
-								phoneNumber: $('#phone').val()
+								phoneNumber: $('#phone').val() || ''
 							},
 							success: function(response) {
 								$('#add-user-form button[type=submit]').prop('disabled', false);
