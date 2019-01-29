@@ -146,11 +146,11 @@ function wdnInclude($path)
 									<fieldset>
 										<section class="form-group required-input">
 											<label for="editFirstName">First Name:</label>
-											<input type="text" class="form-control" id="editFirstName">
+											<input type="text" class="form-control" id="editFirstName" required>
 										</section>
 										<section class="form-group required-input">
 											<label for="editLastName">Last Name:</label>
-											<input type="text" class="form-control" id="editLastName">
+											<input type="text" class="form-control" id="editLastName" required>
 										</section>
 										<section class="form-group required-input">
 											<label for="editEmail">Email Address:</label>

@@ -223,11 +223,12 @@ function addUser($data){
 		$stmt = $DB_CONN->prepare('INSERT INTO User (firstName, lastName, email, phoneNumber)
 			VALUES (?, ?, ?, ?)');
 
+		$phoneNumber = $data['phoneNumber'] === '' ? NULL : $data['phoneNumber'];
 		$res = $stmt->execute(array(
 			$data['firstName'],
 			$data['lastName'],
 			trim($data['email']),
-			$data['phoneNumber']
+			$phoneNumber
 		));
 
 		if ($res == 0) {
@@ -290,11 +291,12 @@ function updateUserInformation($userId, $newFirstName, $newLastName, $newEmail, 
 			SET firstName = ?, lastName = ?, email = ?, phoneNumber = ?
 			WHERE userId = ?';
 		$stmt = $DB_CONN->prepare($query);
+		
 		$stmt->execute(array(
 			$newFirstName,
 			$newLastName,
 			trim($newEmail),
-			$newPhoneNumber,
+			$newPhoneNumber === '' ? NULL : $newPhoneNumber,
 			$userId
 		));
 	} catch (Exception $e) {

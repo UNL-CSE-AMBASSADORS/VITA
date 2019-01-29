@@ -42,7 +42,7 @@ WDN.initializePlugin('modal', [function() {
 						const noValue = !$(this).val();
 						const isRequired = $(this).prop('required');
 						const isInvalid = isRequired && noValue;
-						
+
 						if (isInvalid) {
 							isValid = false;
 						}
@@ -187,10 +187,13 @@ WDN.initializePlugin('modal', [function() {
 						let isValid = true;
 						$(this).find('input').each(function() {
 							const noValue = !$(this).val();
-							if (noValue) {
+							const isRequired = $(this).prop('required');
+							const isInvalid = isRequired && noValue;
+							
+							if (isInvalid) {
 								isValid = false;
 							}
-							$(this).toggleClass('is-invalid', noValue);
+							$(this).toggleClass('is-invalid', isInvalid);
 						});
 		
 						const isValidEmail = $('#editEmail').val().match(/.+@.+\..+/);
@@ -239,7 +242,7 @@ WDN.initializePlugin('modal', [function() {
 				});
 			};
 
-			function updateUserInformation(userId, newFirstName, newLastName, newEmail, newPhoneNumber, callbackFunction) {
+			function updateUserInformation(userId, newFirstName, newLastName, newEmail, newPhoneNumber) {
 				return $.ajax({
 					dataType: 'json',
 					method: 'POST',
