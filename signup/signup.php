@@ -91,12 +91,14 @@
 							name="unlStudent" 
 							ng-model="questions[1]" 
 							uib-btn-radio="'1'" 
+							type="radio" 
 							required>Yes
 						</label>
 						<label class="dcf-btn dcf-btn-secondary" 
 							name="unlStudent" 
 							ng-model="questions[1]" 
 							uib-btn-radio="'2'" 
+							type="radio" 
 							required>No
 						</label>
 					</div>
