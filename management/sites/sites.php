@@ -1,8 +1,8 @@
-<div class="wdn-inner-wrapper wdn-inner-padding-no-top">
-	<div class="wdn-grid-set">
+<div class="dcf-wrapper dcf-pb-8">
+	<div class="dcf-grid">
 		<!-- Site select list -->
-		<div class="wdn-col-one-fourth">
-			<ul class="unstyled-list wdn-list-reset">
+		<div class="dcf-col-25%-start dcf-pr-10">
+			<ul class="unstyled-list dcf-list-bare">
 				<li class="site-list-element"
 					ng-repeat="site in sites"
 					ng-click="selectSite(site)">
@@ -21,16 +21,16 @@
 
 
 		<!-- Site Information Area -->
-		<div class="wdn-col-three-fourths">
+		<div class="dcf-col-75%-end">
 			<!-- Shown if a site is selected and loaded from backend -->
 			<div ng-if="selectedSite != null && siteInformation != null">
 				<h3 class="clear-top">{{siteInformation.title}}</h3>
-				<div class="wdn-grid-set-halves">
-					<div class="wdn-col">
+				<div class="dcf-columns-2">
+					<div class="dcf-col">
 						<div><b>Address:</b> {{siteInformation.address}}</div>
 						<div><b>Phone Number:</b> {{siteInformation.phoneNumber}}</div>
 					</div>
-					<div class="wdn-col">
+					<div class="dcf-col">
 						<div><b>Does Multilingual:</b> {{siteInformation.doesMultilingual ? 'Yes' : 'No'}}</div>
 						<div><b>Does International:</b> {{siteInformation.doesInternational ? 'Yes' : 'No'}}</div>
 					</div>
@@ -47,7 +47,7 @@
 
 					<!-- Displayed when there are volunteer shifts -->
 					<div ng-if="siteInformation.shifts != undefined && siteInformation.shifts.length > 0">
-						<table class="wdn_responsive_table">
+						<table class="dcf-table">
 							<thead>
 								<tr>
 									<th id="shiftDateHeader">Date</th>
@@ -66,7 +66,7 @@
 					</div>
 
 					<!-- Add volunteer shift section -->
-					<div ng-if="addShiftButtonClicked === true">
+					<div ng-if="addShiftButtonClicked === true" class="dcf-mt-5">
 						<h5>Add a Shift</h5>
 						<form class="cmxform"
 							id="addShiftForm"
@@ -75,8 +75,8 @@
 							autocomplete="off" 
 							novalidate>
 
-							<div class="form-textfield">
-								<label class="form-label form-required">Date</label>
+							<div>
+								<label class="dcf-label form-required">Date</label>
 								<input type="text" 
 									id="addShiftDateInput" 
 									name="dateInput" 
@@ -88,10 +88,11 @@
 								</div>
 							</div>
 
-							<div class="form-select">
-								<label class="form-label form-required" for="addShiftStartTimeSelect">Start Time</label>
+							<div>
+								<label class="dcf-label form-required" for="addShiftStartTimeSelect">Start Time</label>
 								<select id="addShiftStartTimeSelect" 
 									name="startTimeSelect" 
+									class="dcf-input-select dcf-mb-0" 
 									ng-model="addShiftInformation.selectedStartTime" 
 									ng-options="time for time in addShiftStartTimeOptions"
 									ng-change="addShiftStartTimeChanged(addShiftInformation.selectedStartTime)" 
@@ -103,10 +104,11 @@
 								</div>
 							</div>
 
-							<div class="form-select">
-								<label class="form-label form-required" for="addShiftEndTimeSelect">End Time</label>
+							<div>
+								<label class="dcf-label form-required" for="addShiftEndTimeSelect">End Time</label>
 								<select id="addShiftEndTimeSelect" 
 									name="endTimeSelect" 
+									class="dcf-input-select dcf-mb-0" 
 									ng-model="addShiftInformation.selectedEndTime" 
 									ng-options="time for time in addShiftEndTimeOptions" 
 									required>
@@ -117,20 +119,20 @@
 								</div>
 							</div>
 
-							<div class="margin-top-10">
+							<div class="dcf-mt-3">
 								<button type="button"
-									class="wdn-button wdn-button-brand"
+									class="dcf-btn dcf-btn-secondary"
 									ng-click="addShiftCancelButtonHandler()">Cancel</button>
 								<input type="submit" 
 									value="Save" 
-									class="submit wdn-button wdn-button-triad"
+									class="submit dcf-btn dcf-btn-primary"
 									ng-disabled="!form.$valid || savingShift === true">
 							</div>
 						</form>
 					</div>
 
 					<!-- Button for adding a shift -->
-					<button class="wdn-button margin-top-10" 
+					<button class="dcf-btn dcf-mt-3" 
 						ng-click="addShiftButtonHandler()" 
 						ng-if="addShiftButtonClicked === false">Add Shift</button>
 				</div>
@@ -154,12 +156,12 @@
 
 					<!-- Displayed when there are appointment times -->
 					<div ng-if="siteInformation.appointmentTimes != undefined && siteInformation.appointmentTimes.length > 0">
-						<table class="wdn_responsive_table">
+						<table class="dcf-table">
 							<thead>
 								<tr>
 									<th id="appointmentTimeScheduledTimeHeader">Scheduled Time</th>
 									<th id="appointmentTimeMinimumNumberOfAppointmentsHeader">
-										Min Appts										
+										Min Appts
 										<a class="tooltip pointer" title="This is the minimum number of appointments for this time slot, meaning at least this many appointments will be allowed to be scheduled even if there are not enough preparers signed up during this time. Default is 0.">
 											<span class="wdn-icon-info" aria-hidden="true"></span>
 										</a>
@@ -198,7 +200,7 @@
 
 
 					<!-- Add appointment time section -->
-					<div ng-if="addAppointmentTimeButtonClicked === true">
+					<div ng-if="addAppointmentTimeButtonClicked === true" class="dcf-mt-5">
 						<h5>Add an Appointment Time</h5>
 						<form class="cmxform"
 							id="addAppointmentTimeForm"
@@ -207,10 +209,11 @@
 							autocomplete="off" 
 							novalidate>
 
-							<div class="form-textfield">
-								<label class="form-label form-required">Date</label>
+							<div>
+								<label class="dcf-label form-required">Date</label>
 								<input type="text" 
 									id="addAppointmentTimeDateInput" 
+									class="dcf-input-text" 
 									name="dateInput" 
 									placeholder=" -- Select a Date -- " 
 									autocomplete="off"
@@ -220,10 +223,11 @@
 								</div>
 							</div>
 
-							<div class="form-number">
-								<label class="form-label form-required" for="addAppointmentTimeApproximateLengthInMinutes">Approximate Length in Minutes (default 60)</label>
+							<div>
+								<label class="dcf-label form-required" for="addAppointmentTimeApproximateLengthInMinutes">Approximate Length in Minutes (default 60)</label>
 								<input id="addAppointmentTimeApproximateLengthInMinutes"
 									type="number"
+									class="dcf-input-text" 
 									name="approximateLengthInMinutes"
 									ng-model="addAppointmentTimeInformation.approximateLengthInMinutes"
 									ng-change="addAppointmentTimeApproximateLengthInMinutesChanged(addAppointmentTimeInformation.approximateLengthInMinutes)" 
@@ -234,10 +238,11 @@
 								</div>
 							</div>
 
-							<div class="form-select">
-								<label class="form-label form-required" for="addAppointmentTimeScheduledTimeSelect">Scheduled Time</label>
+							<div>
+								<label class="dcf-label form-required" for="addAppointmentTimeScheduledTimeSelect">Scheduled Time</label>
 								<select id="addAppointmentTimeScheduledTimeSelect" 
 									name="scheduledTimeSelect" 
+									class="dcf-input-select dcf-mb-0" 
 									ng-model="addAppointmentTimeInformation.selectedScheduledTime" 
 									ng-options="time for time in addAppointmentTimeScheduledTimeOptions"
 									ng-disabled="addAppointmentTimeInformation.selectedDate == null || addAppointmentTimeInformation.approximateLengthInMinutes == null"
@@ -249,10 +254,11 @@
 								</div>
 							</div>
 
-							<div class="form-number">
-								<label class="form-label form-required" for="addAppointmentTimeMinimumNumberOfAppointments">Minimum Number of Appointments (default 0)</label>
+							<div>
+								<label class="dcf-label form-required" for="addAppointmentTimeMinimumNumberOfAppointments">Minimum Number of Appointments (default 0)</label>
 								<input id="addAppointmentTimeMinimumNumberOfAppointments"
 									type="number"
+									class="dcf-input-text" 
 									name="minimumNumberOfAppointments"
 									ng-model="addAppointmentTimeInformation.minimumNumberOfAppointments"
 									min="0"
@@ -262,10 +268,11 @@
 								</div>
 							</div>
 
-							<div class="form-number">
-								<label class="form-label" for="addAppointmentTimeMaximumNumberOfAppointments">Maximum Number of Appointments (default N/A)</label>
+							<div>
+								<label class="dcf-label" for="addAppointmentTimeMaximumNumberOfAppointments">Maximum Number of Appointments (default N/A)</label>
 								<input id="addAppointmentTimeMaximumNumberOfAppointments"
 									type="number"
+									class="dcf-input-text" 
 									name="maximumNumberOfAppointments"
 									ng-model="addAppointmentTimeInformation.maximumNumberOfAppointments"
 									min="0"
@@ -275,10 +282,11 @@
 								</div>
 							</div>
 
-							<div class="form-number">
-								<label class="form-label form-required" for="addAppointmentTimePercentageAppointments">Percentage Appointments (default 100)</label>
+							<div>
+								<label class="dcf-label form-required" for="addAppointmentTimePercentageAppointments">Percentage Appointments (default 100)</label>
 								<input id="addAppointmentTimePercentageAppointments"
 									type="number"
+									class="dcf-input-text" 
 									name="percentageAppointments"
 									ng-model="addAppointmentTimeInformation.percentageAppointments"
 									min="0"
@@ -290,20 +298,20 @@
 							</div>
 
 
-							<div class="margin-top-10">
+							<div class="dcf-mt-3">
 								<button type="button"
-									class="wdn-button wdn-button-brand"
+									class="dcf-btn dcf-btn-secondary"
 									ng-click="addAppointmentTimeCancelButtonHandler()">Cancel</button>
 								<input type="submit" 
 									value="Save" 
-									class="submit wdn-button wdn-button-triad"
+									class="submit dcf-btn dcf-btn-primary"
 									ng-disabled="!form.$valid || savingAppointmentTime === true">
 							</div>
 						</form>
 					</div>
 
 					<!-- Button for adding an appointment time -->
-					<button class="wdn-button margin-top-10" 
+					<button class="dcf-btn dcf-mt-3" 
 						ng-click="addAppointmentTimeButtonHandler()" 
 						ng-if="addAppointmentTimeButtonClicked === false">Add Appointment Time</button>
 				</div>
