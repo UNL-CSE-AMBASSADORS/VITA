@@ -101,12 +101,12 @@
 	<div ng-if="appointments.length > 0">
 		<!-- Search box -->
 		<div class="appointment-search dcf-wrapper dcf-txt-center dcf-pb-8">
-			<label for="queue-search">Search for an appointment by client name or appointment ID</label>
-			<input id="queue-search" type="text" ng-model="appointmentSearch" />
+			<label class="dcf-label" for="queue-search">Search for an appointment by client name or appointment ID</label>
+			<input class="dcf-input-text dcf-d-inline" id="queue-search" type="text" ng-model="appointmentSearch" />
 		</div>
 
 		<!-- Show when there's no search results -->
-		<p class="dcf-wrapper dcf-txt-center" 
+		<p class="dcf-wrapper dcf-txt-center unl-font-sans" 
 			ng-show="(appointments | searchFor: appointmentSearch).length == 0">
 			No results for "{{appointmentSearch}}"
 		</p>
@@ -126,7 +126,7 @@
 	</div>
 
 	<!-- Show when there's no appointments -->
-	<div class="dcf-wrapper dcf-txt-center" ng-if="appointments.length == 0">
+	<div class="dcf-wrapper dcf-txt-center unl-font-sans" ng-if="appointments.length == 0">
 		There are no appointments.
 	</div>
 
