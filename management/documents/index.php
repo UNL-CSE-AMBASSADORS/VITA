@@ -121,7 +121,7 @@ return readfile($documentRoot . $path);
 					</div>
 					<div class="dcf-d-flex dcf-flex-col">
 						<label for="siteSelect">Site</label>
-						<select class="dcf-input-select" id="siteSelect">
+						<select class="dcf-input-select dcf-mb-0" id="siteSelect">
 							<!-- Sites injected through JS -->
 						</select>
 					</div>
