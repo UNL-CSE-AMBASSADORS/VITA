@@ -1,8 +1,4 @@
 <style>
-#appointmentPicker {
-	padding-bottom: 30px
-}
-
 div#ui-datepicker-div {
 	z-index: 50 !important;
 }
@@ -34,6 +30,7 @@ td.available .ui-state-default {
 		<label class="form-label form-required">Date</label>
 		<input type="text" 
 			id="dateInput" 
+			class="dcf-input-text"
 			name="dateInput" 
 			placeholder=" -- Select a Date -- " 
 			ng-model="appointmentPickerSharedProperties.selectedDate"
@@ -48,6 +45,7 @@ td.available .ui-state-default {
 		ng-show="appointmentPickerSharedProperties.selectedDate != null">
 		<label class="form-label form-required" for="sitePickerSelect">Site</label>
 		<select id="sitePickerSelect" 
+			class="dcf-input-select dcf-mb-0"
 			name="sitePickerSelect" 
 			ng-model="appointmentPickerSharedProperties.selectedSite" 
 			ng-change="siteChanged(appointmentPickerSharedProperties.selectedSite)" 
@@ -64,6 +62,7 @@ td.available .ui-state-default {
 		ng-show="appointmentPickerSharedProperties.selectedDate != null && appointmentPickerSharedProperties.selectedSite != null">
 		<label class="form-label form-required" for="timePickerSelect">Time</label>
 		<select id="timePickerSelect" 
+			class="dcf-input-select dcf-mb-0"
 			name="timePickerSelect" 
 			ng-options="time as (info.appointmentsAvailable <= 0) ? (time + ' - FULL' + (appointmentPickerSharedProperties.isLoggedIn && info.appointmentsAvailable < 0 ? ' - overscheduled by ' + -info.appointmentsAvailable + ' appointments' : '')) : time disable when (info.appointmentsAvailable <= 0 && appointmentPickerSharedProperties.isLoggedIn != true) for (time, info) in times track by time" 
 			ng-model="appointmentPickerSharedProperties.selectedTime"

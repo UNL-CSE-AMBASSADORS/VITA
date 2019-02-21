@@ -60,7 +60,7 @@
 				<span class="slider round"></span>
 			</span>
 		</label>
-		<div appointment-picker></div>
+		<div appointment-picker class="dcf-mb-5"></div>
 		<div class="dcf-mb-5">
 			<input type="submit" 
 				value="Reschedule" 
