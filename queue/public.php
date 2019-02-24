@@ -6,12 +6,12 @@
 ?>
 
 <!-- Default Section -->
-<div class="wdn-inner-wrapper wdn-center" ng-if="appointments == null">
+<div class="dcf-wrapper dcf-txt-center dcf-p-10" ng-if="appointments == null">
 	Select a site and date.
 </div>
 
 <!-- Body Section with list of clients -->
-<table class="wdn_responsive_table queue" ng-if="appointments.length > 0" ng-cloak>
+<table class="dcf-table wdn_responsive_table queue" ng-if="appointments.length > 0" ng-cloak>
 	<thead>
 		<tr>
 			<th class="queue-name">Name</th>
@@ -39,6 +39,6 @@
 </table>
 
 <!-- Default message if there are no appointments on the selected date -->
-<div class="wdn-inner-wrapper wdn-center queue" ng-if="appointments.length == 0" ng-cloak>
+<div class="dcf-wrapper dcf-txt-center dcf-p-10 queue" ng-if="appointments.length == 0" ng-cloak>
 	There are no appointments on this day.
 </div>
