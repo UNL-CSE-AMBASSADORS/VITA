@@ -1,4 +1,4 @@
-<div class="wdn-inner-wrapper wdn-inner-padding-no-top">
+<div class="dcf-wrapper dcf-mb-8">
 
 	<!-- Shown when data is loading upon initial page load -->
 	<div ng-if="tokenExists === null">
@@ -37,31 +37,31 @@
 					autocomplete="off" 
 					novalidate>
 
-				<ul>
+				<ul class="dcf-list-bare">
 					<li class="form-textfield">
-						<label class="form-label form-required" for="firstName">First Name</label>
-						<input type="text" name="firstName" id="firstName" ng-model="clientData.firstName" required>
+						<label class="dcf-label form-label form-required" for="firstName">First Name</label>
+						<input class="dcf-input-text" type="text" name="firstName" id="firstName" ng-model="clientData.firstName" required>
 						<div ng-show="form.$submitted || form.firstName.$touched">
 							<label class="error" ng-show="form.firstName.$error.required">This field is required.</label>
 						</div>
 					</li>
 
 					<li class="form-textfield">
-						<label class="form-label form-required" for="lastName">Last Name</label>
-						<input type="text" name="lastName" id="lastName" ng-model="clientData.lastName" required>
+						<label class="dcf-label form-label form-required" for="lastName">Last Name</label>
+						<input class="dcf-input-text" type="text" name="lastName" id="lastName" ng-model="clientData.lastName" required>
 						<div ng-show="form.$submitted || form.lastName.$touched">
 							<label class="error" ng-show="form.lastName.$error.required">This field is required.</label>
 						</div>
 					</li>
 
 					<li class="form-textfield">
-						<label class="form-label" for="email">Email</label>
-						<input type="email" name="email" id="email" ng-model="clientData.email">
+						<label class="dcf-label form-label" for="email">Email</label>
+						<input class="dcf-input-text" type="email" name="email" id="email" ng-model="clientData.email">
 					</li>
 
 					<li class="form-textfield">
-						<label class="form-label form-required" for="phone">Phone Number</label>
-						<input type="text" name="phone" id="phone" ng-model="clientData.phone" required>
+						<label class="dcf-label form-label form-required" for="phone">Phone Number</label>
+						<input class="dcf-input-text" type="text" name="phone" id="phone" ng-model="clientData.phone" required>
 						<div ng-show="form.$submitted || form.phone.$touched">
 							<label class="error" ng-show="form.phone.$error.required">This field is required.</label>
 						</div>
@@ -70,7 +70,7 @@
 
 				<input type="submit" 
 					value="Submit" 
-					class="submit wdn-button wdn-button-triad"
+					class="submit dcf-btn"
 					ng-model="validatingClientInformation" 
 					ng-disabled="!form.$valid || validatingClientInformation">
 			</form>
@@ -102,13 +102,11 @@
 					<!-- Confirm Appointment Cancel Modal -->
 					<div class="hidden">
 						<div class="modal" id="confirm-cancel-modal" tabindex="-1" role="dialog" aria-hidden="true">
-							<div class="wdn-band">
-								<div class="wdn-inner-wrapper">
-									<h4>Are you sure you want to cancel your appointment?</h4>
-									<div>
-										<button type="button" class="wdn-button wdn-button-triad close-modal-button">No, do not Cancel</button>
-										<button type="button" class="wdn-button wdn-button-brand" ng-click="cancelAppointment()">Yes, cancel</button>
-									</div>
+							<div class="dcf-wrapper dcf-pt-8 dcf-pb-5">
+								<h4>Are you sure you want to cancel your appointment?</h4>
+								<div>
+									<button type="button" class="dcf-btn dcf-btn close-modal-button">No, do not Cancel</button>
+									<button type="button" class="dcf-btn dcf-btn-secondary" ng-click="cancelAppointment()">Yes, cancel</button>
 								</div>
 							</div>
 						</div>
@@ -117,7 +115,7 @@
 
 					<!-- Cancel Button -->
 					<a id="confirm-cancel-modal-opener"
-					   class="submit wdn-button wdn-button-brand"
+					   class="submit dcf-btn dcf-btn-secondary"
 					   href="#confirm-cancel-modal">Cancel Appointment</a>
 				</div>
 
@@ -130,13 +128,13 @@
 				<h4 class="clear-top">Reschedule Appointment</h4>
 
 				<form class="cmxform" id="rescheduleForm">
-					<div appointment-picker></div>
+					<div appointment-picker class="dcf-mb-5"></div>
 
 					<!-- Reschedule button -->
 					<input type="submit" 
 						value="Reschedule" 
 						id="rescheduleButton" 
-						class="submit wdn-button wdn-button-triad" 
+						class="submit dcf-btn" 
 						ng-disabled="appointmentPickerSharedProperties.selectedDate == null || appointmentPickerSharedProperties.selectedSite == null || appointmentPickerSharedProperties.selectedTime == null || submittingReschedule" 
 						ng-model="submittingReschedule" 
 						ng-click="rescheduleAppointment()">
@@ -149,9 +147,9 @@
 				<ng-bind-html ng-bind-html="rescheduleSuccessMessage"></ng-bind-html>
 
 				<div>
-					<button type="button" class="mb-3 wdn-button btn wdn-button-triad" onclick="window.print();">Print</button>
+					<button type="button" class="mb-3 dcf-btn btn" onclick="window.print();">Print</button>
 					<button type="button" 
-						class="mb-3 wdn-button btn wdn-button-triad email-confirmation-button" 
+						class="mb-3 dcf-btn btn email-confirmation-button" 
 						ng-if="clientData.email != null && clientData.email.length > 0"
 						ng-disabled="emailButton.disabled"
 						ng-click="emailConfirmation()">{{emailButton.text}}</button>
