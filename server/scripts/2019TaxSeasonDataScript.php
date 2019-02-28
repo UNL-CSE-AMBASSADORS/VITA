@@ -15,7 +15,7 @@ if (!$USER->isLoggedIn() || $USER->getUserId() !== '1') {
 insert2019Data();
 
 function insert2019Data() {	
-	$dataAlreadyInserted = false;
+	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The data has already been inserted');
 	}
@@ -27,7 +27,7 @@ function insert2019Data() {
 	// insertBennettMartinLibraryData();
 	// insertInternationalStudentScholarSiteData();
 	// insertFStreetCommunityCenterData();
-	insertCommunityHopeFederalCreditData();
+	// insertCommunityHopeFederalCreditData();
 	die('SUCCESS');
 }
 
@@ -39,7 +39,7 @@ function insertCommunityHopeFederalCreditdata() {
 	$preparerRoleId = 3;
 	$reviewerRoleId = 4;
 
-	$dataAlreadyInserted = false;
+	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The Community Hope Federal Credit data has already been inserted');
 	}
