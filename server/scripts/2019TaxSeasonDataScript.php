@@ -15,7 +15,7 @@ if (!$USER->isLoggedIn() || $USER->getUserId() !== '1') {
 insert2019Data();
 
 function insert2019Data() {	
-	$dataAlreadyInserted = true;
+	$dataAlreadyInserted = false;
 	if ($dataAlreadyInserted) {
 		die('The data has already been inserted');
 	}
@@ -26,9 +26,48 @@ function insert2019Data() {
 	// insertLorenEiseleyLibraryData();
 	// insertBennettMartinLibraryData();
 	// insertInternationalStudentScholarSiteData();
-	insertFStreetCommunityCenterData();
-
+	// insertFStreetCommunityCenterData();
+	insertCommunityHopeFederalCreditData();
 	die('SUCCESS');
+}
+
+function insertCommunityHopeFederalCreditdata() {
+	GLOBAL $DB_CONN;
+
+	$siteCoordinatorRoleId = 1;
+	$greeterRoleId = 2;
+	$preparerRoleId = 3;
+	$reviewerRoleId = 4;
+
+	$dataAlreadyInserted = false;
+	if ($dataAlreadyInserted) {
+		die('The Community Hope Federal Credit data has already been inserted');
+	}
+
+	try {
+		$DB_CONN->beginTransaction();
+
+		$siteId = insertSite('Community Hope Federal Credit', '1625 N St. Suite A, Lincoln, NE 68508', '402-472-9638', FALSE, FALSE);
+
+		// Fridays
+		$dates = array('2019-03-01', '2019-03-08', '2019-03-15', '2019-03-22', '2019-03-29', '2019-04-05', '2019-04-12');
+		foreach ($dates as $date) {
+			$shiftId = insertShift("$date 08:30:00", "$date 10:30:00", $siteId);
+			
+			$firstAppointmentTimeId = insertAppointmentTime("$date 08:30:00", 100, 60, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 09:30:00", 100, 60, $siteId);
+		}
+
+		// Default Site Role Limits
+		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
+		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
+
+		$DB_CONN->commit();
+	} catch (Exception $e) {
+		$DB_CONN->rollback();
+		throw new Exception('Failed inserting Community Hope Federal Credit data', MY_EXCEPTION);
+		die();
+	}
 }
 
 function insertFStreetCommunityCenterData() {
