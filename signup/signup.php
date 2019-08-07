@@ -266,6 +266,7 @@
 					<label for="6" class="form-required">What country are you a citizen or resident of?</label>
 					<div>
 						<select id="studentCountrySelect" 
+								class="dcf-input-select"
 								name="studentCountrySelect" 
 								ng-model="questions[6]"
 								ng-required="questions[4] == 8 || questions[4] == 10 || questions[5] == 1"
