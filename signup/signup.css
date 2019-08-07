@@ -1,4 +1,5 @@
 .form-textfield,
-.form-radio {
+.form-radio,
+.form-select {
 	list-style-type: none;
 }

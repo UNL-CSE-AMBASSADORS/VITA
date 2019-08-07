@@ -279,7 +279,6 @@
 						<label class="error" ng-show="form.studentCountry.$error.required">This field is required.</label>
 					</div>
 				</li>
-
 			</ul>
 
 
