@@ -20,6 +20,7 @@
 			<div ng-if="appointment.phoneNumber != null">
 				<span><b>Phone Number: </b>{{appointment.phoneNumber}}</span>
 			</div>
+			<div><b>Tax Type: </b>{{appointment.appointmentType}}</div>
 			<div><b>Appointment ID: </b>{{appointment.appointmentId}}</div>
 		</div>
 
@@ -53,14 +54,18 @@
 	<!-- Reschedule Section -->
 	<h3 class="dcf-mt-5">Reschedule Appointment</h3>
 	<form class="cmxform" id="rescheduleForm">
-		<label>
-			<div>International Student Scholar</div>
-			<span class="switch">
-				<input type="checkbox" ng-model="appointmentPickerSharedProperties.studentScholar">
-				<span class="slider round"></span>
-			</span>
-		</label>
+
+		<label>Tax Type (currently: {{appointmentPickerSharedProperties.appointmentType}})</label>
+		<div class="dcf-btn-group">
+			<button class="dcf-btn" type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'residential'">Residential</button>
+			<button class="dcf-btn" type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'china'">China</button>
+			<button class="dcf-btn" type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'india'">India</button>
+			<button class="dcf-btn" type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'treaty'">Treaty</button>
+			<button class="dcf-btn" type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'non-treaty'">Non-Treaty</button>
+		</div>
+		
 		<div appointment-picker class="dcf-mb-5"></div>
+
 		<div class="dcf-mb-5">
 			<input type="submit" 
 				value="Reschedule" 
@@ -76,7 +81,7 @@
 				ng-show="appointment.notStarted && !appointment.cancelled"
 				href="#confirm-cancel-modal">Cancel Appointment</a>
 		</div>
-
+		
 		<p>An email will automatically be sent to the client with the rescheduled information if the client has an email on record.</p>
 
 		<!-- Confirm Appointment Cancel Modal -->

@@ -9,7 +9,7 @@ if (!$USER->isLoggedIn()) {
 }
 
 require_once "$root/server/config.php";
-require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
+require_once "$root/server/utilities/emailUtilities.class.php";
 
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
@@ -69,18 +69,21 @@ function getShifts() {
 	GLOBAL $USER, $DB_CONN;
 	$userId = $USER->getUserId();
 
+	date_default_timezone_set('America/Chicago');
+	$year = date('Y');
+
 	$query = "SELECT Shift.shiftId, TIME_FORMAT(startTime, '%l:%i %p') AS startTimeString, 
-			TIME_FORMAT(endTime, '%l:%i %p') AS endTimeString, DATE_FORMAT(startTime, '%b %D, %Y') AS dateString, 
+			TIME_FORMAT(endTime, '%l:%i %p') AS endTimeString, DATE_FORMAT(startTime, '%W, %b %D, %Y') AS dateString, 
 			title, Site.siteId, UserShift.userShiftId, Role.roleId, Role.name AS roleName
 		FROM Shift
 			JOIN Site ON Shift.siteId = Site.siteId
 			LEFT JOIN UserShift ON Shift.shiftId = UserShift.shiftId AND UserShift.userId = ?
 			LEFT JOIN Role ON UserShift.roleId = Role.roleId
-		WHERE Site.archived = FALSE AND Shift.archived = FALSE
+		WHERE Site.archived = FALSE AND Shift.archived = FALSE AND YEAR(Shift.startTime) = ?
 		ORDER BY startTime";
 
 	$stmt = $DB_CONN->prepare($query);
-	$stmt->execute(array($userId));
+	$stmt->execute(array($userId, $year));
 	$shifts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 	foreach ($shifts as &$shift) {

@@ -5,6 +5,7 @@ $root = realpath($_SERVER['DOCUMENT_ROOT']);
 require_once "$root/server/config.php";
 require_once "$root/server/accessors/appointmentAccessor.class.php";
 require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
+require_once "$root/server/utilities/emailUtilities.class.php";
 require_once "$root/server/accessors/noteAccessor.class.php";
 
 if (isset($_REQUEST['action'])) {
@@ -69,8 +70,13 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 		$response['validated'] = $clientInformationMatches;
 
 		if ($clientInformationMatches) {
-			// Grab appointment information so we can display the site/date/time
+			// Grab appointment information so we can display the site/date/time and see what type of appointment it is
 			$appointmentInformation = getAppointmentInformationFromToken($token);
+
+			$response['appointmentType'] = 'residential';
+			if (isset($appointmentInformation['countryText'])) {
+				$response['appointmentType'] = $appointmentInformation['countryText'];
+			}
 
 			$response['site'] = array(
 				'title' => $appointmentInformation['title'],
@@ -212,8 +218,8 @@ function getClientInformationFromToken($token) {
 
 	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, Appointment.appointmentId
 		FROM SelfServiceAppointmentRescheduleToken
-		JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
-		JOIN Client ON Appointment.clientId = Client.clientId
+			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
+			JOIN Client ON Appointment.clientId = Client.clientId
 		WHERE token = ?';
 
 	$stmt = $DB_CONN->prepare($query);
@@ -229,10 +235,11 @@ function getClientInformationFromToken($token) {
 	return $clientInformation;
 }
 
-function doesClientInformationMatch($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber) {	
+function doesClientInformationMatch($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber) {
 	$firstNameMatches = isset($clientInformation['firstName']) && strtolower($clientInformation['firstName']) === strtolower($firstName);
 	$lastNameMatches = isset($clientInformation['lastName']) && strtolower($clientInformation['lastName']) === strtolower($lastName);
-	$emailAddressMatches = isset($clientInformation['emailAddress']) && strtolower($clientInformation['emailAddress']) === strtolower($emailAddress);
+	$emailAddressMatches = ($clientInformation['emailAddress'] === null && $emailAddress === '') 
+		|| (isset($clientInformation['emailAddress']) && strtolower($clientInformation['emailAddress']) === strtolower($emailAddress));
 	$phoneNumberMatches = isset($clientInformation['phoneNumber']) && cleanPhoneNumber($clientInformation['phoneNumber']) === cleanPhoneNumber($phoneNumber);
 	
 	return $firstNameMatches && $lastNameMatches && $emailAddressMatches && $phoneNumberMatches;
@@ -248,11 +255,14 @@ function getAppointmentInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
 	$query = 'SELECT DATE_FORMAT(scheduledTime, "%W, %M %D, %Y at %l:%i %p") AS scheduledTimeStr, 
-		Site.title, Site.address
+		Site.title, Site.address, PossibleAnswer.text AS countryText
 		FROM SelfServiceAppointmentRescheduleToken
-		JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
-		JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
-		JOIN Site ON AppointmentTime.siteId = Site.siteId
+			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
+			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+			JOIN Site ON AppointmentTime.siteId = Site.siteId
+			LEFT JOIN Answer ON Answer.appointmentId = Appointment.appointmentId AND 
+				Answer.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")
+			LEFT JOIN PossibleAnswer ON PossibleAnswer.possibleAnswerId = Answer.possibleAnswerId
 		WHERE token = ?';
 	
 	$stmt = $DB_CONN->prepare($query);

@@ -1,6 +1,6 @@
 <?php
 
-downloadFile('2018_Schedule.pdf');
+downloadFile('VITACommunitySchedule2019.pdf');
 
 function downloadFile($fileName) {
 	$root = realpath($_SERVER['DOCUMENT_ROOT']);

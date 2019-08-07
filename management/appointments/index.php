@@ -28,6 +28,7 @@ return readfile($documentRoot . $path);
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
+	<link rel="stylesheet" href="/dist/assets/css/form.css">
 	<link rel="stylesheet" href="/dist/management/appointments/appointments.css">
 	<!-- TemplateEndEditable -->
 	<!-- TemplateParam name="class" type="text" value="" -->

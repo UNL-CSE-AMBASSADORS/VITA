@@ -69,10 +69,10 @@ define('selfServiceAppointmentRescheduleController', [], function() {
 			}
 			
 			const token = $scope.token;
-			const firstName = $scope.clientData.firstName;
-			const lastName = $scope.clientData.lastName;
-			const emailAddress = $scope.clientData.email;
-			const phoneNumber = $scope.clientData.phone;
+			const firstName = $scope.clientData.firstName || '';
+			const lastName = $scope.clientData.lastName || '';
+			const emailAddress = $scope.clientData.email || '';
+			const phoneNumber = $scope.clientData.phone || '';
 
 			SelfServiceAppointmentRescheduleDataService.validateClientInformation(token, firstName, lastName, emailAddress, phoneNumber).then((response) => {
 				if (response == null || !response.success) {
@@ -88,6 +88,7 @@ define('selfServiceAppointmentRescheduleController', [], function() {
 							},
 							'scheduledTime': response.scheduledTime
 						};
+						$scope.appointmentPickerSharedProperties.appointmentType = response.appointmentType;
 
 						$scope.initializeCancelConfirmationModal();
 					} else {
@@ -108,10 +109,10 @@ define('selfServiceAppointmentRescheduleController', [], function() {
 			$scope.submittingReschedule = true;
 
 			const token = $scope.token;
-			const firstName = $scope.clientData.firstName;
-			const lastName = $scope.clientData.lastName;
-			const emailAddress = $scope.clientData.email;
-			const phoneNumber = $scope.clientData.phone;
+			const firstName = $scope.clientData.firstName || '';
+			const lastName = $scope.clientData.lastName || '';
+			const emailAddress = $scope.clientData.email || '';
+			const phoneNumber = $scope.clientData.phone || '';
 			const appointmentTimeId = $scope.appointmentPickerSharedProperties.selectedAppointmentTimeId;
 
 			SelfServiceAppointmentRescheduleDataService.rescheduleAppointment(token, firstName, lastName, emailAddress, phoneNumber, appointmentTimeId).then(function(response) {
@@ -136,10 +137,10 @@ define('selfServiceAppointmentRescheduleController', [], function() {
 			$scope.cancellingAppointment = true;
 
 			const token = $scope.token;
-			const firstName = $scope.clientData.firstName;
-			const lastName = $scope.clientData.lastName;
-			const emailAddress = $scope.clientData.email;
-			const phoneNumber = $scope.clientData.phone;
+			const firstName = $scope.clientData.firstName || '';
+			const lastName = $scope.clientData.lastName || '';
+			const emailAddress = $scope.clientData.email || '';
+			const phoneNumber = $scope.clientData.phone || '';
 
 			SelfServiceAppointmentRescheduleDataService.cancelAppointment(token, firstName, lastName, emailAddress, phoneNumber).then(function(response) {
 				document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -165,10 +166,10 @@ define('selfServiceAppointmentRescheduleController', [], function() {
 			$scope.emailButton.disabled = true;
 
 			const token = $scope.token;
-			const firstName = $scope.clientData.firstName;
-			const lastName = $scope.clientData.lastName;
-			const emailAddress = $scope.clientData.email;
-			const phoneNumber = $scope.clientData.phone;
+			const firstName = $scope.clientData.firstName || '';
+			const lastName = $scope.clientData.lastName || '';
+			const emailAddress = $scope.clientData.email || '';
+			const phoneNumber = $scope.clientData.phone || '';
 
 			SelfServiceAppointmentRescheduleDataService.emailConfirmation(token, firstName, lastName, emailAddress, phoneNumber).then(function(response) {
 				if (response == null || !response.success) {
