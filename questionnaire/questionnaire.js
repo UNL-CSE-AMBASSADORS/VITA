@@ -1,120 +1,49 @@
 require.config({
 	paths: {
-		jqueryvalidation: '//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min'
+		angular: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min',
+		ngAnimate: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min',
+		ngAria: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min',
+		ngTouch: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-touch',
+		questionnaireController: '/dist/questionnaire/questionnaireController',
+		toggleDirective: '/dist/assets/js/utilities/button',
+		'bootstrap-ui': '/dist/assets/js/bootstrap/ui-bootstrap-buttons-2.5.0.min'
+	},
+	shim: {
+		'ngAnimate': ['angular'],
+		'ngAria': ['angular'],
+		'ngTouch': ['angular'],
+		'questionnaireController': ['angular'],
+		'toggleDirective': ['angular'],
+		'bootstrap-ui': ['angular']
 	}
 });
 
-require(['jquery', 'jqueryvalidation'], function ($) {
-	window.jQuery = $;
+require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(){
 
-	$(document).ready(function() {
-		initializeConditionalFormFields();
-		initializeCantHelpListeners();
+	require([
+		'questionnaireController',
+		'toggleDirective'
+	],
+	function (
+		QuestionnaireController,
+		ToggleDirective
+	) {
+		'use strict';
 
-		// Add in form validation
-		$("#vitaQuestionnaireForm").validate({
-			errorPlacement: function(error, element) {
-				error.insertAfter( element.closest(".error-placement") );
+		// Create the module
+		const questionnaireApp = angular.module('questionnaireApp', ['ui.bootstrap']);
+
+		questionnaireApp.controller('questionnaireController', QuestionnaireController);
+		questionnaireApp.directive('questionnaire', function () {
+			return {
+				controller: 'questionnaireController',
+				templateUrl: '/questionnaire/questionnaire.php'
 			}
 		});
-	});
 
-	function initializeCantHelpListeners() {
-		let depreciationSchedule = $("#depreciationSchedule");
-		let depreciationScheduleValues = depreciationSchedule.find('input:radio[name="1"]');
+		questionnaireApp.directive('toggle', ToggleDirective);
 
-		let scheduleF = $("#scheduleF");
-		let scheduleFValues = scheduleF.find('input:radio[name="2"]');
+		angular.bootstrap(document.getElementById('questionnaireApp'), ['questionnaireApp']);
 
-		let homeBasedNetLoss = $("#homeBasedNetLoss");
-		let homeBasedNetLossValues = homeBasedNetLoss.find('input:radio[name="4"]');
-		
-		let homeBased10000 = $("#homeBased10000");
-		let homeBased10000Values = homeBased10000.find('input:radio[name="5"]');
-		
-		let homeBasedSEP = $("#homeBasedSEP");
-		let homeBasedSEPValues = homeBasedSEP.find('input:radio[name="6"]');
-
-		let homeBasedEmployees = $("#homeBasedEmployees");
-		let homeBasedEmployeesValues = homeBasedEmployees.find('input:radio[name="7"]');
-
-		let casualtyLosses = $("#casualtyLosses");
-		let casualtyLossesValues = casualtyLosses.find('input:radio[name="8"]');
-
-		let theftLosses = $("#theftLosses");
-		let theftLossesValues = theftLosses.find('input:radio[name="9"]');
-
-		let buttons = [depreciationSchedule, scheduleF, homeBasedNetLoss, homeBased10000, homeBasedSEP, homeBasedEmployees, casualtyLosses, theftLosses];
-		let values = [depreciationScheduleValues, scheduleFValues, homeBasedNetLossValues, homeBased10000Values, homeBasedSEPValues, homeBasedEmployeesValues, casualtyLossesValues, theftLossesValues];
-
-		for (let i = 0; i < buttons.length; i++) {
-			values[i].change(function() {
-				let value = this.value;
-				if (this.checked) {
-					let cantHelpText = buttons[i].find('p[class="cant-help-text"]');
-					if (value === "1") {
-						cantHelpText.show();
-					} else {
-						cantHelpText.hide();
-					}
-				}
-			});
-		}
-	}
-
-	function scrollDown(height, animationTime = 0) {
-		$('html, body').animate({
-			scrollTop: '+=' + height
-		}, animationTime);
-	}
-
-	function initializeConditionalFormFields() {
-		let animationTime = 300;
-		
-		// All of the questions that require conditions to be viewed.
-		let homeBased = $("#homeBased");
-		let homeBasedNetLoss = $("#homeBasedNetLoss");
-		let homeBased10000 = $("#homeBased10000");
-		let homeBasedSEP = $("#homeBasedSEP");
-		let homeBasedEmployees = $("#homeBasedEmployees");
-
-		// All the radio buttons
-		let homeBasedValues = homeBased.find('input:radio[name="3"]');
-
-		// To help hide everything and selectively show content
-		let allUnderHomeBasedValues = homeBasedNetLoss.add(homeBased10000).add(homeBasedSEP).add(homeBasedEmployees);
-
-		// Independent field = #homeBased
-		// Dependent field = if yes --> #homeBasedNetLoss,#homeBased10000,#homeBasedSEP,#homeBasedEmployees
-		homeBasedValues.change(function() {
-			let value = this.value;
-			if(this.checked){
-				if(value === "1"){
-					allUnderHomeBasedValues.slideUp(animationTime);
-					allUnderHomeBasedValues.slideDown(animationTime);
-					scrollDown(homeBased.height(), animationTime);
-				} else if(value === "2"){
-					allUnderHomeBasedValues.slideUp(animationTime);
-				}
-			}
-		});
-	}
-
-	$('#vitaQuestionnaireForm').submit(function(e) {	
-		e.preventDefault();
-
-		// With jQuery UI styling on the radio buttons, a new listener is necessary to update error messages
-		// However, this is only necessary after we have tried submitting once first.
-		$("input:radio").change(function() {
-			$("#vitaQuestionnaireForm").valid();
-		});
-
-		if (!$(this).valid()) {
-			return false;
-		}
-
-		window.location.href = "/signup";
-
-		return false;
 	});
 });
