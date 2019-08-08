@@ -295,10 +295,10 @@
 </div>
 
 <!-- Successful Signup Screen -->
-<div class="dcf-pb-7" ng-if="successMessage != null">
+<div id="successfulSignupContent" class="dcf-mb-6" ng-if="successMessage != null">
 	<ng-bind-html ng-bind-html="successMessage"></ng-bind-html>
 
-	<div>
+	<div id="successfulSignupButtons" class="dcf-mt-4">
 		<button type="button" class="dcf-btn wdn-button-triad" onclick="window.print();">Print</button>
 		<button type="button" 
 			class="dcf-btn wdn-button-triad email-confirmation-button" 

@@ -55,7 +55,7 @@ class AppointmentConfirmationUtilities {
 				Please arrive no later than $timeStr on $dateStr with all necessary materials (listed below). 
 				Please call $sitePhoneNumber if you have any questions. 
 				Thank you from Lincoln VITA.
-				<h2 class='mt-3'>What to Bring for your Appointment</h2>";
+				<h2 class='dcf-mt-3'>What to Bring for your Appointment</h2>";
 	}
 	
 	private static function residentialInformation() {
@@ -113,8 +113,8 @@ class AppointmentConfirmationUtilities {
 	private static function selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken) {
 		$serverName = $_SERVER['SERVER_NAME'];
 		$selfServiceAppointmentRescheduleLink = "https://$serverName/appointment/reschedule?token=$selfServiceAppointmentRescheduleToken";
-		return "<h2 class='mt-3'>Rescheduling or Cancelling your Appointment</h2>
+		return "<h2>Rescheduling or Cancelling Your Appointment</h2>
 				You can reschedule or cancel your appointment by visiting 
-				<a href='$selfServiceAppointmentRescheduleLink' target='_blank'>$selfServiceAppointmentRescheduleLink</a>";
+				<a href='$selfServiceAppointmentRescheduleLink' target='_blank'>the appointment reschedule page</a>";
 	}
 }
