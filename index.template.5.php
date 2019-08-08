@@ -47,7 +47,6 @@ return readfile($documentRoot . $path);
 				<!-- TemplateEndEditable -->
 				<?php wdnInclude("/wdn/templates_5.0/includes/global/give-global-2.html"); ?>
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-global-2.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/idm.html"); ?>
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/search.html"); ?>
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/header-global-2.html"); ?>
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/logo-lockup-1.html"); ?>
