@@ -219,9 +219,9 @@ WDN.initializePlugin('modal', [function() {
 	
 		function appendSignedUpShift(siteTitle, dateString, startTimeString, endTimeString, userShiftId, siteId, roleName) {
 			let shiftRow = $('<div></div>');
-			let shiftInformation = $('<span></span>').text(`${siteTitle}: ${dateString} ${startTimeString} - ${endTimeString} (${roleName})`);
+			let shiftInformation = $('<span></span>').text(`${siteTitle}: ${dateString} ${startTimeString} - ${endTimeString} (${roleName}) `);
 			let removeButton = $('<a></a>')
-				.text(' [Cancel]')
+				.text('[Cancel]')
 				.addClass('red-icon pointer')
 				.colorbox({
 					inline:true,
