@@ -111,7 +111,7 @@ return readfile($documentRoot . $path);
 	<div class="dcf-main-content dcf-wrapper">
 		<!-- TemplateBeginEditable name="maincontentarea" -->
 		<!-- Personal Information -->
-		<div class="dcf-bleed unl-bg-lightest-gray">
+		<div class="dcf-bleed">
 			<div class="dcf-wrapper wdn-inner-padding-sm">
 				<div class="personal-info">
 					<h2 class="inline">Personal Information</h2>
@@ -148,7 +148,7 @@ return readfile($documentRoot . $path);
 		</div>
 
 		<!-- Abilities -->
-		<div class="dcf-bleed">
+		<div class="dcf-bleed unl-bg-lightest-gray">
 			<div class="dcf-wrapper wdn-inner-padding-sm">
 				<h2 class="inline">Abilities</h2>
 				<button class="dcf-btn dcf-float-right" id="abilitiesEditButton">Edit</button>
@@ -158,7 +158,7 @@ return readfile($documentRoot . $path);
 		</div>
 
 		<!-- Certifications -->		
-		<div class="dcf-bleed unl-bg-lightest-gray">
+		<div class="dcf-bleed">
 			<div class="dcf-wrapper wdn-inner-padding-sm">
 				<h2>Certifications</h2>
 				<p><b>NOTE</b>: These must be verified by your site administrator.</p>
@@ -167,7 +167,7 @@ return readfile($documentRoot . $path);
 		</div>
 
 		<!-- Shifts -->
-		<div class="dcf-bleed">
+		<div class="dcf-bleed unl-bg-lightest-gray">
 			<div class="dcf-wrapper wdn-inner-padding-sm">
 				<h2>Shifts You're Signed Up For</h2>
 				<div id="shifts">
