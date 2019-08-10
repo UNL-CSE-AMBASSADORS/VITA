@@ -2,7 +2,7 @@
 	<div class="dcf-grid-full dcf-grid-halves@md dcf-col-gap-1 dcf-row-gap-4 dcf-p-5">
 	<!-- <div class="dcf-d-flex dcf-p-5"> -->
 
-		<div class="dcf-d-flex dcf-m-0 dcf-flex-row dcf-jc-center dcf-1st">
+		<div class="dcf-d-flex dcf-m-0 dcf-flex-row dcf-jc-flex-start dcf-1st">
 			<h1 class="dcf-m-0">
 				<span class="dcf-txt-right">Queue:&nbsp;</span>
 				<span>{{appointments.length}}</span>
