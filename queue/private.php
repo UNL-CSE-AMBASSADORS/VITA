@@ -28,7 +28,7 @@
 		</p>
 
 		<!-- List of clients -->
-		<table class="dcf-table wdn_responsive_table queue" ng-show="(appointments | searchFor: clientSearch).length > 0">
+		<table class="dcf-table queue" ng-show="(appointments | searchFor: clientSearch).length > 0">
 			<thead>
 				<tr>
 					<th class="queue-name">Name</th>
