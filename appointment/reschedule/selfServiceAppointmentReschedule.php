@@ -105,7 +105,7 @@
 							<div class="dcf-wrapper dcf-pt-8 dcf-pb-5">
 								<h4>Are you sure you want to cancel your appointment?</h4>
 								<div>
-									<button type="button" class="dcf-btn dcf-btn close-modal-button">No, do not Cancel</button>
+									<button type="button" class="dcf-btn dcf-btn-primary close-modal-button">No, do not Cancel</button>
 									<button type="button" class="dcf-btn dcf-btn-secondary" ng-click="cancelAppointment()">Yes, cancel</button>
 								</div>
 							</div>
