@@ -126,10 +126,10 @@ return readfile($documentRoot . $path);
 		<div class="dcf-bleed unl-bg-lighter-gray">
 			<div class="dcf-wrapper">
 				<div class="dcf-grid-halves@md dcf-pt-8 dcf-pb-8">
-					<div class="dcf-col">
+					<div>
 						<h2>What is the UNL Tax Credit Campaign?</h2>
 					</div>
-					<div class="dcf-col">
+					<div>
 						The UNL Tax Credit Campaign prepares tax returns for low-income, working families and students for free.
 						It is sponsored by the University of Nebraska&ndash;Lincoln's Center for Civic Engagement in conjunction
 						with the Lincoln EITC Coalition.
@@ -141,24 +141,24 @@ return readfile($documentRoot . $path);
 		<div class="dcf-bleed unl-bg-lightest-gray">
 			<div class="dcf-wrapper">
 				<div class="dcf-grid-halves@md dcf-pt-8 dcf-pb-8">
-					<div class="dcf-col-50%">
+					<div>
 						<h2>Sign up for an Appointment</h2>
 					</div>
-					<div class="dcf-col-50%">
-						<p class="col col-12 col-sm-8">
+					<div>
+						<div>
 							Resident appointments begin January 20th and run through April 11th. 
 							Tax Appointments for International Student Scholars begin March 5th and run 
 							through April 9th. Appointments are available at the following sites: Nebraska East Union, 
 							Anderson Library, Center for People in Need, Loren Eiseley Library, and Bennett Martin 
 							Library. To see the days and times for all the locations, please download 
 							the site schedule. 
-						</p>
-						<div class="dcf-grid-halves@md">
-							<div class="dcf-col-50% visual-island">
-								<a class="wdn-button wdn-button-brand" href="/signup">Make an Appointment</a>
+						</div>
+						<div class="dcf-grid-halves@md dcf-mt-3">
+							<div class="visual-island">
+								<a class="dcf-btn dcf-btn-primary" href="/signup">Make an Appointment</a>
 							</div>
-							<div class="dcf-col-50% visual-island">
-								<button class="wdn-button wdn-button-brand" onClick="javascript:downloadSiteSchedule()">Download Site Schedule</button>
+							<div class="visual-island">
+								<button class="dcf-btn dcf-btn-primary" onClick="javascript:downloadSiteSchedule()">Download Site Schedule</button>
 							</div>
 						</div>
 					</div>
