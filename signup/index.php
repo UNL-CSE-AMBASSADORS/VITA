@@ -124,7 +124,6 @@ return readfile($documentRoot . $path);
 <!-- TemplateBeginEditable name="jsbody" -->
 <?php require_once "$root/server/global_includes.php"; ?>
 <script src="/dist/signup/signup.js"></script>
-<!-- <script src="/dist/assets/js/utilities/button.js"></script> -->
 <!-- TemplateEndEditable -->
 </body>
 </html>
