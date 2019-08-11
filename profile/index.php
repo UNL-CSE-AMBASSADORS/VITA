@@ -112,7 +112,7 @@ return readfile($documentRoot . $path);
 		<!-- TemplateBeginEditable name="maincontentarea" -->
 		<!-- Personal Information -->
 		<div class="dcf-bleed">
-			<div class="dcf-wrapper wdn-inner-padding-sm">
+			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
 				<div class="personal-info">
 					<h2 class="inline">Personal Information</h2>
 					<button class="dcf-btn dcf-float-right" id="personalInformationEditButton">Edit</button>
@@ -141,7 +141,7 @@ return readfile($documentRoot . $path);
 						<input type="text" id="phoneNumberInput" style="display:none;" />
 					</div>
 
-					<button class="dcf-btn wdn-button-triad" id="personalInformationSaveButton" style="display:none;">Save</button>
+					<button class="dcf-btn dcf-btn-secondary" id="personalInformationSaveButton" style="display:none;">Save</button>
 					<button class="dcf-btn dcf-btn-primary" id="personalInformationCancelButton" style="display:none;">Cancel</button>
 				</div>
 			</div>
@@ -149,7 +149,7 @@ return readfile($documentRoot . $path);
 
 		<!-- Abilities -->
 		<div class="dcf-bleed unl-bg-lightest-gray">
-			<div class="dcf-wrapper wdn-inner-padding-sm">
+			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
 				<h2 class="inline">Abilities</h2>
 				<button class="dcf-btn dcf-float-right" id="abilitiesEditButton">Edit</button>
 				<button class="dcf-btn dcf-float-right dcf-btn-primary" id="abilitiesCancelButton" style="display:none;">Cancel</button>
@@ -159,7 +159,7 @@ return readfile($documentRoot . $path);
 
 		<!-- Certifications -->		
 		<div class="dcf-bleed">
-			<div class="dcf-wrapper wdn-inner-padding-sm">
+			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
 				<h2>Certifications</h2>
 				<p><b>NOTE</b>: These must be verified by your site administrator.</p>
 				<div id ="certificationsDiv"></div>
@@ -168,13 +168,13 @@ return readfile($documentRoot . $path);
 
 		<!-- Shifts -->
 		<div class="dcf-bleed unl-bg-lightest-gray">
-			<div class="dcf-wrapper wdn-inner-padding-sm">
+			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
 				<h2>Shifts You're Signed Up For</h2>
 				<div id="shifts">
 					<div id="shiftsSignedUpFor"></div>
 				</div>
 
-				<button class="wdn-button dcf-mt-5" id="addShiftButton"><span class="wdn-icon-plus" aria-hidden="true"></span>  Sign Up for a Shift</button>
+				<button class="dcf-btn dcf-btn-primary dcf-mt-5" id="addShiftButton"><span class="wdn-icon-plus" aria-hidden="true"></span>  Sign Up for a Shift</button>
 			</div>
 		</div>
 
@@ -191,7 +191,7 @@ return readfile($documentRoot . $path);
 							</section>
 						</fieldset>
 						<div class="dcf-pt-5">
-							<button type="submit" class="dcf-btn wdn-button-triad">Finish</button>
+							<button type="submit" class="dcf-btn dcf-btn-secondary">Finish</button>
 							<button type="button" class="dcf-btn dcf-btn-primary close-modal-button">Close</button>
 						</div>
 					</form>

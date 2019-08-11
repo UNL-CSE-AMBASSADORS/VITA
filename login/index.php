@@ -157,7 +157,7 @@ return readfile($documentRoot . $path);
 				<div class="dcf-col-100% dcf-2nd dcf-col-50%-start@md dcf-1st@md">
 					<p>
 						<a id="register_back_link" href="javascript:void(0);" class="toggle_form">
-							<span class="wdn-icon-angle-double-left" aria-hidden="true"></span><span class="wdn-text-hidden">double left arrow icon</span>
+							<span class="wdn-icon-angle-double-left" aria-hidden="true"></span><span class="dcf-sr-only">double left arrow icon</span>
 							Back To Login Form
 						</a>
 					</p>

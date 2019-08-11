@@ -289,7 +289,7 @@
 
 			<input type="submit" 
 				value="Submit" 
-				class="submit dcf-btn wdn-button-triad" >
+				class="submit dcf-btn dcf-btn-primary" >
 		</form>
 	<?php } ?>
 </div>
@@ -299,9 +299,9 @@
 	<ng-bind-html ng-bind-html="successMessage"></ng-bind-html>
 
 	<div id="successfulSignupButtons" class="dcf-mt-4">
-		<button type="button" class="dcf-btn wdn-button-triad" onclick="window.print();">Print</button>
+		<button type="button" class="dcf-btn dcf-btn-primary" onclick="window.print();">Print</button>
 		<button type="button" 
-			class="dcf-btn wdn-button-triad email-confirmation-button" 
+			class="dcf-btn dcf-btn-primary email-confirmation-button" 
 			ng-if="data.email != null && data.email.length > 0"
 			ng-disabled="emailButton.disabled"
 			ng-click="emailConfirmation()">{{emailButton.text}}</button>

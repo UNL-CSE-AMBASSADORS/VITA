@@ -147,7 +147,7 @@ return readfile($documentRoot . $path);
 					<input id="reset_password_vpassword" type="password" required />
 				</section>
 				<br>
-				<button type="submit" class="dcf-btn wdn-button-triad">Submit</button>
+				<button type="submit" class="dcf-btn dcf-btn-primary">Submit</button>
 			</form>
 		<?php
 				}else{

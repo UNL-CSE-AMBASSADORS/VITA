@@ -17,7 +17,7 @@
 		<div ng-if="!validForReschedule">
 			<p>Your appointment cannot be cancelled or rescheduled.</p>
 			<div>
-				<p class="wdn-intro-p"><b>Reason:</b> {{invalidForRescheduleReason}}</p>
+				<p class="dcf-txt-lg"><b>Reason:</b> {{invalidForRescheduleReason}}</p>
 			</div>
 			<p>If you believe this is a mistake, please call {{phoneNumberToCall}} to speak with a VITA volunteer.</p>
 		</div>

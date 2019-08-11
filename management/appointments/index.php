@@ -111,7 +111,7 @@ return readfile($documentRoot . $path);
 	</div>
 	<div class="dcf-main-content dcf-wrapper">
 		<!-- TemplateBeginEditable name="maincontentarea" -->
-		<div id="appointmentsApp" class="wdn-band" appointments></div>
+		<div id="appointmentsApp" class="dcf-bleed" appointments></div>
 		<!-- TemplateEndEditable -->
 	</div>
 </main>

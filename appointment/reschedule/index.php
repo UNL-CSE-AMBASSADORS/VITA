@@ -111,7 +111,7 @@ if (isset($_REQUEST['token']) && strlen($_REQUEST['token']) === $EXPECTED_TOKEN_
 	</div>
 	<div class="dcf-main-content dcf-wrapper">
 		<!-- TemplateBeginEditable name="maincontentarea" -->
-		<div id="selfServiceAppointmentRescheduleApp" class="wdn-band" self-service-appointment-reschedule token="<?php echo $token; ?>"></div>
+		<div id="selfServiceAppointmentRescheduleApp" class="dcf-bleed" self-service-appointment-reschedule token="<?php echo $token; ?>"></div>
 		<!-- TemplateEndEditable -->
 	</div>
 </main>
