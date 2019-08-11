@@ -6,7 +6,7 @@ define('notificationUtilities', [], function() {
 				WDN.initializePlugin('notice');
 				const body = angular.element(document.querySelector('body'));
 				body.append(`
-					<div class="wdn_notice ${affirmative ? 'affirm' : 'negate'}" data-overlay="maincontent" style="position: fixed; top: 10%;">
+					<div class="wdn_notice ${affirmative ? 'affirm' : 'negate'}" data-overlay="maincontent" style="position: fixed; top: 5%;">
 						<div class="close">
 							<a href="#">Close this notice</a>
 						</div>
