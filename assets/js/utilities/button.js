@@ -2,9 +2,9 @@
 // This creates a directive that uses the same data-toggle attribute, so the html is the same
 define('toggleDirective', [], function() {
 	function toggleDirective() {
-		function link(scope, element, attrs) {
+		function link(scope, element, attributes) {
 
-			if (attrs.toggle == "buttons") {
+			if (attributes.toggle === "buttons") {
 				const activeClassName = 'dcf-btn-primary';
 				const nonActiveClassName = 'dcf-btn-secondary';
 
