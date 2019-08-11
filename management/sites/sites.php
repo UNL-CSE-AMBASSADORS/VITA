@@ -2,7 +2,7 @@
 	<div class="dcf-grid">
 		<!-- Site select list -->
 		<div class="dcf-col-25%-start dcf-pr-10">
-			<ul class="unstyled-list dcf-list-bare">
+			<ul class="dcf-list-bare">
 				<li class="site-list-element"
 					ng-repeat="site in sites"
 					ng-click="selectSite(site)">
