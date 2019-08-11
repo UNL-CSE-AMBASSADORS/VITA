@@ -11,7 +11,7 @@
 </div>
 
 <!-- Body Section with list of clients -->
-<table class="dcf-table wdn_responsive_table queue" ng-if="appointments.length > 0" ng-cloak>
+<table class="dcf-table queue dcf-mb-6" ng-if="appointments.length > 0" ng-cloak>
 	<thead>
 		<tr>
 			<th class="queue-name">Name</th>
