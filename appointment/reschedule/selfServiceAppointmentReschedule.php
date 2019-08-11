@@ -146,10 +146,10 @@
 			<div ng-if="rescheduleSuccessMessage != null">
 				<ng-bind-html ng-bind-html="rescheduleSuccessMessage"></ng-bind-html>
 
-				<div>
-					<button type="button" class="mb-3 dcf-btn btn" onclick="window.print();">Print</button>
+				<div class="dcf-mt-3">
+					<button type="button" class="dcf-btn" onclick="window.print();">Print</button>
 					<button type="button" 
-						class="mb-3 dcf-btn btn email-confirmation-button" 
+						class="dcf-btn email-confirmation-button" 
 						ng-if="clientData.email != null && clientData.email.length > 0"
 						ng-disabled="emailButton.disabled"
 						ng-click="emailConfirmation()">{{emailButton.text}}</button>
