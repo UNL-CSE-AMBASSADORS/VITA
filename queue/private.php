@@ -13,7 +13,7 @@
 
 
 <!-- Queue Section -->
-<div ng-if="appointments != null && client == null" ng-cloak>
+<div ng-if="appointments != null && client == null" class="dcf-mb-6" ng-cloak>
 	<div ng-if="appointments.length > 0">
 		<!-- Search box -->
 		<form class="queue-search dcf-wrapper dcf-p-8 dcf-txt-center">
