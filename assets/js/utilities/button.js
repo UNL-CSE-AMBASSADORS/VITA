@@ -1,5 +1,5 @@
-// AngularJS Version
-// This creates a directive that uses the same data-toggle attribute, so the html is the same
+// AngularJS implementation of Bootstrap's jQuery powered buttons
+// This creates a directive that uses the same data-toggle attribute as Bootstrap, so the html is the same
 define('toggleDirective', [], function() {
 	function toggleDirective() {
 		function link(scope, element, attributes) {
