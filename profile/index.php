@@ -112,7 +112,7 @@ return readfile($documentRoot . $path);
 		<!-- TemplateBeginEditable name="maincontentarea" -->
 		<!-- Personal Information -->
 		<div class="dcf-bleed">
-			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
+			<div class="dcf-wrapper dcf-pb-8">
 				<div class="personal-info">
 					<h2 class="inline">Personal Information</h2>
 					<button class="dcf-btn dcf-float-right" id="personalInformationEditButton">Edit</button>
