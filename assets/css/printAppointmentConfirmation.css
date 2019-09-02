@@ -6,16 +6,24 @@
 	#google_translate_element, 
 	#wdn_menu_toggle, 
 	header, 
-	#wdn_logo_lockup,
+	.dcf-logo-lockup,
 	#wdn_navigation_bar, 
 	.wdn-menu-trigger,
 	.wdn_notice,
 	nav,
 	#pagetitle,
 	button,
-	.btn,
-	footer {
-		display: none;
+	.dcf-btn,
+	footer,
+	.dcf-hero,
+	#successfulSignupButtons {
+		margin: 0px !important;
+		padding: 0px !important;
+		display: none !important;
+	}
+
+	li {
+		margin: 1px 0px;
 	}
 
 	body {
@@ -30,10 +38,20 @@
 	h2 {
 		font-size: 18pt;
 		font-weight: normal;
+		margin: 8px 0px;
+		padding: 0px;
 	}
 
 	h5 {
 		font-size: 14pt;
 		font-weight: normal;
+		margin: 0px;
+		padding: 0px;
+	}
+
+	#successfulSignupContent,
+	#successfulSignupButtons {
+		margin-bottom: 0px !important;
+		padding-bottom: 0px !important;
 	}
 }

@@ -18,11 +18,11 @@ return readfile($documentRoot . $path);
 		$Id: php.fixed.dwt.php | cf0a670a0fd8db9e20a169941c55c838d7c2ba10 | Wed Dec 12 16:54:41 2018 -0600 | Eric Rasmussen	$
 	-->
 	<!-- TemplateBeginEditable name="doctitle" -->
-	<title>Server Error | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+	<title>VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
-	<link rel="stylesheet" href="/dist/error_pages/error_page.css">
+	<!-- Place optional header elements here -->
 	<!-- TemplateEndEditable -->
 	<!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -83,13 +83,14 @@ return readfile($documentRoot . $path);
 					<ol>
 						<li><a href="https://www.unl.edu/">Nebraska</a></li>
 						<li><a href="/">VITA Lincoln</a></li>
-						<li><span aria-current="page">Server Error</span></li>
+						<li><span aria-current="page">Home</span></li>
 					</ol>
 					<!-- TemplateEndEditable -->
 				</nav>
 			</div>
-			<header class="dcf-page-title dcf-sr-only" id="dcf-page-title">
+			<header class="dcf-page-title" id="dcf-page-title">
 				<!-- TemplateBeginEditable name="pagetitle" -->
+				<h1>VITA Lincoln</h1>
 				<!-- TemplateEndEditable -->
 			</header>
 			<!-- TemplateBeginEditable name="herogroup1" -->
@@ -102,13 +103,7 @@ return readfile($documentRoot . $path);
 	</div>
 	<div class="dcf-main-content dcf-wrapper">
 		<!-- TemplateBeginEditable name="maincontentarea" -->
-		<div class="dcf-bleed">
-			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
-				<h1 class="error-number">500</h1>
-				<h2 class="error-name">Server Error</h2>
-				<div class="error-description">The server encountered an error trying to help you.<br>Please try again later, and if the problem persists, contact vita@cse.unl.edu</div>
-			</div>
-		</div>
+		<p>Impress your audience with awesome content!</p>
 		<!-- TemplateEndEditable -->
 	</div>
 </main>

@@ -59,7 +59,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 		queueApp.service('appointmentNotesAreaSharedPropertiesService', AppointmentNotesAreaSharedPropertiesService)
 		queueApp.controller('queueController', QueueController);
 		queueApp.controller('queuePrivateController', QueuePrivateController);
-		queueApp.directive('privateQueue', function () {
+		queueApp.directive('vitaQueue', function () {
 			return {
 				controller: 'queuePrivateController',
 				templateUrl: '/queue/private.php'
