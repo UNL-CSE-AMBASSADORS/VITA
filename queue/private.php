@@ -102,19 +102,19 @@
 		<div class="client-progress dcf-mb-8">
 			<h4>Update Progress:</h4>
 			<button type="button" 
-				class="dcf-btn checkin" 
+				class="dcf-btn dcf-btn-primary checkin" 
 				ng-show="!client.checkedIn && !client.ended" 
 				ng-click="checkIn()">
 				Checked In
 			</button>
 			<button type="button" 
-				class="dcf-btn paperworkComplete" 
+				class="dcf-btn dcf-btn-primary paperworkComplete" 
 				ng-show="client.checkedIn && !client.paperworkComplete && !client.ended" 
 				ng-click="pwFilledOut()">
 				Completed Paperwork
 			</button>
 			<button type="button" 
-				class="dcf-btn preparing" 
+				class="dcf-btn dcf-btn-primary preparing" 
 				ng-show="client.paperworkComplete && !client.preparing && !client.ended" 
 				ng-click="nowPreparing()">
 				Preparing
@@ -133,7 +133,7 @@
 				</select>
 			</div>
 			<button type="button" 
-				class="dcf-btn ended" 
+				class="dcf-btn dcf-btn-primary ended" 
 				ng-show="client.preparing && !client.ended" 
 				ng-disabled="client.selectedStationNumber == null" 
 				ng-click="completeAppointment()">
@@ -157,14 +157,14 @@
 		<div class="appointment-not-complete dcf-mb-8">
 			<form>
 				<h4>Appointment Not Completed:</h4>
-				<button class="dcf-btn" 
+				<button class="dcf-btn dcf-btn-primary" 
 					ng-show="!client.checkedIn" 
 					ng-disabled="client.ended" 
 					ng-click="cancelledAppointment()">
 					Cancel Appointment
 				</button>
 
-				<button class="dcf-btn" 
+				<button class="dcf-btn dcf-btn-primary" 
 					ng-show="client.checkedIn" 
 					ng-disabled="client.ended" 
 					ng-click="incompleteAppointment()">
