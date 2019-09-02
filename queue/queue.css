@@ -7,7 +7,6 @@
 
 .queue-count {
 	font-size: 2rem;
-	/* font-family: 'Tungsten A','Tungsten B','Arial Narrow',Arial,sans-serif; */
 }
 
 .queue-size-count {
@@ -18,7 +17,6 @@
 .clock-time {
 	font-size: 3.5rem;
 	color: #474746;
-	/* font-family: 'Tungsten A','Tungsten B','Arial Narrow',Arial,sans-serif; */
 	font-weight: 600;
 	font-style: normal;
 	line-height: 1;
@@ -27,7 +25,6 @@
 .clock-period {
 	font-size: 1.75rem;
 	color: #474746;
-	/* font-family: 'Tungsten A','Tungsten B','Arial Narrow',Arial,sans-serif; */
 	font-weight: 400;
 	font-style: normal;
 	line-height: 1;
