@@ -8,20 +8,11 @@ label.form-required::after {
 	font-size: 1.247rem;
 }
 
-.btn-group .wdn-button {
-	border: 1px solid #2e240c;
-}
-
-.wdn-button.active {
-	background-color: #2e240c;
-}
-
-.wdn-button:focus, 
-.wdn-button:active:focus, 
-.wdn-button.active:focus, 
-.wdn-button.focus, 
-.wdn-button:active.focus, 
-.wdn-button.active.focus {
-	box-shadow: 0 0 0 3px rgba(134,142,150,.5);
-	outline: 5px auto rgba(134,142,150,.5);
+[data-toggle=buttons]>.dcf-btn-group>.dcf-btn input[type=checkbox],
+[data-toggle=buttons]>.dcf-btn-group>.dcf-btn input[type=radio],
+[data-toggle=buttons]>.dcf-btn input[type=checkbox],
+[data-toggle=buttons]>.dcf-btn input[type=radio] {
+	position: absolute;
+	clip: rect(0, 0, 0, 0);
+	pointer-events: none;
 }

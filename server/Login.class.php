@@ -681,7 +681,7 @@ class Login
 	private function sendHtmlFormattedEmail($toEmail, $subject, $body) {
 		if (PROD) {
 			$root = realpath($_SERVER['DOCUMENT_ROOT']);
-			require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
+			require_once "$root/server/utilities/emailUtilities.class.php";
 			
 			$fromEmail = $this->noreply_email;
 			EmailUtilities::sendHtmlFormattedEmail($toEmail, $subject, $body, $fromEmail);

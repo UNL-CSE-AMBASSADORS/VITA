@@ -50,7 +50,7 @@ WDN.initializePlugin('modal', [function() {
 						let ability = response.abilities[i];
 						let modifiers = ability.has ? `data-userAbilityId=${ability.userAbilityId} checked` : '';
 						let checkbox = $(`<input id=${i} type="checkbox" value=${ability.abilityId} ${modifiers} />`);
-						let editLabel = $(`<label for=${i}>${ability.name}</label>`);
+						let editLabel = $(`<label for=${i} class="dcf-pl-1">${ability.name}</label>`);
 						let editContainer = $(`<div style="display:none;"></div>`).addClass("editView");
 						editContainer.append(checkbox, editLabel);
 						let status = $(`<span aria-hidden="true"></span>`).addClass(ability.has ? "wdn-icon-ok green-icon" : "wdn-icon-cancel red-icon");
@@ -219,9 +219,9 @@ WDN.initializePlugin('modal', [function() {
 	
 		function appendSignedUpShift(siteTitle, dateString, startTimeString, endTimeString, userShiftId, siteId, roleName) {
 			let shiftRow = $('<div></div>');
-			let shiftInformation = $('<span></span>').text(`${siteTitle}: ${dateString} ${startTimeString} - ${endTimeString} (${roleName})`);
+			let shiftInformation = $('<span></span>').text(`${siteTitle}: ${dateString} ${startTimeString} - ${endTimeString} (${roleName}) `);
 			let removeButton = $('<a></a>')
-				.text(' [Cancel]')
+				.text('[Cancel]')
 				.addClass('red-icon pointer')
 				.colorbox({
 					inline:true,
@@ -415,11 +415,11 @@ WDN.initializePlugin('modal', [function() {
 
 		function initializeShiftEventListeners() {
 			$("#addShiftButton").click(function(e) {
-				let shiftRow = $('<div></div>').addClass("add-shift-div wdn-grid-set wdn-inner-wrapper wdn-inner-padding-sm centered");
-				let siteSelect = $('<select></select>').addClass("siteSelect bp768-wdn-col-one-fourth mb-1rem");
-				let dateSelect = $('<select></select>').addClass("dateSelect bp768-wdn-col-one-fourth mb-1rem").attr('disabled', true);
-				let timeSelect = $('<select></select>').addClass("timeSelect bp768-wdn-col-one-fourth mb-1rem").attr('disabled', true);
-				let roleSelect = $('<select></select>').addClass("roleSelect bp768-wdn-col-one-fourth mb-1rem").attr('disabled', true);
+				const shiftRow = $('<div></div>').addClass("dcf-grid dcf-grid-fourths dcf-col-gap-1 dcf-row-gap-1 dcf-mt-3 dcf-mb-3");
+				const siteSelect = $('<select></select>').addClass("siteSelect dcf-input-select");
+				const dateSelect = $('<select></select>').addClass("dateSelect dcf-input-select").attr('disabled', true);
+				const timeSelect = $('<select></select>').addClass("timeSelect dcf-input-select").attr('disabled', true);
+				const roleSelect = $('<select></select>').addClass("roleSelect dcf-input-select").attr('disabled', true);
 				
 				siteSelect.append($('<option disabled selected value="" style="display:none"> -- Select a site -- </option>'));
 				dateSelect.append($('<option disabled selected value="" style="display:none"> -- Select a date -- </option>'));
@@ -485,18 +485,18 @@ WDN.initializePlugin('modal', [function() {
 					}
 				});
 	
-				let cancelButton = $('<button type="button"></button>').addClass("wdn-button wdn-button-brand wdn-pull-right").html("Cancel").click(function(){
-					$(this).parent().remove();
+				const cancelButton = $('<button type="button"></button>').addClass("dcf-btn dcf-btn-primary").html("Cancel").click(function(){
+					$(this).parent().parent().remove();
 				});
 	
-				let signUpButton = $('<button type="button"></button>').addClass('wdn-button wdn-button-triad wdn-pull-right').html('Sign Up').click(function() {
+				const signUpButton = $('<button type="button"></button>').addClass('dcf-btn dcf-btn-secondary dcf-ml-2').html('Sign Up').click(function() {
 					$(this).prop('disabled', true);
 					cancelButton.prop('disabled', true);
 	
-					let siteId = siteSelect.val();
-					let dateString = dateSelect.val();
-					let shiftId = timeSelect.val();
-					let roleId = roleSelect.val();
+					const siteId = siteSelect.val();
+					const dateString = dateSelect.val();
+					const shiftId = timeSelect.val();
+					const roleId = roleSelect.val();
 	
 					$.ajax({
 						url: "/server/profile/profile.php",
@@ -539,8 +539,10 @@ WDN.initializePlugin('modal', [function() {
 					});
 				});
 				
-	
-				shiftRow.append(siteSelect, dateSelect, timeSelect, roleSelect, cancelButton, signUpButton);
+				const buttonsRow = $('<div></div>');
+				buttonsRow.append(cancelButton, signUpButton);
+
+				shiftRow.append(siteSelect, dateSelect, timeSelect, roleSelect, buttonsRow);
 				$("#shifts").append(shiftRow);	
 			});
 		}

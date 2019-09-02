@@ -41,7 +41,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 
 		queueApp.factory('queueDataService', QueueDataService);
 		queueApp.controller('queueController', QueueController);
-		queueApp.directive('publicQueue', function () {
+		queueApp.directive('vitaQueue', function () {
 			return {
 				controller: 'queueController',
 				templateUrl: '/queue/public.php'

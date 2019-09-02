@@ -9,6 +9,7 @@ require.config({
 		appointmentPickerSharedPropertiesService: '/dist/components/appointmentPicker/appointmentPickerSharedPropertiesService',
 		appointmentPickerDataService: '/dist/components/appointmentPicker/appointmentPickerDataService',
 		appointmentPickerController: '/dist/components/appointmentPicker/appointmentPickerController',
+		toggleDirective: '/dist/assets/js/utilities/button',
 		'bootstrap-ui': '/dist/assets/js/bootstrap/ui-bootstrap-buttons-2.5.0.min',
 		notificationUtilities: '/dist/assets/js/utilities/notificationUtilities'
 	},
@@ -21,6 +22,7 @@ require.config({
 		'appointmentPickerSharedPropertiesService': ['angular'],
 		'appointmentPickerDataService': ['angular'],
 		'appointmentPickerController': ['angular'],
+		'toggleDirective': ['angular'],
 		'bootstrap-ui': ['angular']
 	}
 });
@@ -33,6 +35,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(
 		'appointmentPickerSharedPropertiesService',
 		'appointmentPickerDataService',
 		'appointmentPickerController',
+		'toggleDirective',
 		'notificationUtilities'
 	],
 	function (
@@ -41,6 +44,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(
 		AppointmentPickerSharedPropertiesService,
 		AppointmentPickerDataService,
 		AppointmentPickerController,
+		ToggleDirective,
 		NotificationUtilities
 	) {
 		'use strict';
@@ -58,6 +62,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(
 				templateUrl: '/signup/signup.php'
 			};
 		});
+		signupApp.directive('toggle', ToggleDirective);
 
 		// Contents for the appointmentPickerApp module
 		signupApp.service('appointmentPickerSharedPropertiesService', AppointmentPickerSharedPropertiesService)

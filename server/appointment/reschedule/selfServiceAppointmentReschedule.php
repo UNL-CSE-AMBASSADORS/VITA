@@ -5,6 +5,7 @@ $root = realpath($_SERVER['DOCUMENT_ROOT']);
 require_once "$root/server/config.php";
 require_once "$root/server/accessors/appointmentAccessor.class.php";
 require_once "$root/server/utilities/appointmentConfirmationUtilities.class.php";
+require_once "$root/server/utilities/emailUtilities.class.php";
 require_once "$root/server/accessors/noteAccessor.class.php";
 
 if (isset($_REQUEST['action'])) {
