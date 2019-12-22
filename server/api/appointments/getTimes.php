@@ -14,8 +14,6 @@ getAppointmentTimes($_GET, $isLoggedIn);
  * The fields that will be returned are: appointmentTimeId, siteId, scheduledDate,  scheduledTime, percentageAppointments, numberOfAppointmentsAlreadyMade, numberOfPreparers
  */
 function getAppointmentTimes($data, $isLoggedIn) {
-	GLOBAL $DB_CONN;
-
 	date_default_timezone_set('America/Chicago');
 
 	$year = date("Y");
@@ -28,28 +26,19 @@ function getAppointmentTimes($data, $isLoggedIn) {
 		$after = $data['after'];
 	}
 
-	$needsInternational = false;
-	if (isset($data['studentScholar'])) {
-		$needsInternational = ($data['studentScholar'] === 'true');
+	$isResidential = true;
+	if (isset($data['appointmentType'])) {
+		$isResidential = $data['appointmentType'] === 'residential';
 	}
 
-	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, TIME(scheduledTime) AS scheduledTime, percentageAppointments, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, COUNT(DISTINCT us.userShiftId) AS numberOfPreparers, apt.minimumNumberOfAppointments, apt.maximumNumberOfAppointments
-	FROM AppointmentTime apt
-	LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
-	LEFT JOIN UserShift us ON us.shiftId IN (SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId AND s.startTime <= apt.scheduledTime AND s.endTime >= apt.scheduledTime AND TIMESTAMPDIFF(MINUTE, apt.scheduledTime, s.endTime) >= apt.approximateLengthInMinutes) 
-		AND us.roleId = (SELECT roleId FROM Role WHERE lookupName = "preparer")
-	LEFT JOIN Site s ON s.siteId = apt.siteId
-	WHERE YEAR(apt.scheduledTime) = ? 
-		AND apt.scheduledTime > ? 
-		AND s.doesInternational = ?
-	GROUP BY apt.appointmentTimeId
-	ORDER BY apt.scheduledTime';
 
-	$stmt = $DB_CONN->prepare($query);
-	$stmt->execute(array($year, $after, $needsInternational));
-	$appointmentTimes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	if ($isResidential) {
+		$appointmentTimes = getResidentialAppointmentTimes($year, $after);
+	} else {
+		$appointmentTimes = getInternationalAppointmentTimes($year, $after, $data['appointmentType']);
+	}
 
-	$dstMap = new DateSiteTimeMap();
+	$dstMap = new DateSiteTimeMap($data['appointmentType']);
 
 	foreach ($appointmentTimes as $appointmentTime) {
 		$dstMap->addDateSiteTimeObject($appointmentTime);
@@ -62,7 +51,67 @@ function getAppointmentTimes($data, $isLoggedIn) {
 	echo json_encode($dstMap);
 }
 
-function calculateRemainingAppointmentsAvailable($appointmentCount, $percentAppointments, $preparerCount, $minimum, $maximum) {
+function getResidentialAppointmentTimes($year, $after) {
+	GLOBAL $DB_CONN;
+
+	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, 
+		TIME(scheduledTime) AS scheduledTime, percentageAppointments, 
+		COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, 
+		COUNT(DISTINCT us.userShiftId) AS numberOfPreparers, 
+		apt.minimumNumberOfAppointments, apt.maximumNumberOfAppointments
+	FROM AppointmentTime apt
+		LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
+		LEFT JOIN ServicedAppointment sa ON sa.appointmentId = a.appointmentId
+		LEFT JOIN UserShift us ON us.shiftId IN 
+			(SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId 
+				AND s.startTime <= apt.scheduledTime 
+				AND s.endTime >= apt.scheduledTime 
+				AND TIMESTAMPDIFF(MINUTE, apt.scheduledTime, s.endTime) >= apt.approximateLengthInMinutes) 
+			AND us.roleId = (SELECT roleId FROM Role WHERE lookupName = "preparer")
+		LEFT JOIN Site s ON s.siteId = apt.siteId
+	WHERE YEAR(apt.scheduledTime) = ? 
+		AND apt.scheduledTime > ? 
+		AND s.doesInternational = FALSE
+		AND (sa.cancelled IS NULL OR sa.cancelled = FALSE)
+	GROUP BY apt.appointmentTimeId
+	ORDER BY apt.scheduledTime';
+
+	$stmt = $DB_CONN->prepare($query);
+	$stmt->execute(array($year, $after));
+	$appointmentTimes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+	return $appointmentTimes;
+}
+
+function getInternationalAppointmentTimes($year, $after, $treatyType) {
+	GLOBAL $DB_CONN;
+
+	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, 
+		TIME(scheduledTime) AS scheduledTime, percentageAppointments, 
+		COUNT(DISTINCT ans.answerId) AS numberOfAppointmentsAlreadyMade, 
+		apt.minimumNumberOfAppointments, apt.maximumNumberOfAppointments
+	FROM AppointmentTime apt
+		LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
+		LEFT JOIN ServicedAppointment sa ON sa.appointmentId = a.appointmentId
+		LEFT JOIN Answer ans ON ans.appointmentId = a.appointmentId 
+			AND ans.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")
+			AND ans.possibleAnswerId = (SELECT possibleAnswerId FROM PossibleAnswer WHERE text = ?)
+		LEFT JOIN Site s ON s.siteId = apt.siteId
+	WHERE YEAR(apt.scheduledTime) = ? 
+		AND apt.scheduledTime > ? 
+		AND s.doesInternational = TRUE
+		AND (sa.cancelled IS NULL OR sa.cancelled = FALSE)
+	GROUP BY apt.appointmentTimeId
+	ORDER BY apt.scheduledTime;';
+
+	$stmt = $DB_CONN->prepare($query);
+	$stmt->execute(array($treatyType, $year, $after));
+	$appointmentTimes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+	return $appointmentTimes;
+}
+
+function calculateRemainingAppointmentsAvailableForResidentialAppointment($appointmentCount, $percentAppointments, $preparerCount, $minimum, $maximum) {
 	if (isset($maximum)) {
 		$availableAppointmentSpots = $maximum;
 	} else {
@@ -72,14 +121,38 @@ function calculateRemainingAppointmentsAvailable($appointmentCount, $percentAppo
 	return ceil($availableAppointmentSpots) - $appointmentCount;
 }
 
+function calculateRemainingAppointmentsAvailableForInternationalAppointment($treatyType, $numberAppointmentsAlreadyScheduled) {
+	if ($treatyType === 'china') {
+		return 15 - $numberAppointmentsAlreadyScheduled;
+	} else if ($treatyType === 'india') {
+		return 6 - $numberAppointmentsAlreadyScheduled;
+	} else if ($treatyType === 'treaty') {
+		return 5 - $numberAppointmentsAlreadyScheduled;
+	} else if ($treatyType === 'non-treaty') {
+		return 15 - $numberAppointmentsAlreadyScheduled;
+	} 
+}
+
 class DateSiteTimeMap {
 	public $dates = [];
 	public $hasAvailability = false;
 	public $isLoggedIn = false;
+	
+	private $appointmentType;
+
+	public function __construct($appointmentType) {
+		$this->appointmentType = $appointmentType;
+	}
 
 	public function addDateSiteTimeObject($dstObject) {
 		// Get the number of appointments still available
-		$appointmentsAvailable = calculateRemainingAppointmentsAvailable($dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['percentageAppointments'], $dstObject['numberOfPreparers'], $dstObject['minimumNumberOfAppointments'], $dstObject['maximumNumberOfAppointments']);
+		$appointmentsAvailable = 0;
+		if ($this->appointmentType === 'residential') {
+			$appointmentsAvailable = calculateRemainingAppointmentsAvailableForResidentialAppointment($dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['percentageAppointments'], $dstObject['numberOfPreparers'], $dstObject['minimumNumberOfAppointments'], $dstObject['maximumNumberOfAppointments']);
+		} else {
+			$appointmentsAvailable = calculateRemainingAppointmentsAvailableForInternationalAppointment($this->appointmentType, $dstObject['numberOfAppointmentsAlreadyMade']);
+		}
+		
 
 		// Reformat the time to be h:i MM
 		$time = date_format(date_create($dstObject['scheduledTime']), 'g:i A');

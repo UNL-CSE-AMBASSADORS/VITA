@@ -59,8 +59,8 @@ function getUserTable($data) {
 		$tbody.= "<tr data-user-id='".$row['userId']."'>";
 		$tbody.= "<th data-header='Name'>".$row['firstName']." ".$row['lastName']."</th>";
 		$tbody.= "<td data-header='Email'>".$row['email']."</td>";
-		$tbody.= "<td data-header='Permissions'><select class='userPermissionList userPermissionsSelectPicker' data-style='wdn-button' multiple=true>".implode('', $permissionsList)."</select></td>";
-		$tbody.= "<td data-header='Certifications'><select class='userAbilityList userAbilitiesSelectPicker' data-style='wdn-button' multiple=true>".implode('', $abilitiesList)."</select></td>";		
+		$tbody.= "<td data-header='Permissions'><select class='userPermissionList userPermissionsSelectPicker' data-style='dcf-btn dcf-btn-secondary' multiple=true>".implode('', $permissionsList)."</select></td>";
+		$tbody.= "<td data-header='Certifications'><select class='userAbilityList userAbilitiesSelectPicker' data-style='dcf-btn dcf-btn-secondary' multiple=true>".implode('', $abilitiesList)."</select></td>";		
 		$tbody.= "<td data-header='Edit'><a href='#edit-user-modal' class='userEditButton'>Edit</a></td>";	
 		$tbody.= "</tr>";
 	}

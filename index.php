@@ -2,190 +2,205 @@
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 function wdnInclude($path)
 {
-	$documentRoot = 'https://unlcms.unl.edu';
-
-	return readfile($documentRoot . $path);
+$documentRoot = 'https://unlcms.unl.edu';
+return readfile($documentRoot . $path);
 }
 ?>
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
-<?php wdnInclude("/wdn/templates_4.1/includes/metanfavico.html"); ?>
-<!--
-	Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at https://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
-	All framework code is the property of the UNL Web Developer Network. The code seen in a source code view is not, and may not be used as, a template. You may not use this code, a reverse-engineered version of this code, or its associated visual presentation in whole or in part to create a derivative work.
-	This message may not be removed from any pages based on the UNLedu Web Framework.
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/head-1.html"); ?>
+	<!--
+		Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at http://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
+		All framework code is the property of the UNL Web Developer Network. The code seen in a source code view is not, and may not be used as, a template. You may not use this code, a reverse-engineered version of this code, or its associated visual presentation in whole or in part to create a derivative work.
+		This message may not be removed from any pages based on the UNLedu Web Framework.
 
-	$Id: php.fixed.dwt.php | 6edb0e1ee94038935f3821c6ce15dfd5c217b2e2 | Tue Dec 1 17:08:56 2015 -0600 | Kevin Abel  $
--->
-<?php wdnInclude("/wdn/templates_4.1/includes/scriptsandstyles.html"); ?>
-<!-- TemplateBeginEditable name="doctitle" -->
-<title>VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
-<!-- TemplateEndEditable -->
-<!-- TemplateBeginEditable name="head" -->
-<!-- TemplateEndEditable -->
-<!-- TemplateParam name="class" type="text" value="" -->
+		$Id: php.fixed.dwt.php | cf0a670a0fd8db9e20a169941c55c838d7c2ba10 | Wed Dec 12 16:54:41 2018 -0600 | Eric Rasmussen	$
+	-->
+	<!-- TemplateBeginEditable name="doctitle" -->
+	<title>VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+	<!-- TemplateEndEditable -->
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/head-2.html"); ?>
+	<!-- TemplateBeginEditable name="head" -->
+	<!-- Place optional header elements here -->
+	<!-- TemplateEndEditable -->
+	<!-- TemplateParam name="class" type="text" value="" -->
 </head>
-<body class="hide-wdn_identity_management" data-version="4.1">
-	<?php wdnInclude("/wdn/templates_4.1/includes/skipnav.html"); ?>
-	<div id="wdn_wrapper">
-		<input type="checkbox" id="wdn_menu_toggle" value="Show navigation menu" class="wdn-content-slide wdn-input-driver" />
-		<?php wdnInclude("/wdn/templates_4.1/includes/noscript-padding.html"); ?>
-		<header id="header" role="banner" class="wdn-content-slide wdn-band">
-			<div id="wdn_header_top">
-				<span id="wdn_institution_title"><a href="https://www.unl.edu/">University of Nebraska&ndash;Lincoln</a></span>
-				<div id="wdn_resources">
-					<?php wdnInclude("/wdn/templates_4.1/includes/wdnResources.html"); ?>
-					<?php wdnInclude("/wdn/templates_4.1/includes/idm.html"); ?>
-					<?php wdnInclude("/wdn/templates_4.1/includes/search.html"); ?>
-				</div>
-			</div>
-			<div id="wdn_logo_lockup">
-				<div class="wdn-inner-wrapper">
-					<?php wdnInclude("/wdn/templates_4.1/includes/logo.html"); ?>
-						<span id="wdn_site_affiliation"><!-- TemplateBeginEditable name="affiliation" --><!-- TemplateEndEditable --></span>
-						<span id="wdn_site_title"><!-- TemplateBeginEditable name="titlegraphic" -->VITA Lincoln<!-- TemplateEndEditable --></span>
-				</div>
-			</div>
-		</header>
-		<div id="wdn_navigation_bar" class="wdn-band">
-			<nav id="breadcrumbs" class="wdn-inner-wrapper" role="navigation" aria-label="breadcrumbs">
-				<!-- TemplateBeginEditable name="breadcrumbs" -->
-				<ul>
-					<li><a href="https://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
-					<li>VITA Lincoln</li>
-					<li>Need Assistance</li>
-				</ul>
+<body class="@@(_document['class'])@@ unl" data-version="5.0">
+<?php wdnInclude("/wdn/templates_5.0/includes/global/skip-nav.html"); ?>
+<header class="dcf-header" id="dcf-header" role="banner">
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/header-global-1.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-global-1.html"); ?>
+				<?php wdnInclude("/wdn/templates_5.0/includes/global/visit-global-1.html"); ?>
+				<!-- TemplateBeginEditable name="visitlocal" -->
+				<?php wdnInclude("/wdn/templates_5.0/includes/local/visit-local.html"); ?>
 				<!-- TemplateEndEditable -->
-			</nav>
-			<div id="wdn_navigation_wrapper">
-				<nav id="navigation" role="navigation" aria-label="main navigation">
-					<!-- TemplateBeginEditable name="navlinks" -->
-					<?php include "$root/sharedcode/navigation.php"; ?>
+				<?php wdnInclude("/wdn/templates_5.0/includes/global/visit-global-2.html"); ?>
+				<?php wdnInclude("/wdn/templates_5.0/includes/global/apply-global-1.html"); ?>
+				<!-- TemplateBeginEditable name="applylocal" -->
+				<?php wdnInclude("/wdn/templates_5.0/includes/local/apply-local.html"); ?>
+				<!-- TemplateEndEditable -->
+				<?php wdnInclude("/wdn/templates_5.0/includes/global/apply-global-2.html"); ?>
+				<?php wdnInclude("/wdn/templates_5.0/includes/global/give-global-1.html"); ?>
+				<!-- TemplateBeginEditable name="givelocal" -->
+				<?php wdnInclude("/wdn/templates_5.0/includes/local/give-local.html"); ?>
+				<!-- TemplateEndEditable -->
+				<?php wdnInclude("/wdn/templates_5.0/includes/global/give-global-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-global-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/search.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/header-global-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/logo-lockup-1.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/site-affiliation-1.html"); ?>
+	<!-- TemplateBeginEditable name="affiliation" -->
+	<!-- TemplateEndEditable -->
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/site-affiliation-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/site-title-1.html"); ?>
+	<!-- TemplateBeginEditable name="titlegraphic" -->
+	<a class="unl-site-title-medium" href="/">VITA Lincoln</a>
+	<!-- TemplateEndEditable -->
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/site-title-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/logo-lockup-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-toggle-group.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-menu-1.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-toggle-btn.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-menu-child-1.html"); ?>
+	<!-- TemplateBeginEditable name="navlinks" -->
+		<?php include "$root/sharedcode/navigation.php"; ?>
+	<!-- TemplateEndEditable -->
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-menu-child-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-menu-2.html"); ?>
+</header>
+
+<main class="dcf-main" id="dcf-main" role="main" tabindex="-1">
+
+	<!-- TemplateBeginEditable name="hero" -->
+	<div class="dcf-hero dcf-hero-default dcf-sr-only">
+		<!-- TemplateEndEditable -->
+		<div class="dcf-hero-group-1">
+			<div class="dcf-breadcrumbs-wrapper">
+				<nav class="dcf-breadcrumbs" id="dcf-breadcrumbs" role="navigation" aria-label="breadcrumbs">
+					<!-- TemplateBeginEditable name="breadcrumbs" -->
+					<ol>
+						<li><a href="https://www.unl.edu/">Nebraska</a></li>
+						<li><a href="/">VITA Lincoln</a></li>
+						<li><span aria-current="page">Home</span></li>
+					</ol>
 					<!-- TemplateEndEditable -->
-					<?php wdnInclude("/wdn/templates_4.1/includes/navigation-addons.html"); ?>
 				</nav>
 			</div>
-		</div>
-		<div class="wdn-menu-trigger wdn-content-slide">
-			<label for="wdn_menu_toggle" class="wdn-icon-menu">Menu</label>
-			<?php wdnInclude("/wdn/templates_4.1/includes/share.html"); ?>
-		</div>
-		<main id="wdn_content_wrapper" role="main" class="wdn-content-slide" tabindex="-1">
-			<div id="maincontent" class="wdn-main">
-				<div id="pagetitle">
-					<!-- TemplateBeginEditable name="pagetitle" -->
-					<!-- TemplateEndEditable -->
-				</div>
-				<!-- TemplateBeginEditable name="maincontentarea" -->
-				<div class="wdn-band wdn-hero">
-					<div class="wdn-hero-text-container">
-						<div class="wdn-hero-text">
-							<h2 class="wdn-hero-heading">VITA Lincoln</h2>
-						</div>
-					</div>
-					<div class="wdn-hero-picture">
-						<img src="assets/res/VITA-Coalition-Web-Banner.png" alt="Lincoln VITA Coalition">
-					</div>
-				</div>
-
-				<div class="wdn-band wdn-text-band">
-					<div class="wdn-inner-wrapper">
-						<p>
-							Qualified students and community members can have their tax return prepared AT NO CHARGE 
-							by trained student and community volunteers.
-						</p>
-					</div>
-				</div>
-
-				<div class="wdn-band wdn-light-triad-band">
-					<div class="wdn-inner-wrapper">
-						<div class="wdn-grid-set">
-							<div class="bp768-wdn-col-one-half">
-								<h2>What is the UNL Tax Credit Campaign?</h2>
-							</div>
-							<div class="bp768-wdn-col-one-half">
-								The UNL Tax Credit Campaign prepares tax returns for low-income, working families and students for free.
-								It is sponsored by the University of Nebraska&ndash;Lincoln's Center for Civic Engagement in conjunction
-								with the Lincoln EITC Coalition.
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="wdn-band wdn-light-neutral-band">
-					<div class="wdn-inner-wrapper">
-						<div class="wdn-grid-set">
-							<div class="bp768-wdn-col-one-half">
-								<h2>Sign up for an Appointment</h2>
-							</div>
-							<div class="bp768-wdn-col-one-half">
-								<p class="col col-12 col-sm-8">
-									Resident appointments begin January 21st and run through April 8th. 
-									Appointments for International Student Scholars tax appointments begin March 6th and run 
-									through April 10th. Appointments are available at the following sites: Nebraska East Union, 
-									Anderson Library, and Jackie Gaughan Multicultural Center. To see the days and times for 
-									all the locations, please download site schedule. 
-								</p>
-								<div class="bp768-wdn-col-one-half visual-island">
-									<a class="wdn-button wdn-button-brand" href="/signup">Make an Appointment</a>
-								</div>
-								<div class="bp768-wdn-col-one-half visual-island">
-									<button class="wdn-button wdn-button-brand" onClick="javascript:downloadSiteSchedule()">Download Site Schedule</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="wdn-band">
-					<div class="wdn-inner-wrapper">
-						<div class="wdn-grid-set">
-							<div class="bp768-wdn-col-one-half">
-								<h2>Documents to Bring</h2>
-							</div>
-							<ul class="bp768-wdn-col-one-half">
-								<li>Social Security Card and photo identification</li>
-								<li>Social Security numbers and birth dates for all dependents</li>
-								<li>Forms W-2 and all other income forms for 2017 (ex: 1099-MISC, 1099-R, etc.)</li>
-								<li>Banking information for deposit/debit, routing number and account number</li>
-								<li>Tax identification numbers for any and all daycare providers</li>
-								<li>Spouse, if filing jointly (both must be present to sign the return)</li>
-								<li>If a college student, you must bring your 1098T and student account information showing payment of tuition and qualified fees</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-
+			<header class="dcf-page-title" id="dcf-page-title">
+				<!-- TemplateBeginEditable name="pagetitle" -->
+				<h1>VITA Lincoln</h1>
 				<!-- TemplateEndEditable -->
-			</div>
-		</main>
-		<footer id="footer" role="contentinfo" class="wdn-content-slide">
-			<div id="wdn_optional_footer" class="wdn-band wdn-footer-optional">
-				<div class="wdn-inner-wrapper">
-					<!-- TemplateBeginEditable name="optionalfooter" -->
-					<!-- TemplateEndEditable -->
-				</div>
-			</div>
-			<div id="wdn_local_footer" class="wdn-band wdn-footer-local">
-				<div class="wdn-inner-wrapper">
-					<!-- TemplateBeginEditable name="contactinfo" -->
-					<?php include "$root/sharedcode/localFooter.html"; ?>
-					<!-- TemplateEndEditable -->
-					<!-- TemplateBeginEditable name="leftcollinks" -->
-					<!-- TemplateEndEditable -->
-				</div>
-			</div>
-			<div id="wdn_global_footer" class="wdn-band wdn-footer-global">
-				<div class="wdn-inner-wrapper">
-					<?php wdnInclude("/wdn/templates_4.1/includes/globalfooter.html"); ?>
-				</div>
-			</div>
-		</footer>
-		<?php wdnInclude("/wdn/templates_4.1/includes/noscript.html"); ?>
+			</header>
+			<!-- TemplateBeginEditable name="herogroup1" -->
+			<!-- TemplateEndEditable -->
+		</div>
+		<!-- TemplateBeginEditable name="herogroup2" -->
+		<div class="dcf-hero-group-2">
+		</div>
+		<!-- TemplateEndEditable -->
 	</div>
-	<?php wdnInclude("/wdn/templates_4.1/includes/body_scripts.html"); ?>
-	<?php require_once "$root/server/global_includes.php"; ?>
-	<script src="/dist/index.js"></script>
+	<div class="dcf-main-content dcf-wrapper">
+		<!-- TemplateBeginEditable name="maincontentarea" -->
+		<div class="dcf-bleed wdn-hero">
+			<div class="wdn-hero-text-container">
+				<div class="wdn-hero-text">
+					<h2 class="wdn-hero-heading">VITA Lincoln</h2>
+				</div>
+			</div>
+			<div class="wdn-hero-picture">
+				<img src="assets/res/VITA-Coalition-Web-Banner.png" alt="Lincoln VITA Coalition">
+			</div>
+		</div>
+
+		<div class="dcf-bleed">
+			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
+				<p>
+					Qualified students and community members can have their tax return prepared AT NO CHARGE 
+					by trained student and community volunteers.
+				</p>
+			</div>
+		</div>
+
+		<div class="dcf-bleed unl-bg-lighter-gray">
+			<div class="dcf-wrapper">
+				<div class="dcf-grid-halves@md dcf-pt-8 dcf-pb-8">
+					<div>
+						<h2>What is the UNL Tax Credit Campaign?</h2>
+					</div>
+					<div>
+						The UNL Tax Credit Campaign prepares tax returns for low-income, working families and students for free.
+						It is sponsored by the University of Nebraska&ndash;Lincoln's Center for Civic Engagement in conjunction
+						with the Lincoln EITC Coalition.
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="dcf-bleed unl-bg-lightest-gray">
+			<div class="dcf-wrapper">
+				<div class="dcf-grid-halves@md dcf-pt-8 dcf-pb-8">
+					<div>
+						<h2>Sign up for an Appointment</h2>
+					</div>
+					<div>
+						<div>
+							Resident appointments begin January 20th and run through April 11th. 
+							Tax Appointments for International Student Scholars begin March 5th and run 
+							through April 9th. Appointments are available at the following sites: Nebraska East Union, 
+							Anderson Library, Center for People in Need, Loren Eiseley Library, and Bennett Martin 
+							Library. To see the days and times for all the locations, please download 
+							the site schedule. 
+						</div>
+						<div class="dcf-grid-halves@md dcf-mt-3">
+							<div class="visual-island">
+								<a class="dcf-btn dcf-btn-primary" href="/signup">Make an Appointment</a>
+							</div>
+							<div class="visual-island">
+								<button class="dcf-btn dcf-btn-primary" onClick="javascript:downloadSiteSchedule()">Download Site Schedule</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="dcf-bleed">
+			<div class="dcf-wrapper">
+				<div class="dcf-grid-halves@md dcf-pt-8 dcf-pb-8">
+					<div class="dcf-col-50%">
+						<h2>Documents to Bring</h2>
+					</div>
+					<ul class="dcf-col-50%">
+						<li>Social Security Card and photo identification</li>
+						<li>Social Security numbers and birth dates for all dependents</li>
+						<li>Forms W-2 and all other income forms for 2017 (ex: 1099-MISC, 1099-R, etc.)</li>
+						<li>Banking information for deposit/debit, routing number and account number</li>
+						<li>Tax identification numbers for any and all daycare providers</li>
+						<li>Spouse, if filing jointly (both must be present to sign the return)</li>
+						<li>If a college student, you must bring your 1098T and student account information showing payment of tuition and qualified fees</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- TemplateEndEditable -->
+	</div>
+</main>
+<footer class="dcf-footer" id="dcf-footer" role="contentinfo">
+	<!-- TemplateBeginEditable name="optionalfooter" -->
+	<!-- TemplateEndEditable -->
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/footer-global-1.html"); ?>
+	<!-- TemplateBeginEditable name="contactinfo" -->
+		<?php include "$root/sharedcode/localFooter.html"; ?>
+	<!-- TemplateEndEditable -->
+		<?php wdnInclude("/wdn/templates_5.0/includes/global/footer-global-2.html"); ?>
+</footer>
+<?php wdnInclude("/wdn/templates_5.0/includes/global/noscript.html"); ?>
+<?php wdnInclude("/wdn/templates_5.0/includes/global/js-body.html"); ?>
+<!-- TemplateBeginEditable name="jsbody" -->
+<?php require_once "$root/server/global_includes.php"; ?>
+<script src="/dist/index.js"></script>
+<!-- TemplateEndEditable -->
 </body>
 </html>

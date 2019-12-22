@@ -6,12 +6,12 @@
 ?>
 
 <!-- Default Section -->
-<div class="wdn-inner-wrapper wdn-center" ng-if="appointments == null">
+<div class="dcf-wrapper dcf-txt-center dcf-p-10" ng-if="appointments == null">
 	Select a site and date.
 </div>
 
 <!-- Body Section with list of clients -->
-<table class="wdn_responsive_table queue" ng-if="appointments.length > 0" ng-cloak>
+<table class="dcf-table queue dcf-mb-6" ng-if="appointments.length > 0" ng-cloak>
 	<thead>
 		<tr>
 			<th class="queue-name">Name</th>
@@ -20,12 +20,13 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="appointment in appointments | orderBy:['noshow', 'timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime']" 
+		<tr ng-repeat="appointment in appointments | orderBy:['noShow', 'timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime', 'walkIn']" 
 			ng-if="appointment.completed == null">
 			<th class="queue-name" data-header="Name">{{appointment.firstName}} {{appointment.lastName}}</th>
 			<td class="queue-progress" data-header="Progress">
-				<span class="pill pill-noshow" ng-if="appointment.noshow">No-show</span>
-				<span ng-if="!appointment.noshow">
+				<span class="pill pill-no-show" ng-if="appointment.noShow">No-show</span>
+				<span ng-if="!appointment.noShow">
+					<span class="pill pill-walk-in" ng-if="appointment.walkIn">Walk-In</span>
 					<span class="pill" ng-class="appointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
 					<span class="pill" ng-class="appointment.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
 					<span class="pill" ng-class="appointment.preparing ? 'pill-complete': 'pill-incomplete'">Appointment in Progress</span>
@@ -38,6 +39,6 @@
 </table>
 
 <!-- Default message if there are no appointments on the selected date -->
-<div class="wdn-inner-wrapper wdn-center queue" ng-if="appointments.length == 0" ng-cloak>
+<div class="dcf-wrapper dcf-txt-center dcf-p-10 queue" ng-if="appointments.length == 0" ng-cloak>
 	There are no appointments on this day.
 </div>

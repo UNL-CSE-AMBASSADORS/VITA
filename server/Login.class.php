@@ -294,13 +294,11 @@ class Login
 				$mail_body .= "<br />You can reach us at: <a href='mailto:".$this->contact_email."'>".$this->contact_email."</a>";
 			}
 
-			## Build Email Headers
-			$headers = "From: ".$this->noreply_email."\r\n";
-			$headers .= 'MIME-Version: 1.0' . "\r\n";
-			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-			if(!mail($dbemail, $subject, $mail_body, $headers) && !PROD){
+			## Send email
+			if (!PROD) {
 				print $mail_body;
 			}
+			$this->sendHtmlFormattedEmail($dbemail, $subject, $mail_body);
 
 			$response['success'] = true;
 		}catch(Exception $e){
@@ -377,11 +375,8 @@ class Login
 					$mail_body .= "<br />You can reach us at: <a href='mailto:".$this->contact_email."'>".$this->contact_email."</a>\r\n";
 				}
 
-				## Build Email Headers
-				$headers = "From: ".$this->noreply_email."\r\n";
-				$headers .= 'MIME-Version: 1.0' . "\r\n";
-				$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-				mail($dbemail, $subject, $mail_body, $headers);
+				## Send email
+				$this->sendHtmlFormattedEmail($dbemail, $subject, $mail_body);
 			}else{
 				## No Results Found For Email Address - Register Them
 				$response = $this->register($email);
@@ -494,11 +489,8 @@ class Login
 				$mail_body .= "<br />You can reach us at: <a href='mailto:".$this->contact_email."'>".$this->contact_email."</a>\r\n";
 			}
 
-			## Build Email Headers
-			$headers = "From: ".$this->noreply_email."\r\n";
-			$headers .= 'MIME-Version: 1.0' . "\r\n";
-			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-			mail($dbemail, $subject, $mail_body, $headers);
+			## Send email
+			$this->sendHtmlFormattedEmail($dbemail, $subject, $mail_body);
 
 			$this->login($email, $password);
 		}catch(Exception $e){
@@ -684,5 +676,15 @@ class Login
 			$response['error'] = "Sorry, there was an error reaching the server. Please try again later.";
 		}
 		$response['success'] = false;
+	}
+
+	private function sendHtmlFormattedEmail($toEmail, $subject, $body) {
+		if (PROD) {
+			$root = realpath($_SERVER['DOCUMENT_ROOT']);
+			require_once "$root/server/utilities/emailUtilities.class.php";
+			
+			$fromEmail = $this->noreply_email;
+			EmailUtilities::sendHtmlFormattedEmail($toEmail, $subject, $body, $fromEmail);
+		}
 	}
 }

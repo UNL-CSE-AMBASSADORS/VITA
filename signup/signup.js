@@ -9,7 +9,9 @@ require.config({
 		appointmentPickerSharedPropertiesService: '/dist/components/appointmentPicker/appointmentPickerSharedPropertiesService',
 		appointmentPickerDataService: '/dist/components/appointmentPicker/appointmentPickerDataService',
 		appointmentPickerController: '/dist/components/appointmentPicker/appointmentPickerController',
-		'bootstrap-ui': '/dist/assets/js/bootstrap/ui-bootstrap-buttons-2.5.0.min'
+		toggleDirective: '/dist/assets/js/utilities/button',
+		'bootstrap-ui': '/dist/assets/js/bootstrap/ui-bootstrap-buttons-2.5.0.min',
+		notificationUtilities: '/dist/assets/js/utilities/notificationUtilities'
 	},
 	shim: {
 		'ngAnimate': ['angular'],
@@ -20,6 +22,7 @@ require.config({
 		'appointmentPickerSharedPropertiesService': ['angular'],
 		'appointmentPickerDataService': ['angular'],
 		'appointmentPickerController': ['angular'],
+		'toggleDirective': ['angular'],
 		'bootstrap-ui': ['angular']
 	}
 });
@@ -31,14 +34,18 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(
 		'signupController',
 		'appointmentPickerSharedPropertiesService',
 		'appointmentPickerDataService',
-		'appointmentPickerController'
+		'appointmentPickerController',
+		'toggleDirective',
+		'notificationUtilities'
 	],
 	function (
 		SignupDataService,
 		SignupController, 
 		AppointmentPickerSharedPropertiesService,
 		AppointmentPickerDataService,
-		AppointmentPickerController
+		AppointmentPickerController,
+		ToggleDirective,
+		NotificationUtilities
 	) {
 		'use strict';
 
@@ -55,6 +62,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(
 				templateUrl: '/signup/signup.php'
 			};
 		});
+		signupApp.directive('toggle', ToggleDirective);
 
 		// Contents for the appointmentPickerApp module
 		signupApp.service('appointmentPickerSharedPropertiesService', AppointmentPickerSharedPropertiesService)
@@ -66,6 +74,9 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(
 				templateUrl: '/components/appointmentPicker/appointmentPicker.php'
 			};
 		});
+
+		// Notification utilities
+		signupApp.factory('notificationUtilities', NotificationUtilities);
 
 		angular.bootstrap(document.getElementById('signupApp'), ['signupApp']);
 

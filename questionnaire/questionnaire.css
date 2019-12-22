@@ -2,10 +2,6 @@
 	color: #d00000;
 }
 
-.question-text {
-	margin-bottom: 0;
-}
-
 p.form-required::after {
 	content: " *";
 	color: #d00000;

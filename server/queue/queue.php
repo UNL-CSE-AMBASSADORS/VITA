@@ -15,11 +15,12 @@ function loadPublicQueue($data) {
 	GLOBAL $DB_CONN;
 	$query = "SELECT Appointment.appointmentId, TIME_FORMAT(scheduledTime, '%l:%i %p') AS scheduledTime, firstName, lastName, 
 				timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, completed,
-				(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 15 MINUTE) < NOW() AND timeIn IS NULL) AS noshow 
+				(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 15 MINUTE) < NOW() AND timeIn IS NULL) AS noShow,
+				(AppointmentTime.scheduledTime < Appointment.createdAt) AS walkIn
 			FROM Appointment
-			LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
-			JOIN Client ON Appointment.clientId = Client.clientId
-			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+				LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
+				JOIN Client ON Appointment.clientId = Client.clientId
+				JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 			WHERE DATE(AppointmentTime.scheduledTime) = ?
 				AND AppointmentTime.siteId = ?
 				AND Appointment.archived = FALSE
@@ -44,14 +45,15 @@ function loadPrivateQueue($data) {
 	$query = "SELECT Appointment.appointmentId, TIME_FORMAT(AppointmentTime.scheduledTime, '%l:%i %p') AS scheduledTime, 
 				firstName, lastName, timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, 
 				completed, language, Client.clientId, 
-				(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 15 MINUTE) < NOW() AND timeIn IS NULL) AS noshow ";
+				(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 15 MINUTE) < NOW() AND timeIn IS NULL) AS noShow,
+				(AppointmentTime.scheduledTime < Appointment.createdAt) AS walkIn ";
 	if ($canViewClientInformation) {
 		$query .= ", phoneNumber, emailAddress ";
 	}
 	$query .= "FROM Appointment
-			LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
-			JOIN Client ON Appointment.clientId = Client.clientId
-			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+				LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
+				JOIN Client ON Appointment.clientId = Client.clientId
+				JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 			WHERE DATE(AppointmentTime.scheduledTime) = ?
 				AND AppointmentTime.siteId = ?
 				AND Appointment.archived = FALSE

@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS Note;
 DROP TABLE IF EXISTS Appointment;
 DROP TABLE IF EXISTS AppointmentTime;
 DROP TABLE IF EXISTS Client;
+DROP TABLE IF EXISTS RoleLimit;
 DROP TABLE IF EXISTS UserShift;
 DROP TABLE IF EXISTS Shift;
 DROP TABLE IF EXISTS Role;
@@ -80,7 +81,7 @@ CREATE TABLE AppointmentTime (
 	maximumNumberOfAppointments INTEGER UNSIGNED DEFAULT NULL,
 	percentageAppointments INTEGER UNSIGNED NOT NULL DEFAULT 100,
 	approximateLengthInMinutes INTEGER UNSIGNED NOT NULL DEFAULT 60,
-	CONSTRAINT percentageCheck CHECK (percentageAppointments>=0 AND percentageAppointments<=100),
+	CONSTRAINT percentageCheck CHECK (percentageAppointments>=0 AND percentageAppointments<=300),
 	siteId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(siteId) REFERENCES Site(siteId)
 );
@@ -238,6 +239,18 @@ CREATE TABLE Role (
 	name VARCHAR(255) NOT NULL,
 	lookupName VARCHAR(255) NOT NULL,
 	CONSTRAINT uniqueLookupName UNIQUE INDEX(lookupName)
+);
+
+CREATE TABLE RoleLimit (
+	roleLimitId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    maximumNumber INTEGER UNSIGNED NOT NULL,
+    roleId INTEGER UNSIGNED NOT NULL,
+    FOREIGN KEY(roleId) REFERENCES Role(roleId),
+    siteId INTEGER UNSIGNED NOT NULL,
+    FOREIGN KEY(siteId) REFERENCES Site(siteId),
+    shiftId INTEGER UNSIGNED NULL,
+    FOREIGN KEY(shiftId) REFERENCES Shift(shiftId),
+    CONSTRAINT uniqueRoleSiteShiftTuple UNIQUE INDEX(roleId, siteId, shiftId)
 );
 
 CREATE TABLE UserShift (
