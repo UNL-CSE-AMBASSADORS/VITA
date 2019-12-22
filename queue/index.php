@@ -104,7 +104,7 @@ return readfile($documentRoot . $path);
 	</div>
 	<div class="dcf-main-content dcf-wrapper dcf-p-0">
 		<!-- TemplateBeginEditable name="maincontentarea" -->
-		<vita-queue id="queueApp" />
+		<vita-queue id="queueApp"></vita-queue>
 		<!-- TemplateEndEditable -->
 	</div>
 </main>
