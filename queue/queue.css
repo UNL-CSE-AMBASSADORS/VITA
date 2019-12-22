@@ -31,7 +31,11 @@
 }
 
 .inactive-period {
-	opacity: 0.15;
+	opacity: 0.8;
+}
+
+.active-period {
+	font-weight: bold;
 }
 
 .left-half {
