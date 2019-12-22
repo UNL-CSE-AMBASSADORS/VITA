@@ -147,7 +147,7 @@ return readfile($documentRoot . $path);
 						</fieldset>
 						<div class="dcf-pt-5">
 							<button type="submit" class="dcf-btn dcf-btn-primary">Add User</button>
-							<button type="button" class="dcf-btn dcf-btn-secondary">Close</button>
+							<button type="button" class="dcf-btn dcf-btn-secondary close-modal-button">Close</button>
 						</div>
 					</form>
 				</div>
@@ -183,7 +183,7 @@ return readfile($documentRoot . $path);
 						</fieldset>
 						<div class="dcf-pt-5">
 							<button type="submit" class="dcf-btn dcf-btn-primary">Save</button>
-							<button type="button" class="dcf-btn dcf-btn-secondary">Close</button>
+							<button type="button" class="dcf-btn dcf-btn-secondary close-modal-button">Close</button>
 						</div>
 					</form>
 				</div>

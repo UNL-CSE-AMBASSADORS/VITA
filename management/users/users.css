@@ -2,6 +2,10 @@
 	border: 1px solid red;
 }
 
+.hidden {
+	display: none;
+}
+
 /*
 Override the colorbox default settings
 */
