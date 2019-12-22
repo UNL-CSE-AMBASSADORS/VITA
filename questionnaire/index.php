@@ -106,7 +106,7 @@ return readfile($documentRoot . $path);
 
 	<div class="dcf-main-content dcf-wrapper">
 		<!-- TemplateBeginEditable name="maincontentarea" -->
-		<questionnaire id="questionnaireApp"></questionnaire>
+		<questionnaire-form id="questionnaireApp"></questionnaire-form>
 		<!-- TemplateEndEditable -->
 	</div>
 </main>
