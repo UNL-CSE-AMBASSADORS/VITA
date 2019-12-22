@@ -25,29 +25,29 @@
 
 			<ul class="dcf-pl-0">
 				<li class="form-textfield">
-					<label class="form-label form-required" for="firstName">First Name</label>
-					<input type="text" name="firstName" id="firstName" ng-model="data.firstName" required>
+					<label class="dcf-label form-label form-required" for="firstName">First Name</label>
+					<input type="text" class="dcf-input-text form-control" name="firstName" id="firstName" ng-model="data.firstName" required>
 					<div ng-show="form.$submitted || form.firstName.$touched">
 						<label class="error" ng-show="form.firstName.$error.required">This field is required.</label>
 					</div>
 				</li>
 
 				<li class="form-textfield">
-					<label class="form-label form-required" for="lastName">Last Name</label>
-					<input type="text" name="lastName" id="lastName" ng-model="data.lastName" required>
+					<label class="dcf-label form-label form-required" for="lastName">Last Name</label>
+					<input type="text" class="dcf-input-text form-control" name="lastName" id="lastName" ng-model="data.lastName" required>
 					<div ng-show="form.$submitted || form.lastName.$touched">
 						<label class="error" ng-show="form.lastName.$error.required">This field is required.</label>
 					</div>
 				</li>
 
 				<li class="form-textfield">
-					<label class="form-label" for="email">Email</label>
-					<input type="email" name="email" id="email" ng-model="data.email">
+					<label class="dcf-label form-label" for="email">Email</label>
+					<input type="email" class="dcf-input-text form-control" name="email" id="email" ng-model="data.email">
 				</li>
 
 				<li class="form-textfield">
-					<label class="form-label form-required" for="phone">Phone Number</label>
-					<input type="text" name="phone" id="phone" ng-model="data.phone" required>
+					<label class="dcf-label form-label form-required" for="phone">Phone Number</label>
+					<input type="text" class="dcf-input-text form-control" name="phone" id="phone" ng-model="data.phone" required>
 					<div ng-show="form.$submitted || form.phone.$touched">
 						<label class="error" ng-show="form.phone.$error.required">This field is required.</label>
 					</div>

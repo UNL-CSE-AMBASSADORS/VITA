@@ -3,3 +3,7 @@
 .form-select {
 	list-style-type: none;
 }
+
+.form-textfield .dcf-input-text {
+	width: 100%;
+}
