@@ -22,7 +22,7 @@ return readfile($documentRoot . $path);
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
-	<!-- Place optional header elements here -->
+	<link rel="stylesheet" href="/dist/index.css">
 	<!-- TemplateEndEditable -->
 	<!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -103,13 +103,8 @@ return readfile($documentRoot . $path);
 	</div>
 	<div class="dcf-main-content dcf-wrapper">
 		<!-- TemplateBeginEditable name="maincontentarea" -->
-		<div class="dcf-bleed wdn-hero">
-			<div class="wdn-hero-text-container">
-				<div class="wdn-hero-text">
-					<h2 class="wdn-hero-heading">VITA Lincoln</h2>
-				</div>
-			</div>
-			<div class="wdn-hero-picture">
+		<div class="dcf-bleed">
+			<div class="hero-picture-container">
 				<img src="assets/res/VITA-Coalition-Web-Banner.png" alt="Lincoln VITA Coalition">
 			</div>
 		</div>
