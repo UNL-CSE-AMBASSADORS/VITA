@@ -2,7 +2,7 @@
 	date_default_timezone_set('America/Chicago');
 	$today = date('Y-m-d');
 	$dateAppointmentSignUpsStart = date('Y-01-16');
-	$taxDay = date('Y-04-15');
+	$taxDay = date('Y-12-25');
 	
 	$taxYear = ($today > $taxDay) ? date('Y', strtotime('+1 year')) : date('Y');
 ?>
@@ -14,17 +14,17 @@
 	<?php } else if ($today < $dateAppointmentSignUpsStart) { ?>
 		<h4>Tax appointments cannot yet be scheduled. Please check back soon.</h4>
 	<?php } else { ?>
-		<form class="cmxform" 
+		<form class="cmxform dcf-form" 
 			id="vitaSignupForm" 
 			name="form" 
 			ng-submit="form.$valid && storeAppointments()" 
 			autocomplete="off" 
 			novalidate>
-			<p dcf-mt-2 dcf-mb-3>Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
+			<p class="dcf-mt-2 dcf-mb-3">Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
 			<p><b>NOTE: Please create a separate appointment for every tax return that needs to be done.</b></p>
 
 			<ul class="dcf-pl-0">
-				<li class="form-textfield">
+				<li class="dcf-form-group form-textfield">
 					<label class="dcf-label form-label form-required" for="firstName">First Name</label>
 					<input type="text" class="dcf-input-text form-control" name="firstName" id="firstName" ng-model="data.firstName" required>
 					<div ng-show="form.$submitted || form.firstName.$touched">
