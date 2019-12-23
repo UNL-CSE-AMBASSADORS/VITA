@@ -18,6 +18,10 @@
 	display: inline;
 }
 
+.hidden {
+	display: none;
+}
+
 #cboxContent {
 	background: transparent !important;
 }

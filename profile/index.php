@@ -29,6 +29,7 @@ return readfile($documentRoot . $path);
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
 	<link rel="stylesheet" href="/dist/profile/profile.css">
+	<script src="https://kit.fontawesome.com/f7ca51166c.js" crossorigin="anonymous"></script>
 	<!-- TemplateEndEditable -->
 	<!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -115,28 +116,28 @@ return readfile($documentRoot . $path);
 			<div class="dcf-wrapper dcf-pb-8">
 				<div class="personal-info">
 					<h2 class="inline">Personal Information</h2>
-					<button class="dcf-btn dcf-float-right" id="personalInformationEditButton">Edit</button>
+					<button class="dcf-btn dcf-btn-secondary dcf-float-right" id="personalInformationEditButton">Edit</button>
 
 					<div>
-						<label for="firstName" id="firstNameLabel">First Name:</label>
+						<label class="dcf-label" for="firstName" id="firstNameLabel">First Name:</label>
 						<span id="firstNameText"></span>
 						<input type="text" id="firstNameInput" style="display:none;" />
 					</div>
 
 					<div>
-						<label for="lastName" id="lastNameLabel">Last Name:</label>
+						<label class="dcf-label" for="lastName" id="lastNameLabel">Last Name:</label>
 						<span id="lastNameText"></span>
 						<input type="text" id="lastNameInput" style="display:none;" />
 					</div>
 
 					<div>
-						<label for="email" id="emailLabel">Email:</label>
+						<label class="dcf-label" for="email" id="emailLabel">Email:</label>
 						<span id="emailText"></span>
 						<input type="text" id="emailInput" style="display:none;" disabled />
 					</div>
 
 					<div>
-						<label for="phoneNumber" id="phoneNumberLabel">Phone Number:</label>
+						<label class="dcf-label" for="phoneNumber" id="phoneNumberLabel">Phone Number:</label>
 						<span id="phoneNumberText"></span>
 						<input type="text" id="phoneNumberInput" style="display:none;" />
 					</div>
@@ -151,7 +152,7 @@ return readfile($documentRoot . $path);
 		<div class="dcf-bleed unl-bg-lightest-gray">
 			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
 				<h2 class="inline">Abilities</h2>
-				<button class="dcf-btn dcf-float-right" id="abilitiesEditButton">Edit</button>
+				<button class="dcf-btn dcf-btn-secondary dcf-float-right" id="abilitiesEditButton">Edit</button>
 				<button class="dcf-btn dcf-float-right dcf-btn-primary" id="abilitiesCancelButton" style="display:none;">Cancel</button>
 				<div id="abilitiesSelect" multiple=true></div>
 			</div>
@@ -162,7 +163,7 @@ return readfile($documentRoot . $path);
 			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
 				<h2>Certifications</h2>
 				<p><b>NOTE</b>: These must be verified by your site administrator.</p>
-				<div id ="certificationsDiv"></div>
+				<div id="certificationsDiv"></div>
 			</div>
 		</div>
 
@@ -181,16 +182,16 @@ return readfile($documentRoot . $path);
 		<!-- Shift Cancellation Reason Modal -->
 		<div class="hidden">
 			<div class="modal" id="cancellation-reason-modal" tabindex="-1" role="dialog" aria-hidden="true">
-				<div class="dcf-wrapper dcf-pt-8 dcf-pb-5">
+				<div class="dcf-wrapper dcf-pt-3">
 					<h4>Please explain the reason you are cancelling your shift.</h4>
 					<p id="cancellation-reason-details"></p>
-					<form id="cancellation-reason-form">
+					<form class="dcf-form" id="cancellation-reason-form">
 						<fieldset>
 							<section class="form-group">
 								<textarea id="cancellation-reason" class="form-control" required></textarea>
 							</section>
 						</fieldset>
-						<div class="dcf-pt-5">
+						<div>
 							<button type="submit" class="dcf-btn dcf-btn-secondary">Finish</button>
 							<button type="button" class="dcf-btn dcf-btn-primary close-modal-button">Close</button>
 						</div>
