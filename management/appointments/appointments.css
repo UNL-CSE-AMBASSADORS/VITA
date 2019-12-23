@@ -1,5 +1,17 @@
+#dateInput {
+	width: 100%;
+}
+
 .pointer {
 	cursor: pointer;
+}
+
+.hidden {
+	display: none;
+}
+
+.queue {
+	width: 100% !important;
 }
 
 .status-incomplete {
