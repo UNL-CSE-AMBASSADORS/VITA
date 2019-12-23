@@ -22,7 +22,7 @@ return readfile($documentRoot . $path);
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
-	<!-- Place optional header elements here -->
+	<link rel="stylesheet" href="/dist/login/login.css">
 	<!-- TemplateEndEditable -->
 	<!-- TemplateParam name="class" type="text" value="" -->
 </head>
