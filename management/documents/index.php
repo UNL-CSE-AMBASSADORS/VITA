@@ -111,15 +111,15 @@ return readfile($documentRoot . $path);
 	<div class="dcf-main-content dcf-wrapper">
 		<!-- TemplateBeginEditable name="maincontentarea" -->
 		<div class="dcf-bleed">
-			<form class="dcf-wrapper dcf-pb-8">
+			<form class="dcf-wrapper dcf-form dcf-pb-8">
 				<div class="dcf-columns-2@md">
 					<div class="dcf-d-flex dcf-flex-col">
-						<label for="dateInput">Date</label>
-						<input type="text" id="dateInput"/>
+						<label for="dateInput" class="dcf-label">Date</label>
+						<input type="text" class="dcf-input-text" id="dateInput"/>
 						<input type="hidden" id="isoFormattedDate"/>
 					</div>
 					<div class="dcf-d-flex dcf-flex-col">
-						<label for="siteSelect">Site</label>
+						<label for="siteSelect" class="dcf-label">Site</label>
 						<select class="dcf-input-select dcf-mb-0" id="siteSelect">
 							<!-- Sites injected through JS -->
 						</select>
