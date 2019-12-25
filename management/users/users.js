@@ -155,12 +155,12 @@ WDN.initializePlugin('modal', [function() {
 							$('#user-management-table').html(response.table);
 							$('#user-management-table .userPermissionsSelectPicker').selectpicker({
 								iconBase: '',
-								tickIcon: 'wdn-icon-ok',
+								tickIcon: 'fas fa-check',
 								multipleSeparator: ', <br>'
 							});
 							$('#user-management-table .userAbilitiesSelectPicker').selectpicker({
 								iconBase: '',
-								tickIcon: 'wdn-icon-ok',
+								tickIcon: 'fas fa-check',
 								multipleSeparator: ', <br>'
 							});
 							$('.dropdown-toggle').on('click', function(){

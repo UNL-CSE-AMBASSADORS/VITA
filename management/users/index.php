@@ -145,7 +145,7 @@ return readfile($documentRoot . $path);
 						</fieldset>
 						<div class="dcf-pt-5">
 							<button type="submit" class="dcf-btn dcf-btn-primary">Add User</button>
-							<button type="button" class="dcf-btn dcf-btn-secondary">Close</button>
+							<button type="button" class="dcf-btn dcf-btn-secondary close-modal-button">Close</button>
 						</div>
 					</form>
 				</div>
@@ -168,6 +168,7 @@ return readfile($documentRoot . $path);
 <!-- TemplateBeginEditable name="jsbody" -->
 <?php require_once "$root/server/global_includes.php"; ?>
 <script src="/dist/management/users/users.js"></script>
+<script src="https://kit.fontawesome.com/f7ca51166c.js" crossorigin="anonymous"></script>
 <!-- TemplateEndEditable -->
 </body>
 </html>

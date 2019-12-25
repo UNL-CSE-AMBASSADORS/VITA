@@ -1,3 +1,15 @@
+.hidden {
+	display: none;
+}
+
+.form-group .dcf-input-text {
+	width: 100%;
+}
+
+#user-management-table {
+	width: 100%;
+}
+
 #cboxContent {
 	background: transparent !important;
 }

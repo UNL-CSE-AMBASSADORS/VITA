@@ -29,7 +29,6 @@ return readfile($documentRoot . $path);
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
 	<link rel="stylesheet" href="/dist/profile/profile.css">
-	<script src="https://kit.fontawesome.com/f7ca51166c.js" crossorigin="anonymous"></script>
 	<!-- TemplateEndEditable -->
 	<!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -216,6 +215,7 @@ return readfile($documentRoot . $path);
 <!-- TemplateBeginEditable name="jsbody" -->
 <?php require_once "$root/server/global_includes.php"; ?>
 <script src="/dist/profile/profile.js"></script>
+<script src="https://kit.fontawesome.com/f7ca51166c.js" crossorigin="anonymous"></script>
 <!-- TemplateEndEditable -->
 </body>
 </html>
