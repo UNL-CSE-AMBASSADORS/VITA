@@ -129,6 +129,7 @@ return readfile($documentRoot . $path);
 <!-- TemplateBeginEditable name="jsbody" -->
 <?php require_once "$root/server/global_includes.php"; ?>
 <script src="/dist/management/sites/sites.js"></script>
+<script src="https://kit.fontawesome.com/f7ca51166c.js" crossorigin="anonymous"></script>
 <!-- TemplateEndEditable -->
 </body>
 </html>

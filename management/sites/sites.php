@@ -25,7 +25,7 @@
 			<!-- Shown if a site is selected and loaded from backend -->
 			<div ng-if="selectedSite != null && siteInformation != null">
 				<h3 class="clear-top">{{siteInformation.title}}</h3>
-				<div class="dcf-columns-2">
+				<div class="dcf-columns-2 dcf-mb-4">
 					<div class="dcf-col">
 						<div><b>Address:</b> {{siteInformation.address}}</div>
 						<div><b>Phone Number:</b> {{siteInformation.phoneNumber}}</div>
@@ -39,7 +39,7 @@
 
 				<!-- Volunteer Shifts Section -->
 				<h4>Volunteer Shifts:</h4>
-				<div>
+				<div class="dcf-mb-5">
 					<!-- Displayed when there are no volunteer shifts -->
 					<div ng-if="siteInformation.shifts == undefined || siteInformation.shifts.length <= 0">
 						<p class="clear-top">There are no shifts</p>
@@ -47,7 +47,7 @@
 
 					<!-- Displayed when there are volunteer shifts -->
 					<div ng-if="siteInformation.shifts != undefined && siteInformation.shifts.length > 0">
-						<table class="dcf-table">
+						<table class="dcf-table dcf-table-striped">
 							<thead>
 								<tr>
 									<th id="shiftDateHeader">Date</th>
@@ -68,17 +68,18 @@
 					<!-- Add volunteer shift section -->
 					<div ng-if="addShiftButtonClicked === true" class="dcf-mt-5">
 						<h5>Add a Shift</h5>
-						<form class="cmxform"
+						<form class="cmxform dcf-form"
 							id="addShiftForm"
 							name="form"
 							ng-submit="form.$valid && addShiftSaveButtonHandler()" 
 							autocomplete="off" 
 							novalidate>
 
-							<div>
+							<section class="dcf-form-group">
 								<label class="dcf-label form-required">Date</label>
 								<input type="text" 
 									id="addShiftDateInput" 
+									class="dcf-input-text"
 									name="dateInput" 
 									placeholder=" -- Select a Date -- " 
 									autocomplete="off"
@@ -86,9 +87,9 @@
 								<div ng-show="form.$submitted || form.dateInput.$touched">
 									<label class="error" ng-show="form.dateInput.$error.required">This field is required.</label>
 								</div>
-							</div>
+							</section>
 
-							<div>
+							<section class="dcf-form-group">
 								<label class="dcf-label form-required" for="addShiftStartTimeSelect">Start Time</label>
 								<select id="addShiftStartTimeSelect" 
 									name="startTimeSelect" 
@@ -102,9 +103,9 @@
 								<div ng-show="form.$submitted || form.startTimeSelect.$touched">
 									<label class="error" ng-show="form.startTimeSelect.$error.required">This field is required.</label>
 								</div>
-							</div>
+							</section>
 
-							<div>
+							<section class="dcf-form-group">
 								<label class="dcf-label form-required" for="addShiftEndTimeSelect">End Time</label>
 								<select id="addShiftEndTimeSelect" 
 									name="endTimeSelect" 
@@ -117,7 +118,7 @@
 								<div ng-show="form.$submitted || form.endTimeSelect.$touched">
 									<label class="error" ng-show="form.endTimeSelect.$error.required">This field is required.</label>
 								</div>
-							</div>
+							</section>
 
 							<div class="dcf-mt-3">
 								<button type="button"
@@ -132,7 +133,7 @@
 					</div>
 
 					<!-- Button for adding a shift -->
-					<button class="dcf-btn dcf-mt-3" 
+					<button class="dcf-btn dcf-btn-primary dcf-mt-3" 
 						ng-click="addShiftButtonHandler()" 
 						ng-if="addShiftButtonClicked === false">Add Shift</button>
 				</div>
@@ -156,32 +157,32 @@
 
 					<!-- Displayed when there are appointment times -->
 					<div ng-if="siteInformation.appointmentTimes != undefined && siteInformation.appointmentTimes.length > 0">
-						<table class="dcf-table">
+						<table class="dcf-table dcf-table-striped">
 							<thead>
 								<tr>
 									<th id="appointmentTimeScheduledTimeHeader">Scheduled Time</th>
 									<th id="appointmentTimeMinimumNumberOfAppointmentsHeader">
 										Min Appts
 										<a class="tooltip pointer" title="This is the minimum number of appointments for this time slot, meaning at least this many appointments will be allowed to be scheduled even if there are not enough preparers signed up during this time. Default is 0.">
-											<span class="wdn-icon-info" aria-hidden="true"></span>
+											<i class="fas fa-info-circle black-icon" aria-hidden="true"></i>
 										</a>
 									</th>
 									<th id="appointmentTimeMaximumNumberOfAppointmentsHeader">
 										Max Appts
 										<a class="tooltip pointer" title="This is the maximum number of appointments for this time slot, meaning even if there are more preparers than this number, this is the number of appointments that will be allowed to be scheduled. Default is N/A.">
-											<span class="wdn-icon-info" aria-hidden="true"></span>
+											<i class="fas fa-info-circle black-icon" aria-hidden="true"></i>
 										</a>
 									</th>
 									<th id="appointmentTimePercentageAppointmentsHeader">
 										Percentage Appts
 										<a class="tooltip pointer" title="This specifies the percentage of the preparers that are allotted for scheduled (as opposed to walk-in) appointments. That is: number of appointments allowed to be scheduled online = number of preparers * percentage appointments. Default is 100%, max is 300%.">
-											<span class="wdn-icon-info" aria-hidden="true"></span>
+											<i class="fas fa-info-circle black-icon" aria-hidden="true"></i>
 										</a>
 									</th>
 									<th id="appointmentTimeApproximateLengthInMinutesHeader">
 										Approx Length (minutes)
 										<a class="tooltip pointer" title="This is the approximate length in minutes of an appointment. This number is critical to determining how many preparers are available at a certain time. Typically this number will be 60.">
-											<span class="wdn-icon-info" aria-hidden="true"></span>
+											<i class="fas fa-info-circle black-icon" aria-hidden="true"></i>
 										</a>
 									</th>
 								</tr>
@@ -202,14 +203,14 @@
 					<!-- Add appointment time section -->
 					<div ng-if="addAppointmentTimeButtonClicked === true" class="dcf-mt-5">
 						<h5>Add an Appointment Time</h5>
-						<form class="cmxform"
+						<form class="cmxform dcf-form"
 							id="addAppointmentTimeForm"
 							name="form"
 							ng-submit="form.$valid && addAppointmentTimeSaveButtonHandler()" 
 							autocomplete="off" 
 							novalidate>
 
-							<div>
+							<section class="dcf-form-group">
 								<label class="dcf-label form-required">Date</label>
 								<input type="text" 
 									id="addAppointmentTimeDateInput" 
@@ -221,9 +222,9 @@
 								<div ng-show="form.$submitted || form.dateInput.$touched">
 									<label class="error" ng-show="form.dateInput.$error.required">This field is required.</label>
 								</div>
-							</div>
+							</section>
 
-							<div>
+							<section class="dcf-form-group">
 								<label class="dcf-label form-required" for="addAppointmentTimeApproximateLengthInMinutes">Approximate Length in Minutes (default 60)</label>
 								<input id="addAppointmentTimeApproximateLengthInMinutes"
 									type="number"
@@ -236,9 +237,9 @@
 								<div ng-show="form.$submitted || form.approximateLengthInMinutes.$touched">
 									<label class="error" ng-show="form.approximateLengthInMinutes.$error.required">This field is required.</label>
 								</div>
-							</div>
+							</section>
 
-							<div>
+							<section class="dcf-form-group">
 								<label class="dcf-label form-required" for="addAppointmentTimeScheduledTimeSelect">Scheduled Time</label>
 								<select id="addAppointmentTimeScheduledTimeSelect" 
 									name="scheduledTimeSelect" 
@@ -252,9 +253,9 @@
 								<div ng-show="form.$submitted || form.scheduledTimeSelect.$touched">
 									<label class="error" ng-show="form.scheduledTimeSelect.$error.required">This field is required.</label>
 								</div>
-							</div>
+							</section>
 
-							<div>
+							<section class="dcf-form-group">
 								<label class="dcf-label form-required" for="addAppointmentTimeMinimumNumberOfAppointments">Minimum Number of Appointments (default 0)</label>
 								<input id="addAppointmentTimeMinimumNumberOfAppointments"
 									type="number"
@@ -266,9 +267,9 @@
 								<div ng-show="form.$submitted || form.minimumNumberOfAppointments.$touched">
 									<label class="error" ng-show="form.minimumNumberOfAppointments.$error.required">This field is required.</label>
 								</div>
-							</div>
+							</section>
 
-							<div>
+							<section class="dcf-form-group">
 								<label class="dcf-label" for="addAppointmentTimeMaximumNumberOfAppointments">Maximum Number of Appointments (default N/A)</label>
 								<input id="addAppointmentTimeMaximumNumberOfAppointments"
 									type="number"
@@ -280,9 +281,9 @@
 								<div ng-show="form.$submitted || form.maximumNumberOfAppointments.$touched">
 									<label class="error" ng-show="form.maximumNumberOfAppointments.$error.required">This field is required.</label>
 								</div>
-							</div>
+							</section>
 
-							<div>
+							<section class="dcf-form-group">
 								<label class="dcf-label form-required" for="addAppointmentTimePercentageAppointments">Percentage Appointments (default 100)</label>
 								<input id="addAppointmentTimePercentageAppointments"
 									type="number"
@@ -295,7 +296,7 @@
 								<div ng-show="form.$submitted || form.percentageAppointments.$touched">
 									<label class="error" ng-show="form.percentageAppointments.$error.required">This field is required.</label>
 								</div>
-							</div>
+							</section>
 
 
 							<div class="dcf-mt-3">
@@ -311,7 +312,7 @@
 					</div>
 
 					<!-- Button for adding an appointment time -->
-					<button class="dcf-btn dcf-mt-3" 
+					<button class="dcf-btn dcf-btn-primary dcf-mt-3" 
 						ng-click="addAppointmentTimeButtonHandler()" 
 						ng-if="addAppointmentTimeButtonClicked === false">Add Appointment Time</button>
 				</div>
