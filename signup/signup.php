@@ -2,7 +2,7 @@
 	date_default_timezone_set('America/Chicago');
 	$today = date('Y-m-d');
 	$dateAppointmentSignUpsStart = date('Y-01-16');
-	$taxDay = date('Y-12-25');
+	$taxDay = date('Y-04-15');
 	
 	$taxYear = ($today > $taxDay) ? date('Y', strtotime('+1 year')) : date('Y');
 ?>
