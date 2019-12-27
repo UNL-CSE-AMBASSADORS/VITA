@@ -110,11 +110,11 @@ return readfile($documentRoot . $path);
 					<form id="login_form">
 						<fieldset>
 							<legend>User Login</legend>
-							<section class="form-group">
+							<section class="dcf-form-group">
 								<label class="dcf-label" for="login_email">E-mail Address</label>
 								<input id="login_email" class="dcf-text-input form-control" placeholder="john@email.com" type="text" autocomplete="off" />
 							</section>
-							<section class="form-group dcf-mt-1">
+							<section class="dcf-form-group dcf-mt-1">
 								<label class="dcf-label" for="login_password">Password</label>
 								<input id="login_password" class="dcf-text-input form-control" placeholder="Password" type="password" />
 							</section>

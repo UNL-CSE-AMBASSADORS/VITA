@@ -103,7 +103,7 @@ return readfile($documentRoot . $path);
 	</div>
 	<div class="dcf-main-content dcf-wrapper">
 		<!-- TemplateBeginEditable name="maincontentarea" -->
-		<div class="dcf-bleed">
+		<div class="dcf-bleed unl-bg-light-gray">
 			<div class="hero-picture-container">
 				<img src="assets/res/VITA-Coalition-Web-Banner.png" alt="Lincoln VITA Coalition">
 			</div>
