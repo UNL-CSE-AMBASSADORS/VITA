@@ -11,7 +11,6 @@ if (!$USER->isLoggedIn() || $USER->getUserId() !== '1') {
 
 // TODO: Need to update the `$dataAlreadyInserted` values before this query will run successfully
 
-
 insert2020Data();
 
 function insert2020Data() {	
@@ -19,13 +18,12 @@ function insert2020Data() {
 	if ($dataAlreadyInserted) {
 		die('The data has already been inserted');
 	}
-
 	// insertAndersonLibraryData();
 	// insertCenterForPeopleInNeedData();
 	// insertLorenEiseleyLibraryData();
 	// insertBennettMartinLibraryData();
-    // insertFStreetCommunityCenterData();
-    // insertSoutheastCommunityCollegeData();
+	// insertFStreetCommunityCenterData();
+	// insertSoutheastCommunityCollegeData();
 	die('SUCCESS');
 }
 
@@ -40,8 +38,8 @@ function insertAndersonLibraryData() {
 	$siteCoordinatorRoleId = 1;
 	$greeterRoleId = 2;
 	$preparerRoleId = 3;
-    $reviewerRoleId = 4;
-    
+	$reviewerRoleId = 4;
+	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The AL data has already been inserted');
@@ -53,25 +51,25 @@ function insertAndersonLibraryData() {
 		$DB_CONN->beginTransaction();
 
 		// Wednesdays
-		$dates = getWeeklyDatesFromRange('2020-01-29', '2020-04-08');
-		foreach ($dates as $date) {
+		$wednesdayDates = getWeeklyDatesFromRange('2020-01-29', '2020-04-08');
+		foreach ($wednesdayDates as $date) {
 			$shiftId = insertShift("$date 17:00:00", "$date 20:00:00", $siteId);
 
-            // Appointment numbers are from per Katie's parameter sheet
+			// Are from Katie's parameter sheet
 			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 9, 9, 100, 60, $siteId);
-            $secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 9, 9, 100, 60, $siteId);
-            $thirdAppointmentTimeId = insertAppointmentTime("$date 19:00:00", 5, 5, 100, 60, $siteId);
-        }
-        
-        // Thursdays
-        $thursdayDates = getWeeklyDatesFromRange('2020-01-30', '2020-04-09');
-        foreach ($dates as $date) {
+			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 9, 9, 100, 60, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 19:00:00", 5, 5, 100, 60, $siteId);
+		}
+		
+		// Thursdays
+		$thursdayDates = getWeeklyDatesFromRange('2020-01-30', '2020-04-09');
+		foreach ($thursdayDates as $date) {
 			$shiftId = insertShift("$date 17:00:00", "$date 20:00:00", $siteId);
 
 			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 6, 6, 100, 60, $siteId);
-            $secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 6, 6, 100, 60, $siteId);
-            $thirdAppointmentTimeId = insertAppointmentTime("$date 19:00:00", 5, 5, 100, 60, $siteId);
-        }
+			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 6, 6, 100, 60, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 19:00:00", 5, 5, 100, 60, $siteId);
+		}
 
 		// Default Site Role Limits
 		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
@@ -91,7 +89,7 @@ function insertCenterForPeopleInNeedData() {
 	$siteCoordinatorRoleId = 1;
 	$greeterRoleId = 2;
 	$preparerRoleId = 3;
-    $reviewerRoleId = 4;
+	$reviewerRoleId = 4;
 	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
@@ -101,11 +99,11 @@ function insertCenterForPeopleInNeedData() {
 	try {
 		$DB_CONN->beginTransaction();
 
-        $siteId = 5; // Manually obtained from PROD DB
+		$siteId = 5; // Manually obtained from PROD DB
 
 		// Tuesdays
-		$dates = getWeeklyDatesFromRange('2020-02-04', '2020-03-24');
-		foreach ($dates as $date) {
+		$tuesdayDates = getWeeklyDatesFromRange('2020-02-04', '2020-03-24');
+		foreach ($tuesdayDates as $date) {
 			$shiftId = insertShift("$date 11:00:00", "$date 14:00:00", $siteId);
 
 			$firstAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 8, 8, 100, 60, $siteId);
@@ -131,8 +129,8 @@ function insertLorenEiseleyLibraryData() {
 	$siteCoordinatorRoleId = 1;
 	$greeterRoleId = 2;
 	$preparerRoleId = 3;
-    $reviewerRoleId = 4;
-    
+	$reviewerRoleId = 4;
+	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The Eiseley data has already been inserted');
@@ -141,21 +139,21 @@ function insertLorenEiseleyLibraryData() {
 	try {
 		$DB_CONN->beginTransaction();
 
-        $siteId = 6; // Manually obtained from PROD DB
+		$siteId = 6; // Manually obtained from PROD DB
 
 		// Thursdays
-		$dates = getWeeklyDatesFromRange('2020-02-06', '2020-04-09');
-		foreach ($dates as $date) {
+		$thursdayDates = getWeeklyDatesFromRange('2020-02-06', '2020-04-09');
+		foreach ($thursdayDates as $date) {
 			$shiftId = insertShift("$date 16:00:00", "$date 19:00:00", $siteId);
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 8, $8, 100, 60, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 8, 8, 100, 60, $siteId);
 			$secondAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 8, 8, 100, 60, $siteId);
 			$thirdAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 4, 4, 100, 60, $siteId);
 		}
 
 		// Saturdays
-		$dates = getWeeklyDatesFromRange('2020-02-01', '2020-04-11')
-		foreach ($dates as $date) {
+		$saturdayDates = getWeeklyDatesFromRange('2020-02-01', '2020-04-04')
+		foreach ($saturdayDates as $date) {
 			$shiftId = insertShift("$date 13:00:00", "$date 16:00:00", $siteId);
 
 			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 8, 8, 100, 60, $siteId);
@@ -182,7 +180,7 @@ function insertBennettMartinLibraryData() {
 	$greeterRoleId = 2;
 	$preparerRoleId = 3;
 	$reviewerRoleId = 4;
-    
+	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The Bennett Martin data has already been inserted');
@@ -194,8 +192,8 @@ function insertBennettMartinLibraryData() {
 		$siteId = 7 // Manually obtained from PROD DB
 
 		// Sundays
-		$dates = getWeeklyDatesFromRange('2020-02-02', '2020-03-15')
-		foreach ($dates as $date) {
+		$sundayDates = getWeeklyDatesFromRange('2020-02-02', '2020-03-15')
+		foreach ($sundayDates as $date) {
 			$shiftId = insertShift("$date 13:00:00", "$date 16:00:00", $siteId);
 
 			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 8, 8, 100, 60, $siteId);
@@ -221,8 +219,8 @@ function insertFStreetCommunityCenterData() {
 	$siteCoordinatorRoleId = 1;
 	$greeterRoleId = 2;
 	$preparerRoleId = 3;
-    $reviewerRoleId = 4;
-    
+	$reviewerRoleId = 4;
+	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The F Street Community Center data has already been inserted');
@@ -231,12 +229,11 @@ function insertFStreetCommunityCenterData() {
 	try {
 		$DB_CONN->beginTransaction();
 
-        $siteId = 8; // Manually obtained from PROD DB
+		$siteId = 8; // Manually obtained from PROD DB
 
 		// Tuesdays
-        $dates = getWeeklyDatesFromRange('2020-02-04', '2020-04-07');
-        
-		foreach ($dates as $date) {
+		$tuesdayDates = getWeeklyDatesFromRange('2020-02-04', '2020-04-07');
+		foreach ($tuesdayDates as $date) {
 			$shiftId = insertShift("$date 17:00:00", "$date 19:00:00", $siteId);
 
 			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 8, 8, 100, 60, $siteId);
@@ -271,12 +268,11 @@ function insertSoutheastCommunityCollegeData() {
 	try {
 		$DB_CONN->beginTransaction();
 
-		$siteId = insertSite('Southeast Community College', '8800 O Street, #T-102, Lincoln, NE 68520', '402-472-9638', FALSE, FALSE);
+		$siteId = insertSite('Southeast Community College', '8800 O Street, #T-102', '402-472-9638', FALSE, FALSE);
 
-        // Thursdays, closed March 26th, January 30th not on the flyer
-        $dates = array('2020-02-06', '2020-02-13', '2020-02-20', '2020-02-27', '2020-03-05', '2020-03-12', '2020-03-19', '2020-04-02', '2020-04-09');
-        
-		foreach ($dates as $date) {
+		// Thursdays, closed March 26th
+		$thursdayDates = array('2020-02-06', '2020-02-13', '2020-02-20', '2020-02-27', '2020-03-05', '2020-03-12', '2020-03-19', '2020-04-02', '2020-04-09');
+		foreach ($thursdayDates as $date) {
 			$shiftId = insertShift("$date 16:30:00", "$date 18:30:00", $siteId);
 
 			$firstAppointmentTimeId = insertAppointmentTime("$date 16:30:00", 4, 4, 100, 60, $siteId);
@@ -284,13 +280,13 @@ function insertSoutheastCommunityCollegeData() {
 		}
 
 		// Saturdays, closed March 21st and 28th
-        $dates = array('2020-02-01', '2020-02-08', '2020-02-15', '2020-02-22', '2020-02-29', '2020-03-07', '2020-03-14', '2020-04-04', '2020-04-11');
-        foreach ($dates as $date) {
-            $shiftId = insertShift("$date 09:00:00", "$date 13:00:00", $siteId);
+		$saturdayDates = array('2020-02-01', '2020-02-08', '2020-02-15', '2020-02-22', '2020-02-29', '2020-03-07', '2020-03-14', '2020-04-04');
+		foreach ($saturdayDates as $date) {
+			$shiftId = insertShift("$date 09:00:00", "$date 13:00:00", $siteId);
 
 			$firstAppointmentTimeId = insertAppointmentTime("$date 09:00:00", 4, 4, 100, 60, $siteId);
-            $secondAppointmentTimeId = insertAppointmentTime("$date 10:00:00", 4, 4, 100, 60, $siteId);
-            $thirdAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 4, 4, 100, 60, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 10:00:00", 4, 4, 100, 60, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 4, 4, 100, 60, $siteId);
 			$fourthAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 4, 4, 100, 60, $siteId);
 		}
 
@@ -384,26 +380,26 @@ function insertShiftRoleLimit($maximumNumber, $roleId, $shiftId, $siteId) {
 	return $DB_CONN->lastInsertId();
 }
 
-// Gets dates of the same days of the week as $start, ends on
-// the first occurrence of that day of the week on or after $end
-function getWeeklyDatesFromRange($start, $end, $format = 'Y-m-d') { 
+// Gets dates of the same days of the week as $startDateInclusive, ends on
+// the first occurrence of that day of the week on or after $endDateInclusive
+// taken from https://www.geeksforgeeks.org/return-all-dates-between-two-dates-in-an-array-in-php/
+function getWeeklyDatesFromRange($startDateInclusive, $endDateInclusive, $dateFormat = 'Y-m-d') { 
 	
-	// Declare an empty array 
 	$array = array(); 
 	
 	// Variable that store the date interval of period 1 week 
 	$interval = new DateInterval('P1W'); 
 
-	$realEnd = new DateTime($end); 
+	// ensures $endDateInclusive is actually included
+	$realEnd = new DateTime($endDateInclusive); 
 	$realEnd->add($interval); 
 
-	$period = new DatePeriod(new DateTime($start), $interval, $realEnd); 
+	$period = new DatePeriod(new DateTime($startDateInclusive), $interval, $realEnd); 
 
 	// Use loop to store date into array 
 	foreach($period as $date) {				 
-		$array[] = $date->format($format); 
+		$array[] = $date->format($dateFormat); 
 	} 
 
-	// Return the array elements 
 	return $array; 
 }
