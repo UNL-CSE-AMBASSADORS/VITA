@@ -152,7 +152,7 @@ function insertLorenEiseleyLibraryData() {
 		}
 
 		// Saturdays
-		$saturdayDates = getWeeklyDatesFromRange('2020-02-01', '2020-04-04')
+		$saturdayDates = getWeeklyDatesFromRange('2020-02-01', '2020-04-04');
 		foreach ($saturdayDates as $date) {
 			$shiftId = insertShift("$date 13:00:00", "$date 16:00:00", $siteId);
 
@@ -189,10 +189,10 @@ function insertBennettMartinLibraryData() {
 	try {
 		$DB_CONN->beginTransaction();
 
-		$siteId = 7 // Manually obtained from PROD DB
+		$siteId = 7; // Manually obtained from PROD DB
 
 		// Sundays
-		$sundayDates = getWeeklyDatesFromRange('2020-02-02', '2020-03-15')
+		$sundayDates = getWeeklyDatesFromRange('2020-02-02', '2020-03-15');
 		foreach ($sundayDates as $date) {
 			$shiftId = insertShift("$date 13:00:00", "$date 16:00:00", $siteId);
 
