@@ -1,6 +1,6 @@
 require.config({
 	shim: {
-		/* Bootstrap is dependent on jquery */
+		/* Bootstrap select is dependent on jquery */
 		'bootstrap-select': { deps: ['jquery'] },
 	},
 	paths: {
@@ -12,77 +12,91 @@ WDN.initializePlugin('modal', [function() {
 	require(['jquery'], function($) {
 		window.jQuery = $;
 		require(['bootstrap-select'], function() {
-			$(function(){
-				// display new user modal
+			$(function() {
+				initializeAddUserModalEventHandlers();
+				initializeUserPermissionsSelectPickerEventHandlers();
+				initializeUserAbilitiesSelectPickerEventHandlers();
+				initializeEditButtonEventHandlers();
+
+				// Initially, create the user table
+				refreshUserTable();
+			});
+
+			function initializeAddUserModalEventHandlers() {
 				$('#add-user').colorbox({
 					inline: true, 
 					width: '50%'
 				});
 
-				$('.close-modal-button').click(function(){
+				$('.close-modal-button').click(function() {
 					$.colorbox.close();
 				});
 
-				$('#add-user-form').on('submit', function(event){
+				$('#add-user-form').on('submit', function(event) {
 					event.preventDefault();
 					$('#add-user-form button[type=submit]').prop('disabled', true);
 					
-					var valid = true;
-	
+					let isValid = true;
+
 					$(this).find('input').each(function(){
-						var noValue = !$(this).val();
-						if(noValue){
-							valid = false;
+						const noValue = !$(this).val();
+						const isRequired = $(this).prop('required');
+						const isInvalid = isRequired && noValue;
+
+						if (isInvalid) {
+							isValid = false;
 						}
-						$(this).toggleClass('is-invalid',noValue);
+						$(this).toggleClass('is-invalid', isInvalid);
 					});
 	
-					if(!$('#email').val().match(/.+@.+\..+/)){
-						valid = false;
+					const isValidEmail = $('#email').val().match(/.+@.+\..+/);
+					if (isValidEmail == null){
+						isValid = false;
 						$('#email').addClass('is-invalid');
 					}
-					if(valid){
+
+					if (isValid) {
 						$.ajax({
 							dataType: 'json',
 							method: 'POST',
 							url: '/server/management/users/users.php',
 							data: {
-								callback: 'addUser',
+								action: 'addUser',
 								firstName: $('#firstName').val(),
 								lastName: $('#lastName').val(),
 								email: $('#email').val(),
-								phone: $('#phone').val()
+								phoneNumber: $('#phone').val() || ''
 							},
-							success: function(response){
+							success: function(response) {
 								$('#add-user-form button[type=submit]').prop('disabled', false);
-	
-								if(response.success){
-									// Clear inputs
-									$('#add-user-form input').val('');
-	
-									// Close box
-									$.colorbox.close();
-									refreshUserTable();
-								}else{
-									alert(response.error);
+								if (!response || !response.success) {
+									alert(response.error || 'There was an error adding the user. Please refresh the page and try again.');
+									return;
 								}
+
+								// Clear inputs
+								$('#add-user-form input').val('');
+								$.colorbox.close();
+								
+								refreshUserTable();
 							}
 						});
-					}else{
+					} else {
 						$('#add-user-form button[type=submit]').prop('disabled', false);
 					}
 				});
+			};
 		
-				refreshUserTable();
+			function initializeUserPermissionsSelectPickerEventHandlers() {
 				$('#user-management-table').on('changed.bs.select', '.userPermissionsSelectPicker', function(event){
-					var userId = $(this).parents('tr').data('user-id');
+					const userId = $(this).parents('tr').data('user-id');
 		
 					// permissions to be removed - all non-selected options with set ids
-					var removePermissionArr = $(this).children('option:not(:selected)[data-userPermissionId]').map(function(index, ele){
+					const removePermissionArr = $(this).children('option:not(:selected)[data-userPermissionId]').map(function(index, ele){
 						return ele.dataset.userpermissionid; // note this is case-sensitive and should be all lowercase
 					}).get();
 					// permissions to be added - all selected options w/o ids
-					var addPermissionArr = $(this).children('option:selected:not([data-userPermissionId])').map(function(index, ele){
+					const addPermissionArr = $(this).children('option:selected:not([data-userPermissionId])').map(function(index, ele){
 						return ele.value;
 					}).get();
 		
@@ -91,32 +105,32 @@ WDN.initializePlugin('modal', [function() {
 						method: 'POST',
 						url: '/server/management/users/users.php',
 						data: {
-							callback: 'updateUserPermissions',
+							action: 'updateUserPermissions',
 							userId: userId,
 							removePermissionArr: removePermissionArr,
 							addPermissionArr: addPermissionArr
 						},
 						success: function(response){
-							if(response.success){
-								refreshUserTable();
-							}else{
-								refreshUserTable();
-								alert(response.error);
+							if (!response  || !response.success) {
+								alert(response.error || 'There was an error updating the permissions. Please refresh the page and try again');
 							}
+							refreshUserTable();
 						}
 					});
 				});
-		
+			};
+
+			function initializeUserAbilitiesSelectPickerEventHandlers() {
 				$('#user-management-table').on('changed.bs.select', '.userAbilitiesSelectPicker', function(event) {
-					let userId = $(this).parents('tr').data('user-id');
+					const userId = $(this).parents('tr').data('user-id');
 		
 					// abilities to be removed - all non-selected options with set ids
-					let removeAbilityArr = $(this).children('option:not(:selected)[data-userAbilityId]').map((index, element) => {
+					const removeAbilityArr = $(this).children('option:not(:selected)[data-userAbilityId]').map((index, element) => {
 						return element.dataset.userabilityid; // note this is case-sensitive and should be all lowercase
 					}).get();
 		
 					// abilities to be added - all selected options w/o ids
-					let addAbilityArr = $(this).children('option:selected:not([data-userAbilityId])').map((index, element) => {
+					const addAbilityArr = $(this).children('option:selected:not([data-userAbilityId])').map((index, element) => {
 						return element.value;
 					}).get();
 		
@@ -125,66 +139,173 @@ WDN.initializePlugin('modal', [function() {
 						method: 'POST',
 						url: '/server/management/users/users.php',
 						data: {
-							callback: 'updateUserAbilities',
+							action: 'updateUserAbilities',
 							userId: userId,
 							removeAbilityArr: removeAbilityArr,
 							addAbilityArr: addAbilityArr
 						},
 						success: function (response) {
-							if (response.success) {
-								refreshUserTable();
-							} else {
-								refreshUserTable();
-								alert(response.error);
+							if (!response || !response.success) {
+								alert(response.error || 'There was an error updating the abilities. Please refresh the page and try again');
 							}
+							refreshUserTable();
 						}
 					});
 				});
-			});
+			};
+
+			function initializeEditButtonEventHandlers() {
+				// Initialize the modal handlers
+				$('.close-modal-button').click(function() {
+					$.colorbox.close();
+				});
+
+				// Initialize the edit button handlers
+				$('#user-management-table').on('click', '.userEditButton', function(event) {
+					event.preventDefault();
+
+					// Initialize the colorbox
+					$('#user-management-table .userEditButton').colorbox({
+						inline: true,
+						width: '50%'
+					});
+
+					// Get user information
+					const userId = $(this).parents('tr').data('user-id');
+					getUserInformation(userId).then((userData) => {
+						$('#editFirstName').val(userData.firstName);
+						$('#editLastName').val(userData.lastName);
+						$('#editEmail').val(userData.email);
+						$('#editPhoneNumber').val(userData.phoneNumber);
+					});
+					
+					// Submit user information
+					$('#edit-user-form').on('submit', function(event) {
+						event.preventDefault();
+						$('#edit-user-form button[type=submit]').prop('disabled', true);
+
+						let isValid = true;
+						$(this).find('input').each(function() {
+							const noValue = !$(this).val();
+							const isRequired = $(this).prop('required');
+							const isInvalid = isRequired && noValue;
+							
+							if (isInvalid) {
+								isValid = false;
+							}
+							$(this).toggleClass('is-invalid', isInvalid);
+						});
 		
-			function refreshUserTable(){
+						const isValidEmail = $('#editEmail').val().match(/.+@.+\..+/);
+						if (isValidEmail == null) {
+							isValid = false;
+							$('#editEmail').addClass('is-invalid');
+						}
+
+						if (isValid) {
+							const newFirstName = $('#editFirstName').val();
+							const newLastName = $('#editLastName').val();
+							const newEmail = $('#editEmail').val();
+							const newPhoneNumber = $('#editPhoneNumber').val();
+
+							updateUserInformation(userId, newFirstName, newLastName, newEmail, newPhoneNumber).then(() => {
+								$.colorbox.close();
+								$('#edit-user-form button[type=submit]').prop('disabled', false);
+								refreshUserTable();
+							});
+
+							// Need to remove the event handlers so that multiple don't exist after submitting the form
+							$(this).off();
+						} else {
+							$('#edit-user-form button[type=submit]').prop('disabled', false);
+						}
+					});
+				});
+			};
+
+			function getUserInformation(userId) {
+				return $.ajax({
+					dataType: 'json',
+					method: 'GET',
+					url: '/server/management/users/users.php',
+					data: {
+						action: 'getUserInformation',
+						userId: userId
+					}
+				}).then((response) => {
+					if (!response || !response.success) {
+						alert(response.error || 'There was an error fetching user data. Please refresh the page and try again.');
+						return;
+					}
+
+					return response.user;
+				});
+			};
+
+			function updateUserInformation(userId, newFirstName, newLastName, newEmail, newPhoneNumber) {
+				return $.ajax({
+					dataType: 'json',
+					method: 'POST',
+					url: '/server/management/users/users.php',
+					data: {
+						action: 'updateUserInformation',
+						userId: userId,
+						firstName: newFirstName,
+						lastName: newLastName,
+						email: newEmail,
+						phoneNumber: newPhoneNumber
+					}
+				}).then((response) => {
+					if (!response || !response.success) {
+						alert(response.error || 'There was an error fetching the data. Please refresh the page.');
+					}
+				});
+			};
+
+			function refreshUserTable() {
 				$.ajax({
 					dataType: 'json',
 					method: 'POST',
 					url: '/server/management/users/users.php',
 					data: {
-						callback: 'getUserTable'
+						action: 'getUserTable'
 					},
 					success: function(response){
-						if(response.success){
-							$('#user-management-table').html(response.table);
-							$('#user-management-table .userPermissionsSelectPicker').selectpicker({
-								iconBase: '',
-								tickIcon: 'fas fa-check',
-								multipleSeparator: ', <br>'
-							});
-							$('#user-management-table .userAbilitiesSelectPicker').selectpicker({
-								iconBase: '',
-								tickIcon: 'fas fa-check',
-								multipleSeparator: ', <br>'
-							});
-							$('.dropdown-toggle').on('click', function(){
-								// Set up event listener for clicks outside of the element
-								$(document).on('click.dropdown', function(e){
-									var container = $('.bootstrap-select.open');
-									// If the click is not on a child element
-									if (container.has(e.target).length === 0) {
-										container.removeClass('open');
-										$(document).off('click.dropdown');
-									}
-								});
-								// Close all dropdowns
-								$('.bootstrap-select.open').removeClass('open');
-								// Open this dropdown
-								$(this).parent().toggleClass('open');
-							});
-							$('.dropdown-toggle').siblings('select').hide();
-						}else{
-							alert(response.error);
+						if (!response || !response.success) {
+							alert(response.error || 'There was an error fetching the data. Please refresh the page.');
+							return;
 						}
+						
+						$('#user-management-table').html(response.table);
+						$('#user-management-table .userPermissionsSelectPicker').selectpicker({
+							iconBase: '',
+							tickIcon: 'fas fa-check',
+							multipleSeparator: ', <br>'
+						});
+						$('#user-management-table .userAbilitiesSelectPicker').selectpicker({
+							iconBase: '',
+							tickIcon: 'fas fa-check',
+							multipleSeparator: ', <br>'
+						});
+						$('.dropdown-toggle').on('click', function(){
+							// Set up event listener for clicks outside of the element
+							$(document).on('click.dropdown', function(e){
+								var container = $('.bootstrap-select.open');
+								// If the click is not on a child element
+								if (container.has(e.target).length === 0) {
+									container.removeClass('open');
+									$(document).off('click.dropdown');
+								}
+							});
+							// Close all dropdowns
+							$('.bootstrap-select.open').removeClass('open');
+							// Open this dropdown
+							$(this).parent().toggleClass('open');
+						});
+						$('.dropdown-toggle').siblings('select').hide();
 					}
 				});
-			}
+			};
 		});
 	});
 }]);
