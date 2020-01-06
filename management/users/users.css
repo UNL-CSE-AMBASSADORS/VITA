@@ -1,3 +1,23 @@
+.hidden {
+	display: none;
+}
+
+.form-group .dcf-input-text {
+	width: 100%;
+}
+
+#user-management-table {
+	width: 100%;
+}
+
+.is-invalid {
+	border: 1px solid red;
+}
+
+
+/*
+Override the colorbox default settings
+*/
 #cboxContent {
 	background: transparent !important;
 }
@@ -8,6 +28,12 @@
 	border: 1px solid rgba(0,0,0,.15);
 	border-radius: 4px;
 	padding: 0 0 2rem 0 !important;
+}
+
+.required-input label::after {
+	color: red;
+	content: ' *';
+	display: inline;
 }
 
 /*

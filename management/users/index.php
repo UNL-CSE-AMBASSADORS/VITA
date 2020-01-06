@@ -120,23 +120,25 @@ return readfile($documentRoot . $path);
 				</table>
 			</div>
 		</div>
+
+		<!-- Add User Modal -->
 		<div class="hidden">
 			<div class="modal" id="add-user-modal" tabindex="-1" role="dialog" aria-hidden="true">
 				<div class="dcf-wrapper dcf-pt-8 dcf-pb-5">
 					<h4>Add a new user</h4>
 					<form id="add-user-form">
 						<fieldset>
-							<section class="form-group">
+							<section class="form-group required-input">
 								<label class="dcf-label" for="firstName">First Name:</label>
-								<input type="text" class="dcf-input-text form-control" id="firstName">
+								<input type="text" class="dcf-input-text form-control" id="firstName" required>
 							</section>
-							<section class="form-group">
+							<section class="form-group required-input">
 								<label class="dcf-label" for="lastName">Last Name:</label>
-								<input type="text" class="dcf-input-text form-control" id="lastName">
+								<input type="text" class="dcf-input-text form-control" id="lastName" required>
 							</section>
-							<section class="form-group">
+							<section class="form-group required-input">
 								<label class="dcf-label" for="email">Email Address:</label>
-								<input type="text" class="dcf-input-text form-control" id="email" placeholder="student@huskers.unl.edu">
+								<input type="text" class="dcf-input-text form-control" id="email" placeholder="student@huskers.unl.edu" required>
 							</section>
 							<section class="form-group">
 								<label class="dcf-label" for="phone">Phone Number:</label>
@@ -145,12 +147,51 @@ return readfile($documentRoot . $path);
 						</fieldset>
 						<div class="dcf-pt-5">
 							<button type="submit" class="dcf-btn dcf-btn-primary">Add User</button>
-							<button type="button" class="dcf-btn dcf-btn-secondary">Close</button>
+							<button type="button" class="dcf-btn dcf-btn-secondary close-modal-button">Close</button>
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
+		<!-- End Add User Modal -->
+
+
+		<!-- Edit User  Modal -->
+		<div class="hidden">
+			<div class="modal" id="edit-user-modal" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="dcf-wrapper dcf-pt-8 dcf-pb-5">
+					<h4>Edit User Information</h4>
+					<form id="edit-user-form">
+						<fieldset>
+							<section class="form-group required-input">
+								<label class="dcf-label" for="editFirstName">First Name:</label>
+								<input type="text" class="dcf-input-text form-control" id="editFirstName" required>
+							</section>
+							<section class="form-group required-input">
+								<label class="dcf-label" for="editLastName">Last Name:</label>
+								<input type="text" class="dcf-input-text form-control" id="editLastName" required>
+							</section>
+							<section class="form-group required-input">
+								<label class="dcf-label" for="editEmail">Email Address:</label>
+								<input type="text" class="dcf-input-text form-control" id="editEmail" placeholder="student@huskers.unl.edu" required>
+								<p>Please note, changing the email address will affect the email a user logs in with. Do not do this unless you are absolutely certain of the change.</p>
+							</section>
+							<section class="form-group">
+								<label class="dcf-label" for="editPhoneNumber">Phone Number:</label>
+								<input type="text" class="dcf-input-text form-control" id="editPhoneNumber">
+							</section>
+						</fieldset>
+						<div class="dcf-pt-5">
+							<button type="submit" class="dcf-btn dcf-btn-primary">Save</button>
+							<button type="button" class="dcf-btn dcf-btn-secondary close-modal-button">Close</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- End Edit User Modal -->
+
+
 		<!-- TemplateEndEditable -->
 	</div>
 </main>
@@ -168,6 +209,7 @@ return readfile($documentRoot . $path);
 <!-- TemplateBeginEditable name="jsbody" -->
 <?php require_once "$root/server/global_includes.php"; ?>
 <script src="/dist/management/users/users.js"></script>
+<script src="https://kit.fontawesome.com/f7ca51166c.js" crossorigin="anonymous"></script>
 <!-- TemplateEndEditable -->
 </body>
 </html>

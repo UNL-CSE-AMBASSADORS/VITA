@@ -53,8 +53,8 @@ WDN.initializePlugin('modal', [function() {
 						let editLabel = $(`<label for=${i} class="dcf-pl-1">${ability.name}</label>`);
 						let editContainer = $(`<div style="display:none;"></div>`).addClass("editView");
 						editContainer.append(checkbox, editLabel);
-						let status = $(`<span aria-hidden="true"></span>`).addClass(ability.has ? "wdn-icon-ok green-icon" : "wdn-icon-cancel red-icon");
-						let label = $(`<label>${ability.name}</label>`);
+						let status = $(`<i></i>`).addClass(ability.has ? "fas fa-check green-icon" : "fas fa-times red-icon");
+						let label = $(`<label class="dcf-pl-1">${ability.name}</label>`);
 						let container = $(`<div></div>`).addClass("preview");
 						container.append(status, label);
 						$('#abilitiesSelect').append(editContainer, container);
@@ -65,8 +65,8 @@ WDN.initializePlugin('modal', [function() {
 						let ability = response.abilitiesRequiringVerification[i];
 						
 						let abilityDiv = $('<div></div>');
-						let abilityName = $('<span></span>').html(ability.name);
-						let abilityStatus = $('<span aria-hidden="true"></span>').addClass(ability.has ? "wdn-icon-ok green-icon" : "wdn-icon-cancel red-icon");
+						let abilityName = $('<span class="dcf-pl-1"></span>').html(ability.name);
+						let abilityStatus = $('<i></i>').addClass(ability.has ? "fas fa-check green-icon" : "fas fa-times red-icon");
 	
 						abilityDiv.append(abilityStatus, abilityName);
 						$('#certificationsDiv').append(abilityDiv);
