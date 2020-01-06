@@ -55,18 +55,14 @@ class AppointmentConfirmationUtilities {
 				Please arrive no later than $timeStr on $dateStr with all necessary materials (listed below). 
 				Please call $sitePhoneNumber if you have any questions. 
 				Thank you from Lincoln VITA.
-				<h2 class='dcf-mt-3'>What to Bring for your Appointment</h2>";
+				<h2 class='dcf-mt-3'>To Have Your Taxes Prepared, Bring:</h2>";
 	}
 	
 	private static function residentialInformation() {
 		return "<h5>Identification:</h5>
 				<ul>
-					<li><b>Social Security cards</b> or <b>ITIN Letters</b> for <b>EVERYONE</b> who will be included on the return</li>
-					<li><b>Photo ID</b> for <b>ALL</b> tax return signers (BOTH spouses must sign if filing jointly)</li>
-				</ul>
-				<h5>Health Care Coverage:</h5>
-				<ul>
-					<li><b>Verification</b> of health insurance (1095 A, B or C)</li>
+					<li><b>Social Security Cards</b> or <b>ITIN Letters</b> for EVERYONE who will be included on the return</li>
+					<li>Photo ID for ALL tax return signers (BOTH spouses must sign if filing jointly)</li>
 				</ul>
 				<h5>Income:</h5>
 				<ul>
@@ -79,6 +75,7 @@ class AppointmentConfirmationUtilities {
 					<li><b>1098s</b> for mortgage interest, student loan interest (1098-E), or tuition (1098-T), statement of property tax paid</li>
 					<li><b>Statement of college student account</b> showing all charges and payments for each student on the return</li>
 					<li><b>Childcare receipts</b>, including tax ID and address for childcare provider</li>
+					<li><b>1095s</b> showing creditable health insurance coverage</li>
 					<li><b>Records</b> of expenses for self-employment or home-based businesses</li>
 				</ul>";
 	}
@@ -106,7 +103,7 @@ class AppointmentConfirmationUtilities {
 		return "<h5>Miscellaneous:</h5>
 				<ul>
 					<li>Checking or savings account information for direct deposit/direct debit</li>
-					<li>It is <b>STRONGLY RECOMMENDED</b> that you bring last year's tax return</li>
+					<li>It is <b>REQUIRED</b> that you bring last year's tax return for MyFreeTaxes self-preparation</li>
 				</ul>";
 	}
 
