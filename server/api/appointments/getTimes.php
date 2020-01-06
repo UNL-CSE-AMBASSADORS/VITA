@@ -112,11 +112,15 @@ function getInternationalAppointmentTimes($year, $after, $treatyType) {
 }
 
 function calculateRemainingAppointmentsAvailableForResidentialAppointment($appointmentCount, $percentAppointments, $preparerCount, $minimum, $maximum) {
-	if (isset($maximum)) {
-		$availableAppointmentSpots = $maximum;
-	} else {
-		$availableAppointmentSpots = max($minimum, $preparerCount);
+	$availableAppointmentSpots = $preparerCount;
+	if (isset($minimum)) {
+		$availableAppointmentSpots = max($minimum, $availableAppointmentSpots);
 	}
+
+	if (isset($maximum)) {
+		$availableAppointmentSpots = min($maximum, $availableAppointmentSpots);
+	}
+
 	$availableAppointmentSpots *= $percentAppointments / 100;
 	return ceil($availableAppointmentSpots) - $appointmentCount;
 }
