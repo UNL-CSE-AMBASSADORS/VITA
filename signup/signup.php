@@ -14,40 +14,40 @@
 	<?php } else if ($today < $dateAppointmentSignUpsStart) { ?>
 		<h4>Tax appointments cannot yet be scheduled. Please check back soon.</h4>
 	<?php } else { ?>
-		<form class="cmxform" 
+		<form class="cmxform dcf-form" 
 			id="vitaSignupForm" 
 			name="form" 
 			ng-submit="form.$valid && storeAppointments()" 
 			autocomplete="off" 
 			novalidate>
-			<p dcf-mt-2 dcf-mb-3>Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
+			<p class="dcf-mt-2 dcf-mb-3">Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
 			<p><b>NOTE: Please create a separate appointment for every tax return that needs to be done.</b></p>
 
 			<ul class="dcf-pl-0">
-				<li class="form-textfield">
-					<label class="form-label form-required" for="firstName">First Name</label>
-					<input type="text" name="firstName" id="firstName" ng-model="data.firstName" required>
+				<li class="dcf-form-group form-textfield">
+					<label class="dcf-label form-label form-required" for="firstName">First Name</label>
+					<input type="text" class="dcf-input-text form-control" name="firstName" id="firstName" ng-model="data.firstName" required>
 					<div ng-show="form.$submitted || form.firstName.$touched">
 						<label class="error" ng-show="form.firstName.$error.required">This field is required.</label>
 					</div>
 				</li>
 
 				<li class="form-textfield">
-					<label class="form-label form-required" for="lastName">Last Name</label>
-					<input type="text" name="lastName" id="lastName" ng-model="data.lastName" required>
+					<label class="dcf-label form-label form-required" for="lastName">Last Name</label>
+					<input type="text" class="dcf-input-text form-control" name="lastName" id="lastName" ng-model="data.lastName" required>
 					<div ng-show="form.$submitted || form.lastName.$touched">
 						<label class="error" ng-show="form.lastName.$error.required">This field is required.</label>
 					</div>
 				</li>
 
 				<li class="form-textfield">
-					<label class="form-label" for="email">Email</label>
-					<input type="email" name="email" id="email" ng-model="data.email">
+					<label class="dcf-label form-label" for="email">Email</label>
+					<input type="email" class="dcf-input-text form-control" name="email" id="email" ng-model="data.email">
 				</li>
 
 				<li class="form-textfield">
-					<label class="form-label form-required" for="phone">Phone Number</label>
-					<input type="text" name="phone" id="phone" ng-model="data.phone" required>
+					<label class="dcf-label form-label form-required" for="phone">Phone Number</label>
+					<input type="text" class="dcf-input-text form-control" name="phone" id="phone" ng-model="data.phone" required>
 					<div ng-show="form.$submitted || form.phone.$touched">
 						<label class="error" ng-show="form.phone.$error.required">This field is required.</label>
 					</div>

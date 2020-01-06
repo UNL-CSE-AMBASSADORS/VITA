@@ -325,5 +325,5 @@
 		</div>
 	</div>
 	<br/>
-	<input type="submit" value="Schedule An Appointment"/>
+	<input type="submit" class="dcf-btn dcf-btn-primary" value="Schedule An Appointment"/>
 </form>

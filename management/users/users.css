@@ -1,10 +1,19 @@
+.hidden {
+	display: none;
+}
+
+.form-group .dcf-input-text {
+	width: 100%;
+}
+
+#user-management-table {
+	width: 100%;
+}
+
 .is-invalid {
 	border: 1px solid red;
 }
 
-.hidden {
-	display: none;
-}
 
 /*
 Override the colorbox default settings

@@ -22,7 +22,7 @@ return readfile($documentRoot . $path);
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
-	<!-- Place optional header elements here -->
+	<link rel="stylesheet" href="/dist/login/login.css">
 	<!-- TemplateEndEditable -->
 	<!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -110,16 +110,16 @@ return readfile($documentRoot . $path);
 					<form id="login_form">
 						<fieldset>
 							<legend>User Login</legend>
-							<section class="form-group">
-								<label for="login_email">E-mail Address</label>
-								<input id="login_email" class="form-control" placeholder="E-mail" type="text" autocomplete="off" />
+							<section class="dcf-form-group">
+								<label class="dcf-label" for="login_email">E-mail Address</label>
+								<input id="login_email" class="dcf-text-input form-control" placeholder="john@email.com" type="text" autocomplete="off" />
 							</section>
-							<section class="form-group">
-								<label for="login_password">Password</label>
-								<input id="login_password" class="form-control" placeholder="Password" type="password" />
+							<section class="dcf-form-group dcf-mt-1">
+								<label class="dcf-label" for="login_password">Password</label>
+								<input id="login_password" class="dcf-text-input form-control" placeholder="Password" type="password" />
 							</section>
 						</fieldset>
-						<input class="dcf-mt-5" type="submit" value="Login" />
+						<input class="dcf-btn dcf-btn-primary dcf-mt-5" type="submit" value="Login" />
 					</form>
 				</div>
 				<div class="dcf-col-100% dcf-2nd dcf-col-50%-start@md dcf-1st@md">
@@ -142,11 +142,11 @@ return readfile($documentRoot . $path);
 								Please provide the e-mail address associated with your account. Once the form is submitted, you will receive an e-mail with further instructions.
 							</p>
 							<div class="form-group">
-								<label for="register_email">E-mail Address</label>
-								<input id="register_email" class="form-control" placeholder="E-mail" type="text" autocomplete="off" />
+								<label class="dcf-label" for="register_email">E-mail Address</label>
+								<input id="register_email" class="dcf-text-input form-control" placeholder="john@email.com" type="text" autocomplete="off" />
 							</div>
 						</fieldset>
-						<input class="dcf-mt-5" id="register_submit" type="submit" value="Reset Password/Register" />
+						<input class="dcf-btn dcf-btn-primary dcf-mt-5" id="register_submit" type="submit" value="Reset Password/Register" />
 					</form>
 					<p id="register_success" style="display:none;">
 						<span style="font-weight:bold; color:#288700;">

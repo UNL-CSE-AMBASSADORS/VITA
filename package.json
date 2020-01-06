@@ -6,8 +6,8 @@
   "scripts": {
     "clean-start": "rm -rf ./dist/",
     "transpile-js": "babel . -d ./dist/ --ignore ./node_modules/,./dist/",
-    "process-css:dev": "postcss \"./!(dist|node_modules)/**/*.css\" -d ./dist/ -b ./ --use postcss-cssnext",
-    "process-css:prod": "postcss \"./!(dist|node_modules)/**/*.css\" -d ./dist/ -b ./ --use postcss-cssnext cssnano",
+    "process-css:dev": "postcss \"./index.css\" \"./!(dist|node_modules)/**/*.css\" -d ./dist/ -b ./ --use postcss-cssnext",
+    "process-css:prod": "postcss \"./index.css\" \"./!(dist|node_modules)/**/*.css\" -d ./dist/ -b ./ --use postcss-cssnext cssnano",
     "minify-js:prod": "run-for-every-file --src \"./dist/\" --dest \"./dist/\" --file \"**/*.js\" --not-file \"**/*/\" --run \"uglifyjs {{src-file}} -o {{dest-file}} --compress drop_console --mangle --keep-fnames\"",
     "cache-bust:prod": "hashmark ./dist/**/*.{js,css} {dir}/{name}-{hash}{ext} | sed 's/\\\\\\\\\\\\\\\\/\\//g' > replace-map.json && cat replace-map.json | replaceinfiles -s ./**/*.php -d {dir}/{name}{ext} && cat replace-map.json | sed s/\\.js/\\\\\\x22/g | replaceinfiles -s ./dist/**/*.js -d {dir}/{name}{ext} && rm replace-map.json",
     "clean-end": "rm -rf ./dist/node_modules",

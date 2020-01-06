@@ -270,28 +270,27 @@ WDN.initializePlugin('modal', [function() {
 					data: {
 						action: 'getUserTable'
 					},
-					success: function(response) {
+					success: function(response){
 						if (!response || !response.success) {
 							alert(response.error || 'There was an error fetching the data. Please refresh the page.');
 							return;
 						}
-
+						
 						$('#user-management-table').html(response.table);
 						$('#user-management-table .userPermissionsSelectPicker').selectpicker({
 							iconBase: '',
-							tickIcon: 'wdn-icon-ok',
+							tickIcon: 'fas fa-check',
 							multipleSeparator: ', <br>'
 						});
 						$('#user-management-table .userAbilitiesSelectPicker').selectpicker({
 							iconBase: '',
-							tickIcon: 'wdn-icon-ok',
+							tickIcon: 'fas fa-check',
 							multipleSeparator: ', <br>'
 						});
-
 						$('.dropdown-toggle').on('click', function(){
 							// Set up event listener for clicks outside of the element
 							$(document).on('click.dropdown', function(e){
-								const container = $('.bootstrap-select.open');
+								var container = $('.bootstrap-select.open');
 								// If the click is not on a child element
 								if (container.has(e.target).length === 0) {
 									container.removeClass('open');
