@@ -24,6 +24,9 @@ function insert2020Data() {
 	// insertBennettMartinLibraryData();
 	// insertFStreetCommunityCenterData();
 	// insertSoutheastCommunityCollegeData();
+	// insertInternationalStudentScholarSiteData();
+	// insertNebraskaUnionData();
+
 	die('SUCCESS');
 }
 
@@ -298,6 +301,122 @@ function insertSoutheastCommunityCollegeData() {
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
 		throw new Exception('Failed inserting Southeast Community College data', MY_EXCEPTION);
+		die();
+	}
+}
+
+function insertInternationalStudentScholarSiteData() {
+	GLOBAL $DB_CONN;
+
+	$siteCoordinatorRoleId = 1;
+	$greeterRoleId = 2;
+	$preparerRoleId = 3;
+	$reviewerRoleId = 4;
+	
+	$dataAlreadyInserted = true;
+	if ($dataAlreadyInserted) {
+		die('The ISS data has already been inserted');
+	}
+
+	$siteId = 4; // Manually obtained from PROD DB
+
+	try {
+		$DB_CONN->beginTransaction();
+
+		// Tuesdays
+		$tuesdayDates = array('2020-03-03', '2020-03-10', '2020-03-17', '2020-03-31');
+		foreach ($tuesdayDates as $date) {
+			$shiftId = insertShift("$date 13:00:00", "$date 18:00:00", $siteId);
+
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 41, 41, 100, 60, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 41, 41, 100, 60, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 41, 41, 100, 60, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 41, 41, 100, 60, $siteId);
+			$fifthAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 19, 19, 100, 60, $siteId);
+		}
+
+		// Spring break Tuesday (different than the others)
+		$tuesdayDate = '2020-03-24';
+		$tuesdayShiftId = insertShift("$tuesdayDate 13:00:00", "$tuesdayDate 16:00:00", $siteId);
+		
+		$firstAppointmentTimeId = insertAppointmentTime("$tuesdayDate 13:00:00", 41, 41, 100, 60, $siteId);
+		$secondAppointmentTimeId = insertAppointmentTime("$tuesdayDate 14:00:00", 41, 41, 100, 60, $siteId);
+		$thirdAppointmentTimeId = insertAppointmentTime("$tuesdayDate 15:00:00", 41, 41, 100, 60, $siteId);
+
+		// Wednesday
+		$wednesdayDate = '2020-04-08';
+		$wednesdayShiftId = insertShift("$wednesdayDate 13:00:00", "$wednesdayDate 18:00:00", $siteId);
+		
+		$firstAppointmentTimeId = insertAppointmentTime("$wednesdayDate 13:00:00", 41, 41, 100, 60, $siteId);
+		$secondAppointmentTimeId = insertAppointmentTime("$wednesdayDate 14:00:00", 41, 41, 100, 60, $siteId);
+		$thirdAppointmentTimeId = insertAppointmentTime("$wednesdayDate 15:00:00", 41, 41, 100, 60, $siteId);
+		$fourthAppointmentTimeId = insertAppointmentTime("$wednesdayDate 16:00:00", 41, 41, 100, 60, $siteId);
+		$fifthAppointmentTimeId = insertAppointmentTime("$wednesdayDate 17:00:00", 19, 19, 100, 60, $siteId);
+
+		// Default Site Role Limits
+		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
+		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
+
+		$DB_CONN->commit();
+	} catch (Exception $e) {
+		$DB_CONN->rollback();
+		throw new Exception('Failed inserting ISS data', MY_EXCEPTION);
+		die();
+	}
+
+}
+
+function insertNebraskaUnionData() {
+	GLOBAL $DB_CONN;
+
+	$siteCoordinatorRoleId = 1;
+	$greeterRoleId = 2;
+	$preparerRoleId = 3;
+	$reviewerRoleId = 4;
+	
+	$dataAlreadyInserted = true;
+	if ($dataAlreadyInserted) {
+		die('The AL data has already been inserted');
+	}
+
+	$siteId = insertSite('Nebraska Union', '1400 R Street', '402-472-9638', FALSE, FALSE);
+
+	try {
+		$DB_CONN->beginTransaction();
+
+		// Saturdays
+		$saturdayDates = getWeeklyDatesFromRange('2020-01-25', '2020-02-22');
+		foreach ($saturdayDates as $date) {
+			$shiftId = insertShift("$date 10:00:00", "$date 16:00:00", $siteId);
+
+			$firstAppointmentTimeId = insertAppointmentTime("$date 10:00:00", 15, 15, 100, 60, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 15, 15, 100, 60, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 15, 15, 100, 60, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 15, 15, 100, 60, $siteId);
+			$fifthAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 15, 15, 100, 60, $siteId);
+			$sixthAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 15, 15, 100, 60, $siteId);
+		}
+		
+		// Sundays
+		$sundayDates = getWeeklyDatesFromRange('2020-01-26', '2020-03-01');
+		foreach ($sundayDates as $date) {
+			$shiftId = insertShift("$date 11:00:00", "$date 16:00:00", $siteId);
+
+			$firstAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 15, 15, 100, 60, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 15, 15, 100, 60, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 15, 15, 100, 60, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 15, 15, 100, 60, $siteId);
+			$fifthAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 15, 15, 100, 60, $siteId);
+		}
+
+		// Default Site Role Limits
+		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
+		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
+
+		$DB_CONN->commit();
+	} catch (Exception $e) {
+		$DB_CONN->rollback();
+		throw new Exception('Failed inserting Anderson Library data', MY_EXCEPTION);
 		die();
 	}
 }
