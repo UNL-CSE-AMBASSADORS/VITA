@@ -1,4 +1,13 @@
 <div class="dcf-wrapper dcf-mb-8">
-	<h1>Hello World!</h1>
-	<canvas id="myChart" width="100" height="100"></canvas>
+	<div class="dcf-grid-halves@md">
+		<div>
+			<canvas id="stackedAppointmentCountsChart"></canvas>
+		</div>
+		<div>
+			<canvas id="unlOrWesleyanCountsChart"></canvas>
+		</div>
+		<div class="dcf-col-100%">
+			<canvas id="appointmentCountsPerSiteChart"></canvas>
+		</div>
+	</div>
 </div>

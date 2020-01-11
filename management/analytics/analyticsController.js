@@ -2,73 +2,163 @@ define('analyticsController', [], function() {
 
 	function analyticsController($scope, AnalyticsDataService, NotificationUtilities) {
 
-		$scope.sites = [];
-
-		$scope.loadSites = () => {
-			AnalyticsDataService.getSites().then((result) => {
-				if (result == null) {
-					NotificationUtilities.giveNotice('Failure', 'Unable to load the sites.', false);
+		$scope.initializeAggregateAppointmentHistoryCharts = () => {
+			AnalyticsDataService.getAggregateAppointmentHistory().then((result) => {
+				if (result == null || !result.success) {
+					NotificationUtilities.giveNotice('Failure', 'Unable to load aggregate appointment history data.', false);
 					return;
 				}
 
-				$scope.sites = result;
-			});
-		};
+				const aggregateAppointmentHistory = result.aggregateAppointmentHistory;
+				const years = aggregateAppointmentHistory.map((datum) => datum.year);
 
-		// Number of appointments scheduled
-		// Number of UNL/Wesleyan appointments scheduled
-		// Number of international appointments scheduled
-		
-
-		$scope.addDemoData = () => {
-			require(['chartJS'], function() {
-				var myChart = new Chart('myChart', {
-					type: 'bar',
-					data: {
-						labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-						datasets: [{
-							label: '# of Votes',
-							data: [12, 19, 3, 5, 2, 3],
-							backgroundColor: [
-								'rgba(255, 99, 132, 0.2)',
-								'rgba(54, 162, 235, 0.2)',
-								'rgba(255, 206, 86, 0.2)',
-								'rgba(75, 192, 192, 0.2)',
-								'rgba(153, 102, 255, 0.2)',
-								'rgba(255, 159, 64, 0.2)'
-							],
-							borderColor: [
-								'rgba(255, 99, 132, 1)',
-								'rgba(54, 162, 235, 1)',
-								'rgba(255, 206, 86, 1)',
-								'rgba(75, 192, 192, 1)',
-								'rgba(153, 102, 255, 1)',
-								'rgba(255, 159, 64, 1)'
-							],
-							borderWidth: 1
-						}]
-					},
-					options: {
-						scales: {
-							yAxes: [{
-								ticks: {
-									beginAtZero: true
+				require(['chartJS'], () => {
+					// Initialize stacked appointment counts chart
+					const residentialAppointmentCounts = aggregateAppointmentHistory.map((datum) => datum.numberOfResidentialAppointments);
+					const internationalAppointmentCounts = aggregateAppointmentHistory.map((datum) => datum.numberOfInternationalAppointments);
+					new Chart('stackedAppointmentCountsChart', {
+						type: 'bar',
+						data: {
+							labels: years,
+							datasets: [
+								{
+									label: '# of Residential Appointments',
+									data: residentialAppointmentCounts,
+									backgroundColor: 'rgba(208, 0, 0, 0.5)'
+								},
+								{
+									label: '# of International Appointments',
+									data: internationalAppointmentCounts,
+									backgroundColor: 'rgba(0, 208, 0, 0.5)'
 								}
-							}]
+							]
+						},
+						options: {
+							title: {
+								display: true,
+								text: 'Number of Appointments Per Year'
+							},
+							tooltips: {
+								mode: 'index',
+								intersect: false
+							},
+							scales: {
+								xAxes: [{
+								   stacked: true
+								}],
+								yAxes: [{
+								   stacked: true
+								}]
+							}
 						}
-					}
+					});
+
+					// Initialize UNL or Wesleyan counts charts
+					const unlOrWesleyanCounts = aggregateAppointmentHistory.map((datum) => datum.numberOfUnlOrWesleyanAppointments);
+					new Chart('unlOrWesleyanCountsChart', {
+						type: 'bar',
+						data: {
+							labels: years,
+							datasets: [{
+								data: unlOrWesleyanCounts,
+								backgroundColor: 'rgba(208, 0, 0, 0.5)'
+							}]
+						},
+						options: {
+							title: {
+								display: true,
+								text: 'Number of UNL/Wesleyan Appointments Per Year'
+							},
+							legend: {
+								display: false
+							},
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero: true
+									}
+								}]
+							}
+						}
+					});
 				});
 			});
-
 		};
-		
+
+		$scope.initializeAppointmentHistoryPerSiteCharts = () => {
+			// appointmentCountsPerSiteChart
+			AnalyticsDataService.getAppointmentCountsPerSiteHistory().then((result) => {
+				if (result == null || !result.success) {
+					NotificationUtilities.giveNotice('Failure', 'Unable to load aggregate appointment history data.', false);
+					return;
+				}
+
+				const appointmentCountsPerSiteHistory = result.appointmentCountsPerSiteHistory;
+				const years = [...new Set(Object.values(appointmentCountsPerSiteHistory).flatMap((site) => Object.keys(site.appointmentCounts)))].sort();
+				const dataPerSite = Object.values(appointmentCountsPerSiteHistory).map((site) => {
+					const color = $scope.getRandomColor();
+					return {
+						label: site.title,
+						data: years.map((year) => site.appointmentCounts[year]),
+						backgroundColor: color,
+						borderColor: color,
+						fill: false
+					};
+				});
+
+				require(['chartJS'], () => {
+					new Chart('appointmentCountsPerSiteChart', {
+						type: 'line',
+						data: {
+							labels: years,
+							datasets: dataPerSite
+						},
+						options: {
+							responsive: true,
+							title: {
+								display: true,
+								text: 'Number of Appointments Per Site'
+							},
+							legend: {
+								position: 'right'
+							},
+							tooltips: {
+								mode: 'index',
+								intersect: false
+							},
+							hover: {
+								mode: 'index',
+								intersect: false
+							},
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero: true
+									}
+								}]
+							}
+						}
+					});
+				});
+			});
+		};
+
+		// Adapted from: https://stackoverflow.com/a/1484514
+		$scope.getRandomColor = () => {
+			const letters = '0123456789ABCDEF';
+			let color = '#';
+			for (let i = 0; i < 6; i++) {
+				color += letters[Math.floor(Math.random() * 16)];
+			}
+			return color;
+		}
+
 		// Invoke initially
-		$scope.loadSites();
-		$scope.addDemoData();
+		$scope.initializeAggregateAppointmentHistoryCharts();
+		$scope.initializeAppointmentHistoryPerSiteCharts();
 	};
 
 	analyticsController.$inject = ['$scope', 'analyticsDataService', 'notificationUtilities'];
 
 	return analyticsController;
-
 });

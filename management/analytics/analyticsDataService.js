@@ -2,13 +2,20 @@ define('analyticsDataService', [], function($http) {
 
 	function analyticsDataService($http) {
 		return {
-			getSites: function() {
-				return $http.get('/server/api/sites/getAll.php?siteId=true&title=true').then(function(response){
+			getAggregateAppointmentHistory: function() {
+				return $http.get('/server/management/analytics/analytics.php?action=getAggregateAppointmentHistory').then((response) => {
 					return response.data;
-				},function(error) {
+				}, (error) => {
 					return null;
 				});
 			},
+			getAppointmentCountsPerSiteHistory: function() {
+				return $http.get('/server/management/analytics/analytics.php?action=getAppointmentCountsPerSiteHistory').then((response) => {
+					return response.data;
+				}, (error) => {
+					return null;
+				});
+			}
 		};
 	};
 
