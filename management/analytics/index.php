@@ -1,11 +1,18 @@
 <?php
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
+require_once "$root/server/user.class.php";
+$USER = new User();
+if (!$USER->hasPermission('use_admin_tools')) {
+	header("Location: /unauthorized");
+	die();
+}
 function wdnInclude($path)
 {
 $documentRoot = 'https://unlcms.unl.edu';
 return readfile($documentRoot . $path);
 }
 ?>
+
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
@@ -18,11 +25,11 @@ return readfile($documentRoot . $path);
 		$Id: php.fixed.dwt.php | cf0a670a0fd8db9e20a169941c55c838d7c2ba10 | Wed Dec 12 16:54:41 2018 -0600 | Eric Rasmussen	$
 	-->
 	<!-- TemplateBeginEditable name="doctitle" -->
-	<title>VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+	<title>Analytics | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.0/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
-	<!-- Place optional header elements here -->
+	<link rel="stylesheet" href="/dist/management/analytics/analytics.css">
 	<!-- TemplateEndEditable -->
 	<!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -83,14 +90,15 @@ return readfile($documentRoot . $path);
 					<ol>
 						<li><a href="https://www.unl.edu/">Nebraska</a></li>
 						<li><a href="/">VITA Lincoln</a></li>
-						<li><span aria-current="page">Home</span></li>
+						<li><a href="/management">Management</a></li>
+						<li><span aria-current="page">Analytics</span></li>
 					</ol>
 					<!-- TemplateEndEditable -->
 				</nav>
 			</div>
 			<header class="dcf-page-title" id="dcf-page-title">
 				<!-- TemplateBeginEditable name="pagetitle" -->
-				<h1>VITA Lincoln</h1>
+				<h1>Analytics</h1>
 				<!-- TemplateEndEditable -->
 			</header>
 			<!-- TemplateBeginEditable name="herogroup1" -->
@@ -103,7 +111,7 @@ return readfile($documentRoot . $path);
 	</div>
 	<div class="dcf-main-content dcf-wrapper">
 		<!-- TemplateBeginEditable name="maincontentarea" -->
-		<p>Impress your audience with awesome content!</p>
+		<div id="analyticsApp" class="dcf-bleed" analytics></div>
 		<!-- TemplateEndEditable -->
 	</div>
 </main>
@@ -120,7 +128,7 @@ return readfile($documentRoot . $path);
 <?php wdnInclude("/wdn/templates_5.0/includes/global/js-body.html"); ?>
 <!-- TemplateBeginEditable name="jsbody" -->
 <?php require_once "$root/server/global_includes.php"; ?>
-<!-- put your custom javascript here -->
+<script src="/dist/management/analytics/analytics.js"></script>
 <!-- TemplateEndEditable -->
 </body>
 </html>
