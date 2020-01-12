@@ -1,6 +1,7 @@
 define('analyticsController', [], function() {
 
 	function analyticsController($scope, AnalyticsDataService, NotificationUtilities) {
+		$scope.COLORS = ['#DCECC9', '#AADACC', '#78C6D0', '#48B3D3', '#3E94C0', '#3474AC', '#2A5599', '#203686', '#18216B', '#11174B'];
 
 		$scope.initializeAggregateAppointmentHistoryCharts = () => {
 			AnalyticsDataService.getAggregateAppointmentHistory().then((result) => {
@@ -94,8 +95,8 @@ define('analyticsController', [], function() {
 
 				const appointmentCountsPerSiteHistory = result.appointmentCountsPerSiteHistory;
 				const years = [...new Set(Object.values(appointmentCountsPerSiteHistory).flatMap((site) => Object.keys(site.appointmentCounts)))].sort();
-				const dataPerSite = Object.values(appointmentCountsPerSiteHistory).map((site) => {
-					const color = $scope.getRandomColor();
+				const dataPerSite = Object.values(appointmentCountsPerSiteHistory).map((site, index) => {
+					const color = $scope.COLORS[index % $scope.COLORS.length];
 					return {
 						label: site.title,
 						data: years.map((year) => site.appointmentCounts[year]),
@@ -141,16 +142,6 @@ define('analyticsController', [], function() {
 				});
 			});
 		};
-
-		// Adapted from: https://stackoverflow.com/a/1484514
-		$scope.getRandomColor = () => {
-			const letters = '0123456789ABCDEF';
-			let color = '#';
-			for (let i = 0; i < 6; i++) {
-				color += letters[Math.floor(Math.random() * 16)];
-			}
-			return color;
-		}
 
 		// Invoke initially
 		$scope.initializeAggregateAppointmentHistoryCharts();
