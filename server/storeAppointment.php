@@ -114,8 +114,8 @@ function emailConfirmation($data) {
 	$response['success'] = false;
 
 	try {
-		if (!isset($data['email']) || !preg_match('/.+@.+/', $data['email'])) throw new Exception('Unable to send email--An invalid email address was given.', MY_EXCEPTION);
-		if (!isset($data['appointmentId'])) throw new Exception('Unable to send email--invalid information was received.', MY_EXCEPTION); 
+		if (!isset($data['email']) || !preg_match('/.+@.+/', $data['email'])) throw new Exception('Unable to send confirmation email--An invalid email address was given.', MY_EXCEPTION);
+		if (!isset($data['appointmentId'])) throw new Exception('Unable to send confirmation email--Invalid information was received.', MY_EXCEPTION); 
 
 		$confirmationMessage = AppointmentConfirmationUtilities::generateAppointmentConfirmation($data['appointmentId']);
 		
