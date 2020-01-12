@@ -376,7 +376,7 @@ function insertNebraskaUnionData() {
 	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
-		die('The AL data has already been inserted');
+		die('The Nebraska Union data has already been inserted');
 	}
 
 	$siteId = insertSite('Nebraska Union', '1400 R Street', '402-472-9638', FALSE, FALSE);
@@ -416,7 +416,7 @@ function insertNebraskaUnionData() {
 		$DB_CONN->commit();
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
-		throw new Exception('Failed inserting Anderson Library data', MY_EXCEPTION);
+		throw new Exception('Failed inserting Nebraska Union data', MY_EXCEPTION);
 		die();
 	}
 }
