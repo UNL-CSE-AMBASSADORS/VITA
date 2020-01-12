@@ -39,13 +39,13 @@
 			</thead>
 			<tbody>
 				<tr class="pointer"
-					ng-repeat="appointment in appointments | orderBy:['noShow', 'timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime', 'walkIn'] | searchFor: clientSearch"
-					ng-if="appointment.completed == null"
+					ng-repeat="appointment in appointments | orderBy:['noShow', 'cancelled', 'ended', 'timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime', 'walkIn'] | searchFor: clientSearch"
 					ng-click="selectClient(appointment)">
 					<th class="queue-name" data-header="Name">{{appointment.firstName}} {{appointment.lastName}}</th>
 					<td class="queue-status" data-header="Progress">
-						<span class="pill pill-no-show" ng-if="appointment.noShow">No-show</span>
-						<span ng-if="!appointment.noShow">
+						<span class="pill pill-red" ng-if="appointment.noShow">No-show</span>
+						<span class="pill pill-red" ng-if="appointment.cancelled">Cancelled</span>
+						<span ng-if="!appointment.noShow && !appointment.cancelled">
 							<span class="pill pill-walk-in" ng-if="appointment.walkIn">Walk-In</span>
 							<span class="pill" ng-class="appointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
 							<span class="pill" ng-class="appointment.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
