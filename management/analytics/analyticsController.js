@@ -86,7 +86,6 @@ define('analyticsController', [], function() {
 		};
 
 		$scope.initializeAppointmentHistoryPerSiteCharts = () => {
-			// appointmentCountsPerSiteChart
 			AnalyticsDataService.getAppointmentCountsPerSiteHistory().then((result) => {
 				if (result == null || !result.success) {
 					NotificationUtilities.giveNotice('Failure', 'Unable to load aggregate appointment history data.', false);
