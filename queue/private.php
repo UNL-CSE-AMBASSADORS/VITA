@@ -34,7 +34,6 @@
 					<th class="queue-name">Name</th>
 					<th class="queue-progress">Progress</th>
 					<th class="queue-time">Scheduled Time</th>
-					<th class="queue-id">Appointment ID</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -58,7 +57,6 @@
 						</span>
 					</td>
 					<td class="queue-time" data-header="Scheduled Time">{{appointment.scheduledTime}}</td>
-					<td class="queue-id" data-header="Appointment ID">#{{appointment.appointmentId}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -177,7 +175,7 @@
 			</form>
 		</div>
 
-		<div class="client-appointmentId dcf-txt-xs dcf-txt-right"><b>Appointment ID: </b>{{client.appointmentId}}</div>
+		<div class="client-appointmentId dcf-txt-xs dcf-txt-right dcf-mb-3"><b>Appointment ID: </b>{{client.appointmentId}}</div>
 	</div>
 </div>
 <!-- End of Client/Appointment Info Section -->
