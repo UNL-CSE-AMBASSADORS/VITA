@@ -23,7 +23,7 @@ td.available .ui-state-default {
 </style>
 
 <div id="appointmentPicker" ng-cloak>
-	<div ng-show="appointmentPickerSharedProperties.appointmentType != 'residential'"><b>International tax appointments begin March 5th.</b></div>
+	<div ng-show="appointmentPickerSharedProperties.appointmentType != 'residential'"><b>International tax appointments begin March 3rd.</b></div>
 
 	<div ng-show="appointmentPickerSharedProperties.hasAvailability == false">Sorry! There are currently no remaining appointments available.</div>
 	<div id="datePicker" 

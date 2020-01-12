@@ -141,11 +141,12 @@ return readfile($documentRoot . $path);
 					</div>
 					<div>
 						<div>
-							Resident appointments begin January 20th and run through April 11th. 
-							Tax Appointments for International Student Scholars begin March 5th and run 
-							through April 9th. Appointments are available at the following sites: Nebraska East Union, 
-							Anderson Library, Center for People in Need, Loren Eiseley Library, and Bennett Martin 
-							Library. To see the days and times for all the locations, please download 
+							Resident appointments begin January 25th and run through April 9th. 
+							Tax Appointments for International Student Scholars begin March 3rd and run 
+							through April 8th. Appointments are available at the following sites: Nebraska Union, 
+							Victor E. Anderson Library, Center for People in Need, F Street Community Center, 
+							Loren C. Eiseley Library, Bennett Martin Library, and Southeast Community College. 
+							To see the days and times for all the locations, please download 
 							the site schedule. 
 						</div>
 						<div class="dcf-grid-halves@md dcf-mt-3">

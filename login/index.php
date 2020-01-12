@@ -112,11 +112,11 @@ return readfile($documentRoot . $path);
 							<legend>User Login</legend>
 							<section class="dcf-form-group">
 								<label class="dcf-label" for="login_email">E-mail Address</label>
-								<input id="login_email" class="dcf-text-input form-control" placeholder="john@email.com" type="text" autocomplete="off" />
+								<input id="login_email" class="dcf-text-input form-control" placeholder="john@email.com" type="text" autocomplete="username" />
 							</section>
 							<section class="dcf-form-group dcf-mt-1">
 								<label class="dcf-label" for="login_password">Password</label>
-								<input id="login_password" class="dcf-text-input form-control" placeholder="Password" type="password" />
+								<input id="login_password" class="dcf-text-input form-control" placeholder="Password" type="password" autocomplete="current-password" />
 							</section>
 						</fieldset>
 						<input class="dcf-btn dcf-btn-primary dcf-mt-5" type="submit" value="Login" />
@@ -141,10 +141,10 @@ return readfile($documentRoot . $path);
 							<p id="register_info">
 								Please provide the e-mail address associated with your account. Once the form is submitted, you will receive an e-mail with further instructions.
 							</p>
-							<div class="form-group">
-								<label class="dcf-label" for="register_email">E-mail Address</label>
-								<input id="register_email" class="dcf-text-input form-control" placeholder="john@email.com" type="text" autocomplete="off" />
-							</div>
+							<section class="dcf-form-group dcf-mt-1">
+								<label class="dcf-label" for="register_email">E-mail address</label>
+								<input id="register_email" class="dcf-text-input form-control" placeholder="john@email.com" type="text" autocomplete="new-password" />
+							</section>
 						</fieldset>
 						<input class="dcf-btn dcf-btn-primary dcf-mt-5" id="register_submit" type="submit" value="Reset Password/Register" />
 					</form>

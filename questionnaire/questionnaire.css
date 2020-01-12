@@ -1,5 +1,11 @@
 .cant-help-text {
 	color: #d00000;
+	font-weight: bold;
+}
+
+.can-help-text {
+	color: green;
+	font-weight: bold;
 }
 
 p.form-required::after {
