@@ -40,9 +40,7 @@ function storeAppointment($data){
 		$response['message'] = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
-		
-		// TODO
-		// mail('vita@cse.unl.edu', 'Please help, everything is on fire?', print_r($e, true).print_r($data, true));
+		$response['message'] = 'An error occurred while trying to confirm the appointment. Please try again in a few minutes.';
 	}
 
 	print json_encode($response);

@@ -43,6 +43,7 @@
 				<li class="form-textfield">
 					<label class="dcf-label form-label" for="email">Email</label>
 					<input type="email" class="dcf-input-text form-control" name="email" id="email" ng-model="data.email">
+					<p class="dcf-txt-xs">A confirmation email will be sent to this email address.</p>
 				</li>
 
 				<li class="form-textfield">
@@ -299,11 +300,6 @@
 	<ng-bind-html ng-bind-html="successMessage"></ng-bind-html>
 
 	<div id="successfulSignupButtons" class="dcf-mt-4">
-		<button type="button" class="dcf-btn dcf-btn-primary" onclick="window.print();">Print</button>
-		<button type="button" 
-			class="dcf-btn dcf-btn-primary email-confirmation-button" 
-			ng-if="data.email != null && data.email.length > 0"
-			ng-disabled="emailButton.disabled"
-			ng-click="emailConfirmation()">{{emailButton.text}}</button>
+		<button type="button" class="dcf-btn dcf-btn-primary" onclick="window.print();">Print this Confirmation</button>
 	</div>
 </div>
