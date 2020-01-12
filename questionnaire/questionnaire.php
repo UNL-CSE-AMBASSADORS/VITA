@@ -324,6 +324,10 @@
 			</div>
 		</div>
 	</div>
-	<br/>
-	<input type="submit" class="dcf-btn dcf-btn-primary" value="Schedule An Appointment"/>
+
+	<div class="dcf-mt-6 dcf-mb-6">
+		<p class="can-help-text" ng-show="appointmentIsInScope()">Yes, VITA should be able to prepare your taxes!</p>
+		<p class="cant-help-text" ng-show="!appointmentIsInScope()">Sorry, VITA cannot prepare your taxes.</p>
+		<input type="submit" class="dcf-btn dcf-btn-primary" value="Schedule An Appointment" ng-disabled="!appointmentIsInScope()" />
+	</div>
 </form>
