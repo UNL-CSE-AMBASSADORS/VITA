@@ -276,6 +276,7 @@
 								<option value="" style="display:none;">-- Select a Country --</option>
 						</select>
 					</div>
+					<p class="dcf-txt-xs">This information is for the purpose of having a specific tax preparer available to assist with your China, India, Treaty, or Non-Treaty tax return and is stored as one of those four values.</p>
 					<div ng-show="form.$submitted || form.studentCountry.$touched">
 						<label class="error" ng-show="form.studentCountry.$error.required">This field is required.</label>
 					</div>
