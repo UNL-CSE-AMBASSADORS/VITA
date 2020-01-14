@@ -24,7 +24,7 @@
 			ng-if="appointment.completed == null">
 			<th class="queue-name" data-header="Name">{{appointment.firstName}} {{appointment.lastName}}</th>
 			<td class="queue-progress" data-header="Progress">
-				<span class="pill pill-no-show" ng-if="appointment.noShow">No-show</span>
+				<span class="pill pill-red" ng-if="appointment.noShow">No-show</span>
 				<span ng-if="!appointment.noShow">
 					<span class="pill pill-walk-in" ng-if="appointment.walkIn">Walk-In</span>
 					<span class="pill" ng-class="appointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
