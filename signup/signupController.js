@@ -7,9 +7,6 @@ define('signupController', [], function() {
 		$scope.appointmentId = null; // The id of the client's appointment once they successfully sign up
 		$scope.data = {};
 		$scope.questions = [];
-		$scope.emailButton = {};
-		$scope.emailButton.disabled = false
-		$scope.emailButton.text = 'Email Me this Confirmation';
 
 		$scope.countries = [ 
 			{ 'name': 'China', 'treatyType': 'china' },
@@ -110,6 +107,11 @@ define('signupController', [], function() {
 					$scope.appointmentId = response.appointmentId;
 					$scope.successMessage = $sce.trustAsHtml(response.message);
 					NotificationUtilities.giveNotice('Success', 'You have successfully scheduled an appointment!');
+
+					// Send the confirmation email
+					if ($scope.data.email != null && $scope.data.email.length > 0) {
+						$scope.emailConfirmation();
+					}
 				} else {
 					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
 				}
@@ -117,7 +119,6 @@ define('signupController', [], function() {
 		};
 
 		$scope.emailConfirmation = function() {
-			$scope.emailButton.disabled = true;
 			const data = {
 				"action": "emailConfirmation",
 				"appointmentId": $scope.appointmentId,
@@ -127,15 +128,12 @@ define('signupController', [], function() {
 			SignupService.emailConfirmation(data).then(function(response) {
 				if (typeof response !== 'undefined' && response){
 					if (response.success) {
-						$scope.emailButton.text = "Sent!";
-						NotificationUtilities.giveNotice('Success', 'The email has been sent!');
+						NotificationUtilities.giveNotice('Success', 'A confirmation email has been sent!');
 					} else {
-						$scope.emailButton.disabled = false;
 						NotificationUtilities.giveNotice('Failure', response.error, false);
 					}
 				} else {
-					$scope.emailButton.disabled = false;
-					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Try again or please print this page instead.', false);
+					NotificationUtilities.giveNotice('Failure', 'There was an error sending a confirmation email! Please print this page instead.', false);
 				}
 			});
 		};

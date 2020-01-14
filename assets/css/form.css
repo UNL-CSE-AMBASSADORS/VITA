@@ -3,9 +3,11 @@
 }
 
 label.form-required::after {
-	content: " *";
+	content: " required";
 	color: #d00000;
-	font-size: 1.247rem;
+	font-style: italic;
+	font-size: 0.75rem;
+	vertical-align: super;
 }
 
 [data-toggle=buttons]>.dcf-btn-group>.dcf-btn input[type=checkbox],

@@ -14,7 +14,7 @@ if ($USER->isLoggedIn()) {
 function loadPublicQueue($data) {
 	GLOBAL $DB_CONN;
 	$query = "SELECT Appointment.appointmentId, TIME_FORMAT(scheduledTime, '%l:%i %p') AS scheduledTime, firstName, lastName, 
-				timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, completed,
+				timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, completed, cancelled,
 				(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 15 MINUTE) < NOW() AND timeIn IS NULL) AS noShow,
 				(AppointmentTime.scheduledTime < Appointment.createdAt) AS walkIn
 			FROM Appointment
@@ -44,7 +44,7 @@ function loadPrivateQueue($data) {
 
 	$query = "SELECT Appointment.appointmentId, TIME_FORMAT(AppointmentTime.scheduledTime, '%l:%i %p') AS scheduledTime, 
 				firstName, lastName, timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, 
-				completed, language, Client.clientId, 
+				completed, cancelled, language, Client.clientId, 
 				(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 15 MINUTE) < NOW() AND timeIn IS NULL) AS noShow,
 				(AppointmentTime.scheduledTime < Appointment.createdAt) AS walkIn ";
 	if ($canViewClientInformation) {

@@ -34,27 +34,29 @@
 					<th class="queue-name">Name</th>
 					<th class="queue-progress">Progress</th>
 					<th class="queue-time">Scheduled Time</th>
-					<th class="queue-id">Appointment ID</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr class="pointer"
-					ng-repeat="appointment in appointments | orderBy:['noShow', 'timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime', 'walkIn'] | searchFor: clientSearch"
-					ng-if="appointment.completed == null"
+					ng-repeat="appointment in appointments | orderBy:['noShow', 'cancelled', 'completed == false', 'ended', 'timeIn == null', 'timeReturnedPapers == null', 'timeAppointmentStarted == null', 'scheduledTime', 'walkIn'] | searchFor: clientSearch"
 					ng-click="selectClient(appointment)">
 					<th class="queue-name" data-header="Name">{{appointment.firstName}} {{appointment.lastName}}</th>
 					<td class="queue-status" data-header="Progress">
-						<span class="pill pill-no-show" ng-if="appointment.noShow">No-show</span>
-						<span ng-if="!appointment.noShow">
-							<span class="pill pill-walk-in" ng-if="appointment.walkIn">Walk-In</span>
-							<span class="pill" ng-class="appointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
-							<span class="pill" ng-class="appointment.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
-							<span class="pill" ng-class="appointment.preparing ? 'pill-complete': 'pill-incomplete'">Preparing</span>
-							<span class="pill" ng-class="appointment.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
+						<span class="pill pill-red" ng-if="appointment.cancelled">Cancelled</span>
+						<span class="pill pill-red" ng-if="appointment.noShow && !appointment.cancelled">No-show</span>
+						<span class="pill pill-red" ng-if="appointment.completed == false && !appointment.cancelled">Incomplete</span>
+						<span ng-if="!appointment.noShow && !appointment.cancelled && appointment.completed != false">
+							<span class="pill pill-green" ng-if="appointment.ended">Completed</span>
+							<span ng-if="!appointment.ended">
+								<span class="pill pill-walk-in" ng-if="appointment.walkIn">Walk-In</span>
+								<span class="pill" ng-class="appointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
+								<span class="pill" ng-class="appointment.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
+								<span class="pill" ng-class="appointment.preparing ? 'pill-complete': 'pill-incomplete'">Preparing</span>
+								<span class="pill" ng-class="appointment.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
+							</span>
 						</span>
 					</td>
 					<td class="queue-time" data-header="Scheduled Time">{{appointment.scheduledTime}}</td>
-					<td class="queue-id" data-header="Appointment ID">#{{appointment.appointmentId}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -173,7 +175,7 @@
 			</form>
 		</div>
 
-		<div class="client-appointmentId dcf-txt-xs dcf-txt-right"><b>Appointment ID: </b>{{client.appointmentId}}</div>
+		<div class="client-appointmentId dcf-txt-xs dcf-txt-right dcf-mb-3"><b>Appointment ID: </b>{{client.appointmentId}}</div>
 	</div>
 </div>
 <!-- End of Client/Appointment Info Section -->

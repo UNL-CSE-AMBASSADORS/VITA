@@ -31,6 +31,7 @@ define('queueController', [], function() {
 						appointment.name = appointment.firstName + " " + appointment.lastName;
 						appointment.noShow = appointment.noShow == true; // Do this since the SQL returns 0/1 for false/true, and we want it to be true/false instead of 0/1
 						appointment.walkIn = appointment.walkIn == true; // ^ Similarly here.
+						appointment.cancelled = appointment.cancelled == true; // ^ Similarly here.
 						return appointment;
 					});
 				} else {
