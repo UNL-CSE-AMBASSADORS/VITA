@@ -50,6 +50,7 @@
 			<li><a href="<?php $root ?>/management/users" title="User Management">User Management</a></li>
 			<li><a href="<?php $root ?>/management/sites" title="Site Management">Site Management</a></li>
 			<li><a href="<?php $root ?>/management/documents" title="Print Documents">Print Documents</a></li>
+			<li><a href="<?php $root ?>/management/analytics" title="Analytics">Analytics</a></li>
 			<?php endif; ?>
 		</ul>
 	</li>
