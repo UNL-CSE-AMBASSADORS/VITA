@@ -49,6 +49,7 @@
 					<li class="dcf-form-group form-textfield">
 						<label class="dcf-label form-label" for="email">Email</label>
 						<input class="dcf-input-text" type="email" name="email" id="email" ng-model="clientData.email">
+						<p class="dcf-txt-xs">If you provided an email while signing up, this field is required to verify your information.</p>
 					</li>
 
 					<li class="dcf-form-group form-textfield">
@@ -71,17 +72,48 @@
 
 		<!-- Shown once the client information has been validated -->
 		<div ng-if="clientInformationValidated === true">
-			<p class="clear-top">Thank you for verifying your information. You may now upload your documents below.</p>
+			<p class="clear-top">Thank you for verifying your information. You may now upload your documents below. See the bottom of this page for all the documents required.</p>
 
 			<!-- File upload area-->
-			<div>
-				<form name="form" class="cmxform dcf-form" ng-submit="uploadDocuments()">
-					<input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
-					<input type="file" name="files[]" />
-					<input type="file" name="files[]" />
-					<input type="submit" class="dcf-btn dcf-btn-primary" value="Upload Documents" />
-				</form>
-			</div>
+			<table class="dcf-table-striped dcf-w-100%">
+				<tbody>
+					<tr>
+						<th>Select File</th>
+						<th>Upload</th>
+						<th>Remove</th>
+						<th>Status</th>
+					</tr>
+					<tr ng-repeat="fileRepresentative in fileRepresentatives">
+						<td>
+							<input type="file" 
+								id="{{fileRepresentative.id}}" 
+								accept=".pdf, .png, .jpeg, .jpg"
+								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded" />
+						</td>
+						<td>
+							<button type="button" 
+								class="dcf-btn dcf-btn-primary" 
+								ng-click="uploadDocument(fileRepresentative)" 
+								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded">Upload</button>
+						</td>
+						<td>
+							<button type="button" 
+								class="dcf-btn dcf-btn-secondary" 
+								ng-click="removeDocument(fileRepresentative)" 
+								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded">Remove</button>
+						</td>
+						<td class="dcf-relative" ng-class="{ 'error-text': fileRepresentative.error, 'success-text': fileRepresentative.uploadSucceeded }">
+							<div ng-if="fileRepresentative.uploading" class="loading-spinner" role="status">
+								<span class="dcf-sr-only">Loading...</span>
+							</div>
+							<div ng-class="{ 'dcf-ml-8': fileRepresentative.uploading }">
+								{{fileRepresentative.statusMessage}}
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<button type="button" class="dcf-btn dcf-btn-secondary dcf-mt-2" ng-click="addAnotherDocument()">Add Another Document</button>
 
 			<!-- Required documents descriptions -->
 			<div class="dcf-mt-5">
