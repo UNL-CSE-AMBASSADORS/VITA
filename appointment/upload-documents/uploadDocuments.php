@@ -72,10 +72,10 @@
 
 		<!-- Shown once the client information has been validated -->
 		<div ng-if="clientInformationValidated === true">
-			<p class="clear-top">Thank you for verifying your information. You may now upload your documents below. See the bottom of this page for all the documents required.</p>
+			<p class="clear-top">Thank you for verifying your information. You may now upload your documents below. See the bottom of this page for a list of relevant documents you should upload as applicable. After your documents have been uploaded, a tax preparer will begin preparing your taxes and you will be contacted by a quality reviewer prior to your taxes being submitted.</p>
 
 			<!-- File upload area-->
-			<table class="dcf-table-striped dcf-w-100%">
+			<table class="dcf-table-striped dcf-w-100% dcf-mt-1">
 				<tbody>
 					<tr>
 						<th>Select File</th>
@@ -114,11 +114,43 @@
 				</tbody>
 			</table>
 			<button type="button" class="dcf-btn dcf-btn-secondary dcf-mt-2" ng-click="addAnotherDocument()">Add Another Document</button>
+			<p class="dcf-mt-2 dcf-txt-xs">Documents are transmitted and stored securely. These documents will not be shared with anyone except the Lincoln VITA volunteers helping to prepare your tax return and will be deleted after 14 days.</p>
 
-			<!-- Required documents descriptions -->
-			<div class="dcf-mt-5">
-				<h4>Required Documents to Upload:</h4>
-				TODO: THESE DOCUMENTS NEED TO BE UPLOADED TO PREPARE YOUR RETURN
+			<!-- Relevant documents descriptions -->
+			<div class="dcf-mt-6">
+				<h4>Relevant Documents to Upload:</h4>
+				<h6>Identification:</h6>
+				<ul>
+					<li><b>Social Security Cards</b> or <b>ITIN Letters</b> for <span class="dcf-uppercase">everyone</span> who will be included on the return</li>
+					<li><b>Photo IDs</b> for <b class="dcf-uppercase">all</b> tax return signers (<span class="dcf-uppercase">both</span> spouses must sign if filing jointly)</li>
+					<li><b>Passports</b> for <b class="dcf-uppercase">all</b> tax return signers (if international tax return)</li>
+					<li><b>Birthdates</b> and <b>number of months in the home</b> for <span class="dcf-uppercase">everyone</span> who will be included on the return</li>
+				</ul>
+				<h6>Income:</h6>
+				<ul>
+					<li><b>W-2s</b> for wages, <b>W-2Gs</b> for gambling income</li>
+					<li><b>1099s</b> for interest, dividends, unemployment, state tax refunds, pension or 401-K distributions, and other income</li>
+					<li><b>Records</b> of revenue from self-employment or home-based businesses</li>
+				</ul>
+				<h6>Expenses:</h6>
+				<ul>
+					<li><b>1098s</b> for mortgage interest, student loan interest (1098-E), or tuition (1098-T), statement of property tax paid</li>
+					<li><b>Statement of college student account</b> showing all charges and payments for each student on the return</li>
+					<li><b>Childcare receipts</b>, including tax ID and address for childcare provider</li>
+					<li><b>1095s</b> showing creditable health insurance coverage</li>
+					<li><b>Records</b> of expenses for self-employment or home-based businesses</li>
+					<li><b>1042-S</b> for international tax returns (If you received one, not everyone receives one)</li>
+				</ul>
+				<h6>Immigration Documents (if an international tax return):</h6>
+				<ul>
+					<li><b>I-94</b></li>
+					<li><b>I-20</b></li>
+					<li><b>DS-2019</b> for those in J1 status</li>
+				</ul>
+				<h6>Miscellaneous:</h6>
+				<ul>
+					<li>Checking or savings account information for direct deposit/direct debit</li>
+				</ul>
 			</div>
 
 		</div>
