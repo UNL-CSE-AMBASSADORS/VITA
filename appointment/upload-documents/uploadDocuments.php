@@ -83,20 +83,20 @@
 						<th>Remove</th>
 						<th>Status</th>
 					</tr>
-					<tr ng-repeat="fileRepresentative in fileRepresentatives">
+					<tr ng-repeat="fileRepresentative in fileRepresentatives" class="dcf-p-2">
 						<td>
 							<input type="file" 
 								id="{{fileRepresentative.id}}" 
 								accept=".pdf, .png, .jpeg, .jpg"
 								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded" />
 						</td>
-						<td>
+						<td class="dcf-pt-1 dcf-pb-1">
 							<button type="button" 
 								class="dcf-btn dcf-btn-primary" 
 								ng-click="uploadDocument(fileRepresentative)" 
 								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded">Upload</button>
 						</td>
-						<td>
+						<td class="dcf-pt-1 dcf-pb-1">
 							<button type="button" 
 								class="dcf-btn dcf-btn-secondary" 
 								ng-click="removeDocument(fileRepresentative)" 
