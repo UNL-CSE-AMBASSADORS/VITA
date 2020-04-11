@@ -83,6 +83,7 @@
 						<th>Remove</th>
 						<th>Status</th>
 					</tr>
+					
 					<tr ng-repeat="fileRepresentative in fileRepresentatives" class="dcf-p-2">
 						<td>
 							<input type="file" 
