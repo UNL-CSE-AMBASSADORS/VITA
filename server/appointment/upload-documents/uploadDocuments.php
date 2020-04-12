@@ -90,6 +90,9 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		if (strlen($uploadedFileName) > 200) {
 			throw new Exception('Error: File name is too long, it must be 200 characters or less', MY_EXCEPTION);
 		}
+		if ($uploadedFileErrorCode == 1 || $uploadedFileSize > 10000000) {
+			throw new Exception('Error: File is too big, max size is 10MB', MY_EXCEPTION);
+		}
 		if (!in_array($uploadedFileType, ['application/pdf', 'image/jpeg', 'image/png'])) {
 			throw new Exception('Error: Unsupported file type. Must be of type PDF, JPEG, JPG, or PNG', MY_EXCEPTION);
 		}
@@ -98,9 +101,6 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		}
 		if ($uploadedFileSize <= 0) {
 			throw new Exception('Error: File is empty', MY_EXCEPTION);
-		}
-		if ($uploadedFileSize > 10000000) {
-			throw new Exception('Error: File is too big, max size is 10MB', MY_EXCEPTION);
 		}
 		if ($uploadedFileErrorCode !== 0) {
 			throw new Exception('Error uploading file', MY_EXCEPTION);
