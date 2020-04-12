@@ -30,8 +30,8 @@ define('uploadDocumentsController', [], function() {
 		$scope.fileRepresentatives = [ $scope.GET_DEFAULT_FILE_REPRESENTATIVE() ];
 
 		const MAX_FILE_NAME_LENGTH = 200;
-		const MAX_FILE_SIZE_IN_BYTES = 2000000;
 		const BYTES_IN_A_MEGABYTE = 1000000;
+		const MAX_FILE_SIZE_IN_BYTES = 10 * BYTES_IN_A_MEGABYTE;
 		const ACCEPTABLE_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 		const ACCEPTABLE_FILE_EXTENSIONS = ['.pdf', '.jpeg', '.jpg', '.png'];
 

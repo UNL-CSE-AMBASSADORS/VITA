@@ -99,8 +99,8 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		if ($uploadedFileSize <= 0) {
 			throw new Exception('Error: File is empty', MY_EXCEPTION);
 		}
-		if ($uploadedFileSize > 2000000) {
-			throw new Exception('Error: File is too big, max size is 2MB', MY_EXCEPTION);
+		if ($uploadedFileSize > 10000000) {
+			throw new Exception('Error: File is too big, max size is 10MB', MY_EXCEPTION);
 		}
 		if ($uploadedFileErrorCode !== 0) {
 			throw new Exception('Error uploading file', MY_EXCEPTION);
