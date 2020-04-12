@@ -2,6 +2,7 @@
 	define('PROD', false);
 	define('MY_EXCEPTION', 99999);
 	define('NOREPLY_EMAIL', 'noreply@vita.unl.edu');
+	define('AZURE_BLOB_STORAGE_CONNECTION_STRING', '');
 
 	error_reporting(E_ALL);
 	if (PROD) {

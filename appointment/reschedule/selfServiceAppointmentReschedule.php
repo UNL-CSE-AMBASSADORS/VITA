@@ -57,6 +57,7 @@
 					<li class="dcf-form-group form-textfield">
 						<label class="dcf-label form-label" for="email">Email</label>
 						<input class="dcf-input-text" type="email" name="email" id="email" ng-model="clientData.email">
+						<p class="dcf-txt-xs">If you provided an email while signing up, this field is required to verify your information.</p>
 					</li>
 
 					<li class="dcf-form-group form-textfield">
