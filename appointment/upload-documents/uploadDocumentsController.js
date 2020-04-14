@@ -35,6 +35,9 @@ define('uploadDocumentsController', [], function() {
 		const ACCEPTABLE_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 		const ACCEPTABLE_FILE_EXTENSIONS = ['.pdf', '.jpeg', '.jpg', '.png'];
 
+		// Ready button variables
+		$scope.readyCheckboxChecked = false;
+
 		$scope.doesTokenExist = function(token) {
 			if (!token || 0 === token.length || EXPECTED_TOKEN_LENGTH !== token.length) {
 				$scope.tokenExists = false;
@@ -161,12 +164,33 @@ define('uploadDocumentsController', [], function() {
 			}
 		};
 
+		$scope.markAppointmentAsReady = () => {
+			// TODO: guards
+			console.log("CALLED");
+
+			const token = $scope.token;
+			const firstName = $scope.clientData.firstName || '';
+			const lastName = $scope.clientData.lastName || '';
+			const emailAddress = $scope.clientData.email || '';
+			const phoneNumber = $scope.clientData.phone || '';
+
+			UploadDocumentsDataService.markAppointmentAsReady(token, firstName, lastName, emailAddress, phoneNumber).then((response) => {
+				console.log("DONE");
+				console.log(response);
+				if (response == null || !response.success) {
+					const errorMessage = response ? response.error : 'Something went wrong and the appointment could not be marked as ready! Please try again later.';
+				} else {
+					
+				}
+			});
+		};
+
 		$scope.downloadIntakeForm = () => {
-			const fileUrl = "/server/download/downloadIntakeForm.php";
-			let iframe = document.getElementById("hiddenDownloader");
+			const fileUrl = '/server/download/downloadIntakeForm.php';
+			let iframe = document.getElementById('hiddenDownloader');
 			if (iframe == null) {
 				iframe = document.createElement('iframe');
-				iframe.id = "hiddenDownloader";
+				iframe.id = 'hiddenDownloader';
 				iframe.style.visibility = 'hidden';
 				iframe.style.display = 'none';
 				document.body.appendChild(iframe);

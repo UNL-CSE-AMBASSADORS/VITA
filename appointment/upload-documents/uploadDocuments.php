@@ -80,54 +80,76 @@
 			</p>
 
 			<!-- File upload area-->
-			<table class="dcf-table-striped dcf-w-100% dcf-mt-1">
-				<tbody>
-					<tr>
-						<th>Select File</th>
-						<th>Upload</th>
-						<th>Remove</th>
-						<th>Status</th>
-					</tr>
-					
-					<tr ng-repeat="fileRepresentative in fileRepresentatives" class="dcf-p-2">
-						<td>
-							<input type="file" 
-								id="{{fileRepresentative.id}}" 
-								accept=".pdf, .png, .jpeg, .jpg"
-								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded" />
-						</td>
-						<td class="dcf-pt-1 dcf-pb-1">
-							<button type="button" 
-								class="dcf-btn dcf-btn-primary" 
-								ng-click="uploadDocument(fileRepresentative)" 
-								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded">Upload</button>
-						</td>
-						<td class="dcf-pt-1 dcf-pb-1">
-							<button type="button" 
-								class="dcf-btn dcf-btn-secondary" 
-								ng-click="removeDocument(fileRepresentative)" 
-								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded">Remove</button>
-						</td>
-						<td class="dcf-relative" ng-class="{ 'error-text': fileRepresentative.error, 'success-text': fileRepresentative.uploadSucceeded }">
-							<div ng-if="fileRepresentative.uploading" class="loading-spinner" role="status">
-								<span class="dcf-sr-only">Loading...</span>
-							</div>
-							<div ng-class="{ 'dcf-ml-8': fileRepresentative.uploading }">
-								{{fileRepresentative.statusMessage}}
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<button type="button" class="dcf-btn dcf-btn-secondary dcf-mt-2" ng-click="addAnotherDocument()">Add Another Document</button>
-			<p class="dcf-mt-2 dcf-txt-xs">Documents are transmitted and stored securely. These documents will not be shared with anyone except the Lincoln VITA volunteers helping to prepare your tax return and will be deleted after 14 days.</p>
+			<fieldset>
+				<legend>File Upload</legend>
+				<table class="dcf-table-striped dcf-w-100% dcf-mt-1">
+					<tbody>
+						<tr>
+							<th>Select File</th>
+							<th>Upload</th>
+							<th>Remove</th>
+							<th>Status</th>
+						</tr>
+						
+						<tr ng-repeat="fileRepresentative in fileRepresentatives" class="dcf-p-2">
+							<td>
+								<input type="file" 
+									id="{{fileRepresentative.id}}" 
+									accept=".pdf, .png, .jpeg, .jpg"
+									ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded" />
+							</td>
+							<td class="dcf-pt-1 dcf-pb-1">
+								<button type="button" 
+									class="dcf-btn dcf-btn-primary" 
+									ng-click="uploadDocument(fileRepresentative)" 
+									ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded">Upload</button>
+							</td>
+							<td class="dcf-pt-1 dcf-pb-1">
+								<button type="button" 
+									class="dcf-btn dcf-btn-secondary" 
+									ng-click="removeDocument(fileRepresentative)" 
+									ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded">Remove</button>
+							</td>
+							<td class="dcf-relative" ng-class="{ 'error-text': fileRepresentative.error, 'success-text': fileRepresentative.uploadSucceeded }">
+								<div ng-if="fileRepresentative.uploading" class="loading-spinner" role="status">
+									<span class="dcf-sr-only">Loading...</span>
+								</div>
+								<div ng-class="{ 'dcf-ml-8': fileRepresentative.uploading }">
+									{{fileRepresentative.statusMessage}}
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<button type="button" class="dcf-btn dcf-btn-secondary dcf-mt-2" ng-click="addAnotherDocument()">Add Another Document</button>
+				<p class="dcf-mt-2 dcf-txt-xs">Documents are transmitted and stored securely. These documents will not be shared with anyone except the Lincoln VITA volunteers helping to prepare your tax return and will be deleted after 14 days.</p>
+			</fieldset>
+
+			<!-- Ready button -->
+			<fieldset class="dcf-mt-3">
+				<legend>Appointment Ready</legend>
+				<p>
+					After you mark your appointment as 'ready', a tax preparer will begin preparing your return within 48 hours. 
+					If the tax preparer does not have all the necessary documents, they will not be able to prepare your return. 
+					You may return to this page to upload additional documents if necessary.
+				</p>
+				<div class="dcf-input-checkbox">
+					<input id="ready-checkbox" type="checkbox" ng-model="readyCheckboxChecked">
+					<label for="ready-checkbox">I have uploaded all the necessary documents and my appointment is ready to be prepared</label>
+				</div>
+				<button type="button"
+					class="dcf-btn dcf-btn-primary dcf-mt-1"
+					ng-disabled="!readyCheckboxChecked"
+					ng-click="markAppointmentAsReady()">Mark My Appointment as Ready</button>
+			</fieldset>
+			
 
 			<!-- Relevant documents descriptions -->
 			<div class="dcf-mt-6">
 				<h4>Relevant Documents to Upload:</h4>
 				<h6>Intake Form</h6>
 				<ul>
-					<li>Please <b><a href ng-click="downloadIntakeForm()">download this Intake Form</a></b>, fill it out, and submit it</li>
+					<li>Please <b><a href ng-click="downloadIntakeForm()">download this Intake Form</a></b>, fill it out, and upload it</li>
 				</ul>
 				<h6>Identification:</h6>
 				<ul>
