@@ -149,14 +149,13 @@
 				<h4>Relevant Documents to Upload:</h4>
 				<h6>Intake Form</h6>
 				<ul>
-					<li>Please <b><a href ng-click="downloadIntakeForm()">download this Intake Form</a></b>, fill it out, and upload it</li>
+					<li><b>Completed <a href ng-click="downloadIntakeForm()">Form 13614-C</a></b>. Without this form, Lincoln VITA cannot prepare your return.</li>
 				</ul>
 				<h6>Identification:</h6>
 				<ul>
 					<li><b>Social Security Cards</b> or <b>ITIN Letters</b> for <span class="dcf-uppercase">everyone</span> who will be included on the return</li>
 					<li><b>Photo IDs</b> for <b class="dcf-uppercase">all</b> tax return signers (<span class="dcf-uppercase">both</span> spouses must sign if filing jointly)</li>
 					<li><b>Passports</b> for <b class="dcf-uppercase">all</b> tax return signers (if international tax return)</li>
-					<li><b>Birthdates</b> and <b>number of months in the home</b> for <span class="dcf-uppercase">everyone</span> who will be included on the return</li>
 				</ul>
 				<h6>Income:</h6>
 				<ul>
@@ -181,8 +180,8 @@
 				</ul>
 				<h6>Direct Deposit Information:</h6>
 				<ul>
-					<li>Picture of a <b>blank check</b> (showing account number, routing number, and account owner's name)</li>
-					<li>A previous <b>bank statement</b> (showing bank name, account number, routing number, and account owner's name)</li>
+					<li>Picture of a <b>blank check</b> showing account number, routing number, and account owner's name</li>
+					<li>A previous <b>bank statement</b> showing bank name, account number, routing number, and account owner's name</li>
 				</ul>
 			</div>
 
