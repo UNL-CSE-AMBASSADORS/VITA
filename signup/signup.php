@@ -11,7 +11,12 @@
 <!-- Appointment Signup with no success -->
 <div class="dcf-pb-7" ng-if="successMessage == null">
 	<?php if ($overrideForCovid19) { ?>
-		<h4>In response to COVID-19, all VITA tax sites will be cancelled starting Monday, March 16th through the remainder of the scheduled appointment dates. Taxpayers may consider filing <a href="" ng-click="downloadForm4868()">Form 4868 (Extension of Time to File)</a>. On-site tax assistance will be reevaluated as conditions change.</h4>
+		<h4>
+			In response to COVID-19, all VITA tax sites are cancelled through the remainder of the scheduled appointment dates. 
+			However, the federal income tax filing deadline has been extended to July 15, 2020, and 
+			we are currently testing "virtual" appointments. 
+			Please check back here frequently to see if we are accepting more clients for "virtual" appointments.
+		</h4>
 	<?php } else if ($today > $taxDay) { ?>
 		<h4>VITA appointments have ended for the <?php echo date('Y') ?> tax season. Check back during the <?php echo $taxYear ?> tax season to sign up for an appointment.</h4>
 	<?php } else if ($today < $dateAppointmentSignUpsStart) { ?>
