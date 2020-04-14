@@ -72,7 +72,12 @@
 
 		<!-- Shown once the client information has been validated -->
 		<div ng-if="clientInformationValidated === true">
-			<p class="clear-top">Thank you for verifying your information. You may now upload your documents below. See the bottom of this page for a list of relevant documents you should upload as applicable. After your documents have been uploaded, a tax preparer will begin preparing your taxes and you will be contacted by a quality reviewer prior to your taxes being submitted.</p>
+			<p class="clear-top">
+				Thank you for verifying your information. You may now upload your documents below. 
+				See the bottom of this page for a list of relevant documents you should upload as applicable. 
+				After your documents have been uploaded, a tax preparer will begin preparing your taxes and 
+				you will be contacted by a quality reviewer prior to your taxes being submitted.
+			</p>
 
 			<!-- File upload area-->
 			<table class="dcf-table-striped dcf-w-100% dcf-mt-1">
@@ -152,9 +157,10 @@
 					<li><b>I-20</b></li>
 					<li><b>DS-2019</b> for those in J1 status</li>
 				</ul>
-				<h6>Miscellaneous:</h6>
+				<h6>Direct Deposit Information:</h6>
 				<ul>
-					<li>Checking or savings account information for direct deposit/direct debit</li>
+					<li>Picture of a <b>blank check</b> (showing account number, routing number, and account owner's name)</li>
+					<li>A previous <b>bank statement</b> (showing bank name, account number, routing number, and account owner's name)</li>
 				</ul>
 			</div>
 
