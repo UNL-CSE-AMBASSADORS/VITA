@@ -12,7 +12,7 @@
 	
 	<!-- Shown when the token is valid and exists -->
 	<div ng-if="tokenExists === true" ng-cloak>
-
+		
 		
 		<!-- Shown when the client information is not yet validated -->
 		<div ng-if="clientInformationValidated === false">
@@ -120,6 +120,10 @@
 			<!-- Relevant documents descriptions -->
 			<div class="dcf-mt-6">
 				<h4>Relevant Documents to Upload:</h4>
+				<h6>Intake Form</h6>
+				<ul>
+					<li>Please <b><a href ng-click="downloadIntakeForm()">download this Intake Form</a></b>, fill it out, and submit it</li>
+				</ul>
 				<h6>Identification:</h6>
 				<ul>
 					<li><b>Social Security Cards</b> or <b>ITIN Letters</b> for <span class="dcf-uppercase">everyone</span> who will be included on the return</li>

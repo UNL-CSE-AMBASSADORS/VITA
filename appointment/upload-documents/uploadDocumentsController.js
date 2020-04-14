@@ -58,6 +58,8 @@ define('uploadDocumentsController', [], function() {
 		});
 
 		$scope.validateClientInformation = function() {
+			$scope.clientInformationValidated = true;
+			return;
 			if ($scope.validatingClientInformation || $scope.clientInformationValidated) {
 				return;
 			}
@@ -157,6 +159,20 @@ define('uploadDocumentsController', [], function() {
 			if ($scope.fileRepresentatives.length <= 0) {
 				$scope.addAnotherDocument();
 			}
+		};
+
+		$scope.downloadIntakeForm = () => {
+			const fileUrl = "/server/download/downloadIntakeForm.php";
+			let iframe = document.getElementById("hiddenDownloader");
+			if (iframe == null) {
+				iframe = document.createElement('iframe');
+				iframe.id = "hiddenDownloader";
+				iframe.style.visibility = 'hidden';
+				iframe.style.display = 'none';
+				document.body.appendChild(iframe);
+			}
+		
+			iframe.src = fileUrl;
 		};
 	}
 
