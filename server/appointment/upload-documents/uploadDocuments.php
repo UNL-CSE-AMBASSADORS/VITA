@@ -138,7 +138,7 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 		$appointmentId = $clientInformation['appointmentId'];
 
 		// Email volunteers saying it's ready to go
-		if (!PROD) {
+		if (PROD) {
 			$handle = @fopen('./notificationEmails.txt', 'r');
 			if ($handle != false) {
 				$toEmails = [];
