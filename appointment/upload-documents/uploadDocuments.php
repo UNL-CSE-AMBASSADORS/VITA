@@ -134,12 +134,12 @@
 					You may return to this page to upload additional documents if necessary.
 				</p>
 				<div class="dcf-input-checkbox">
-					<input id="ready-checkbox" type="checkbox" ng-model="readyCheckboxChecked">
+					<input id="ready-checkbox" type="checkbox" ng-model="readyCheckbox.checked" value="false">
 					<label for="ready-checkbox">I have uploaded all the necessary documents and my appointment is ready to be prepared</label>
 				</div>
 				<button type="button"
 					class="dcf-btn dcf-btn-primary dcf-mt-1"
-					ng-disabled="!readyCheckboxChecked"
+					ng-disabled="!readyCheckbox.checked || submittingAppointmentReady || appointmentMarkedAsReadySuccessfully"
 					ng-click="markAppointmentAsReady()">Mark My Appointment as Ready</button>
 			</fieldset>
 			

@@ -12,6 +12,14 @@ define('uploadDocumentsController', [], function() {
 		$scope.clientInformationValidated = false;
 		$scope.invalidClientInformation = false;
 
+		// Ready button variables
+		// For some reason, you can't bind the checkbox to a primitive boolean, it has to be in an object: https://stackoverflow.com/a/23943930
+		$scope.readyCheckbox = {
+			checked: false
+		};
+		$scope.submittingAppointmentReady = false;
+		$scope.appointmentMarkedAsReadySuccessfully = false;
+
 		// Files
 		// Copied from https://stackoverflow.com/a/2117523
 		$scope.uuidv4 = () => {
@@ -34,9 +42,6 @@ define('uploadDocumentsController', [], function() {
 		const MAX_FILE_SIZE_IN_BYTES = 10 * BYTES_IN_A_MEGABYTE;
 		const ACCEPTABLE_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 		const ACCEPTABLE_FILE_EXTENSIONS = ['.pdf', '.jpeg', '.jpg', '.png'];
-
-		// Ready button variables
-		$scope.readyCheckboxChecked = false;
 
 		$scope.doesTokenExist = function(token) {
 			if (!token || 0 === token.length || EXPECTED_TOKEN_LENGTH !== token.length) {
@@ -61,11 +66,10 @@ define('uploadDocumentsController', [], function() {
 		});
 
 		$scope.validateClientInformation = function() {
-			$scope.clientInformationValidated = true;
-			return;
 			if ($scope.validatingClientInformation || $scope.clientInformationValidated) {
 				return;
 			}
+			$scope.validatingClientInformation = true;
 			
 			const token = $scope.token;
 			const firstName = $scope.clientData.firstName || '';
@@ -165,8 +169,10 @@ define('uploadDocumentsController', [], function() {
 		};
 
 		$scope.markAppointmentAsReady = () => {
-			// TODO: guards
-			console.log("CALLED");
+			if (!$scope.readyCheckbox.checked || $scope.submittingAppointmentReady || $scope.appointmentMarkedAsReadySuccessfully) {
+				return;
+			}
+			$scope.submittingAppointmentReady = true;
 
 			const token = $scope.token;
 			const firstName = $scope.clientData.firstName || '';
@@ -175,13 +181,14 @@ define('uploadDocumentsController', [], function() {
 			const phoneNumber = $scope.clientData.phone || '';
 
 			UploadDocumentsDataService.markAppointmentAsReady(token, firstName, lastName, emailAddress, phoneNumber).then((response) => {
-				console.log("DONE");
-				console.log(response);
 				if (response == null || !response.success) {
 					const errorMessage = response ? response.error : 'Something went wrong and the appointment could not be marked as ready! Please try again later.';
+					NotificationUtilities.giveNotice('Failure', errorMessage, false);
 				} else {
-					
+					NotificationUtilities.giveNotice('Success!', 'Your appointment was successfully marked as ready.');
+					$scope.appointmentMarkedAsReadySuccessfully = true;
 				}
+				$scope.submittingAppointmentReady = false;
 			});
 		};
 
