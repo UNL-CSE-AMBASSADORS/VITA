@@ -12,10 +12,11 @@
 <div class="dcf-pb-7" ng-if="successMessage == null">
 	<?php if ($overrideForCovid19) { ?>
 		<h4>
-			In response to COVID-19, all VITA tax sites are cancelled through the remainder of the scheduled appointment dates. 
-			However, the federal income tax filing deadline has been extended to July 15, 2020, and 
-			we are currently testing "virtual" appointments. 
-			Please check back here frequently to see if we are accepting more clients for "virtual" appointments.
+			In response to COVID-19, all VITA tax appointments were canceled starting March 16th. 
+			The IRS and Nebraska Department of Revenue have both extended the filing deadline to July 15th, 2020. 
+			We are in the process of starting virtual tax preparation. 
+			Individuals who had canceled appointments will be invited to participate shortly. 
+			Please check back if you did not have a canceled tax appointment, but you are interested in virtual free tax preparation as soon as those dates become available.
 		</h4>
 	<?php } else if ($today > $taxDay) { ?>
 		<h4>VITA appointments have ended for the <?php echo date('Y') ?> tax season. Check back during the <?php echo $taxYear ?> tax season to sign up for an appointment.</h4>
