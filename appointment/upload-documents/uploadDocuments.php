@@ -75,35 +75,36 @@
 			<p class="clear-top">Thank you for verifying your information. You may now upload your documents below. See the bottom of this page for a list of relevant documents you should upload as applicable. After your documents have been uploaded, a tax preparer will begin preparing your taxes and you will be contacted by a quality reviewer prior to your taxes being submitted.</p>
 
 			<!-- File upload area-->
-			<table class="dcf-table-striped dcf-w-100% dcf-mt-1">
-				<tbody>
+			<table class="dcf-table dcf-table-striped dcf-table-responsive dcf-w-100% dcf-mt-1">
+				<thead>
 					<tr>
-						<th>Select File</th>
-						<th>Upload</th>
-						<th>Remove</th>
-						<th>Status</th>
+						<th scope="col">Select File</th>
+						<th scope="col">Upload</th>
+						<th scope="col">Remove</th>
+						<th scope="col">Status</th>
 					</tr>
-					
+				</thead>
+				<tbody>
 					<tr ng-repeat="fileRepresentative in fileRepresentatives" class="dcf-p-2">
-						<td>
+						<td data-label="Select File">
 							<input type="file" 
 								id="{{fileRepresentative.id}}" 
 								accept=".pdf, .png, .jpeg, .jpg"
 								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded" />
 						</td>
-						<td class="dcf-pt-1 dcf-pb-1">
+						<td data-label="Upload" class="dcf-pt-1 dcf-pb-1">
 							<button type="button" 
 								class="dcf-btn dcf-btn-primary" 
 								ng-click="uploadDocument(fileRepresentative)" 
 								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded">Upload</button>
 						</td>
-						<td class="dcf-pt-1 dcf-pb-1">
+						<td data-label="Remove" class="dcf-pt-1 dcf-pb-1">
 							<button type="button" 
 								class="dcf-btn dcf-btn-secondary" 
 								ng-click="removeDocument(fileRepresentative)" 
 								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded">Remove</button>
 						</td>
-						<td class="dcf-relative" ng-class="{ 'error-text': fileRepresentative.error, 'success-text': fileRepresentative.uploadSucceeded }">
+						<td data-label="Status" class="dcf-relative" ng-class="{ 'error-text': fileRepresentative.error, 'success-text': fileRepresentative.uploadSucceeded }">
 							<div ng-if="fileRepresentative.uploading" class="loading-spinner" role="status">
 								<span class="dcf-sr-only">Loading...</span>
 							</div>
