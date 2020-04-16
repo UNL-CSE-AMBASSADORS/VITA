@@ -12,6 +12,14 @@ define('uploadDocumentsController', [], function() {
 		$scope.clientInformationValidated = false;
 		$scope.invalidClientInformation = false;
 
+		// Ready button variables
+		// For some reason, you can't bind the checkbox to a primitive boolean, it has to be in an object: https://stackoverflow.com/a/23943930
+		$scope.readyCheckbox = {
+			checked: false
+		};
+		$scope.submittingAppointmentReady = false;
+		$scope.appointmentMarkedAsReadySuccessfully = false;
+
 		// Files
 		// Copied from https://stackoverflow.com/a/2117523
 		$scope.uuidv4 = () => {
@@ -61,6 +69,7 @@ define('uploadDocumentsController', [], function() {
 			if ($scope.validatingClientInformation || $scope.clientInformationValidated) {
 				return;
 			}
+			$scope.validatingClientInformation = true;
 			
 			const token = $scope.token;
 			const firstName = $scope.clientData.firstName || '';
@@ -157,6 +166,44 @@ define('uploadDocumentsController', [], function() {
 			if ($scope.fileRepresentatives.length <= 0) {
 				$scope.addAnotherDocument();
 			}
+		};
+
+		$scope.markAppointmentAsReady = () => {
+			if (!$scope.readyCheckbox.checked || $scope.submittingAppointmentReady || $scope.appointmentMarkedAsReadySuccessfully) {
+				return;
+			}
+			$scope.submittingAppointmentReady = true;
+
+			const token = $scope.token;
+			const firstName = $scope.clientData.firstName || '';
+			const lastName = $scope.clientData.lastName || '';
+			const emailAddress = $scope.clientData.email || '';
+			const phoneNumber = $scope.clientData.phone || '';
+
+			UploadDocumentsDataService.markAppointmentAsReady(token, firstName, lastName, emailAddress, phoneNumber).then((response) => {
+				if (response == null || !response.success) {
+					const errorMessage = response ? response.error : 'Something went wrong and the appointment could not be marked as ready! Please try again later.';
+					NotificationUtilities.giveNotice('Failure', errorMessage, false);
+				} else {
+					NotificationUtilities.giveNotice('Success!', 'Your appointment was successfully marked as ready.');
+					$scope.appointmentMarkedAsReadySuccessfully = true;
+				}
+				$scope.submittingAppointmentReady = false;
+			});
+		};
+
+		$scope.downloadIntakeForm = () => {
+			const fileUrl = '/server/download/downloadIntakeForm.php';
+			let iframe = document.getElementById('hiddenDownloader');
+			if (iframe == null) {
+				iframe = document.createElement('iframe');
+				iframe.id = 'hiddenDownloader';
+				iframe.style.visibility = 'hidden';
+				iframe.style.display = 'none';
+				document.body.appendChild(iframe);
+			}
+		
+			iframe.src = fileUrl;
 		};
 	}
 

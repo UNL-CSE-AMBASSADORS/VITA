@@ -13,7 +13,7 @@
 	<!-- Shown when the token is valid and exists -->
 	<div ng-if="tokenExists === true" ng-cloak>
 
-		
+
 		<!-- Shown when the client information is not yet validated -->
 		<div ng-if="clientInformationValidated === false">
 			<p>For security reasons, you must verify the information associated with your appointment</p>
@@ -72,60 +72,91 @@
 
 		<!-- Shown once the client information has been validated -->
 		<div ng-if="clientInformationValidated === true">
-			<p class="clear-top">Thank you for verifying your information. You may now upload your documents below. See the bottom of this page for a list of relevant documents you should upload as applicable. After your documents have been uploaded, a tax preparer will begin preparing your taxes and you will be contacted by a quality reviewer prior to your taxes being submitted.</p>
+			<p class="clear-top">
+				Thank you for verifying your information. You may now upload your documents below. 
+				See the bottom of this page for a list of relevant documents you should upload as applicable. 
+				After your documents have been uploaded, a tax preparer will begin preparing your taxes and 
+				you will be contacted by a quality reviewer prior to your taxes being submitted.
+			</p>
 
 			<!-- File upload area-->
-			<table class="dcf-table-striped dcf-w-100% dcf-mt-1">
-				<tbody>
-					<tr>
-						<th>Select File</th>
-						<th>Upload</th>
-						<th>Remove</th>
-						<th>Status</th>
-					</tr>
-					
-					<tr ng-repeat="fileRepresentative in fileRepresentatives" class="dcf-p-2">
-						<td>
-							<input type="file" 
-								id="{{fileRepresentative.id}}" 
-								accept=".pdf, .png, .jpeg, .jpg"
-								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded" />
-						</td>
-						<td class="dcf-pt-1 dcf-pb-1">
-							<button type="button" 
-								class="dcf-btn dcf-btn-primary" 
-								ng-click="uploadDocument(fileRepresentative)" 
-								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded">Upload</button>
-						</td>
-						<td class="dcf-pt-1 dcf-pb-1">
-							<button type="button" 
-								class="dcf-btn dcf-btn-secondary" 
-								ng-click="removeDocument(fileRepresentative)" 
-								ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded">Remove</button>
-						</td>
-						<td class="dcf-relative" ng-class="{ 'error-text': fileRepresentative.error, 'success-text': fileRepresentative.uploadSucceeded }">
-							<div ng-if="fileRepresentative.uploading" class="loading-spinner" role="status">
-								<span class="dcf-sr-only">Loading...</span>
-							</div>
-							<div ng-class="{ 'dcf-ml-8': fileRepresentative.uploading }">
-								{{fileRepresentative.statusMessage}}
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<button type="button" class="dcf-btn dcf-btn-secondary dcf-mt-2" ng-click="addAnotherDocument()">Add Another Document</button>
-			<p class="dcf-mt-2 dcf-txt-xs">Documents are transmitted and stored securely. These documents will not be shared with anyone except the Lincoln VITA volunteers helping to prepare your tax return and will be deleted after 14 days.</p>
+			<fieldset>
+				<legend>File Upload</legend>
+				<table class="dcf-table dcf-table-striped dcf-table-responsive dcf-w-100% dcf-mt-1">
+					<thead>
+						<tr>
+							<th scope="col">Select File</th>
+							<th scope="col">Upload</th>
+							<th scope="col">Remove</th>
+							<th scope="col">Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="fileRepresentative in fileRepresentatives" class="dcf-p-2">
+							<td data-label="Select File">
+								<input type="file" 
+									id="{{fileRepresentative.id}}" 
+									accept=".pdf, .png, .jpeg, .jpg"
+									ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded" />
+							</td>
+							<td data-label="Upload" class="dcf-pt-1 dcf-pb-1">
+								<button type="button" 
+									class="dcf-btn dcf-btn-primary" 
+									ng-click="uploadDocument(fileRepresentative)" 
+									ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded">Upload</button>
+							</td>
+							<td data-label="Remove" class="dcf-pt-1 dcf-pb-1">
+								<button type="button" 
+									class="dcf-btn dcf-btn-secondary" 
+									ng-click="removeDocument(fileRepresentative)" 
+									ng-disabled="fileRepresentative.uploading || fileRepresentative.uploadSucceeded">Remove</button>
+							</td>
+							<td data-label="Status" class="dcf-relative" ng-class="{ 'error-text': fileRepresentative.error, 'success-text': fileRepresentative.uploadSucceeded }">
+								<div ng-if="fileRepresentative.uploading" class="loading-spinner" role="status">
+									<span class="dcf-sr-only">Loading...</span>
+								</div>
+								<div ng-class="{ 'dcf-ml-8': fileRepresentative.uploading }">
+									{{fileRepresentative.statusMessage}}
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<button type="button" class="dcf-btn dcf-btn-secondary dcf-mt-2" ng-click="addAnotherDocument()">Add Another Document</button>
+				<p class="dcf-mt-2 dcf-txt-xs">Documents are transmitted and stored securely. These documents will not be shared with anyone except the Lincoln VITA volunteers helping to prepare your tax return and will be deleted after 14 days.</p>
+			</fieldset>
+
+			<!-- Ready button -->
+			<fieldset class="dcf-mt-3">
+				<legend>Appointment Ready</legend>
+				<p>
+					After you mark your appointment as 'ready', a tax preparer will begin preparing your return within 48 hours. 
+					If the tax preparer does not have all the necessary documents, they will not be able to prepare your return. 
+					You may return to this page to upload additional documents if necessary.
+				</p>
+				<div class="dcf-input-checkbox">
+					<input id="ready-checkbox" type="checkbox" ng-model="readyCheckbox.checked" value="false">
+					<label for="ready-checkbox">I have uploaded all the necessary documents and my appointment is ready to be prepared</label>
+				</div>
+				<button type="button"
+					class="dcf-btn dcf-btn-primary dcf-mt-1"
+					ng-disabled="!readyCheckbox.checked || submittingAppointmentReady || appointmentMarkedAsReadySuccessfully"
+					ng-click="markAppointmentAsReady()">Mark My Appointment as Ready</button>
+			</fieldset>
+			
 
 			<!-- Relevant documents descriptions -->
 			<div class="dcf-mt-6">
 				<h4>Relevant Documents to Upload:</h4>
+				<h6>Intake Form</h6>
+				<ul>
+					<li><b>Completed <a href ng-click="downloadIntakeForm()">Form 13614-C</a></b>. Without this form, Lincoln VITA cannot prepare your return.</li>
+				</ul>
 				<h6>Identification:</h6>
 				<ul>
 					<li><b>Social Security Cards</b> or <b>ITIN Letters</b> for <span class="dcf-uppercase">everyone</span> who will be included on the return</li>
 					<li><b>Photo IDs</b> for <b class="dcf-uppercase">all</b> tax return signers (<span class="dcf-uppercase">both</span> spouses must sign if filing jointly)</li>
 					<li><b>Passports</b> for <b class="dcf-uppercase">all</b> tax return signers (if international tax return)</li>
-					<li><b>Birthdates</b> and <b>number of months in the home</b> for <span class="dcf-uppercase">everyone</span> who will be included on the return</li>
 				</ul>
 				<h6>Income:</h6>
 				<ul>
@@ -148,9 +179,10 @@
 					<li><b>I-20</b></li>
 					<li><b>DS-2019</b> for those in J1 status</li>
 				</ul>
-				<h6>Miscellaneous:</h6>
+				<h6>Direct Deposit Information:</h6>
 				<ul>
-					<li>Checking or savings account information for direct deposit/direct debit</li>
+					<li>Picture of a <b>blank check</b> showing account number, routing number, and account owner's name</li>
+					<li>A previous <b>bank statement</b> showing bank name, account number, routing number, and account owner's name</li>
 				</ul>
 			</div>
 

@@ -11,7 +11,13 @@
 <!-- Appointment Signup with no success -->
 <div class="dcf-pb-7" ng-if="successMessage == null">
 	<?php if ($overrideForCovid19) { ?>
-		<h4>In response to COVID-19, all VITA tax sites will be cancelled starting Monday, March 16th through the remainder of the scheduled appointment dates. Taxpayers may consider filing <a href="" ng-click="downloadForm4868()">Form 4868 (Extension of Time to File)</a>. On-site tax assistance will be reevaluated as conditions change.</h4>
+		<h4>
+			In response to COVID-19, all VITA tax appointments were canceled starting March 16th. 
+			The IRS and Nebraska Department of Revenue have both extended the filing deadline to July 15th, 2020. 
+			We are in the process of starting virtual tax preparation. 
+			Individuals who had canceled appointments will be invited to participate shortly. 
+			Please check back if you did not have a canceled tax appointment, but you are interested in virtual free tax preparation as soon as those dates become available.
+		</h4>
 	<?php } else if ($today > $taxDay) { ?>
 		<h4>VITA appointments have ended for the <?php echo date('Y') ?> tax season. Check back during the <?php echo $taxYear ?> tax season to sign up for an appointment.</h4>
 	<?php } else if ($today < $dateAppointmentSignUpsStart) { ?>
@@ -24,7 +30,7 @@
 			autocomplete="off" 
 			novalidate>
 			<p class="dcf-mt-2 dcf-mb-3">Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
-			<p><b>NOTE: Please create a separate appointment for every tax return that needs to be done.</b></p>
+			<p><b>NOTE: Please create a separate appointment for every tax return (i.e. multiple years or multiple individuals) that needs to be done.</b></p>
 
 			<ul class="dcf-pl-0">
 				<li class="dcf-form-group form-textfield">

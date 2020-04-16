@@ -4,6 +4,7 @@ $root = realpath($_SERVER['DOCUMENT_ROOT']);
 
 require_once "$root/server/config.php";
 require_once "$root/vendor/autoload.php";
+require_once "$root/server/utilities/emailUtilities.class.php";
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 
@@ -14,6 +15,7 @@ if (isset($_REQUEST['action'])) {
 		case 'doesTokenExist': doesTokenExist($_GET['token']); break;
 		case 'validateClientInformation': isClientInformationValid($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'upload': uploadDocument($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
+		case 'markAppointmentAsReady': markAppointmentAsReady($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -125,6 +127,43 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 	echo json_encode($response);
 }
 
+
+function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $phoneNumber) {
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		// Validate the client information
+		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
+		$appointmentId = $clientInformation['appointmentId'];
+
+		// Email volunteers saying it's ready to go
+		if (PROD) {
+			$handle = @fopen('./notificationEmails.txt', 'r');
+			if ($handle != false) {
+				$toEmails = [];
+				while(!feof($handle)) {
+					array_push($toEmails, fgets($handle));
+				}
+
+				$toEmailsString = implode(', ', $toEmails);
+				$readyMessage = "A client has marked their appointment as ready: <br/>
+					<b>First Name:</b> $firstName <br/>
+					<b>Last Name:</b> $lastName <br/>
+					<b>Appointment ID:</b> $appointmentId <br/>
+					<b>Phone Number:</b> $phoneNumber <br/>
+					<b>Email (if provided):</b> $emailAddress";
+				EmailUtilities::sendHtmlFormattedEmail($toEmailsString, 'VITA -- Appointment Ready', $readyMessage);
+				fclose($handle);
+			}
+		}
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'There was an error on the server marking this appointment as ready. Please refresh the page and try again.';
+	}
+
+	echo json_encode($response);
+}
 
 /* 
  * Private functions
