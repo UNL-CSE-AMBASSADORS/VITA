@@ -50,6 +50,25 @@ define('uploadDocumentsDataService', [], function($http) {
 				}, (error) => {
 					return null;
 				});
+			},
+			markAppointmentAsReady: (token, firstName, lastName, emailAddress, phoneNumber) => {
+				return $http({
+					url: '/server/appointment/upload-documents/uploadDocuments.php',
+					method: 'POST',
+					data: 'action=markAppointmentAsReady' +
+						`&token=${token}` +
+						`&firstName=${firstName}` +
+						`&lastName=${lastName}` +
+						`&emailAddress=${emailAddress}` + 
+						`&phoneNumber=${phoneNumber}`,
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}
+				}).then((response) => {
+					return response.data;
+				}, (error) => {
+					return null;
+				});
 			}
 		};
 	}
