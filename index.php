@@ -28,6 +28,19 @@ return readfile($documentRoot . $path);
 </head>
 <body class="@@(_document['class'])@@ unl" data-version="5.1">
 <?php wdnInclude("/wdn/templates_5.1/includes/global/skip-nav.html"); ?>
+
+<div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-wrapper dcf-pt-3 dcf-pb-3 dcf-bold dcf-txt-decor-none unl-font-sans unl-cream" style="background-color: #007197;">
+	<span class="dcf-txt-xs">
+		<span class="dcf-d-inline-block dcf-mt-2 dcf-mb-2 dcf-mr-4">
+			In response to COVID-19, all VITA tax appointments were canceled starting March 16th. 
+			The IRS and Nebraska Department of Revenue have both extended the filing deadline to July 15th, 2020. 
+			We are in the process of starting virtual tax preparation. 
+			Individuals who had canceled appointments will be invited to participate shortly. 
+			Please check back if you did not have a canceled tax appointment, but you are interested in virtual free tax preparation as soon as those dates become available.
+		</span>
+	</span>
+</div>
+
 <header class="dcf-header" id="dcf-header" role="banner">
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/header-global-1.html"); ?>
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/nav-global-1.html"); ?>
