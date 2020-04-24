@@ -19,7 +19,7 @@ class AppointmentConfirmationUtilities {
 		$selfServiceAppointmentRescheduleToken = $data['token'];
 
 		if ($isVirtualAppointment) {
-			$message = self::virtualAppointmentIntroductionInformation($firstName, $sitePhoneNumber);
+			$message = self::virtualAppointmentIntroductionInformation($firstName, $sitePhoneNumber, $dateStr);
 			$message .= self::virtualAppointmentUploadDocumentsInformation($selfServiceAppointmentRescheduleToken);
 		} else {
 			$message = self::introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber);
@@ -36,19 +36,21 @@ class AppointmentConfirmationUtilities {
 		return $message;
 	}
 
-	private static function virtualAppointmentIntroductionInformation($firstName, $sitePhoneNumber) {
+	private static function virtualAppointmentIntroductionInformation($firstName, $sitePhoneNumber, $dateStr) {
 		return "<h2>Appointment Confirmation</h2>
 				$firstName, thank you for signing up for a virtual VITA appointment!
-				<b>You now need to upload your documents to have your appointment prepared.</b>
-				Please call $sitePhoneNumber if you have any questions.
+				<b>You now need to upload your documents to have your taxes prepared </b> (see the instructions below for uploading your documents).
+				After your documents have been received, a tax preparer will start preparing your taxes the week of $dateStr. 
+				Please email vita@unl.edu or call $sitePhoneNumber if you have any questions.
 				Thank you from Lincoln VITA.";
 	}
 
 	private static function virtualAppointmentUploadDocumentsInformation($selfServiceAppointmentRescheduleToken) {
 		$serverName = $_SERVER['SERVER_NAME'];
 		$uploadDocumentsLink = "https://$serverName/appointment/upload-documents/?token=$selfServiceAppointmentRescheduleToken";
-		return "<h2>Uploading Your Documents</h2>
-				Please visit <a href='$uploadDocumentsLink' target='_blank'>the upload documents page</a> to upload the necessary documents to have your appointment prepared.";
+		return "<h2 class='dcf-mt-2'>Uploading Your Documents</h2>
+				Please visit <a href='$uploadDocumentsLink' target='_blank'>the upload documents page</a> to upload the necessary documents to have your taxes prepared. 
+				If the link is not working, you can copy and paste this link into your browser: $uploadDocumentsLink";
 	}
 	
 	private static function getAppointmentInformation($appointmentId) {

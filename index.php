@@ -36,7 +36,7 @@ return readfile($documentRoot . $path);
 			The IRS and Nebraska Department of Revenue have both extended the filing deadline to July 15th, 2020. 
 			We are in the process of starting virtual tax preparation. 
 			Individuals who had canceled appointments will be invited to participate shortly. 
-			Please check back if you did not have a canceled tax appointment, but you are interested in virtual free tax preparation as soon as those dates become available.
+			Please check back on Monday, April 27th if you did not have a canceled tax appointment, but you are interested in free, virtual tax preparation.
 		</span>
 	</span>
 </div>

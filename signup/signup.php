@@ -1,7 +1,7 @@
 <?php
 	date_default_timezone_set('America/Chicago');
 	$today = date('Y-m-d');
-	$dateAppointmentSignUpsStart = date('Y-01-13');
+	$dateAppointmentSignUpsStart = date('Y-04-27');
 	$taxDay = date('Y-07-15');
 	$overrideForCovid19 = false;
 	
