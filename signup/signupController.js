@@ -56,20 +56,6 @@ define('signupController', [], function() {
 			{ 'name': 'Other', 'treatyType': 'non-treaty' }
 		];
 
-		$scope.downloadForm4868 = function() {
-			const fileUrl = "/server/download/downloadForm4868.php";
-			let iframe = document.getElementById("hiddenDownloader");
-			if (iframe == null) {
-				iframe = document.createElement('iframe');
-				iframe.id = "hiddenDownloader";
-				iframe.style.visibility = 'hidden';
-				iframe.style.display = 'none';
-				document.body.appendChild(iframe);
-			}
-		
-			iframe.src = fileUrl;
-		}
-		
 		$scope.storeAppointments = function() {
 			let questions = [];
 			Object.keys($scope.questions).forEach(function(key) {
@@ -124,7 +110,7 @@ define('signupController', [], function() {
 
 					// Send the confirmation email
 					if ($scope.data.email != null && $scope.data.email.length > 0) {
-						$scope.emailConfirmation();
+						$scope.git ();
 					}
 				} else {
 					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);

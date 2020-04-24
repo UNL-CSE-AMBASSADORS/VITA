@@ -5,6 +5,8 @@ require_once "$root/server/config.php";
 class AppointmentConfirmationUtilities {
 
 	public static function generateAppointmentConfirmation($appointmentId) {
+		// TODO: THIS SHOULD NOT BE HARD-CODED TO TRUE AFTER VIRTUAL APPOINTMENTS STOP
+		$isVirtualAppointment = true;
 		$data = self::getAppointmentInformation($appointmentId);
 	
 		$firstName = $data['firstName'];
@@ -15,18 +17,38 @@ class AppointmentConfirmationUtilities {
 		$timeStr = $data['timeStr'];
 		$doesInternational = $data['doesInternational'];
 		$selfServiceAppointmentRescheduleToken = $data['token'];
-	
-		$message = self::introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber);
-		if ($doesInternational) {
-			// If it is an international appointment, there is a different list of what to brings than for residential appointments
-			$message .= self::internationalInformation(); 
+
+		if ($isVirtualAppointment) {
+			$message = self::virtualAppointmentIntroductionInformation($firstName, $sitePhoneNumber);
+			$message .= self::virtualAppointmentUploadDocumentsInformation($selfServiceAppointmentRescheduleToken);
 		} else {
-			$message .= self::residentialInformation();
+			$message = self::introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber);
+			if ($doesInternational) {
+				// If it is an international appointment, there is a different list of what to brings than for residential appointments
+				$message .= self::internationalInformation(); 
+			} else {
+				$message .= self::residentialInformation();
+			}
+			$message .= self::miscellaneousInformation();
+			$message .= self::selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken);
 		}
-		$message .= self::miscellaneousInformation();
-		$message .= self::selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken);
 	
 		return $message;
+	}
+
+	private static function virtualAppointmentIntroductionInformation($firstName, $sitePhoneNumber) {
+		return "<h2>Appointment Confirmation</h2>
+				$firstName, thank you for signing up for a virtual VITA appointment!
+				<b>You now need to upload your documents to have your appointment prepared.</b>
+				Please call $sitePhoneNumber if you have any questions.
+				Thank you from Lincoln VITA.";
+	}
+
+	private static function virtualAppointmentUploadDocumentsInformation($selfServiceAppointmentRescheduleToken) {
+		$serverName = $_SERVER['SERVER_NAME'];
+		$uploadDocumentsLink = "https://$serverName/appointment/upload-documents/?token=$selfServiceAppointmentRescheduleToken";
+		return "<h2>Uploading Your Documents</h2>
+				Please visit <a href='$uploadDocumentsLink' target='_blank'>the upload documents page</a> to upload the necessary documents to have your appointment prepared.";
 	}
 	
 	private static function getAppointmentInformation($appointmentId) {

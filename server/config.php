@@ -29,7 +29,7 @@
 
 		$DB_CONN = new PDO($data_source_name, $db_user, $db_pass, $options);
 	} catch (Exception $e) {
-		print_r($e);
+		echo "<h3>Unable to Connect to Database</h3>";
 	} finally {
 		unset($db_pass);
 		unset($db_host);
