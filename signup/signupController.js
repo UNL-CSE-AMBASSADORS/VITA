@@ -110,7 +110,7 @@ define('signupController', [], function() {
 
 					// Send the confirmation email
 					if ($scope.data.email != null && $scope.data.email.length > 0) {
-						$scope.git ();
+						$scope.emailConfirmation();
 					}
 				} else {
 					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
