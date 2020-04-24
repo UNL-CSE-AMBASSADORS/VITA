@@ -19,7 +19,7 @@ class AppointmentConfirmationUtilities {
 		$selfServiceAppointmentRescheduleToken = $data['token'];
 
 		if ($isVirtualAppointment) {
-			$message = self::virtualAppointmentIntroductionInformation($firstName, $sitePhoneNumber, $dateStr);
+			$message = self::virtualAppointmentIntroductionInformation($firstName, $dateStr);
 			$message .= self::virtualAppointmentUploadDocumentsInformation($selfServiceAppointmentRescheduleToken);
 		} else {
 			$message = self::introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber);
@@ -36,12 +36,12 @@ class AppointmentConfirmationUtilities {
 		return $message;
 	}
 
-	private static function virtualAppointmentIntroductionInformation($firstName, $sitePhoneNumber, $dateStr) {
+	private static function virtualAppointmentIntroductionInformation($firstName, $dateStr) {
 		return "<h2>Appointment Confirmation</h2>
 				$firstName, thank you for signing up for a virtual VITA appointment!
 				<b>You now need to upload your documents to have your taxes prepared </b> (see the instructions below for uploading your documents).
 				After your documents have been received, a tax preparer will start preparing your taxes the week of $dateStr. 
-				Please email vita@unl.edu or call $sitePhoneNumber if you have any questions.
+				Please email vita@unl.edu if you have any questions.
 				Thank you from Lincoln VITA.";
 	}
 
