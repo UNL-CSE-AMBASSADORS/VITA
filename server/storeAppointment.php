@@ -117,10 +117,19 @@ function emailConfirmation($data) {
 		if (!isset($data['email']) || !preg_match('/.+@.+/', $data['email'])) throw new Exception('Unable to send confirmation email--An invalid email address was given.', MY_EXCEPTION);
 		if (!isset($data['appointmentId'])) throw new Exception('Unable to send confirmation email--Invalid information was received.', MY_EXCEPTION); 
 
-		$confirmationMessage = AppointmentConfirmationUtilities::generateAppointmentConfirmation($data['appointmentId']);
-		
+		// Ensure the email address given matches that of the appointment before sending email
+		$appointmentId = $data['appointmentId'];
+		$emailAddressToSendTo = $data['email'];
+		$clientInformation = getClientInformationForAppointmentId($appointmentId);
+		$emailAddressMatches = isset($clientInformation['emailAddress']) && strtolower($clientInformation['emailAddress']) === strtolower($emailAddressToSendTo);
+		if ($emailAddressMatches === false) {
+			http_response_code(401);
+			throw new Exception('The email provided does not match what was given during appointment sign up.', MY_EXCEPTION);
+		}
+
+		$confirmationMessage = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
 		if (PROD) {
-			EmailUtilities::sendHtmlFormattedEmail($data['email'], 'VITA Appointment Confirmation', $confirmationMessage);
+			EmailUtilities::sendHtmlFormattedEmail($emailAddressToSendTo, 'VITA Appointment Confirmation', $confirmationMessage);
 		} else {
 			$response['message'] = $confirmationMessage;
 		}
@@ -134,4 +143,26 @@ function emailConfirmation($data) {
 	}
 
 	echo json_encode($response);
+}
+
+
+function getClientInformationForAppointmentId($appointmentId) {
+	GLOBAL $DB_CONN;
+
+	$query = 'SELECT emailAddress
+		FROM Client
+			JOIN Appointment ON Client.clientId = Appointment.clientId
+		WHERE Appointment.appointmentId = ?';
+
+	$stmt = $DB_CONN->prepare($query);
+	if (!$stmt->execute(array($appointmentId))) {
+		throw new Exception('There was an error on the server sending the appointment confirmation email. Please print the confirmation page instead.', MY_EXCEPTION);
+	}
+
+	$clientInformation = $stmt->fetch();
+	if (!$clientInformation) {
+		throw new Exception('There was an error on the server sending the appointment confirmation email. Please print the confirmation page instead..', MY_EXCEPTION);
+	}
+
+	return $clientInformation;
 }
