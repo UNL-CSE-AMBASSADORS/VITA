@@ -1,9 +1,9 @@
 <?php
 	date_default_timezone_set('America/Chicago');
 	$today = date('Y-m-d');
-	$dateAppointmentSignUpsStart = date('Y-01-13');
-	$taxDay = date('Y-04-15');
-	$overrideForCovid19 = true;
+	$dateAppointmentSignUpsStart = date('Y-04-27');
+	$taxDay = date('Y-07-15');
+	$overrideForCovid19 = false;
 	
 	$taxYear = ($today > $taxDay) ? date('Y', strtotime('+1 year')) : date('Y');
 ?>

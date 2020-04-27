@@ -148,9 +148,10 @@
 			<!-- Relevant documents descriptions -->
 			<div class="dcf-mt-6">
 				<h4>Relevant Documents to Upload:</h4>
-				<h6>Intake Form</h6>
+				<h6>Required Forms:</h6>
 				<ul>
-					<li><b>Completed <a href ng-click="downloadIntakeForm()">Form 13614-C</a></b>. Without this form, Lincoln VITA cannot prepare your return.</li>
+					<li><b>Completed <a href ng-click="downloadForm14446()">Form 14446</a></b>. The <b>bottom portion of page two</b> (Part III: Taxpayer Consents) needs to be completed.</li>
+					<li><b>Completed <a href ng-click="downloadIntakeForm()">Form 13614-C</a></b> (Intake Form). Without this form, Lincoln VITA cannot prepare your return.</li>
 				</ul>
 				<h6>Identification:</h6>
 				<ul>
