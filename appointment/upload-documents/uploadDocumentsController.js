@@ -205,6 +205,20 @@ define('uploadDocumentsController', [], function() {
 		
 			iframe.src = fileUrl;
 		};
+
+		$scope.downloadForm14446 = () => {
+			const fileUrl = '/server/download/downloadForm14446VirtualAppt.php';
+			let iframe = document.getElementById('hiddenDownloader');
+			if (iframe == null) {
+				iframe = document.createElement('iframe');
+				iframe.id = 'hiddenDownloader';
+				iframe.style.visibility = 'hidden';
+				iframe.style.display = 'none';
+				document.body.appendChild(iframe);
+			}
+		
+			iframe.src = fileUrl;
+		};
 	}
 
 	uploadDocumentsController.$inject = ['$scope', 'uploadDocumentsDataService', 'notificationUtilities'];
