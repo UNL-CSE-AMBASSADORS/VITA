@@ -7,6 +7,9 @@ define('signupController', [], function() {
 		$scope.appointmentId = null; // The id of the client's appointment once they successfully sign up
 		$scope.data = {};
 		$scope.questions = [];
+		$scope.agreeToVirtualPreparationCheckbox = {
+			checked: false
+		};
 
 		$scope.countries = [ 
 			{ 'name': 'China', 'treatyType': 'china' },

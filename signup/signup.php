@@ -289,9 +289,15 @@
 
 			<div appointment-picker class="dcf-mb-5"></div>
 
+			<div class="dcf-input-checkbox">
+				<input id="agree-to-virtual-preparation-checkbox" type="checkbox" ng-model="agreeToVirtualPreparationCheckbox.checked" value="false">
+				<label for="agree-to-virtual-preparation-checkbox">I agree to have my tax return prepared virtually. See <a href="https://www.irs.gov/pub/irs-pdf/f14446.pdf" target="_blank">Form 14446 (Virtual VITA/TCE Taxpayer Consent)</label>
+			</div>
+
 			<input type="submit" 
 				value="Submit" 
-				class="submit dcf-btn dcf-btn-primary" >
+				class="submit dcf-btn dcf-btn-primary dcf-mt-4"
+				ng-disabled="!agreeToVirtualPreparationCheckbox.checked" />
 		</form>
 	<?php } ?>
 </div>
