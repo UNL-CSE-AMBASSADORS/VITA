@@ -98,6 +98,7 @@ define('signupController', [], function() {
 				"lastName": $scope.data.lastName,
 				"email": $scope.data.email,
 				"phone": $scope.data.phone,
+				"bestTimeToCall": $scope.data.bestTimeToCall,
 				"language": $scope.data.language,
 				"questions": questions,
 				"appointmentTimeId": $scope.sharedProperties.selectedAppointmentTimeId,

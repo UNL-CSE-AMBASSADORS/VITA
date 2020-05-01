@@ -53,6 +53,14 @@
 						<label class="error" ng-show="form.phone.$error.required">This field is required.</label>
 					</div>
 				</li>
+
+				<li class="form-textfield">
+					<label class="dcf-label form-label form-required" for="bestTimeToCall">Best Time to Call</label>
+					<input type="text" class="dcf-input-text form-control" name="bestTimeToCall" id="bestTimeToCall" ng-model="data.bestTimeToCall" required>
+					<div ng-show="form.$submitted || form.bestTimeToCall.$touched">
+						<label class="error" ng-show="form.bestTimeToCall.$error.required">This field is required.</label>
+					</div>
+				</li>
 			</ul>
 
 
@@ -291,7 +299,7 @@
 
 			<div class="dcf-input-checkbox">
 				<input id="agree-to-virtual-preparation-checkbox" type="checkbox" ng-model="agreeToVirtualPreparationCheckbox.checked" value="false">
-				<label for="agree-to-virtual-preparation-checkbox">I agree to have my tax return prepared virtually. See <a href="https://www.irs.gov/pub/irs-pdf/f14446.pdf" target="_blank">Form 14446 (Virtual VITA/TCE Taxpayer Consent)</label>
+				<label for="agree-to-virtual-preparation-checkbox">I agree to have my tax return prepared virtually. See <a href="https://www.irs.gov/pub/irs-pdf/f14446.pdf" target="_blank">Form 14446 (Virtual VITA/TCE Taxpayer Consent)</a></label>
 			</div>
 
 			<input type="submit" 
