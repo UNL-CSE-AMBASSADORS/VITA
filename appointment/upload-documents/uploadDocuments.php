@@ -150,6 +150,7 @@
 				<h4>Relevant Documents to Upload:</h4>
 				<h6>Required Forms:</h6>
 				<ul>
+					<b class="dcf-uppercase">Important Note</b>: If you are typing your information into the fillable form, you must "save as" to your device before uploading it or your information will not save.
 					<li><b>Completed <a href ng-click="downloadForm14446()">Form 14446</a></b>. The <b>bottom portion of page two</b> (Part III: Taxpayer Consents) needs to be completed.</li>
 					<li><b>Completed <a href ng-click="downloadIntakeForm()">Form 13614-C</a></b> (Intake Form). Without this form, Lincoln VITA cannot prepare your return.</li>
 				</ul>
