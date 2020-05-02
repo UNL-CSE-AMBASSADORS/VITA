@@ -136,6 +136,7 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 		// Validate the client information
 		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$appointmentId = $clientInformation['appointmentId'];
+		$bestTimeToCall = $clientInformation['bestTimeToCall'];
 
 		// Email volunteers saying it's ready to go
 		if (PROD) {
@@ -152,6 +153,7 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 					<b>Last Name:</b> $lastName <br/>
 					<b>Appointment ID:</b> $appointmentId <br/>
 					<b>Phone Number:</b> $phoneNumber <br/>
+					<b>Best Time to Call (if new appointment):</b> $bestTimeToCall <br/> 
 					<b>Email (if provided):</b> $emailAddress";
 				EmailUtilities::sendHtmlFormattedEmail($toEmailsString, 'VITA -- Appointment Ready', $readyMessage);
 				fclose($handle);
@@ -188,7 +190,7 @@ function validateClientInformation($token, $firstName, $lastName, $emailAddress,
 function getClientInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
-	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, Appointment.appointmentId
+	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, bestTimeToCall, Appointment.appointmentId
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId

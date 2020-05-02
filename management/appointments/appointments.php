@@ -20,6 +20,9 @@
 			<div ng-if="appointment.phoneNumber != null">
 				<span><b>Phone Number: </b>{{appointment.phoneNumber}}</span>
 			</div>
+			<div ng-if="appointment.bestTimeToCall != null">
+				<span><b>Best Time to Call: </b>{{appointment.bestTimeToCall}}</span>
+			</div>
 			<div><b>Tax Type: </b>{{appointment.appointmentType}}</div>
 			<div><b>Appointment ID: </b>{{appointment.appointmentId}}</div>
 		</div>
