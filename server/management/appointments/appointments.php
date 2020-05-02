@@ -42,7 +42,7 @@ function getAppointments($year) {
 			TIME_FORMAT(timeAppointmentEnded, "%l:%i %p") AS timeAppointmentEnded, 
 			completed, cancelled, servicedByStation, servicedAppointmentId ';
 		if ($canViewClientInformation) {
-			$query .= ', Client.phoneNumber, emailAddress ';
+			$query .= ', Client.phoneNumber, emailAddress, bestTimeToCall ';
 		}
 		$query .= 'FROM Appointment
 				LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId

@@ -12,8 +12,13 @@ define('uploadDocumentsController', [], function() {
 		$scope.clientInformationValidated = false;
 		$scope.invalidClientInformation = false;
 
-		// Ready button variables
+		// Agree to virtual preparation variables
 		// For some reason, you can't bind the checkbox to a primitive boolean, it has to be in an object: https://stackoverflow.com/a/23943930
+		$scope.agreeToVirtualPreparationCheckbox = {
+			checked: false
+		};
+
+		// Ready button variables
 		$scope.readyCheckbox = {
 			checked: false
 		};

@@ -29,7 +29,7 @@ function storeAppointment($data){
 			$email = trim($data['email']);
 		}
 
-		$clientId = insertClient($data['firstName'], $data['lastName'], $email, $data['phone']);
+		$clientId = insertClient($data['firstName'], $data['lastName'], $email, $data['phone'], $data['bestTimeToCall']);
 		$appointmentId = insertAppointment($clientId, $data['appointmentTimeId'], $data['language'], $_SERVER['REMOTE_ADDR']);
 		$selfServiceAppointmentRescheduleTokenId = insertSelfServiceAppointmentRescheduleToken($appointmentId);
 		insertAnswers($appointmentId, $data['questions']);
@@ -46,12 +46,12 @@ function storeAppointment($data){
 	print json_encode($response);
 }
 
-function insertClient($firstName, $lastName, $email, $phoneNumber) {
+function insertClient($firstName, $lastName, $email, $phoneNumber, $bestTimeToCall) {
 	GLOBAL $DB_CONN;
 
-	$clientInsert = 'INSERT INTO Client (firstName, lastName, emailAddress, phoneNumber)
-		VALUES (?, ?, ?, ?);';
-	$clientParams = array($firstName, $lastName, $email, $phoneNumber);
+	$clientInsert = 'INSERT INTO Client (firstName, lastName, emailAddress, phoneNumber, bestTimeToCall)
+		VALUES (?, ?, ?, ?, ?);';
+	$clientParams = array($firstName, $lastName, $email, $phoneNumber, $bestTimeToCall);
 
 	$stmt = $DB_CONN->prepare($clientInsert);
 	if (!$stmt->execute($clientParams)) {

@@ -3,22 +3,13 @@
 	$today = date('Y-m-d');
 	$dateAppointmentSignUpsStart = date('Y-04-27');
 	$taxDay = date('Y-07-15');
-	$overrideForCovid19 = false;
 	
 	$taxYear = ($today > $taxDay) ? date('Y', strtotime('+1 year')) : date('Y');
 ?>
 
 <!-- Appointment Signup with no success -->
 <div class="dcf-pb-7" ng-if="successMessage == null">
-	<?php if ($overrideForCovid19) { ?>
-		<h4>
-			In response to COVID-19, all VITA tax appointments were canceled starting March 16th. 
-			The IRS and Nebraska Department of Revenue have both extended the filing deadline to July 15th, 2020. 
-			We are in the process of starting virtual tax preparation. 
-			Individuals who had canceled appointments will be invited to participate shortly. 
-			Please check back if you did not have a canceled tax appointment, but you are interested in virtual free tax preparation as soon as those dates become available.
-		</h4>
-	<?php } else if ($today > $taxDay) { ?>
+	<?php if ($today > $taxDay) { ?>
 		<h4>VITA appointments have ended for the <?php echo date('Y') ?> tax season. Check back during the <?php echo $taxYear ?> tax season to sign up for an appointment.</h4>
 	<?php } else if ($today < $dateAppointmentSignUpsStart) { ?>
 		<h4>Tax appointments cannot yet be scheduled. Please check back on <?php echo date('F jS, Y', strtotime($dateAppointmentSignUpsStart)) ?>.</h4>
@@ -56,10 +47,18 @@
 				</li>
 
 				<li class="form-textfield">
-					<label class="dcf-label form-label form-required" for="phone">Phone Number</label>
+					<label class="dcf-label form-label form-required" for="phone">Best Phone Number (where you can be reached)</label>
 					<input type="text" class="dcf-input-text form-control" name="phone" id="phone" ng-model="data.phone" required>
 					<div ng-show="form.$submitted || form.phone.$touched">
 						<label class="error" ng-show="form.phone.$error.required">This field is required.</label>
+					</div>
+				</li>
+
+				<li class="form-textfield">
+					<label class="dcf-label form-label form-required" for="bestTimeToCall">Best Time to Call</label>
+					<input type="text" class="dcf-input-text form-control" name="bestTimeToCall" id="bestTimeToCall" ng-model="data.bestTimeToCall" required>
+					<div ng-show="form.$submitted || form.bestTimeToCall.$touched">
+						<label class="error" ng-show="form.bestTimeToCall.$error.required">This field is required.</label>
 					</div>
 				</li>
 			</ul>
@@ -298,9 +297,15 @@
 
 			<div appointment-picker class="dcf-mb-5"></div>
 
+			<div class="dcf-input-checkbox">
+				<input id="agree-to-virtual-preparation-checkbox" type="checkbox" ng-model="agreeToVirtualPreparationCheckbox.checked" value="false">
+				<label for="agree-to-virtual-preparation-checkbox">I agree to have my tax return prepared virtually. See <a href="https://www.irs.gov/pub/irs-pdf/f14446.pdf" target="_blank">Form 14446 (Virtual VITA/TCE Taxpayer Consent)</a></label>
+			</div>
+
 			<input type="submit" 
 				value="Submit" 
-				class="submit dcf-btn dcf-btn-primary" >
+				class="submit dcf-btn dcf-btn-primary dcf-mt-4"
+				ng-disabled="!agreeToVirtualPreparationCheckbox.checked" />
 		</form>
 	<?php } ?>
 </div>

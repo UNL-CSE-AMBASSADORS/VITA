@@ -7,6 +7,9 @@ define('signupController', [], function() {
 		$scope.appointmentId = null; // The id of the client's appointment once they successfully sign up
 		$scope.data = {};
 		$scope.questions = [];
+		$scope.agreeToVirtualPreparationCheckbox = {
+			checked: false
+		};
 
 		$scope.countries = [ 
 			{ 'name': 'China', 'treatyType': 'china' },
@@ -95,6 +98,7 @@ define('signupController', [], function() {
 				"lastName": $scope.data.lastName,
 				"email": $scope.data.email,
 				"phone": $scope.data.phone,
+				"bestTimeToCall": $scope.data.bestTimeToCall,
 				"language": $scope.data.language,
 				"questions": questions,
 				"appointmentTimeId": $scope.sharedProperties.selectedAppointmentTimeId,
