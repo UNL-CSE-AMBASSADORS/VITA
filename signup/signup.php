@@ -299,7 +299,7 @@
 
 			<div class="dcf-input-checkbox">
 				<input id="agree-to-virtual-preparation-checkbox" type="checkbox" ng-model="agreeToVirtualPreparationCheckbox.checked" value="false">
-				<label for="agree-to-virtual-preparation-checkbox">I agree to have my tax return prepared virtually. See <a href="https://www.irs.gov/pub/irs-pdf/f14446.pdf" target="_blank">Form 14446 (Virtual VITA/TCE Taxpayer Consent)</a></label>
+				<label for="agree-to-virtual-preparation-checkbox">I agree to have my tax return prepared virtually. See <a href ng-click="downloadForm14446()">Form 14446 (Virtual VITA/TCE Taxpayer Consent)</a></label>
 			</div>
 
 			<input type="submit" 
