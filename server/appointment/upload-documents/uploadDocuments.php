@@ -186,10 +186,10 @@ function validateForm14446HasChanged($uploadedFileTempName) {
 
 	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
 	$uploadedFileHash = md5($uploadedFileContentAsString);
-	$expectedFileContentAsString = file_get_contents("$root/server/download/documents/f14446VirtualLincolnVita.pdf");
-	$expectedFileHash = md5($expectedFileContentAsString);
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/f14446VirtualLincolnVita.pdf");
+	$originalFileHash = md5($originalFileContentAsString);
 
-	if ($uploadedFileHash === $expectedFileHash) {
+	if ($uploadedFileHash === $originalFileHash) {
 		throw new Exception('Error: The uploaded Form 14446 does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
 	}
 }
@@ -199,10 +199,10 @@ function validateForm13614CHasChanged($uploadedFileTempName) {
 
 	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
 	$uploadedFileHash = md5($uploadedFileContentAsString);
-	$expectedFileContentAsString = file_get_contents("$root/server/download/documents/IntakeForm_13614C.pdf");
-	$expectedFileHash = md5($expectedFileContentAsString);
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/IntakeForm_13614C.pdf");
+	$originalFileHash = md5($originalFileContentAsString);
 
-	if ($uploadedFileHash === $expectedFileHash) {
+	if ($uploadedFileHash === $originalFileHash) {
 		throw new Exception('Error: The uploaded Intake Form 13614-C does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
 	}
 }
