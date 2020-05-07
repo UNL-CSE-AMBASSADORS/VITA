@@ -107,6 +107,16 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		if ($uploadedFileErrorCode !== 0) {
 			throw new Exception('Error uploading file', MY_EXCEPTION);
 		}
+
+		// Check if file is Fillable Form 14446 and, if so, that it has changed
+		if (preg_match('/(.*)f14446VirtualLincolnVita(.*)\.pdf(.*)/i', $uploadedFileName)) {
+			validateForm14446HasChanged($uploadedFileTempName);
+		}
+
+		// Check if file is Fillable Intake Form 13614C and, if so, that it has changed
+		if (preg_match('/(.*)IntakeForm_13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
+			validateForm13614CHasChanged($uploadedFileTempName);
+		}
 		
 		// Validate the client information
 		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
@@ -170,6 +180,32 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 /* 
  * Private functions
  */
+
+function validateForm14446HasChanged($uploadedFileTempName) {
+	GLOBAL $root;
+
+	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
+	$uploadedFileHash = md5($uploadedFileContentAsString);
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/f14446VirtualLincolnVita.pdf");
+	$originalFileHash = md5($originalFileContentAsString);
+
+	if ($uploadedFileHash === $originalFileHash) {
+		throw new Exception('Error: The uploaded Form 14446 does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
+	}
+}
+
+function validateForm13614CHasChanged($uploadedFileTempName) {
+	GLOBAL $root;
+
+	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
+	$uploadedFileHash = md5($uploadedFileContentAsString);
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/IntakeForm_13614C.pdf");
+	$originalFileHash = md5($originalFileContentAsString);
+
+	if ($uploadedFileHash === $originalFileHash) {
+		throw new Exception('Error: The uploaded Intake Form 13614-C does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
+	}
+}
 
 function validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber) {
 	$clientInformation = getClientInformationFromToken($token);
