@@ -85,14 +85,18 @@ define('appointmentPickerController', [], function() {
 		}
 
 		$scope.getTimeText = (time, info) => {
-			console.log("CALLED");
-			console.log(time);
-			console.log(info);
-			console.log($scope.appointmentPickerSharedProperties.isSelectedSiteVirtual);
-			if (!$scope.appointmentPickerSharedProperties.isSelectedSiteVirtual) { // Non-virtual site
-				return (info.appointmentsAvailable <= 0) ? (time + ' - FULL' + ($scope.appointmentPickerSharedProperties.isLoggedIn && info.appointmentsAvailable < 0 ? ' - overscheduled by ' + -info.appointmentsAvailable + ' appointments' : '')) : (time);
+			const isPhysicalSite = !$scope.appointmentPickerSharedProperties.isSelectedSiteVirtual;
+			const appointmentsStillAvailable = info.appointmentsAvailable > 0;
+			if (isPhysicalSite) {
+				if (appointmentsStillAvailable) {
+					return time;
+				}
+				return (time + ' - FULL' + ($scope.appointmentPickerSharedProperties.isLoggedIn ? ' - overscheduled by ' + Math.abs(info.appointmentsAvailable) + ' appointments' : ''));
 			} else { // Virtual site
-				return 'No particular time, will occur sometime during the week of the date selected.';
+				if (appointmentsStillAvailable) {
+					return 'No particular time--Your appointment will occur sometime during the week of the selected date.'
+				}
+				return ('No appointments available during the week of the selected date - FULL' + ($scope.appointmentPickerSharedProperties.isLoggedIn ? ' - overscheduled by ' + Math.abs(info.appointmentsAvailable) + ' appointments' : ''))
 			}
 		}
 
