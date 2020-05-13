@@ -199,6 +199,10 @@ SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
 INSERT INTO Site (title, address, phoneNumber, doesInternational, createdBy, lastModifiedBy)
 	VALUES ("International Student Scholar", "1400 R St, Lincoln, NE 68588", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_internationalStudentScholar = LAST_INSERT_ID();
+
+INSERT INTO Site (title, address, phoneNumber, isVirtual, createdBy, lastModifiedBy)
+	VALUES ("Virtual Site", "", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+SET @site_virtualId = LAST_INSERT_ID();
 -- End Sites
 
 
@@ -453,6 +457,15 @@ SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @sh
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
 	VALUES (@appointmentTime, 100, @site_internationalStudentScholar);
 SET @appointmentTime_internationalSiteShift1Time2Id = LAST_INSERT_ID();
+
+-- Appointment times for virtual site
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 1 DAY);
+INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
+	VALUES (@appointmentTime, 100, @site_virtualId);
+
+SET @appointmentTime = DATE_ADD(@appointmentTime, INTERVAL 1 WEEK);
+INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
+	VALUES (@appointmentTime, 100, @site_virtualId);
 -- end appointmentTime
 
 

@@ -75,12 +75,25 @@ define('appointmentPickerController', [], function() {
 
 		$scope.siteChanged = function(site) {
 			$scope.appointmentPickerSharedProperties.selectedSiteTitle = $scope.sites[site]['site_title'];
+			$scope.appointmentPickerSharedProperties.isSelectedSiteVirtual = $scope.sites[site]['is_virtual'];
 			$scope.appointmentPickerSharedProperties.selectedTime = null;
 			$scope.updateGlobalTimes($scope.appointmentPickerSharedProperties.selectedDate, site);
 		}
 
 		$scope.timeChanged = function(time) {
 			$scope.appointmentPickerSharedProperties.selectedAppointmentTimeId = $scope.times[time]['appointmentTimeId'];
+		}
+
+		$scope.getTimeText = (time, info) => {
+			console.log("CALLED");
+			console.log(time);
+			console.log(info);
+			console.log($scope.appointmentPickerSharedProperties.isSelectedSiteVirtual);
+			if (!$scope.appointmentPickerSharedProperties.isSelectedSiteVirtual) { // Non-virtual site
+				return (info.appointmentsAvailable <= 0) ? (time + ' - FULL' + ($scope.appointmentPickerSharedProperties.isLoggedIn && info.appointmentsAvailable < 0 ? ' - overscheduled by ' + -info.appointmentsAvailable + ' appointments' : '')) : (time);
+			} else { // Virtual site
+				return 'No particular time, will occur sometime during the week of the date selected.';
+			}
 		}
 
 		$scope.$watch(
