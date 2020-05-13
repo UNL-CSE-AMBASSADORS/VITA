@@ -5,8 +5,6 @@ require_once "$root/server/config.php";
 class AppointmentConfirmationUtilities {
 
 	public static function generateAppointmentConfirmation($appointmentId) {
-		// TODO: THIS SHOULD NOT BE HARD-CODED TO TRUE AFTER VIRTUAL APPOINTMENTS STOP
-		$isVirtualAppointment = true;
 		$data = self::getAppointmentInformation($appointmentId);
 	
 		$firstName = $data['firstName'];
@@ -16,6 +14,7 @@ class AppointmentConfirmationUtilities {
 		$dateStr = $data['dateStr'];
 		$timeStr = $data['timeStr'];
 		$doesInternational = $data['doesInternational'];
+		$isVirtualAppointment = $data['isVirtual'];
 		$selfServiceAppointmentRescheduleToken = $data['token'];
 
 		if ($isVirtualAppointment) {
@@ -56,7 +55,8 @@ class AppointmentConfirmationUtilities {
 	private static function getAppointmentInformation($appointmentId) {
 		GLOBAL $DB_CONN;
 	
-		$query = "SELECT Site.address, Site.phoneNumber, Site.title, Site.doesInternational, Client.firstName, 
+		$query = "SELECT Site.address, Site.phoneNumber, Site.title, 
+				Site.isVirtual, Site.doesInternational, Client.firstName, 
 				SelfServiceAppointmentRescheduleToken.token, 
 				DATE_FORMAT(scheduledTime, '%W, %M %D, %Y') AS dateStr, 
 				TIME_FORMAT(scheduledTime, '%l:%i %p') as timeStr
