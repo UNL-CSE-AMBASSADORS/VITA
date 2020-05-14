@@ -9,7 +9,6 @@
 	<!-- Information Section -->
 	<h2 class="client-name">{{appointment.firstName}} {{appointment.lastName}}</h2>
 	<div class="dcf-grid-halves@md">
-
 		<div>
 			<div><b>Scheduled Appointment Time: </b>{{appointment.scheduledTime}}</div>
 			<div><b>Site: </b>{{appointment.title}}</div>
@@ -24,7 +23,6 @@
 				<span><b>Best Time to Call: </b>{{appointment.bestTimeToCall}}</span>
 			</div>
 			<div><b>Tax Type: </b>{{appointment.appointmentType}}</div>
-			<div><b>Appointment ID: </b>{{appointment.appointmentId}}</div>
 		</div>
 
 		<div>
@@ -37,7 +35,12 @@
 			<div><b>Time Appointment Started: </b>{{appointment.timeAppointmentStarted != null ? appointment.timeAppointmentStarted : "N/A"}}</div>
 			<div><b>Time Appointment Ended: </b>{{appointment.timeAppointmentEnded != null ? appointment.timeAppointmentEnded : "N/A"}}</div>
 			<div><b>Prepared at Station: </b>{{appointment.servicedByStation != null ? appointment.servicedByStation : "N/A"}}</div>
+			<div><b>Appointment ID: </b>{{appointment.appointmentId}}</div>
 		</div>
+	</div>
+	<div>
+		<div><b>Unique Appointment Reschedule URL: </b><a ng-href="{{appointment.uniqueAppointmentRescheduleUrl}}" target="_blank">{{appointment.uniqueAppointmentRescheduleUrl}}</a></div>
+		<div><b>Unique Upload Documents URL: </b><a ng-href="{{appointment.uniqueUploadDocumentsUrl}}" target="_blank">{{appointment.uniqueUploadDocumentsUrl}}</a></div>
 	</div>
 	<div ng-if="appointment.filingStatuses.length > 0" class="dcf-mt-5">
 		<div><b>Filed: </b></div>
