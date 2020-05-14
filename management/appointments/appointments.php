@@ -39,8 +39,8 @@
 		</div>
 	</div>
 	<div>
-		<div><b>Unique Appointment Reschedule URL: </b><a ng-href="{{appointment.uniqueAppointmentRescheduleUrl}}" target="_blank">{{appointment.uniqueAppointmentRescheduleUrl}}</a></div>
-		<div><b>Unique Upload Documents URL: </b><a ng-href="{{appointment.uniqueUploadDocumentsUrl}}" target="_blank">{{appointment.uniqueUploadDocumentsUrl}}</a></div>
+		<div ng-if="appointment.uniqueAppointmentRescheduleUrl != null"><b>Unique Appointment Reschedule URL: </b><a ng-href="{{appointment.uniqueAppointmentRescheduleUrl}}" target="_blank">{{appointment.uniqueAppointmentRescheduleUrl}}</a></div>
+		<div ng-if="appointment.uniqueUploadDocumentsUrl != null"><b>Unique Upload Documents URL: </b><a ng-href="{{appointment.uniqueUploadDocumentsUrl}}" target="_blank">{{appointment.uniqueUploadDocumentsUrl}}</a></div>
 	</div>
 	<div ng-if="appointment.filingStatuses.length > 0" class="dcf-mt-5">
 		<div><b>Filed: </b></div>

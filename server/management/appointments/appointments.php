@@ -49,7 +49,7 @@ function getAppointments($year) {
 				JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 				JOIN Site ON AppointmentTime.siteId = Site.siteId
 				JOIN Client ON Appointment.clientId = Client.clientId
-				JOIN SelfServiceAppointmentRescheduleToken ON Appointment.appointmentId = SelfServiceAppointmentRescheduleToken.appointmentId
+				LEFT JOIN SelfServiceAppointmentRescheduleToken ON Appointment.appointmentId = SelfServiceAppointmentRescheduleToken.appointmentId
 				LEFT JOIN Answer ON Answer.appointmentId = Appointment.appointmentId
 					AND Answer.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")
 				LEFT JOIN PossibleAnswer ON PossibleAnswer.possibleAnswerId = Answer.possibleAnswerId
