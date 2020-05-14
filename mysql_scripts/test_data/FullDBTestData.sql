@@ -55,17 +55,18 @@ SET @user_siteAdmin1Id = LAST_INSERT_ID();
 
 -- login
 SET @passwordHash = "$2y$10$g0OGzs2N5akgizkj0odajON8.Nr8PqpHYLhCps7lMM4YCUyJDNKUS"; -- This is the hash of "test"
+SET @lockoutTime = NOW() - INTERVAL 1 HOUR;
 INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
-	VALUES (0, @passwordHash, TIMESTAMP(0), @user_preparer1Id);
+	VALUES (0, @passwordHash, @lockoutTime, @user_preparer1Id);
 
 INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
-	VALUES (0, @passwordHash, TIMESTAMP(0), @user_reviewer1Id);
+	VALUES (0, @passwordHash, @lockoutTime, @user_reviewer1Id);
 
 INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
-	VALUES (0, @passwordHash, TIMESTAMP(0), @user_receptionist1Id);
+	VALUES (0, @passwordHash, @lockoutTime, @user_receptionist1Id);
 
 INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
-	VALUES (0, @passwordHash, TIMESTAMP(0), @user_siteAdmin1Id);
+	VALUES (0, @passwordHash, @lockoutTime, @user_siteAdmin1Id);
 -- end login
 
 

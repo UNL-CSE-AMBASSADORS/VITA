@@ -4,7 +4,7 @@
 <div class="dcf-wrapper" ng-show="appointment != null" ng-cloak>
 
 	<!-- Provide a way back to list of appointments -->
-	<button type="button" class="dcf-btn dcf-mb-8" ng-click="deselectAppointment()">Back to List of Appointments</button>
+	<button type="button" class="dcf-btn dcf-btn-secondary dcf-mb-8" ng-click="deselectAppointment()">Back to List of Appointments</button>
 
 	<!-- Information Section -->
 	<h2 class="client-name">{{appointment.firstName}} {{appointment.lastName}}</h2>
@@ -19,6 +19,9 @@
 			</div>
 			<div ng-if="appointment.phoneNumber != null">
 				<span><b>Phone Number: </b>{{appointment.phoneNumber}}</span>
+			</div>
+			<div ng-if="appointment.bestTimeToCall != null">
+				<span><b>Best Time to Call: </b>{{appointment.bestTimeToCall}}</span>
 			</div>
 			<div><b>Tax Type: </b>{{appointment.appointmentType}}</div>
 			<div><b>Appointment ID: </b>{{appointment.appointmentId}}</div>
@@ -122,7 +125,7 @@
 		</p>
 
 		<!-- List of appointments  -->
-		<table class="dcf-table queue" ng-show="(appointments | searchFor: appointmentSearch).length > 0">
+		<table class="dcf-table queue dcf-ml-5 dcf-mr-5" ng-show="(appointments | searchFor: appointmentSearch).length > 0">
 			<tbody>
 				<tr class="pointer"
 					ng-repeat="appointment in appointments | searchFor: appointmentSearch"

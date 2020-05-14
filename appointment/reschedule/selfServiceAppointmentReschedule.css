@@ -1,3 +1,7 @@
+.form-textfield .dcf-input-text {
+	width: 100%;
+}
+
 /* Override the default colors for the colorbox */
 #cboxContent {
 	background: transparent !important;

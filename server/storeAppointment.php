@@ -26,10 +26,10 @@ function storeAppointment($data){
 
 		$email = null;
 		if (isset($data['email'])) {
-			$email = $data['email'];
+			$email = trim($data['email']);
 		}
 
-		$clientId = insertClient($data['firstName'], $data['lastName'], $email, $data['phone']);
+		$clientId = insertClient($data['firstName'], $data['lastName'], $email, $data['phone'], $data['bestTimeToCall']);
 		$appointmentId = insertAppointment($clientId, $data['appointmentTimeId'], $data['language'], $_SERVER['REMOTE_ADDR']);
 		$selfServiceAppointmentRescheduleTokenId = insertSelfServiceAppointmentRescheduleToken($appointmentId);
 		insertAnswers($appointmentId, $data['questions']);
@@ -40,20 +40,18 @@ function storeAppointment($data){
 		$response['message'] = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
-		
-		// TODO
-		// mail('vita@cse.unl.edu', 'Please help, everything is on fire?', print_r($e, true).print_r($data, true));
+		$response['message'] = 'An error occurred while trying to confirm the appointment. Please try again in a few minutes.';
 	}
 
 	print json_encode($response);
 }
 
-function insertClient($firstName, $lastName, $email, $phoneNumber) {
+function insertClient($firstName, $lastName, $email, $phoneNumber, $bestTimeToCall) {
 	GLOBAL $DB_CONN;
 
-	$clientInsert = 'INSERT INTO Client (firstName, lastName, emailAddress, phoneNumber)
-		VALUES (?, ?, ?, ?);';
-	$clientParams = array($firstName, $lastName, $email, $phoneNumber);
+	$clientInsert = 'INSERT INTO Client (firstName, lastName, emailAddress, phoneNumber, bestTimeToCall)
+		VALUES (?, ?, ?, ?, ?);';
+	$clientParams = array($firstName, $lastName, $email, $phoneNumber, $bestTimeToCall);
 
 	$stmt = $DB_CONN->prepare($clientInsert);
 	if (!$stmt->execute($clientParams)) {
@@ -116,13 +114,22 @@ function emailConfirmation($data) {
 	$response['success'] = false;
 
 	try {
-		if (!isset($data['email']) || !preg_match('/.+@.+/', $data['email'])) throw new Exception('Invalid email address given. Unable to send email.', MY_EXCEPTION);
-		if (!isset($data['appointmentId'])) throw new Exception('Invalid information received. Unable to send email.', MY_EXCEPTION); 
+		if (!isset($data['email']) || !preg_match('/.+@.+/', $data['email'])) throw new Exception('Unable to send confirmation email--An invalid email address was given.', MY_EXCEPTION);
+		if (!isset($data['appointmentId'])) throw new Exception('Unable to send confirmation email--Invalid information was received.', MY_EXCEPTION); 
 
-		$confirmationMessage = AppointmentConfirmationUtilities::generateAppointmentConfirmation($data['appointmentId']);
-		
+		// Ensure the email address given matches that of the appointment before sending email
+		$appointmentId = $data['appointmentId'];
+		$emailAddressToSendTo = $data['email'];
+		$clientInformation = getClientInformationForAppointmentId($appointmentId);
+		$emailAddressMatches = isset($clientInformation['emailAddress']) && strtolower($clientInformation['emailAddress']) === strtolower($emailAddressToSendTo);
+		if ($emailAddressMatches === false) {
+			http_response_code(401);
+			throw new Exception('The email provided does not match what was given during appointment sign up.', MY_EXCEPTION);
+		}
+
+		$confirmationMessage = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
 		if (PROD) {
-			EmailUtilities::sendHtmlFormattedEmail($data['email'], 'VITA Appointment Confirmation', $confirmationMessage);
+			EmailUtilities::sendHtmlFormattedEmail($emailAddressToSendTo, 'VITA Appointment Confirmation', $confirmationMessage);
 		} else {
 			$response['message'] = $confirmationMessage;
 		}
@@ -131,9 +138,31 @@ function emailConfirmation($data) {
 		if ($e->getCode() === MY_EXCEPTION) {
 			$response['error'] = $e->getMessage();
 		} else {
-			$response['error'] = 'There was an error on the server, please try again. If the problem persists, please print this page instead.';
+			$response['error'] = 'There was an error on the server sending the confirmation email, please try again. If the problem persists, please print this page instead.';
 		}
 	}
 
 	echo json_encode($response);
+}
+
+
+function getClientInformationForAppointmentId($appointmentId) {
+	GLOBAL $DB_CONN;
+
+	$query = 'SELECT emailAddress
+		FROM Client
+			JOIN Appointment ON Client.clientId = Appointment.clientId
+		WHERE Appointment.appointmentId = ?';
+
+	$stmt = $DB_CONN->prepare($query);
+	if (!$stmt->execute(array($appointmentId))) {
+		throw new Exception('There was an error on the server sending the appointment confirmation email. Please print the confirmation page instead.', MY_EXCEPTION);
+	}
+
+	$clientInformation = $stmt->fetch();
+	if (!$clientInformation) {
+		throw new Exception('There was an error on the server sending the appointment confirmation email. Please print the confirmation page instead..', MY_EXCEPTION);
+	}
+
+	return $clientInformation;
 }

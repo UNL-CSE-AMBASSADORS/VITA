@@ -5,6 +5,10 @@
 	padding: 30px 0.7rem;
 }
 
+.queue {
+	width: 100%;
+}
+
 .queue-count {
 	font-size: 2rem;
 }
@@ -31,7 +35,11 @@
 }
 
 .inactive-period {
-	opacity: 0.15;
+	opacity: 0.8;
+}
+
+.active-period {
+	font-weight: bold;
 }
 
 .left-half {
@@ -68,9 +76,14 @@
 	border: 1px solid grey;
 }
 
-.pill-no-show {
+.pill-red {
 	color: #fff;
 	background-color: #D00000;
+}
+
+.pill-green {
+	color: #fff;
+	background-color: #38764C;
 }
 
 .pill-walk-in {

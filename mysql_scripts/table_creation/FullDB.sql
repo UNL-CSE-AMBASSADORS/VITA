@@ -71,7 +71,8 @@ CREATE TABLE Client (
 	firstName VARCHAR(255) NOT NULL,
 	lastName VARCHAR(255) NOT NULL,
 	phoneNumber VARCHAR(255) NULL,
-	emailAddress VARCHAR(255) NULL
+	emailAddress VARCHAR(255) NULL,
+	bestTimeToCall VARCHAR(255) NULL
 );
 
 CREATE TABLE AppointmentTime (

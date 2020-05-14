@@ -34,7 +34,7 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngTouch', 'bootstrap-ui'], function(
 		const questionnaireApp = angular.module('questionnaireApp', ['ui.bootstrap']);
 
 		questionnaireApp.controller('questionnaireController', QuestionnaireController);
-		questionnaireApp.directive('questionnaire', function () {
+		questionnaireApp.directive('questionnaireForm', function () {
 			return {
 				controller: 'questionnaireController',
 				templateUrl: '/questionnaire/questionnaire.php'

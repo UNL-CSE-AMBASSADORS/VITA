@@ -5,6 +5,8 @@ require_once "$root/server/config.php";
 class AppointmentConfirmationUtilities {
 
 	public static function generateAppointmentConfirmation($appointmentId) {
+		// TODO: THIS SHOULD NOT BE HARD-CODED TO TRUE AFTER VIRTUAL APPOINTMENTS STOP
+		$isVirtualAppointment = true;
 		$data = self::getAppointmentInformation($appointmentId);
 	
 		$firstName = $data['firstName'];
@@ -15,18 +17,40 @@ class AppointmentConfirmationUtilities {
 		$timeStr = $data['timeStr'];
 		$doesInternational = $data['doesInternational'];
 		$selfServiceAppointmentRescheduleToken = $data['token'];
-	
-		$message = self::introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber);
-		if ($doesInternational) {
-			// If it is an international appointment, there is a different list of what to brings than for residential appointments
-			$message .= self::internationalInformation(); 
+
+		if ($isVirtualAppointment) {
+			$message = self::virtualAppointmentIntroductionInformation($firstName, $dateStr);
+			$message .= self::virtualAppointmentUploadDocumentsInformation($selfServiceAppointmentRescheduleToken);
 		} else {
-			$message .= self::residentialInformation();
+			$message = self::introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber);
+			if ($doesInternational) {
+				// If it is an international appointment, there is a different list of what to brings than for residential appointments
+				$message .= self::internationalInformation(); 
+			} else {
+				$message .= self::residentialInformation();
+			}
+			$message .= self::miscellaneousInformation();
+			$message .= self::selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken);
 		}
-		$message .= self::miscellaneousInformation();
-		$message .= self::selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken);
 	
 		return $message;
+	}
+
+	private static function virtualAppointmentIntroductionInformation($firstName, $dateStr) {
+		return "<h2>Appointment Confirmation</h2>
+				$firstName, thank you for signing up for a virtual VITA appointment!
+				<b>You now need to upload your documents to have your taxes prepared </b> (see the instructions below for uploading your documents).
+				After your documents have been received, a tax preparer will start preparing your taxes the week of $dateStr. 
+				Please email vita@unl.edu if you have any questions.
+				Thank you from Lincoln VITA.";
+	}
+
+	private static function virtualAppointmentUploadDocumentsInformation($selfServiceAppointmentRescheduleToken) {
+		$serverName = $_SERVER['SERVER_NAME'];
+		$uploadDocumentsLink = "https://$serverName/appointment/upload-documents/?token=$selfServiceAppointmentRescheduleToken";
+		return "<h2 class='dcf-mt-2'>Uploading Your Documents</h2>
+				Please visit <a href='$uploadDocumentsLink' target='_blank'>the upload documents page</a> to upload the necessary documents to have your taxes prepared. 
+				If the link is not working, you can copy and paste this link into your browser: $uploadDocumentsLink";
 	}
 	
 	private static function getAppointmentInformation($appointmentId) {
@@ -55,18 +79,14 @@ class AppointmentConfirmationUtilities {
 				Please arrive no later than $timeStr on $dateStr with all necessary materials (listed below). 
 				Please call $sitePhoneNumber if you have any questions. 
 				Thank you from Lincoln VITA.
-				<h2 class='dcf-mt-3'>What to Bring for your Appointment</h2>";
+				<h2 class='dcf-mt-3'>To Have Your Taxes Prepared, Bring:</h2>";
 	}
 	
 	private static function residentialInformation() {
 		return "<h5>Identification:</h5>
 				<ul>
-					<li><b>Social Security cards</b> or <b>ITIN Letters</b> for <b>EVERYONE</b> who will be included on the return</li>
-					<li><b>Photo ID</b> for <b>ALL</b> tax return signers (BOTH spouses must sign if filing jointly)</li>
-				</ul>
-				<h5>Health Care Coverage:</h5>
-				<ul>
-					<li><b>Verification</b> of health insurance (1095 A, B or C)</li>
+					<li><b>Social Security Cards</b> or <b>ITIN Letters</b> for EVERYONE who will be included on the return</li>
+					<li>Photo ID for ALL tax return signers (BOTH spouses must sign if filing jointly)</li>
 				</ul>
 				<h5>Income:</h5>
 				<ul>
@@ -79,6 +99,7 @@ class AppointmentConfirmationUtilities {
 					<li><b>1098s</b> for mortgage interest, student loan interest (1098-E), or tuition (1098-T), statement of property tax paid</li>
 					<li><b>Statement of college student account</b> showing all charges and payments for each student on the return</li>
 					<li><b>Childcare receipts</b>, including tax ID and address for childcare provider</li>
+					<li><b>1095s</b> showing creditable health insurance coverage</li>
 					<li><b>Records</b> of expenses for self-employment or home-based businesses</li>
 				</ul>";
 	}
@@ -106,7 +127,7 @@ class AppointmentConfirmationUtilities {
 		return "<h5>Miscellaneous:</h5>
 				<ul>
 					<li>Checking or savings account information for direct deposit/direct debit</li>
-					<li>It is <b>STRONGLY RECOMMENDED</b> that you bring last year's tax return</li>
+					<li>It is <b>REQUIRED</b> that you bring last year's tax return for MyFreeTaxes self-preparation</li>
 				</ul>";
 	}
 

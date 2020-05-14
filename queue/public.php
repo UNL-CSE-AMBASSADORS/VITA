@@ -11,7 +11,7 @@
 </div>
 
 <!-- Body Section with list of clients -->
-<table class="dcf-table queue dcf-mb-6" ng-if="appointments.length > 0" ng-cloak>
+<table class="dcf-table queue dcf-mb-6 dcf-ml-2 dcf-mr-2" ng-if="appointments.length > 0" ng-cloak>
 	<thead>
 		<tr>
 			<th class="queue-name">Name</th>
@@ -24,7 +24,7 @@
 			ng-if="appointment.completed == null">
 			<th class="queue-name" data-header="Name">{{appointment.firstName}} {{appointment.lastName}}</th>
 			<td class="queue-progress" data-header="Progress">
-				<span class="pill pill-no-show" ng-if="appointment.noShow">No-show</span>
+				<span class="pill pill-red" ng-if="appointment.noShow">No-show</span>
 				<span ng-if="!appointment.noShow">
 					<span class="pill pill-walk-in" ng-if="appointment.walkIn">Walk-In</span>
 					<span class="pill" ng-class="appointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>

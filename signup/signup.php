@@ -1,8 +1,8 @@
 <?php
 	date_default_timezone_set('America/Chicago');
 	$today = date('Y-m-d');
-	$dateAppointmentSignUpsStart = date('Y-01-16');
-	$taxDay = date('Y-04-15');
+	$dateAppointmentSignUpsStart = date('Y-04-27');
+	$taxDay = date('Y-07-15');
 	
 	$taxYear = ($today > $taxDay) ? date('Y', strtotime('+1 year')) : date('Y');
 ?>
@@ -12,44 +12,54 @@
 	<?php if ($today > $taxDay) { ?>
 		<h4>VITA appointments have ended for the <?php echo date('Y') ?> tax season. Check back during the <?php echo $taxYear ?> tax season to sign up for an appointment.</h4>
 	<?php } else if ($today < $dateAppointmentSignUpsStart) { ?>
-		<h4>Tax appointments cannot yet be scheduled. Please check back soon.</h4>
+		<h4>Tax appointments cannot yet be scheduled. Please check back on <?php echo date('F jS, Y', strtotime($dateAppointmentSignUpsStart)) ?>.</h4>
 	<?php } else { ?>
-		<form class="cmxform" 
+		<form class="cmxform dcf-form" 
 			id="vitaSignupForm" 
 			name="form" 
 			ng-submit="form.$valid && storeAppointments()" 
 			autocomplete="off" 
 			novalidate>
-			<p dcf-mt-2 dcf-mb-3>Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
-			<p><b>NOTE: Please create a separate appointment for every tax return that needs to be done.</b></p>
+			<p class="dcf-mt-2 dcf-mb-3">Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
+			<p><b>NOTE: Please create a separate appointment for every tax return (i.e. multiple years or multiple individuals) that needs to be done.</b></p>
+			<p>Appointments are for tax return preparation only. Please direct any questions relating to already prepared tax returns or other questions by email to <a href="mailto:vita@unl.edu" target="_blank">vita@unl.edu</a></p>
 
 			<ul class="dcf-pl-0">
-				<li class="form-textfield">
-					<label class="form-label form-required" for="firstName">First Name</label>
-					<input type="text" name="firstName" id="firstName" ng-model="data.firstName" required>
+				<li class="dcf-form-group form-textfield">
+					<label class="dcf-label form-label form-required" for="firstName">First Name</label>
+					<input type="text" class="dcf-input-text form-control" name="firstName" id="firstName" ng-model="data.firstName" required>
 					<div ng-show="form.$submitted || form.firstName.$touched">
 						<label class="error" ng-show="form.firstName.$error.required">This field is required.</label>
 					</div>
 				</li>
 
 				<li class="form-textfield">
-					<label class="form-label form-required" for="lastName">Last Name</label>
-					<input type="text" name="lastName" id="lastName" ng-model="data.lastName" required>
+					<label class="dcf-label form-label form-required" for="lastName">Last Name</label>
+					<input type="text" class="dcf-input-text form-control" name="lastName" id="lastName" ng-model="data.lastName" required>
 					<div ng-show="form.$submitted || form.lastName.$touched">
 						<label class="error" ng-show="form.lastName.$error.required">This field is required.</label>
 					</div>
 				</li>
 
 				<li class="form-textfield">
-					<label class="form-label" for="email">Email</label>
-					<input type="email" name="email" id="email" ng-model="data.email">
+					<label class="dcf-label form-label" for="email">Email</label>
+					<input type="email" class="dcf-input-text form-control" name="email" id="email" ng-model="data.email">
+					<p class="dcf-txt-xs">A confirmation email will be sent to this email address.</p>
 				</li>
 
 				<li class="form-textfield">
-					<label class="form-label form-required" for="phone">Phone Number</label>
-					<input type="text" name="phone" id="phone" ng-model="data.phone" required>
+					<label class="dcf-label form-label form-required" for="phone">Best Phone Number (where you can be reached)</label>
+					<input type="text" class="dcf-input-text form-control" name="phone" id="phone" ng-model="data.phone" required>
 					<div ng-show="form.$submitted || form.phone.$touched">
 						<label class="error" ng-show="form.phone.$error.required">This field is required.</label>
+					</div>
+				</li>
+
+				<li class="form-textfield">
+					<label class="dcf-label form-label form-required" for="bestTimeToCall">Best Time to Call</label>
+					<input type="text" class="dcf-input-text form-control" name="bestTimeToCall" id="bestTimeToCall" ng-model="data.bestTimeToCall" required>
+					<div ng-show="form.$submitted || form.bestTimeToCall.$touched">
+						<label class="error" ng-show="form.bestTimeToCall.$error.required">This field is required.</label>
 					</div>
 				</li>
 			</ul>
@@ -276,6 +286,7 @@
 								<option value="" style="display:none;">-- Select a Country --</option>
 						</select>
 					</div>
+					<p class="dcf-txt-xs">This information is for the purpose of having a specific tax preparer available to assist with your China, India, Treaty, or Non-Treaty tax return and is stored as one of those four values.</p>
 					<div ng-show="form.$submitted || form.studentCountry.$touched">
 						<label class="error" ng-show="form.studentCountry.$error.required">This field is required.</label>
 					</div>
@@ -287,9 +298,15 @@
 
 			<div appointment-picker class="dcf-mb-5"></div>
 
+			<div class="dcf-input-checkbox">
+				<input id="agree-to-virtual-preparation-checkbox" type="checkbox" ng-model="agreeToVirtualPreparationCheckbox.checked" value="false">
+				<label for="agree-to-virtual-preparation-checkbox">I agree to have my tax return prepared virtually. See <a href ng-click="downloadForm14446()">Form 14446 (Virtual VITA/TCE Taxpayer Consent)</a></label>
+			</div>
+
 			<input type="submit" 
 				value="Submit" 
-				class="submit dcf-btn dcf-btn-primary" >
+				class="submit dcf-btn dcf-btn-primary dcf-mt-4"
+				ng-disabled="!agreeToVirtualPreparationCheckbox.checked" />
 		</form>
 	<?php } ?>
 </div>
@@ -299,11 +316,6 @@
 	<ng-bind-html ng-bind-html="successMessage"></ng-bind-html>
 
 	<div id="successfulSignupButtons" class="dcf-mt-4">
-		<button type="button" class="dcf-btn dcf-btn-primary" onclick="window.print();">Print</button>
-		<button type="button" 
-			class="dcf-btn dcf-btn-primary email-confirmation-button" 
-			ng-if="data.email != null && data.email.length > 0"
-			ng-disabled="emailButton.disabled"
-			ng-click="emailConfirmation()">{{emailButton.text}}</button>
+		<button type="button" class="dcf-btn dcf-btn-primary" onclick="window.print();">Print this Confirmation</button>
 	</div>
 </div>

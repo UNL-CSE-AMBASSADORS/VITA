@@ -10,8 +10,8 @@
 		<div class="dcf-d-flex dcf-flex-row">
 			<div class="clock-time">{{updateTime | date: "h:mm"}}</div>
 			<div class="clock-period">
-				<div class="clock-am" ng-class="isAm ? '':'inactive-period'">AM</div>
-				<div class="clock-pm" ng-class="isAm ? 'inactive-period':''">PM</div>
+				<div class="clock-am" ng-class="isAm ? 'active-period':'inactive-period'">AM</div>
+				<div class="clock-pm" ng-class="isAm ? 'inactive-period':'active-period'">PM</div>
 			</div>
 		</div>
 	</div>

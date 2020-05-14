@@ -3,3 +3,4 @@
 /mysql_scripts/RefreshTestDatabase.ps1
 /node_modules/
 /dist/
+/vendor/

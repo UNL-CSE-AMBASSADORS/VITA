@@ -9,7 +9,7 @@ return readfile($documentRoot . $path);
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/head-1.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/head-1.html"); ?>
 	<!--
 		Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at http://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
 		All framework code is the property of the UNL Web Developer Network. The code seen in a source code view is not, and may not be used as, a template. You may not use this code, a reverse-engineered version of this code, or its associated visual presentation in whole or in part to create a derivative work.
@@ -20,55 +20,68 @@ return readfile($documentRoot . $path);
 	<!-- TemplateBeginEditable name="doctitle" -->
 	<title>VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 	<!-- TemplateEndEditable -->
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/head-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
-	<!-- Place optional header elements here -->
+	<link rel="stylesheet" href="/dist/index.css">
 	<!-- TemplateEndEditable -->
 	<!-- TemplateParam name="class" type="text" value="" -->
 </head>
-<body class="@@(_document['class'])@@ unl" data-version="5.0">
-<?php wdnInclude("/wdn/templates_5.0/includes/global/skip-nav.html"); ?>
+<body class="@@(_document['class'])@@ unl" data-version="5.1">
+<?php wdnInclude("/wdn/templates_5.1/includes/global/skip-nav.html"); ?>
+
+<div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-wrapper dcf-pt-3 dcf-pb-3 dcf-bold dcf-txt-decor-none unl-font-sans unl-cream" style="background-color: #007197;">
+	<span class="dcf-txt-xs">
+		<span class="dcf-d-inline-block dcf-mt-2 dcf-mb-2 dcf-mr-4">
+			In response to COVID-19, all VITA tax appointments were canceled starting March 16th. 
+			The IRS and Nebraska Department of Revenue have both extended the filing deadline to July 15th, 2020. 
+			We are in the process of starting virtual tax preparation. 
+			Individuals who had canceled appointments will be invited to participate shortly. 
+			Please check back on Monday, April 27th if you did not have a canceled tax appointment, but you are interested in free, virtual tax preparation.
+		</span>
+	</span>
+</div>
+
 <header class="dcf-header" id="dcf-header" role="banner">
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/header-global-1.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-global-1.html"); ?>
-				<?php wdnInclude("/wdn/templates_5.0/includes/global/visit-global-1.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/header-global-1.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/nav-global-1.html"); ?>
+				<?php wdnInclude("/wdn/templates_5.1/includes/global/visit-global-1.html"); ?>
 				<!-- TemplateBeginEditable name="visitlocal" -->
-				<?php wdnInclude("/wdn/templates_5.0/includes/local/visit-local.html"); ?>
+				<?php wdnInclude("/wdn/templates_5.1/includes/local/visit-local.html"); ?>
 				<!-- TemplateEndEditable -->
-				<?php wdnInclude("/wdn/templates_5.0/includes/global/visit-global-2.html"); ?>
-				<?php wdnInclude("/wdn/templates_5.0/includes/global/apply-global-1.html"); ?>
+				<?php wdnInclude("/wdn/templates_5.1/includes/global/visit-global-2.html"); ?>
+				<?php wdnInclude("/wdn/templates_5.1/includes/global/apply-global-1.html"); ?>
 				<!-- TemplateBeginEditable name="applylocal" -->
-				<?php wdnInclude("/wdn/templates_5.0/includes/local/apply-local.html"); ?>
+				<?php wdnInclude("/wdn/templates_5.1/includes/local/apply-local.html"); ?>
 				<!-- TemplateEndEditable -->
-				<?php wdnInclude("/wdn/templates_5.0/includes/global/apply-global-2.html"); ?>
-				<?php wdnInclude("/wdn/templates_5.0/includes/global/give-global-1.html"); ?>
+				<?php wdnInclude("/wdn/templates_5.1/includes/global/apply-global-2.html"); ?>
+				<?php wdnInclude("/wdn/templates_5.1/includes/global/give-global-1.html"); ?>
 				<!-- TemplateBeginEditable name="givelocal" -->
-				<?php wdnInclude("/wdn/templates_5.0/includes/local/give-local.html"); ?>
+				<?php wdnInclude("/wdn/templates_5.1/includes/local/give-local.html"); ?>
 				<!-- TemplateEndEditable -->
-				<?php wdnInclude("/wdn/templates_5.0/includes/global/give-global-2.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-global-2.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/search.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/header-global-2.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/logo-lockup-1.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/site-affiliation-1.html"); ?>
+				<?php wdnInclude("/wdn/templates_5.1/includes/global/give-global-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/nav-global-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/search.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/header-global-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/logo-lockup-1.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/site-affiliation-1.html"); ?>
 	<!-- TemplateBeginEditable name="affiliation" -->
 	<!-- TemplateEndEditable -->
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/site-affiliation-2.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/site-title-1.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/site-affiliation-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/site-title-1.html"); ?>
 	<!-- TemplateBeginEditable name="titlegraphic" -->
 	<a class="unl-site-title-medium" href="/">VITA Lincoln</a>
 	<!-- TemplateEndEditable -->
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/site-title-2.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/logo-lockup-2.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-toggle-group.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-menu-1.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-toggle-btn.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-menu-child-1.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/site-title-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/logo-lockup-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/nav-toggle-group.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/nav-menu-1.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/nav-toggle-btn.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/nav-menu-child-1.html"); ?>
 	<!-- TemplateBeginEditable name="navlinks" -->
 		<?php include "$root/sharedcode/navigation.php"; ?>
 	<!-- TemplateEndEditable -->
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-menu-child-2.html"); ?>
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/nav-menu-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/nav-menu-child-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/nav-menu-2.html"); ?>
 </header>
 
 <main class="dcf-main" id="dcf-main" role="main" tabindex="-1">
@@ -103,13 +116,8 @@ return readfile($documentRoot . $path);
 	</div>
 	<div class="dcf-main-content dcf-wrapper">
 		<!-- TemplateBeginEditable name="maincontentarea" -->
-		<div class="dcf-bleed wdn-hero">
-			<div class="wdn-hero-text-container">
-				<div class="wdn-hero-text">
-					<h2 class="wdn-hero-heading">VITA Lincoln</h2>
-				</div>
-			</div>
-			<div class="wdn-hero-picture">
+		<div class="dcf-bleed unl-bg-light-gray">
+			<div class="hero-picture-container">
 				<img src="assets/res/VITA-Coalition-Web-Banner.png" alt="Lincoln VITA Coalition">
 			</div>
 		</div>
@@ -146,11 +154,12 @@ return readfile($documentRoot . $path);
 					</div>
 					<div>
 						<div>
-							Resident appointments begin January 20th and run through April 11th. 
-							Tax Appointments for International Student Scholars begin March 5th and run 
-							through April 9th. Appointments are available at the following sites: Nebraska East Union, 
-							Anderson Library, Center for People in Need, Loren Eiseley Library, and Bennett Martin 
-							Library. To see the days and times for all the locations, please download 
+							Resident appointments begin January 25th and run through April 9th. 
+							Tax Appointments for International Student Scholars begin March 3rd and run 
+							through April 8th. Appointments are available at the following sites: Nebraska Union, 
+							Victor E. Anderson Library, Center for People in Need, F Street Community Center, 
+							Loren C. Eiseley Library, Bennett Martin Library, and Southeast Community College. 
+							To see the days and times for all the locations, please download 
 							the site schedule. 
 						</div>
 						<div class="dcf-grid-halves@md dcf-mt-3">
@@ -190,14 +199,14 @@ return readfile($documentRoot . $path);
 <footer class="dcf-footer" id="dcf-footer" role="contentinfo">
 	<!-- TemplateBeginEditable name="optionalfooter" -->
 	<!-- TemplateEndEditable -->
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/footer-global-1.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/footer-global-1.html"); ?>
 	<!-- TemplateBeginEditable name="contactinfo" -->
 		<?php include "$root/sharedcode/localFooter.html"; ?>
 	<!-- TemplateEndEditable -->
-		<?php wdnInclude("/wdn/templates_5.0/includes/global/footer-global-2.html"); ?>
+		<?php wdnInclude("/wdn/templates_5.1/includes/global/footer-global-2.html"); ?>
 </footer>
-<?php wdnInclude("/wdn/templates_5.0/includes/global/noscript.html"); ?>
-<?php wdnInclude("/wdn/templates_5.0/includes/global/js-body.html"); ?>
+<?php wdnInclude("/wdn/templates_5.1/includes/global/noscript.html"); ?>
+<?php wdnInclude("/wdn/templates_5.1/includes/global/js-body.html"); ?>
 <!-- TemplateBeginEditable name="jsbody" -->
 <?php require_once "$root/server/global_includes.php"; ?>
 <script src="/dist/index.js"></script>

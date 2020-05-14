@@ -30,7 +30,7 @@
 			</p>
 
 			<!-- Form to validate client information -->
-			<form class="cmxform" 
+			<form class="cmxform dcf-form" 
 					id="validateClientInformationForm"
 					name="form" 
 					ng-submit="form.$valid && validateClientInformation()" 
@@ -38,7 +38,7 @@
 					novalidate>
 
 				<ul class="dcf-list-bare">
-					<li class="form-textfield">
+					<li class="dcf-form-group form-textfield">
 						<label class="dcf-label form-label form-required" for="firstName">First Name</label>
 						<input class="dcf-input-text" type="text" name="firstName" id="firstName" ng-model="clientData.firstName" required>
 						<div ng-show="form.$submitted || form.firstName.$touched">
@@ -46,7 +46,7 @@
 						</div>
 					</li>
 
-					<li class="form-textfield">
+					<li class="dcf-form-group form-textfield">
 						<label class="dcf-label form-label form-required" for="lastName">Last Name</label>
 						<input class="dcf-input-text" type="text" name="lastName" id="lastName" ng-model="clientData.lastName" required>
 						<div ng-show="form.$submitted || form.lastName.$touched">
@@ -54,12 +54,13 @@
 						</div>
 					</li>
 
-					<li class="form-textfield">
+					<li class="dcf-form-group form-textfield">
 						<label class="dcf-label form-label" for="email">Email</label>
 						<input class="dcf-input-text" type="email" name="email" id="email" ng-model="clientData.email">
+						<p class="dcf-txt-xs">If you provided an email while signing up, this field is required to verify your information.</p>
 					</li>
 
-					<li class="form-textfield">
+					<li class="dcf-form-group form-textfield">
 						<label class="dcf-label form-label form-required" for="phone">Phone Number</label>
 						<input class="dcf-input-text" type="text" name="phone" id="phone" ng-model="clientData.phone" required>
 						<div ng-show="form.$submitted || form.phone.$touched">
@@ -70,7 +71,7 @@
 
 				<input type="submit" 
 					value="Submit" 
-					class="submit dcf-btn"
+					class="submit dcf-btn dcf-btn-primary"
 					ng-model="validatingClientInformation" 
 					ng-disabled="!form.$valid || validatingClientInformation">
 			</form>
@@ -127,14 +128,14 @@
 				<!-- Reschedule Section -->				
 				<h4 class="clear-top">Reschedule Appointment</h4>
 
-				<form class="cmxform" id="rescheduleForm">
+				<form class="cmxform dcf-form" id="rescheduleForm">
 					<div appointment-picker class="dcf-mb-5"></div>
 
 					<!-- Reschedule button -->
 					<input type="submit" 
 						value="Reschedule" 
 						id="rescheduleButton" 
-						class="submit dcf-btn" 
+						class="submit dcf-btn dcf-btn-primary" 
 						ng-disabled="appointmentPickerSharedProperties.selectedDate == null || appointmentPickerSharedProperties.selectedSite == null || appointmentPickerSharedProperties.selectedTime == null || submittingReschedule" 
 						ng-model="submittingReschedule" 
 						ng-click="rescheduleAppointment()">
@@ -147,9 +148,9 @@
 				<ng-bind-html ng-bind-html="rescheduleSuccessMessage"></ng-bind-html>
 
 				<div class="dcf-mt-3">
-					<button type="button" class="dcf-btn" onclick="window.print();">Print</button>
+					<button type="button" class="dcf-btn dcf-btn-primary" onclick="window.print();">Print</button>
 					<button type="button" 
-						class="dcf-btn email-confirmation-button" 
+						class="dcf-btn dcf-btn-primary email-confirmation-button" 
 						ng-if="clientData.email != null && clientData.email.length > 0"
 						ng-disabled="emailButton.disabled"
 						ng-click="emailConfirmation()">{{emailButton.text}}</button>

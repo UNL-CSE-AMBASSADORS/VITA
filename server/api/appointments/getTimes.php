@@ -112,25 +112,43 @@ function getInternationalAppointmentTimes($year, $after, $treatyType) {
 }
 
 function calculateRemainingAppointmentsAvailableForResidentialAppointment($appointmentCount, $percentAppointments, $preparerCount, $minimum, $maximum) {
-	if (isset($maximum)) {
-		$availableAppointmentSpots = $maximum;
-	} else {
-		$availableAppointmentSpots = max($minimum, $preparerCount);
+	$availableAppointmentSpots = $preparerCount;
+	if (isset($minimum)) {
+		$availableAppointmentSpots = max($minimum, $availableAppointmentSpots);
 	}
+
+	if (isset($maximum)) {
+		$availableAppointmentSpots = min($maximum, $availableAppointmentSpots);
+	}
+
 	$availableAppointmentSpots *= $percentAppointments / 100;
 	return ceil($availableAppointmentSpots) - $appointmentCount;
 }
 
-function calculateRemainingAppointmentsAvailableForInternationalAppointment($treatyType, $numberAppointmentsAlreadyScheduled) {
-	if ($treatyType === 'china') {
-		return 15 - $numberAppointmentsAlreadyScheduled;
-	} else if ($treatyType === 'india') {
-		return 6 - $numberAppointmentsAlreadyScheduled;
-	} else if ($treatyType === 'treaty') {
-		return 5 - $numberAppointmentsAlreadyScheduled;
-	} else if ($treatyType === 'non-treaty') {
-		return 15 - $numberAppointmentsAlreadyScheduled;
-	} 
+function calculateRemainingAppointmentsAvailableForInternationalAppointment($treatyType, $numberAppointmentsAlreadyScheduled, $appointmentTimeId) {
+	// TODO: This is a real band-aid that we are using to enable less appointments for certain time slots
+	$appointmentTimeIdsForLessAppointments = array(968, 969, 970, 971, 972);
+	if (in_array($appointmentTimeId, $appointmentTimeIdsForLessAppointments)) {
+		if ($treatyType === 'china') {
+			return 7 - $numberAppointmentsAlreadyScheduled;
+		} else if ($treatyType === 'india') {
+			return 3 - $numberAppointmentsAlreadyScheduled;
+		} else if ($treatyType === 'treaty') {
+			return 2 - $numberAppointmentsAlreadyScheduled;
+		} else if ($treatyType === 'non-treaty') {
+			return 7 - $numberAppointmentsAlreadyScheduled;
+		}
+	} else {
+		if ($treatyType === 'china') {
+			return 15 - $numberAppointmentsAlreadyScheduled;
+		} else if ($treatyType === 'india') {
+			return 6 - $numberAppointmentsAlreadyScheduled;
+		} else if ($treatyType === 'treaty') {
+			return 5 - $numberAppointmentsAlreadyScheduled;
+		} else if ($treatyType === 'non-treaty') {
+			return 15 - $numberAppointmentsAlreadyScheduled;
+		} 
+	}
 }
 
 class DateSiteTimeMap {
@@ -150,7 +168,7 @@ class DateSiteTimeMap {
 		if ($this->appointmentType === 'residential') {
 			$appointmentsAvailable = calculateRemainingAppointmentsAvailableForResidentialAppointment($dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['percentageAppointments'], $dstObject['numberOfPreparers'], $dstObject['minimumNumberOfAppointments'], $dstObject['maximumNumberOfAppointments']);
 		} else {
-			$appointmentsAvailable = calculateRemainingAppointmentsAvailableForInternationalAppointment($this->appointmentType, $dstObject['numberOfAppointmentsAlreadyMade']);
+			$appointmentsAvailable = calculateRemainingAppointmentsAvailableForInternationalAppointment($this->appointmentType, $dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['appointmentTimeId']);
 		}
 		
 
