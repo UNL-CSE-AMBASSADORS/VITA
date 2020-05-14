@@ -8,6 +8,7 @@ define('appointmentPickerSharedPropertiesService', [], function() {
 			selectedDate: null,
 			selectedSite: null,
 			selectedSiteTitle: null,
+			isSelectedSiteVirtual: false,
 			selectedTime: null,
 			selectedAppointmentTimeId: null,
 			hasAvailability: null,

@@ -11,7 +11,7 @@ $isLoggedIn = $USER->isLoggedIn();
 getAppointmentTimes($_GET, $isLoggedIn);
 
 /*
- * The fields that will be returned are: appointmentTimeId, siteId, scheduledDate,  scheduledTime, percentageAppointments, numberOfAppointmentsAlreadyMade, numberOfPreparers
+ * The fields that will be returned are: appointmentTimeId, siteId, isVirtual, scheduledDate, scheduledTime, percentageAppointments, numberOfAppointmentsAlreadyMade, numberOfPreparers
  */
 function getAppointmentTimes($data, $isLoggedIn) {
 	date_default_timezone_set('America/Chicago');
@@ -54,7 +54,7 @@ function getAppointmentTimes($data, $isLoggedIn) {
 function getResidentialAppointmentTimes($year, $after) {
 	GLOBAL $DB_CONN;
 
-	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, 
+	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, s.isVirtual, DATE(scheduledTime) AS scheduledDate, 
 		TIME(scheduledTime) AS scheduledTime, percentageAppointments, 
 		COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, 
 		COUNT(DISTINCT us.userShiftId) AS numberOfPreparers, 
@@ -86,7 +86,7 @@ function getResidentialAppointmentTimes($year, $after) {
 function getInternationalAppointmentTimes($year, $after, $treatyType) {
 	GLOBAL $DB_CONN;
 
-	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate, 
+	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, s.isVirtual, DATE(scheduledTime) AS scheduledDate, 
 		TIME(scheduledTime) AS scheduledTime, percentageAppointments, 
 		COUNT(DISTINCT ans.answerId) AS numberOfAppointmentsAlreadyMade, 
 		apt.minimumNumberOfAppointments, apt.maximumNumberOfAppointments
@@ -177,6 +177,7 @@ class DateSiteTimeMap {
 
 		// Add the appointmentTime to the map
 		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["site_title"] = $dstObject['title'];
+		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["is_virtual"] = (boolean)$dstObject['isVirtual'];
 		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["times"][$time]['appointmentsAvailable'] = $appointmentsAvailable;
 		$this->dates[$dstObject['scheduledDate']]["sites"][$dstObject['siteId']]["times"][$time]['appointmentTimeId'] = $dstObject['appointmentTimeId'];
 	}

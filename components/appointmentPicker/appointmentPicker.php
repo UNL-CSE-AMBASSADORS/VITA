@@ -66,7 +66,7 @@ td.available .ui-state-default {
 		<select id="timePickerSelect" 
 			class="dcf-input-select dcf-mb-0"
 			name="timePickerSelect" 
-			ng-options="time as (info.appointmentsAvailable <= 0) ? (time + ' - FULL' + (appointmentPickerSharedProperties.isLoggedIn && info.appointmentsAvailable < 0 ? ' - overscheduled by ' + -info.appointmentsAvailable + ' appointments' : '')) : time disable when (info.appointmentsAvailable <= 0 && appointmentPickerSharedProperties.isLoggedIn != true) for (time, info) in times track by time" 
+			ng-options="time as getTimeText(time, info) disable when (info.appointmentsAvailable <= 0 && appointmentPickerSharedProperties.isLoggedIn != true) for (time, info) in times track by time" 
 			ng-model="appointmentPickerSharedProperties.selectedTime"
 			ng-change="timeChanged(appointmentPickerSharedProperties.selectedTime)"
 			required>
