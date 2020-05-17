@@ -125,7 +125,7 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		// Upload the user's file to Azure BLOB Storage
 		$containerName = 'ty2019';
 		$fileContent = fopen($uploadedFileTempName, 'r');
-		$fileNameToSave = urlencode($firstName.'_'.$lastName)."/$appointmentId/".uniqid().urlencode("-$uploadedFileName");
+		$fileNameToSave = $firstName.'_'.$lastName."/$appointmentId/".uniqid()."-$uploadedFileName";
 
 		$blobClient = BlobRestProxy::createBlobService(AZURE_BLOB_STORAGE_CONNECTION_STRING);
 		$blobClient->createBlockBlob($containerName, $fileNameToSave, $fileContent);
