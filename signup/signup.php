@@ -42,9 +42,12 @@
 				</li>
 
 				<li class="form-textfield">
-					<label class="dcf-label form-label" for="email">Email</label>
-					<input type="email" class="dcf-input-text form-control" name="email" id="email" ng-model="data.email">
-					<p class="dcf-txt-xs">A confirmation email will be sent to this email address.</p>
+					<label class="dcf-label form-label" ng-class="{ 'form-required': isEmailRequired() }" for="email">Email</label>
+					<input type="email" class="dcf-input-text form-control" name="email" id="email" ng-model="data.email" ng-required="isEmailRequired()">
+					<div ng-show="form.$submitted || form.email.$touched">
+						<label class="error" ng-show="form.email.$error.required">This field is required for virtual appointments.</label>
+					</div>
+					<p class="dcf-txt-xs">A confirmation email will be sent to this email address. This field is required if you are scheduling a virtual appointment.</p>
 				</li>
 
 				<li class="form-textfield">
@@ -302,6 +305,8 @@
 				<input id="agree-to-virtual-preparation-checkbox" type="checkbox" ng-model="agreeToVirtualPreparationCheckbox.checked" value="false">
 				<label for="agree-to-virtual-preparation-checkbox">I agree to have my tax return prepared virtually. See <a href ng-click="downloadForm14446()">Form 14446 (Virtual VITA/TCE Taxpayer Consent)</a></label>
 			</div>
+
+			<p ng-if="form.$invalid && form.$submitted" class="error">Your input is invalid, please correct the errors above and re-submit this form</p>
 
 			<input type="submit" 
 				value="Submit" 
