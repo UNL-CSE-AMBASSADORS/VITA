@@ -167,6 +167,10 @@ define('signupController', [], function() {
 			}
 		};
 
+		$scope.isEmailRequired = () => {
+			return $scope.sharedProperties.isSelectedSiteVirtual === true;
+		};
+
 		$scope.downloadForm14446 = () => {
 			const fileUrl = '/server/download/downloadForm14446VirtualAppt.php';
 			let iframe = document.getElementById('hiddenDownloader');
