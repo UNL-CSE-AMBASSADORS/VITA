@@ -168,7 +168,7 @@ define('signupController', [], function() {
 		};
 
 		$scope.isEmailRequired = () => {
-			return $scope.sharedProperties.isSelectedSiteVirtual == true;
+			return $scope.sharedProperties.isSelectedSiteVirtual === true;
 		};
 
 		$scope.downloadForm14446 = () => {
