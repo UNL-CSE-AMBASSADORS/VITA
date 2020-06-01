@@ -40,7 +40,7 @@ function getAppointments($year) {
 			TIME_FORMAT(timeReturnedPapers, "%l:%i %p") AS timeReturnedPapers, 
 			TIME_FORMAT(timeAppointmentStarted, "%l:%i %p") AS timeAppointmentStarted, 
 			TIME_FORMAT(timeAppointmentEnded, "%l:%i %p") AS timeAppointmentEnded, 
-			completed, cancelled, servicedByStation, servicedAppointmentId ';
+			completed, cancelled, servicedByStation, servicedAppointmentId, token ';
 		if ($canViewClientInformation) {
 			$query .= ', Client.phoneNumber, emailAddress, bestTimeToCall ';
 		}
@@ -49,6 +49,7 @@ function getAppointments($year) {
 				JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 				JOIN Site ON AppointmentTime.siteId = Site.siteId
 				JOIN Client ON Appointment.clientId = Client.clientId
+				LEFT JOIN SelfServiceAppointmentRescheduleToken ON Appointment.appointmentId = SelfServiceAppointmentRescheduleToken.appointmentId
 				LEFT JOIN Answer ON Answer.appointmentId = Appointment.appointmentId
 					AND Answer.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")
 				LEFT JOIN PossibleAnswer ON PossibleAnswer.possibleAnswerId = Answer.possibleAnswerId
@@ -65,6 +66,15 @@ function getAppointments($year) {
 			// Shorten last name to only the initial if user doesn't have permission to view entire last name
 			if (!$canViewClientInformation) {
 				$appointment['lastName'] = getInitial($appointment['lastName']);
+			}
+
+			if (isset($appointment['token'])) {
+				$token = $appointment['token'];
+				$serverName = $_SERVER['SERVER_NAME'];
+				$appointmentRescheduleLink = "https://$serverName/appointment/reschedule/?token=$token";
+				$uploadDocumentsLink = "https://$serverName/appointment/upload-documents/?token=$token";
+				$appointment['uniqueAppointmentRescheduleUrl'] = $appointmentRescheduleLink;
+				$appointment['uniqueUploadDocumentsUrl'] = $uploadDocumentsLink;
 			}
 
 			$appointment['appointmentType'] = isset($appointment['countryText']) ? $appointment['countryText'] : 'residential';
