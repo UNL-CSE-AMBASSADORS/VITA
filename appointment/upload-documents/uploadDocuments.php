@@ -161,44 +161,81 @@
 				<!-- Relevant documents descriptions -->
 				<div class="dcf-mt-6">
 					<h4>Relevant Documents to Upload:</h4>
-					<h6>Required Forms:</h6>
-					<ul>
-						<b class="dcf-uppercase">Important Note</b>: If you are typing your information into the fillable form, you must "save as" to your device before uploading it or your information will not save.
-						<li><b>Completed <a href ng-click="downloadForm14446()">Form 14446</a></b>. The <b>bottom portion of page two</b> (Part III: Taxpayer Consents) needs to be completed.</li>
-						<li><b>Completed <a href ng-click="downloadIntakeForm()">Form 13614-C</a></b> (Intake Form). Without this form, Lincoln VITA cannot prepare your return.</li>
-					</ul>
-					<h6>Identification:</h6>
-					<ul>
-						<li><b>Social Security Cards</b> or <b>ITIN Letters</b> for <span class="dcf-uppercase">everyone</span> who will be included on the return</li>
-						<li><b>Photo IDs</b> for <b class="dcf-uppercase">all</b> tax return signers (<span class="dcf-uppercase">both</span> spouses must sign if filing jointly)</li>
-						<li><b>Passports</b> for <b class="dcf-uppercase">all</b> tax return signers (if international tax return)</li>
-					</ul>
-					<h6>Income:</h6>
-					<ul>
-						<li><b>W-2s</b> for wages, <b>W-2Gs</b> for gambling income</li>
-						<li><b>1099s</b> for interest, dividends, unemployment, state tax refunds, pension or 401-K distributions, and other income</li>
-						<li><b>Records</b> of revenue from self-employment or home-based businesses</li>
-					</ul>
-					<h6>Expenses:</h6>
-					<ul>
-						<li><b>1098s</b> for mortgage interest, student loan interest (1098-E), or tuition (1098-T), statement of property tax paid</li>
-						<li><b>Statement of college student account</b> showing all charges and payments for each student on the return</li>
-						<li><b>Childcare receipts</b>, including tax ID and address for childcare provider</li>
-						<li><b>1095s</b> showing creditable health insurance coverage</li>
-						<li><b>Records</b> of expenses for self-employment or home-based businesses</li>
-						<li><b>1042-S</b> for international tax returns (If you received one, not everyone receives one)</li>
-					</ul>
-					<h6>Immigration Documents (if an international tax return):</h6>
-					<ul>
-						<li><b>I-94</b></li>
-						<li><b>I-20</b></li>
-						<li><b>DS-2019</b> for those in J1 status</li>
-					</ul>
-					<h6>Direct Deposit Information:</h6>
-					<ul>
-						<li>Picture of a <b>blank check</b> showing account number, routing number, and account owner's name</li>
-						<li>A previous <b>bank statement</b> showing bank name, account number, routing number, and account owner's name</li>
-					</ul>
+					<!-- Residential appointments -->
+					<div ng-if="isResidentialAppointment">
+						<h6>Required Forms:</h6>
+						<ul>
+							<b class="dcf-uppercase">Important Note</b>: If you are typing your information into the fillable form, you must "save as" to your device before uploading it or your information will not save.
+							<li><b>Completed <a href ng-click="downloadForm14446()">Form 14446</a></b>. The <b>bottom portion of page two</b> (Part III: Taxpayer Consents) needs to be completed.</li>
+							<li><b>Completed <a href ng-click="downloadResidentIntakeForm()">Form 13614-C</a></b> (Intake Form). Without this form, Lincoln VITA cannot prepare your return.</li>
+						</ul>
+						<h6>Identification:</h6>
+						<ul>
+							<li><b>Social Security Cards</b> or <b>ITIN Letters</b> for <span class="dcf-uppercase">everyone</span> who will be included on the return</li>
+							<li><b>Photo IDs</b> for <b class="dcf-uppercase">all</b> tax return signers (<span class="dcf-uppercase">both</span> spouses must sign if filing jointly)</li>
+						</ul>
+						<h6>Income:</h6>
+						<ul>
+							<li><b>W-2s</b> for wages, <b>W-2Gs</b> for gambling income</li>
+							<li><b>1099s</b> for interest, dividends, unemployment, state tax refunds, pension or 401-K distributions, and other income</li>
+							<li><b>Records</b> of revenue from self-employment or home-based businesses</li>
+						</ul>
+						<h6>Expenses:</h6>
+						<ul>
+							<li><b>1098s</b> for mortgage interest, student loan interest (1098-E), or tuition (1098-T), statement of property tax paid</li>
+							<li><b>Statement of college student account</b> showing all charges and payments for each student on the return</li>
+							<li><b>Childcare receipts</b>, including tax ID and address for childcare provider</li>
+							<li><b>1095s</b> showing creditable health insurance coverage</li>
+							<li><b>Records</b> of expenses for self-employment or home-based businesses</li>
+						</ul>
+						<h6>Direct Deposit Information:</h6>
+						<ul>
+							<li>Picture of a <b>blank check</b> showing account number, routing number, and account owner's name</li>
+							<li>A previous <b>bank statement</b> showing bank name, account number, routing number, and account owner's name</li>
+						</ul>
+					</div>
+
+
+
+					<!-- Non-Residential appointments -->
+					<div ng-if="!isResidentialAppointment">
+						<h6>Required Forms:</h6>
+						<ul>
+							<b class="dcf-uppercase">Important Note</b>: If you are typing your information into the fillable form, you must "save as" to your device before uploading it or your information will not save.
+							<li><b>Completed <a href ng-click="downloadForm14446()">Form 14446</a></b>. The <b>bottom portion of page two</b> (Part III: Taxpayer Consents) needs to be completed.</li>
+							<li><b>Completed <a href ng-click="downloadNonResidentIntakeForm()">Form 13614-NR</a></b> (Intake Form). Without this form, Lincoln VITA cannot prepare your return.</li>
+						</ul>
+						<h6>Identification:</h6>
+						<ul>
+							<li><b>Social Security Cards</b> or <b>ITIN Letters</b> for <span class="dcf-uppercase">everyone</span> who will be included on the return</li>
+							<li><b>Passports</b> for <b class="dcf-uppercase">all</b> tax return signers</li>
+						</ul>
+						<h6>Immigration Documents:</h6>
+						<ul>
+							<li><b>I-94</b></li>
+							<li><b>I-20</b></li>
+							<li><b>DS-2019</b> for those in J1 status</li>
+						</ul>
+						<h6>Income:</h6>
+						<ul>
+							<li><b>W-2s</b> for wages</li>
+							<li><b>1042-S</b> (If you received one, not everyone receives one)</li>
+						</ul>
+						<h6>Expenses:</h6>
+						<ul>
+							<li><b>1098s</b> for mortgage interest, student loan interest (1098-E), or tuition (1098-T), statement of property tax paid</li>
+							<li><b>Statement of college student account</b> showing all charges and payments for each student on the return</li>
+							<li><b>Childcare receipts</b>, including tax ID and address for childcare provider</li>
+							<li><b>1095s</b> showing creditable health insurance coverage</li>
+							<li><b>Records</b> of expenses for self-employment or home-based businesses</li>
+						</ul>
+						<h6>Direct Deposit Information:</h6>
+						<ul>
+							<li>Picture of a <b>blank check</b> showing account number, routing number, and account owner's name</li>
+							<li>A previous <b>bank statement</b> showing bank name, account number, routing number, and account owner's name</li>
+						</ul>
+					</div>
+
 				</div>
 			</div>
 

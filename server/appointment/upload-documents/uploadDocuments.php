@@ -56,6 +56,9 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 		$clientInformation = getClientInformationFromToken($token);
 		$clientInformationMatches = doesClientInformationMatch($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$response['validated'] = $clientInformationMatches;
+		if ($clientInformationMatches) {
+			$response['residentialAppointment'] = $clientInformation['appointmentType'] === 'residential';
+		}
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'There was an error on the server validating information. Please refresh the page and try again.';
