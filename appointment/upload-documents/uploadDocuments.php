@@ -220,6 +220,7 @@
 						<ul>
 							<li><b>W-2s</b> for wages</li>
 							<li><b>1042-S</b> (If you received one, not everyone receives one)</li>
+							<li><b>1099s</b> for interest, dividends, unemployment, state tax refunds, pension or 401-K distributions, and other income</li>
 						</ul>
 						<h6>Expenses:</h6>
 						<ul>

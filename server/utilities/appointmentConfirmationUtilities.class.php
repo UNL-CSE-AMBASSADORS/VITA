@@ -120,6 +120,15 @@ class AppointmentConfirmationUtilities {
 				<ul>
 					<li><b>W-2s</b> for wages</li>
 					<li><b>1042-S</b> (If you received one, not everyone receives one)</li>
+					<li><b>1099s</b> for interest, dividends, unemployment, state tax refunds, pension or 401-K distributions, and other income</li>
+				</ul>
+				<h5>Expenses:</h5>
+				<ul>
+					<li><b>1098s</b> for mortgage interest, student loan interest (1098-E), or tuition (1098-T), statement of property tax paid</li>
+					<li><b>Statement of college student account</b> showing all charges and payments for each student on the return</li>
+					<li><b>Childcare receipts</b>, including tax ID and address for childcare provider</li>
+					<li><b>1095s</b> showing creditable health insurance coverage</li>
+					<li><b>Records</b> of expenses for self-employment or home-based businesses</li>
 				</ul>";
 	}
 	
