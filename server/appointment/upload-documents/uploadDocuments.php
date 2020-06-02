@@ -121,11 +121,17 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		// Validate the client information
 		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$appointmentId = $clientInformation['appointmentId'];
+		$appointmentType = $clientInformation['appointmentType'];
 
 		// Upload the user's file to Azure BLOB Storage
 		$containerName = 'ty2019';
 		$fileContent = fopen($uploadedFileTempName, 'r');
-		$fileNameToSave = urlencode($firstName.'_'.$lastName)."/$appointmentId/".uniqid().urlencode("-$uploadedFileName");
+		$fileNameToSave = $firstName.'_'.$lastName."/$appointmentId/".uniqid()."-$uploadedFileName";
+		if ($appointmentType === 'residential') {
+			$fileNameToSave = 'residential/'.$fileNameToSave;
+		} else {
+			$fileNameToSave = 'non-residential/'.$fileNameToSave;
+		}
 
 		$blobClient = BlobRestProxy::createBlobService(AZURE_BLOB_STORAGE_CONNECTION_STRING);
 		$blobClient->createBlockBlob($containerName, $fileNameToSave, $fileContent);
@@ -147,27 +153,23 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$appointmentId = $clientInformation['appointmentId'];
 		$bestTimeToCall = $clientInformation['bestTimeToCall'];
+		$appointmentType = $clientInformation['appointmentType'];
 
 		// Email volunteers saying it's ready to go
 		if (PROD) {
-			$handle = @fopen('./notificationEmails.txt', 'r');
-			if ($handle != false) {
-				$toEmails = [];
-				while(!feof($handle)) {
-					array_push($toEmails, fgets($handle));
-				}
+			$emailJsonString = file_get_contents('./notificationEmails.json');
+			$emailsJson = json_decode($emailJsonString, true);
+			$toEmailsString = $appointmentType === 'residential' ? $emailsJson['residential'] : $emailsJson['non-residential'];
 
-				$toEmailsString = implode(', ', $toEmails);
-				$readyMessage = "A client has marked their appointment as ready: <br/>
-					<b>First Name:</b> $firstName <br/>
-					<b>Last Name:</b> $lastName <br/>
-					<b>Appointment ID:</b> $appointmentId <br/>
-					<b>Phone Number:</b> $phoneNumber <br/>
-					<b>Best Time to Call (if new appointment):</b> $bestTimeToCall <br/> 
-					<b>Email (if provided):</b> $emailAddress";
-				EmailUtilities::sendHtmlFormattedEmail($toEmailsString, 'VITA -- Appointment Ready', $readyMessage);
-				fclose($handle);
-			}
+			$readyMessage = "A client has marked their appointment as ready: <br/>
+				<b>First Name:</b> $firstName <br/>
+				<b>Last Name:</b> $lastName <br/>
+				<b>Appointment ID:</b> $appointmentId <br/>
+				<b>Phone Number:</b> $phoneNumber <br/>
+				<b>Best Time to Call (if new appointment):</b> $bestTimeToCall <br/> 
+				<b>Email (if provided):</b> $emailAddress <br/>
+				<b>Type:</b> $appointmentType";
+			EmailUtilities::sendHtmlFormattedEmail($toEmailsString, 'VITA -- Appointment Ready', $readyMessage);
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -226,10 +228,14 @@ function validateClientInformation($token, $firstName, $lastName, $emailAddress,
 function getClientInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
-	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, bestTimeToCall, Appointment.appointmentId
+	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, bestTimeToCall, Appointment.appointmentId,
+				PossibleAnswer.text AS countryText
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId
+			LEFT JOIN Answer ON Answer.appointmentId = Appointment.appointmentId
+				AND Answer.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")
+			LEFT JOIN PossibleAnswer ON PossibleAnswer.possibleAnswerId = Answer.possibleAnswerId
 		WHERE token = ?';
 
 	$stmt = $DB_CONN->prepare($query);
@@ -241,6 +247,8 @@ function getClientInformationFromToken($token) {
 	if (!$clientInformation) {
 		throw new Exception('There was an error on the server fetching information. Please refresh the page and try again.', MY_EXCEPTION);
 	}
+
+	$clientInformation['appointmentType'] = isset($clientInformation['countryText']) ? 'non-residential' : 'residential';
 
 	return $clientInformation;
 }
