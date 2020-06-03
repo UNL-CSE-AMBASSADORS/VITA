@@ -138,7 +138,7 @@ define('uploadDocumentsController', [], function() {
 				if (!ACCEPTABLE_FILE_TYPES.includes(file.type)) {
 					throw `Error: Invalid file type. Allowed file types are: ${ACCEPTABLE_FILE_EXTENSIONS.join(', ')}`;
 				}
-				const validFileExtension = ACCEPTABLE_FILE_EXTENSIONS.some((extension) => file.name.endsWith(extension));
+				const validFileExtension = ACCEPTABLE_FILE_EXTENSIONS.some((extension) => file.name.trim().toLowerCase().endsWith(extension));
 				if (!validFileExtension) {
 					throw `Error: Invalid file extension. Allowed file extensions are: ${ACCEPTABLE_FILE_EXTENSIONS.join(', ')}`;
 				}

@@ -269,6 +269,6 @@ function cleanPhoneNumber($phoneNumber) {
 	return str_replace($find, $replace, $phoneNumber);
 }
 
-function endsWith($haystack, $needle) {
-    return substr_compare($haystack, $needle, -strlen($needle)) === 0;
+function endsWith($haystack, $needle, $caseInsensitive = true) {
+    return substr_compare($haystack, $needle, -strlen($needle), strlen($needle), $caseInsensitive) === 0;
 }
