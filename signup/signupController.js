@@ -82,7 +82,7 @@ define('signupController', [], function() {
 				else if(country.treatyType === 'india') answerDatabaseId = "12";
 				else if(country.treatyType === 'treaty') answerDatabaseId = "13";
 				else if(country.treatyType === 'non-treaty') answerDatabaseId = "14";
-				
+
 				questions[indexOfCountryQuestionInQuestionsArray] = {
 					id: countryQuestionDatabaseId,
 					value: answerDatabaseId
@@ -158,6 +158,7 @@ define('signupController', [], function() {
 		};
 
 		$scope.residentialAppointment = function() {
+			$scope.questions[6] = null;
 			$scope.sharedProperties.appointmentType = 'residential';
 		};
 
