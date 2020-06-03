@@ -11,6 +11,7 @@ define('uploadDocumentsController', [], function() {
 		$scope.validatingClientInformation = false;
 		$scope.clientInformationValidated = false;
 		$scope.invalidClientInformation = false;
+		$scope.isResidentialAppointment = true;
 
 		// Agree to virtual preparation variables
 		// For some reason, you can't bind the checkbox to a primitive boolean, it has to be in an object: https://stackoverflow.com/a/23943930
@@ -91,6 +92,8 @@ define('uploadDocumentsController', [], function() {
 					if (!response.validated) {
 						$scope.invalidClientInformation = true;
 						$scope.clientData = {};
+					} else {
+						$scope.isResidentialAppointment = response.residentialAppointment;
 					}
 				}
 
@@ -197,22 +200,19 @@ define('uploadDocumentsController', [], function() {
 			});
 		};
 
-		$scope.downloadIntakeForm = () => {
-			const fileUrl = '/server/download/downloadIntakeForm.php';
-			let iframe = document.getElementById('hiddenDownloader');
-			if (iframe == null) {
-				iframe = document.createElement('iframe');
-				iframe.id = 'hiddenDownloader';
-				iframe.style.visibility = 'hidden';
-				iframe.style.display = 'none';
-				document.body.appendChild(iframe);
-			}
-		
-			iframe.src = fileUrl;
+		$scope.downloadResidentIntakeForm = () => {
+			$scope.downloadFile('/server/download/downloadIntakeForm.php');
+		};
+
+		$scope.downloadNonResidentIntakeForm = () => {
+			$scope.downloadFile('/server/download/downloadNonResidentIntakeForm.php');
 		};
 
 		$scope.downloadForm14446 = () => {
-			const fileUrl = '/server/download/downloadForm14446VirtualAppt.php';
+			$scope.downloadFile('/server/download/downloadForm14446VirtualAppt.php');
+		};
+
+		$scope.downloadFile = (fileUrl) => {
 			let iframe = document.getElementById('hiddenDownloader');
 			if (iframe == null) {
 				iframe = document.createElement('iframe');
