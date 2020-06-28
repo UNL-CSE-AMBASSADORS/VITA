@@ -12,6 +12,7 @@ define('uploadDocumentsController', [], function() {
 		$scope.clientInformationValidated = false;
 		$scope.invalidClientInformation = false;
 		$scope.isResidentialAppointment = true;
+		$scope.isIowaAppointment = false;
 
 		// Agree to virtual preparation variables
 		// For some reason, you can't bind the checkbox to a primitive boolean, it has to be in an object: https://stackoverflow.com/a/23943930
@@ -94,6 +95,7 @@ define('uploadDocumentsController', [], function() {
 						$scope.clientData = {};
 					} else {
 						$scope.isResidentialAppointment = response.residentialAppointment;
+						$scope.isIowaAppointment = false; // TODO: Set this based on response from BE
 					}
 				}
 
@@ -209,7 +211,11 @@ define('uploadDocumentsController', [], function() {
 		};
 
 		$scope.downloadForm14446 = () => {
-			$scope.downloadFile('/server/download/downloadForm14446VirtualAppt.php');
+			if ($scope.isIowaAppointment) {
+				$scope.downloadFile('/server/download/downloadForm14446VirtualApptIowa.php');
+			} else {
+				$scope.downloadFile('/server/download/downloadForm14446VirtualAppt.php');
+			}
 		};
 
 		$scope.downloadFile = (fileUrl) => {

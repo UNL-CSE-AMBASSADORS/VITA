@@ -129,7 +129,7 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$appointmentId = $clientInformation['appointmentId'];
 		$appointmentType = $clientInformation['appointmentType'];
-		$isIowaAppointment = false;
+		$isIowaAppointment = false; // TODO: Set this based on appointment information
 
 		// Upload the user's file to Azure BLOB Storage
 		$containerName = 'ty2019';
@@ -166,7 +166,7 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 		$appointmentId = $clientInformation['appointmentId'];
 		$bestTimeToCall = $clientInformation['bestTimeToCall'];
 		$appointmentType = $clientInformation['appointmentType'];
-		$isIowaAppointment = false;
+		$isIowaAppointment = false; // TODO: Set this based on appointment information
 
 		// Email volunteers saying it's ready to go
 		if (PROD) {
