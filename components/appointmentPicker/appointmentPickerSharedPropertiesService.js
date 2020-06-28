@@ -13,7 +13,8 @@ define('appointmentPickerSharedPropertiesService', [], function() {
 			selectedAppointmentTimeId: null,
 			hasAvailability: null,
 			isLoggedIn: false,
-			appointmentType: 'residential'
+			appointmentType: 'residential',
+			tenantName: 'unl'
 		};
 
 		return {
