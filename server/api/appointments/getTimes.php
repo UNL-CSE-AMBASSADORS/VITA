@@ -44,11 +44,11 @@ function getAppointmentTimes($data, $isLoggedIn) {
 
 	$dstMap = new DateSiteTimeMap($data['appointmentType']);
 
-	$uiowaSiteIds = [ 8 ]; // TODO: Set to actual IDs for UIowa sites
 	foreach ($appointmentTimes as $appointmentTime) {
 		// TODO: If this 'tenant' system remains (which it probably shouldn't), this filterin should be done somehow in the SQL query
-		$shouldSkip = ($tenantName === 'unl' && in_array($appointmentTime['siteId'], $uiowaSiteIds)) 
-			|| ($tenantName === 'uiowa' && !in_array($appointmentTime['siteId'], $uiowaSiteIds));
+		$isIowaSite = isIowaSite($appointmentTime['siteId']);
+		$shouldSkip = ($tenantName === 'unl' && $isIowaSite) 
+			|| ($tenantName === 'uiowa' && !$isIowaSite);
 		if ($shouldSkip) continue;
 
 		$dstMap->addDateSiteTimeObject($appointmentTime);

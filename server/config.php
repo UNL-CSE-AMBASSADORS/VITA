@@ -39,3 +39,9 @@
 		unset($db_charset);
 		unset($data_source_name);
 	}
+
+	function isIowaSite($siteId) {
+		$uiowaSiteIds = [ 8 ]; // TODO: Set to actual IDs for UIowa sites
+	
+		return in_array($siteId, $uiowaSiteIds);
+	}

@@ -58,7 +58,7 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 		$response['validated'] = $clientInformationMatches;
 		if ($clientInformationMatches) {
 			$response['residentialAppointment'] = $clientInformation['appointmentType'] === 'residential';
-			$response['isIowaAppointment'] = false; // TODO: Set this based on appointment information
+			$response['isIowaAppointment'] = isIowaSite($clientInformation['siteId']);
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -135,7 +135,7 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$appointmentId = $clientInformation['appointmentId'];
 		$appointmentType = $clientInformation['appointmentType'];
-		$isIowaAppointment = false; // TODO: Set this based on appointment information
+		$isIowaAppointment = isIowaSite($clientInformation['siteId']);
 
 		// Upload the user's file to Azure BLOB Storage
 		$containerName = 'ty2019';
@@ -172,7 +172,7 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 		$appointmentId = $clientInformation['appointmentId'];
 		$bestTimeToCall = $clientInformation['bestTimeToCall'];
 		$appointmentType = $clientInformation['appointmentType'];
-		$isIowaAppointment = false; // TODO: Set this based on appointment information
+		$isIowaAppointment = isIowaSite($clientInformation['siteId']);
 
 		// Email volunteers saying it's ready to go
 		if (PROD) {
@@ -205,6 +205,8 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 /* 
  * Private functions
  */
+
+
 
 function validateForm14446HasChanged($uploadedFileTempName) {
 	GLOBAL $root;
@@ -265,9 +267,10 @@ function getClientInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
 	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, bestTimeToCall, Appointment.appointmentId,
-				PossibleAnswer.text AS countryText
+				PossibleAnswer.text AS countryText, AppointmentTime.siteId
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
+			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 			JOIN Client ON Appointment.clientId = Client.clientId
 			LEFT JOIN Answer ON Answer.appointmentId = Appointment.appointmentId
 				AND Answer.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")
