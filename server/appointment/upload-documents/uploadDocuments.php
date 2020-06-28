@@ -58,6 +58,7 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 		$response['validated'] = $clientInformationMatches;
 		if ($clientInformationMatches) {
 			$response['residentialAppointment'] = $clientInformation['appointmentType'] === 'residential';
+			$response['isIowaAppointment'] = false; // TODO: Set this based on appointment information
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;

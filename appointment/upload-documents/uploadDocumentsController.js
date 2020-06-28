@@ -95,7 +95,7 @@ define('uploadDocumentsController', [], function() {
 						$scope.clientData = {};
 					} else {
 						$scope.isResidentialAppointment = response.residentialAppointment;
-						$scope.isIowaAppointment = false; // TODO: Set this based on response from BE
+						$scope.isIowaAppointment = response.isIowaAppointment;
 					}
 				}
 
