@@ -116,6 +116,11 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 			validateForm14446HasChanged($uploadedFileTempName);
 		}
 
+		// Check if file is UIowa's Fillable Form 14446 and, if so, that it has changed
+		if (preg_match('/(.*)f14446VirtualIowaVita(.*)\.pdf(.*)/i', $uploadedFileName)) {
+			validateUIowaForm14446HasChanged($uploadedFileTempName);
+		}
+
 		// Check if file is Fillable Intake Form 13614C and, if so, that it has changed
 		if (preg_match('/(.*)IntakeForm_13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
 			validateForm13614CHasChanged($uploadedFileTempName);
@@ -205,6 +210,14 @@ function validateForm14446HasChanged($uploadedFileTempName) {
 	GLOBAL $root;
 
 	if (!hasFileChanged($uploadedFileTempName, "$root/server/download/documents/f14446VirtualLincolnVita.pdf")) {
+		throw new Exception('Error: The uploaded Form 14446 does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
+	}
+}
+
+function validateUIowaForm14446HasChanged($uploadedFileTempName) {
+	GLOBAL $root;
+
+	if (!hasFileChanged($uploadedFileTempName, "$root/server/download/documents/f14446VirtualIowaVita.pdf")) {
 		throw new Exception('Error: The uploaded Form 14446 does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
 	}
 }
