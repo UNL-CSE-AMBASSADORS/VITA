@@ -142,6 +142,10 @@ define('signupController', [], function() {
 			});
 		};
 
+		$scope.unlStudentChanged = () => {
+			$scope.sharedProperties.tenantName = 'unl';
+		};
+
 		$scope.intStudentChanged = function() {
 			$scope.questions[3] = null;
 			$scope.questions[4] = null;
@@ -172,8 +176,19 @@ define('signupController', [], function() {
 			return $scope.sharedProperties.isSelectedSiteVirtual === true;
 		};
 
+		$scope.isIowaFiler = () => $scope.sharedProperties.tenantName === 'uiowa';
+
+		// If the tenant changes, reset the checkbox because there is a different document they have to agree to. TODO: This can be removed when multi-tenancy with UIowa is removed
+		$scope.$watch(
+			() => $scope.sharedProperties.tenantName,
+			() => $scope.agreeToVirtualPreparationCheckbox.checked = false
+		);
+
 		$scope.downloadForm14446 = () => {
-			const fileUrl = '/server/download/downloadForm14446VirtualAppt.php';
+			const fileUrl = $scope.isIowaFiler() 
+				? '/server/download/downloadForm14446VirtualApptIowa.php' 
+				: '/server/download/downloadForm14446VirtualAppt.php';
+
 			let iframe = document.getElementById('hiddenDownloader');
 			if (iframe == null) {
 				iframe = document.createElement('iframe');

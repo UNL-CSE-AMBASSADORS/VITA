@@ -16,12 +16,12 @@ getAppointmentTimes($_GET, $isLoggedIn);
 function getAppointmentTimes($data, $isLoggedIn) {
 	date_default_timezone_set('America/Chicago');
 
-	$year = date("Y");
+	$year = date('Y');
 	if (isset($data['year'])) {
 		$year = $data['year'];
 	}
 
-	$after = date("Y-m-d H:i:s", time() - ($isLoggedIn ? 3600 : 0));
+	$after = date('Y-m-d H:i:s', time() - ($isLoggedIn ? 3600 : 0));
 	if (isset($data['after'])) {
 		$after = $data['after'];
 	}
@@ -31,6 +31,10 @@ function getAppointmentTimes($data, $isLoggedIn) {
 		$isResidential = $data['appointmentType'] === 'residential';
 	}
 
+	$tenantName = 'unl';
+	if (isset($data['tenantName'])) {
+		$tenantName = $data['tenantName'];
+	}
 
 	if ($isResidential) {
 		$appointmentTimes = getResidentialAppointmentTimes($year, $after);
@@ -41,6 +45,12 @@ function getAppointmentTimes($data, $isLoggedIn) {
 	$dstMap = new DateSiteTimeMap($data['appointmentType']);
 
 	foreach ($appointmentTimes as $appointmentTime) {
+		// TODO: If this 'tenant' system remains (which it probably shouldn't), this filterin should be done somehow in the SQL query
+		$isIowaSite = isIowaSite($appointmentTime['siteId']);
+		$shouldSkip = ($tenantName === 'unl' && $isIowaSite) 
+			|| ($tenantName === 'uiowa' && !$isIowaSite);
+		if ($shouldSkip) continue;
+
 		$dstMap->addDateSiteTimeObject($appointmentTime);
 	}
 

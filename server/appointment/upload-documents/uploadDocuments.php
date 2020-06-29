@@ -58,6 +58,7 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 		$response['validated'] = $clientInformationMatches;
 		if ($clientInformationMatches) {
 			$response['residentialAppointment'] = $clientInformation['appointmentType'] === 'residential';
+			$response['isIowaAppointment'] = isIowaSite($clientInformation['siteId']);
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -79,8 +80,7 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		}
 
 		$uploadedFile = $_FILES['file'];
-
-		if (!isset($uploadedFile['name']) || !isset($uploadedFile['type']) || !isset($uploadedFile['size']) || !isset($uploadedFile['tmp_name']) || !isset($uploadedFile['error'])) {
+		if (!isset($uploadedFile['name'], $uploadedFile['type'], $uploadedFile['size'], $uploadedFile['tmp_name'], $uploadedFile['error'])) {
 			throw new Exception('Invalid file information', MY_EXCEPTION);
 		}
 
@@ -116,15 +116,26 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 			validateForm14446HasChanged($uploadedFileTempName);
 		}
 
+		// Check if file is UIowa's Fillable Form 14446 and, if so, that it has changed
+		if (preg_match('/(.*)f14446VirtualIowaVita(.*)\.pdf(.*)/i', $uploadedFileName)) {
+			validateUIowaForm14446HasChanged($uploadedFileTempName);
+		}
+
 		// Check if file is Fillable Intake Form 13614C and, if so, that it has changed
 		if (preg_match('/(.*)IntakeForm_13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
 			validateForm13614CHasChanged($uploadedFileTempName);
+		}
+
+		// Check if file is Fillable Intake Form 13614NR and, if so, that it has changed
+		if (preg_match('/(.*)NonResidentIntakeForm_F13614NR(.*)\.pdf(.*)/i', $uploadedFileName)) {
+			validateForm13614NRHasChanged($uploadedFileTempName);
 		}
 		
 		// Validate the client information
 		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$appointmentId = $clientInformation['appointmentId'];
 		$appointmentType = $clientInformation['appointmentType'];
+		$isIowaAppointment = isIowaSite($clientInformation['siteId']);
 
 		// Upload the user's file to Azure BLOB Storage
 		$containerName = 'ty2019';
@@ -136,7 +147,11 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 			$fileNameToSave = 'non-residential/'.$fileNameToSave;
 		}
 
-		$blobClient = BlobRestProxy::createBlobService(AZURE_BLOB_STORAGE_CONNECTION_STRING);
+		$azureBlobStorageConnectionString = $isIowaAppointment
+			? UIOWA_AZURE_BLOB_STORAGE_CONNECTION_STRING
+			: AZURE_BLOB_STORAGE_CONNECTION_STRING;
+
+		$blobClient = BlobRestProxy::createBlobService($azureBlobStorageConnectionString);
 		$blobClient->createBlockBlob($containerName, $fileNameToSave, $fileContent);
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -157,10 +172,15 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 		$appointmentId = $clientInformation['appointmentId'];
 		$bestTimeToCall = $clientInformation['bestTimeToCall'];
 		$appointmentType = $clientInformation['appointmentType'];
+		$isIowaAppointment = isIowaSite($clientInformation['siteId']);
 
 		// Email volunteers saying it's ready to go
 		if (PROD) {
-			$emailJsonString = file_get_contents('./notificationEmails.json');
+			$emailJsonFileName = $isIowaAppointment 
+				? './uiowa_notificationEmails.json'
+				: './notificationEmails.json';
+
+			$emailJsonString = file_get_contents($emailJsonFileName);
 			$emailsJson = json_decode($emailJsonString, true);
 			$toEmailsString = $appointmentType === 'residential' ? $emailsJson['residential'] : $emailsJson['non-residential'];
 
@@ -186,15 +206,20 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
  * Private functions
  */
 
+
+
 function validateForm14446HasChanged($uploadedFileTempName) {
 	GLOBAL $root;
 
-	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
-	$uploadedFileHash = md5($uploadedFileContentAsString);
-	$originalFileContentAsString = file_get_contents("$root/server/download/documents/f14446VirtualLincolnVita.pdf");
-	$originalFileHash = md5($originalFileContentAsString);
+	if (!hasFileChanged($uploadedFileTempName, "$root/server/download/documents/f14446VirtualLincolnVita.pdf")) {
+		throw new Exception('Error: The uploaded Form 14446 does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
+	}
+}
 
-	if ($uploadedFileHash === $originalFileHash) {
+function validateUIowaForm14446HasChanged($uploadedFileTempName) {
+	GLOBAL $root;
+
+	if (!hasFileChanged($uploadedFileTempName, "$root/server/download/documents/f14446VirtualIowaVita.pdf")) {
 		throw new Exception('Error: The uploaded Form 14446 does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
 	}
 }
@@ -202,14 +227,24 @@ function validateForm14446HasChanged($uploadedFileTempName) {
 function validateForm13614CHasChanged($uploadedFileTempName) {
 	GLOBAL $root;
 
-	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
-	$uploadedFileHash = md5($uploadedFileContentAsString);
-	$originalFileContentAsString = file_get_contents("$root/server/download/documents/IntakeForm_13614C.pdf");
-	$originalFileHash = md5($originalFileContentAsString);
-
-	if ($uploadedFileHash === $originalFileHash) {
+	if (!hasFileChanged($uploadedFileTempName, "$root/server/download/documents/IntakeForm_13614C.pdf")) {
 		throw new Exception('Error: The uploaded Intake Form 13614-C does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
 	}
+}
+
+function validateForm13614NRHasChanged($uploadedFileTempName) {
+	GLOBAL $root;
+
+	if (!hasFileChanged($uploadedFileTempName, "$root/server/download/documents/NonResidentIntakeForm_F13614NR.pdf")) {
+		throw new Exception('Error: The uploaded Intake Form 13614-NR does not appear to have changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
+	}
+}
+
+function hasFileChanged($fileInQuestionName, $referenceFileName) {
+	$fileInQuestionContent = file_get_contents($fileInQuestionName);
+	$referenceFileContent = file_get_contents($referenceFileName);
+
+	return md5($fileInQuestionContent) !== md5($referenceFileContent);
 }
 
 function validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber) {
@@ -232,9 +267,10 @@ function getClientInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
 	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, bestTimeToCall, Appointment.appointmentId,
-				PossibleAnswer.text AS countryText
+				PossibleAnswer.text AS countryText, AppointmentTime.siteId
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
+			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 			JOIN Client ON Appointment.clientId = Client.clientId
 			LEFT JOIN Answer ON Answer.appointmentId = Appointment.appointmentId
 				AND Answer.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")

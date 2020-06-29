@@ -3,6 +3,7 @@
 	define('MY_EXCEPTION', 99999);
 	define('NOREPLY_EMAIL', 'noreply@vita.unl.edu');
 	define('AZURE_BLOB_STORAGE_CONNECTION_STRING', '');
+	define('UIOWA_AZURE_BLOB_STORAGE_CONNECTION_STRING', '');
 
 	error_reporting(E_ALL);
 	if (PROD) {
@@ -37,4 +38,10 @@
 		unset($db_user);
 		unset($db_charset);
 		unset($data_source_name);
+	}
+
+	function isIowaSite($siteId) {
+		$uiowaSiteIds = [ 8 ]; // TODO: Set to actual IDs for UIowa sites
+	
+		return in_array($siteId, $uiowaSiteIds);
 	}

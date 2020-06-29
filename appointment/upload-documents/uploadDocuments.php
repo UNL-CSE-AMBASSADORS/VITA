@@ -136,7 +136,7 @@
 						</tbody>
 					</table>
 					<button type="button" class="dcf-btn dcf-btn-secondary dcf-mt-2" ng-click="addAnotherDocument()">Add Another Document</button>
-					<p class="dcf-mt-2 dcf-txt-xs">Documents are transmitted and stored securely. These documents will not be shared with anyone except the Lincoln VITA volunteers helping to prepare your tax return and will be deleted after 14 days.</p>
+					<p class="dcf-mt-2 dcf-txt-xs">Documents are transmitted and stored securely. These documents will not be shared with anyone except the VITA volunteers helping to prepare your tax return and will be deleted after 14 days.</p>
 				</fieldset>
 
 				<!-- Ready button -->
@@ -167,7 +167,7 @@
 						<ul>
 							<b class="dcf-uppercase">Important Note</b>: If you are typing your information into the fillable form, you must "save as" to your device before uploading it or your information will not save.
 							<li><b>Completed <a href ng-click="downloadForm14446()">Form 14446</a></b>. The <b>bottom portion of page two</b> (Part III: Taxpayer Consents) needs to be completed.</li>
-							<li><b>Completed <a href ng-click="downloadResidentIntakeForm()">Form 13614-C</a></b> (Intake Form). Without this form, Lincoln VITA cannot prepare your return.</li>
+							<li><b>Completed <a href ng-click="downloadResidentIntakeForm()">Form 13614-C</a></b> (Intake Form). Without this form, VITA cannot prepare your return.</li>
 						</ul>
 						<h6>Identification:</h6>
 						<ul>
@@ -203,7 +203,7 @@
 						<ul>
 							<b class="dcf-uppercase">Important Note</b>: If you are typing your information into the fillable form, you must "save as" to your device before uploading it or your information will not save.
 							<li><b>Completed <a href ng-click="downloadForm14446()">Form 14446</a></b>. The <b>bottom portion of page two</b> (Part III: Taxpayer Consents) needs to be completed.</li>
-							<li><b>Completed <a href ng-click="downloadNonResidentIntakeForm()">Form 13614-NR</a></b> (Intake Form). Without this form, Lincoln VITA cannot prepare your return.</li>
+							<li><b>Completed <a href ng-click="downloadNonResidentIntakeForm()">Form 13614-NR</a></b> (Intake Form). Without this form, VITA cannot prepare your return.</li>
 						</ul>
 						<h6>Identification:</h6>
 						<ul>

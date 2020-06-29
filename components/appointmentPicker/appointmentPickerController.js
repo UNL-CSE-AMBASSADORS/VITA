@@ -7,9 +7,9 @@ define('appointmentPickerController', [], function() {
 		$scope.today = new Date();
 		$scope.appointmentPickerSharedProperties = sharedPropertiesService.getSharedProperties();
 
-		$scope.getAppointments = function(appointmentType = "residential") {
+		$scope.getAppointments = function(appointmentType = "residential", tenantName = "unl") {
 			let year = new Date().getFullYear();
-			AppointmentPickerDataService.loadAllAppointments(year, appointmentType).then(function(result) {
+			AppointmentPickerDataService.loadAllAppointments(year, appointmentType, tenantName).then(function(result) {
 				if(result == null) {
 					alert('There was an error loading the appointments. Please try refreshing the page.');
 				} else {
@@ -101,9 +101,19 @@ define('appointmentPickerController', [], function() {
 		}
 
 		$scope.$watch(
-			function() { return $scope.appointmentPickerSharedProperties.appointmentType; },
-			function(newValue, oldValue) {
-				$scope.getAppointments(newValue);
+			() => $scope.appointmentPickerSharedProperties.appointmentType,
+			(newValue, oldValue) => {
+				$scope.getAppointments(newValue, $scope.appointmentPickerSharedProperties.tenantName);
+				$scope.appointmentPickerSharedProperties.selectedDate = null;
+				$scope.appointmentPickerSharedProperties.selectedSite = null;
+				$scope.appointmentPickerSharedProperties.selectedTime = null;
+			}
+		);
+
+		$scope.$watch(
+			() => $scope.appointmentPickerSharedProperties.tenantName,
+			(newValue, oldValue) => {
+				$scope.getAppointments($scope.appointmentPickerSharedProperties.appointmentType, newValue);
 				$scope.appointmentPickerSharedProperties.selectedDate = null;
 				$scope.appointmentPickerSharedProperties.selectedSite = null;
 				$scope.appointmentPickerSharedProperties.selectedTime = null;
