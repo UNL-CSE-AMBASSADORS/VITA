@@ -40,7 +40,7 @@ function getAppointments($year) {
 			TIME_FORMAT(timeReturnedPapers, "%l:%i %p") AS timeReturnedPapers, 
 			TIME_FORMAT(timeAppointmentStarted, "%l:%i %p") AS timeAppointmentStarted, 
 			TIME_FORMAT(timeAppointmentEnded, "%l:%i %p") AS timeAppointmentEnded, 
-			completed, cancelled, servicedByStation, servicedAppointmentId, token ';
+			completed, cancelled, servicedAppointmentId, token ';
 		if ($canViewClientInformation) {
 			$query .= ', Client.phoneNumber, emailAddress, bestTimeToCall ';
 		}
@@ -79,7 +79,6 @@ function getAppointments($year) {
 
 			$appointment['appointmentType'] = isset($appointment['countryText']) ? $appointment['countryText'] : 'residential';
 			$appointment['language'] = expandLanguageCode($appointment['language']);
-			$appointment['filingStatuses'] = getFilingStatusesForAppointment($appointment['servicedAppointmentId']);
 			$appointment['notes'] = getNotesForAppointment($appointment['appointmentId']);
 		}
 
@@ -139,23 +138,6 @@ function cancelAppointment($appointmentId) {
  */
 function getInitial($name) {
 	return substr($name, 0, 1) . '.'; // concat period since this is an initial
-}
-
-function getFilingStatusesForAppointment($servicedAppointmentId) {
-	GLOBAL $DB_CONN;
-
-	if (!isset($appointment['servicedAppointmentId'])) {
-		return array();
-	}
-
-	$filingStatusQuery = 'SELECT text
-		FROM AppointmentFilingStatus
-		JOIN FilingStatus ON AppointmentFilingStatus.filingStatusId = FilingStatus.filingStatusId
-		WHERE AppointmentFilingStatus.servicedAppointmentId = ?';
-	$filingStatusStmt = $DB_CONN->prepare($filingStatusQuery);
-
-	$filingStatusStmt->execute(array($appointment['servicedAppointmentId']));
-	return $filingStatusStmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getNotesForAppointment($appointmentId) {
