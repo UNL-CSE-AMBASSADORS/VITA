@@ -192,8 +192,8 @@ INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
 	VALUES ("Anderson Library", "3635 Touzalin Ave", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_andersonLibrary = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, doesMultilingual, createdBy, lastModifiedBy)
-	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
 
 INSERT INTO Site (title, address, phoneNumber, doesInternational, createdBy, lastModifiedBy)

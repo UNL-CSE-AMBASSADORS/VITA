@@ -33,7 +33,7 @@ function getSiteInformation($siteId) {
 	$response['success'] = true;
 
 	try {
-		$query = 'SELECT siteId, title, address, phoneNumber, doesMultilingual, doesInternational
+		$query = 'SELECT siteId, title, address, phoneNumber, doesInternational
 			FROM Site
 			WHERE siteId = ? AND archived = FALSE';
 		$stmt = $DB_CONN->prepare($query);
