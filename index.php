@@ -32,11 +32,11 @@ return readfile($documentRoot . $path);
 <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-wrapper dcf-pt-3 dcf-pb-3 dcf-bold dcf-txt-decor-none unl-font-sans unl-cream" style="background-color: #007197;">
 	<span class="dcf-txt-xs">
 		<span class="dcf-d-inline-block dcf-mt-2 dcf-mb-2 dcf-mr-4">
-			In response to COVID-19, all VITA tax appointments were canceled starting March 16th. 
-			The IRS and Nebraska Department of Revenue have both extended the filing deadline to July 15th, 2020. 
-			We are in the process of starting virtual tax preparation. 
-			Individuals who had canceled appointments will be invited to participate shortly. 
-			Please check back on Monday, April 27th if you did not have a canceled tax appointment, but you are interested in free, virtual tax preparation.
+			In response to COVID-19, all in-person VITA tax appointments were canceled starting March 16th. 
+			The IRS and Nebraska Department of Revenue have both extended the filing deadline to July 15th, 2020.
+		</span>
+		<span>
+			We now offer virtual tax appointments. Visit the <a href="/signup/">Appointment Sign Up Page</a> to schedule your virtual appointment.
 		</span>
 	</span>
 </div>
@@ -154,12 +154,9 @@ return readfile($documentRoot . $path);
 					</div>
 					<div>
 						<div>
-							Resident appointments begin January 25th and run through April 9th. 
-							Tax Appointments for International Student Scholars begin March 3rd and run 
-							through April 8th. Appointments are available at the following sites: Nebraska Union, 
-							Victor E. Anderson Library, Center for People in Need, F Street Community Center, 
-							Loren C. Eiseley Library, Bennett Martin Library, and Southeast Community College. 
-							To see the days and times for all the locations, please download 
+							Lincoln VITA offers tax appointments for United States residents and for international visitors. 
+							Tax appointments begin late January and run through April 9th and are available at multiple 
+							sites in the Lincoln area. To see the days and times for all the locations, please download 
 							the site schedule. 
 						</div>
 						<div class="dcf-grid-halves@md dcf-mt-3">
@@ -184,10 +181,10 @@ return readfile($documentRoot . $path);
 					<ul class="dcf-col-50%">
 						<li>Social Security Card and photo identification</li>
 						<li>Social Security numbers and birth dates for all dependents</li>
-						<li>Forms W-2 and all other income forms for 2017 (ex: 1099-MISC, 1099-R, etc.)</li>
+						<li>Forms W-2 and all other income forms (ex: 1099-MISC, 1099-R, etc.)</li>
 						<li>Banking information for deposit/debit, routing number and account number</li>
 						<li>Tax identification numbers for any and all daycare providers</li>
-						<li>Spouse, if filing jointly (both must be present to sign the return)</li>
+						<li>If filing jointly, both you and your spouse must be present to sign the return</li>
 						<li>If a college student, you must bring your 1098T and student account information showing payment of tuition and qualified fees</li>
 					</ul>
 				</div>
