@@ -362,22 +362,22 @@ INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
 
 -- appointment
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUE (@appointmentTime_site1AppointmentTime0, @client_client1Id, "eng", "localhost");
+	VALUES (@appointmentTime_site1AppointmentTime0, @client_client1Id, "eng", "localhost");
 SET @appointment_appointment1Id = LAST_INSERT_ID();
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUE (@appointmentTime_site1AppointmentTime1, @client_client2Id, "eng", "localhost");
+	VALUES (@appointmentTime_site1AppointmentTime1, @client_client2Id, "eng", "localhost");
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUE (@appointmentTime_site1AppointmentTime2, @client_client2Id, "spa", "localhost");
+	VALUES (@appointmentTime_site1AppointmentTime2, @client_client2Id, "spa", "localhost");
 SET @appointment_appointment2Id = LAST_INSERT_ID();
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUE (@appointmentTime_site1AppointmentTime2, @client_client3Id, "eng", "localhost");
+	VALUES (@appointmentTime_site1AppointmentTime2, @client_client3Id, "eng", "localhost");
 SET @appointment_appointment3Id = LAST_INSERT_ID();
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUE (@appointmentTime_site1AppointmentTime1, @client_client4Id, "vie", "localhost");
+	VALUES (@appointmentTime_site1AppointmentTime1, @client_client4Id, "vie", "localhost");
 SET @appointment_appointment4Id = LAST_INSERT_ID();
 
 -- Already serviced appointment
@@ -400,19 +400,19 @@ INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
 
 -- International appointments
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUE (@appointmentTime_internationalSiteTime0Id, @client_chinaInternationalId, "eng", "localhost");
+	VALUES (@appointmentTime_internationalSiteTime0Id, @client_chinaInternationalId, "eng", "localhost");
 SET @appointment_chinaId = LAST_INSERT_ID();
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUE (@appointmentTime_internationalSiteTime1Id, @client_indiaInternationalId, "eng", "localhost");
+	VALUES (@appointmentTime_internationalSiteTime1Id, @client_indiaInternationalId, "eng", "localhost");
 SET @appointment_indiaId = LAST_INSERT_ID();
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUE (@appointmentTime_internationalSiteTime2Id, @client_treatyInternationalId, "eng", "localhost");
+	VALUES (@appointmentTime_internationalSiteTime2Id, @client_treatyInternationalId, "eng", "localhost");
 SET @appointment_treatyId = LAST_INSERT_ID();
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUE (@appointmentTime_internationalSiteTime2Id, @client_nonTreatyInternationalId, "eng", "localhost");
+	VALUES (@appointmentTime_internationalSiteTime2Id, @client_nonTreatyInternationalId, "eng", "localhost");
 SET @appointment_nonTreatyId = LAST_INSERT_ID();
 -- end appointment
 
