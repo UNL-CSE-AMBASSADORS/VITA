@@ -10,11 +10,6 @@ TRUNCATE Note;
 TRUNCATE Appointment;
 TRUNCATE AppointmentTime;
 TRUNCATE Client;
-TRUNCATE RoleLimit;
-TRUNCATE UserShift;
-TRUNCATE RoleLimit;
-TRUNCATE Shift;
-TRUNCATE Role;
 TRUNCATE Site;
 TRUNCATE PossibleAnswer;
 TRUNCATE Question;
@@ -207,101 +202,6 @@ SET @site_virtualId = LAST_INSERT_ID();
 
 
 
--- Shifts
-SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 HOUR);
-SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 1 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
-SET @shift_site1Shift1Id = LAST_INSERT_ID();
-
-SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
-SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site1Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
-SET @shift_site1Shift2Id = LAST_INSERT_ID();
-
-SET @shiftStartTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
-SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 4 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
-SET @shift_site2Shift1Id = LAST_INSERT_ID();
-
-SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 3 DAY);
-SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 2 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
-SET @shift_site2Shift2Id = LAST_INSERT_ID();
-
-SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
-SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_site2Id, @user_siteAdmin1Id, @user_siteAdmin1Id);
-SET @shift_site2Shift3Id = LAST_INSERT_ID();
-
--- Shift for international site
-SET @shiftStartTime = DATE_ADD(@shiftStartTime, INTERVAL 1 DAY);
-SET @shiftEndTime = DATE_ADD(@shiftStartTime, INTERVAL 3 HOUR);
-INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-	VALUES (@shiftStartTime, @shiftEndTime, @site_internationalStudentScholar, @user_siteAdmin1Id, @user_siteAdmin1Id);
-SET @shift_internationalSiteShift1Id = LAST_INSERT_ID();
--- end shift
-
-
-
--- role
-INSERT INTO Role (name, lookupName)
-	VALUES ("Site Administrator", "site_administrator");
-SET @role_siteAdministrator = LAST_INSERT_ID();
-
-INSERT INTO Role (name, lookupName)
-	VALUES ("Greeter", "greeter");
-SET @role_greeter = LAST_INSERT_ID();
-
-INSERT INTO Role (name, lookupName)
-	VALUES ("Preparer", "preparer");
-SET @role_preparer = LAST_INSERT_ID();
-
-INSERT INTO Role (name, lookupName)
-	VALUES ("Reviewer", "reviewer");
-SET @role_reviewer = LAST_INSERT_ID();
--- end role
-
-
-
--- user shift
-INSERT INTO UserShift (userId, shiftId, roleId)
-	VALUES (@user_preparer2Id, @shift_site1Shift2Id, @role_preparer);
-
-INSERT INTO UserShift (userId, shiftId, roleId)
-	VALUES (@user_preparer2Id, @shift_site2Shift3Id, @role_preparer);
-
-INSERT INTO UserShift (userId, shiftId, roleId)
-	VALUES (@user_receptionist1Id, @shift_site1Shift1Id, @role_greeter);
-
-INSERT INTO UserShift (userId, shiftId, roleId)
-	VALUES (@user_receptionist1Id, @shift_site1Shift2Id, @role_greeter);
-
-INSERT INTO UserShift (userId, shiftId, roleId)
-	VALUES (@user_reviewer1Id, @shift_site2Shift1Id, @role_reviewer);
-
-INSERT INTO UserShift (userId, shiftId, roleId)
-	VALUES (@user_reviewer1Id, @shift_site2Shift2Id, @role_reviewer);
-
-INSERT INTO UserShift (userId, shiftId, roleId)
-	VALUES (@user_reviewer1Id, @shift_site2Shift3Id, @role_reviewer);
--- end user shift
-
-
-
--- role limit
-INSERT INTO RoleLimit (maximumNumber, roleId, siteId)
-	VALUES (10, @role_preparer, @site_site1Id);
-
-INSERT INTO RoleLimit (maximumNumber, roleId, siteId, shiftId)
-	VALUES (15, @role_preparer, @site_site1Id, @shift_site1Shift2Id);
--- end role limit
-
-
 
 -- client
 INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
@@ -345,74 +245,64 @@ SET @client_nonTreatyInternationalId = LAST_INSERT_ID();
 
 
 -- appointmentTime
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site1Shift1Id), INTERVAL 0 MINUTE);
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 1 HOUR);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, minimumNumberOfAppointments)
 	VALUES (@appointmentTime, 100, @site_site1Id, 5);
-SET @appointmentTime_site1Shift1Time0 = LAST_INSERT_ID();
+SET @appointmentTime_site1AppointmentTime0 = LAST_INSERT_ID();
 
-
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site1Shift2Id), INTERVAL 0 MINUTE);
+SET @appointmentTime = DATE_ADD(DATE_ADD(@appointmentTime, INTERVAL 1 DAY), INTERVAL 60 MINUTE);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, minimumNumberOfAppointments)
 	VALUES (@appointmentTime, 100, @site_site1Id, 5);
-SET @appointmentTime_site1Shift2Time0 = LAST_INSERT_ID();
-
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site1Shift2Id), INTERVAL 60 MINUTE);
-INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, minimumNumberOfAppointments)
-	VALUES (@appointmentTime, 100, @site_site1Id, 5);
-SET @appointmentTime_site1Shift2Time1 = LAST_INSERT_ID();
+SET @appointmentTime_site1AppointmentTime1 = LAST_INSERT_ID();
    
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site1Shift2Id), INTERVAL 120 MINUTE);
+SET @appointmentTime = DATE_ADD(@appointmentTime, INTERVAL 120 MINUTE);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, minimumNumberOfAppointments)
 	VALUES (@appointmentTime, 100, @site_site1Id, 5);
-SET @appointmentTime_site1Shift2Time2 = LAST_INSERT_ID();
+SET @appointmentTime_site1AppointmentTime2 = LAST_INSERT_ID();
 
 
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site2Shift1Id), INTERVAL 0 MINUTE);
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 1 MONTH);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, maximumNumberOfAppointments)
 	VALUES (@appointmentTime, 100, @site_site2Id, 30);
-SET @appointmentTime_site2Shift1Time0 = LAST_INSERT_ID();
+SET @appointmentTime_site2AppointmentTime0 = LAST_INSERT_ID();
 
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site2Shift1Id), INTERVAL 60 MINUTE);
+SET @appointmentTime = DATE_ADD(@appointmentTime, INTERVAL 60 MINUTE);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, maximumNumberOfAppointments)
 	VALUES (@appointmentTime, 100, @site_site2Id, 30);
-SET @appointmentTime_site2Shift1Time1 = LAST_INSERT_ID();
+SET @appointmentTime_site2AppointmentTime1 = LAST_INSERT_ID();
    
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site2Shift1Id), INTERVAL 120 MINUTE);
+SET @appointmentTime = DATE_ADD(@appointmentTime, INTERVAL 120 MINUTE);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, maximumNumberOfAppointments)
 	VALUES (@appointmentTime, 100, @site_site2Id, 30);
-SET @appointmentTime_site2Shift1Time2 = LAST_INSERT_ID();
+SET @appointmentTime_site2AppointmentTime2 = LAST_INSERT_ID();
 
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site2Shift1Id), INTERVAL 180 MINUTE);
+
+
+SET @appointmentTime = DATE_ADD(@appointmentTime, INTERVAL 3 DAY);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, maximumNumberOfAppointments)
 	VALUES (@appointmentTime, 100, @site_site2Id, 30);
-SET @appointmentTime_site2Shift1Time3 = LAST_INSERT_ID();
+SET @appointmentTime_site2AppointmentTime0 = LAST_INSERT_ID();
 
-
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site2Shift2Id), INTERVAL 0 MINUTE);
+SET @appointmentTime = DATE_ADD(@appointmentTime, INTERVAL 60 MINUTE);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, maximumNumberOfAppointments)
 	VALUES (@appointmentTime, 100, @site_site2Id, 30);
-SET @appointmentTime_site2Shift2Time0 = LAST_INSERT_ID();
+SET @appointmentTime_site2AppointmentTime1 = LAST_INSERT_ID();
 
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site2Shift2Id), INTERVAL 60 MINUTE);
+
+SET @appointmentTime = DATE_ADD(@appointmentTime, INTERVAL 1 DAY);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, maximumNumberOfAppointments)
 	VALUES (@appointmentTime, 100, @site_site2Id, 30);
-SET @appointmentTime_site2Shift2Time1 = LAST_INSERT_ID();
+SET @appointmentTime_site2AppointmentTime0 = LAST_INSERT_ID();
 
-
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site2Shift3Id), INTERVAL 0 MINUTE);
+SET @appointmentTime = DATE_ADD(@appointmentTime, INTERVAL 60 MINUTE);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, maximumNumberOfAppointments)
 	VALUES (@appointmentTime, 100, @site_site2Id, 30);
-SET @appointmentTime_site2Shift3Time0 = LAST_INSERT_ID();
+SET @appointmentTime_site2AppointmentTime1 = LAST_INSERT_ID();
 
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site2Shift3Id), INTERVAL 60 MINUTE);
+SET @appointmentTime = DATE_ADD(@appointmentTime, INTERVAL 120 MINUTE);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, maximumNumberOfAppointments)
 	VALUES (@appointmentTime, 100, @site_site2Id, 30);
-SET @appointmentTime_site2Shift3Time1 = LAST_INSERT_ID();
-
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_site2Shift3Id), INTERVAL 120 MINUTE);
-INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, maximumNumberOfAppointments)
-	VALUES (@appointmentTime, 100, @site_site2Id, 30);
-SET @appointmentTime_site2Shift3Time2 = LAST_INSERT_ID();
+SET @appointmentTime_site2AppointmentTime2 = LAST_INSERT_ID();
 
 
 -- Already serviced appointment
@@ -443,20 +333,20 @@ INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId, maxi
 SET @appointmentTime_site2AppointmentTime9Id = LAST_INSERT_ID();
 
 -- Appointment times for international site
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_internationalSiteShift1Id), INTERVAL 0 MINUTE);
+SET @appointmentTime = DATE_ADD(@appointmentTime, INTERVAL 1 DAY);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
 	VALUES (@appointmentTime, 100, @site_internationalStudentScholar);
-SET @appointmentTime_internationalSiteShift1Time0Id = LAST_INSERT_ID();
+SET @appointmentTime_internationalSiteTime0Id = LAST_INSERT_ID();
 
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_internationalSiteShift1Id), INTERVAL 60 MINUTE);
+SET @appointmentTime = DATE_ADD(@appointmentTime, INTERVAL 60 MINUTE);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
 	VALUES (@appointmentTime, 100, @site_internationalStudentScholar);
-SET @appointmentTime_internationalSiteShift1Time1Id = LAST_INSERT_ID();
+SET @appointmentTime_internationalSiteTime1Id = LAST_INSERT_ID();
 
-SET @appointmentTime = DATE_ADD((SELECT startTime FROM Shift WHERE shiftId = @shift_internationalSiteShift1Id), INTERVAL 120 MINUTE);
+SET @appointmentTime = DATE_ADD(@appointmentTime, INTERVAL 120 MINUTE);
 INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
 	VALUES (@appointmentTime, 100, @site_internationalStudentScholar);
-SET @appointmentTime_internationalSiteShift1Time2Id = LAST_INSERT_ID();
+SET @appointmentTime_internationalSiteTime2Id = LAST_INSERT_ID();
 
 -- Appointment times for virtual site
 SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 1 DAY);
@@ -472,22 +362,22 @@ INSERT INTO AppointmentTime (scheduledTime, percentageAppointments, siteId)
 
 -- appointment
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUES (@appointmentTime_site1Shift1Time0, @client_client1Id, "eng", "localhost");
+	VALUE (@appointmentTime_site1AppointmentTime0, @client_client1Id, "eng", "localhost");
 SET @appointment_appointment1Id = LAST_INSERT_ID();
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUES (@appointmentTime_site1Shift2Time0, @client_client2Id, "eng", "localhost");
+	VALUE (@appointmentTime_site1AppointmentTime1, @client_client2Id, "eng", "localhost");
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUES (@appointmentTime_site1Shift2Time2, @client_client2Id, "spa", "localhost");
+	VALUE (@appointmentTime_site1AppointmentTime2, @client_client2Id, "spa", "localhost");
 SET @appointment_appointment2Id = LAST_INSERT_ID();
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUES (@appointmentTime_site2Shift1Time3, @client_client3Id, "eng", "localhost");
+	VALUE (@appointmentTime_site1AppointmentTime2, @client_client3Id, "eng", "localhost");
 SET @appointment_appointment3Id = LAST_INSERT_ID();
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUES (@appointmentTime_site2Shift2Time1, @client_client4Id, "vie", "localhost");
+	VALUE (@appointmentTime_site1AppointmentTime1, @client_client4Id, "vie", "localhost");
 SET @appointment_appointment4Id = LAST_INSERT_ID();
 
 -- Already serviced appointment
@@ -510,19 +400,19 @@ INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
 
 -- International appointments
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUES (@appointmentTime_internationalSiteShift1Time0Id, @client_chinaInternationalId, "eng", "localhost");
+	VALUE (@appointmentTime_internationalSiteTime0Id, @client_chinaInternationalId, "eng", "localhost");
 SET @appointment_chinaId = LAST_INSERT_ID();
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUES (@appointmentTime_internationalSiteShift1Time0Id, @client_indiaInternationalId, "eng", "localhost");
+	VALUE (@appointmentTime_internationalSiteTime1Id, @client_indiaInternationalId, "eng", "localhost");
 SET @appointment_indiaId = LAST_INSERT_ID();
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUES (@appointmentTime_internationalSiteShift1Time0Id, @client_treatyInternationalId, "eng", "localhost");
+	VALUE (@appointmentTime_internationalSiteTime2Id, @client_treatyInternationalId, "eng", "localhost");
 SET @appointment_treatyId = LAST_INSERT_ID();
 
 INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
-	VALUES (@appointmentTime_internationalSiteShift1Time0Id, @client_nonTreatyInternationalId, "eng", "localhost");
+	VALUE (@appointmentTime_internationalSiteTime2Id, @client_nonTreatyInternationalId, "eng", "localhost");
 SET @appointment_nonTreatyId = LAST_INSERT_ID();
 -- end appointment
 

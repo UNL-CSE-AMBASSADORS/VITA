@@ -37,116 +37,12 @@
 				</div>
 
 
-				<!-- Volunteer Shifts Section -->
-				<h4>Volunteer Shifts:</h4>
-				<div class="dcf-mb-5">
-					<!-- Displayed when there are no volunteer shifts -->
-					<div ng-if="siteInformation.shifts == undefined || siteInformation.shifts.length <= 0">
-						<p class="clear-top">There are no shifts</p>
-					</div>
-
-					<!-- Displayed when there are volunteer shifts -->
-					<div ng-if="siteInformation.shifts != undefined && siteInformation.shifts.length > 0">
-						<table class="dcf-table dcf-table-striped">
-							<thead>
-								<tr>
-									<th id="shiftDateHeader">Date</th>
-									<th id="shiftStartTimeHeader">Start Time</th>
-									<th id="shiftEndTimeHeader">End Time</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="shift in siteInformation.shifts">
-									<th id="shift{{shift.shiftId}}">{{shift.dateString}}</div>
-									<td headers="shiftStartTimeHeader shift{{shift.shiftId}}">{{shift.startTimeString}}</td>
-									<td headers="shiftEndTimeHeader shift{{shift.shiftId}}">{{shift.endTimeString}}</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-
-					<!-- Add volunteer shift section -->
-					<div ng-if="addShiftButtonClicked === true" class="dcf-mt-5">
-						<h5>Add a Shift</h5>
-						<form class="cmxform dcf-form"
-							id="addShiftForm"
-							name="form"
-							ng-submit="form.$valid && addShiftSaveButtonHandler()" 
-							autocomplete="off" 
-							novalidate>
-
-							<section class="dcf-form-group">
-								<label class="dcf-label form-required">Date</label>
-								<input type="text" 
-									id="addShiftDateInput" 
-									class="dcf-input-text"
-									name="dateInput" 
-									placeholder=" -- Select a Date -- " 
-									autocomplete="off"
-									required>
-								<div ng-show="form.$submitted || form.dateInput.$touched">
-									<label class="error" ng-show="form.dateInput.$error.required">This field is required.</label>
-								</div>
-							</section>
-
-							<section class="dcf-form-group">
-								<label class="dcf-label form-required" for="addShiftStartTimeSelect">Start Time</label>
-								<select id="addShiftStartTimeSelect" 
-									name="startTimeSelect" 
-									class="dcf-input-select dcf-mb-0" 
-									ng-model="addShiftInformation.selectedStartTime" 
-									ng-options="time for time in addShiftStartTimeOptions"
-									ng-change="addShiftStartTimeChanged(addShiftInformation.selectedStartTime)" 
-									required>
-									<option value="" style="display:none;">-- Select a Start Time --</option>
-								</select>
-								<div ng-show="form.$submitted || form.startTimeSelect.$touched">
-									<label class="error" ng-show="form.startTimeSelect.$error.required">This field is required.</label>
-								</div>
-							</section>
-
-							<section class="dcf-form-group">
-								<label class="dcf-label form-required" for="addShiftEndTimeSelect">End Time</label>
-								<select id="addShiftEndTimeSelect" 
-									name="endTimeSelect" 
-									class="dcf-input-select dcf-mb-0" 
-									ng-model="addShiftInformation.selectedEndTime" 
-									ng-options="time for time in addShiftEndTimeOptions" 
-									required>
-									<option value="" style="display:none;">-- Select an End Time --</option>
-								</select>
-								<div ng-show="form.$submitted || form.endTimeSelect.$touched">
-									<label class="error" ng-show="form.endTimeSelect.$error.required">This field is required.</label>
-								</div>
-							</section>
-
-							<div class="dcf-mt-3">
-								<button type="button"
-									class="dcf-btn dcf-btn-secondary"
-									ng-click="addShiftCancelButtonHandler()">Cancel</button>
-								<input type="submit" 
-									value="Save" 
-									class="submit dcf-btn dcf-btn-primary"
-									ng-disabled="!form.$valid || savingShift === true">
-							</div>
-						</form>
-					</div>
-
-					<!-- Button for adding a shift -->
-					<button class="dcf-btn dcf-btn-primary dcf-mt-3" 
-						ng-click="addShiftButtonHandler()" 
-						ng-if="addShiftButtonClicked === false">Add Shift</button>
-				</div>
-
-
 				<!-- Appointment Times Section -->
 				<h4>Appointment Times:</h4>
 				<div>
 					<p>Appointment times represent a time slot in which a client can sign up for an appointment. Additionally, appointment times control the rules around the number of appointments that can be scheduled during the time slot.</p>
 					<p>Appointment times must follow these rules:</p>
 					<ul>
-						<li>Scheduled time must be within a volunteer shift</li>
-						<li>Scheduled time + approximate length in minutes must be within a volunteer shift</li>
 						<li>Two appointment times cannot have the same scheduled time</li>
 					</ul>
 

@@ -165,39 +165,6 @@ return readfile($documentRoot . $path);
 				<div id="certificationsDiv"></div>
 			</div>
 		</div>
-
-		<!-- Shifts -->
-		<div class="dcf-bleed unl-bg-lightest-gray">
-			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
-				<h2>Shifts You're Signed Up For</h2>
-				<div id="shifts">
-					<div id="shiftsSignedUpFor"></div>
-				</div>
-
-				<button class="dcf-btn dcf-btn-primary dcf-mt-5" id="addShiftButton"><span class="wdn-icon-plus" aria-hidden="true"></span>  Sign Up for a Shift</button>
-			</div>
-		</div>
-
-		<!-- Shift Cancellation Reason Modal -->
-		<div class="hidden">
-			<div class="modal" id="cancellation-reason-modal" tabindex="-1" role="dialog" aria-hidden="true">
-				<div class="dcf-wrapper dcf-pt-3">
-					<h4>Please explain the reason you are cancelling your shift.</h4>
-					<p id="cancellation-reason-details"></p>
-					<form class="dcf-form" id="cancellation-reason-form">
-						<fieldset>
-							<section class="form-group">
-								<textarea id="cancellation-reason" class="form-control" required></textarea>
-							</section>
-						</fieldset>
-						<div>
-							<button type="submit" class="dcf-btn dcf-btn-secondary">Finish</button>
-							<button type="button" class="dcf-btn dcf-btn-primary close-modal-button">Close</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
 		<!-- TemplateEndEditable -->
 	</div>
 </main>
