@@ -47,7 +47,6 @@ define('sitesController', [], function() {
 					return;
 				}
 
-				result.site.doesMultilingual = result.site.doesMultilingual == true; // Do this since we want true/false instead of 1/0
 				result.site.doesInternational = result.site.doesInternational == true; // Do this since we want true/false instead of 1/0
 				$scope.siteInformation = result.site;
 			});

@@ -31,7 +31,6 @@
 						<div><b>Phone Number:</b> {{siteInformation.phoneNumber}}</div>
 					</div>
 					<div class="dcf-col">
-						<div><b>Does Multilingual:</b> {{siteInformation.doesMultilingual ? 'Yes' : 'No'}}</div>
 						<div><b>Does International:</b> {{siteInformation.doesInternational ? 'Yes' : 'No'}}</div>
 					</div>
 				</div>
