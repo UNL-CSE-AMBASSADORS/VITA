@@ -15,7 +15,6 @@ WDN.initializePlugin('modal', [function() {
 			$(function() {
 				initializeAddUserModalEventHandlers();
 				initializeUserPermissionsSelectPickerEventHandlers();
-				initializeUserAbilitiesSelectPickerEventHandlers();
 				initializeEditButtonEventHandlers();
 
 				// Initially, create the user table
@@ -113,40 +112,6 @@ WDN.initializePlugin('modal', [function() {
 						success: function(response){
 							if (!response  || !response.success) {
 								alert(response.error || 'There was an error updating the permissions. Please refresh the page and try again');
-							}
-							refreshUserTable();
-						}
-					});
-				});
-			};
-
-			function initializeUserAbilitiesSelectPickerEventHandlers() {
-				$('#user-management-table').on('changed.bs.select', '.userAbilitiesSelectPicker', function(event) {
-					const userId = $(this).parents('tr').data('user-id');
-		
-					// abilities to be removed - all non-selected options with set ids
-					const removeAbilityArr = $(this).children('option:not(:selected)[data-userAbilityId]').map((index, element) => {
-						return element.dataset.userabilityid; // note this is case-sensitive and should be all lowercase
-					}).get();
-		
-					// abilities to be added - all selected options w/o ids
-					const addAbilityArr = $(this).children('option:selected:not([data-userAbilityId])').map((index, element) => {
-						return element.value;
-					}).get();
-		
-					$.ajax({
-						dataType: 'json',
-						method: 'POST',
-						url: '/server/management/users/users.php',
-						data: {
-							action: 'updateUserAbilities',
-							userId: userId,
-							removeAbilityArr: removeAbilityArr,
-							addAbilityArr: addAbilityArr
-						},
-						success: function (response) {
-							if (!response || !response.success) {
-								alert(response.error || 'There was an error updating the abilities. Please refresh the page and try again');
 							}
 							refreshUserTable();
 						}
@@ -278,11 +243,6 @@ WDN.initializePlugin('modal', [function() {
 						
 						$('#user-management-table').html(response.table);
 						$('#user-management-table .userPermissionsSelectPicker').selectpicker({
-							iconBase: '',
-							tickIcon: 'fas fa-check',
-							multipleSeparator: ', <br>'
-						});
-						$('#user-management-table .userAbilitiesSelectPicker').selectpicker({
 							iconBase: '',
 							tickIcon: 'fas fa-check',
 							multipleSeparator: ', <br>'
