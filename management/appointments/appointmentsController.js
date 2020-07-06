@@ -98,7 +98,6 @@ define('appointmentsController', [], function() {
 			appointment.timeReturnedPapers = null;
 			appointment.timeAppointmentStarted = null;
 			appointment.timeAppointmentEnded = null;
-			appointment.servicedByStation = null;
 		}
 
 		$scope.cancelAppointment = function() {

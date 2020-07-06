@@ -2,8 +2,6 @@ USE vita;
 
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE Answer;
-TRUNCATE AppointmentFilingStatus;
-TRUNCATE FilingStatus;
 TRUNCATE ServicedAppointment;
 TRUNCATE SelfServiceAppointmentRescheduleToken;
 TRUNCATE Note;
@@ -63,22 +61,6 @@ INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
 INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
 	VALUES (0, @passwordHash, @lockoutTime, @user_siteAdmin1Id);
 -- end login
-
-
-
--- filing statuses
-INSERT INTO FilingStatus (text, lookupName)
-	VALUES ('State E-file', 'state_efile');
-
-INSERT INTO FilingStatus (text, lookupName)
-	VALUES ('Federal E-file', 'federal_efile');
-
-INSERT INTO FilingStatus (text, lookupName)
-	VALUES ('State Paper', 'state_paper');
-
-INSERT INTO FilingStatus (text, lookupName)
-	VALUES ('Federal Paper', 'federal_paper');
--- end filiing statuses
 
 
 
@@ -420,8 +402,8 @@ SET @appointment_nonTreatyId = LAST_INSERT_ID();
 
 -- serviced appointment
 SET @timeIn = DATE_ADD((SELECT scheduledTime FROM AppointmentTime WHERE appointmentTimeId = (SELECT appointmentTimeId FROM Appointment WHERE appointmentId = @appointment_appointment5Id)), INTERVAL 5 MINUTE);
-INSERT INTO ServicedAppointment (timeIn, servicedByStation, appointmentId)
-	VALUES (@timeIn, 1, @appointment_appointment5Id);
+INSERT INTO ServicedAppointment (timeIn, appointmentId)
+	VALUES (@timeIn, @appointment_appointment5Id);
 -- end serviced appointment
 
 

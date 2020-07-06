@@ -121,23 +121,9 @@
 				ng-click="nowPreparing()">
 				Preparing
 			</button>
-			<div class="dcf-grid-halves@md dcf-mb-2" ng-show="client.preparing && !client.ended">
-				<div ng-repeat="filingStatus in filingStatuses">
-					<input class="dcf-input-control" type="checkbox" ng-model="filingStatus.checked"/> {{filingStatus.text}}
-				</div>
-			</div>
-			<div class="dcf-mb-5" ng-show="client.preparing && !client.ended">
-				<label class="dcf-label">Station</label>
-				<select class="dcf-input-select dcf-mb-0" 
-					ng-model="client.selectedStationNumber" 
-					ng-options="stationNumber for stationNumber in stationNumbers">
-					<option value="" style="display:none;">-- Select Station --</option>
-				</select>
-			</div>
 			<button type="button" 
 				class="dcf-btn dcf-btn-primary ended" 
 				ng-show="client.preparing && !client.ended" 
-				ng-disabled="client.selectedStationNumber == null" 
 				ng-click="completeAppointment()">
 				Finished
 			</button>
