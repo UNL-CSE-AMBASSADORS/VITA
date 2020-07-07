@@ -74,8 +74,8 @@ define('appointmentPickerController', [], function() {
 		}
 
 		$scope.siteChanged = function(site) {
-			$scope.appointmentPickerSharedProperties.selectedSiteTitle = $scope.sites[site]['site_title'];
-			$scope.appointmentPickerSharedProperties.isSelectedSiteVirtual = $scope.sites[site]['is_virtual'];
+			$scope.appointmentPickerSharedProperties.selectedSiteTitle = $scope.sites[site]['siteTitle'];
+			$scope.appointmentPickerSharedProperties.isSelectedSiteVirtual = $scope.sites[site]['isVirtual'];
 			$scope.appointmentPickerSharedProperties.selectedTime = null;
 			$scope.updateGlobalTimes($scope.appointmentPickerSharedProperties.selectedDate, site);
 		}

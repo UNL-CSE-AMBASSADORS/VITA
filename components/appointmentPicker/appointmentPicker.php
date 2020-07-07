@@ -23,6 +23,7 @@ td.available .ui-state-default {
 </style>
 
 <div id="appointmentPicker" ng-cloak>
+	<!-- TODO: Is there a way to not have this date hard-coded? -->
 	<div ng-show="appointmentPickerSharedProperties.appointmentType != 'residential'"><b>International tax appointments begin March 3rd.</b></div>
 
 	<div ng-show="appointmentPickerSharedProperties.hasAvailability == false">Sorry! There are currently no remaining appointments available.</div>
@@ -51,7 +52,7 @@ td.available .ui-state-default {
 			name="sitePickerSelect" 
 			ng-model="appointmentPickerSharedProperties.selectedSite" 
 			ng-change="siteChanged(appointmentPickerSharedProperties.selectedSite)" 
-			ng-options="key as site.site_title for (key, site) in sites track by key" 
+			ng-options="key as site.siteTitle for (key, site) in sites track by key" 
 			required>
 			<option value="" style="display:none;">-- Select a Site --</option>
 		</select>
