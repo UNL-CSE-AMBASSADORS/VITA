@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS SelfServiceAppointmentRescheduleToken;
 DROP TABLE IF EXISTS Note;
 DROP TABLE IF EXISTS Appointment;
 DROP TABLE IF EXISTS AppointmentTime;
+DROP TABLE IF EXISTS AppointmentType;
 DROP TABLE IF EXISTS Client;
 -- TODO: RoleLimit, UserShift, Shift, and Role can be removed once this script has been run by each dev member
 DROP TABLE IF EXISTS RoleLimit;

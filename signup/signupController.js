@@ -12,51 +12,51 @@ define('signupController', [], function() {
 		};
 
 		$scope.countries = [ 
-			{ 'name': 'China', 'treatyType': 'china' },
-			{ 'name': 'India', 'treatyType': 'india' },
+			{ 'name': 'China', 'appointmentType': 'china' },
+			{ 'name': 'India', 'appointmentType': 'india' },
 
-			{ 'name': 'Armenia', 'treatyType': 'treaty' },
-			{ 'name': 'Azerbaijan', 'treatyType': 'treaty' },
-			{ 'name': 'Bangladesh', 'treatyType': 'treaty' },
-			{ 'name': 'Belarus', 'treatyType': 'treaty' },
-			{ 'name': 'Canada', 'treatyType': 'treaty' },
-			{ 'name': 'Cyprus', 'treatyType': 'treaty' },
-			{ 'name': 'Czech Republic', 'treatyType': 'treaty' },
-			{ 'name': 'Egypt', 'treatyType': 'treaty' },
-			{ 'name': 'France', 'treatyType': 'treaty' },
-			{ 'name': 'Georgia', 'treatyType': 'treaty' },
-			{ 'name': 'Germany', 'treatyType': 'treaty' },
-			{ 'name': 'Iceland', 'treatyType': 'treaty' },
-			{ 'name': 'Indonesia', 'treatyType': 'treaty' },
-			{ 'name': 'Israel', 'treatyType': 'treaty' },
-			{ 'name': 'Kazakhstan', 'treatyType': 'treaty' },
-			{ 'name': 'Kyrgyzstan', 'treatyType': 'treaty' },
-			{ 'name': 'Latvia', 'treatyType': 'treaty' },
-			{ 'name': 'Lithuania', 'treatyType': 'treaty' },
-			{ 'name': 'Moldova', 'treatyType': 'treaty' },
-			{ 'name': 'Morocco', 'treatyType': 'treaty' },
-			{ 'name': 'Netherlands', 'treatyType': 'treaty' },
-			{ 'name': 'Norway', 'treatyType': 'treaty' },
-			{ 'name': 'Pakistan', 'treatyType': 'treaty' },
-			{ 'name': 'Philippines', 'treatyType': 'treaty' },
-			{ 'name': 'Poland', 'treatyType': 'treaty' },
-			{ 'name': 'Portugal', 'treatyType': 'treaty' },
-			{ 'name': 'Romania', 'treatyType': 'treaty' },
-			{ 'name': 'Russia', 'treatyType': 'treaty' },
-			{ 'name': 'Slovak Republic', 'treatyType': 'treaty' },
-			{ 'name': 'Slovenia', 'treatyType': 'treaty' },
-			{ 'name': 'South Korea', 'treatyType': 'treaty' },
-			{ 'name': 'Spain', 'treatyType': 'treaty' },
-			{ 'name': 'Tajikistan', 'treatyType': 'treaty' },
-			{ 'name': 'Thailand', 'treatyType': 'treaty' },
-			{ 'name': 'Trinidad and Tobago', 'treatyType': 'treaty' },
-			{ 'name': 'Tunisia', 'treatyType': 'treaty' },
-			{ 'name': 'Turkmenistan', 'treatyType': 'treaty' },
-			{ 'name': 'Ukraine', 'treatyType': 'treaty' },
-			{ 'name': 'Uzbekistan', 'treatyType': 'treaty' },
-			{ 'name': 'Venezuela', 'treatyType': 'treaty' },
+			{ 'name': 'Armenia', 'appointmentType': 'treaty' },
+			{ 'name': 'Azerbaijan', 'appointmentType': 'treaty' },
+			{ 'name': 'Bangladesh', 'appointmentType': 'treaty' },
+			{ 'name': 'Belarus', 'appointmentType': 'treaty' },
+			{ 'name': 'Canada', 'appointmentType': 'treaty' },
+			{ 'name': 'Cyprus', 'appointmentType': 'treaty' },
+			{ 'name': 'Czech Republic', 'appointmentType': 'treaty' },
+			{ 'name': 'Egypt', 'appointmentType': 'treaty' },
+			{ 'name': 'France', 'appointmentType': 'treaty' },
+			{ 'name': 'Georgia', 'appointmentType': 'treaty' },
+			{ 'name': 'Germany', 'appointmentType': 'treaty' },
+			{ 'name': 'Iceland', 'appointmentType': 'treaty' },
+			{ 'name': 'Indonesia', 'appointmentType': 'treaty' },
+			{ 'name': 'Israel', 'appointmentType': 'treaty' },
+			{ 'name': 'Kazakhstan', 'appointmentType': 'treaty' },
+			{ 'name': 'Kyrgyzstan', 'appointmentType': 'treaty' },
+			{ 'name': 'Latvia', 'appointmentType': 'treaty' },
+			{ 'name': 'Lithuania', 'appointmentType': 'treaty' },
+			{ 'name': 'Moldova', 'appointmentType': 'treaty' },
+			{ 'name': 'Morocco', 'appointmentType': 'treaty' },
+			{ 'name': 'Netherlands', 'appointmentType': 'treaty' },
+			{ 'name': 'Norway', 'appointmentType': 'treaty' },
+			{ 'name': 'Pakistan', 'appointmentType': 'treaty' },
+			{ 'name': 'Philippines', 'appointmentType': 'treaty' },
+			{ 'name': 'Poland', 'appointmentType': 'treaty' },
+			{ 'name': 'Portugal', 'appointmentType': 'treaty' },
+			{ 'name': 'Romania', 'appointmentType': 'treaty' },
+			{ 'name': 'Russia', 'appointmentType': 'treaty' },
+			{ 'name': 'Slovak Republic', 'appointmentType': 'treaty' },
+			{ 'name': 'Slovenia', 'appointmentType': 'treaty' },
+			{ 'name': 'South Korea', 'appointmentType': 'treaty' },
+			{ 'name': 'Spain', 'appointmentType': 'treaty' },
+			{ 'name': 'Tajikistan', 'appointmentType': 'treaty' },
+			{ 'name': 'Thailand', 'appointmentType': 'treaty' },
+			{ 'name': 'Trinidad and Tobago', 'appointmentType': 'treaty' },
+			{ 'name': 'Tunisia', 'appointmentType': 'treaty' },
+			{ 'name': 'Turkmenistan', 'appointmentType': 'treaty' },
+			{ 'name': 'Ukraine', 'appointmentType': 'treaty' },
+			{ 'name': 'Uzbekistan', 'appointmentType': 'treaty' },
+			{ 'name': 'Venezuela', 'appointmentType': 'treaty' },
 
-			{ 'name': 'Other', 'treatyType': 'non-treaty' }
+			{ 'name': 'Other', 'appointmentType': 'non-treaty' }
 		];
 
 		$scope.storeAppointments = function() {
@@ -70,7 +70,7 @@ define('signupController', [], function() {
 				}
 			});
 
-			// The country question has to give the treatyType instead of the entire country object
+			// The country question has to give the appointmentType instead of the entire country object
 			const countryQuestionDatabaseId = "6";
 			const indexOfCountryQuestionInQuestionsArray = questions.findIndex((question) => question.id === countryQuestionDatabaseId);
 			if (questions[indexOfCountryQuestionInQuestionsArray]) {
@@ -78,10 +78,10 @@ define('signupController', [], function() {
 
 				// These ids were pulled manually from the database
 				let answerDatabaseId = -1;
-				if(country.treatyType === 'china') answerDatabaseId = "11";
-				else if(country.treatyType === 'india') answerDatabaseId = "12";
-				else if(country.treatyType === 'treaty') answerDatabaseId = "13";
-				else if(country.treatyType === 'non-treaty') answerDatabaseId = "14";
+				if(country.appointmentType === 'china') answerDatabaseId = "11";
+				else if(country.appointmentType === 'india') answerDatabaseId = "12";
+				else if(country.appointmentType === 'treaty') answerDatabaseId = "13";
+				else if(country.appointmentType === 'non-treaty') answerDatabaseId = "14";
 
 				questions[indexOfCountryQuestionInQuestionsArray] = {
 					id: countryQuestionDatabaseId,
@@ -164,7 +164,7 @@ define('signupController', [], function() {
 
 		$scope.studentCountryChanged = function(country) {
 			if (country) {
-				$scope.sharedProperties.appointmentType = country.treatyType;
+				$scope.sharedProperties.appointmentType = country.appointmentType;
 			}
 		};
 
