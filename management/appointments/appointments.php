@@ -53,20 +53,16 @@
 	<!-- Reschedule Section -->
 	<h3 class="dcf-mt-5">Reschedule Appointment</h3>
 	<form class="cmxform" id="rescheduleForm">
-
-		<label>Tax Type (currently: {{appointmentPickerSharedProperties.appointmentType}})</label>
-		<div class="dcf-btn-group">
-			<button class="dcf-btn dcf-ml-2 dcf-mr-2" ng-class="appointmentPickerSharedProperties.appointmentType === 'residential' ? 'dcf-btn-primary' : 'dcf-btn-secondary'" 
-				type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'residential'">Residential</button>
-			<button class="dcf-btn dcf-mr-2" ng-class="appointmentPickerSharedProperties.appointmentType === 'china' ? 'dcf-btn-primary' : 'dcf-btn-secondary'"
-				type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'china'">China</button>
-			<button class="dcf-btn dcf-mr-2" ng-class="appointmentPickerSharedProperties.appointmentType === 'india' ? 'dcf-btn-primary' : 'dcf-btn-secondary'"
-				type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'india'">India</button>
-			<button class="dcf-btn dcf-mr-2" ng-class="appointmentPickerSharedProperties.appointmentType === 'treaty' ? 'dcf-btn-primary' : 'dcf-btn-secondary'"
-				type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'treaty'">Treaty</button>
-			<button class="dcf-btn" ng-class="appointmentPickerSharedProperties.appointmentType === 'non-treaty' ? 'dcf-btn-primary' : 'dcf-btn-secondary'"
-				type="button" ng-click="appointmentPickerSharedProperties.appointmentType = 'non-treaty'">Non-Treaty</button>
-		</div>
+ 
+		<label for="appointmentTypeSelect" class="form-label form-required">Appointment Type</label>
+		<select id="appointmentTypeSelect"
+			class="dropdown-toggle dcf-input-select" 
+			ng-model="appointmentPickerSharedProperties.appointmentType" 
+			required>
+			<option value="" style="display:none;">-- Select An Appointment Type --</option>
+			<option ng-repeat="option in appointmentTypes" ng-value="option.lookupName">{{option.name}}</option>
+		</select>
+		<p class="dcf-txt-xs">This dropdown defaults to the type of this appointment, only change if necessary</p>
 		
 		<div appointment-picker class="dcf-mb-5"></div>
 

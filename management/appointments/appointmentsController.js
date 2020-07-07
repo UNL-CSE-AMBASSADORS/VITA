@@ -7,9 +7,11 @@ define('appointmentsController', [], function() {
 		$scope.submittingReschedule = false;
 		$scope.cancelling = false;
 
-		$scope.getAppointments = function() {
+		$scope.appointmentTypes = [];
+
+		$scope.getAppointments = () => {
 			const year = new Date().getFullYear();
-			AppointmentsService.getAppointments(year).then(function(result) {
+			AppointmentsService.getAppointments(year).then((result) => {
 				if(result == null) {
 					NotificationUtilities.giveNotice("Failure", 'There was an error loading the appointments. Please try refreshing the page.', false);
 				} else {
@@ -46,17 +48,17 @@ define('appointmentsController', [], function() {
 			});
 		};
 
-		$scope.rescheduleAppointment = function() {
+		$scope.rescheduleAppointment = () => {
 			if ($scope.appointmentPickerSharedProperties.selectedDate == null || $scope.appointmentPickerSharedProperties.selectedSite == null || $scope.appointmentPickerSharedProperties.selectedTime == null || $scope.submittingReschedule) {
 				return false;
 			}
 
 			$scope.submittingReschedule = true;
 
-			let appointmentId = $scope.appointment.appointmentId;
-			let appointmentTimeId = $scope.appointmentPickerSharedProperties.selectedAppointmentTimeId;
+			const appointmentId = $scope.appointment.appointmentId;
+			const appointmentTimeId = $scope.appointmentPickerSharedProperties.selectedAppointmentTimeId;
 
-			AppointmentsService.rescheduleAppointment(appointmentId, appointmentTimeId).then(function(result) {
+			AppointmentsService.rescheduleAppointment(appointmentId, appointmentTimeId).then((result) => {
 				document.body.scrollTop = document.documentElement.scrollTop = 0;
 				
 				if (result.success) {
@@ -84,7 +86,7 @@ define('appointmentsController', [], function() {
 			});
 		}
 
-		$scope.resetAppointmentProperties = function(appointment) {
+		$scope.resetAppointmentProperties = (appointment) => {
 			// Reset the status properties on the appointment
 			appointment.cancelled = false;
 			appointment.completed = false;
@@ -100,13 +102,13 @@ define('appointmentsController', [], function() {
 			appointment.timeAppointmentEnded = null;
 		}
 
-		$scope.cancelAppointment = function() {
+		$scope.cancelAppointment = () => {
 			if ($scope.cancelling) return false;
 
 			$scope.cancelling = true;
 
 			const appointmentId = $scope.appointment.appointmentId;
-			AppointmentsService.cancelAppointment(appointmentId).then(function(result) {
+			AppointmentsService.cancelAppointment(appointmentId).then((result) => {
 				if (result.success) {
 					document.body.scrollTop = document.documentElement.scrollTop = 0;
 
@@ -127,15 +129,24 @@ define('appointmentsController', [], function() {
 			});
 		}
 
-		$scope.selectAppointment = function(appointment) {
+		$scope.selectAppointment = (appointment) => {
 			$scope.appointment = appointment;
 			$scope.appointmentNotesAreaSharedProperties.appointmentId = appointment.appointmentId;  // Need to share the appointment id so we can load/add notes
 			$scope.appointmentPickerSharedProperties.appointmentType = appointment.appointmentType;
 			document.body.scrollTop = document.documentElement.scrollTop = 0;
 		};
 
-		$scope.deselectAppointment = function() {
+		$scope.deselectAppointment = () => {
 			$scope.appointment = null;
+		};
+
+		$scope.getAppointmentTypes = () => {
+			AppointmentsService.getAppointmentTypes().then((response) => {
+				if (response.length <= 0) {
+					NotificationUtilities.giveNotice('Failure', 'Unable to load appointment types from server. Please reload the page.', false);
+				}
+				$scope.appointmentTypes = response;
+			});
 		};
 
 		$scope.initializeCancelConfirmationModal = () => {
@@ -156,6 +167,7 @@ define('appointmentsController', [], function() {
 
 		// Invoke initially
 		$scope.getAppointments();
+		$scope.getAppointmentTypes();
 		$scope.initializeCancelConfirmationModal();
 	}
 
