@@ -35,11 +35,12 @@ function getAppointments($year) {
 
 	try {
 		$query = 'SELECT Appointment.appointmentId, language, DATE_FORMAT(scheduledTime, "%b %D %l:%i %p") AS scheduledTime, 
-			Site.title, firstName, lastName, PossibleAnswer.text AS countryText,
+			Site.title, firstName, lastName,
 			TIME_FORMAT(timeIn, "%l:%i %p") AS timeIn, 
 			TIME_FORMAT(timeReturnedPapers, "%l:%i %p") AS timeReturnedPapers, 
 			TIME_FORMAT(timeAppointmentStarted, "%l:%i %p") AS timeAppointmentStarted, 
-			TIME_FORMAT(timeAppointmentEnded, "%l:%i %p") AS timeAppointmentEnded, 
+			TIME_FORMAT(timeAppointmentEnded, "%l:%i %p") AS timeAppointmentEnded,
+			AppointmentType.lookupName AS appointmentType,
 			completed, cancelled, servicedAppointmentId, token ';
 		if ($canViewClientInformation) {
 			$query .= ', Client.phoneNumber, emailAddress, bestTimeToCall ';
@@ -47,12 +48,10 @@ function getAppointments($year) {
 		$query .= 'FROM Appointment
 				LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 				JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+				JOIN AppointmentType ON AppointmentTime.appointmentTypeId = AppointmentType.appointmentTypeId
 				JOIN Site ON AppointmentTime.siteId = Site.siteId
 				JOIN Client ON Appointment.clientId = Client.clientId
 				LEFT JOIN SelfServiceAppointmentRescheduleToken ON Appointment.appointmentId = SelfServiceAppointmentRescheduleToken.appointmentId
-				LEFT JOIN Answer ON Answer.appointmentId = Appointment.appointmentId
-					AND Answer.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")
-				LEFT JOIN PossibleAnswer ON PossibleAnswer.possibleAnswerId = Answer.possibleAnswerId
 			WHERE Appointment.archived = FALSE AND
 				YEAR(AppointmentTime.scheduledTime) = ?
 			ORDER BY AppointmentTime.scheduledTime';
@@ -71,13 +70,10 @@ function getAppointments($year) {
 			if (isset($appointment['token'])) {
 				$token = $appointment['token'];
 				$serverName = $_SERVER['SERVER_NAME'];
-				$appointmentRescheduleLink = "https://$serverName/appointment/reschedule/?token=$token";
-				$uploadDocumentsLink = "https://$serverName/appointment/upload-documents/?token=$token";
-				$appointment['uniqueAppointmentRescheduleUrl'] = $appointmentRescheduleLink;
-				$appointment['uniqueUploadDocumentsUrl'] = $uploadDocumentsLink;
+				$appointment['uniqueAppointmentRescheduleUrl'] = "https://$serverName/appointment/reschedule/?token=$token";
+				$appointment['uniqueUploadDocumentsUrl'] = "https://$serverName/appointment/upload-documents/?token=$token";
 			}
 
-			$appointment['appointmentType'] = isset($appointment['countryText']) ? $appointment['countryText'] : 'residential';
 			$appointment['language'] = expandLanguageCode($appointment['language']);
 			$appointment['notes'] = getNotesForAppointment($appointment['appointmentId']);
 		}
