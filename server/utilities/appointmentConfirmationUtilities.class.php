@@ -13,16 +13,16 @@ class AppointmentConfirmationUtilities {
 		$sitePhoneNumber = $data['phoneNumber'];
 		$dateStr = $data['dateStr'];
 		$timeStr = $data['timeStr'];
-		$doesInternational = $data['doesInternational'];
-		$isVirtualAppointment = $data['isVirtual'];
 		$selfServiceAppointmentRescheduleToken = $data['token'];
+		$isInternationalAppointment = self::isInternationalAppointmentType($data['appointmentType']);
+		$isVirtualAppointment = self::isVirtualAppointmentType($data['appointmentType']);
 
 		if ($isVirtualAppointment) {
 			$message = self::virtualAppointmentIntroductionInformation($firstName, $dateStr);
 			$message .= self::virtualAppointmentUploadDocumentsInformation($selfServiceAppointmentRescheduleToken);
 		} else {
 			$message = self::introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber);
-			if ($doesInternational) {
+			if ($isInternationalAppointment) {
 				// If it is an international appointment, there is a different list of what to brings than for residential appointments
 				$message .= self::internationalInformation(); 
 			} else {
@@ -33,6 +33,40 @@ class AppointmentConfirmationUtilities {
 		}
 	
 		return $message;
+	}
+
+	// TODO: Consider consolidating these isXXXXAppointmentType methods somewhere/somehow
+	private static function isInternationalAppointmentType($appointmentType) {
+		return strpos($appointmentType, 'china') !== false
+			|| strpos($appointmentType, 'india') !== false
+			|| strpos($appointmentType, 'treaty') !== false
+			|| strpos($appointmentType, 'non-treaty') !== false;
+	}
+
+	private static function isVirtualAppointmentType($appointmentType) {
+		return strpos($appointmentType, 'virtual') !== false;
+	}
+
+	private static function getAppointmentInformation($appointmentId) {
+		GLOBAL $DB_CONN;
+	
+		$query = "SELECT Site.address, Site.phoneNumber, Site.title, 
+				Client.firstName, SelfServiceAppointmentRescheduleToken.token, 
+				DATE_FORMAT(scheduledTime, '%W, %M %D, %Y') AS dateStr, 
+				TIME_FORMAT(scheduledTime, '%l:%i %p') AS timeStr,
+				AppointmentType.lookupName AS appointmentType
+			FROM Appointment
+			JOIN Client ON Appointment.clientId = Client.clientId
+			JOIN SelfServiceAppointmentRescheduleToken ON Appointment.appointmentId = SelfServiceAppointmentRescheduleToken.appointmentId
+			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+			JOIN AppointmentType ON AppointmentTime.appointmentTypeId = AppointmentType.appointmentTypeId
+			JOIN Site ON AppointmentTime.siteId = Site.siteId
+			WHERE Appointment.appointmentId = ?";
+	
+		$stmt = $DB_CONN->prepare($query);
+		$stmt->execute(array($appointmentId));
+	
+		return $stmt->fetch();
 	}
 
 	private static function virtualAppointmentIntroductionInformation($firstName, $dateStr) {
@@ -50,27 +84,6 @@ class AppointmentConfirmationUtilities {
 		return "<h2 class='dcf-mt-2'>Uploading Your Documents</h2>
 				Please visit <a href='$uploadDocumentsLink' target='_blank'>the upload documents page</a> to upload the necessary documents to have your taxes prepared. 
 				If the link is not working, you can copy and paste this link into your browser: $uploadDocumentsLink";
-	}
-	
-	private static function getAppointmentInformation($appointmentId) {
-		GLOBAL $DB_CONN;
-	
-		$query = "SELECT Site.address, Site.phoneNumber, Site.title, 
-				Site.isVirtual, Site.doesInternational, Client.firstName, 
-				SelfServiceAppointmentRescheduleToken.token, 
-				DATE_FORMAT(scheduledTime, '%W, %M %D, %Y') AS dateStr, 
-				TIME_FORMAT(scheduledTime, '%l:%i %p') as timeStr
-			FROM Appointment
-			JOIN Client ON Appointment.clientId = Client.clientId
-			JOIN SelfServiceAppointmentRescheduleToken ON Appointment.appointmentId = SelfServiceAppointmentRescheduleToken.appointmentId
-			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
-			JOIN Site ON AppointmentTime.siteId = Site.siteId
-			WHERE Appointment.appointmentId = ?";
-	
-		$stmt = $DB_CONN->prepare($query);
-		$stmt->execute(array($appointmentId));
-	
-		return $stmt->fetch();
 	}
 	
 	private static function introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber) {
