@@ -8,7 +8,7 @@ getAllAppointmentTypes();
 function getAllAppointmentTypes() {
 	GLOBAL $DB_CONN;
 
-	$query = 'SELECT name, lookupName FROM AppointmentType
+	$query = 'SELECT appointmentTypeId, name, lookupName FROM AppointmentType
 		WHERE archived = FALSE;';
 	$stmt = $DB_CONN->prepare($query);
 	$stmt->execute();
