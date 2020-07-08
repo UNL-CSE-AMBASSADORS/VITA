@@ -59,9 +59,9 @@ define('signupController', [], function() {
 			{ 'name': 'Other', 'appointmentType': 'non-treaty' }
 		];
 
-		$scope.storeAppointments = function() {
+		$scope.storeAppointments = () => {
 			let questions = [];
-			Object.keys($scope.questions).forEach(function(key) {
+			Object.keys($scope.questions).forEach((key) => {
 				if($scope.questions[key] != null) {
 					questions.push({
 						id: key,
@@ -105,7 +105,7 @@ define('signupController', [], function() {
 				"siteId": $scope.sharedProperties.selectedSite
 			};
 
-			SignupService.storeAppointments(data).then(function(response) {
+			SignupService.storeAppointments(data).then((response) => {
 				if (typeof response !== 'undefined' && response && response.success){
 					document.body.scrollTop = document.documentElement.scrollTop = 0;
 					$scope.appointmentId = response.appointmentId;
@@ -122,7 +122,7 @@ define('signupController', [], function() {
 			});
 		};
 
-		$scope.emailConfirmation = function() {
+		$scope.emailConfirmation = () => {
 			const data = {
 				"action": "emailConfirmation",
 				"appointmentId": $scope.appointmentId,
@@ -142,33 +142,46 @@ define('signupController', [], function() {
 			});
 		};
 
-		$scope.intStudentChanged = function() {
+		$scope.updateAppointmentType = () => {
+			// TODO: This is hard-coded to true right now since all appointments are virtual, should eventually be replaced with a question
+			const virtualAppointmentRequest = true;
+			if (virtualAppointmentRequest && !$scope.sharedProperties.appointmentType.includes('virtual-')) {
+				$scope.sharedProperties.appointmentType = 'virtual-' + $scope.sharedProperties.appointmentType;
+			}
+		};
+
+		$scope.intStudentChanged = () => {
 			$scope.questions[3] = null;
 			$scope.questions[4] = null;
 			$scope.questions[5] = null;
 			$scope.questions[6] = null;
 			$scope.sharedProperties.appointmentType = 'residential';
+			$scope.updateAppointmentType();
 		};
 
-		$scope.visaChanged = function() {
+		$scope.visaChanged = () => {
 			$scope.questions[4] = null;
 			$scope.questions[5] = null;
 			$scope.questions[6] = null;
 			$scope.sharedProperties.appointmentType = 'residential';
+			$scope.updateAppointmentType();
 		};
 
-		$scope.residentialAppointment = function() {
+		$scope.residentialAppointment = () => {
 			$scope.questions[6] = null;
 			$scope.sharedProperties.appointmentType = 'residential';
+			$scope.updateAppointmentType();
 		};
 
-		$scope.studentCountryChanged = function(country) {
+		$scope.studentCountryChanged = (country) => {
 			if (country) {
 				$scope.sharedProperties.appointmentType = country.appointmentType;
 			}
+			$scope.updateAppointmentType();
 		};
 
 		$scope.isEmailRequired = () => {
+			// TODO: Remove isSelectedSiteVirtual in favor of appointment type virtual checking
 			return $scope.sharedProperties.isSelectedSiteVirtual === true;
 		};
 

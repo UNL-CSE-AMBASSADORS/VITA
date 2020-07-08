@@ -24,7 +24,7 @@ td.available .ui-state-default {
 
 <div id="appointmentPicker" ng-cloak>
 	<!-- TODO: Is there a way to not have this date hard-coded? -->
-	<div ng-show="appointmentPickerSharedProperties.appointmentType != 'residential'"><b>International tax appointments begin March 3rd.</b></div>
+	<div ng-show="!isResidentialAppointmentType()"><b>International tax appointments begin March 3rd.</b></div>
 
 	<div ng-show="appointmentPickerSharedProperties.hasAvailability == false">Sorry! There are currently no remaining appointments available.</div>
 	<div id="datePicker" 
