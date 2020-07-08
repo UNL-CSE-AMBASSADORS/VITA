@@ -1,6 +1,7 @@
 <?php
 $root = realpath($_SERVER['DOCUMENT_ROOT']);
 require_once "$root/server/config.php";
+require_once "$root/server/utilities/appointmentTypeUtilities.class.php";
 
 class AppointmentConfirmationUtilities {
 
@@ -14,8 +15,8 @@ class AppointmentConfirmationUtilities {
 		$dateStr = $data['dateStr'];
 		$timeStr = $data['timeStr'];
 		$selfServiceAppointmentRescheduleToken = $data['token'];
-		$isInternationalAppointment = self::isInternationalAppointmentType($data['appointmentType']);
-		$isVirtualAppointment = self::isVirtualAppointmentType($data['appointmentType']);
+		$isInternationalAppointment = AppointmentTypeUtilities::isInternationalAppointmentType($data['appointmentType']);
+		$isVirtualAppointment = AppointmentTypeUtilities::isVirtualAppointmentType($data['appointmentType']);
 
 		if ($isVirtualAppointment) {
 			$message = self::virtualAppointmentIntroductionInformation($firstName, $dateStr);
@@ -33,18 +34,6 @@ class AppointmentConfirmationUtilities {
 		}
 	
 		return $message;
-	}
-
-	// TODO: Consider consolidating these isXXXXAppointmentType methods somewhere/somehow
-	private static function isInternationalAppointmentType($appointmentType) {
-		return strpos($appointmentType, 'china') !== false
-			|| strpos($appointmentType, 'india') !== false
-			|| strpos($appointmentType, 'treaty') !== false
-			|| strpos($appointmentType, 'non-treaty') !== false;
-	}
-
-	private static function isVirtualAppointmentType($appointmentType) {
-		return strpos($appointmentType, 'virtual') !== false;
 	}
 
 	private static function getAppointmentInformation($appointmentId) {

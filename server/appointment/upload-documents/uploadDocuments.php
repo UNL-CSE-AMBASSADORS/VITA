@@ -5,6 +5,7 @@ $root = realpath($_SERVER['DOCUMENT_ROOT']);
 require_once "$root/server/config.php";
 require_once "$root/vendor/autoload.php";
 require_once "$root/server/utilities/emailUtilities.class.php";
+require_once "$root/server/utilities/appointmentTypeUtilities.class.php";
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 
@@ -57,7 +58,7 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 		$clientInformationMatches = doesClientInformationMatch($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$response['validated'] = $clientInformationMatches;
 		if ($clientInformationMatches) {
-			$response['residentialAppointment'] = isResidentialAppointmentType($clientInformation['appointmentType']);
+			$response['residentialAppointment'] = AppointmentTypeUtilities::isResidentialAppointmentType($clientInformation['appointmentType']);
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -129,7 +130,7 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		$containerName = 'ty2019';
 		$fileContent = fopen($uploadedFileTempName, 'r');
 		$fileNameToSave = $firstName.'_'.$lastName."/$appointmentId/".uniqid()."-$uploadedFileName";
-		if (isResidentialAppointmentType($appointmentType)) {
+		if (AppointmentTypeUtilities::isResidentialAppointmentType($appointmentType)) {
 			$fileNameToSave = 'residential/'.$fileNameToSave;
 		} else {
 			$fileNameToSave = 'non-residential/'.$fileNameToSave;
@@ -161,7 +162,7 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 		if (PROD) {
 			$emailJsonString = file_get_contents('./notificationEmails.json');
 			$emailsJson = json_decode($emailJsonString, true);
-			$toEmailsString = isResidentialAppointmentType($appointmentType) ? $emailsJson['residential'] : $emailsJson['non-residential'];
+			$toEmailsString = AppointmentTypeUtilities::isResidentialAppointmentType($appointmentType) ? $emailsJson['residential'] : $emailsJson['non-residential'];
 
 			$readyMessage = "A client has marked their appointment as ready: <br/>
 				<b>First Name:</b> $firstName <br/>
@@ -184,10 +185,6 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 /* 
  * Private functions
  */
-
-function isResidentialAppointmentType($appointmentType) {
-	return strpos($appointmentType, 'residential') !== false;
-}
 
 function validateForm14446HasChanged($uploadedFileTempName) {
 	GLOBAL $root;

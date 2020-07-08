@@ -3,6 +3,7 @@
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 require_once "$root/server/config.php";
 require_once "$root/server/user.class.php";
+require_once "$root/server/utilities/appointmentTypeUtilities.class.php";
 $USER = new User();
 
 $isLoggedIn = $USER->isLoggedIn();
@@ -81,7 +82,7 @@ class DateSiteTimeMap {
 		$time = date_format(date_create($dstObject['scheduledTime']), 'g:i A');
 
 		// Add the appointmentTime to the map
-		$this->dates[$dstObject['scheduledDate']]['sites'][$dstObject['siteId']]['times'][$time]['isVirtual'] = $this->isAppointmentTypeVirtual($dstObject['appointmentType']);
+		$this->dates[$dstObject['scheduledDate']]['sites'][$dstObject['siteId']]['times'][$time]['isVirtual'] = AppointmentTypeUtilities::isVirtualAppointmentType($dstObject['appointmentType']);
 		$this->dates[$dstObject['scheduledDate']]['sites'][$dstObject['siteId']]['siteTitle'] = $dstObject['title'];
 		$this->dates[$dstObject['scheduledDate']]['sites'][$dstObject['siteId']]['times'][$time]['appointmentsAvailable'] = $appointmentsAvailable;
 		$this->dates[$dstObject['scheduledDate']]['sites'][$dstObject['siteId']]['times'][$time]['appointmentTimeId'] = $dstObject['appointmentTimeId'];
@@ -89,10 +90,6 @@ class DateSiteTimeMap {
 
 	private function calculateRemainingAppointmentsAvailable($numberOfAppointmentsAlreadyScheduled, $numberOfAppointmentsAllowed) {
 		return $numberOfAppointmentsAllowed - $numberOfAppointmentsAlreadyScheduled;
-	}
-
-	private function isAppointmentTypeVirtual($appointmentType) {
-		return strpos($appointmentType, 'virtual') !== false;
 	}
 
 	public function updateAvailability() {
