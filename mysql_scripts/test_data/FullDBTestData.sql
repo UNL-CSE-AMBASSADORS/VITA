@@ -103,22 +103,6 @@ INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
 SET @site_site2Id = LAST_INSERT_ID();
 
 INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
-	VALUES ("No walkins site", "9876 Test St. Lincoln, NE 29384", "555-999-8888", @user_siteAdmin1Id, @user_siteAdmin1Id);
-SET @site_site3Id = LAST_INSERT_ID();
-
-INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
-	VALUES ("Nebraska East Union", "Holdrege and 35th Streets", "402-472-6150", @user_siteAdmin1Id, @user_siteAdmin1Id);
-SET @site_nebraskaEastUnion = LAST_INSERT_ID();
-
-INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
-	VALUES ("Anderson Library", "3635 Touzalin Ave", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
-SET @site_andersonLibrary = LAST_INSERT_ID();
-
-INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
-	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
-SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
-
-INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
 	VALUES ("International Student Scholar", "1400 R St, Lincoln, NE 68588", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_internationalStudentScholar = LAST_INSERT_ID();
 
