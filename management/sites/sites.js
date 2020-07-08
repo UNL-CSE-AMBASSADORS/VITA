@@ -5,8 +5,7 @@ require.config({
 		ngAria: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min',
 		sitesDataService: '/dist/management/sites/sitesDataService',
 		sitesController: '/dist/management/sites/sitesController',
-		// TODO: Consider moving this filter to a utilities or something?
-		fromMapFilter: '/dist/management/sites/fromMapFilter',
+		fromMapFilter: '/dist/assets/js/utilities/fromMapFilter',
 		notificationUtilities: '/dist/assets/js/utilities/notificationUtilities'
 	},
 	shim: {
