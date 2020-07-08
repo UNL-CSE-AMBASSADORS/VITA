@@ -51,45 +51,44 @@ define('appointmentPickerController', [], function() {
 
 		$scope.hasDate = (dateObj) => {
 			return dateObj.toISOString().substring(0, 10) in $scope.dates;
-		}
+		};
 	
 		$scope.hasTimeSlotsRemaining = (dateObj) => {
 			const date = dateObj.toISOString().substring(0, 10);
 			return $scope.dates[date]["hasAvailability"];
-		}
+		};
 	
 		$scope.updateGlobalSites = (dateInput) => {
 			const dateObj = new Date(dateInput);
 			const date = dateObj.toISOString().substring(0, 10);
 			$scope.sites = $scope.dates[date]["sites"];
-		}
+		};
 	
 		$scope.updateGlobalTimes = (dateInput, site) => {
 			const dateObj = new Date(dateInput);
 			const date  = dateObj.toISOString().substring(0, 10);
 			$scope.times = $scope.dates[date]["sites"][site]["times"];
-		}
+		};
 
 		$scope.dateChanged = (dateInput) => {
 			$scope.appointmentPickerSharedProperties.selectedDate = dateInput;
 			$scope.appointmentPickerSharedProperties.selectedSite = null;
 			$scope.appointmentPickerSharedProperties.selectedTime = null;
 			$scope.updateGlobalSites(dateInput);
-		}
+		};
 
 		$scope.siteChanged = (site) => {
 			$scope.appointmentPickerSharedProperties.selectedSiteTitle = $scope.sites[site]['siteTitle'];
-			$scope.appointmentPickerSharedProperties.isSelectedSiteVirtual = $scope.sites[site]['isVirtual'];
 			$scope.appointmentPickerSharedProperties.selectedTime = null;
 			$scope.updateGlobalTimes($scope.appointmentPickerSharedProperties.selectedDate, site);
-		}
+		};
 
 		$scope.timeChanged = (time) => {
 			$scope.appointmentPickerSharedProperties.selectedAppointmentTimeId = $scope.times[time]['appointmentTimeId'];
-		}
+		};
 
 		$scope.getTimeText = (time, info) => {
-			const isPhysicalSite = !$scope.appointmentPickerSharedProperties.isSelectedSiteVirtual;
+			const isPhysicalSite = !$scope.isVirtualAppointmentType();
 			const appointmentsStillAvailable = info.appointmentsAvailable > 0;
 			if (isPhysicalSite) {
 				if (appointmentsStillAvailable) {
@@ -102,7 +101,11 @@ define('appointmentPickerController', [], function() {
 				}
 				return ('No appointments available during the week of the selected date - FULL' + ($scope.appointmentPickerSharedProperties.isLoggedIn ? ' - overscheduled by ' + Math.abs(info.appointmentsAvailable) + ' appointments' : ''))
 			}
-		}
+		};
+
+		$scope.isVirtualAppointmentType = () => {
+			return $scope.appointmentType.includes('virtual-');
+		};
 
 		$scope.$watch(
 			() => { return $scope.appointmentPickerSharedProperties.appointmentType; },

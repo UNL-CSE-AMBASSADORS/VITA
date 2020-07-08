@@ -82,7 +82,6 @@ class DateSiteTimeMap {
 		$time = date_format(date_create($dstObject['scheduledTime']), 'g:i A');
 
 		// Add the appointmentTime to the map
-		$this->dates[$dstObject['scheduledDate']]['sites'][$dstObject['siteId']]['times'][$time]['isVirtual'] = AppointmentTypeUtilities::isVirtualAppointmentType($dstObject['appointmentType']);
 		$this->dates[$dstObject['scheduledDate']]['sites'][$dstObject['siteId']]['siteTitle'] = $dstObject['title'];
 		$this->dates[$dstObject['scheduledDate']]['sites'][$dstObject['siteId']]['times'][$time]['appointmentsAvailable'] = $appointmentsAvailable;
 		$this->dates[$dstObject['scheduledDate']]['sites'][$dstObject['siteId']]['times'][$time]['appointmentTimeId'] = $dstObject['appointmentTimeId'];

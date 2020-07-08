@@ -143,9 +143,7 @@ define('signupController', [], function() {
 		};
 
 		$scope.updateAppointmentType = () => {
-			// TODO: This is hard-coded to true right now since all appointments are virtual, should eventually be replaced with a question
-			const virtualAppointmentRequest = true;
-			if (virtualAppointmentRequest && !$scope.sharedProperties.appointmentType.includes('virtual-')) {
+			if ($scope.isVirtualAppointmentRequested() && !$scope.sharedProperties.appointmentType.includes('virtual-')) {
 				$scope.sharedProperties.appointmentType = 'virtual-' + $scope.sharedProperties.appointmentType;
 			}
 		};
@@ -181,8 +179,12 @@ define('signupController', [], function() {
 		};
 
 		$scope.isEmailRequired = () => {
-			// TODO: Remove isSelectedSiteVirtual in favor of appointment type virtual checking
-			return $scope.sharedProperties.isSelectedSiteVirtual === true;
+			return $scope.isVirtualAppointmentRequested();
+		};
+
+		$scope.isVirtualAppointmentRequested = () => {
+			// TODO: This is hard-coded to true right now since all appointments are virtual, should eventually be replaced with a question
+			return true;
 		};
 
 		$scope.downloadForm14446 = () => {
