@@ -32,11 +32,8 @@ return readfile($documentRoot . $path);
 <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-wrapper dcf-pt-3 dcf-pb-3 dcf-bold dcf-txt-decor-none unl-font-sans unl-cream" style="background-color: #007197;">
 	<span class="dcf-txt-xs">
 		<span class="dcf-d-inline-block dcf-mt-2 dcf-mb-2 dcf-mr-4">
-			In response to COVID-19, all in-person VITA tax appointments were canceled starting March 16th. 
-			The IRS and Nebraska Department of Revenue have both extended the filing deadline to July 15th, 2020.
-		</span>
-		<span>
-			We now offer virtual tax appointments. Visit the <a href="/signup/">Appointment Sign Up Page</a> to schedule your virtual appointment.
+			In response to COVID-19, Lincoln VITA tax appointments are now available virtually. 
+			You may schedule a virtual appointment under the 'Need Assistance' tab.
 		</span>
 	</span>
 </div>
