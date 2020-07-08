@@ -26,6 +26,7 @@ define('sitesController', [], function() {
 			.map((time) => time.timeString);
 		$scope.appointmentTypes = [];
 
+		// Controls the edit buttons for each appointment time row. This maps appointment time ID to an object
 		$scope.appointmentTimesEditMap = new Map();
 
 

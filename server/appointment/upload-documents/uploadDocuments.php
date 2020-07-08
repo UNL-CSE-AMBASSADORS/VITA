@@ -186,7 +186,7 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
  */
 
 function isResidentialAppointmentType($appointmentType) {
-	return $appointmentType === 'residential';
+	return strpos($appointmentType, 'residential') !== false;
 }
 
 function validateForm14446HasChanged($uploadedFileTempName) {

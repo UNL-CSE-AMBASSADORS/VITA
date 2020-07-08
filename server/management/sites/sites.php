@@ -105,7 +105,7 @@ function addAppointmentTime($siteId, $dateString, $scheduledTimeString, $appoint
 		if (!isset($dateString) || !DateTimeUtilities::isValidDateString($dateString, DateFormats::MM_DD_YYYY)) throw new Exception('Invalid date given', MY_EXCEPTION);
 		if (!isset($scheduledTimeString) || !DateTimeUtilities::isValidTimeString($scheduledTimeString, TimeFormats::HH_MM_PERIOD)) throw new Exception('Invalid start time given', MY_EXCEPTION);
 		if (!isset($appointmentTypeId)) throw new Exception('Invalid appointment type ID given', MY_EXCEPTION);
-		if (isset($numberOfAppointments) && (int)$numberOfAppointments < 0) throw new Exception('Invalid minimum number of appointments given', MY_EXCEPTION);
+		if (isset($numberOfAppointments) && (int)$numberOfAppointments < 0) throw new Exception('Invalid number of appointments given', MY_EXCEPTION);
 
 		// Get variables into proper format for db
 		$scheduledTime = DateTime::createFromFormat('m-d-Y g:i A', $dateString . ' ' . $scheduledTimeString);

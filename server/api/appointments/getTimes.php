@@ -42,9 +42,8 @@ function getAppointmentTimes($data, $isLoggedIn) {
 function getAppointmentTimesFromDatabase($year, $after, $appointmentType) {
 	GLOBAL $DB_CONN;
 
-	// TODO: Change numberOfAppointmentsAlreadyMade to numberOfAppointmentsAlreadyScheduled
 	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate,
-		TIME(scheduledTime) AS scheduledTime, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade,
+		TIME(scheduledTime) AS scheduledTime, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyScheduled,
 		apt.numberOfAppointments, AppointmentType.name, AppointmentType.lookupName AS appointmentType
 	FROM AppointmentTime apt
 		LEFT JOIN Site s ON s.siteId = apt.siteId
@@ -76,7 +75,7 @@ class DateSiteTimeMap {
 	
 	public function addDateSiteTimeObject($dstObject) {
 		// Get the number of appointments still available
-		$appointmentsAvailable = $this->calculateRemainingAppointmentsAvailable($dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['numberOfAppointments']);
+		$appointmentsAvailable = $this->calculateRemainingAppointmentsAvailable($dstObject['numberOfAppointmentsAlreadyScheduled'], $dstObject['numberOfAppointments']);
 
 		// Reformat the time to be h:i MM
 		$time = date_format(date_create($dstObject['scheduledTime']), 'g:i A');
