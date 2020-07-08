@@ -104,7 +104,7 @@ define('appointmentPickerController', [], function() {
 		};
 
 		$scope.isVirtualAppointmentType = () => {
-			return $scope.appointmentType.includes('virtual-');
+			return $scope.appointmentPickerSharedProperties.appointmentType.includes('virtual-');
 		};
 
 		$scope.$watch(
