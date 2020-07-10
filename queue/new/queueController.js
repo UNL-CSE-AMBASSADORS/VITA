@@ -8,12 +8,12 @@ define('queueController', [], function() {
 		$scope.currentMonth = $scope.today.getMonth();
 		$scope.currentYear = $scope.today.getFullYear();
 
-		$scope.apppointments = [];
 		$scope.sites = [];
 		$scope.selectedAppointment = null;
 		$scope.selectedSite = null;
 
 		// Swimlane arrays
+		$scope.apppointments = []; // All references to an appointment are stored in this array, and each swimlane array contains a shallow reference to the object.
 		$scope.awaitingAppointments = [];
 		$scope.checkedInAppointments = [];
 		$scope.paperworkCompletedAppointments = [];
@@ -25,7 +25,7 @@ define('queueController', [], function() {
 		// Configure dragula options
 		DragulaService.options($scope, 'queue-bag', { // Dragula call a collection of "swimlanes/containers" a "bag"
 			accepts: (element, targetContainer, sourceContainer, sibling) => {
-				// Elements can only be dropped in adjacent containers				
+				// Make it so elements can only be dropped in adjacent containers				
 				const containerOrder = ['awaitingAppointmentsContainer', 'checkedInAppointmentsContainer', 'paperworkCompletedAppointmentsContainer', 'beingPreparedAppointmentsContainer', 'completedAppointmentsContainer'];
 				if (targetContainer != null && sourceContainer != null) {
 					const sourceIndex = containerOrder.indexOf(sourceContainer.id);
@@ -50,131 +50,158 @@ define('queueController', [], function() {
 			}
 
 			if (targetContainerId === 'awaitingAppointmentsContainer') {
-				QueueDataService.markAppointmentAsAwaiting(appointmentId).then((response) => {
-					// TODO: Consider pulling this helper method for displaying failure notification to a method
-					if (response == null || !response.success) {
-						const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
-						NotificationUtilities.giveNotice('Failure', errorMessage, false);
-						return;
-					}
-					
-					const appointment = $scope.awaitingAppointments.find((appointment) => appointment.appointmentId === appointmentId);
-					appointment.checkedIn = false;
-				});
+				$scope.markAppointmentAsAwaiting(appointmentId);
 			} else if (targetContainerId === 'checkedInAppointmentsContainer') {
-				QueueDataService.markAppointmentAsCheckedIn(appointmentId).then((response) => {
-					if (response == null || !response.success) {
-						const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
-						NotificationUtilities.giveNotice('Failure', errorMessage, false);
-						return;
-					}
-					const appointment = $scope.checkedInAppointments.find((appointment) => appointment.appointmentId === appointmentId);
-					appointment.checkedIn = true;
-					appointment.paperworkComplete = false;
-					appointment.noShow = false;
-
-				});
+				$scope.markAppointmentAsCheckedIn(appointmentId);
 			} else if (targetContainerId === 'paperworkCompletedAppointmentsContainer') {
-				QueueDataService.markAppointmentAsPaperworkCompleted(appointmentId).then((response) => {
-					if (response == null || !response.success) {
-						const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
-						NotificationUtilities.giveNotice('Failure', errorMessage, false);
-						return;
-					}
-					const appointment = $scope.paperworkCompletedAppointments.find((appointment) => appointment.appointmentId === appointmentId);
-					appointment.paperworkComplete = true;
-					appointment.preparing = false;
-				});
+				$scope.markAppointmentAsPaperworkCompleted(appointmentId);
 			} else if (targetContainerId === 'beingPreparedAppointmentsContainer') {
-				QueueDataService.markAppointmentAsBeingPrepared(appointmentId).then((response) => {
-					if (response == null || !response.success) {
-						const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
-						NotificationUtilities.giveNotice('Failure', errorMessage, false);
-						return;
-					}
-					const appointment = $scope.beingPreparedAppointments.find((appointment) => appointment.appointmentId === appointmentId);
-					appointment.preparing = true;
-					appointment.ended = false;
-				});
+				$scope.markAppointmentAsBeingPrepared(appointmentId);
 			} else if (targetContainerId === 'completedAppointmentsContainer') {
-				QueueDataService.markAppointmentAsCompleted(appointmentId).then((response) => {
-					if (response == null || !response.success) {
-						const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
-						NotificationUtilities.giveNotice('Failure', errorMessage, false);
-						return;
-					}
-					const appointment = $scope.completedAppointments.find((appointment) => appointment.appointmentId === appointmentId);
-					appointment.ended = true;
-				});
+				$scope.markAppointmentAsCompleted(appointmentId);
 			}
 		});
 
-		$scope.selectAppointment = (appointment) => {
-			$scope.selectedAppointment = appointment;
-			$scope.appointmentNotesAreaSharedProperties.appointmentId = $scope.selectedAppointment.appointmentId;
-			// document.body.scrollTop = document.documentElement.scrollTop = 0;
-		};
-
-		$scope.deselectAppointment = () => {
-			$scope.selectedAppointment = null;
-		};
-
-		$scope.markAppointmentAsCancelled = () => {
-			console.log('MARK AS CANCELLED');
-		};
-
-		$scope.markAppointmentAsIncomplete = () => {
-			console.log('MARK AS INCOMPLETE');
-		};
-	
 		$scope.getAppointments = () => {
-			// TODO: Pull this into helper method?
 			let year = $scope.currentYear,
 				month = $scope.currentMonth + 1,
 				day = $scope.currentDay;
 			if (month < 10) month = '0' + month;
 			const isoFormattedDate = year + "-" + month + "-" + day;
 
-			if ($scope.selectedSite == null || $scope.selectedSite.siteId == null) return;
+			if ($scope.selectedSite == null || $scope.selectedSite.siteId == null) {
+				return;
+			}
 			const siteId = $scope.selectedSite.siteId;
 
-			QueueDataService.getAppointments(isoFormattedDate, siteId).then((response) => {
-				if (response == null || !response.success) {
-					const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
-					NotificationUtilities.giveNotice('Failure', errorMessage, false);
-					return;
-				}
+			QueueDataService.getAppointments(isoFormattedDate, siteId)
+				.then($scope.checkResponseForError)
+				.then((response) => {
+					const appointments = response.appointments.map((appointment) => {
+						appointment.name = appointment.firstName + ' ' + appointment.lastName;
+						appointment.checkedIn = appointment.timeIn != null;
+						appointment.paperworkComplete = appointment.timeReturnedPapers != null;
+						appointment.preparing = appointment.timeAppointmentStarted != null;
+						appointment.ended = appointment.timeAppointmentEnded != null;
+						return appointment;
+					});
+					
+					// Only add appointments if 1) they don't exist in any swimlane, or 2) they've been moved/removed already (by another volunteer)
+					// I've ignored case 2 however, as I don't think it'll happen all too often, so it's not worth the extra logic
+					appointments.forEach((appointment) => {
+						const exists = $scope.appointments.some((appointment2) => appointment.appointmentId === appointment2.appointmentId);
+						if (exists) return;
 
-				const appointments = response.appointments.map((appointment) => {
-					appointment.name = appointment.firstName + ' ' + appointment.lastName;
-					appointment.checkedIn = appointment.timeIn != null;
-					appointment.paperworkComplete = appointment.timeReturnedPapers != null;
-					appointment.preparing = appointment.timeAppointmentStarted != null;
-					appointment.ended = appointment.timeAppointmentEnded != null;
-					return appointment;
-				});
-				
-				// Only add appointments if 1) they don't exist in any swimlane, or 2) they've been moved already (by another volunteer)
-				// I've ignored case 2 however, as I don't think it'll happen all too often, so it's not worth the extra logic
-				appointments.forEach((appointment) => {
-					const exists = $scope.appointments.some((appointment2) => appointment.appointmentId === appointment2.appointmentId);
-					if (exists) return;
+						$scope.appointments.push(appointment);
+						if (appointment.timeAppointmentEnded != null || appointment.completed) {
+							$scope.completedAppointments.push(appointment);
+						} else if (appointment.timeAppointmentStarted != null) {
+							$scope.beingPreparedAppointments.push(appointment);
+						} else if (appointment.timeReturnedPapers != null) {
+							$scope.paperworkCompletedAppointments.push(appointment);
+						} else if (appointment.timeIn != null) {
+							$scope.checkedInAppointments.push(appointment);
+						} else {
+							$scope.awaitingAppointments.push(appointment);
+						}
+					});
+				})
+				.catch($scope.notifyOfError);
+		};
 
-					if (appointment.timeAppointmentEnded != null || appointment.completed) {
-						$scope.completedAppointments.push(appointment);
-					} else if (appointment.timeAppointmentStarted != null) {
-						$scope.beingPreparedAppointments.push(appointment);
-					} else if (appointment.timeReturnedPapers != null) {
-						$scope.paperworkCompletedAppointments.push(appointment);
-					} else if (appointment.timeIn != null) {
-						$scope.checkedInAppointments.push(appointment);
-					} else {
-						$scope.awaitingAppointments.push(appointment);
-					}
-				});
+		$scope.getSites = () => {
+			QueueDataService.getSites()
+				.then($scope.checkResponseForError)
+				.then((data) => {
+					$scope.sites = data;
+				})
+				.catch($scope.notifyOfError);
+		};
 
-				$scope.appointments = appointments; // Finally set appointments after the existence check has occurred above
-			});
+		$scope.markAppointmentAsAwaiting = (appointmentId) => {
+			QueueDataService.markAppointmentAsAwaiting(appointmentId)
+				.then($scope.checkResponseForError)
+				.then((response) => {
+					const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
+					appointment.checkedIn = false;
+				})
+				.catch($scope.notifyOfError);
+		};
+
+		$scope.markAppointmentAsCheckedIn = (appointmentId) => {
+			QueueDataService.markAppointmentAsCheckedIn(appointmentId)
+				.then($scope.checkResponseForError)
+				.then((response) => {
+					const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
+					appointment.checkedIn = true;
+					appointment.paperworkComplete = false;
+					appointment.noShow = false;
+				})
+				.catch($scope.notifyOfError);
+		};
+
+		$scope.markAppointmentAsPaperworkCompleted = (appointmentId) => {
+			QueueDataService.markAppointmentAsPaperworkCompleted(appointmentId)
+				.then($scope.checkResponseForError)
+				.then((response) => {
+					const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
+					appointment.paperworkComplete = true;
+					appointment.preparing = false;
+				})
+				.catch($scope.notifyOfError);
+		};
+
+		$scope.markAppointmentAsBeingPrepared = (appointmentId) => {
+			QueueDataService.markAppointmentAsBeingPrepared(appointmentId)
+				.then($scope.checkResponseForError)
+				.then((response) => {
+					const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
+					appointment.preparing = true;
+					appointment.ended = false;
+				})
+				.catch($scope.notifyOfError);
+		};
+
+		$scope.markAppointmentAsCompleted = (appointmentId) => {
+			QueueDataService.markAppointmentAsCompleted(appointmentId)
+				.then($scope.checkResponseForError)
+				.then((response) => {
+					const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
+					appointment.ended = true;
+				})
+				.catch($scope.notifyOfError);
+		};
+
+		$scope.markAppointmentAsIncomplete = () => {
+			const appointmentId = $scope.selectedAppointment.appointmentId;
+			QueueDataService.markAppointmentAsIncomplete(appointmentId)
+				.then($scope.checkResponseForError)
+				.then((response) => {
+					$scope.selectedAppointment.ended = true;
+					$scope.removeAppointmentFromSwimlanes(appointmentId);
+				})
+				.catch($scope.notifyOfError);
+		};
+
+		$scope.markAppointmentAsCancelled = () => {
+			const appointmentId = $scope.selectedAppointment.appointmentId;
+			QueueDataService.markAppointmentAsCancelled(appointmentId)
+				.then($scope.checkResponseForError)	
+				.then((response) => {
+					$scope.selectedAppointment.ended = true;
+					$scope.selectedAppointment.cancelled = true;
+					$scope.removeAppointmentFromSwimlanes(appointmentId);
+				})
+				.catch($scope.notifyOfError);
+		};
+
+		$scope.selectAppointment = (appointment) => {
+			$scope.selectedAppointment = appointment;
+			$scope.appointmentNotesAreaSharedProperties.appointmentId = $scope.selectedAppointment.appointmentId;
+		};
+
+		$scope.deselectAppointment = () => {
+			$scope.selectedAppointment = null;
 		};
 
 		$scope.siteChanged = () => {
@@ -196,16 +223,28 @@ define('queueController', [], function() {
 			$scope.completedAppointments = [];
 		};
 
-		$scope.getSites = () => {
-			QueueDataService.getSites().then((data) => {
-				if (data == null) {
-					NotificationUtilities.giveNotice('Failure', 'There was an error getting the sites. Please try refreshing the page.', false);
-				} else {
-					$scope.sites = data;
-				}
-			});
+		$scope.removeAppointmentFromSwimlanes = (appointmentId) => {
+			$scope.appointments = $scope.appointments.filter((appointment) => appointment.appointmentId != appointmentId);
+			$scope.awaitingAppointments = $scope.awaitingAppointments.filter((appointment) => appointment.appointmentId != appointmentId);
+			$scope.checkedInAppointments = $scope.checkedInAppointments.filter((appointment) => appointment.appointmentId != appointmentId);
+			$scope.paperworkCompletedAppointments = $scope.paperworkCompletedAppointments.filter((appointment) => appointment.appointmentId != appointmentId);
+			$scope.beingPreparedAppointments = $scope.beingPreparedAppointments.filter((appointment) => appointment.appointmentId != appointmentId);
+			$scope.completedAppointments = $scope.completedAppointments.filter((appointment) => appointment.appointmentId != appointmentId);
 		};
 
+		$scope.checkResponseForError = (response) => {
+			if (response == null || (!!response.success && !response.success)) {
+				const errorMessage = (response && response.error) ? response.error : 'There was an error on the server. Please refresh the page and try again.';
+				throw new Error(errorMessage);
+			}
+			return response;
+		};
+
+		$scope.notifyOfError = (errorMessage) => {
+			NotificationUtilities.giveNotice('Failure', errorMessage, false)
+		};
+
+		// Initialize the date picker plugin
 		WDN.initializePlugin('jqueryui', [() => {
 			require(['jquery'], ($) => {
 				$('#dateInput').datepicker({

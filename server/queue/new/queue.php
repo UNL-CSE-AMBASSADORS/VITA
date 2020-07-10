@@ -53,8 +53,10 @@ function getAppointments($date, $siteId) {
 					JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 				WHERE DATE(AppointmentTime.scheduledTime) = ?
 					AND AppointmentTime.siteId = ?
+					AND (cancelled IS NULL OR cancelled = FALSE)
+					AND (completed IS NULL OR completed != FALSE)
 					AND Appointment.archived = FALSE
-				ORDER BY AppointmentTime.scheduledTime ASC';
+				ORDER BY AppointmentTime.scheduledTime ASC, firstName ASC, lastName ASC';
 		$stmt = $DB_CONN->prepare($query);
 		$stmt->execute(array($date, $siteId));
 		$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -203,11 +205,46 @@ function markAppointmentAsCompleted($appointmentId) {
 }
 
 function markAppointmentAsIncomplete($appointmentId) {
+	GLOBAL $DB_CONN, $USER;
 
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		$query = 'UPDATE ServicedAppointment
+			SET completed = FALSE
+			WHERE appointmentId = ?';
+		$stmt = $DB_CONN->prepare($query);
+
+		$success = $stmt->execute(array($appointmentId));
+		if ($success == false) throw new Exception();
+
+		# Insert an automatic note saying it was marked as incomplete
+		$noteAccessor = new NoteAccessor();
+		$noteText = 'Marked as Incomplete [Automatic Note]';
+		$userId = $USER->getUserId();
+		$noteAccessor->addNote($appointmentId, $noteText, $userId);
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = 'Unable to update the appointment. Please refresh the page and try again.';
+	}
+
+	echo json_encode($response);
 }
 
 function markAppointmentAsCancelled($appointmentId) {
+	$response = array();
+	$response['success'] = true;
 
+	try {
+		$appointmentAccessor = new AppointmentAccessor();
+		$appointmentAccessor->cancelAppointment($appointmentId);
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = 'Unable to cancel the appointment. Please refresh the page and try again.';
+	}
+
+	echo json_encode($response);
 }
 
 ###################

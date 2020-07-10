@@ -55,6 +55,22 @@ define('queueDataService', [], ($http) => {
 					data: `action=completeAppointment&appointmentId=${appointmentId}`,
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				}).then((response) => response.data, (error) => null);
+			},
+			markAppointmentAsIncomplete: (appointmentId) => {
+				return $http({
+					url: '/server/queue/new/queue.php',
+					method: 'POST',
+					data: `action=incompleteAppointment&appointmentId=${appointmentId}`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
+			},
+			markAppointmentAsCancelled: (appointmentId) => {
+				return $http({
+					url: '/server/queue/new/queue.php',
+					method: 'POST',
+					data: `action=cancelAppointment&appointmentId=${appointmentId}`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
 			}
 		};
 	}
