@@ -1,6 +1,5 @@
 <div class="dcf-wrapper dcf-mb-8">
 	<!-- Queue Section -->
-	<!-- TODO: Why does ng-if not work here? But ng-show does? -->
 	<div ng-show="selectedAppointment == null">
 		<!-- Header -->
 		<div class="dcf-grid dcf-grid-thirds dcf-col-gap-2 dcf-mb-6">
