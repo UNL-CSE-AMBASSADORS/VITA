@@ -12,6 +12,8 @@ define('queueController', [], function() {
 		$scope.selectedAppointment = null;
 		$scope.selectedSite = null;
 
+		$scope.clientSearchString = '';
+
 		// Swimlane arrays
 		$scope.apppointments = []; // All references to an appointment are stored in this array, and each swimlane array contains a shallow reference to the object.
 		$scope.awaitingAppointments = [];
@@ -76,6 +78,7 @@ define('queueController', [], function() {
 
 			QueueDataService.getAppointments(isoFormattedDate, siteId)
 				.then($scope.checkResponseForError)
+				.catch($scope.notifyOfError)
 				.then((response) => {
 					const appointments = response.appointments.map((appointment) => {
 						appointment.name = appointment.firstName + ' ' + appointment.lastName;
@@ -105,94 +108,93 @@ define('queueController', [], function() {
 							$scope.awaitingAppointments.push(appointment);
 						}
 					});
-				})
-				.catch($scope.notifyOfError);
+				});
 		};
 
 		$scope.getSites = () => {
 			QueueDataService.getSites()
 				.then($scope.checkResponseForError)
+				.catch($scope.notifyOfError)
 				.then((data) => {
 					$scope.sites = data;
-				})
-				.catch($scope.notifyOfError);
+				});
 		};
 
 		$scope.markAppointmentAsAwaiting = (appointmentId) => {
 			QueueDataService.markAppointmentAsAwaiting(appointmentId)
 				.then($scope.checkResponseForError)
+				.catch($scope.notifyOfError)
 				.then((response) => {
 					const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
 					appointment.checkedIn = false;
-				})
-				.catch($scope.notifyOfError);
+				});
 		};
 
 		$scope.markAppointmentAsCheckedIn = (appointmentId) => {
 			QueueDataService.markAppointmentAsCheckedIn(appointmentId)
 				.then($scope.checkResponseForError)
+				.catch($scope.notifyOfError)
 				.then((response) => {
 					const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
 					appointment.checkedIn = true;
 					appointment.paperworkComplete = false;
 					appointment.noShow = false;
-				})
-				.catch($scope.notifyOfError);
+				});
 		};
 
 		$scope.markAppointmentAsPaperworkCompleted = (appointmentId) => {
 			QueueDataService.markAppointmentAsPaperworkCompleted(appointmentId)
 				.then($scope.checkResponseForError)
+				.catch($scope.notifyOfError)
 				.then((response) => {
 					const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
 					appointment.paperworkComplete = true;
 					appointment.preparing = false;
-				})
-				.catch($scope.notifyOfError);
+				});
 		};
 
 		$scope.markAppointmentAsBeingPrepared = (appointmentId) => {
 			QueueDataService.markAppointmentAsBeingPrepared(appointmentId)
 				.then($scope.checkResponseForError)
+				.catch($scope.notifyOfError)
 				.then((response) => {
 					const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
 					appointment.preparing = true;
 					appointment.ended = false;
-				})
-				.catch($scope.notifyOfError);
+				});
 		};
 
 		$scope.markAppointmentAsCompleted = (appointmentId) => {
 			QueueDataService.markAppointmentAsCompleted(appointmentId)
 				.then($scope.checkResponseForError)
+				.catch($scope.notifyOfError)
 				.then((response) => {
 					const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
 					appointment.ended = true;
-				})
-				.catch($scope.notifyOfError);
+				});
 		};
 
 		$scope.markAppointmentAsIncomplete = () => {
 			const appointmentId = $scope.selectedAppointment.appointmentId;
 			QueueDataService.markAppointmentAsIncomplete(appointmentId)
 				.then($scope.checkResponseForError)
+				.catch($scope.notifyOfError)
 				.then((response) => {
 					$scope.selectedAppointment.ended = true;
 					$scope.removeAppointmentFromSwimlanes(appointmentId);
-				})
-				.catch($scope.notifyOfError);
+				});
 		};
 
 		$scope.markAppointmentAsCancelled = () => {
 			const appointmentId = $scope.selectedAppointment.appointmentId;
 			QueueDataService.markAppointmentAsCancelled(appointmentId)
-				.then($scope.checkResponseForError)	
+				.then($scope.checkResponseForError)
+				.catch($scope.notifyOfError)
 				.then((response) => {
 					$scope.selectedAppointment.ended = true;
 					$scope.selectedAppointment.cancelled = true;
 					$scope.removeAppointmentFromSwimlanes(appointmentId);
-				})
-				.catch($scope.notifyOfError);
+				});
 		};
 
 		$scope.selectAppointment = (appointment) => {
@@ -230,6 +232,13 @@ define('queueController', [], function() {
 			$scope.paperworkCompletedAppointments = $scope.paperworkCompletedAppointments.filter((appointment) => appointment.appointmentId != appointmentId);
 			$scope.beingPreparedAppointments = $scope.beingPreparedAppointments.filter((appointment) => appointment.appointmentId != appointmentId);
 			$scope.completedAppointments = $scope.completedAppointments.filter((appointment) => appointment.appointmentId != appointmentId);
+		};
+
+		$scope.passesSearchFilter = (appointment) => {
+			const searchString = $scope.clientSearchString.toLowerCase();
+			if (!searchString) return true;
+			return appointment.name.toLowerCase().indexOf(searchString) !== -1 ||
+				appointment.appointmentId.toString().indexOf(searchString) !== -1;
 		};
 
 		$scope.checkResponseForError = (response) => {

@@ -23,13 +23,16 @@
 			<!-- Search box -->
 			<div>
 				<label for="queueSearch" class="dcf-label">Client Search</label>
-				<input type="text" id="queueSearch" class="dcf-w-100% dcf-input-text" ng-model="clientSearch" />
+				<input type="text" 
+					id="queueSearch" 
+					class="dcf-w-100% dcf-input-text" 
+					ng-model="clientSearchString" />
 
 				<!-- Message if there are no appointments that match the search -->
 				<p class="dcf-txt-center" 
-					ng-show="clientSearch && (appointments | searchFor: clientSearch).length === 0"
+					ng-show="clientSearchString && !appointments.some(passesSearchFilter)"
 					ng-cloak>
-					No results for "{{clientSearch}}".
+					No results for "{{clientSearchString}}".
 				</p>
 			</div>
 		</div>
@@ -54,28 +57,33 @@
 			<!-- Swimlanes -->
 			<div class="dcf-grid-fifths@md dcf-col-gap-2">
 				<div class="container" id="awaitingAppointmentsContainer" dragula="'queue-bag'" dragula-model="awaitingAppointments">
-					<div ng-repeat="appointment in awaitingAppointments | searchFor: clientSearch" 
+					<div ng-repeat="appointment in awaitingAppointments"
 						data-appointment-id="{{appointment.appointmentId}}"
+						ng-show="passesSearchFilter(appointment)"
 						ng-click="selectAppointment(appointment)">{{appointment.name}}</div>
 				</div>
 				<div class="container" id="checkedInAppointmentsContainer" dragula="'queue-bag'" dragula-model="checkedInAppointments">
-					<div ng-repeat="appointment in checkedInAppointments | searchFor: clientSearch" 
+					<div ng-repeat="appointment in checkedInAppointments" 
 						data-appointment-id="{{appointment.appointmentId}}"
+						ng-show="passesSearchFilter(appointment)"
 						ng-click="selectAppointment(appointment)">{{appointment.name}}</div>
 				</div>
 				<div class="container" id="paperworkCompletedAppointmentsContainer" dragula="'queue-bag'" dragula-model="paperworkCompletedAppointments">
-					<div ng-repeat="appointment in paperworkCompletedAppointments | searchFor: clientSearch" 
+					<div ng-repeat="appointment in paperworkCompletedAppointments" 
 						data-appointment-id="{{appointment.appointmentId}}"
+						ng-show="passesSearchFilter(appointment)"
 						ng-click="selectAppointment(appointment)">{{appointment.name}}</div>
 				</div>
 				<div class="container" id="beingPreparedAppointmentsContainer" dragula="'queue-bag'" dragula-model="beingPreparedAppointments">
-					<div ng-repeat="appointment in beingPreparedAppointments | searchFor: clientSearch" 
+					<div ng-repeat="appointment in beingPreparedAppointments" 
 						data-appointment-id="{{appointment.appointmentId}}"
+						ng-show="passesSearchFilter(appointment)"
 						ng-click="selectAppointment(appointment)">{{appointment.name}}</div>
 				</div>
 				<div class="container" id="completedAppointmentsContainer" dragula="'queue-bag'" dragula-model="completedAppointments">
-					<div ng-repeat="appointment in completedAppointments | searchFor: clientSearch" 
+					<div ng-repeat="appointment in completedAppointments" 
 						data-appointment-id="{{appointment.appointmentId}}"
+						ng-show="passesSearchFilter(appointment)"
 						ng-click="selectAppointment(appointment)">{{appointment.name}}</div>
 				</div>
 			</div>

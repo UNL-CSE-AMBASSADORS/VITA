@@ -5,7 +5,6 @@ require.config({
 		ngAria: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min',
 		queueDataService: '/dist/queue/new/queueDataService',
 		queueController: '/dist/queue/new/queueController',
-		queueSearchFilter: '/dist/queue/new/queueSearchFilter',
 		appointmentNotesAreaSharedPropertiesService: '/dist/components/appointmentNotesArea/appointmentNotesAreaSharedPropertiesService',
 		appointmentNotesAreaDataService: '/dist/components/appointmentNotesArea/appointmentNotesAreaDataService',
 		appointmentNotesAreaController: '/dist/components/appointmentNotesArea/appointmentNotesAreaController',
@@ -17,7 +16,6 @@ require.config({
 		'ngAria': ['angular'],
 		'queueDataService': ['angular'],
 		'queueController': ['angular'],
-		'queueSearchFilter': ['angular'],
 		'notificationUtilities': ['angular'],
 		'appointmentNotesAreaSharedPropertiesService': ['angular'],
 		'appointmentNotesAreaDataService': ['angular'],
@@ -31,7 +29,6 @@ require(['angular', 'ngAnimate', 'ngAria'], () => {
 	require([
 		'queueDataService',
 		'queueController',
-		'queueSearchFilter',
 		'appointmentNotesAreaSharedPropertiesService',
 		'appointmentNotesAreaDataService',
 		'appointmentNotesAreaController',
@@ -41,7 +38,6 @@ require(['angular', 'ngAnimate', 'ngAria'], () => {
 	function (
 		QueueDataService,
 		QueueController,
-		QueueSearchFilter,
 		AppointmentNotesAreaSharedPropertiesService,
 		AppointmentNotesAreaDataService,
 		AppointmentNotesAreaController,
@@ -73,7 +69,6 @@ require(['angular', 'ngAnimate', 'ngAria'], () => {
 				templateUrl: '/queue/new/queue.php'
 			};
 		});
-		queueApp.filter('searchFor', QueueSearchFilter);
 
 		// Notification utilities
 		queueApp.factory('notificationUtilities', NotificationUtilities);
