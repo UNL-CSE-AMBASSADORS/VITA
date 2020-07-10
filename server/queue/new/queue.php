@@ -42,7 +42,7 @@ function getAppointments($date, $siteId) {
 		$query = 'SELECT Appointment.appointmentId, TIME_FORMAT(AppointmentTime.scheduledTime, "%l:%i %p") AS scheduledTime, 
 					firstName, lastName, timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, 
 					completed, cancelled, language, Client.clientId, 
-					(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 15 MINUTE) < NOW() AND timeIn IS NULL) AS noShow,
+					(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 30 MINUTE) < NOW() AND timeIn IS NULL) AS noShow,
 					(AppointmentTime.scheduledTime < Appointment.createdAt) AS walkIn ';
 		if ($canViewClientInformation) {
 			$query .= ', phoneNumber, emailAddress ';
@@ -61,6 +61,10 @@ function getAppointments($date, $siteId) {
 
 		foreach ($appointments as &$appointment) {
 			$appointment['language'] = expandLanguageCode($appointment['language']);
+			// Convert the following from tinyints to booleans
+			$appointment['noShow'] = (boolean)$appointment['noShow'];
+			$appointment['walkIn'] = (boolean)$appointment['walkIn'];
+			$appointment['cancelled'] = (boolean)$appointment['cancelled'];
 
 			// Shorten last name to only the initial if user doesn't have permission to view entire last name
 			if (!$canViewClientInformation) {

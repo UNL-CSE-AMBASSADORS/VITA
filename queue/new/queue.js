@@ -6,6 +6,9 @@ require.config({
 		queueDataService: '/dist/queue/new/queueDataService',
 		queueController: '/dist/queue/new/queueController',
 		queueSearchFilter: '/dist/queue/new/queueSearchFilter',
+		appointmentNotesAreaSharedPropertiesService: '/dist/components/appointmentNotesArea/appointmentNotesAreaSharedPropertiesService',
+		appointmentNotesAreaDataService: '/dist/components/appointmentNotesArea/appointmentNotesAreaDataService',
+		appointmentNotesAreaController: '/dist/components/appointmentNotesArea/appointmentNotesAreaController',
 		notificationUtilities: '/dist/assets/js/utilities/notificationUtilities',
 		'angularjs-dragula': '/dist/assets/js/dragula/dragula.min'
 	},
@@ -15,6 +18,10 @@ require.config({
 		'queueDataService': ['angular'],
 		'queueController': ['angular'],
 		'queueSearchFilter': ['angular'],
+		'notificationUtilities': ['angular'],
+		'appointmentNotesAreaSharedPropertiesService': ['angular'],
+		'appointmentNotesAreaDataService': ['angular'],
+		'appointmentNotesAreaController': ['angular'],
 		'angularjs-dragula': ['angular']
 	}
 });
@@ -25,6 +32,9 @@ require(['angular', 'ngAnimate', 'ngAria'], () => {
 		'queueDataService',
 		'queueController',
 		'queueSearchFilter',
+		'appointmentNotesAreaSharedPropertiesService',
+		'appointmentNotesAreaDataService',
+		'appointmentNotesAreaController',
 		'notificationUtilities',
 		'angularjs-dragula'
 	],
@@ -32,6 +42,9 @@ require(['angular', 'ngAnimate', 'ngAria'], () => {
 		QueueDataService,
 		QueueController,
 		QueueSearchFilter,
+		AppointmentNotesAreaSharedPropertiesService,
+		AppointmentNotesAreaDataService,
+		AppointmentNotesAreaController,
 		NotificationUtilities,
 		angularDragula
 	) {
@@ -40,6 +53,18 @@ require(['angular', 'ngAnimate', 'ngAria'], () => {
 		// Create the module
 		const queueApp = angular.module('queueApp', [angularDragula(angular)]);
 
+		// Add Appointment Notes Component
+		queueApp.service('appointmentNotesAreaSharedPropertiesService', AppointmentNotesAreaSharedPropertiesService)
+		queueApp.factory('appointmentNotesAreaDataService', AppointmentNotesAreaDataService);
+		queueApp.controller('appointmentNotesAreaController', AppointmentNotesAreaController);
+		queueApp.directive('appointmentNotesArea', function () {
+			return {
+				controller: 'appointmentNotesAreaController',
+				templateUrl: '/components/appointmentNotesArea/appointmentNotesArea.php'
+			};
+		});
+
+		// Add Queue module itself
 		queueApp.factory('queueDataService', QueueDataService);
 		queueApp.controller('queueController', QueueController);
 		queueApp.directive('queue', () => {

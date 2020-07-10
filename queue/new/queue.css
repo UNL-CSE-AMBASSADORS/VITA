@@ -21,3 +21,37 @@
 	cursor: -moz-grabbing;
 	cursor: -webkit-grabbing;
 }
+
+.pill {
+	display: inline-block;
+	padding: .25em .6em;
+	line-height: 1;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: 10rem;
+}
+
+.pill-complete {
+	color: #fff;
+	background-color: #137cbd;
+}
+
+.pill-incomplete {
+	border: 1px solid grey;
+}
+
+.pill-red {
+	color: #fff;
+	background-color: #D00000;
+}
+
+.pill-green {
+	color: #fff;
+	background-color: #38764C;
+}
+
+.pill-walk-in {
+	color: #fff;
+	background-color: #38764C;
+}

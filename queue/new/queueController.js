@@ -1,7 +1,7 @@
 define('queueController', [], function() {
 
 	// TODO: Organize methods/variables
-	function queueController($scope, $interval, QueueDataService, DragulaService, NotificationUtilities) {
+	function queueController($scope, $interval, QueueDataService, AppointmentNotesAreaSharedPropertiesService, DragulaService, NotificationUtilities) {
 
 		$scope.today = new Date();
 		$scope.currentDay = $scope.today.getDate();
@@ -19,6 +19,8 @@ define('queueController', [], function() {
 		$scope.paperworkCompletedAppointments = [];
 		$scope.beingPreparedAppointments = [];
 		$scope.completedAppointments = [];
+
+		$scope.appointmentNotesAreaSharedProperties = AppointmentNotesAreaSharedPropertiesService.getSharedProperties();
 
 		// Configure dragula options
 		DragulaService.options($scope, 'queue-bag', { // Dragula call a collection of "swimlanes/containers" a "bag"
@@ -53,38 +55,77 @@ define('queueController', [], function() {
 					if (response == null || !response.success) {
 						const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
 						NotificationUtilities.giveNotice('Failure', errorMessage, false);
+						return;
 					}
+					
+					const appointment = $scope.awaitingAppointments.find((appointment) => appointment.appointmentId === appointmentId);
+					appointment.checkedIn = false;
 				});
 			} else if (targetContainerId === 'checkedInAppointmentsContainer') {
 				QueueDataService.markAppointmentAsCheckedIn(appointmentId).then((response) => {
 					if (response == null || !response.success) {
 						const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
 						NotificationUtilities.giveNotice('Failure', errorMessage, false);
+						return;
 					}
+					const appointment = $scope.checkedInAppointments.find((appointment) => appointment.appointmentId === appointmentId);
+					appointment.checkedIn = true;
+					appointment.paperworkComplete = false;
+					appointment.noShow = false;
+
 				});
 			} else if (targetContainerId === 'paperworkCompletedAppointmentsContainer') {
 				QueueDataService.markAppointmentAsPaperworkCompleted(appointmentId).then((response) => {
 					if (response == null || !response.success) {
 						const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
 						NotificationUtilities.giveNotice('Failure', errorMessage, false);
+						return;
 					}
+					const appointment = $scope.paperworkCompletedAppointments.find((appointment) => appointment.appointmentId === appointmentId);
+					appointment.paperworkComplete = true;
+					appointment.preparing = false;
 				});
 			} else if (targetContainerId === 'beingPreparedAppointmentsContainer') {
 				QueueDataService.markAppointmentAsBeingPrepared(appointmentId).then((response) => {
 					if (response == null || !response.success) {
 						const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
 						NotificationUtilities.giveNotice('Failure', errorMessage, false);
+						return;
 					}
+					const appointment = $scope.beingPreparedAppointments.find((appointment) => appointment.appointmentId === appointmentId);
+					appointment.preparing = true;
+					appointment.ended = false;
 				});
 			} else if (targetContainerId === 'completedAppointmentsContainer') {
 				QueueDataService.markAppointmentAsCompleted(appointmentId).then((response) => {
 					if (response == null || !response.success) {
 						const errorMessage = response ? response.error : 'There was an error on the server. Please refresh the page and try again.';
 						NotificationUtilities.giveNotice('Failure', errorMessage, false);
+						return;
 					}
+					const appointment = $scope.completedAppointments.find((appointment) => appointment.appointmentId === appointmentId);
+					appointment.ended = true;
 				});
 			}
 		});
+
+		$scope.selectAppointment = (appointment) => {
+			$scope.selectedAppointment = appointment;
+			$scope.appointmentNotesAreaSharedProperties.appointmentId = $scope.selectedAppointment.appointmentId;
+			// document.body.scrollTop = document.documentElement.scrollTop = 0;
+		};
+
+		$scope.deselectAppointment = () => {
+			$scope.selectedAppointment = null;
+		};
+
+		$scope.markAppointmentAsCancelled = () => {
+			console.log('MARK AS CANCELLED');
+		};
+
+		$scope.markAppointmentAsIncomplete = () => {
+			console.log('MARK AS INCOMPLETE');
+		};
 	
 		$scope.getAppointments = () => {
 			// TODO: Pull this into helper method?
@@ -103,10 +144,19 @@ define('queueController', [], function() {
 					NotificationUtilities.giveNotice('Failure', errorMessage, false);
 					return;
 				}
+
+				const appointments = response.appointments.map((appointment) => {
+					appointment.name = appointment.firstName + ' ' + appointment.lastName;
+					appointment.checkedIn = appointment.timeIn != null;
+					appointment.paperworkComplete = appointment.timeReturnedPapers != null;
+					appointment.preparing = appointment.timeAppointmentStarted != null;
+					appointment.ended = appointment.timeAppointmentEnded != null;
+					return appointment;
+				});
 				
 				// Only add appointments if 1) they don't exist in any swimlane, or 2) they've been moved already (by another volunteer)
 				// I've ignored case 2 however, as I don't think it'll happen all too often, so it's not worth the extra logic
-				response.appointments.forEach((appointment) => {
+				appointments.forEach((appointment) => {
 					const exists = $scope.appointments.some((appointment2) => appointment.appointmentId === appointment2.appointmentId);
 					if (exists) return;
 
@@ -123,23 +173,18 @@ define('queueController', [], function() {
 					}
 				});
 
-				$scope.appointments = response.appointments.map((appointment) => {
-					appointment.name = appointment.firstName + ' ' + appointment.lastName;
-					return appointment;
-				});
+				$scope.appointments = appointments; // Finally set appointments after the existence check has occurred above
 			});
 		};
 
 		$scope.siteChanged = () => {
 			$scope.resetSwimlanes();
 			$scope.getAppointments();
-			$scope.selectedAppointment = null;
 		};
 
 		$scope.dateChanged = () => {
 			$scope.resetSwimlanes();
 			$scope.getAppointments();
-			$scope.selectedAppointment = null;
 		};
 
 		$scope.resetSwimlanes = () => {
@@ -175,10 +220,10 @@ define('queueController', [], function() {
 			});
 		}]);
 
-		// Create interval to update appointment information every 10 seconds
+		// Create interval to update appointment information every 15 seconds
 		const appointmentInterval = $interval((() => {
 			$scope.getAppointments();
-		}).bind(this), 10000);
+		}).bind(this), 15000);
 
 		// Destroy the intervals when we leave this page
 		$scope.$on('$destroy', () => {
@@ -188,12 +233,9 @@ define('queueController', [], function() {
 
 		// Invoke initially
 		$scope.getSites();
-
-		// TODO: Appointments need to be loaded still every 15 seconds or so, and then only added to the
-		// arrays if they are not already existent
 	};
 
-	queueController.$inject = ['$scope', '$interval', 'queueDataService', 'dragulaService', 'notificationUtilities'];
+	queueController.$inject = ['$scope', '$interval', 'queueDataService', 'appointmentNotesAreaSharedPropertiesService', 'dragulaService', 'notificationUtilities'];
 
 	return queueController;
 
