@@ -47,6 +47,7 @@ function getAppointments($date, $siteId) {
 		if ($canViewClientInformation) {
 			$query .= ', phoneNumber, emailAddress ';
 		}
+		// TODO: Improve query to organize appointments based on times
 		$query .= 'FROM Appointment
 					LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 					JOIN Client ON Appointment.clientId = Client.clientId

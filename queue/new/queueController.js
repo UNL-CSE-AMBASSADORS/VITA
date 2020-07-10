@@ -1,6 +1,5 @@
 define('queueController', [], function() {
 
-	// TODO: Organize methods/variables
 	function queueController($scope, $interval, QueueDataService, AppointmentNotesAreaSharedPropertiesService, DragulaService, NotificationUtilities) {
 
 		$scope.today = new Date();

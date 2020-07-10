@@ -47,15 +47,15 @@
 		<div ng-if="appointments.length > 0" ng-cloak>
 			<!-- Swimlane headers -->
 			<div class="dcf-grid dcf-grid-fifths@md dcf-col-gap-2">
-				<div class="dcf-d-flex dcf-jc-center"><h5>Awaiting</h5></div>
-				<div class="dcf-d-flex dcf-jc-center"><h5>Checked-In</h5></div>
-				<div class="dcf-d-flex dcf-jc-center"><h5>Paperwork Complete</h5></div>
-				<div class="dcf-d-flex dcf-jc-center"><h5>Preparing</h5></div>
-				<div class="dcf-d-flex dcf-jc-center"><h5>Complete</h5></div>
+				<div class="dcf-d-flex dcf-jc-center"><h5>Awaiting ({{awaitingAppointments.length}})</h5></div>
+				<div class="dcf-d-flex dcf-jc-center"><h5>Checked-In ({{checkedInAppointments.length}})</h5></div>
+				<div class="dcf-d-flex dcf-jc-center"><h5>Paperwork Done ({{paperworkCompletedAppointments.length}})</h5></div>
+				<div class="dcf-d-flex dcf-jc-center"><h5>Preparing ({{beingPreparedAppointments.length}})</h5></div>
+				<div class="dcf-d-flex dcf-jc-center"><h5>Complete ({{completedAppointments.length}})</h5></div>
 			</div>
 
 			<!-- Swimlanes -->
-			<div class="dcf-grid-fifths@md dcf-col-gap-2">
+			<div class="dcf-grid dcf-grid-fifths@md dcf-col-gap-2">
 				<div class="container" id="awaitingAppointmentsContainer" dragula="'queue-bag'" dragula-model="awaitingAppointments">
 					<div ng-repeat="appointment in awaitingAppointments"
 						data-appointment-id="{{appointment.appointmentId}}"
