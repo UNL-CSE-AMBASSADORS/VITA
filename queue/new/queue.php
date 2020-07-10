@@ -60,7 +60,7 @@
 					<div ng-repeat="appointment in awaitingAppointments"
 						data-appointment-id="{{appointment.appointmentId}}"
 						ng-show="passesSearchFilter(appointment)"
-						ng-click="selectAppointment(appointment)">{{appointment.name}}</div>
+						ng-click="selectAppointment(appointment)">{{appointment.name}} ({{appointment.scheduledTime}})</div>
 				</div>
 				<div class="container" id="checkedInAppointmentsContainer" dragula="'queue-bag'" dragula-model="checkedInAppointments">
 					<div ng-repeat="appointment in checkedInAppointments" 

@@ -47,7 +47,6 @@ function getAppointments($date, $siteId) {
 		if ($canViewClientInformation) {
 			$query .= ', phoneNumber, emailAddress ';
 		}
-		// TODO: Improve query to organize appointments based on times
 		$query .= 'FROM Appointment
 					LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 					JOIN Client ON Appointment.clientId = Client.clientId
@@ -57,7 +56,7 @@ function getAppointments($date, $siteId) {
 					AND (cancelled IS NULL OR cancelled = FALSE)
 					AND (completed IS NULL OR completed != FALSE)
 					AND Appointment.archived = FALSE
-				ORDER BY AppointmentTime.scheduledTime ASC, firstName ASC, lastName ASC';
+				ORDER BY AppointmentTime.scheduledTime, firstName, lastName';
 		$stmt = $DB_CONN->prepare($query);
 		$stmt->execute(array($date, $siteId));
 		$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
