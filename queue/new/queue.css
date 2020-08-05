@@ -9,13 +9,21 @@
 	padding: 10px;
 	background-color: rgba(0, 0, 0, 0.2);
 	transition: opacity 0.4s ease-in-out;
+	border-radius: 8px;
+  	box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 2px -2px, rgba(0, 0, 0, 0.2) 0px 1px 3px;
 }
+
+.container div:hover, .gu-mirror:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
 .container div {
 	cursor: move;
 	cursor: grab;
 	cursor: -moz-grab;
 	cursor: -webkit-grab;
 }
+
 .gu-mirror {
 	cursor: grabbing;
 	cursor: -moz-grabbing;
