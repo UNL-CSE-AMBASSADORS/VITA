@@ -19,9 +19,6 @@ if(isset($_REQUEST['action'])){
 		case 'updateUserPermissions':
 			updateUserPermissions($_REQUEST);
 			break;
-		case 'updateUserAbilities':
-			updateUserAbilities($_REQUEST);
-			break;
 		case 'addUser':
 			addUser($_REQUEST);
 			break;
@@ -50,17 +47,15 @@ function getUserTable($data) {
 
 	$stmt->execute(array());
 
-	$thead = '<thead><tr><th>Name</th><th>Email</th><th>Permissions</th><th>Cerifications</th><th>Edit</th></tr></thead>';
+	$thead = '<thead><tr><th>Name</th><th>Email</th><th>Permissions</th><th>Edit</th></tr></thead>';
 	$tbody = '<tbody>';
 	while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 		$permissionsList = getUserPermissionOptionList($row['userId']);
-		$abilitiesList = getUserAbilityOptionList($row['userId']);
 
 		$tbody.= "<tr data-user-id='".$row['userId']."'>";
 		$tbody.= "<th data-header='Name'>".$row['firstName']." ".$row['lastName']."</th>";
 		$tbody.= "<td data-header='Email'>".$row['email']."</td>";
 		$tbody.= "<td data-header='Permissions'><select class='userPermissionList userPermissionsSelectPicker' data-style='dcf-btn dcf-btn-secondary' multiple=true>".implode('', $permissionsList)."</select></td>";
-		$tbody.= "<td data-header='Certifications'><select class='userAbilityList userAbilitiesSelectPicker' data-style='dcf-btn dcf-btn-secondary' multiple=true>".implode('', $abilitiesList)."</select></td>";		
 		$tbody.= "<td data-header='Edit'><a href='#edit-user-modal' class='userEditButton'>Edit</a></td>";	
 		$tbody.= "</tr>";
 	}
@@ -91,31 +86,6 @@ function getUserPermissionOptionList($userId) {
 			$data = "data-userPermissionId='".$row['userPermissionId']."'";
 		}
 		$options[] = "<option $data value=".$row['permissionId']." $selected>".$row['name']."</option>";
-	}
-
-	return $options;
-}
-
-// Returns string of html <option> elments with all abilities
-function getUserAbilityOptionList($userId) {
-	GLOBAL $DB_CONN;
-
-	$stmt = $DB_CONN->prepare('SELECT abilityId, name, description, lookupName, 
-		(SELECT userAbilityId FROM UserAbility WHERE userId = ? AND UserAbility.abilityId = Ability.abilityId) as userAbilityId
-	FROM Ability
-	ORDER BY !verificationRequired');
-
-	$stmt->execute(array($userId));
-
-	$options = array();
-	while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-		$selected = '';
-		$data = '';
-		if ($row['userAbilityId']) {
-			$selected = 'selected=true';
-			$data = "data-userAbilityId='".$row['userAbilityId']."'";
-		}
-		$options[] = "<option $data value=".$row['abilityId']." $selected>".$row['name']."</option>";
 	}
 
 	return $options;
@@ -167,40 +137,6 @@ function updateUserPermissions($data){
 			$stmt->execute(array(
 				$data['userId'],
 				$permissionId, 
-				$USER->getUserId()
-			));
-		}
-	}
-
-	$DB_CONN->commit();
-
-	echo json_encode($response);
-}
-
-function updateUserAbilities($data) {
-	GLOBAL $DB_CONN, $USER;
-
-	$response = array();
-	$response['success'] = true;
-
-	$DB_CONN->beginTransaction();
-	
-	if (isset($data['removeAbilityArr'])) {
-		$stmt = $DB_CONN->prepare('DELETE FROM UserAbility WHERE userAbilityId = ?');
-
-		foreach ($data['removeAbilityArr'] as $userAbilityId) {
-			$stmt->execute(array($userAbilityId));
-		}
-	}
-
-	if (isset($data['addAbilityArr'])){
-		$stmt = $DB_CONN->prepare('INSERT INTO UserAbility (userId, abilityId, createdBy)
-			VALUES (?, ?, ?)');
-
-		foreach ($data['addAbilityArr'] as $abilityId) {
-			$stmt->execute(array(
-				$data['userId'],
-				$abilityId, 
 				$USER->getUserId()
 			));
 		}

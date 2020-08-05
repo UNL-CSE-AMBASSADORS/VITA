@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS Question;
 
 DROP TABLE IF EXISTS UserPermission;
 DROP TABLE IF EXISTS Permission;
+-- TODO: Ability tables can be removed after this script has been run by each dev member
 DROP TABLE IF EXISTS UserAbility;
 DROP TABLE IF EXISTS Ability;
 DROP TABLE IF EXISTS Login;
@@ -198,27 +199,6 @@ CREATE TABLE UserPermission (
 	permissionId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(permissionId) REFERENCES Permission(permissionId),
 	CONSTRAINT UNIQUE unique_permission (userId, permissionId)
-);
-
-CREATE TABLE Ability (
-	abilityId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	name VARCHAR(255) NOT NULL,
-	lookupName VARCHAR(255) NOT NULL,
-	verificationRequired BOOLEAN NOT NULL,
-	description VARCHAR(500) NOT NULL,
-	CONSTRAINT uniqueLookupName UNIQUE INDEX(lookupName)
-);
-
-CREATE TABLE UserAbility (
-	userAbilityId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	createdAt DATETIME NOT NULL DEFAULT NOW(),
-	createdBy INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(createdBy) REFERENCES User(userId),
-	userId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(userId) REFERENCES User(userId),
-	abilityId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(abilityId) REFERENCES Ability(abilityId),
-	CONSTRAINT UNIQUE unique_ability (userId, abilityId)
 );
 
 CREATE TABLE Shift (
