@@ -25,8 +25,8 @@ INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
 	VALUES ("Anderson Library", "3635 Touzalin Ave", "402-472-9638", @userId, @userId);
 SET @site_andersonLibrary = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, doesMultilingual, createdBy, lastModifiedBy)
-	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", TRUE, @userId, @userId);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", @userId, @userId);
 SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
 
 INSERT INTO Site (title, address, phoneNumber, doesInternational, createdBy, lastModifiedBy)
@@ -1675,35 +1675,6 @@ INSERT INTO AppointmentTime (scheduledTime, maximumNumberOfAppointments, siteId)
 	VALUES (@scheduledTime, 10, @site_internationalStudentScholar);
 -- End Shifts and AppointmentTimes
 
-
-
-
-
--- Abilities
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Basic Certification", "basic_certification", "Has completed the basic certification requirements", TRUE);
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Advanced Certification", "advanced_certification", "Has completed the advanced certification requirements", TRUE);
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("International Certification", "international_certification", "Has completed the international certification requirements", TRUE);
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Military Certification", "military_certification", "Has completed the military certification requirements", TRUE);
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Health Savings (HSA) Certification", "health_savings_certification", "Has completed the health savings (HSA) certification requirements", TRUE);
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Spanish-Speaking", "spanish_speaking", "Can speak fluent Spanish", FALSE);
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Vietnamese-Speaking", "viatnamese_speaking", "Can speak fluent vietnamese", FALSE);
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Arabic-Speaking", "arabic_speaking", "Can speak fluent Arabic", FALSE);
--- End Abilities
 
 
 

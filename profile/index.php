@@ -147,25 +147,6 @@ return readfile($documentRoot . $path);
 			</div>
 		</div>
 
-		<!-- Abilities -->
-		<div class="dcf-bleed unl-bg-lightest-gray">
-			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
-				<h2 class="inline">Abilities</h2>
-				<button class="dcf-btn dcf-btn-secondary dcf-float-right" id="abilitiesEditButton">Edit</button>
-				<button class="dcf-btn dcf-float-right dcf-btn-primary" id="abilitiesCancelButton" style="display:none;">Cancel</button>
-				<div id="abilitiesSelect" multiple=true></div>
-			</div>
-		</div>
-
-		<!-- Certifications -->		
-		<div class="dcf-bleed">
-			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
-				<h2>Certifications</h2>
-				<p><b>NOTE</b>: These must be verified by your site administrator.</p>
-				<div id="certificationsDiv"></div>
-			</div>
-		</div>
-
 		<!-- Shifts -->
 		<div class="dcf-bleed unl-bg-lightest-gray">
 			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
@@ -215,7 +196,6 @@ return readfile($documentRoot . $path);
 <!-- TemplateBeginEditable name="jsbody" -->
 <?php require_once "$root/server/global_includes.php"; ?>
 <script src="/dist/profile/profile.js"></script>
-<script src="https://kit.fontawesome.com/f7ca51166c.js" crossorigin="anonymous"></script>
 <!-- TemplateEndEditable -->
 </body>
 </html>

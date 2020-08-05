@@ -19,8 +19,6 @@ TRUNCATE Question;
 
 TRUNCATE UserPermission;
 TRUNCATE Permission;
-TRUNCATE UserAbility;
-TRUNCATE Ability;
 TRUNCATE Login;
 TRUNCATE PasswordReset;
 TRUNCATE LoginHistory;
@@ -66,61 +64,6 @@ INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
 INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
 	VALUES (0, @passwordHash, @lockoutTime, @user_siteAdmin1Id);
 -- end login
-
-
-
--- Abilities
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Basic Certification", "basic_certification", "Has completed the basic certification requirements", TRUE);
-SET @ability_basicCertificationId = LAST_INSERT_ID();
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Advanced Certification", "advanced_certification", "Has completed the advanced certification requirements", TRUE);
-SET @ability_advancedCertificationId = LAST_INSERT_ID();
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Worldwide Income Certification", "worldwide_income_certification", "Has completed the worldwide income certification requirements", TRUE);
-SET @ability_worldwideIncomeCertificationId = LAST_INSERT_ID();
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Military Certification", "military_certification", "Has completed the military certification requirements", TRUE);
-SET @ability_militaryCertificationId = LAST_INSERT_ID();
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Health Savings (HSA) Certification", "health_savings_certification", "Has completed the health savings (HSA) certification requirements", TRUE);
-SET @ability_healthSavingsCertificationId = LAST_INSERT_ID();
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Spanish-Speaking", "spanish_speaking", "Can speak fluent Spanish", FALSE);
-SET @ability_spanishSpeakingId = LAST_INSERT_ID();
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Vietnamese-Speaking", "viatnamese_speaking", "Can speak fluent vietnamese", FALSE);
-SET @ability_vietnameseSpeakingId = LAST_INSERT_ID();
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Arabic-Speaking", "arabic_speaking", "Can speak fluent Arabic", FALSE);
-SET @ability_arabicSpeakingId = LAST_INSERT_ID();
-
-INSERT INTO Ability (name, lookupName, description, verificationRequired)
-	VALUES ("Foreign Student Scholar Certification", "foreign_student_scholar_certification", "Has complete the foreign student scholar certification requirements", TRUE);
--- End Abilities
-
-
-
--- user abilities
-INSERT INTO UserAbility (userId, abilityId, createdBy)
-	VALUES (@user_preparer1Id, @ability_basicCertificationId, @user_siteAdmin1Id);
-
-INSERT INTO UserAbility (userId, abilityId, createdBy)
-	VALUES (@user_preparer1Id, @ability_worldwideIncomeCertificationId, @user_siteAdmin1Id);
-
-INSERT INTO UserAbility (userId, abilityId, createdBy)
-	VALUES (@user_preparer2Id, @ability_basicCertificationId, @user_siteAdmin1Id);
-
-INSERT INTO UserAbility (userId, abilityId, createdBy)
-	VALUES (@user_preparer2Id, @ability_spanishSpeakingId, @user_siteAdmin1Id);
--- end user abilities
 
 
 
@@ -174,8 +117,8 @@ INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
 	VALUES ("Anderson Library", "3635 Touzalin Ave", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_andersonLibrary = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, doesMultilingual, createdBy, lastModifiedBy)
-	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", TRUE, @user_siteAdmin1Id, @user_siteAdmin1Id);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", @user_siteAdmin1Id, @user_siteAdmin1Id);
 SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
 
 INSERT INTO Site (title, address, phoneNumber, doesInternational, createdBy, lastModifiedBy)
