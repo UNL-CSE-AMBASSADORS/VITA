@@ -124,12 +124,12 @@ return readfile($documentRoot . $path);
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/footer-global-2.html"); ?>
 </footer>
+<script src="https://kit.fontawesome.com/f7ca51166c.js" crossorigin="anonymous"></script>
 <?php wdnInclude("/wdn/templates_5.1/includes/global/noscript.html"); ?>
 <?php wdnInclude("/wdn/templates_5.1/includes/global/js-body.html"); ?>
 <!-- TemplateBeginEditable name="jsbody" -->
 <?php require_once "$root/server/global_includes.php"; ?>
 <script src="/dist/management/sites/sites.js"></script>
-<script src="https://kit.fontawesome.com/f7ca51166c.js" crossorigin="anonymous"></script>
 <!-- TemplateEndEditable -->
 </body>
 </html>
