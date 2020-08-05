@@ -1,3 +1,4 @@
 <?php 
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
-require_once "$root/components/translate.php";
+// Any front-end PHP files that should be included on every page can be specified here
+

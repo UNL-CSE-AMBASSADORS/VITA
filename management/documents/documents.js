@@ -3,7 +3,6 @@ WDN.initializePlugin('jqueryui', [function () {
 		$(document).ready(function() {
 			window.downloadAppointmentSchedule = downloadAppointmentSchedule;
 			window.downloadVolunteerSchedule = downloadVolunteerSchedule;
-			window.downloadAppointmentsFilingStatuses = downloadAppointmentsFilingStatuses;
 
 			loadAllSites();
 
@@ -21,12 +20,6 @@ WDN.initializePlugin('jqueryui', [function () {
 			let date = getSelectedDate();	
 			clickDownloadLink(`/server/management/documents/appointmentsSchedule.php?date=${date}&siteId=${siteId}`);
 		};
-
-		function downloadAppointmentsFilingStatuses() {
-			let siteId = getSelectedSiteId();
-			let date = getSelectedDate();
-			clickDownloadLink(`/server/management/documents/appointmentsFilingStatuses.php?date=${date}&siteId=${siteId}`);
-		}
 
 		function getSelectedSiteId() {
 			let siteSelect = document.getElementById("siteSelect");

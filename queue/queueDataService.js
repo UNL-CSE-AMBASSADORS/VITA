@@ -16,13 +16,6 @@ define('queueDataService', [], function() {
 					return null;
 				});
 			},
-			getFilingStatuses: function() {
-				return $http.get('/server/api/filingStatuses/getAll.php?filingStatusId=true&text=true').then(function(response) {
-					return response.data;
-				},function(error) {
-					return null;
-				});
-			},
 			checkInNow: function(time, id) {
 				return $http({
 					url: "/server/queue/queue_priv.php",
@@ -65,16 +58,14 @@ define('queueDataService', [], function() {
 					return null;
 				});
 			},
-			finishAppointment: function(time, id, stationNumber, filingStatusIds) {
+			finishAppointment: function(time, id) {
 				return $http({
 					url: "/server/queue/queue_priv.php",
 					method: 'POST',
 					params: {
 						"action": "appointmentComplete",
 						"time": time,
-						"id": id,
-						"stationNumber": stationNumber,
-						"filingStatusIds[]": filingStatusIds
+						"id": id
 					}
 				}).then(function(response){
 					return response.data;

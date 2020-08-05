@@ -34,19 +34,12 @@
 			<div><b>Time Paperwork Completed: </b>{{appointment.timeReturnedPapers != null ? appointment.timeReturnedPapers : "N/A"}}</div>
 			<div><b>Time Appointment Started: </b>{{appointment.timeAppointmentStarted != null ? appointment.timeAppointmentStarted : "N/A"}}</div>
 			<div><b>Time Appointment Ended: </b>{{appointment.timeAppointmentEnded != null ? appointment.timeAppointmentEnded : "N/A"}}</div>
-			<div><b>Prepared at Station: </b>{{appointment.servicedByStation != null ? appointment.servicedByStation : "N/A"}}</div>
 			<div><b>Appointment ID: </b>{{appointment.appointmentId}}</div>
 		</div>
 	</div>
 	<div>
 		<div ng-if="appointment.uniqueAppointmentRescheduleUrl != null"><b>Unique Appointment Reschedule URL: </b><a ng-href="{{appointment.uniqueAppointmentRescheduleUrl}}" target="_blank">{{appointment.uniqueAppointmentRescheduleUrl}}</a></div>
 		<div ng-if="appointment.uniqueUploadDocumentsUrl != null"><b>Unique Upload Documents URL: </b><a ng-href="{{appointment.uniqueUploadDocumentsUrl}}" target="_blank">{{appointment.uniqueUploadDocumentsUrl}}</a></div>
-	</div>
-	<div ng-if="appointment.filingStatuses.length > 0" class="dcf-mt-5">
-		<div><b>Filed: </b></div>
-		<ul>
-			<li ng-repeat="filingStatus in appointment.filingStatuses">{{filingStatus.text}}</li>
-		</ul>
 	</div>
 
 

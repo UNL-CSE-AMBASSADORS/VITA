@@ -14,9 +14,7 @@ require_once "$root/server/utilities/emailUtilities.class.php";
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
 		case 'getUserInformation': getUserInformation(); break;
-		case 'getAbilities': getAbilities(); break;
 		case 'updatePersonalInformation': updatePersonalInformation($_REQUEST); break;
-		case 'updateAbilities': updateAbilities($_REQUEST); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -27,76 +25,6 @@ function getUserInformation() {
 	GLOBAL $USER;
 	$userInformation = $USER->getUserDetails();
 	echo json_encode($userInformation);
-}
-
-function getAbilities() {
-	GLOBAL $USER, $DB_CONN;
-	$userId = $USER->getUserId();
-	
-	$query = "SELECT Ability.abilityId, Ability.name, Ability.description, Ability.verificationRequired, UserAbility.userAbilityId
-		FROM Ability
-		LEFT JOIN UserAbility ON Ability.abilityId = UserAbility.abilityId AND UserAbility.userId = ?";
-	
-	$stmt = $DB_CONN->prepare($query);
-	$stmt->execute(array($userId));
-	$abilities = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	
-	$abilitiesNotRequiringVerificaiton = array();
-	$abilitiesRequiringVerification = array();
-	foreach ($abilities as &$ability) {
-		$ability['has'] = isset($ability['userAbilityId']);
-		$ability['verificationRequired'] = $ability['verificationRequired'] ? true : false;
-		
-		if ($ability['verificationRequired']) {
-			$abilitiesRequiringVerification[] = $ability;
-		} else {
-			$abilitiesNotRequiringVerificaiton[] = $ability;
-		}
-	}
-
-	$result = array(
-		'abilities' => $abilitiesNotRequiringVerificaiton,
-		'abilitiesRequiringVerification' => $abilitiesRequiringVerification
-	);
-
-	echo json_encode($result);
-}
-
-function updateAbilities($data) {
-	GLOBAL $DB_CONN, $USER;
-
-	$userId = $USER->getUserId();
-	$response = array();
-	$response['success'] = true;
-
-	$DB_CONN->beginTransaction();
-
-	if(isset($data['removeAbilityArray'])){
-		$stmt = $DB_CONN->prepare("DELETE FROM UserAbility WHERE userAbilityId = ? AND userId = ?");
-
-		foreach ($data['removeAbilityArray'] as $userAbilityId) {
-			$stmt->execute(array($userAbilityId, $userId));
-		}
-	}
-
-	if(isset($data['addAbilityArray'])){
-		$stmt = $DB_CONN->prepare("INSERT INTO UserAbility 
-				(userId, abilityId, createdBy)
-			VALUES 
-				(?, ?, ?)");
-
-		foreach ($data['addAbilityArray'] as $abilityId) {
-			$stmt->execute(array(
-				$userId,
-				$abilityId, 
-				$userId
-			));
-		}
-	}
-
-	$DB_CONN->commit();
-
-	echo json_encode($response);
 }
 
 function updatePersonalInformation($data) {
