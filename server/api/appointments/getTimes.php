@@ -11,7 +11,7 @@ $isLoggedIn = $USER->isLoggedIn();
 getAppointmentTimes($_GET, $isLoggedIn);
 
 /*
- * The fields that will be returned are: appointmentTimeId, siteId, isVirtual, scheduledDate, scheduledTime, percentageAppointments, numberOfAppointmentsAlreadyMade, numberOfPreparers
+ * The fields that will be returned are: appointmentTimeId, siteId, isVirtual, scheduledDate, scheduledTime, percentageAppointments, numberOfAppointmentsAlreadyMade
  */
 function getAppointmentTimes($data, $isLoggedIn) {
 	date_default_timezone_set('America/Chicago');
@@ -57,17 +57,10 @@ function getResidentialAppointmentTimes($year, $after) {
 	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, s.isVirtual, DATE(scheduledTime) AS scheduledDate, 
 		TIME(scheduledTime) AS scheduledTime, percentageAppointments, 
 		COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyMade, 
-		COUNT(DISTINCT us.userShiftId) AS numberOfPreparers, 
 		apt.minimumNumberOfAppointments, apt.maximumNumberOfAppointments
 	FROM AppointmentTime apt
 		LEFT JOIN Appointment a ON a.appointmentTimeId = apt.appointmentTimeId
 		LEFT JOIN ServicedAppointment sa ON sa.appointmentId = a.appointmentId
-		LEFT JOIN UserShift us ON us.shiftId IN 
-			(SELECT s.shiftId FROM Shift s WHERE s.siteId = apt.siteId 
-				AND s.startTime <= apt.scheduledTime 
-				AND s.endTime >= apt.scheduledTime 
-				AND TIMESTAMPDIFF(MINUTE, apt.scheduledTime, s.endTime) >= apt.approximateLengthInMinutes) 
-			AND us.roleId = (SELECT roleId FROM Role WHERE lookupName = "preparer")
 		LEFT JOIN Site s ON s.siteId = apt.siteId
 	WHERE YEAR(apt.scheduledTime) = ? 
 		AND apt.scheduledTime > ? 
@@ -111,8 +104,8 @@ function getInternationalAppointmentTimes($year, $after, $treatyType) {
 	return $appointmentTimes;
 }
 
-function calculateRemainingAppointmentsAvailableForResidentialAppointment($appointmentCount, $percentAppointments, $preparerCount, $minimum, $maximum) {
-	$availableAppointmentSpots = $preparerCount;
+function calculateRemainingAppointmentsAvailableForResidentialAppointment($appointmentCount, $percentAppointments, $minimum, $maximum) {
+	$availableAppointmentSpots = 0;
 	if (isset($minimum)) {
 		$availableAppointmentSpots = max($minimum, $availableAppointmentSpots);
 	}
@@ -166,7 +159,7 @@ class DateSiteTimeMap {
 		// Get the number of appointments still available
 		$appointmentsAvailable = 0;
 		if ($this->appointmentType === 'residential') {
-			$appointmentsAvailable = calculateRemainingAppointmentsAvailableForResidentialAppointment($dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['percentageAppointments'], $dstObject['numberOfPreparers'], $dstObject['minimumNumberOfAppointments'], $dstObject['maximumNumberOfAppointments']);
+			$appointmentsAvailable = calculateRemainingAppointmentsAvailableForResidentialAppointment($dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['percentageAppointments'], $dstObject['minimumNumberOfAppointments'], $dstObject['maximumNumberOfAppointments']);
 		} else {
 			$appointmentsAvailable = calculateRemainingAppointmentsAvailableForInternationalAppointment($this->appointmentType, $dstObject['numberOfAppointmentsAlreadyMade'], $dstObject['appointmentTimeId']);
 		}
