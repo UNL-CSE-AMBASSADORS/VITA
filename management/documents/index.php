@@ -127,7 +127,6 @@ return readfile($documentRoot . $path);
 				</div>
 				<div class="dcf-d-flex dcf-flex-col dcf-ai-start">
 					<button class="dcf-btn dcf-btn-primary dcf-mt-5" onclick="downloadAppointmentSchedule();">Download Appointment Schedule</button>
-					<button class="dcf-btn dcf-btn-primary dcf-mt-5" onclick="downloadVolunteerSchedule();">Download Volunteer Schedule</button>
 				</div>
 			</form>
 		</div>

@@ -21,12 +21,6 @@ WDN.initializePlugin('jqueryui', [function () {
 			clickDownloadLink(`/server/management/documents/appointmentsSchedule.php?date=${date}&siteId=${siteId}`);
 		};
 
-		function downloadVolunteerSchedule() {
-			let siteId = getSelectedSiteId();
-			let date = getSelectedDate();
-			clickDownloadLink(`/server/management/documents/volunteerSchedule.php?date=${date}&siteId=${siteId}`);
-		};
-
 		function getSelectedSiteId() {
 			let siteSelect = document.getElementById("siteSelect");
 			let siteSelectedOption = siteSelect.options[siteSelect.selectedIndex];

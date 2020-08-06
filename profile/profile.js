@@ -25,7 +25,7 @@ WDN.initializePlugin('modal', [function() {
 				}
 			});
 		};
-		
+
 		function initializeEventListeners() {
 			initializePersonalInformationEventListeners();
 		}

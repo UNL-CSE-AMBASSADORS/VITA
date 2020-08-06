@@ -63,7 +63,6 @@ INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
 
 
 
-
 -- permissions
 INSERT INTO Permission (name, description, lookupName)
 	VALUES ("Edit Permissions", "Can edit user permissions", "edit_user_permissions");

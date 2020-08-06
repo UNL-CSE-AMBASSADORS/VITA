@@ -30,13 +30,13 @@ define('uploadDocumentsDataService', [], function($http) {
 			},
 			uploadDocument: (token, firstName, lastName, emailAddress, phoneNumber, file) => {
 				const formData = new FormData();
-				formData.set('action', 'upload');
-				formData.set('token', token);
-				formData.set('firstName', firstName);
-				formData.set('lastName', lastName);
-				formData.set('emailAddress', emailAddress);
-				formData.set('phoneNumber', phoneNumber);
-				formData.set('file', file);
+				formData.append('action', 'upload');
+				formData.append('token', token);
+				formData.append('firstName', firstName);
+				formData.append('lastName', lastName);
+				formData.append('emailAddress', emailAddress);
+				formData.append('phoneNumber', phoneNumber);
+				formData.append('file', file, file.name);
 
 				return $http({
 					url: '/server/appointment/upload-documents/uploadDocuments.php',
