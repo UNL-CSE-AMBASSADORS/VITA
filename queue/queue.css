@@ -1,60 +1,33 @@
-.dashboard {
-	display: flex;
-	align-items: center;
-	flex-direction: row;
-	padding: 30px 0.7rem;
+.container {
+	display: table-cell;
+	background-color: #ebebea;
 }
 
-.queue {
-	width: 100%;
+.container div,
+.gu-mirror {
+	margin: 10px 5px;
+	padding: 10px;
+	background-color: rgba(0, 0, 0, 0.2);
+	transition: opacity 0.4s ease-in-out;
+	border-radius: 8px;
+  	box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 2px -2px, rgba(0, 0, 0, 0.2) 0px 1px 3px;
 }
 
-.queue-count {
-	font-size: 2rem;
+.container div:hover, .gu-mirror:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
-.queue-size-count {
-	font-weight: 600;
-	padding-left: 5px;
+.container div {
+	cursor: move;
+	cursor: grab;
+	cursor: -moz-grab;
+	cursor: -webkit-grab;
 }
 
-.clock-time {
-	font-size: 3.5rem;
-	color: #474746;
-	font-weight: 600;
-	font-style: normal;
-	line-height: 1;
-}
-
-.clock-period {
-	font-size: 1.75rem;
-	color: #474746;
-	font-weight: 400;
-	font-style: normal;
-	line-height: 1;
-}
-
-.inactive-period {
-	opacity: 0.8;
-}
-
-.active-period {
-	font-weight: bold;
-}
-
-.left-half {
-	text-align: right;
-	width: 50%;
-	float: left;
-}
-
-.right-half {
-	width: 50%;
-	float: left;
-}
-
-.pointer {
-	cursor: pointer;
+.gu-mirror {
+	cursor: grabbing;
+	cursor: -moz-grabbing;
+	cursor: -webkit-grabbing;
 }
 
 .pill {
@@ -89,22 +62,4 @@
 .pill-walk-in {
 	color: #fff;
 	background-color: #38764C;
-}
-
-/* Center the datepicker calendar on mobile */
-@media (max-width: 767px) {
-	.md-datepicker-calendar-pane.md-pane-open {
-		left: 50% !important;
-		transform: translateX(-50%) !important;
-	}
-
-	.bp-768-d-none {
-		display: none;
-	}
-}
-
-@media (max-width: 479px) {
-	.dashboard {
-		flex-direction: column;
-	}
 }

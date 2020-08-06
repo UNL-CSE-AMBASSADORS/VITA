@@ -3,71 +3,54 @@ require.config({
 		angular: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min',
 		ngAnimate: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min',
 		ngAria: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min',
-		ngMessages: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min',
-		ngMaterial: '//ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min',
 		queueDataService: '/dist/queue/queueDataService',
 		queueController: '/dist/queue/queueController',
-		queuePrivateController: '/dist/queue/queuePrivateController',
-		queueSearchFilter: '/dist/queue/queueSearchFilter',
 		appointmentNotesAreaSharedPropertiesService: '/dist/components/appointmentNotesArea/appointmentNotesAreaSharedPropertiesService',
 		appointmentNotesAreaDataService: '/dist/components/appointmentNotesArea/appointmentNotesAreaDataService',
-		appointmentNotesAreaController: '/dist/components/appointmentNotesArea/appointmentNotesAreaController'
+		appointmentNotesAreaController: '/dist/components/appointmentNotesArea/appointmentNotesAreaController',
+		notificationUtilities: '/dist/assets/js/utilities/notificationUtilities',
+		'angularjs-dragula': '/dist/assets/js/dragula/dragula.min'
 	},
 	shim: {
 		'ngAnimate': ['angular'],
 		'ngAria': ['angular'],
-		'ngMaterial': {
-			deps: ['ngAnimate', 'ngAria']
-		},
-		'ngMessages': ['angular'],
 		'queueDataService': ['angular'],
 		'queueController': ['angular'],
-		'queuePrivateController': ['angular'],
-		'queueSearchFilter': ['angular'],
+		'notificationUtilities': ['angular'],
 		'appointmentNotesAreaSharedPropertiesService': ['angular'],
 		'appointmentNotesAreaDataService': ['angular'],
-		'appointmentNotesAreaController': ['angular']
+		'appointmentNotesAreaController': ['angular'],
+		'angularjs-dragula': ['angular']
 	}
 });
 
-require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function(){
+require(['angular', 'ngAnimate', 'ngAria'], () => {
 
 	require([
 		'queueDataService',
 		'queueController',
-		'queuePrivateController',
-		'queueSearchFilter',
 		'appointmentNotesAreaSharedPropertiesService',
 		'appointmentNotesAreaDataService',
-		'appointmentNotesAreaController'
+		'appointmentNotesAreaController',
+		'notificationUtilities',
+		'angularjs-dragula'
 	],
 	function (
 		QueueDataService,
-		QueueController, 
-		QueuePrivateController,
-		QueueSearchFilter,
+		QueueController,
 		AppointmentNotesAreaSharedPropertiesService,
 		AppointmentNotesAreaDataService,
-		AppointmentNotesAreaController
+		AppointmentNotesAreaController,
+		NotificationUtilities,
+		angularDragula
 	) {
 		'use strict';
 
 		// Create the module
-		var queueApp = angular.module('queueApp', []);
+		const queueApp = angular.module('queueApp', [angularDragula(angular)]);
 
-		queueApp.factory('queueDataService', QueueDataService);
+		// Add Appointment Notes Component
 		queueApp.service('appointmentNotesAreaSharedPropertiesService', AppointmentNotesAreaSharedPropertiesService)
-		queueApp.controller('queueController', QueueController);
-		queueApp.controller('queuePrivateController', QueuePrivateController);
-		queueApp.directive('vitaQueue', function () {
-			return {
-				controller: 'queuePrivateController',
-				templateUrl: '/queue/private.php'
-			};
-		});
-		queueApp.filter('searchFor', QueueSearchFilter);
-
-		// Contents for the appointmentNotesAreaApp module
 		queueApp.factory('appointmentNotesAreaDataService', AppointmentNotesAreaDataService);
 		queueApp.controller('appointmentNotesAreaController', AppointmentNotesAreaController);
 		queueApp.directive('appointmentNotesArea', function () {
@@ -76,6 +59,19 @@ require(['angular', 'ngAnimate', 'ngAria', 'ngMessages', 'ngMaterial'], function
 				templateUrl: '/components/appointmentNotesArea/appointmentNotesArea.php'
 			};
 		});
+
+		// Add Queue module itself
+		queueApp.factory('queueDataService', QueueDataService);
+		queueApp.controller('queueController', QueueController);
+		queueApp.directive('queue', () => {
+			return {
+				controller: 'queueController',
+				templateUrl: '/queue/queue.php'
+			};
+		});
+
+		// Notification utilities
+		queueApp.factory('notificationUtilities', NotificationUtilities);
 
 		angular.bootstrap(document.getElementById('queueApp'), ['queueApp']);
 
