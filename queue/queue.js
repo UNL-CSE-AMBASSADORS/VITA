@@ -3,8 +3,8 @@ require.config({
 		angular: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min',
 		ngAnimate: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min',
 		ngAria: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min',
-		queueDataService: '/dist/queue/new/queueDataService',
-		queueController: '/dist/queue/new/queueController',
+		queueDataService: '/dist/queue/queueDataService',
+		queueController: '/dist/queue/queueController',
 		appointmentNotesAreaSharedPropertiesService: '/dist/components/appointmentNotesArea/appointmentNotesAreaSharedPropertiesService',
 		appointmentNotesAreaDataService: '/dist/components/appointmentNotesArea/appointmentNotesAreaDataService',
 		appointmentNotesAreaController: '/dist/components/appointmentNotesArea/appointmentNotesAreaController',
@@ -66,7 +66,7 @@ require(['angular', 'ngAnimate', 'ngAria'], () => {
 		queueApp.directive('queue', () => {
 			return {
 				controller: 'queueController',
-				templateUrl: '/queue/new/queue.php'
+				templateUrl: '/queue/queue.php'
 			};
 		});
 
