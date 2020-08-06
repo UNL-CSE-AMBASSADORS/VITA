@@ -1,6 +1,7 @@
 USE vita;
 
 DROP TABLE IF EXISTS Answer;
+-- TODO: FilingStatus tables can be removed once this script has been run by all dev members
 DROP TABLE IF EXISTS AppointmentFilingStatus;
 DROP TABLE IF EXISTS FilingStatus;
 DROP TABLE IF EXISTS ServicedAppointment;
@@ -9,6 +10,7 @@ DROP TABLE IF EXISTS Note;
 DROP TABLE IF EXISTS Appointment;
 DROP TABLE IF EXISTS AppointmentTime;
 DROP TABLE IF EXISTS Client;
+-- TODO: RoleLimit, UserShift, Shift, and Role can be removed once this script has been run by each dev member
 DROP TABLE IF EXISTS RoleLimit;
 DROP TABLE IF EXISTS UserShift;
 DROP TABLE IF EXISTS Shift;
@@ -19,6 +21,7 @@ DROP TABLE IF EXISTS Question;
 
 DROP TABLE IF EXISTS UserPermission;
 DROP TABLE IF EXISTS Permission;
+-- TODO: Ability tables can be removed after this script has been run by each dev member
 DROP TABLE IF EXISTS UserAbility;
 DROP TABLE IF EXISTS Ability;
 DROP TABLE IF EXISTS Login;
@@ -55,7 +58,6 @@ CREATE TABLE Site (
 	title VARCHAR(255) NOT NULL,
 	address VARCHAR(255) NOT NULL,
 	phoneNumber VARCHAR(20) NOT NULL,
-	doesMultilingual BOOLEAN NOT NULL DEFAULT FALSE,
 	doesInternational BOOLEAN NOT NULL DEFAULT FALSE,
 	isVirtual BOOLEAN NOT NULL DEFAULT FALSE,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
@@ -135,24 +137,8 @@ CREATE TABLE ServicedAppointment (
     timeAppointmentEnded DATETIME NULL DEFAULT NULL,
     completed BOOLEAN NULL DEFAULT NULL,
     cancelled BOOLEAN NOT NULL DEFAULT FALSE,
-	servicedByStation INTEGER UNSIGNED NULL,
 	appointmentId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId)
-);
-
-CREATE TABLE FilingStatus (
-	filingStatusId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	text VARCHAR(255) NOT NULL,
-    lookupName VARCHAR(255) NOT NULL,
-    CONSTRAINT uniqueLookupName UNIQUE INDEX(lookupName)
-);
-
-CREATE TABLE AppointmentFilingStatus (
-	appointmentFilingStatusId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	servicedAppointmentId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY (servicedAppointmentId) REFERENCES ServicedAppointment(servicedAppointmentId),
-	filingStatusId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY (filingStatusId) REFERENCES FilingStatus(filingStatusId)
 );
 
 CREATE TABLE Login (
@@ -198,71 +184,4 @@ CREATE TABLE UserPermission (
 	permissionId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(permissionId) REFERENCES Permission(permissionId),
 	CONSTRAINT UNIQUE unique_permission (userId, permissionId)
-);
-
-CREATE TABLE Ability (
-	abilityId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	name VARCHAR(255) NOT NULL,
-	lookupName VARCHAR(255) NOT NULL,
-	verificationRequired BOOLEAN NOT NULL,
-	description VARCHAR(500) NOT NULL,
-	CONSTRAINT uniqueLookupName UNIQUE INDEX(lookupName)
-);
-
-CREATE TABLE UserAbility (
-	userAbilityId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	createdAt DATETIME NOT NULL DEFAULT NOW(),
-	createdBy INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(createdBy) REFERENCES User(userId),
-	userId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(userId) REFERENCES User(userId),
-	abilityId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(abilityId) REFERENCES Ability(abilityId),
-	CONSTRAINT UNIQUE unique_ability (userId, abilityId)
-);
-
-CREATE TABLE Shift (
-	shiftId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	startTime DATETIME NOT NULL,
-	endTime DATETIME NOT NULL,
-	archived BOOLEAN NOT NULL DEFAULT FALSE,
-	createdAt DATETIME NOT NULL DEFAULT NOW(),
-	lastModifiedDate DATETIME NULL,
-	siteId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(siteId) REFERENCES Site(siteId),
-	createdBy INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(createdBy) REFERENCES User(userId),
-	lastModifiedBy INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(lastModifiedBy) REFERENCES User(userId)
-);
-
-CREATE TABLE Role (
-	roleId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	name VARCHAR(255) NOT NULL,
-	lookupName VARCHAR(255) NOT NULL,
-	CONSTRAINT uniqueLookupName UNIQUE INDEX(lookupName)
-);
-
-CREATE TABLE RoleLimit (
-	roleLimitId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    maximumNumber INTEGER UNSIGNED NOT NULL,
-    roleId INTEGER UNSIGNED NOT NULL,
-    FOREIGN KEY(roleId) REFERENCES Role(roleId),
-    siteId INTEGER UNSIGNED NOT NULL,
-    FOREIGN KEY(siteId) REFERENCES Site(siteId),
-    shiftId INTEGER UNSIGNED NULL,
-    FOREIGN KEY(shiftId) REFERENCES Shift(shiftId),
-    CONSTRAINT uniqueRoleSiteShiftTuple UNIQUE INDEX(roleId, siteId, shiftId)
-);
-
-CREATE TABLE UserShift (
-	userShiftId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	createdAt DATETIME NOT NULL DEFAULT NOW(),
-	userId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(userId) REFERENCES User(userId),
-	shiftId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(shiftId) REFERENCES Shift(shiftId),
-	roleId INTEGER UNSIGNED NOT NULL,
-	FOREIGN KEY(roleId) REFERENCES Role(roleId),
-	CONSTRAINT UNIQUE unique_shift (userId, shiftId)
 );

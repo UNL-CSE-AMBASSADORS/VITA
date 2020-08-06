@@ -16,7 +16,7 @@
 		case 'checkIn': checkIn($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'completePaperwork': completePaperwork($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentStart': appointmentStart($_REQUEST['time'], $_REQUEST['id']); break;
-		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id'], $_REQUEST['stationNumber'], array_key_exists('filingStatusIds', $_REQUEST) ? $_REQUEST['filingStatusIds'] : []); break;
+		case 'appointmentComplete': appointmentComplete($_REQUEST['time'], $_REQUEST['id']); break;
 		case 'appointmentIncomplete': appointmentIncomplete($_REQUEST['id']); break;
 		case 'cancelledAppointment': cancelledAppointment($_REQUEST['id']); break;
 		default: break;
@@ -96,7 +96,7 @@
 		$stmt = null;
 	}
 
-	function appointmentComplete($time, $appointmentId, $stationNumber, $filingStatusIds) {
+	function appointmentComplete($time, $appointmentId) {
 		GLOBAL $DB_CONN;
 		
 		$response = array();
@@ -106,19 +106,11 @@
 			$DB_CONN->beginTransaction();
 
 			$stmt = $DB_CONN->prepare("UPDATE ServicedAppointment
-				SET timeAppointmentEnded = ?, servicedByStation = ?, completed = TRUE
+				SET timeAppointmentEnded = ?, completed = TRUE
 				WHERE appointmentId = ?");
 
-			if ($stmt->execute(array($time, $stationNumber, $appointmentId)) == false) {
+			if ($stmt->execute(array($time, $appointmentId)) == false) {
 				throw new Exception();
-			}
-
-			$stmt = $DB_CONN->prepare("INSERT INTO AppointmentFilingStatus (servicedAppointmentId, filingStatusId)
-				VALUES ((SELECT servicedAppointmentId FROM ServicedAppointment WHERE appointmentId = ?), ?)");
-			foreach ($filingStatusIds as $filingStatusId) {
-				if ($stmt->execute(array($appointmentId, $filingStatusId)) == false) {
-					throw new Exception();
-				}
 			}
 
 			$DB_CONN->commit();

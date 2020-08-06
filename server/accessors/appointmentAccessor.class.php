@@ -57,7 +57,7 @@ class AppointmentAccessor {
 
 		$query = "UPDATE ServicedAppointment
 			SET timeIn = NULL, timeReturnedPapers = NULL, timeAppointmentStarted = NULL, timeAppointmentEnded = NULL,
-				completed = NULL, cancelled = FALSE, servicedByStation = NULL
+				completed = NULL, cancelled = FALSE
 			WHERE appointmentId = ?";
 
 		$stmt = $DB_CONN->prepare($query);
