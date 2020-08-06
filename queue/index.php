@@ -1,5 +1,12 @@
 <?php
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
+require_once "$root/server/user.class.php";
+$USER = new User();
+if (!$USER->isLoggedIn()) {
+	header("Location: /unauthorized");
+	die();
+}
+
 function wdnInclude($path)
 {
 $documentRoot = 'https://unlcms.unl.edu';
@@ -11,7 +18,7 @@ return readfile($documentRoot . $path);
 <head>
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/head-1.html"); ?>
 	<!--
-		Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at https://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
+		Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at http://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
 		All framework code is the property of the UNL Web Developer Network. The code seen in a source code view is not, and may not be used as, a template. You may not use this code, a reverse-engineered version of this code, or its associated visual presentation in whole or in part to create a derivative work.
 		This message may not be removed from any pages based on the UNLedu Web Framework.
 
@@ -20,10 +27,10 @@ return readfile($documentRoot . $path);
 	<!-- TemplateBeginEditable name="doctitle" -->
 	<title>Queue | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 	<!-- TemplateEndEditable -->
-		<?php wdnInclude("/wdn/templates_5.1/includes/global/head-2.html"); ?>
+	<?php wdnInclude("/wdn/templates_5.1/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
+	<link rel="stylesheet" href="/dist/assets/css/dragula/dragula.min.css">
 	<link rel="stylesheet" href="/dist/queue/queue.css">
-	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
 	<!-- TemplateEndEditable -->
 	<!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -75,7 +82,7 @@ return readfile($documentRoot . $path);
 <main class="dcf-main" id="dcf-main" role="main" tabindex="-1">
 
 	<!-- TemplateBeginEditable name="hero" -->
-	<div class="dcf-hero dcf-hero-default dcf-mb-0">
+	<div class="dcf-hero dcf-hero-default">
 		<!-- TemplateEndEditable -->
 		<div class="dcf-hero-group-1">
 			<div class="dcf-breadcrumbs-wrapper">
@@ -91,7 +98,7 @@ return readfile($documentRoot . $path);
 			</div>
 			<header class="dcf-page-title" id="dcf-page-title">
 				<!-- TemplateBeginEditable name="pagetitle" -->
-				<!-- No page title -->
+				<h1>Queue</h1>
 				<!-- TemplateEndEditable -->
 			</header>
 			<!-- TemplateBeginEditable name="herogroup1" -->
@@ -102,9 +109,9 @@ return readfile($documentRoot . $path);
 		</div>
 		<!-- TemplateEndEditable -->
 	</div>
-	<div class="dcf-main-content dcf-wrapper dcf-p-0">
+	<div class="dcf-main-content dcf-wrapper">
 		<!-- TemplateBeginEditable name="maincontentarea" -->
-		<vita-queue id="queueApp"></vita-queue>
+		<div id="queueApp" class="dcf-bleed" queue></div>
 		<!-- TemplateEndEditable -->
 	</div>
 </main>
@@ -121,19 +128,7 @@ return readfile($documentRoot . $path);
 <?php wdnInclude("/wdn/templates_5.1/includes/global/js-body.html"); ?>
 <!-- TemplateBeginEditable name="jsbody" -->
 <?php require_once "$root/server/global_includes.php"; ?>
-<?php
-	require_once "$root/server/user.class.php";
-	$USER = new User();
-	if ($USER->isLoggedIn() && !isset($_REQUEST['public'])) { // we enable logged in users to get to the public queue by having ?public in the URL
-?>
-	<script src="/dist/queue/queuePrivate.js"></script>
-<?php
-	} else {
-?>
-	<script src="/dist/queue/queuePublic.js"></script>
-<?php
-	}
-?>
+<script src="/dist/queue/queue.js"></script>
 <!-- TemplateEndEditable -->
 </body>
 </html>
