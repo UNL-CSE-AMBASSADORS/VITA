@@ -1,120 +1,81 @@
-define('queueDataService', [], function() {
+define('queueDataService', [], ($http) => {
 
 	function queueDataService($http) {
 		return {
-			getAppointments: function(date, siteId){
-				return $http.get(`/server/queue/queue.php?displayDate=${date}&siteId=${siteId}`).then(function(response){
-					return response.data;
-				},function(error){
-					return null;
-				});
-			},
-			getSites: function() {
-				return $http.get('/server/api/sites/getAll.php?siteId=true&title=true').then(function(response){
+			getSites: () => {
+				return $http.get('/server/api/sites/getAll.php?siteId=true&title=true').then((response) => {
 					return response.data;
 				}, function(error){
 					return null;
 				});
 			},
-			getFilingStatuses: function() {
-				return $http.get('/server/api/filingStatuses/getAll.php?filingStatusId=true&text=true').then(function(response) {
+			getAppointments: (date, siteId) => {
+				return $http.get(`/server/queue/queue.php?action=getAppointments&date=${date}&siteId=${siteId}`).then((response) => {
 					return response.data;
-				},function(error) {
+				}, (error) => {
 					return null;
 				});
 			},
-			checkInNow: function(time, id) {
+			markAppointmentAsAwaiting: (appointmentId) => {
 				return $http({
-					url: "/server/queue/queue_priv.php",
+					url: '/server/queue/queue.php',
 					method: 'POST',
-					data: `action=checkIn&time=${time}&id=${id}`,
-					headers: {
-						'Content-Type': "application/x-www-form-urlencoded"
-					}
-				}).then(function(response){
-					return response.data;
-				},function(error){
-					return null;
-				});
+					data: `action=awaiting&appointmentId=${appointmentId}`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
 			},
-			turnInPapers: function(time, id) {
+			markAppointmentAsCheckedIn: (appointmentId) => {
 				return $http({
-					url: "/server/queue/queue_priv.php",
+					url: '/server/queue/queue.php',
 					method: 'POST',
-					data: `action=completePaperwork&time=${time}&id=${id}`,
-					headers: {
-						'Content-Type': "application/x-www-form-urlencoded"
-					}
-				}).then(function(response){
-					return response.data;
-				},function(error){
-					return null;
-				});
+					data: `action=checkIn&appointmentId=${appointmentId}`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
 			},
-			beginAppointment: function(time, id) {
+			markAppointmentAsPaperworkCompleted: (appointmentId) => {
 				return $http({
-					url: "/server/queue/queue_priv.php",
+					url: '/server/queue/queue.php',
 					method: 'POST',
-					data: `action=appointmentStart&time=${time}&id=${id}`,
-					headers: {
-						'Content-Type': "application/x-www-form-urlencoded"
-					}
-				}).then(function(response){
-					return response.data;
-				},function(error){
-					return null;
-				});
+					data: `action=paperworkCompleted&appointmentId=${appointmentId}`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
 			},
-			finishAppointment: function(time, id, stationNumber, filingStatusIds) {
+			markAppointmentAsBeingPrepared: (appointmentId) => {
 				return $http({
-					url: "/server/queue/queue_priv.php",
+					url: '/server/queue/queue.php',
 					method: 'POST',
-					params: {
-						"action": "appointmentComplete",
-						"time": time,
-						"id": id,
-						"stationNumber": stationNumber,
-						"filingStatusIds[]": filingStatusIds
-					}
-				}).then(function(response){
-					return response.data;
-				},function(error){
-					return null;
-				});
+					data: `action=startAppointment&appointmentId=${appointmentId}`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
 			},
-			incompleteAppointment: function(id) {
+			markAppointmentAsCompleted: (appointmentId) => {
 				return $http({
-					url: "/server/queue/queue_priv.php",
+					url: '/server/queue/queue.php',
 					method: 'POST',
-					data: `action=appointmentIncomplete&id=${id}`,
-					headers: {
-						'Content-Type': "application/x-www-form-urlencoded"
-					}
-				}).then(function(response){
-					return response.data;
-				},function(error){
-					return null;
-				});
+					data: `action=completeAppointment&appointmentId=${appointmentId}`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
 			},
-			cancelledAppointment: function(id) {
+			markAppointmentAsIncomplete: (appointmentId) => {
 				return $http({
-					url: "/server/queue/queue_priv.php",
+					url: '/server/queue/queue.php',
 					method: 'POST',
-					data: `action=cancelledAppointment&id=${id}`,
-					headers: {
-						'Content-Type': "application/x-www-form-urlencoded"
-					}
-				}).then(function(response){
-					return response.data;
-				},function(error){
-					return null;
-				});
+					data: `action=incompleteAppointment&appointmentId=${appointmentId}`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
+			},
+			markAppointmentAsCancelled: (appointmentId) => {
+				return $http({
+					url: '/server/queue/queue.php',
+					method: 'POST',
+					data: `action=cancelAppointment&appointmentId=${appointmentId}`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
 			}
-		}
+		};
 	}
 
 	queueDataService.$inject = ['$http'];
 
 	return queueDataService;
-
 });

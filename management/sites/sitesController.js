@@ -2,6 +2,7 @@ define('sitesController', [], function() {
 
 	function sitesController($scope, SitesDataService, NotificationUtilities) {
 		const MINUTES_IN_DAY = 24 * 60;
+		const TIME_INTERVAL = 30; // The default interval between displayed times for an AppointmentTime
 
 		// For the site select list
 		$scope.selectedSite = null;
@@ -9,14 +10,6 @@ define('sitesController', [], function() {
 
 		// Contains site information after a site has been selected
 		$scope.siteInformation = null;
-
-		// For the add volunteer shift section
-		$scope.savingShift = false;
-		$scope.addShiftButtonClicked = false;
-		$scope.addShiftInformation = {};
-		const TIME_INTERVAL = 30;
-		$scope.addShiftStartTimeOptions = generateTimes(TIME_INTERVAL).map(time => time.timeString);
-		$scope.addShiftEndTimeOptions = generateTimes(TIME_INTERVAL).map(time => time.timeString);
 
 		// For the add appointment time section
 		$scope.savingAppointmentTime = false;
@@ -54,83 +47,9 @@ define('sitesController', [], function() {
 					return;
 				}
 
-				result.site.doesMultilingual = result.site.doesMultilingual == true; // Do this since we want true/false instead of 1/0
 				result.site.doesInternational = result.site.doesInternational == true; // Do this since we want true/false instead of 1/0
 				$scope.siteInformation = result.site;
 			});
-		};
-		
-		$scope.addShiftButtonHandler = () => {
-			$scope.initializeDatePicker('addShiftDateInput', (date) => {
-				$scope.addShiftInformation.selectedDate = date;
-				$scope.$apply();
-			}, (date) => isDateInPast(date));
-			$scope.addShiftButtonClicked = true;
-		};
-
-		$scope.addShiftSaveButtonHandler = () => {
-			if ($scope.savingShift) {
-				return;
-			}
-			$scope.savingShift = true;
-			
-			const shiftInformation = $scope.addShiftInformation;
-
-			const siteId = $scope.siteInformation.siteId;
-			const date = shiftInformation.selectedDate;
-			const startTime = shiftInformation.selectedStartTime;
-			const endTime = shiftInformation.selectedEndTime;
-			SitesDataService.addShift(siteId, date, startTime, endTime).then((result) => {
-				if (result == null || !result.success) {
-					const errorMessage = result.error || 'There was an error saving the shift. Please refresh and try again.';
-					NotificationUtilities.giveNotice('Failure', errorMessage, false);
-				} else {
-					$scope.updateShiftsTable();
-					$scope.addShiftInformation = {};
-					$scope.addShiftButtonClicked = false;
-	
-					NotificationUtilities.giveNotice('Success', 'The shift was successfully created');
-				}
-
-				$scope.savingShift = false;
-			});
-		};
-
-		$scope.updateShiftsTable = () => {
-			const siteId = $scope.siteInformation.siteId;
-
-			SitesDataService.getShiftsForSite(siteId).then((result) => {
-				if (result == null || !result.success) {
-					const errorMessage = result.error || 'There was an error retrieving the shifts. Please refresh the page.';
-					NotificationUtilities.giveNotice('Failure', errorMessage, false);
-				} else {
-					$scope.siteInformation.shifts = result.shifts;
-				}
-			});
-		};
-
-		$scope.addShiftCancelButtonHandler = () => {
-			$scope.addShiftInformation = {};
-			$scope.addShiftButtonClicked = false;
-		};
-
-		$scope.addShiftStartTimeChanged = (newStartTime) => {
-			// Change end time options to only be the ones past the start time
-			const period = newStartTime.slice(-2);
-			const hourString = newStartTime.split(':')[0];
-			const minuteString = newStartTime.split(':')[1];
-
-			let hour = parseInt(hourString);
-			if (period === 'AM' && hour === 12) hour = 0;
-			if (period === 'PM' && hour !== 12) hour += 12;
-			const minute = parseInt(minuteString);
-			const time = hour * 60 + minute + TIME_INTERVAL; // + TIME_INTERVAL so the same time can't be selected
-
-			$scope.addShiftEndTimeOptions = generateTimes(TIME_INTERVAL, time).map(time => time.timeString);
-		};
-
-		function isShiftDateEqualToDate(shiftDate, date) {
-			return new Date(new Date(shiftDate).toDateString()).getTime() === new Date(date.toDateString()).getTime();
 		};
 
 		$scope.addAppointmentTimeButtonHandler = () => {
@@ -138,12 +57,7 @@ define('sitesController', [], function() {
 				$scope.addAppointmentTimeInformation.selectedDate = date;
 				$scope.updateAddAppointmentTimeScheduledTimeOptions();
 				$scope.$apply();
-			}, (date) => {
-				const dateInPast = isDateInPast(date);
-				const anyShiftsOnThisDay = $scope.siteInformation.shifts
-					.some(shift => isShiftDateEqualToDate(shift.startTime, date));
-				return dateInPast || !anyShiftsOnThisDay;
-			});
+			}, (date) => isDateInPast(date));
 			$scope.addAppointmentTimeButtonClicked = true;
 		};
 
@@ -159,35 +73,17 @@ define('sitesController', [], function() {
 				return;
 			}
 
-			const date = $scope.addAppointmentTimeInformation.selectedDate;
-			const shiftsOnThisDay = $scope.siteInformation.shifts
-				.filter(shift => isShiftDateEqualToDate(shift.startTime, new Date(date)));
-
-			const times = $scope.getAvailableAppointmentTimes(shiftsOnThisDay, timeInterval);
+			const times = $scope.getAvailableAppointmentTimes(timeInterval);
 			$scope.addAppointmentTimeScheduledTimeOptions = times.map(time => time.timeString);
 		};
 
-		$scope.getAvailableAppointmentTimes = (shifts, timeInterval) => {
+		$scope.getAvailableAppointmentTimes = (timeInterval) => {
 			const getTime = (time) => {
 				const dateTime = new Date(time);
 				return dateTime.getHours() * 60 + dateTime.getMinutes();
 			};
 
-			let times = [];
-
-			// Get the possible times within each shift
-			for (const shift of shifts) {
-				const startTime = getTime(shift.startTime);
-				const endTime = getTime(shift.endTime);
-
-				const generatedTimes = generateTimes(timeInterval, startTime, endTime - timeInterval, true);
-				for (const generatedTime of generatedTimes) {
-					const containsAlready = times.some(time => time.time == generatedTime.time);
-					if (!containsAlready) {
-						times.push(generatedTime);
-					}
-				}
-			}
+			let times = generateTimes(TIME_INTERVAL);
 
 			// Remove any times that already have an appointment time with that time
 			for (const appointmentTime of $scope.siteInformation.appointmentTimes) {
