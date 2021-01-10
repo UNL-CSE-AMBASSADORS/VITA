@@ -15,7 +15,8 @@ if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
 		case 'getSiteInformation': getSiteInformation($_GET['siteId']); break;
 		case 'getAppointmentTimes': getAppointmentTimes($_GET['siteId']); break;
-		case 'addAppointmentTime': addAppointmentTime($_POST['siteId'], $_POST['date'], $_POST['scheduledTime'], $_POST['minimumNumberOfAppointments'], $_POST['maximumNumberOfAppointments'], $_POST['percentageAppointments'], $_POST['approximateLengthInMinutes']); break;
+		case 'addAppointmentTime': addAppointmentTime($_POST['siteId'], $_POST['date'], $_POST['scheduledTime'], $_POST['appointmentTypeId'], $_POST['numberOfAppointments']); break;
+		case 'updateAppointmentTime': updateAppointmentTime($_POST['appointmentTimeId'], $_POST['numberOfAppointments']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -31,7 +32,7 @@ function getSiteInformation($siteId) {
 	$response['success'] = true;
 
 	try {
-		$query = 'SELECT siteId, title, address, phoneNumber, doesInternational
+		$query = 'SELECT siteId, title, address, phoneNumber
 			FROM Site
 			WHERE siteId = ? AND archived = FALSE';
 		$stmt = $DB_CONN->prepare($query);
@@ -72,13 +73,19 @@ function getAppointmentTimesForSite($siteId, $year = null) {
 		$year = date('Y');
 	}
 
-	$query = 'SELECT appointmentTimeId, scheduledTime, 
-			DATE_FORMAT(scheduledTime, "%b %e, %Y, %l:%i %p (%W)") AS scheduledTimeString, 
-			minimumNumberOfAppointments, maximumNumberOfAppointments, percentageAppointments, approximateLengthInMinutes
+	$query = 'SELECT AppointmentTime.appointmentTimeId, scheduledTime, 
+			DATE_FORMAT(scheduledTime, "%b %e, %Y (%W)") AS scheduledDateString,
+			TIME_FORMAT(scheduledTime, "%l:%i %p") AS scheduledTimeString,
+			numberOfAppointments, AppointmentType.lookupName AS appointmentType,
+			AppointmentType.name AS appointmentTypeName,
+			COUNT(DISTINCT Appointment.appointmentId) AS numberOfAppointmentsAlreadyScheduled
 		FROM AppointmentTime
+		JOIN AppointmentType ON AppointmentTime.appointmentTypeId = AppointmentType.appointmentTypeId
+		LEFT JOIN Appointment ON AppointmentTime.appointmentTimeId = Appointment.appointmentTimeId
 		WHERE siteId = ?
 			AND YEAR(scheduledTime) = ?
-		ORDER BY AppointmentTime.scheduledTime';
+		GROUP BY AppointmentTime.appointmentTimeId
+		ORDER BY AppointmentTime.scheduledTime;';
 	$stmt = $DB_CONN->prepare($query);
 	$stmt->execute(array($siteId, $year));
 
@@ -86,7 +93,7 @@ function getAppointmentTimesForSite($siteId, $year = null) {
 	return $appointmentTimes;
 }
 
-function addAppointmentTime($siteId, $dateString, $scheduledTimeString, $minimumNumberOfAppointments, $maximumNumberOfAppointments, $percentageAppointments, $approximateLengthInMinutes) {
+function addAppointmentTime($siteId, $dateString, $scheduledTimeString, $appointmentTypeId, $numberOfAppointments) {
 	GLOBAL $DB_CONN, $USER;
 
 	$response = array();
@@ -94,46 +101,27 @@ function addAppointmentTime($siteId, $dateString, $scheduledTimeString, $minimum
 
 	try {
 		// Validate inputs
-		if (!isset($siteId)) throw new Exception('Invalid site Id given', MY_EXCEPTION);
+		if (!isset($siteId)) throw new Exception('Invalid site ID given', MY_EXCEPTION);
 		if (!isset($dateString) || !DateTimeUtilities::isValidDateString($dateString, DateFormats::MM_DD_YYYY)) throw new Exception('Invalid date given', MY_EXCEPTION);
 		if (!isset($scheduledTimeString) || !DateTimeUtilities::isValidTimeString($scheduledTimeString, TimeFormats::HH_MM_PERIOD)) throw new Exception('Invalid start time given', MY_EXCEPTION);
-		if (isset($minimumNumberOfAppointments) && (int)$minimumNumberOfAppointments < 0) throw new Exception('Invalid minimum number of appointments given', MY_EXCEPTION);
-		if (isset($maximumNumberOfAppointments) && (int)$maximumNumberOfAppointments < 0) throw new Exception('Invalid maximum number of appointments given', MY_EXCEPTION);
-		if (isset($minimumNumberOfAppointments) && isset($maximumNumberOfAppointments)) {
-			if ((int)$minimumNumberOfAppointments > (int)$maximumNumberOfAppointments) throw new Exception('Minimum number of appointments cannot be greater than maximum number of appointments', MY_EXCEPTION);
-		}
-
-		if (!isset($percentageAppointments)) throw new Exception('Invalid percent appointments given', MY_EXCEPTION);
-		if (isset($percentageAppointments) && ((int)$percentageAppointments < 0 || (int)$percentageAppointments > 300)) throw new Exception('Invalid percent appointments given', MY_EXCEPTION);
-
-		if (!isset($approximateLengthInMinutes)) throw new Exception('Invalid approximate length in minutes given', MY_EXCEPTION);
-		if (isset($approximateLengthInMinutes) && ((int)$approximateLengthInMinutes < 0)) throw new Exception('Invalid approximate length in minutes given', MY_EXCEPTION);
+		if (!isset($appointmentTypeId)) throw new Exception('Invalid appointment type ID given', MY_EXCEPTION);
+		if (isset($numberOfAppointments) && (int)$numberOfAppointments < 0) throw new Exception('Invalid number of appointments given', MY_EXCEPTION);
 
 		// Get variables into proper format for db
 		$scheduledTime = DateTime::createFromFormat('m-d-Y g:i A', $dateString . ' ' . $scheduledTimeString);
 		$scheduledTimeForDb = $scheduledTime->format('Y-m-d H:i:s'); // i.e. 2018-01-21 13:00:00
-		if (!isset($minimumNumberOfAppointments)) $minimumNumberOfAppointments = null;
-		if (!isset($maximumNumberOfAppointments)) $maximumNumberOfAppointments = null;
 
 		// Ensure it is a valid appointment time given the rules
-		$isValidAppointmentTime = isValidAppointmentTime($siteId, $scheduledTimeForDb, $approximateLengthInMinutes);
+		$isValidAppointmentTime = isValidAppointmentTime($siteId, $scheduledTimeForDb, $appointmentTypeId);
 		if ($isValidAppointmentTime['valid'] === false) {
 			throw new Exception($isValidAppointmentTime['reason'], MY_EXCEPTION);
 		}
 
-
 		// Insert into DB
-		$insertParams = array($siteId, $scheduledTimeForDb, $minimumNumberOfAppointments, $percentageAppointments, $approximateLengthInMinutes);
-		$query = 'INSERT INTO AppointmentTime (siteId, scheduledTime, minimumNumberOfAppointments, 
-				percentageAppointments, approximateLengthInMinutes';
-		if ($maximumNumberOfAppointments != null) {
-			$query .= ', maximumNumberOfAppointments) VALUES (?, ?, ?, ?, ?, ?)';
-			array_push($insertParams, $maximumNumberOfAppointments);
-		} else {
-			$query .= ') VALUES (?, ?, ?, ?, ?)';
-		}
+		$query = 'INSERT INTO AppointmentTime (siteId, scheduledTime, appointmentTypeId, numberOfAppointments)
+			VALUES (?, ?, ?, ?);';
 		$stmt = $DB_CONN->prepare($query);
-		$stmt->execute($insertParams);
+		$stmt->execute(array($siteId, $scheduledTimeForDb, $appointmentTypeId, $numberOfAppointments));
 
 		$response['appointmentTimeId'] = $DB_CONN->lastInsertId();
 	} catch (Exception $e) {
@@ -144,29 +132,54 @@ function addAppointmentTime($siteId, $dateString, $scheduledTimeString, $minimum
 	echo json_encode($response);
 }
 
-// Checks to ensure the given appointment time values satisfy the following three conditions:
+function updateAppointmentTime($appointmentTimeId, $numberOfAppointments) {
+	GLOBAL $DB_CONN;
+
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		// Validate inputs
+		if (!isset($appointmentTimeId)) throw new Exception('Invalid appointment time ID given', MY_EXCEPTION);
+		if (!isset($numberOfAppointments) || $numberOfAppointments < 0) throw new Exception('Invalid number of appointments given', MY_EXCEPTION);
+
+		// Insert into DB
+		$query = 'UPDATE AppointmentTime
+			SET numberOfAppointments = ?
+			WHERE appointmentTimeId = ?;';
+		$stmt = $DB_CONN->prepare($query);
+		$stmt->execute(array($numberOfAppointments, $appointmentTimeId));
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'There was an error on the server adding the appointment time. Please refresh the page and try again.';
+	}
+
+	echo json_encode($response);
+}
+
+// Checks to ensure the given appointment time values satisfy the following conditions:
 /*
 	1. Two appointment times cannot have the same scheduled time
 */
-function isValidAppointmentTime($siteId, $scheduledTime, $approximateLengthInMinutes) {
+function isValidAppointmentTime($siteId, $scheduledTime, $appointmentTypeId) {
 	GLOBAL $DB_CONN;
 
 	// Checks 1
-	$appointmentTimeAlreadyExists = doesAppointmentTimeAlreadyExistWithScheduledTime($siteId, $scheduledTime);
+	$appointmentTimeAlreadyExists = doesAppointmentTimeAlreadyExistWithScheduledTimeAndType($siteId, $scheduledTime, $appointmentTypeId);
 	if ($appointmentTimeAlreadyExists) {
-		return array('valid' => false, 'reason' => 'An appointment time with this scheduled time already exists at this site');
+		return array('valid' => false, 'reason' => 'An appointment time with this scheduled time and appointment type already exists at this site');
 	}
 
 	return array('valid' => true);
 }
 
-function doesAppointmentTimeAlreadyExistWithScheduledTime($siteId, $scheduledTime) {
+function doesAppointmentTimeAlreadyExistWithScheduledTimeAndType($siteId, $scheduledTime, $appointmentTypeId) {
 	GLOBAL $DB_CONN;
 
 	$query = 'SELECT 1 FROM AppointmentTime
-		WHERE siteId = ? AND scheduledTime = ?';
+		WHERE siteId = ? AND scheduledTime = ? AND appointmentTypeId = ?';
 	$stmt = $DB_CONN->prepare($query);
-	$stmt->execute(array($siteId, $scheduledTime));
+	$stmt->execute(array($siteId, $scheduledTime, $appointmentTypeId));
 
 	$appointmentTimeAlreadyExists = (bool)$stmt->fetch() !== false;
 	return $appointmentTimeAlreadyExists;

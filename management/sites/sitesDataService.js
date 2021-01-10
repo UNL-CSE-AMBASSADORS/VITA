@@ -2,39 +2,60 @@ define('sitesDataService', [], function($http) {
 
 	function sitesDataService($http) {
 		return {
-			getSites: function() {
-				return $http.get('/server/api/sites/getAll.php?siteId=true&title=true').then(function(response){
+			getSites: () => {
+				return $http.get('/server/api/sites/getAll.php?siteId=true&title=true').then((response) => {
 					return response.data;
-				},function(error) {
+				}, (error) => {
 					return null;
 				});
 			},
-			getSiteInformation: function(siteId) {
-				return $http.get(`/server/management/sites/sites.php?action=getSiteInformation&siteId=${siteId}`).then(function(response){
+			getSiteInformation: (siteId) => {
+				return $http.get(`/server/management/sites/sites.php?action=getSiteInformation&siteId=${siteId}`).then((response) => {
 					return response.data;
-				},function(error) {
+				}, (error) => {
 					return null;
 				});
 			},
-			getAppointmentTimesForSite: function(siteId) {
-				return $http.get(`/server/management/sites/sites.php?action=getAppointmentTimes&siteId=${siteId}`).then(function(response){
+			getAppointmentTimesForSite: (siteId) => {
+				return $http.get(`/server/management/sites/sites.php?action=getAppointmentTimes&siteId=${siteId}`).then((response) => {
 					return response.data;
-				},function(error) {
+				}, (error) => {
 					return null;
 				});
 			},
-			addAppointmentTime: function(siteId, date, scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, percentageAppointments, approximateLengthInMinutes) {
+			getAppointmentTypes: () => {
+				return $http.get('/server/api/appointments/types/getAll.php').then((response) => {
+					return response.data;
+				}, (error) => {
+					return null;
+				});
+			},
+			addAppointmentTime: (siteId, date, scheduledTime, appointmentTypeId, numberOfAppointments) => {
 				return $http({
 					url: '/server/management/sites/sites.php',
 					method: 'POST',
-					data: `action=addAppointmentTime&siteId=${siteId}&date=${date}&scheduledTime=${scheduledTime}&minimumNumberOfAppointments=${minimumNumberOfAppointments}&maximumNumberOfAppointments=${maximumNumberOfAppointments == null ? '' : maximumNumberOfAppointments}&percentageAppointments=${percentageAppointments}&approximateLengthInMinutes=${approximateLengthInMinutes}`,
+					data: `action=addAppointmentTime&siteId=${siteId}&date=${date}&scheduledTime=${scheduledTime}&appointmentTypeId=${appointmentTypeId}&numberOfAppointments=${numberOfAppointments}`,
 					headers: {
-						'Content-Type': "application/x-www-form-urlencoded"
+						'Content-Type': 'application/x-www-form-urlencoded'
 					}
-				}).then(function(response) {
+				}).then((response) => {
 					return response.data;
-				},function(error) {
+				}, (error) => {
 					return null;
+				});
+			},
+			updateAppointmentTime: (appointmentTimeId, numberOfAppointments) => {
+				return $http({
+					url: '/server/management/sites/sites.php',
+					method: 'POST',
+					data: `action=updateAppointmentTime&appointmentTimeId=${appointmentTimeId}&numberOfAppointments=${numberOfAppointments}`,
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}
+				}).then((response) => {
+					return response.data;
+				}, (error) => {
+					return null
 				});
 			}
 		};
