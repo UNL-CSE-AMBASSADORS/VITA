@@ -3,6 +3,8 @@ define('sitesController', [], function() {
 	function sitesController($scope, SitesDataService, NotificationUtilities) {
 		const MINUTES_IN_DAY = 24 * 60;
 		const TIME_INTERVAL = 30; // The default interval between displayed times for an AppointmentTime
+		const START_TIME = 60 * 7; // The first allowable time for a new appointment time (this is only for UX convenience)
+		const END_TIME_INCLUSIVE = 60 * 22; // The last allowable time for a new appointment time (this is only for UX convenience)
 
 		// For the site select list
 		$scope.selectedSite = null;
@@ -14,14 +16,18 @@ define('sitesController', [], function() {
 		// For the add appointment time section
 		$scope.savingAppointmentTime = false;
 		$scope.addAppointmentTimeButtonClicked = false;
-		const DEFAULT_ADD_APPOINTMENT_TIME_INFORMATION = {
-			minimumNumberOfAppointments: 0,
-			maximumNumberOfAppointments: null,
-			percentageAppointments: 100,
-			approximateLengthInMinutes: 60
-		};
-		$scope.addAppointmentTimeInformation = DEFAULT_ADD_APPOINTMENT_TIME_INFORMATION;
-		$scope.addAppointmentTimeScheduledTimeOptions = [];
+		$scope.DEFAULT_ADD_APPOINTMENT_TIME_INFORMATION = () => ({
+			numberOfAppointments: 0
+		});
+		$scope.addAppointmentTimeInformation = $scope.DEFAULT_ADD_APPOINTMENT_TIME_INFORMATION();
+		// TODO: Consider not showing times that aren't allowable based on the type+date
+		$scope.addAppointmentTimeScheduledTimeOptions = generateTimes(TIME_INTERVAL, START_TIME, END_TIME_INCLUSIVE, true)
+			.sort((time1, time2) => time1 - time2) // Sort in ascending order
+			.map((time) => time.timeString);
+		$scope.appointmentTypes = [];
+
+		// Controls the edit buttons for each appointment time row. This maps appointment time ID to an object
+		$scope.appointmentTimesEditMap = new Map();
 
 
 		$scope.loadSites = () => {
@@ -30,8 +36,16 @@ define('sitesController', [], function() {
 					NotificationUtilities.giveNotice('Failure', 'Unable to load the sites.', false);
 					return;
 				}
-
 				$scope.sites = result;
+			});
+		};
+
+		$scope.getAppointmentTypes = () => {
+			SitesDataService.getAppointmentTypes().then((result) => {
+				if (result == null) {
+					NotificationUtilities.giveNotice('Failure', 'Unable to load appointment types from server. Please reload the page.', false);
+				}
+				$scope.appointmentTypes = result;
 			});
 		};
 
@@ -47,55 +61,29 @@ define('sitesController', [], function() {
 					return;
 				}
 
-				result.site.doesInternational = result.site.doesInternational == true; // Do this since we want true/false instead of 1/0
 				$scope.siteInformation = result.site;
+				$scope.createAppointmentTimesMap();
 			});
+		};
+
+		$scope.createAppointmentTimesMap = () => {
+			// Maps date -> AppointmentTimes for that date
+			$scope.siteInformation.appointmentTimesMap = new Map();
+			for (const appointmentTime of $scope.siteInformation.appointmentTimes) {
+				if (!$scope.siteInformation.appointmentTimesMap.has(appointmentTime.scheduledDateString)) {
+					$scope.siteInformation.appointmentTimesMap.set(appointmentTime.scheduledDateString, []);
+				}
+				$scope.siteInformation.appointmentTimesMap.get(appointmentTime.scheduledDateString).push(appointmentTime);
+			}
 		};
 
 		$scope.addAppointmentTimeButtonHandler = () => {
 			$scope.initializeDatePicker('addAppointmentTimeDateInput', (date) => {
 				$scope.addAppointmentTimeInformation.selectedDate = date;
-				$scope.updateAddAppointmentTimeScheduledTimeOptions();
 				$scope.$apply();
 			}, (date) => isDateInPast(date));
 			$scope.addAppointmentTimeButtonClicked = true;
 		};
-
-		$scope.addAppointmentTimeApproximateLengthInMinutesChanged = (newApproximateLengthInMinutes) => {
-			$scope.addAppointmentTimeInformation.approximateLengthInMinutes = newApproximateLengthInMinutes;
-			$scope.updateAddAppointmentTimeScheduledTimeOptions();
-		};
- 
-		$scope.updateAddAppointmentTimeScheduledTimeOptions = () => {
-			const timeInterval = $scope.addAppointmentTimeInformation.approximateLengthInMinutes;
-			if (timeInterval == null || timeInterval <= 0) {
-				$scope.addAppointmentTimeScheduledTimeOptions = [];
-				return;
-			}
-
-			const times = $scope.getAvailableAppointmentTimes(timeInterval);
-			$scope.addAppointmentTimeScheduledTimeOptions = times.map(time => time.timeString);
-		};
-
-		$scope.getAvailableAppointmentTimes = (timeInterval) => {
-			const getTime = (time) => {
-				const dateTime = new Date(time);
-				return dateTime.getHours() * 60 + dateTime.getMinutes();
-			};
-
-			let times = generateTimes(TIME_INTERVAL);
-
-			// Remove any times that already have an appointment time with that time
-			for (const appointmentTime of $scope.siteInformation.appointmentTimes) {
-				const scheduledTime  = getTime(appointmentTime.scheduledTime);
-				times = times.filter(time => time.time != scheduledTime);
-			}
-
-			// Sort the times in ascending order
-			times.sort((time1, time2) => time1 - time2);
-
-			return times;
-		}
 
 		$scope.addAppointmentTimeSaveButtonHandler = () => {
 			if ($scope.savingAppointmentTime) {
@@ -108,18 +96,16 @@ define('sitesController', [], function() {
 			const siteId = $scope.siteInformation.siteId;
 			const date = appointmentTimeInformation.selectedDate;
 			const scheduledTime = appointmentTimeInformation.selectedScheduledTime;
-			const minimumNumberOfAppointments = appointmentTimeInformation.minimumNumberOfAppointments;
-			const maximumNumberOfAppointments = appointmentTimeInformation.maximumNumberOfAppointments;
-			const percentageAppointments = appointmentTimeInformation.percentageAppointments;
-			const approximateLengthInMinutes = appointmentTimeInformation.approximateLengthInMinutes;
+			const appointmentTypeId = appointmentTimeInformation.selectedAppointmentTypeId;
+			const numberOfAppointments = appointmentTimeInformation.numberOfAppointments;
 
-			SitesDataService.addAppointmentTime(siteId, date, scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, percentageAppointments, approximateLengthInMinutes).then((result) => {
+			SitesDataService.addAppointmentTime(siteId, date, scheduledTime, appointmentTypeId, numberOfAppointments).then((result) => {
 				if (result == null || !result.success) {
 					const errorMessage = result.error || 'There was an error saving the appointment time. Please refresh and try again.';
 					NotificationUtilities.giveNotice('Failure', errorMessage, false);
 				} else {
 					$scope.updateAppointmentTimesTable();
-					$scope.addAppointmentTimeInformation = DEFAULT_ADD_APPOINTMENT_TIME_INFORMATION;
+					$scope.addAppointmentTimeInformation = $scope.DEFAULT_ADD_APPOINTMENT_TIME_INFORMATION();
 					$scope.addAppointmentTimeButtonClicked = false;
 	
 					NotificationUtilities.giveNotice('Success', 'The appointment time was successfully created');
@@ -138,13 +124,39 @@ define('sitesController', [], function() {
 					NotificationUtilities.giveNotice('Failure', errorMessage, false);
 				} else {
 					$scope.siteInformation.appointmentTimes = result.appointmentTimes;
+					$scope.createAppointmentTimesMap();
 				}
 			});
 		};
 
 		$scope.addAppointmentTimeCancelButtonHandler = () => {
-			$scope.addAppointmentTimeInformation = DEFAULT_ADD_APPOINTMENT_TIME_INFORMATION;
+			$scope.addAppointmentTimeInformation = $scope.DEFAULT_ADD_APPOINTMENT_TIME_INFORMATION();
 			$scope.addAppointmentTimeButtonClicked = false;
+		};
+
+		$scope.isAppointmentTimeRowBeingEdited = (appointmentTimeId) => {
+			return $scope.appointmentTimesEditMap.has(appointmentTimeId) && $scope.appointmentTimesEditMap.get(appointmentTimeId).editing;
+		};
+
+		$scope.editAppointmentTimesEditButtonHandler = (appointmentTime) => {
+			$scope.appointmentTimesEditMap.set(appointmentTime.appointmentTimeId, { 
+				editing: true, 
+				newNumberOfAppointments: parseInt(appointmentTime.numberOfAppointments) 
+			});
+		};
+
+		$scope.editAppointmentTimeSaveButtonHandler = (appointmentTime) => {
+			const appointmentTimeId = appointmentTime.appointmentTimeId;
+			const newNumberOfAppointments = $scope.appointmentTimesEditMap.get(appointmentTimeId).newNumberOfAppointments;
+			SitesDataService.updateAppointmentTime(appointmentTimeId, newNumberOfAppointments).then((result) => {
+				if (result == null || !result.success) {
+					const errorMessage = result.error || 'There was an error updating the appointment time. Please refresh the page.';
+					NotificationUtilities.giveNotice('Failure', errorMessage, false);
+				} else {
+					appointmentTime.numberOfAppointments = newNumberOfAppointments;
+					$scope.appointmentTimesEditMap.get(appointmentTimeId).editing = false;
+				}
+			});
 		};
 
 		$scope.initializeDatePicker = (elementId, onSelectCallback, beforeShowDayPredicate) => {
@@ -198,6 +210,7 @@ define('sitesController', [], function() {
 
 		// Invoke initially
 		$scope.loadSites();
+		$scope.getAppointmentTypes();
 	};
 
 	sitesController.$inject = ['$scope', 'sitesDataService', 'notificationUtilities'];

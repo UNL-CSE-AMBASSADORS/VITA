@@ -5,6 +5,7 @@ $root = realpath($_SERVER['DOCUMENT_ROOT']);
 require_once "$root/server/config.php";
 require_once "$root/vendor/autoload.php";
 require_once "$root/server/utilities/emailUtilities.class.php";
+require_once "$root/server/utilities/appointmentTypeUtilities.class.php";
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 
@@ -57,7 +58,7 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 		$clientInformationMatches = doesClientInformationMatch($clientInformation, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$response['validated'] = $clientInformationMatches;
 		if ($clientInformationMatches) {
-			$response['residentialAppointment'] = $clientInformation['appointmentType'] === 'residential';
+			$response['residentialAppointment'] = AppointmentTypeUtilities::isResidentialAppointmentType($clientInformation['appointmentType']);
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -66,7 +67,6 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 
 	echo json_encode($response);
 }
-
 
 function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumber) {
 	$response = array();
@@ -130,7 +130,7 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		$containerName = 'ty2019';
 		$fileContent = fopen($uploadedFileTempName, 'r');
 		$fileNameToSave = $firstName.'_'.$lastName."/$appointmentId/".uniqid()."-$uploadedFileName";
-		if ($appointmentType === 'residential') {
+		if (AppointmentTypeUtilities::isResidentialAppointmentType($appointmentType)) {
 			$fileNameToSave = 'residential/'.$fileNameToSave;
 		} else {
 			$fileNameToSave = 'non-residential/'.$fileNameToSave;
@@ -162,7 +162,7 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 		if (PROD) {
 			$emailJsonString = file_get_contents('./notificationEmails.json');
 			$emailsJson = json_decode($emailJsonString, true);
-			$toEmailsString = $appointmentType === 'residential' ? $emailsJson['residential'] : $emailsJson['non-residential'];
+			$toEmailsString = AppointmentTypeUtilities::isResidentialAppointmentType($appointmentType) ? $emailsJson['residential'] : $emailsJson['non-residential'];
 
 			$readyMessage = "A client has marked their appointment as ready: <br/>
 				<b>First Name:</b> $firstName <br/>
@@ -231,14 +231,13 @@ function validateClientInformation($token, $firstName, $lastName, $emailAddress,
 function getClientInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
-	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, bestTimeToCall, Appointment.appointmentId,
-				PossibleAnswer.text AS countryText
+	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, bestTimeToCall, 
+			Appointment.appointmentId, AppointmentType.lookupName AS appointmentType
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId
-			LEFT JOIN Answer ON Answer.appointmentId = Appointment.appointmentId
-				AND Answer.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")
-			LEFT JOIN PossibleAnswer ON PossibleAnswer.possibleAnswerId = Answer.possibleAnswerId
+			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+			JOIN AppointmentType ON AppointmentTime.appointmentTypeId = AppointmentType.appointmentTypeId
 		WHERE token = ?';
 
 	$stmt = $DB_CONN->prepare($query);
@@ -250,8 +249,6 @@ function getClientInformationFromToken($token) {
 	if (!$clientInformation) {
 		throw new Exception('There was an error on the server fetching information. Please refresh the page and try again.', MY_EXCEPTION);
 	}
-
-	$clientInformation['appointmentType'] = isset($clientInformation['countryText']) ? 'non-residential' : 'residential';
 
 	return $clientInformation;
 }

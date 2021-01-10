@@ -73,11 +73,7 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 			// Grab appointment information so we can display the site/date/time and see what type of appointment it is
 			$appointmentInformation = getAppointmentInformationFromToken($token);
 
-			$response['appointmentType'] = 'residential';
-			if (isset($appointmentInformation['countryText'])) {
-				$response['appointmentType'] = $appointmentInformation['countryText'];
-			}
-
+			$response['appointmentType'] = $appointmentInformation['appointmentType'];
 			$response['site'] = array(
 				'title' => $appointmentInformation['title'],
 				'address' => $appointmentInformation['address']
@@ -255,14 +251,12 @@ function getAppointmentInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
 	$query = 'SELECT DATE_FORMAT(scheduledTime, "%W, %M %D, %Y at %l:%i %p") AS scheduledTimeStr, 
-		Site.title, Site.address, PossibleAnswer.text AS countryText
+		Site.title, Site.address, AppointmentType.lookupName AS appointmentType
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+			JOIN AppointmentType ON AppointmentTime.appointmentTypeId = AppointmentType.appointmentTypeId
 			JOIN Site ON AppointmentTime.siteId = Site.siteId
-			LEFT JOIN Answer ON Answer.appointmentId = Appointment.appointmentId AND 
-				Answer.questionId = (SELECT questionId FROM Question WHERE lookupName = "treaty_type")
-			LEFT JOIN PossibleAnswer ON PossibleAnswer.possibleAnswerId = Answer.possibleAnswerId
 		WHERE token = ?';
 	
 	$stmt = $DB_CONN->prepare($query);

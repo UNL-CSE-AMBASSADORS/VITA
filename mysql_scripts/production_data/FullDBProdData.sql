@@ -29,8 +29,8 @@ INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
 	VALUES ("Jackie Gaughan Multicultural Center", "1505 'S' Street", "402-472-9638", @userId, @userId);
 SET @site_jackieGaughanMulticulturalCenter = LAST_INSERT_ID();
 
-INSERT INTO Site (title, address, phoneNumber, doesInternational, createdBy, lastModifiedBy)
-	VALUES ("International Student Scholar", "Nebraska Union -- Colonial Room", "402-472-9638", TRUE, @userId, @userId);
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("International Student Scholar", "Nebraska Union -- Colonial Room", "402-472-9638", @userId, @userId);
 SET @site_internationalStudentScholar = LAST_INSERT_ID();
 -- End Sites
 
