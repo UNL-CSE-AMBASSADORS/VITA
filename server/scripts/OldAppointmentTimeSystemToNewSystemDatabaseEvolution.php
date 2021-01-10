@@ -1,10 +1,10 @@
 <?php
-// This script will only work for Matthew Meacham
+// This script will only work for Joey Carrigan
 
 $root = realpath($_SERVER['DOCUMENT_ROOT']);
 require_once "$root/server/user.class.php";
 $USER = new User();
-if (!$USER->isLoggedIn() || $USER->getUserId() !== '1') {
+if (!$USER->isLoggedIn() || $USER->getUserId() !== '358') {
 	header("Location: /unauthorized");
 	die();
 }
