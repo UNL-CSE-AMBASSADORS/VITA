@@ -1,24 +1,14 @@
 <?php
 	date_default_timezone_set('America/Chicago');
 	$today = date('Y-m-d');
-	$dateAppointmentSignUpsStart = date('Y-04-27');
-	$taxDay = date('Y-07-15');
+	$dateAppointmentSignUpsStart = date('Y-01-15');
+	$taxDay = date('Y-04-15');
 	
 	$taxYear = ($today > $taxDay) ? date('Y', strtotime('+1 year')) : date('Y');
 ?>
 
 <!-- Appointment Signup with no success -->
 <div class="dcf-pb-7" ng-if="successMessage == null">
-	<div>
-		<p>
-		The IRS/Nebraska Department of Revenue filing deadline is set for July 15, 2020. 
-		If you need to submit an extension to file, you can fill out and submit Form 4868.
-		</p>
-		<ul>
-			<li><a href="https://www.irs.gov/pub/irs-pdf/f4868.pdf" target="_blank">IRS Form 4868 (link)</a></li>
-			<li><a href="https://revenue.nebraska.gov/sites/revenue.nebraska.gov/files/doc/tax-forms/2017/f_4868n.pdf" target="_blank">NE Department of Revenue Form 4868N (link)</a></li>
-		</ul>
-	</div>
 	<?php if ($today > $taxDay) { ?>
 		<h4>VITA appointments have ended for the <?php echo date('Y') ?> tax season. Check back during the <?php echo $taxYear ?> tax season to sign up for an appointment.</h4>
 	<?php } else if ($today < $dateAppointmentSignUpsStart) { ?>
