@@ -119,11 +119,20 @@
 		<!-- List of appointments  -->
 		<table class="dcf-table queue dcf-ml-5 dcf-mr-5" ng-show="(appointments | searchFor: appointmentSearch).length > 0">
 			<tbody>
+				<tr>
+					<th>Name</th>
+					<th>Site</th>
+					<th>Scheduled Time</th>
+					<th>Language</th>
+					<th>Appointment ID</th>
+				</tr>
 				<tr class="pointer"
 					ng-repeat="appointment in appointments | searchFor: appointmentSearch"
 					ng-click="selectAppointment(appointment)">
 					<td data-header="Name">{{appointment.firstName}} {{appointment.lastName}}</td>
-					<td data-header="Scheduled Time">{{appointment.scheduledTime}} at {{appointment.title}}</td>
+					<td data-header="Site">{{appointment.title}}</td>
+					<td data-header="Scheduled Time">{{appointment.scheduledTime}}</td>
+					<td data-header="Language">{{appointment.language}}</td>
 					<td data-header="Appointment ID">#{{appointment.appointmentId}}</td>
 				</tr>
 			</tbody>
