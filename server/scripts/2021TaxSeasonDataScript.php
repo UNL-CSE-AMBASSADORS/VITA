@@ -1,51 +1,43 @@
 <?php
-// This script will only work for Matthew Meacham
+// This script will only work for Joey Carrigan.
+// To run it locally, make sure userId and siteIds exist here and in helper functions
 
 $root = realpath($_SERVER['DOCUMENT_ROOT']);
 require_once "$root/server/user.class.php";
 $USER = new User();
-if (!$USER->isLoggedIn() || $USER->getUserId() !== '1') {
+if (!$USER->isLoggedIn() || $USER->getUserId() !== '358') {
 	header("Location: /unauthorized");
 	die();
 }
 
 // TODO: Need to update the `$dataAlreadyInserted` values before this query will run successfully
 
-insert2020Data();
+insert2021Data();
 
-function insert2020Data() {	
+function insert2021Data() {	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The data has already been inserted');
 	}
-	// insertAndersonLibraryData();
-	// insertCenterForPeopleInNeedData();
-	// insertLorenEiseleyLibraryData();
-	// insertBennettMartinLibraryData();
-	// insertFStreetCommunityCenterData();
-	// insertSoutheastCommunityCollegeData();
-	// insertInternationalStudentScholarSiteData();
-	// insertNebraskaUnionData();
-
+//	insertAndersonLibraryData();
+//	insertCenterForPeopleInNeedData();
+//	insertLorenEiseleyLibraryData();
+//	insertBennettMartinLibraryData();
+//	insertFStreetCommunityCenterData();
+//	insertSoutheastCommunityCollegeData();
+//	insertAsianCommunityAndCulturalCenterData();
+//	insertNebraskaUnionData();
+//	insertInternationalStudentScholarSiteData();
+	
 	die('SUCCESS');
 }
 
-// Need to create the new sites
-// Create Shifts for each site
-// Create appointment times within those shifts
-// Create role limits for that site/shift/role
-
 function insertAndersonLibraryData() {
 	GLOBAL $DB_CONN;
-
-	$siteCoordinatorRoleId = 1;
-	$greeterRoleId = 2;
-	$preparerRoleId = 3;
-	$reviewerRoleId = 4;
 	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
-		die('The AL data has already been inserted');
+		die('The Anderson Library data has already been inserted');
 	}
 
 	$siteId = 2; // Manually obtained from PROD DB
@@ -53,30 +45,25 @@ function insertAndersonLibraryData() {
 	try {
 		$DB_CONN->beginTransaction();
 
-		// Wednesdays
+		// Wednesdays 5-8
 		$wednesdayDates = getWeeklyDatesFromRange('2021-02-03', '2021-04-07');
 		foreach ($wednesdayDates as $date) {
-			$shiftId = insertShift("$date 17:00:00", "$date 20:00:00", $siteId);
 
 			// Are from Katie's parameter sheet
-			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 7.5, 7.5, 100, 60, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 7.5, 7.5, 100, 60, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 19:00:00", 7.5, 7.5, 100, 60, $siteId);
+			// 6 is Virtual Residential
+			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 7.5, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 7.5, 6, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 19:00:00", 7.5, 6, $siteId);
 		}
 		
-		// Thursdays
-		$thursdayDates = getWeeklyDatesFromRange('2021-02-04', '2021-02-08');
+		// Thursdays 5-8
+		$thursdayDates = getWeeklyDatesFromRange('2021-02-04', '2021-04-08');
 		foreach ($thursdayDates as $date) {
-			$shiftId = insertShift("$date 17:00:00", "$date 20:00:00", $siteId);
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 7.5, 7.5, 100, 60, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 7.5, 7.5, 100, 60, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 19:00:00", 7.5, 7.5, 100, 60, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 7.5, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 7.5, 6, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 19:00:00", 7.5, 6, $siteId);
 		}
-
-		// Default Site Role Limits
-		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
-		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
@@ -86,14 +73,8 @@ function insertAndersonLibraryData() {
 	}
 }
 
-//center for people in need exists Feb 2 - Mar 23
 function insertCenterForPeopleInNeedData() {
 	GLOBAL $DB_CONN;
-
-	$siteCoordinatorRoleId = 1;
-	$greeterRoleId = 2;
-	$preparerRoleId = 3;
-	$reviewerRoleId = 4;
 	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
@@ -105,20 +86,15 @@ function insertCenterForPeopleInNeedData() {
 
 		$siteId = 5; // Manually obtained from PROD DB
 
-		// Tuesdays
-		$tuesdayDates = getWeeklyDatesFromRange('2021-02-02', '2021-03-23'); //TODO check this end date!
+		// Tuesdays 11-2
+		$tuesdayDates = getWeeklyDatesFromRange('2021-02-02', '2021-03-23');
+
 		foreach ($tuesdayDates as $date) {
-			$shiftId = insertShift("$date 11:00:00", "$date 14:00:00", $siteId);
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 6, 6, 100, 60, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 6, 6, 100, 60, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 6, 6, 100, 60, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 6, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 6, 6, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 6, 6, $siteId);
 		}
-
-		// Default Site Role Limits
-		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
-		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
-
 		$DB_CONN->commit();
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
@@ -130,14 +106,9 @@ function insertCenterForPeopleInNeedData() {
 function insertLorenEiseleyLibraryData() {
 	GLOBAL $DB_CONN;
 
-	$siteCoordinatorRoleId = 1;
-	$greeterRoleId = 2;
-	$preparerRoleId = 3;
-	$reviewerRoleId = 4;
-	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
-		die('The Eiseley data has already been inserted');
+		die('The Loren Eiseley data has already been inserted');
 	}
 
 	try {
@@ -145,34 +116,28 @@ function insertLorenEiseleyLibraryData() {
 
 		$siteId = 6; // Manually obtained from PROD DB
 
-		// Thursdays
-		$thursdayDates = getWeeklyDatesFromRange('2021-02-04', '2021-04-08');
+		// Thursdays 4-7
+		$thursdayDates = getWeeklyDatesFromRange('2021-02-18', '2021-04-08');
 		foreach ($thursdayDates as $date) {
-			$shiftId = insertShift("$date 16:00:00", "$date 19:00:00", $siteId);
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 6, 6, 100, 60, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 6, 6, 100, 60, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 6, 6, 100, 60, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 6, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 6, 6, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 6, 6, $siteId);
 		}
 
-		// Saturdays
-		$saturdayDates = getWeeklyDatesFromRange('2021-02-06', '2021-04-10');
+		// Saturdays 1-4
+		$saturdayDates = getWeeklyDatesFromRange('2021-02-20', '2021-04-03');
 		foreach ($saturdayDates as $date) {
-			$shiftId = insertShift("$date 13:00:00", "$date 16:00:00", $siteId);
-
-			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 6, 6, 100, 60, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 6, 6, 100, 60, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 6, 6, 100, 60, $siteId);
+		
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 6, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 6, 6, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 6, 6, $siteId);
 		}
-
-		// Default Site Role Limits
-		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
-		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
-		throw new Exception('Failed inserting Center for People in Need data', MY_EXCEPTION);
+		throw new Exception('Failed inserting Loren Eisely data', MY_EXCEPTION);
 		die();
 	}
 }
@@ -180,11 +145,6 @@ function insertLorenEiseleyLibraryData() {
 function insertBennettMartinLibraryData() {
 	GLOBAL $DB_CONN;
 
-	$siteCoordinatorRoleId = 1;
-	$greeterRoleId = 2;
-	$preparerRoleId = 3;
-	$reviewerRoleId = 4;
-	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
 		die('The Bennett Martin data has already been inserted');
@@ -195,35 +155,25 @@ function insertBennettMartinLibraryData() {
 
 		$siteId = 7; // Manually obtained from PROD DB
 
-		// Sundays
+		// Sundays 1-4
 		$sundayDates = getWeeklyDatesFromRange('2021-02-07', '2021-03-14');
 		foreach ($sundayDates as $date) {
-			$shiftId = insertShift("$date 13:00:00", "$date 16:00:00", $siteId);
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 6, 6, 100, 60, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 6, 6, 100, 60, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 6, 6, 100, 60, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 6, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 6, 6, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 6, 6, $siteId);
 		}
-
-		// Default Site Role Limits
-		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
-		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
-		throw new Exception('Failed inserting Center for People in Need data', MY_EXCEPTION);
+		throw new Exception('Failed inserting Bennett Martin Library data', MY_EXCEPTION);
 		die();
 	}
 }
 
 function insertFStreetCommunityCenterData() {
 	GLOBAL $DB_CONN;
-
-	$siteCoordinatorRoleId = 1;
-	$greeterRoleId = 2;
-	$preparerRoleId = 3;
-	$reviewerRoleId = 4;
 	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
@@ -235,18 +185,13 @@ function insertFStreetCommunityCenterData() {
 
 		$siteId = 8; // Manually obtained from PROD DB
 
-		// Tuesdays Feb 2 - Apr 6
+		// Tuesdays Feb 2 - Apr 6, 5-7
 		$tuesdayDates = getWeeklyDatesFromRange('2021-02-02', '2021-04-06');
 		foreach ($tuesdayDates as $date) {
-			$shiftId = insertShift("$date 17:00:00", "$date 19:00:00", $siteId);
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 6, 6, 100, 60, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 6, 6, 100, 60, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 6, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 6, 6, $siteId);
 		}
-
-		// Default Site Role Limits
-		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
-		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
@@ -256,18 +201,12 @@ function insertFStreetCommunityCenterData() {
 	}
 }
 
-//Southeast community exists
 function insertSoutheastCommunityCollegeData() {	
 	GLOBAL $DB_CONN;
 
-	$siteCoordinatorRoleId = 1;
-	$greeterRoleId = 2;
-	$preparerRoleId = 3;
-	$reviewerRoleId = 4;
-
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
-		die('The Southeast Community College Data has already been inserted');
+		die('The Southeast Community College data has already been inserted');
 	}
  	
 	try {
@@ -276,26 +215,21 @@ function insertSoutheastCommunityCollegeData() {
 		$siteId = 10; // Manually obtained from PROD DB
 
 		// Mondays, Feb 1 - Mar 1
-		$mondayDates = getWeeklyDatesFromRange('2021-02-01', '2021-03-01');//TODO idk if this is monday or satur//array('2021-02-01', '2021-02-08', '2021-02-15', '2021-02-22', '2021-03-01');
+		$mondayDates = getWeeklyDatesFromRange('2021-02-01', '2021-03-01');
 		foreach ($mondayDates as $date) {
-			$shiftId = insertShift("$date 16:30:00", "$date 18:30:00", $siteId);
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 16:30:00", 4, 4, 100, 60, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 17:30:00", 4, 4, 100, 60, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 4.5, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 4.5, 6, $siteId);
 		}
 
 		// Thursdays, Feb 4 - mar 25 or apr 8
-		$thursdayDates = getWeeklyDatesFromRange('2021-02-04', '2021-03-25');//TODO CHECK end date //array('2021-02-18', '2021-02-25', '2021-03-04', '2021-03-11', '2021-03-18', '2021-03-25', '2021-04-01', '2021-04-08');
+		$thursdayDates = getWeeklyDatesFromRange('2021-02-04', '2021-04-08');
 		foreach ($thursdayDates as $date) {
-			$shiftId = insertShift("$date 16:30:00", "$date 18:30:00", $siteId);
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 16:30:00", 4.5, 4.5, 100, 60, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 17:30:00", 4.5, 4.5, 100, 60, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 4.5, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 4.5, 6, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 4.5, 6, $siteId);
 		}
-
-		// Default Site Role Limits
-		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
-		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
@@ -307,11 +241,6 @@ function insertSoutheastCommunityCollegeData() {
 
 function insertNebraskaUnionData() {
 	GLOBAL $DB_CONN;
-
-	$siteCoordinatorRoleId = 1;
-	$greeterRoleId = 2;
-	$preparerRoleId = 3;
-	$reviewerRoleId = 4;
 	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
@@ -324,21 +253,16 @@ function insertNebraskaUnionData() {
 		$DB_CONN->beginTransaction();
 
 		// Saturdays
-		$saturdayDates = getWeeklyDatesFromRange('2021-01-30', '2021-03-13');
+		$saturdayDates = getWeeklyDatesFromRange('2021-01-30', '2021-03-06');
 		foreach ($saturdayDates as $date) {
-			$shiftId = insertShift("$date 10:00:00", "$date 16:00:00", $siteId);
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 10:00:00", 7.5, 7.5, 100, 60, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 7.5, 7.5, 100, 60, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 7.5, 7.5, 100, 60, $siteId);
-			$fourthAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 7.5, 7.5, 100, 60, $siteId);
-			$fifthAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 7.5, 7.5, 100, 60, $siteId);
-			$sixthAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 7.5, 7.5, 100, 60, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 10:00:00", 7.5, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 7.5, 6, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 7.5, 6, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 7.5, 6, $siteId);
+			$fifthAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 7.5, 6, $siteId);
+			$sixthAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 7.5, 6, $siteId);
 		}
-
-		// Default Site Role Limits
-		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
-		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
@@ -348,17 +272,51 @@ function insertNebraskaUnionData() {
 	}
 }
 
-function insertInternationalStudentScholarSiteData() {
+function insertAsianCommunityAndCulturalCenterData() {
 	GLOBAL $DB_CONN;
-
-	$siteCoordinatorRoleId = 1;
-	$greeterRoleId = 2;
-	$preparerRoleId = 3;
-	$reviewerRoleId = 4;
 	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
-		die('The ISS data has already been inserted');
+		die('The Asian Community and Cultural Center data has already been inserted');
+	}
+
+	$siteId = insertSite("Asian Community And Cultural Center", "", "");
+
+	try {
+		$DB_CONN->beginTransaction();
+
+		// Wednesdays 11-2
+		$wednesdayDates = getWeeklyDatesFromRange('2021-02-03', '2021-04-07');
+		foreach ($wednesdayDates as $date) {
+
+			$firstAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 6, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 6, 6, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 6, 6, $siteId);
+		}
+		
+		// Thursdays 11-2
+		$thursdayDates = getWeeklyDatesFromRange('2021-02-04', '2021-04-08');
+		foreach ($thursdayDates as $date) {
+
+			$firstAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 6, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 6, 6, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 6, 6, $siteId);
+		}
+
+		$DB_CONN->commit();
+	} catch (Exception $e) {
+		$DB_CONN->rollback();
+		throw new Exception('Failed inserting Asian Community and Cultural Center data', MY_EXCEPTION);
+		die();
+	}
+}
+
+function insertInternationalStudentScholarSiteData() {
+	GLOBAL $DB_CONN;
+
+	$dataAlreadyInserted = true;
+	if ($dataAlreadyInserted) {
+		die('The International Student Scholar data has already been inserted');
 	}
 
 	$siteId = 4; // Manually obtained from PROD DB
@@ -366,50 +324,53 @@ function insertInternationalStudentScholarSiteData() {
 	try {
 		$DB_CONN->beginTransaction();
 
-		// Tuesdays
+		// Tuesdays 12-5
 		$tuesdayDates = getWeeklyDatesFromRange('2021-03-02', '2021-04-06');
+		//TODO make sure these are 12-4
 		foreach ($tuesdayDates as $date) {
-			$shiftId = insertShift("$date 12:00:00", "$date 17:00:00", $siteId);
 
-			$fifthAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 30, 30, 100, 60, $siteId);
-			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 30, 30, 100, 60, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 30, 30, 100, 60, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 30, 30, 100, 60, $siteId);
-			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 30, 30, 100, 60, $siteId);
+			// Virtual China
+			$firstAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 10, 7, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 10, 7, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 10, 7, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 10, 7, $siteId);
 
+			// Virtual India
+			$firstAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 5, 8, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 5, 8, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 5, 8, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 5, 8, $siteId);			
+		
+			// Virtual Treaty
+			$firstAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 5, 9, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 5, 9, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 5, 9, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 5, 9, $siteId);			
+		
+			// Virtual Non-Treaty
+			$firstAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 10, 10, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 10, 10, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 10, 10, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 10, 10, $siteId);
 		}
-
-		// Default Site Role Limits
-		insertSiteRoleLimit(1, $siteCoordinatorRoleId, $siteId);
-		insertSiteRoleLimit(1, $greeterRoleId, $siteId);
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
-		throw new Exception('Failed inserting ISS data', MY_EXCEPTION);
+		throw new Exception('Failed inserting International Student Scholar data', MY_EXCEPTION);
 		die();
 	}
-
 }
-//f street community center exists
-
-// Asian Community and Cultural Center doesn't exist
-//Lincoln City Libraries? victor e anderson, loren eiseley, bennet martin library
-//Nebraska Unions? east and normal
-
-
-
-
 
 /*
  * Helper Methods
  */ 
-function insertSite($title, $address, $phoneNumber, $doesMultilingual, $doesInternational) {
+function insertSite($title, $address, $phoneNumber) {
 	GLOBAL $DB_CONN;
 
-	$query = 'INSERT INTO Site (title, address, phoneNumber, doesMultilingual, doesInternational, createdBy, lastModifiedBy)
-		VALUES (?, ?, ?, ?, ?, 1, 1);';
-	$params = array($title, $address, $phoneNumber, $doesMultilingual, $doesInternational);
+	$query = 'INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+		VALUES (?, ?, ?, 358, 358);';
+	$params = array($title, $address, $phoneNumber);
 
 	$stmt = $DB_CONN->prepare($query);
 	if (!$stmt->execute($params)) {
@@ -419,61 +380,16 @@ function insertSite($title, $address, $phoneNumber, $doesMultilingual, $doesInte
 	return $DB_CONN->lastInsertId();
 }
 
-function insertShift($startTime, $endTime, $siteId) {
+function insertAppointmentTime($scheduledTime, $numberOfAppointments, $appointmentTypeId, $siteId) {
 	GLOBAL $DB_CONN;
 
-	$query = 'INSERT INTO Shift (startTime, endTime, siteId, createdBy, lastModifiedBy)
-		VALUES (?, ?, ?, 1, 1)';
-	$params = array($startTime, $endTime, $siteId);
-
-	$stmt = $DB_CONN->prepare($query);
-	if (!$stmt->execute($params)) {
-		throw new Exception("Unable to insert shift", MY_EXCEPTION);
-	}
-
-	return $DB_CONN->lastInsertId();
-}
-
-function insertAppointmentTime($scheduledTime, $minimumNumberOfAppointments, $maximumNumberOfAppointments, $percentageAppointments, $approximateLengthInMinutes, $siteId) {
-	GLOBAL $DB_CONN;
-
-	$query = 'INSERT INTO AppointmentTime (scheduledTime, minimumNumberOfAppointments, maximumNumberOfAppointments, percentageAppointments, approximateLengthInMinutes, siteId)
-		VALUES (?, ?, ?, ?, ?, ?)';
-	$params = array($scheduledTime, $minimumNumberOfAppointments, $maximumNumberOfAppointments, $percentageAppointments, $approximateLengthInMinutes, $siteId);
+	$query = 'INSERT INTO AppointmentTime (scheduledTime, numberOfAppointments, appointmentTypeId, siteId)
+		VALUES (?, ?, ?, ?)';
+	$params = array($scheduledTime, $numberOfAppointments, $appointmentTypeId, $siteId);
 
 	$stmt = $DB_CONN->prepare($query);
 	if (!$stmt->execute($params)) {
 		throw new Exception("Unable to insert appointment time", MY_EXCEPTION);
-	}
-
-	return $DB_CONN->lastInsertId();
-}
-
-function insertSiteRoleLimit($maximumNumber, $roleId, $siteId) {
-	GLOBAL $DB_CONN;
-
-	$query = 'INSERT INTO RoleLimit (maximumNumber, roleId, siteId)
-		VALUES (?, ?, ?)';
-	$params = array($maximumNumber, $roleId, $siteId);
-
-	$stmt = $DB_CONN->prepare($query);
-	if (!$stmt->execute($params)) {
-		throw new Exception("Unable to insert role limit", MY_EXCEPTION);
-	}
-
-	return $DB_CONN->lastInsertId();
-}
-
-function insertShiftRoleLimit($maximumNumber, $roleId, $shiftId, $siteId) {
-	GLOBAL $DB_CONN;
-
-	$query = 'INSERT INTO RoleLimit (maximumNumber, roleId, shiftId, siteId)
-		VALUES (?, ?, ?, ?)';
-	$params = array($maximumNumber, $roleId, $shiftId, $siteId);
-
-	$stmt = $DB_CONN->prepare($query);
-	if (!$stmt->execute($params)) {
-		throw new Exception("Unable to insert role limit", MY_EXCEPTION);
 	}
 
 	return $DB_CONN->lastInsertId();
