@@ -117,7 +117,7 @@
 		</p>
 
 		<!-- List of appointments  -->
-		<table class="dcf-table queue dcf-ml-5 dcf-mr-5" ng-show="(appointments | searchFor: appointmentSearch).length > 0">
+		<table class="dcf-table dcf-table-striped queue dcf-ml-5 dcf-mr-5" ng-show="(appointments | searchFor: appointmentSearch).length > 0">
 			<tbody>
 				<tr>
 					<th>Name</th>

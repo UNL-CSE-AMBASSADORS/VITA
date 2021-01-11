@@ -115,7 +115,7 @@ return readfile($documentRoot . $path);
 				<a class="dcf-btn dcf-btn-primary dcf-float-right dcf-mb-5" id="add-user" href="#add-user-modal">Add User</a>
 			</div>
 			<div class="dcf-wrapper dcf-mb-8" id="user-management-table-row">
-				<table class="table table-condensed table-hover dcf-table" id="user-management-table">
+				<table class="table table-condensed table-hover dcf-table dcf-table-striped" id="user-management-table">
 					<!-- table data injected through JS -->
 				</table>
 			</div>
