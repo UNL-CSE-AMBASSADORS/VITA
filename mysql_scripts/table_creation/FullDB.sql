@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS SelfServiceAppointmentRescheduleToken;
 DROP TABLE IF EXISTS Note;
 DROP TABLE IF EXISTS Appointment;
 DROP TABLE IF EXISTS AppointmentTime;
+DROP TABLE IF EXISTS AppointmentType;
 DROP TABLE IF EXISTS Client;
 -- TODO: RoleLimit, UserShift, Shift, and Role can be removed once this script has been run by each dev member
 DROP TABLE IF EXISTS RoleLimit;
@@ -58,8 +59,6 @@ CREATE TABLE Site (
 	title VARCHAR(255) NOT NULL,
 	address VARCHAR(255) NOT NULL,
 	phoneNumber VARCHAR(20) NOT NULL,
-	doesInternational BOOLEAN NOT NULL DEFAULT FALSE,
-	isVirtual BOOLEAN NOT NULL DEFAULT FALSE,
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
 	lastModifiedDate DATETIME,
 	archived BOOLEAN NOT NULL DEFAULT FALSE,
@@ -78,14 +77,19 @@ CREATE TABLE Client (
 	bestTimeToCall VARCHAR(255) NULL
 );
 
+CREATE TABLE AppointmentType (
+	appointmentTypeId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	name VARCHAR(255) NOT NULL,
+	lookupName VARCHAR(255) NOT NULL,
+	archived BOOLEAN NOT NULL DEFAULT FALSE
+);
+
 CREATE TABLE AppointmentTime (
 	appointmentTimeId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	scheduledTime DATETIME NOT NULL,
-	minimumNumberOfAppointments INTEGER UNSIGNED DEFAULT 0,
-	maximumNumberOfAppointments INTEGER UNSIGNED DEFAULT NULL,
-	percentageAppointments INTEGER UNSIGNED NOT NULL DEFAULT 100,
-	approximateLengthInMinutes INTEGER UNSIGNED NOT NULL DEFAULT 60,
-	CONSTRAINT percentageCheck CHECK (percentageAppointments>=0 AND percentageAppointments<=300),
+	numberOfAppointments INTEGER UNSIGNED DEFAULT 0,
+	appointmentTypeId INTEGER UNSIGNED NOT NULL,
+	FOREIGN KEY(appointmentTypeId) REFERENCES AppointmentType(appointmentTypeId),
 	siteId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(siteId) REFERENCES Site(siteId)
 );

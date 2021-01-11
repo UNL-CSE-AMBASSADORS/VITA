@@ -2,14 +2,21 @@ define('appointmentsDataService', [], function($http) {
 
 	function appointmentsDataService($http) {
 		return {
-			getAppointments: function(year) {
+			getAppointments: (year) => {
 				return $http.get(`/server/management/appointments/appointments.php?action=getAppointments&year=${year}`).then(function(response){
 					return response.data;
 				},function(error){
 					return null;
 				});
 			},
-			rescheduleAppointment: function(appointmentId, appointmentTimeId) {
+			getAppointmentTypes: () => {
+				return $http.get('/server/api/appointments/types/getAll.php').then((response) => {
+					return response.data;
+				}, (error) => {
+					return null;
+				});
+			},
+			rescheduleAppointment: (appointmentId, appointmentTimeId) => {
 				return $http({
 					url: "/server/management/appointments/appointments.php",
 					method: 'POST',
@@ -23,7 +30,7 @@ define('appointmentsDataService', [], function($http) {
 					return null;
 				});
 			},
-			cancelAppointment: function(appointmentId) {
+			cancelAppointment: (appointmentId) => {
 				return $http({
 					url: "/server/management/appointments/appointments.php",
 					method: 'POST',

@@ -2,7 +2,6 @@ WDN.initializePlugin('modal', [function() {
 	require(['jquery'], function($) {
 		$(function(){
 			loadProfileInformation();
-
 			initializeEventListeners();
 		});
 

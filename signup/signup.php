@@ -311,7 +311,7 @@
 
 			<div appointment-picker class="dcf-mb-5"></div>
 
-			<div class="dcf-input-checkbox">
+			<div class="dcf-input-checkbox" ng-if="isVirtualAppointmentRequested()">
 				<input id="agree-to-virtual-preparation-checkbox" type="checkbox" ng-model="agreeToVirtualPreparationCheckbox.checked" value="false">
 				<label for="agree-to-virtual-preparation-checkbox">I agree to have my tax return prepared virtually. See <a href ng-click="downloadForm14446()">Form 14446 (Virtual VITA/TCE Taxpayer Consent)</a></label>
 			</div>
@@ -321,7 +321,7 @@
 			<input type="submit" 
 				value="Submit" 
 				class="submit dcf-btn dcf-btn-primary dcf-mt-4"
-				ng-disabled="!agreeToVirtualPreparationCheckbox.checked" />
+				ng-disabled="isVirtualAppointmentRequested() && !agreeToVirtualPreparationCheckbox.checked" />
 		</form>
 	<?php } ?>
 </div>

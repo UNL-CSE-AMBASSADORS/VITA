@@ -5,13 +5,15 @@ require.config({
 		ngAria: '//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min',
 		sitesDataService: '/dist/management/sites/sitesDataService',
 		sitesController: '/dist/management/sites/sitesController',
+		fromMapFilter: '/dist/assets/js/utilities/fromMapFilter',
 		notificationUtilities: '/dist/assets/js/utilities/notificationUtilities'
 	},
 	shim: {
 		'ngAnimate': ['angular'],
 		'ngAria': ['angular'],
 		'sitesDataService': ['angular'],
-		'sitesController': ['angular']
+		'sitesController': ['angular'],
+		'fromMapFilter': ['angular']
 	}
 });
 
@@ -20,17 +22,19 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 	require([
 		'sitesDataService',
 		'sitesController',
+		'fromMapFilter',
 		'notificationUtilities'
 	],
 	function (
 		SitesDataService,
 		SitesController,
+		FromMapFilter,
 		NotificationUtilities
 	) {
 		'use strict';
 
 		// Create the module
-		var sitesApp = angular.module('sitesApp', []);
+		const sitesApp = angular.module('sitesApp', []);
 		
 		sitesApp.factory('sitesDataService', SitesDataService);
 		sitesApp.controller('sitesController', SitesController);
@@ -40,6 +44,9 @@ require(['angular', 'ngAnimate', 'ngAria'], function(){
 				templateUrl: '/management/sites/sites.php'
 			};
 		});
+
+		// Set up FromMap utility
+		sitesApp.filter('fromMapFilter', FromMapFilter);
 
 		// Set up Notification utilities
 		sitesApp.factory('notificationUtilities', NotificationUtilities);
