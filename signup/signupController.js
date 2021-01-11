@@ -89,8 +89,8 @@ define('signupController', [], function() {
 				};
 			}
 
-			// TODO: assume english for right now until support for other languages is added
-			$scope.data.language = "eng";
+			// If assuming english, comment out language div in signup.php and uncomment next line of code
+			// $scope.data.language = "eng";
 
 			const data = {
 				"action": "storeAppointment",

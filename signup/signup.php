@@ -81,12 +81,12 @@
 			<h3 class="form-subheading">Background Information</h3>
 
 			<ul class="dcf-pl-0">
-				<!-- TODO: NOTE THAT THIS WAS COMMENTED OUT, WE CURRENTLY DONT LET THEM SAY THE LANGUAGE THEY REQUIRED, WE LET IT DEFAULT TO ENGLISH
+				<!-- TODO: NOTE THAT THIS WAS COMMENTED OUT, WE CURRENTLY DONT LET THEM SAY THE LANGUAGE THEY REQUIRED, WE LET IT DEFAULT TO ENGLISH -->
 				<li class="form-radio" id="language">
 					<label for="language" class="form-required">Which language will you require?</label>
 					<div>
 						<div class="dcf-btn-group" data-toggle="buttons">
-							NOTE: the values here are the ISO 639-2/T specfication for language codes (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+							<!-- NOTE: the values here are the ISO 639-2/T specfication for language codes (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) -->
 							<label class="dcf-btn dcf-btn-secondary" 
 								name="language" 
 								ng-model="data.language" 
@@ -116,7 +116,7 @@
 							<label class="error" ng-show="form.language.$error.required">This field is required.</label>
 						</div>
 					</li>
-					-->
+					
 
 				<li class="form-radio" id="studentUNL">
 					<label for="1" class="form-required">Are you a University of Nebraska-Lincoln or Nebraska Wesleyan student?</label>
