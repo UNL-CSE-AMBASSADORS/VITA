@@ -5,7 +5,9 @@ define('signupController', [], function() {
 		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
 		$scope.successMessage = null;
 		$scope.appointmentId = null; // The id of the client's appointment once they successfully sign up
-		$scope.data = {};
+		$scope.data = {
+			language: 'eng'
+		};
 		$scope.questions = [];
 		$scope.agreeToVirtualPreparationCheckbox = {
 			checked: false
@@ -89,7 +91,6 @@ define('signupController', [], function() {
 				};
 			}
 
-			// If assuming english, comment out language div in signup.php and uncomment next line of code
 			// $scope.data.language = "eng";
 
 			const data = {

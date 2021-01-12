@@ -71,15 +71,14 @@
 			<h3 class="form-subheading">Background Information</h3>
 
 			<ul class="dcf-pl-0">
-				<!-- TODO: NOTE THAT THIS WAS COMMENTED OUT, WE CURRENTLY DONT LET THEM SAY THE LANGUAGE THEY REQUIRED, WE LET IT DEFAULT TO ENGLISH -->
 				<li class="form-radio" id="language">
-					<label for="language" class="form-required">Which language will you require?</label>
+					<label for="language" class="form-required">Which language would you prefer?</label>
 					<div>
 						<div class="dcf-btn-group" data-toggle="buttons">
 							<!-- NOTE: the values here are the ISO 639-2/T specfication for language codes (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) -->
-							<label class="dcf-btn dcf-btn-secondary" 
+							<label class="dcf-btn dcf-btn-primary" 
 								name="language" 
-								ng-model="data.language" 
+								ng-model="data.language"
 								uib-btn-radio="'eng'" 
 								required>English
 							</label>
@@ -102,10 +101,11 @@
 								required>Vietnamese
 							</label>
 						</div>
-						<div ng-show="form.$submitted || form.language.$touched">
-							<label class="error" ng-show="form.language.$error.required">This field is required.</label>
-						</div>
-					</li>
+					</div>
+					<div ng-show="form.$submitted || form.language.$touched">
+						<label class="error" ng-show="form.language.$error.required">This field is required.</label>
+					</div>
+				</li>
 					
 
 				<li class="form-radio" id="studentUNL">
