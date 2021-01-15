@@ -204,6 +204,10 @@ define('uploadDocumentsController', [], function() {
 			$scope.downloadFile('/server/download/downloadIntakeForm.php');
 		};
 
+		$scope.downloadResidentIntakeFormSpanish = () => {
+			$scope.downloadFile('/server/download/downloadIntakeFormSpanish.php');
+		};
+
 		$scope.downloadNonResidentIntakeForm = () => {
 			$scope.downloadFile('/server/download/downloadNonResidentIntakeForm.php');
 		};

@@ -116,9 +116,14 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 			validateForm14446HasChanged($uploadedFileTempName);
 		}
 
-		// Check if file is Fillable Intake Form 13614C and, if so, that it has changed
-		if (preg_match('/(.*)IntakeForm_13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
+		// Check if file is Fillable Intake Form 13614C (Residential) and, if so, that it has changed
+		if (preg_match('/(.*)2021_F13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
 			validateForm13614CHasChanged($uploadedFileTempName);
+		}
+
+		// Check if file is Fillable Intake Form 13614NR (Non-Residential) and, if so, that it has changed
+		if (preg_match('/(.*)NonResidentialIntakeForm_F13614NR(.*)\.pdf(.*)/i', $uploadedFileName)) {
+			validateForm13614NRHasChanged($uploadedFileTempName);
 		}
 		
 		// Validate the client information
@@ -204,11 +209,24 @@ function validateForm13614CHasChanged($uploadedFileTempName) {
 
 	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
 	$uploadedFileHash = md5($uploadedFileContentAsString);
-	$originalFileContentAsString = file_get_contents("$root/server/download/documents/IntakeForm_13614C.pdf");
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2021_F13614C.pdf");
 	$originalFileHash = md5($originalFileContentAsString);
 
 	if ($uploadedFileHash === $originalFileHash) {
 		throw new Exception('Error: The uploaded Intake Form 13614-C does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
+	}
+}
+
+function validateForm13614NRHasChanged($uploadedFileTempName) {
+	GLOBAL $root;
+
+	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
+	$uploadedFileHash = md5($uploadedFileContentAsString);
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/NonResidentialIntakeForm_F13614NR.pdf");
+	$originalFileHash = md5($originalFileContentAsString);
+
+	if ($uploadedFileHash === $originalFileHash) {
+		throw new Exception('Error: The uploaded Intake Form 13614-NR does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
 	}
 }
 
