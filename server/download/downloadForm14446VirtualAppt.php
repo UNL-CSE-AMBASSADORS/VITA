@@ -1,6 +1,6 @@
 <?php
 
-downloadFile('f14446VirtualLincolnVita.pdf');
+downloadFile('2020_F14446.pdf');
 
 function downloadFile($fileName) {
 	$root = realpath($_SERVER['DOCUMENT_ROOT']);
