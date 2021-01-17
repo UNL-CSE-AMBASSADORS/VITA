@@ -51,18 +51,18 @@ function insertAndersonLibraryData() {
 
 			// Are from Katie's parameter sheet
 			// 6 is Virtual Residential
-			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 7.5, 6, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 7.5, 6, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 19:00:00", 7.5, 6, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 8, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 8, 6, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 19:00:00", 8, 6, $siteId);
 		}
 		
 		// Thursdays 5-8
 		$thursdayDates = getWeeklyDatesFromRange('2021-02-04', '2021-04-08');
 		foreach ($thursdayDates as $date) {
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 7.5, 6, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 7.5, 6, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 19:00:00", 7.5, 6, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 8, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 8, 6, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 19:00:00", 8, 6, $siteId);
 		}
 
 		$DB_CONN->commit();
@@ -222,7 +222,7 @@ function insertSoutheastCommunityCollegeData() {
 			$secondAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 4.5, 6, $siteId);
 		}
 
-		// Thursdays, Feb 4 - mar 25 or apr 8
+		// Thursdays, Feb 4 - apr 8
 		$thursdayDates = getWeeklyDatesFromRange('2021-02-04', '2021-04-08');
 		foreach ($thursdayDates as $date) {
 
@@ -256,12 +256,12 @@ function insertNebraskaUnionData() {
 		$saturdayDates = getWeeklyDatesFromRange('2021-01-30', '2021-03-06');
 		foreach ($saturdayDates as $date) {
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 10:00:00", 7.5, 6, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 7.5, 6, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 7.5, 6, $siteId);
-			$fourthAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 7.5, 6, $siteId);
-			$fifthAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 7.5, 6, $siteId);
-			$sixthAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 7.5, 6, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 10:00:00", 8, 6, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 8, 6, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 8, 6, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 8, 6, $siteId);
+			$fifthAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 8, 6, $siteId);
+			$sixthAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 8, 6, $siteId);
 		}
 
 		$DB_CONN->commit();
