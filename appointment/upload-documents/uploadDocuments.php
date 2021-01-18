@@ -55,6 +55,7 @@
 					<li class="dcf-form-group form-textfield">
 						<label class="dcf-label form-label form-required" for="phone">Phone Number</label>
 						<input class="dcf-input-text" type="text" name="phone" id="phone" ng-model="clientData.phone" required>
+						<p class="dcf-txt-xs">Please recall we asked you to provide a number accessible to restricted callers (*67), if possible</p>
 						<div ng-show="form.$submitted || form.phone.$touched">
 							<label class="error" ng-show="form.phone.$error.required">This field is required.</label>
 						</div>
@@ -143,8 +144,8 @@
 				<fieldset class="dcf-mt-3">
 					<legend>Appointment Ready</legend>
 					<p>
-						After you mark your appointment as 'ready', a tax preparer will begin preparing your return within 48 hours. 
-						If the tax preparer does not have all the necessary documents, they will not be able to prepare your return. 
+						Thank you for uploading your documents. Your appointment is {{appointmentTimeStr}}.
+						Your documents need to be uploaded by {{uploadDeadlineStr}} (one week in advance).
 						You may return to this page to upload additional documents if necessary.
 					</p>
 					<div class="dcf-input-checkbox">
@@ -167,9 +168,9 @@
 						<ul>
 							<b class="dcf-uppercase">Important Note</b>: If you are typing your information into the fillable form, you must "save as" to your device before uploading it or your information will not save.
 							<li><b>Completed <a href ng-click="downloadForm14446()">Form 14446</a></b>. The <b>bottom portion of page two</b> (Part III: Taxpayer Consents) needs to be completed.</li>
-							<li><b>Completed <a href ng-click="downloadResidentIntakeForm()">Form 13614-C</a></b> (Intake Form). Without this form, Lincoln VITA cannot prepare your return.</li>
+							<li><b>Completed <a href ng-click="downloadResidentIntakeForm()">Form 13614-C</a></b> (Intake Form for residents). Without this form, Lincoln VITA cannot prepare your return.</li>
 							<ul>
-								<li><b>Spanish version of the Form 13614-C (SP) can be found here <a href ng-click="downloadNonResidentIntakeForm()">Form 13614-NR</a></b> (Intake Form). Without this form, Lincoln VITA cannot prepare your return.</li>
+								<li>The Spanish version of the Intake Form for residents can be found here: <b><a href ng-click="downloadResidentIntakeFormSpanish()">Form 13614-C (SP)</a></b></li>
 							</ul>	
 						</ul>
 						<h6>Identification:</h6>
@@ -206,7 +207,7 @@
 						<ul>
 							<b class="dcf-uppercase">Important Note</b>: If you are typing your information into the fillable form, you must "save as" to your device before uploading it or your information will not save.
 							<li><b>Completed <a href ng-click="downloadForm14446()">Form 14446</a></b>. The <b>bottom portion of page two</b> (Part III: Taxpayer Consents) needs to be completed.</li>
-							<li><b>Completed <a href ng-click="downloadNonResidentIntakeForm()">Form 13614-NR</a></b> (Intake Form). Without this form, Lincoln VITA cannot prepare your return.</li>
+							<li><b>Completed <a href ng-click="downloadNonResidentIntakeForm()">Form 13614-NR</a></b> (Intake Form for non-residents). Without this form, Lincoln VITA cannot prepare your return.</li>
 						</ul>
 						<h6>Identification:</h6>
 						<ul>

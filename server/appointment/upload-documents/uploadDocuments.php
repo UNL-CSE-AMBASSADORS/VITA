@@ -59,6 +59,8 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 		$response['validated'] = $clientInformationMatches;
 		if ($clientInformationMatches) {
 			$response['residentialAppointment'] = AppointmentTypeUtilities::isResidentialAppointmentType($clientInformation['appointmentType']);
+			$response['appointmentTimeStr'] = $clientInformation['appointmentTimeStr'];
+			$response['uploadDeadlineStr'] = $clientInformation['uploadDeadlineStr'];
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -121,9 +123,9 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 			validateForm13614CHasChanged($uploadedFileTempName);
 		}
 
-		// Check if file is Fillable Intake Form 13614C (Residential) and, if so, that it has changed
+		// Check if file is Spanish Fillable Intake Form 13614C (SP) (Residential) and, if so, that it has changed
 		if (preg_match('/(.*)2020_SP_F13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
-			validateForm13614CHasChanged($uploadedFileTempName);
+			validateForm13614C_SPHasChanged($uploadedFileTempName);
 		}
 
 		// Check if file is Fillable Intake Form 13614NR (Non-Residential) and, if so, that it has changed
@@ -268,7 +270,9 @@ function getClientInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
 	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, bestTimeToCall, 
-			Appointment.appointmentId, AppointmentType.lookupName AS appointmentType
+			DATE_FORMAT(AppointmentTime.scheduledTime, "%W, %M %D at %l:%i %p") AS appointmentTimeStr, 
+			DATE_FORMAT(DATE_SUB(AppointmentTime.scheduledTime, INTERVAL 7 DAY), "%W, %M %D") AS uploadDeadlineStr,
+			AppointmentTime.scheduledTime, Appointment.appointmentId, AppointmentType.lookupName AS appointmentType
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId
