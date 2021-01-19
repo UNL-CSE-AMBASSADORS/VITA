@@ -137,9 +137,10 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$appointmentId = $clientInformation['appointmentId'];
 		$appointmentType = $clientInformation['appointmentType'];
-
+		$siteId = $clientInformation['siteId'];
+		
 		// Upload the user's file to Azure BLOB Storage
-		$containerName = 'ty2019';
+		$containerName = getContainerName($siteId);
 		$fileContent = fopen($uploadedFileTempName, 'r');
 		$fileNameToSave = $firstName.'_'.$lastName."/$appointmentId/".uniqid()."-$uploadedFileName";
 		if (AppointmentTypeUtilities::isResidentialAppointmentType($appointmentType)) {
@@ -157,7 +158,6 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 
 	echo json_encode($response);
 }
-
 
 function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $phoneNumber) {
 	$response = array();
@@ -272,7 +272,7 @@ function getClientInformationFromToken($token) {
 	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, bestTimeToCall, 
 			DATE_FORMAT(AppointmentTime.scheduledTime, "%W, %M %D at %l:%i %p") AS appointmentTimeStr, 
 			DATE_FORMAT(DATE_SUB(AppointmentTime.scheduledTime, INTERVAL 7 DAY), "%W, %M %D") AS uploadDeadlineStr,
-			AppointmentTime.scheduledTime, Appointment.appointmentId, AppointmentType.lookupName AS appointmentType
+			AppointmentTime.scheduledTime, Appointment.appointmentId, AppointmentTime.siteId, AppointmentType.lookupName AS appointmentType
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId
@@ -301,6 +301,38 @@ function doesClientInformationMatch($clientInformation, $firstName, $lastName, $
 	$phoneNumberMatches = isset($clientInformation['phoneNumber']) && cleanPhoneNumber($clientInformation['phoneNumber']) === cleanPhoneNumber($phoneNumber);
 	
 	return $firstNameMatches && $lastNameMatches && $emailAddressMatches && $phoneNumberMatches;
+}
+
+// container/blob naming rules here https://docs.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
+function getContainerName($siteId) {
+	if($siteId == 1) {
+		return 'nebraska-east-union';
+	} else if ($siteId == 2) {
+		return 'victor-e-anderson-library';
+	} else if ($siteId == 3) {
+		return 'jackie-gaughan-multicultural-center';
+	} else if ($siteId == 4) {
+		return 'international-student-scholar';
+	} else if ($siteId == 5) {
+		return 'center-for-people-in-need';
+	} else if ($siteId == 6) {
+		return 'loren-eiseley-library';
+	} else if ($siteId == 7) {
+		return 'bennett-martin-library';
+	} else if ($siteId == 8) {
+		return 'f-street-community-center';
+	} else if ($siteId == 9) {
+		return 'community-hope-federal-credit';
+	} else if ($siteId == 10) {
+		return 'southeast-community-college';
+	} else if ($siteId == 11) {
+		return 'nebraska-union';
+	} else if ($siteId == 12) {
+		return 'virtual-vita';
+	} else if ($siteId == 13) {
+		return 'student-athlete-virtual-site';
+	}
+	return 'server-contingency-site';
 }
 
 function cleanPhoneNumber($phoneNumber) {
