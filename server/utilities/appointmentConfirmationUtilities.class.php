@@ -63,6 +63,7 @@ class AppointmentConfirmationUtilities {
 				$firstName, thank you for signing up for a virtual VITA appointment!
 				<b>You now need to upload your documents to have your taxes prepared </b> (see the instructions below for uploading your documents).
 				After your documents have been received, a tax preparer will start preparing your taxes the week of $dateStr. 
+				Your site coordinator or return preparer will be in contact with you via email or phone, possibly from a restricted caller (*67) number.
 				Please email vita@unl.edu if you have any questions.
 				Thank you from Lincoln VITA.";
 	}

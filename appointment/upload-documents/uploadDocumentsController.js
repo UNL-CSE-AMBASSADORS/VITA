@@ -94,6 +94,8 @@ define('uploadDocumentsController', [], function() {
 						$scope.clientData = {};
 					} else {
 						$scope.isResidentialAppointment = response.residentialAppointment;
+						$scope.appointmentTimeStr = response.appointmentTimeStr;
+						$scope.uploadDeadlineStr = response.uploadDeadlineStr.toUpperCase();
 					}
 				}
 
@@ -202,6 +204,10 @@ define('uploadDocumentsController', [], function() {
 
 		$scope.downloadResidentIntakeForm = () => {
 			$scope.downloadFile('/server/download/downloadIntakeForm.php');
+		};
+
+		$scope.downloadResidentIntakeFormSpanish = () => {
+			$scope.downloadFile('/server/download/downloadIntakeFormSpanish.php');
 		};
 
 		$scope.downloadNonResidentIntakeForm = () => {

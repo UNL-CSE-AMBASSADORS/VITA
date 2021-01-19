@@ -59,6 +59,8 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 		$response['validated'] = $clientInformationMatches;
 		if ($clientInformationMatches) {
 			$response['residentialAppointment'] = AppointmentTypeUtilities::isResidentialAppointmentType($clientInformation['appointmentType']);
+			$response['appointmentTimeStr'] = $clientInformation['appointmentTimeStr'];
+			$response['uploadDeadlineStr'] = $clientInformation['uploadDeadlineStr'];
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -112,22 +114,33 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		}
 
 		// Check if file is Fillable Form 14446 and, if so, that it has changed
-		if (preg_match('/(.*)f14446VirtualLincolnVita(.*)\.pdf(.*)/i', $uploadedFileName)) {
+		if (preg_match('/(.*)2020_F14446(.*)\.pdf(.*)/i', $uploadedFileName)) {
 			validateForm14446HasChanged($uploadedFileTempName);
 		}
 
-		// Check if file is Fillable Intake Form 13614C and, if so, that it has changed
-		if (preg_match('/(.*)IntakeForm_13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
+		// Check if file is Fillable Intake Form 13614C (Residential) and, if so, that it has changed
+		if (preg_match('/(.*)2020_F13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
 			validateForm13614CHasChanged($uploadedFileTempName);
+		}
+
+		// Check if file is Spanish Fillable Intake Form 13614C (SP) (Residential) and, if so, that it has changed
+		if (preg_match('/(.*)2020_SP_F13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
+			validateForm13614C_SPHasChanged($uploadedFileTempName);
+		}
+
+		// Check if file is Fillable Intake Form 13614NR (Non-Residential) and, if so, that it has changed
+		if (preg_match('/(.*)2020_F13614NR(.*)\.pdf(.*)/i', $uploadedFileName)) {
+			validateForm13614NRHasChanged($uploadedFileTempName);
 		}
 		
 		// Validate the client information
 		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
 		$appointmentId = $clientInformation['appointmentId'];
 		$appointmentType = $clientInformation['appointmentType'];
-
+		$siteId = $clientInformation['siteId'];
+		
 		// Upload the user's file to Azure BLOB Storage
-		$containerName = 'ty2019';
+		$containerName = getContainerName($siteId);
 		$fileContent = fopen($uploadedFileTempName, 'r');
 		$fileNameToSave = $firstName.'_'.$lastName."/$appointmentId/".uniqid()."-$uploadedFileName";
 		if (AppointmentTypeUtilities::isResidentialAppointmentType($appointmentType)) {
@@ -145,7 +158,6 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 
 	echo json_encode($response);
 }
-
 
 function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $phoneNumber) {
 	$response = array();
@@ -191,7 +203,7 @@ function validateForm14446HasChanged($uploadedFileTempName) {
 
 	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
 	$uploadedFileHash = md5($uploadedFileContentAsString);
-	$originalFileContentAsString = file_get_contents("$root/server/download/documents/f14446VirtualLincolnVita.pdf");
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2020_F14446.pdf");
 	$originalFileHash = md5($originalFileContentAsString);
 
 	if ($uploadedFileHash === $originalFileHash) {
@@ -204,11 +216,37 @@ function validateForm13614CHasChanged($uploadedFileTempName) {
 
 	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
 	$uploadedFileHash = md5($uploadedFileContentAsString);
-	$originalFileContentAsString = file_get_contents("$root/server/download/documents/IntakeForm_13614C.pdf");
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2020_F13614C.pdf");
 	$originalFileHash = md5($originalFileContentAsString);
 
 	if ($uploadedFileHash === $originalFileHash) {
 		throw new Exception('Error: The uploaded Intake Form 13614-C does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
+	}
+}
+
+function validateForm13614C_SPHasChanged($uploadedFileTempName) {
+	GLOBAL $root;
+
+	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
+	$uploadedFileHash = md5($uploadedFileContentAsString);
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2020_SP_F13614C.pdf");
+	$originalFileHash = md5($originalFileContentAsString);
+
+	if ($uploadedFileHash === $originalFileHash) {
+		throw new Exception('Error: The uploaded Spanish Intake Form 13614-C (SP) does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
+	}
+}
+
+function validateForm13614NRHasChanged($uploadedFileTempName) {
+	GLOBAL $root;
+
+	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
+	$uploadedFileHash = md5($uploadedFileContentAsString);
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2020_F13614NR.pdf");
+	$originalFileHash = md5($originalFileContentAsString);
+
+	if ($uploadedFileHash === $originalFileHash) {
+		throw new Exception('Error: The uploaded Intake Form 13614-NR does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
 	}
 }
 
@@ -232,7 +270,9 @@ function getClientInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
 	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, bestTimeToCall, 
-			Appointment.appointmentId, AppointmentType.lookupName AS appointmentType
+			DATE_FORMAT(AppointmentTime.scheduledTime, "%W, %M %D at %l:%i %p") AS appointmentTimeStr, 
+			DATE_FORMAT(DATE_SUB(AppointmentTime.scheduledTime, INTERVAL 7 DAY), "%W, %M %D") AS uploadDeadlineStr,
+			AppointmentTime.scheduledTime, Appointment.appointmentId, AppointmentTime.siteId, AppointmentType.lookupName AS appointmentType
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId
@@ -261,6 +301,38 @@ function doesClientInformationMatch($clientInformation, $firstName, $lastName, $
 	$phoneNumberMatches = isset($clientInformation['phoneNumber']) && cleanPhoneNumber($clientInformation['phoneNumber']) === cleanPhoneNumber($phoneNumber);
 	
 	return $firstNameMatches && $lastNameMatches && $emailAddressMatches && $phoneNumberMatches;
+}
+
+// container/blob naming rules here https://docs.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
+function getContainerName($siteId) {
+	if($siteId == 1) {
+		return 'nebraska-east-union';
+	} else if ($siteId == 2) {
+		return 'victor-e-anderson-library';
+	} else if ($siteId == 3) {
+		return 'jackie-gaughan-multicultural-center';
+	} else if ($siteId == 4) {
+		return 'international-student-scholar';
+	} else if ($siteId == 5) {
+		return 'center-for-people-in-need';
+	} else if ($siteId == 6) {
+		return 'loren-eiseley-library';
+	} else if ($siteId == 7) {
+		return 'bennett-martin-library';
+	} else if ($siteId == 8) {
+		return 'f-street-community-center';
+	} else if ($siteId == 9) {
+		return 'community-hope-federal-credit';
+	} else if ($siteId == 10) {
+		return 'southeast-community-college';
+	} else if ($siteId == 11) {
+		return 'nebraska-union';
+	} else if ($siteId == 12) {
+		return 'virtual-vita';
+	} else if ($siteId == 13) {
+		return 'student-athlete-virtual-site';
+	}
+	return 'server-contingency-site';
 }
 
 function cleanPhoneNumber($phoneNumber) {
