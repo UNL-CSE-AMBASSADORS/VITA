@@ -95,7 +95,7 @@ define('uploadDocumentsController', [], function() {
 					} else {
 						$scope.isResidentialAppointment = response.residentialAppointment;
 						$scope.appointmentTimeStr = response.appointmentTimeStr;
-						$scope.uploadDeadlineStr = response.uploadDeadlineStr;
+						$scope.uploadDeadlineStr = response.uploadDeadlineStr.toUpperCase();
 					}
 				}
 

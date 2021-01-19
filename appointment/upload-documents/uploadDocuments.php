@@ -88,6 +88,7 @@
 			<div ng-if="agreeToVirtualPreparationCheckbox.checked">
 				<p>
 					You may now upload your documents below. 
+					<b>Your documents need to be uploaded by {{uploadDeadlineStr}}.</b> 
 					See the bottom of this page for a list of relevant documents you should upload as applicable. 
 					After your documents have been uploaded, a tax preparer will begin preparing your taxes and 
 					you will be contacted by a quality reviewer prior to your taxes being submitted.
@@ -142,11 +143,12 @@
 
 				<!-- Ready button -->
 				<fieldset class="dcf-mt-3">
-					<legend>Appointment Ready</legend>
+					<legend>Finished Uploading Documents?</legend>
 					<p>
-						Thank you for uploading your documents. Your appointment is {{appointmentTimeStr}}.
-						Your documents need to be uploaded by {{uploadDeadlineStr}} (one week in advance).
+						Your appointment is {{appointmentTimeStr}}.
+						<b>Your documents need to be uploaded by {{uploadDeadlineStr}} (one week in advance).</b>
 						You may return to this page to upload additional documents if necessary.
+						Your site coordinator or return preparer will be in contact with you via email or phone.
 					</p>
 					<div class="dcf-input-checkbox">
 						<input id="ready-checkbox" type="checkbox" ng-model="readyCheckbox.checked" value="false">
@@ -167,7 +169,7 @@
 						<h6>Required Forms:</h6>
 						<ul>
 							<b class="dcf-uppercase">Important Note</b>: If you are typing your information into the fillable form, you must "save as" to your device before uploading it or your information will not save.
-							<li><b>Completed <a href ng-click="downloadForm14446()">Form 14446</a></b>. The <b>bottom portion of page two</b> (Part III: Taxpayer Consents) needs to be completed.</li>
+							<li><b>Completed <a href ng-click="downloadForm14446()">Form 14446</a></b>. The <b>third page</b> (Part III: Taxpayer Consents) needs to be completed.</li>
 							<li><b>Completed <a href ng-click="downloadResidentIntakeForm()">Form 13614-C</a></b> (Intake Form for residents). Without this form, Lincoln VITA cannot prepare your return.</li>
 							<ul>
 								<li>The Spanish version of the Intake Form for residents can be found here: <b><a href ng-click="downloadResidentIntakeFormSpanish()">Form 13614-C (SP)</a></b></li>
@@ -206,7 +208,7 @@
 						<h6>Required Forms:</h6>
 						<ul>
 							<b class="dcf-uppercase">Important Note</b>: If you are typing your information into the fillable form, you must "save as" to your device before uploading it or your information will not save.
-							<li><b>Completed <a href ng-click="downloadForm14446()">Form 14446</a></b>. The <b>bottom portion of page two</b> (Part III: Taxpayer Consents) needs to be completed.</li>
+							<li><b>Completed <a href ng-click="downloadForm14446()">Form 14446</a></b>. The <b>third page</b> (Part III: Taxpayer Consents) needs to be completed.</li>
 							<li><b>Completed <a href ng-click="downloadNonResidentIntakeForm()">Form 13614-NR</a></b> (Intake Form for non-residents). Without this form, Lincoln VITA cannot prepare your return.</li>
 						</ul>
 						<h6>Identification:</h6>
