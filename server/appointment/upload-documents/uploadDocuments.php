@@ -59,6 +59,8 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 		$response['validated'] = $clientInformationMatches;
 		if ($clientInformationMatches) {
 			$response['residentialAppointment'] = AppointmentTypeUtilities::isResidentialAppointmentType($clientInformation['appointmentType']);
+			$response['appointmentTimeStr'] = $clientInformation['appointmentTimeStr'];
+			$response['uploadDeadlineStr'] = $clientInformation['uploadDeadlineStr'];
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -112,13 +114,23 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		}
 
 		// Check if file is Fillable Form 14446 and, if so, that it has changed
-		if (preg_match('/(.*)f14446VirtualLincolnVita(.*)\.pdf(.*)/i', $uploadedFileName)) {
+		if (preg_match('/(.*)2020_F14446(.*)\.pdf(.*)/i', $uploadedFileName)) {
 			validateForm14446HasChanged($uploadedFileTempName);
 		}
 
-		// Check if file is Fillable Intake Form 13614C and, if so, that it has changed
-		if (preg_match('/(.*)IntakeForm_13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
+		// Check if file is Fillable Intake Form 13614C (Residential) and, if so, that it has changed
+		if (preg_match('/(.*)2020_F13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
 			validateForm13614CHasChanged($uploadedFileTempName);
+		}
+
+		// Check if file is Spanish Fillable Intake Form 13614C (SP) (Residential) and, if so, that it has changed
+		if (preg_match('/(.*)2020_SP_F13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
+			validateForm13614C_SPHasChanged($uploadedFileTempName);
+		}
+
+		// Check if file is Fillable Intake Form 13614NR (Non-Residential) and, if so, that it has changed
+		if (preg_match('/(.*)2020_F13614NR(.*)\.pdf(.*)/i', $uploadedFileName)) {
+			validateForm13614NRHasChanged($uploadedFileTempName);
 		}
 		
 		// Validate the client information
@@ -191,7 +203,7 @@ function validateForm14446HasChanged($uploadedFileTempName) {
 
 	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
 	$uploadedFileHash = md5($uploadedFileContentAsString);
-	$originalFileContentAsString = file_get_contents("$root/server/download/documents/f14446VirtualLincolnVita.pdf");
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2020_F14446.pdf");
 	$originalFileHash = md5($originalFileContentAsString);
 
 	if ($uploadedFileHash === $originalFileHash) {
@@ -204,11 +216,37 @@ function validateForm13614CHasChanged($uploadedFileTempName) {
 
 	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
 	$uploadedFileHash = md5($uploadedFileContentAsString);
-	$originalFileContentAsString = file_get_contents("$root/server/download/documents/IntakeForm_13614C.pdf");
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2020_F13614C.pdf");
 	$originalFileHash = md5($originalFileContentAsString);
 
 	if ($uploadedFileHash === $originalFileHash) {
 		throw new Exception('Error: The uploaded Intake Form 13614-C does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
+	}
+}
+
+function validateForm13614C_SPHasChanged($uploadedFileTempName) {
+	GLOBAL $root;
+
+	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
+	$uploadedFileHash = md5($uploadedFileContentAsString);
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2020_SP_F13614C.pdf");
+	$originalFileHash = md5($originalFileContentAsString);
+
+	if ($uploadedFileHash === $originalFileHash) {
+		throw new Exception('Error: The uploaded Spanish Intake Form 13614-C (SP) does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
+	}
+}
+
+function validateForm13614NRHasChanged($uploadedFileTempName) {
+	GLOBAL $root;
+
+	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
+	$uploadedFileHash = md5($uploadedFileContentAsString);
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2020_F13614NR.pdf");
+	$originalFileHash = md5($originalFileContentAsString);
+
+	if ($uploadedFileHash === $originalFileHash) {
+		throw new Exception('Error: The uploaded Intake Form 13614-NR does not appear to have been changed. Verify your changes and then save the file to your system and re-upload the file.', MY_EXCEPTION);
 	}
 }
 
@@ -232,7 +270,9 @@ function getClientInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
 	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, bestTimeToCall, 
-			Appointment.appointmentId, AppointmentTime.siteId, AppointmentType.lookupName AS appointmentType
+			DATE_FORMAT(AppointmentTime.scheduledTime, "%W, %M %D at %l:%i %p") AS appointmentTimeStr, 
+			DATE_FORMAT(DATE_SUB(AppointmentTime.scheduledTime, INTERVAL 7 DAY), "%W, %M %D") AS uploadDeadlineStr,
+			AppointmentTime.scheduledTime, Appointment.appointmentId, AppointmentTime.siteId, AppointmentType.lookupName AS appointmentType
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId

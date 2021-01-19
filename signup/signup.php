@@ -53,6 +53,7 @@
 				<li class="form-textfield">
 					<label class="dcf-label form-label form-required" for="phone">Best Phone Number (where you can be reached)</label>
 					<input type="text" class="dcf-input-text form-control" name="phone" id="phone" ng-model="data.phone" required>
+					<p class="dcf-txt-xs">If possible, please provide a number that allows the restricted caller function (*67)</p>
 					<div ng-show="form.$submitted || form.phone.$touched">
 						<label class="error" ng-show="form.phone.$error.required">This field is required.</label>
 					</div>
