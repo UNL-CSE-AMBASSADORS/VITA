@@ -265,35 +265,34 @@ function doesClientInformationMatch($clientInformation, $firstName, $lastName, $
 
 // container/blob naming rules here https://docs.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
 function getContainerName($siteId) {
-	$containerName = null;
 	if($siteId == 1) {
-		$containerName = "nebraska-east-union";
+		return 'nebraska-east-union';
 	} else if ($siteId == 2) {
-		$containerName = "victor-e-anderson-library";
+		return 'victor-e-anderson-library';
 	} else if ($siteId == 3) {
-		$containerName = "jackie-gaughan-multicultural-center";
+		return 'jackie-gaughan-multicultural-center';
 	} else if ($siteId == 4) {
-		$containerName = "international-student-scholar";
+		return 'international-student-scholar';
 	} else if ($siteId == 5) {
-		$containerName = "center-for-people-in-need";
+		return 'center-for-people-in-need';
 	} else if ($siteId == 6) {
-		$containerName = "loren-eiseley-library";
+		return 'loren-eiseley-library';
 	} else if ($siteId == 7) {
-		$containerName = "bennett-martin-library";
+		return 'bennett-martin-library';
 	} else if ($siteId == 8) {
-		$containerName = "f-street-community-center";
+		return 'f-street-community-center';
 	} else if ($siteId == 9) {
-		$containerName = "community-hope-federal-credit";
+		return 'community-hope-federal-credit';
 	} else if ($siteId == 10) {
-		$containerName = "southeast-community-college";
+		return 'southeast-community-college';
 	} else if ($siteId == 11) {
-		$containerName = "nebraska-union";
+		return 'nebraska-union';
 	} else if ($siteId == 12) {
-		$containerName = "virtual-vita";
+		return 'virtual-vita';
 	} else if ($siteId == 13) {
-		$containerName = "student-athlete-virtual-site";
+		return 'student-athlete-virtual-site';
 	}
-	return $containerName;
+	return 'server-contingency-site';
 }
 
 function cleanPhoneNumber($phoneNumber) {
