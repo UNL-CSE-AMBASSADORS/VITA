@@ -172,9 +172,11 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 
 		// Email volunteers saying it's ready to go
 		if (PROD) {
-			$emailJsonString = file_get_contents('./notificationEmails.json');
-			$emailsJson = json_decode($emailJsonString, true);
-			$toEmailsString = AppointmentTypeUtilities::isResidentialAppointmentType($appointmentType) ? $emailsJson['residential'] : $emailsJson['non-residential'];
+			//$emailJsonString = file_get_contents('./notificationEmails.json');
+			//$emailsJson = json_decode($emailJsonString, true);
+			//$toEmailsString = AppointmentTypeUtilities::isResidentialAppointmentType($appointmentType) ? $emailsJson['residential'] : $emailsJson['non-residential'];
+			$siteId = $clientInformation['siteId'];
+			$toEmailString = getToEmailString($siteId);
 
 			$readyMessage = "A client has marked their appointment as ready: <br/>
 				<b>First Name:</b> $firstName <br/>
@@ -184,7 +186,7 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 				<b>Best Time to Call (if new appointment):</b> $bestTimeToCall <br/> 
 				<b>Email (if provided):</b> $emailAddress <br/>
 				<b>Type:</b> $appointmentType";
-			EmailUtilities::sendHtmlFormattedEmail($toEmailsString, 'VITA -- Appointment Ready', $readyMessage);
+			EmailUtilities::sendHtmlFormattedEmail($toEmailString, 'VITA -- Appointment Ready', $readyMessage);
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -333,6 +335,39 @@ function getContainerName($siteId) {
 		return 'student-athlete-virtual-site';
 	}
 	return 'server-contingency-site';
+}
+
+function getToEmailString($siteId) {
+	if($siteId == 1) {
+		return 'vita@unl.edu';
+	} else if ($siteId == 2) {
+		return 'anderson-vita@unl.edu';
+	} else if ($siteId == 3) {
+		return 'vita@unl.edu';
+	} else if ($siteId == 4) {
+		return 'international-vita@unl.edu';
+	} else if ($siteId == 5) {
+		return 'cpn-vita@unl.edu';
+	} else if ($siteId == 6) {
+		return 'eiseley-vita@unl.edu';
+	} else if ($siteId == 7) {
+		return 'bm-vita@unl.edu';
+	} else if ($siteId == 8) {
+		return 'fstreet-vita@unl.edu';
+	} else if ($siteId == 9) {
+		return 'vita@unl.edu';
+	} else if ($siteId == 10) {
+		return 'scc-vita@unl.edu';
+	} else if ($siteId == 11) {
+		return 'vita@unl.edu';
+	} else if ($siteId == 12) {
+		return 'vita@unl.edu';
+	} else if ($siteId == 13) {
+		return 'international-vita@unl.edu';
+	} else if ($siteId == 14) {
+		return 'accc-vita@unl.edu';
+	}
+	return 'vita@unl.edu';
 }
 
 function cleanPhoneNumber($phoneNumber) {
