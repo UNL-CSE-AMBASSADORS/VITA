@@ -32,8 +32,8 @@ return readfile($documentRoot . $path);
 <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-wrapper dcf-pt-3 dcf-pb-3 dcf-bold dcf-txt-decor-none unl-font-sans unl-cream" style="background-color: #007197;">
 	<span class="dcf-txt-xs">
 		<span class="dcf-d-inline-block dcf-mt-2 dcf-mb-2 dcf-mr-4">
-			In response to COVID-19, Lincoln VITA tax appointments are now available virtually. 
-			You may schedule a virtual appointment under the 'Need Assistance' tab. The virtual site will be taking appointments through Monday, August 24th.
+			In response to COVID-19, all Lincoln VITA tax appointments will be conducted virtually. 
+			You may schedule a virtual appointment under the 'Need Assistance' tab. The virtual site will be taking appointments through Thursday, April 8th.
 		</span>
 	</span>
 </div>
