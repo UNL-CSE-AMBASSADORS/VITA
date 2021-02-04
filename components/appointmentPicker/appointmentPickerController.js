@@ -29,7 +29,9 @@ define('appointmentPickerController', [], function() {
 								// called for every date before it is displayed
 								beforeShowDay: (date) => {
 									if ($scope.hasDate(date)) {
-										if ($scope.hasTimeSlotsRemaining(date)) {
+										if (isDateTomorrowOrBefore(date)) {
+											return [false, ''];
+										} else if ($scope.hasTimeSlotsRemaining(date)) {
 											return [true, 'available'];
 										} else {
 											return [false, 'full'];
@@ -41,10 +43,17 @@ define('appointmentPickerController', [], function() {
 							});
 						});
 					}]);
+
+					function isDateTomorrowOrBefore(date) {
+						const today = new Date()
+						const tomorrow = new Date(today)
+						tomorrow.setDate(tomorrow.getDate() + 1)
+						return new Date(date.toDateString()).setHours(0,0,0,0) <= new Date(tomorrow.toDateString()).setHours(0,0,0,0);
+					};
 				}
 			});
 		};
-
+		
 		$scope.isResidentialAppointmentType = () => {
 			return $scope.appointmentPickerSharedProperties.appointmentType.includes('residential');
 		};
