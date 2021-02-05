@@ -19,7 +19,8 @@ function getAppointmentTimes($data, $isLoggedIn) {
 		$year = $data['year'];
 	}
 
-	$after = date("Y-m-d H:i:s", time() - ($isLoggedIn ? 3600 : 0));
+	// Volunteers can see appointments within the last hour, clients can see appointments scheduled the day after tomorrow
+	$after = $isLoggedIn ? date("Y-m-d H:i:s", time() - 3600) : date("Y-m-d", time() + 172800);
 	if (isset($data['after'])) {
 		$after = $data['after'];
 	}

@@ -52,6 +52,9 @@ INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
 	VALUES (0, @passwordHash, @lockoutTime, @user_preparer1Id);
 
 INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
+	VALUES (0, @passwordHash, @lockoutTime, @user_preparer2Id);
+
+INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)
 	VALUES (0, @passwordHash, @lockoutTime, @user_reviewer1Id);
 
 INSERT INTO Login (failedLoginCount, password, lockoutTime, userId)

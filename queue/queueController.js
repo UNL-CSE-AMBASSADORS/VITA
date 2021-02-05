@@ -14,7 +14,7 @@ define('queueController', [], function() {
 		$scope.clientSearchString = '';
 
 		// Swimlane arrays
-		$scope.apppointments = []; // All references to an appointment are stored in this array, and each swimlane array contains a shallow reference to the object.
+		$scope.appointments = []; // All references to an appointment are stored in this array, and each swimlane array contains a shallow reference to the object.
 		$scope.awaitingAppointments = [];
 		$scope.checkedInAppointments = [];
 		$scope.paperworkCompletedAppointments = [];

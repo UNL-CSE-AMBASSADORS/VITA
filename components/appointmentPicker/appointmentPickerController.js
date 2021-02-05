@@ -97,7 +97,7 @@ define('appointmentPickerController', [], function() {
 				return (time + ' - FULL' + ($scope.appointmentPickerSharedProperties.isLoggedIn ? ' - overscheduled by ' + Math.abs(info.appointmentsAvailable) + ' appointments' : ''));
 			} else { // Virtual site
 				if (appointmentsStillAvailable) {
-					return 'No particular time--Your appointment will occur sometime during the week of the selected date.'
+					return time;
 				}
 				return ('No appointments available during the week of the selected date - FULL' + ($scope.appointmentPickerSharedProperties.isLoggedIn ? ' - overscheduled by ' + Math.abs(info.appointmentsAvailable) + ' appointments' : ''))
 			}
