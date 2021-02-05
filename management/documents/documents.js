@@ -2,7 +2,6 @@ WDN.initializePlugin('jqueryui', [function () {
 	require(['jquery'], function($) {
 		$(document).ready(function() {
 			window.downloadAppointmentSchedule = downloadAppointmentSchedule;
-			window.downloadVolunteerSchedule = downloadVolunteerSchedule;
 
 			loadAllSites();
 
