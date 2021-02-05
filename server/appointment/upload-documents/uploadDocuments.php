@@ -169,22 +169,25 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 		$appointmentId = $clientInformation['appointmentId'];
 		$bestTimeToCall = $clientInformation['bestTimeToCall'];
 		$appointmentType = $clientInformation['appointmentType'];
+		$preferredLanguage = $clientInformation['language'];
+		$siteName = $clientInformation['title'];
 
 		// Email volunteers saying it's ready to go
 		if (PROD) {
-			$emailJsonString = file_get_contents('./notificationEmails.json');
-			$emailsJson = json_decode($emailJsonString, true);
-			$toEmailsString = AppointmentTypeUtilities::isResidentialAppointmentType($appointmentType) ? $emailsJson['residential'] : $emailsJson['non-residential'];
+			$siteId = $clientInformation['siteId'];
+			$toEmailString = getToEmailString($siteId);
 
 			$readyMessage = "A client has marked their appointment as ready: <br/>
 				<b>First Name:</b> $firstName <br/>
 				<b>Last Name:</b> $lastName <br/>
+				<b>Site:</b> $siteName <br/>
 				<b>Appointment ID:</b> $appointmentId <br/>
 				<b>Phone Number:</b> $phoneNumber <br/>
 				<b>Best Time to Call (if new appointment):</b> $bestTimeToCall <br/> 
+				<b>Preferred Language:</b> $preferredLanguage <br/>
 				<b>Email (if provided):</b> $emailAddress <br/>
 				<b>Type:</b> $appointmentType";
-			EmailUtilities::sendHtmlFormattedEmail($toEmailsString, 'VITA -- Appointment Ready', $readyMessage);
+			EmailUtilities::sendHtmlFormattedEmail($toEmailString, 'VITA -- Appointment Ready', $readyMessage);
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -269,15 +272,17 @@ function validateClientInformation($token, $firstName, $lastName, $emailAddress,
 function getClientInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
-	$query = 'SELECT firstName, lastName, emailAddress, phoneNumber, bestTimeToCall, 
+	$query = 'SELECT Client.firstName, Client.lastName, Client.emailAddress, Client.phoneNumber, Client.bestTimeToCall, 
 			DATE_FORMAT(AppointmentTime.scheduledTime, "%W, %M %D at %l:%i %p") AS appointmentTimeStr, 
 			DATE_FORMAT(DATE_SUB(AppointmentTime.scheduledTime, INTERVAL 7 DAY), "%W, %M %D") AS uploadDeadlineStr,
-			AppointmentTime.scheduledTime, Appointment.appointmentId, AppointmentTime.siteId, AppointmentType.lookupName AS appointmentType
+			AppointmentTime.scheduledTime, Appointment.appointmentId, Appointment.language,
+			AppointmentTime.siteId, AppointmentType.lookupName AS appointmentType, Site.title
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId
 			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 			JOIN AppointmentType ON AppointmentTime.appointmentTypeId = AppointmentType.appointmentTypeId
+			JOIN Site ON AppointmentTime.siteId = Site.siteId
 		WHERE token = ?';
 
 	$stmt = $DB_CONN->prepare($query);
@@ -305,36 +310,69 @@ function doesClientInformationMatch($clientInformation, $firstName, $lastName, $
 
 // container/blob naming rules here https://docs.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
 function getContainerName($siteId) {
-	if($siteId == 1) {
+	if($siteId === 1) {
 		return 'nebraska-east-union';
-	} else if ($siteId == 2) {
+	} else if ($siteId === 2) {
 		return 'victor-e-anderson-library';
-	} else if ($siteId == 3) {
+	} else if ($siteId === 3) {
 		return 'jackie-gaughan-multicultural-center';
-	} else if ($siteId == 4) {
+	} else if ($siteId === 4) {
 		return 'international-student-scholar';
-	} else if ($siteId == 5) {
+	} else if ($siteId === 5) {
 		return 'center-for-people-in-need';
-	} else if ($siteId == 6) {
+	} else if ($siteId === 6) {
 		return 'loren-eiseley-library';
-	} else if ($siteId == 7) {
+	} else if ($siteId === 7) {
 		return 'bennett-martin-library';
-	} else if ($siteId == 8) {
+	} else if ($siteId === 8) {
 		return 'f-street-community-center';
-	} else if ($siteId == 9) {
+	} else if ($siteId === 9) {
 		return 'community-hope-federal-credit';
-	} else if ($siteId == 10) {
+	} else if ($siteId === 10) {
 		return 'southeast-community-college';
-	} else if ($siteId == 11) {
+	} else if ($siteId === 11) {
 		return 'nebraska-union';
-	} else if ($siteId == 12) {
+	} else if ($siteId === 12) {
 		return 'virtual-vita';
-	} else if ($siteId == 13) {
+	} else if ($siteId === 13) {
 		return 'student-athlete-virtual-site';
 	} else if ($siteId == 14) {
 		return 'asian-community-and-cultural-center';
 	}
 	return 'server-contingency-site';
+}
+
+function getToEmailString($siteId) {
+	if($siteId === 1) {
+		return 'vita@unl.edu';
+	} else if ($siteId === 2) {
+		return 'anderson-vita@unl.edu';
+	} else if ($siteId === 3) {
+		return 'vita@unl.edu';
+	} else if ($siteId === 4) {
+		return 'international-vita@unl.edu';
+	} else if ($siteId === 5) {
+		return 'cpn-vita@unl.edu';
+	} else if ($siteId === 6) {
+		return 'eiseley-vita@unl.edu';
+	} else if ($siteId === 7) {
+		return 'bm-vita@unl.edu';
+	} else if ($siteId === 8) {
+		return 'fstreet-vita@unl.edu';
+	} else if ($siteId === 9) {
+		return 'vita@unl.edu';
+	} else if ($siteId === 10) {
+		return 'scc-vita@unl.edu';
+	} else if ($siteId === 11) {
+		return 'vita@unl.edu';
+	} else if ($siteId === 12) {
+		return 'vita@unl.edu';
+	} else if ($siteId === 13) {
+		return 'international-vita@unl.edu';
+	} else if ($siteId === 14) {
+		return 'accc-vita@unl.edu';
+	}
+	return 'vita@unl.edu';
 }
 
 function cleanPhoneNumber($phoneNumber) {
