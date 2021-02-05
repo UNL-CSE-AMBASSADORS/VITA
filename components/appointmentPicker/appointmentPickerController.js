@@ -44,7 +44,7 @@ define('appointmentPickerController', [], function() {
 				}
 			});
 		};
-		
+
 		$scope.isResidentialAppointmentType = () => {
 			return $scope.appointmentPickerSharedProperties.appointmentType.includes('residential');
 		};

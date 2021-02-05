@@ -138,7 +138,7 @@
 						</tbody>
 					</table>
 					<button type="button" class="dcf-btn dcf-btn-secondary dcf-mt-2" ng-click="addAnotherDocument()">Add Another Document</button>
-					<p class="dcf-mt-2 dcf-txt-xs">Documents are transmitted and stored securely. These documents will not be shared with anyone except the Lincoln VITA volunteers helping to prepare your tax return and will be deleted at the close of tax season.</p>
+					<p class="dcf-mt-2 dcf-txt-xs">Documents are transmitted and stored securely. These documents will not be shared with anyone except the Lincoln VITA volunteers helping to prepare your tax return and will be deleted at the end of tax season.</p>
 				</fieldset>
 
 				<!-- Ready button -->
