@@ -310,31 +310,31 @@ function doesClientInformationMatch($clientInformation, $firstName, $lastName, $
 
 // container/blob naming rules here https://docs.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
 function getContainerName($siteId) {
-	if($siteId === 1) {
+	if($siteId == 1) {
 		return 'nebraska-east-union';
-	} else if ($siteId === 2) {
+	} else if ($siteId == 2) {
 		return 'victor-e-anderson-library';
-	} else if ($siteId === 3) {
+	} else if ($siteId == 3) {
 		return 'jackie-gaughan-multicultural-center';
-	} else if ($siteId === 4) {
+	} else if ($siteId == 4) {
 		return 'international-student-scholar';
-	} else if ($siteId === 5) {
+	} else if ($siteId == 5) {
 		return 'center-for-people-in-need';
-	} else if ($siteId === 6) {
+	} else if ($siteId == 6) {
 		return 'loren-eiseley-library';
-	} else if ($siteId === 7) {
+	} else if ($siteId == 7) {
 		return 'bennett-martin-library';
-	} else if ($siteId === 8) {
+	} else if ($siteId == 8) {
 		return 'f-street-community-center';
-	} else if ($siteId === 9) {
+	} else if ($siteId == 9) {
 		return 'community-hope-federal-credit';
-	} else if ($siteId === 10) {
+	} else if ($siteId == 10) {
 		return 'southeast-community-college';
-	} else if ($siteId === 11) {
+	} else if ($siteId == 11) {
 		return 'nebraska-union';
-	} else if ($siteId === 12) {
+	} else if ($siteId == 12) {
 		return 'virtual-vita';
-	} else if ($siteId === 13) {
+	} else if ($siteId == 13) {
 		return 'student-athlete-virtual-site';
 	} else if ($siteId == 14) {
 		return 'asian-community-and-cultural-center';
@@ -343,33 +343,33 @@ function getContainerName($siteId) {
 }
 
 function getToEmailString($siteId) {
-	if($siteId === 1) {
+	if($siteId == 1) {
 		return 'vita@unl.edu';
-	} else if ($siteId === 2) {
+	} else if ($siteId == 2) {
 		return 'anderson-vita@unl.edu';
-	} else if ($siteId === 3) {
+	} else if ($siteId == 3) {
 		return 'vita@unl.edu';
-	} else if ($siteId === 4) {
+	} else if ($siteId == 4) {
 		return 'international-vita@unl.edu';
-	} else if ($siteId === 5) {
+	} else if ($siteId == 5) {
 		return 'cpn-vita@unl.edu';
-	} else if ($siteId === 6) {
+	} else if ($siteId == 6) {
 		return 'eiseley-vita@unl.edu';
-	} else if ($siteId === 7) {
+	} else if ($siteId == 7) {
 		return 'bm-vita@unl.edu';
-	} else if ($siteId === 8) {
+	} else if ($siteId == 8) {
 		return 'fstreet-vita@unl.edu';
-	} else if ($siteId === 9) {
+	} else if ($siteId == 9) {
 		return 'vita@unl.edu';
-	} else if ($siteId === 10) {
+	} else if ($siteId == 10) {
 		return 'scc-vita@unl.edu';
-	} else if ($siteId === 11) {
+	} else if ($siteId == 11) {
 		return 'vita@unl.edu';
-	} else if ($siteId === 12) {
+	} else if ($siteId == 12) {
 		return 'vita@unl.edu';
-	} else if ($siteId === 13) {
+	} else if ($siteId == 13) {
 		return 'international-vita@unl.edu';
-	} else if ($siteId === 14) {
+	} else if ($siteId == 14) {
 		return 'accc-vita@unl.edu';
 	}
 	return 'vita@unl.edu';
