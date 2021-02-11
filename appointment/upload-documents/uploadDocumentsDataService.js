@@ -69,6 +69,23 @@ define('uploadDocumentsDataService', [], function($http) {
 				}, (error) => {
 					return null;
 				});
+			},
+			storeConsent: function(reviewConsent, virtualConsent, signature) {
+				return $http({
+					url: '/server/appointment/upload-documents/uploadDocuments.php',
+					method: 'POST',
+					data: 'action=storeConsent' +
+						`&reviewConsent=${reviewConsent}` +
+						`&virtualConsent=${virtualConsent}`+
+						`&signature=${signature}`,
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded' //TODO not sure what this is
+					}
+				}).then((response) => {
+					return response.data;
+				}, (error) => {
+					return null;
+				});
 			}
 		};
 	}

@@ -17,6 +17,7 @@ if (isset($_REQUEST['action'])) {
 		case 'validateClientInformation': isClientInformationValid($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'upload': uploadDocument($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'markAppointmentAsReady': markAppointmentAsReady($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
+		case 'storeConsent': storeConsent($_POST['reviewConsent'], $_POST['virtualConsent'], $_POST['signature']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -197,9 +198,47 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 	echo json_encode($response);
 }
 
+function storeConsent($reviewConsent, $virtualConsent, $signature) {
+	GLOBAL $DB_CONN;
+
+	$response = array();
+	$response['success'] = false;
+
+	try {
+		$DB_CONN->beginTransaction();
+
+		$consentId = insertConsent($reviewConsent, $virtualConsent, $signature);
+		$DB_CONN->commit();
+
+		$response['success'] = true;
+		$response['consentId'] = $consentId;
+		// TODO do we need a confirmation? I guess it wouldn't hurt $response['message'] = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
+	} catch (Exception $e) {
+		$DB_CONN->rollback();
+		$response['message'] = 'An error occurred while trying to record your consent. Please try again in a few minutes.';
+	}
+
+	print json_encode($response);
+}
+
 /* 
  * Private functions
  */
+
+function insertConsent($reviewConsent, $virtualConsent, $signature) { //TODO need to change insertAppointment to include consentId
+	GLOBAL $DB_CONN;
+
+	$consentInsert = 'INSERT INTO Consent (reviewConsent, virtualConsent, signature)
+		VALUES (?, ?, ?)';
+	$consentParams = array($reviewConsent, $virtualConsent, $signature);
+
+	$stmt = $DB_CONN->prepare($consentInsert);
+	if(!$stmt->execute($consentParams)){
+		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
+	}
+
+	return $DB_CONN->lastInsertId();
+}
 
 function validateForm14446HasChanged($uploadedFileTempName) {
 	GLOBAL $root;

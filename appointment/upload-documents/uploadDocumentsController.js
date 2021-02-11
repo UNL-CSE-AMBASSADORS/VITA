@@ -13,16 +13,14 @@ define('uploadDocumentsController', [], function() {
 		$scope.invalidClientInformation = false;
 		$scope.isResidentialAppointment = true;
 
-		// Agree to virtual preparation variables
-		// For some reason, you can't bind the checkbox to a primitive boolean, it has to be in an object: https://stackoverflow.com/a/23943930
-		$scope.agreeToVirtualPreparationCheckbox = {
-			checked: false
+		// Consent variables
+		$scope.consentData = {
+			reviewConsent: 0,
+			virtualConsent: 0,
+			signature: "starting value, others started false",
+			completedConsent: false // TODO now we need to check and see if they've already consented
 		};
 
-		// Ready button variables
-		$scope.readyCheckbox = {
-			checked: false
-		};
 		$scope.submittingAppointmentReady = false;
 		$scope.appointmentMarkedAsReadySuccessfully = false;
 
@@ -48,6 +46,22 @@ define('uploadDocumentsController', [], function() {
 		const MAX_FILE_SIZE_IN_BYTES = 10 * BYTES_IN_A_MEGABYTE;
 		const ACCEPTABLE_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 		const ACCEPTABLE_FILE_EXTENSIONS = ['.pdf', '.jpeg', '.jpg', '.png'];
+
+		$scope.storeConsent = function() {
+			const reviewConsent = $scope.consentData.reviewConsent;
+			const virtualConsent = $scope.consentData.virtualConsent;
+			const signature = $scope.consentData.signature;
+
+			UploadDocumentsDataService.storeConsent(reviewConsent, virtualConsent, signature).then((response) => {
+				if (typeof response !== 'undefined' && response && response.success){
+					$scope.consentData.completedConsent = true;
+					document.body.scrollTop = document.documentElement.scrollTop = 0;
+					NotificationUtilities.giveNotice('Success', 'You are now ready to upload your documents!'); //TODO see how this looks or if it's needed
+				} else {
+					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
+				}
+			});
+		};
 
 		$scope.doesTokenExist = function(token) {
 			if (!token || 0 === token.length || EXPECTED_TOKEN_LENGTH !== token.length) {
@@ -76,7 +90,7 @@ define('uploadDocumentsController', [], function() {
 				return;
 			}
 			$scope.validatingClientInformation = true;
-			
+
 			const token = $scope.token;
 			const firstName = $scope.clientData.firstName || '';
 			const lastName = $scope.clientData.lastName || '';
