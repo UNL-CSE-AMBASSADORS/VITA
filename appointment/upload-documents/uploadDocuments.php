@@ -204,7 +204,6 @@
 						class="submit dcf-btn dcf-btn-primary dcf-mt-4"
 						ng-disabled="!consentData.virtualConsent == 1 || consentData.reviewConsent == null || consentData.signature == null || consentData.signature == ''" />
 				</form>
-				<p>rc is {{consentData.reviewConsent}}, vc is {{consentData.virtualConsent}}, sig is {{consentData.signature}}</p>
 			</div>
 
 			<div ng-if="consentData.completedConsent === true">

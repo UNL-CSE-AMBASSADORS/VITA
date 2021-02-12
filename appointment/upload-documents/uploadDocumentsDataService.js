@@ -79,7 +79,23 @@ define('uploadDocumentsDataService', [], function($http) {
 						`&virtualConsent=${virtualConsent}`+
 						`&signature=${signature}`,
 					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded' //TODO not sure what this is
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}
+				}).then((response) => {
+					return response.data;
+				}, (error) => {
+					return null;
+				});
+			},
+			addConsentForeignKeyToAppointment: function(appointmentId, virtualAppointmentConsentId) {
+				return $http({
+					url: '/server/appointment/upload-documents/uploadDocuments.php',
+					method: 'POST',
+					data: 'action=addConsentForeignKeyToAppointment' +
+						`&appointmentId=${appointmentId}` +
+						`&virtualAppointmentConsentId=${virtualAppointmentConsentId}`,
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
 					}
 				}).then((response) => {
 					return response.data;

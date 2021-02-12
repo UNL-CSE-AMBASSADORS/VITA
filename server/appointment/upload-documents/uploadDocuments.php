@@ -6,6 +6,7 @@ require_once "$root/server/config.php";
 require_once "$root/vendor/autoload.php";
 require_once "$root/server/utilities/emailUtilities.class.php";
 require_once "$root/server/utilities/appointmentTypeUtilities.class.php";
+require_once "$root/server/accessors/appointmentAccessor.class.php";
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 
@@ -18,6 +19,7 @@ if (isset($_REQUEST['action'])) {
 		case 'upload': uploadDocument($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'markAppointmentAsReady': markAppointmentAsReady($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'storeConsent': storeConsent($_POST['reviewConsent'], $_POST['virtualConsent'], $_POST['signature']); break;
+		case 'addConsentForeignKeyToAppointment': addConsentForeignKeyToAppointment($_POST['appointmentId'], $_POST['virtualAppointmentConsentId']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -62,6 +64,8 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 			$response['residentialAppointment'] = AppointmentTypeUtilities::isResidentialAppointmentType($clientInformation['appointmentType']);
 			$response['appointmentTimeStr'] = $clientInformation['appointmentTimeStr'];
 			$response['uploadDeadlineStr'] = $clientInformation['uploadDeadlineStr'];
+			$response['appointmentId'] = $clientInformation['appointmentId'];
+			$response['consentId'] = $clientInformation['consentId'];
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -173,12 +177,12 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 		$preferredLanguage = $clientInformation['language'];
 		$siteName = $clientInformation['title'];
 
-		// Email volunteers saying it's ready to go
 		if (PROD) {
+			// Email volunteers saying it's ready to go
 			$siteId = $clientInformation['siteId'];
 			$toEmailString = getToEmailString($siteId);
 
-			$readyMessage = "A client has marked their appointment as ready: <br/>
+			$volunteerMessage = "A client has marked their appointment as ready: <br/>
 				<b>First Name:</b> $firstName <br/>
 				<b>Last Name:</b> $lastName <br/>
 				<b>Site:</b> $siteName <br/>
@@ -188,7 +192,18 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 				<b>Preferred Language:</b> $preferredLanguage <br/>
 				<b>Email (if provided):</b> $emailAddress <br/>
 				<b>Type:</b> $appointmentType";
-			EmailUtilities::sendHtmlFormattedEmail($toEmailString, 'VITA -- Appointment Ready', $readyMessage);
+			EmailUtilities::sendHtmlFormattedEmail($toEmailString, 'VITA -- Appointment Ready', $volunteerMessage);
+
+			if(!empty($emailAddress)) {
+				// Email client confirmation
+				$clientMessage = "Congratulations, $firstName $lastName, you have successfully marked your appointment as ready!<br/>
+					<b>Site:</b> $siteName".(AppointmentTypeUtilities::isVirtualAppointmentType($appointmentType) ? " (Please do not show up to the site for your virtual appointment)" : "")."<br/>
+					<b>Your Phone Number:</b> $phoneNumber <br/>
+					<b>Your Chosen Best Time to Call:</b> $bestTimeToCall <br/> 
+					<b>Your Preferred Language:</b> $preferredLanguage <br/>
+					<b>Appointment Type:</b> $appointmentType";
+				EmailUtilities::sendHtmlFormattedEmail($emailAddress, 'Your VITA Appointment is Marked as Ready', $clientMessage);
+			}
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -207,12 +222,31 @@ function storeConsent($reviewConsent, $virtualConsent, $signature) {
 	try {
 		$DB_CONN->beginTransaction();
 
-		$consentId = insertConsent($reviewConsent, $virtualConsent, $signature);
+		$virtualAppointmentConsentId = insertConsent($reviewConsent, $virtualConsent, $signature);
 		$DB_CONN->commit();
 
 		$response['success'] = true;
-		$response['consentId'] = $consentId;
-		// TODO do we need a confirmation? I guess it wouldn't hurt $response['message'] = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
+		$response['virtualAppointmentConsentId'] = $virtualAppointmentConsentId;
+		// $response['message'] = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
+	} catch (Exception $e) {
+		$DB_CONN->rollback();
+		$response['message'] = 'An error occurred while trying to record your consent. Please try again in a few minutes.';
+	}
+
+	print json_encode($response);
+}
+
+function addConsentForeignKeyToAppointment($appointmentId, $virtualAppointmentConsentId) {
+	GLOBAL $DB_CONN;
+
+	$response = array();
+	$response['success'] = false;
+
+	try {
+		$appointmentAccessor = new AppointmentAccessor();
+		$appointmentAccessor->addVirtualAppointmentConsentId($appointmentId, $virtualAppointmentConsentId);
+
+		$response['success'] = true;
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
 		$response['message'] = 'An error occurred while trying to record your consent. Please try again in a few minutes.';
@@ -225,12 +259,28 @@ function storeConsent($reviewConsent, $virtualConsent, $signature) {
  * Private functions
  */
 
-function insertConsent($reviewConsent, $virtualConsent, $signature) { //TODO need to change insertAppointment to include consentId
+function insertConsent($reviewConsent, $virtualConsent, $signature) {
 	GLOBAL $DB_CONN;
 
-	$consentInsert = 'INSERT INTO Consent (reviewConsent, virtualConsent, signature)
+	$consentInsert = 'INSERT INTO VirtualAppointmentConsent (reviewConsent, virtualConsent, signature)
 		VALUES (?, ?, ?)';
 	$consentParams = array($reviewConsent, $virtualConsent, $signature);
+
+	$stmt = $DB_CONN->prepare($consentInsert);
+	if(!$stmt->execute($consentParams)){
+		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
+	}
+
+	return $DB_CONN->lastInsertId();
+}
+
+
+function insertConsentForeignKeyToAppointment($appointmentId, $virtualAppointmentConsentId) {
+	GLOBAL $DB_CONN;
+
+	$consentInsert = 'INSERT INTO Appointment (virtualAppointmentConsentId)
+		VALUES (?)';
+	$consentParams = array($virtualAppointmentConsentId);
 
 	$stmt = $DB_CONN->prepare($consentInsert);
 	if(!$stmt->execute($consentParams)){
@@ -314,7 +364,7 @@ function getClientInformationFromToken($token) {
 	$query = 'SELECT Client.firstName, Client.lastName, Client.emailAddress, Client.phoneNumber, Client.bestTimeToCall, 
 			DATE_FORMAT(AppointmentTime.scheduledTime, "%W, %M %D at %l:%i %p") AS appointmentTimeStr, 
 			DATE_FORMAT(DATE_SUB(AppointmentTime.scheduledTime, INTERVAL 7 DAY), "%W, %M %D") AS uploadDeadlineStr,
-			AppointmentTime.scheduledTime, Appointment.appointmentId, Appointment.language,
+			AppointmentTime.scheduledTime, Appointment.appointmentId, Appointment.language, Appointment.virtualAppointmentConsentId AS consentId,
 			AppointmentTime.siteId, AppointmentType.lookupName AS appointmentType, Site.title
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId

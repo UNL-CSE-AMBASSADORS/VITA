@@ -17,10 +17,11 @@ define('uploadDocumentsController', [], function() {
 		$scope.consentData = {
 			reviewConsent: 0,
 			virtualConsent: 0,
-			signature: "starting value, others started false",
-			completedConsent: false // TODO now we need to check and see if they've already consented
+			signature: null,
+			completedConsent: null // will be updated to T/F when client data is validated 
 		};
 
+		$scope.appointmentId = null;
 		$scope.submittingAppointmentReady = false;
 		$scope.appointmentMarkedAsReadySuccessfully = false;
 
@@ -54,11 +55,26 @@ define('uploadDocumentsController', [], function() {
 
 			UploadDocumentsDataService.storeConsent(reviewConsent, virtualConsent, signature).then((response) => {
 				if (typeof response !== 'undefined' && response && response.success){
-					$scope.consentData.completedConsent = true;
-					document.body.scrollTop = document.documentElement.scrollTop = 0;
-					NotificationUtilities.giveNotice('Success', 'You are now ready to upload your documents!'); //TODO see how this looks or if it's needed
+					const virtualAppointmentConsentId = response.virtualAppointmentConsentId;
+					const appointmentId = $scope.appointmentId;
+					$scope.addConsentForeignKeyToAppointment(appointmentId, virtualAppointmentConsentId);
+					//$scope.consentData.completedConsent = true;
+					//document.body.scrollTop = document.documentElement.scrollTop = 0;
+					//NotificationUtilities.giveNotice('Success', 'You are now ready to upload your documents!');
 				} else {
 					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
+				}
+			});
+		};
+
+		$scope.addConsentForeignKeyToAppointment = function(appointmentId, virtualAppointmentConsentId) {
+			UploadDocumentsDataService.addConsentForeignKeyToAppointment(appointmentId, virtualAppointmentConsentId).then((response) => {
+				if (typeof response !== 'undefined' && response && response.success){
+					$scope.consentData.completedConsent = true;
+					document.body.scrollTop = document.documentElement.scrollTop = 0;
+					NotificationUtilities.giveNotice('Success', 'Your consent has been recorded and you are now ready to upload your documents!');	
+				} else {
+					NotificationUtilities.giveNotice('Failure', 'There was an error on the server. Please refresh the page in a few minutes and try again.', false);
 				}
 			});
 		};
@@ -110,6 +126,11 @@ define('uploadDocumentsController', [], function() {
 						$scope.isResidentialAppointment = response.residentialAppointment;
 						$scope.appointmentTimeStr = response.appointmentTimeStr;
 						$scope.uploadDeadlineStr = response.uploadDeadlineStr.toUpperCase();
+						$scope.appointmentId = response.appointmentId;
+						
+						// Checking to see if they've already filled out consent
+						const virtualAppointmentConsentId = response.consentId;
+						$scope.validateConsent(virtualAppointmentConsentId);
 					}
 				}
 
@@ -215,6 +236,14 @@ define('uploadDocumentsController', [], function() {
 				$scope.submittingAppointmentReady = false;
 			});
 		};
+
+		$scope.validateConsent = (consentId) => {
+			if(consentId != null) {
+				$scope.consentData.completedConsent = true;
+			} else {
+				$scope.consentData.completedConsent = false;
+			}
+		}
 
 		$scope.downloadResidentIntakeForm = () => {
 			$scope.downloadFile('/server/download/downloadIntakeForm.php');
