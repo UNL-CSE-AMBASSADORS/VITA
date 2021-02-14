@@ -70,30 +70,15 @@ define('uploadDocumentsDataService', [], function($http) {
 					return null;
 				});
 			},
-			storeConsent: function(reviewConsent, virtualConsent, signature) {
+			storeConsent: function(reviewConsent, virtualConsent, signature, appointmentId) {
 				return $http({
 					url: '/server/appointment/upload-documents/uploadDocuments.php',
 					method: 'POST',
 					data: 'action=storeConsent' +
 						`&reviewConsent=${reviewConsent}` +
 						`&virtualConsent=${virtualConsent}`+
-						`&signature=${signature}`,
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					}
-				}).then((response) => {
-					return response.data;
-				}, (error) => {
-					return null;
-				});
-			},
-			addConsentForeignKeyToAppointment: function(appointmentId, virtualAppointmentConsentId) {
-				return $http({
-					url: '/server/appointment/upload-documents/uploadDocuments.php',
-					method: 'POST',
-					data: 'action=addConsentForeignKeyToAppointment' +
-						`&appointmentId=${appointmentId}` +
-						`&virtualAppointmentConsentId=${virtualAppointmentConsentId}`,
+						`&signature=${signature}`+
+						`&appointmentId=${appointmentId}`,
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded'
 					}

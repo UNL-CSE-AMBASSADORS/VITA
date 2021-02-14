@@ -52,27 +52,13 @@ define('uploadDocumentsController', [], function() {
 			const reviewConsent = $scope.consentData.reviewConsent;
 			const virtualConsent = $scope.consentData.virtualConsent;
 			const signature = $scope.consentData.signature;
+			const appointmentId =  $scope.appointmentId;
 
-			UploadDocumentsDataService.storeConsent(reviewConsent, virtualConsent, signature).then((response) => {
-				if (typeof response !== 'undefined' && response && response.success){
-					const virtualAppointmentConsentId = response.virtualAppointmentConsentId;
-					const appointmentId = $scope.appointmentId;
-					$scope.addConsentForeignKeyToAppointment(appointmentId, virtualAppointmentConsentId);
-					//$scope.consentData.completedConsent = true;
-					//document.body.scrollTop = document.documentElement.scrollTop = 0;
-					//NotificationUtilities.giveNotice('Success', 'You are now ready to upload your documents!');
-				} else {
-					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
-				}
-			});
-		};
-
-		$scope.addConsentForeignKeyToAppointment = function(appointmentId, virtualAppointmentConsentId) {
-			UploadDocumentsDataService.addConsentForeignKeyToAppointment(appointmentId, virtualAppointmentConsentId).then((response) => {
+			UploadDocumentsDataService.storeConsent(reviewConsent, virtualConsent, signature, appointmentId).then((response) => {
 				if (typeof response !== 'undefined' && response && response.success){
 					$scope.consentData.completedConsent = true;
 					document.body.scrollTop = document.documentElement.scrollTop = 0;
-					NotificationUtilities.giveNotice('Success', 'Your consent has been recorded and you are now ready to upload your documents!');	
+					NotificationUtilities.giveNotice('Success', 'Your consent has been recorded and you are now ready to upload your documents!');
 				} else {
 					NotificationUtilities.giveNotice('Failure', 'There was an error on the server. Please refresh the page in a few minutes and try again.', false);
 				}

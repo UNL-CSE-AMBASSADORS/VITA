@@ -18,8 +18,7 @@ if (isset($_REQUEST['action'])) {
 		case 'validateClientInformation': isClientInformationValid($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'upload': uploadDocument($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'markAppointmentAsReady': markAppointmentAsReady($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
-		case 'storeConsent': storeConsent($_POST['reviewConsent'], $_POST['virtualConsent'], $_POST['signature']); break;
-		case 'addConsentForeignKeyToAppointment': addConsentForeignKeyToAppointment($_POST['appointmentId'], $_POST['virtualAppointmentConsentId']); break;
+		case 'storeConsent': storeConsent($_POST['reviewConsent'], $_POST['virtualConsent'], $_POST['signature'], $_POST['appointmentId']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -213,7 +212,7 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 	echo json_encode($response);
 }
 
-function storeConsent($reviewConsent, $virtualConsent, $signature) {
+function storeConsent($reviewConsent, $virtualConsent, $signature, $appointmentId) {
 	GLOBAL $DB_CONN;
 
 	$response = array();
@@ -222,29 +221,8 @@ function storeConsent($reviewConsent, $virtualConsent, $signature) {
 	try {
 		$DB_CONN->beginTransaction();
 
-		$virtualAppointmentConsentId = insertConsent($reviewConsent, $virtualConsent, $signature);
+		$virtualAppointmentConsentId = insertConsent($reviewConsent, $virtualConsent, $signature, $appointmentId);
 		$DB_CONN->commit();
-
-		$response['success'] = true;
-		$response['virtualAppointmentConsentId'] = $virtualAppointmentConsentId;
-		// $response['message'] = AppointmentConfirmationUtilities::generateAppointmentConfirmation($appointmentId);
-	} catch (Exception $e) {
-		$DB_CONN->rollback();
-		$response['message'] = 'An error occurred while trying to record your consent. Please try again in a few minutes.';
-	}
-
-	print json_encode($response);
-}
-
-function addConsentForeignKeyToAppointment($appointmentId, $virtualAppointmentConsentId) {
-	GLOBAL $DB_CONN;
-
-	$response = array();
-	$response['success'] = false;
-
-	try {
-		$appointmentAccessor = new AppointmentAccessor();
-		$appointmentAccessor->addVirtualAppointmentConsentId($appointmentId, $virtualAppointmentConsentId);
 
 		$response['success'] = true;
 	} catch (Exception $e) {
@@ -259,28 +237,12 @@ function addConsentForeignKeyToAppointment($appointmentId, $virtualAppointmentCo
  * Private functions
  */
 
-function insertConsent($reviewConsent, $virtualConsent, $signature) {
+function insertConsent($reviewConsent, $virtualConsent, $signature, $appointmentId) {
 	GLOBAL $DB_CONN;
 
-	$consentInsert = 'INSERT INTO VirtualAppointmentConsent (reviewConsent, virtualConsent, signature)
-		VALUES (?, ?, ?)';
-	$consentParams = array($reviewConsent, $virtualConsent, $signature);
-
-	$stmt = $DB_CONN->prepare($consentInsert);
-	if(!$stmt->execute($consentParams)){
-		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
-	}
-
-	return $DB_CONN->lastInsertId();
-}
-
-
-function insertConsentForeignKeyToAppointment($appointmentId, $virtualAppointmentConsentId) {
-	GLOBAL $DB_CONN;
-
-	$consentInsert = 'INSERT INTO Appointment (virtualAppointmentConsentId)
-		VALUES (?)';
-	$consentParams = array($virtualAppointmentConsentId);
+	$consentInsert = 'INSERT INTO VirtualAppointmentConsent (reviewConsent, virtualConsent, signature, appointmentId)
+		VALUES (?, ?, ?, ?)';
+	$consentParams = array($reviewConsent, $virtualConsent, $signature, $appointmentId);
 
 	$stmt = $DB_CONN->prepare($consentInsert);
 	if(!$stmt->execute($consentParams)){
@@ -361,10 +323,11 @@ function validateClientInformation($token, $firstName, $lastName, $emailAddress,
 function getClientInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
+	// LEFT JOIN consent so that if consent isn't found, it still returns the rest of the info
 	$query = 'SELECT Client.firstName, Client.lastName, Client.emailAddress, Client.phoneNumber, Client.bestTimeToCall, 
 			DATE_FORMAT(AppointmentTime.scheduledTime, "%W, %M %D at %l:%i %p") AS appointmentTimeStr, 
 			DATE_FORMAT(DATE_SUB(AppointmentTime.scheduledTime, INTERVAL 7 DAY), "%W, %M %D") AS uploadDeadlineStr,
-			AppointmentTime.scheduledTime, Appointment.appointmentId, Appointment.language, Appointment.virtualAppointmentConsentId AS consentId,
+			AppointmentTime.scheduledTime, Appointment.appointmentId, Appointment.language, VirtualAppointmentConsent.virtualAppointmentConsentId AS consentId,
 			AppointmentTime.siteId, AppointmentType.lookupName AS appointmentType, Site.title
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
@@ -372,6 +335,7 @@ function getClientInformationFromToken($token) {
 			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 			JOIN AppointmentType ON AppointmentTime.appointmentTypeId = AppointmentType.appointmentTypeId
 			JOIN Site ON AppointmentTime.siteId = Site.siteId
+			LEFT JOIN VirtualAppointmentConsent ON Appointment.appointmentId = VirtualAppointmentConsent.appointmentId
 		WHERE token = ?';
 
 	$stmt = $DB_CONN->prepare($query);
