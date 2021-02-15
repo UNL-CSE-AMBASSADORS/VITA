@@ -108,7 +108,7 @@
 					<li><b>Performing the interview with the taxpayer(s):</b> The Return Preparer will contact the Client by phone to discuss Form 13614 and review all photo identification, social security cards/ITIN letter and income documents that have been uploaded.</li>
 					<li><b>Preparing the tax return:</b> An IRS tax law certified return preparer will be assigned to the Client by the Site Coordinator. The Site Coordinator will assign a Client to a Return Prepare based upon the certification level of the Return Preparer.</li>
 					<li><b>Performing the quality review:</b> The Site Coordinator will review the Client's return.</li>
-					<li><b>Sharing the completed return:</b> The quality reviewed tax return will be uploaded and sent via secured link to the Client. The Return Preparer will call the Client to review the finished return, making in needed edits to the return, and asking the Client to sign Form 8879.</li>
+					<li><b>Sharing the completed return:</b> The quality reviewed tax return will be uploaded and sent via secured link to the Client. The Return Preparer will call the Client to review the finished return, making any needed edits to the return, and asking the Client to sign Form 8879.</li>
 					<li><b>Signing the return:</b> The Client will upload on a secure link a signed and dated copy of their Form 8879.</li>
 					<li><b>E-filing the tax return:</b> The Site Coordinator will review and e-file the tax return.</li>
 				</ol>
@@ -125,19 +125,20 @@
 						to having your return reviewed for accuracy, by an IRS employee?
 					</p>
 					<li class="form-radio" id="consentReview">
+						<label class="form-required"></label>
 						<div>
 							<div class="dcf-btn-group" data-toggle="buttons">
 								<label class="dcf-btn dcf-btn-secondary" 
 									name="consentToReview" 
 									ng-model="consentData.reviewConsent" 
-									uib-btn-radio="1" 
+									uib-btn-radio="true" 
 									type="radio"
 									required>Yes
 								</label>
 								<label class="dcf-btn dcf-btn-secondary" 
 									name="consentToReview" 
 									ng-model="consentData.reviewConsent" 
-									uib-btn-radio="0" 
+									uib-btn-radio="false" 
 									type="radio"
 									required>No
 								</label>
@@ -152,7 +153,7 @@
 					<p>If you agree to have your tax return prepared and your tax documents handled in the above manner,
 						your signature and/or agreement is required on this document. Signing this document means that
 						you are agreeing to the procedures stated above for preparing a tax return for you. (If this
-						is a Married Filing Joint return both spouses must sign and date this document.) If you chose
+						is a Married Filing Joint return both spouses must sign and date this document.) If you choose
 						not to sign this form, we may not be able to prepare your tax return using this process. Since
 						we are preparing your tax return virtually, we have to secure your consent agreeing to this 
 						process. If you consent to use these non-IRS virtual systems to disclose or use your tax return
@@ -166,7 +167,7 @@
 						While the IRS is responsible for providing oversight requirements to Volunteer Income Tax Assistance (VITA) 
 						and Tax Counseling for the Elderly (TCE) programs, these sites are operated by IRS sponsored partners who
 						manage IRS site operations requirements and volunteer ethical standards. In addition, the locations of these 
-						ites may not be in or on federal Property. </p>
+						sites may not be in or on federal property. </p>
 					<li class="form-radio" id="consentVirtual">
 						<label class="form-required">I am agreeing to use this site's Virtual VITA/TCE Process</label>
 						<div>
@@ -174,13 +175,13 @@
 								<label class="dcf-btn dcf-btn-secondary" 
 									name="consentToVirtual" 
 									ng-model="consentData.virtualConsent" 
-									uib-btn-radio="1" 
+									uib-btn-radio="true" 
 									required>Yes
 								</label>
 								<label class="dcf-btn dcf-btn-secondary" 
 									name="consentToVirtual" 
 									ng-model="consentData.virtualConsent" 
-									uib-btn-radio="0" 
+									uib-btn-radio="false" 
 									required>No
 								</label>
 							</div>
@@ -188,6 +189,7 @@
 						<div ng-show="consentForm.$submitted">
 							<label class="error" ng-show="consentForm.consentToVirtual.$error.required">This field is required.</label>
 						</div>
+						<p class="cant-help-text" ng-show="consentData.virtualConsent == false">Sorry, we cannot prepare your tax return without your consent to the virtual process.</p>
 					</li>
 
 					<li class="dcf-form-group form-textfield">
@@ -201,8 +203,8 @@
 					<p ng-if="consentForm.$invalid && consentForm.$submitted" class="error">Your input is invalid, please correct the errors above and re-submit this form</p>
 					<input type="submit" 
 						value="Submit" 
-						class="submit dcf-btn dcf-btn-primary dcf-mt-4"
-						ng-disabled="!consentData.virtualConsent == 1 || consentData.reviewConsent == null || consentData.signature == null || consentData.signature == ''" />
+						class="submit dcf-btn dcf-btn-primary dcf-mt-4" 
+						ng-disabled="!consentData.virtualConsent == true || consentData.reviewConsent == null || consentData.signature == null || consentData.signature == ''" />
 				</form>
 			</div>
 
@@ -273,7 +275,7 @@
 					</p>
 					<div class="dcf-input-checkbox">
 						<input id="ready-checkbox" type="checkbox" ng-model="readyCheckbox.checked" value="false">
-						<label for="ready-checkbox">I have uploaded the <b>Form 13614-C</b> and all the necessary documents and my appointment is ready to be prepared</label>
+						<label for="ready-checkbox">I have uploaded <b>Form 13614-C</b> and all other necessary documents and my appointment is ready to be prepared</label>
 					</div>
 					<button type="button"
 						class="dcf-btn dcf-btn-primary dcf-mt-1"

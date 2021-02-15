@@ -15,8 +15,8 @@ define('uploadDocumentsController', [], function() {
 
 		// Consent variables
 		$scope.consentData = {
-			reviewConsent: 0,
-			virtualConsent: 0,
+			reviewConsent: null,
+			virtualConsent: null,
 			signature: null,
 			completedConsent: null // will be updated to T/F when client data is validated 
 		};
@@ -48,21 +48,25 @@ define('uploadDocumentsController', [], function() {
 		const ACCEPTABLE_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 		const ACCEPTABLE_FILE_EXTENSIONS = ['.pdf', '.jpeg', '.jpg', '.png'];
 
-		$scope.storeConsent = function() {
+		$scope.storeConsent = () => {
 			const reviewConsent = $scope.consentData.reviewConsent;
 			const virtualConsent = $scope.consentData.virtualConsent;
 			const signature = $scope.consentData.signature;
 			const appointmentId =  $scope.appointmentId;
 
-			UploadDocumentsDataService.storeConsent(reviewConsent, virtualConsent, signature, appointmentId).then((response) => {
-				if (typeof response !== 'undefined' && response && response.success){
-					$scope.consentData.completedConsent = true;
-					document.body.scrollTop = document.documentElement.scrollTop = 0;
-					NotificationUtilities.giveNotice('Success', 'Your consent has been recorded and you are now ready to upload your documents!');
-				} else {
-					NotificationUtilities.giveNotice('Failure', 'There was an error on the server. Please refresh the page in a few minutes and try again.', false);
-				}
-			});
+			if(virtualConsent === true && signature != null) {
+				UploadDocumentsDataService.storeConsent(reviewConsent, virtualConsent, signature, appointmentId).then((response) => {
+					if (typeof response !== 'undefined' && response && response.success){
+						$scope.consentData.completedConsent = response.consented == 1;
+						document.body.scrollTop = document.documentElement.scrollTop = 0;
+						NotificationUtilities.giveNotice('Success', 'Your consent has been recorded and you are now ready to upload your documents!');
+					} else {
+						NotificationUtilities.giveNotice('Failure', response.message, false);
+					}
+				});
+			} else {
+				NotificationUtilities.giveNotice('Failure', 'Invalid input. Please make sure you have consented to virtual preparation and typed your signature.', false);
+			}
 		};
 
 		$scope.doesTokenExist = function(token) {
@@ -113,10 +117,7 @@ define('uploadDocumentsController', [], function() {
 						$scope.appointmentTimeStr = response.appointmentTimeStr;
 						$scope.uploadDeadlineStr = response.uploadDeadlineStr.toUpperCase();
 						$scope.appointmentId = response.appointmentId;
-						
-						// Checking to see if they've already filled out consent
-						const virtualAppointmentConsentId = response.consentId;
-						$scope.validateConsent(virtualAppointmentConsentId);
+						$scope.consentData.completedConsent = response.consented == 1;
 					}
 				}
 
@@ -222,14 +223,6 @@ define('uploadDocumentsController', [], function() {
 				$scope.submittingAppointmentReady = false;
 			});
 		};
-
-		$scope.validateConsent = (consentId) => {
-			if(consentId != null) {
-				$scope.consentData.completedConsent = true;
-			} else {
-				$scope.consentData.completedConsent = false;
-			}
-		}
 
 		$scope.downloadResidentIntakeForm = () => {
 			$scope.downloadFile('/server/download/downloadIntakeForm.php');

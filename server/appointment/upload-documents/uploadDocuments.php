@@ -64,7 +64,7 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 			$response['appointmentTimeStr'] = $clientInformation['appointmentTimeStr'];
 			$response['uploadDeadlineStr'] = $clientInformation['uploadDeadlineStr'];
 			$response['appointmentId'] = $clientInformation['appointmentId'];
-			$response['consentId'] = $clientInformation['consentId'];
+			$response['consented'] = $clientInformation['consented'];
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -199,8 +199,7 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 					<b>Site:</b> $siteName".(AppointmentTypeUtilities::isVirtualAppointmentType($appointmentType) ? " (Please do not show up to the site for your virtual appointment)" : "")."<br/>
 					<b>Your Phone Number:</b> $phoneNumber <br/>
 					<b>Your Chosen Best Time to Call:</b> $bestTimeToCall <br/> 
-					<b>Your Preferred Language:</b> $preferredLanguage <br/>
-					<b>Appointment Type:</b> $appointmentType";
+					<b>Your Preferred Language:</b> $preferredLanguage <br/>";
 				EmailUtilities::sendHtmlFormattedEmail($emailAddress, 'Your VITA Appointment is Marked as Ready', $clientMessage);
 			}
 		}
@@ -217,17 +216,23 @@ function storeConsent($reviewConsent, $virtualConsent, $signature, $appointmentI
 
 	$response = array();
 	$response['success'] = false;
+	
+	if($virtualConsent === 'true' && $virtualConsent !== null && $signature !== null && $signature !== '' && $appointmentId !== null) {
+		$reviewConsent = $reviewConsent === 'true' ? 1 : 0;
+		$virtualConsent = $virtualConsent === 'true' ? 1 : 0;
+		try {
+			$DB_CONN->beginTransaction();
 
-	try {
-		$DB_CONN->beginTransaction();
+			insertConsent($reviewConsent, $virtualConsent, $signature, $appointmentId);
+			$DB_CONN->commit();
 
-		$virtualAppointmentConsentId = insertConsent($reviewConsent, $virtualConsent, $signature, $appointmentId);
-		$DB_CONN->commit();
-
-		$response['success'] = true;
-	} catch (Exception $e) {
-		$DB_CONN->rollback();
-		$response['message'] = 'An error occurred while trying to record your consent. Please try again in a few minutes.';
+			$response['success'] = true;
+		} catch (Exception $e) {
+			$DB_CONN->rollback();
+			$response['message'] = 'An error occurred while trying to record your consent. Please try again in a few minutes.';
+		}
+	} else {
+		$response['message'] = 'Your consent information was not found to be valid. Please try again in a few minutes.';
 	}
 
 	print json_encode($response);
@@ -248,8 +253,6 @@ function insertConsent($reviewConsent, $virtualConsent, $signature, $appointment
 	if(!$stmt->execute($consentParams)){
 		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
 	}
-
-	return $DB_CONN->lastInsertId();
 }
 
 function validateForm14446HasChanged($uploadedFileTempName) {
@@ -327,8 +330,10 @@ function getClientInformationFromToken($token) {
 	$query = 'SELECT Client.firstName, Client.lastName, Client.emailAddress, Client.phoneNumber, Client.bestTimeToCall, 
 			DATE_FORMAT(AppointmentTime.scheduledTime, "%W, %M %D at %l:%i %p") AS appointmentTimeStr, 
 			DATE_FORMAT(DATE_SUB(AppointmentTime.scheduledTime, INTERVAL 7 DAY), "%W, %M %D") AS uploadDeadlineStr,
-			AppointmentTime.scheduledTime, Appointment.appointmentId, Appointment.language, VirtualAppointmentConsent.virtualAppointmentConsentId AS consentId,
-			AppointmentTime.siteId, AppointmentType.lookupName AS appointmentType, Site.title
+			AppointmentTime.scheduledTime, Appointment.appointmentId, Appointment.language,
+			AppointmentTime.siteId, AppointmentType.lookupName AS appointmentType, Site.title,
+			(VirtualAppointmentConsent.virtualConsent = 1 AND NOT (VirtualAppointmentConsent.signature IS NULL OR /*column is set to NOT NULL. Left it to be sure*/
+			VirtualAppointmentConsent.signature = \'\')) as consented
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId
