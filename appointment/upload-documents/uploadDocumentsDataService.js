@@ -87,13 +87,6 @@ define('uploadDocumentsDataService', [], function($http) {
 				}, (error) => {
 					return null;
 				});
-			},
-			isAppointmentValid: function(appointmentId) {
-				return $http.get(`/server/appointment/upload-documents/uploadDocuments.php?action=isAppointmentValid&appointmentId=${appointmentId}`).then((response) => {
-					return response.data;
-				}, (error) => {
-					return null;
-				});
 			}
 		};
 	}

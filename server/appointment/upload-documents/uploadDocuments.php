@@ -18,7 +18,6 @@ if (isset($_REQUEST['action'])) {
 		case 'upload': uploadDocument($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'markAppointmentAsReady': markAppointmentAsReady($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'submitConsent': submitConsent($_POST['reviewConsent'], $_POST['virtualConsent'], $_POST['signature'], $_POST['appointmentId']); break;
-		case 'isAppointmentValid': isAppointmentValid($_GET['appointmentId']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -238,32 +237,6 @@ function submitConsent($reviewConsent, $virtualConsent, $signature, $appointment
 	}
 
 	print json_encode($response);
-}
-
-function isAppointmentValid($appointmentId) {
-	GLOBAL $DB_CONN;
-
-	$response = array();
-	$response['success'] = true;
-
-	try {
-		$query = 'SELECT archived
-			FROM Appointment
-			WHERE appointmentId = ?';
-
-		$stmt = $DB_CONN->prepare($query);
-		$stmt->execute(array($appointmentId));
-		$row = $stmt->fetch();
-
-		$appointmentExists = (bool)$row !== false;
-		$response['exists'] = $appointmentExists;
-		$response['archived'] = $appointmentExists ? $row['archived'] : null;
-	} catch (Exception $e) {
-		$response['success'] = false;
-		$response['error'] = 'There was an error on the server validating the appointment. Please refresh the page and try again';
-	}
-
-	echo json_encode($response);
 }
 
 /* 
