@@ -19,6 +19,7 @@ TRUNCATE Login;
 TRUNCATE PasswordReset;
 TRUNCATE LoginHistory;
 TRUNCATE User;
+TRUNCATE VirtualAppointmentConsent;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- users
@@ -118,7 +119,7 @@ SET @site_virtualId = LAST_INSERT_ID();
 
 -- client
 INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
-	VALUES ("Clienty", "McClientFace", "402-555-1234", "clientmcclientface@test.test");
+	VALUES ("Clienty", "McClientFace", "402-555-1234", "clientymcclientface@test.test");
 SET @client_client1Id = LAST_INSERT_ID();
 
 INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
@@ -564,6 +565,36 @@ INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
 INSERT INTO Answer (possibleAnswerId, appointmentId, questionId)
 	VALUES (@possibleAnswer_nonTreatyId, @appointment_nonTreatyId, @question_question6Id);
 -- end answer
+
+
+
+-- virtualAppointmentConsent 
+INSERT INTO VirtualAppointmentConsent (reviewConsent, virtualConsent, signature, appointmentId)
+	VALUES (0, 1, "test_signature_one", @appointment_appointment1Id);
+INSERT INTO VirtualAppointmentConsent (reviewConsent, virtualConsent, signature, appointmentId)
+	VALUES (1, 1, "test_signature test_last", @appointment_appointment2Id);
+INSERT INTO VirtualAppointmentConsent (reviewConsent, virtualConsent, signature, appointmentId)
+	VALUES (1, 0, "Barry Test", @appointment_appointment3Id);
+INSERT INTO VirtualAppointmentConsent (reviewConsent, virtualConsent, signature, appointmentId)
+	VALUES (0, 0, "signature fo\' testing", @appointment_appointment4Id);
+INSERT INTO VirtualAppointmentConsent (reviewConsent, virtualConsent, signature, appointmentId)
+	VALUES (0, 1, "", @appointment_appointment5Id);
+-- end virtualAppointmentConsent
+
+
+
+-- selfserviceappointmentrescheduletoken
+INSERT INTO SelfServiceAppointmentRescheduleToken (token, appointmentId)
+	VALUES ("c4ca4238a0b923820dcc509a6f75849b", @appointment_appointment1Id);
+INSERT INTO SelfServiceAppointmentRescheduleToken (token, appointmentId)
+	VALUES ("c81e728d9d4c2f636f067f89cc14862c", @appointment_appointment2Id);
+INSERT INTO SelfServiceAppointmentRescheduleToken (token, appointmentId)
+	VALUES ("eccbc87e4b5ce2fe28308fd9f2a7baf3", @appointment_appointment3Id);
+INSERT INTO SelfServiceAppointmentRescheduleToken (token, appointmentId)
+	VALUES ("a87ff679a2f3e71d9181a67b7542122c", @appointment_appointment4Id);
+INSERT INTO SelfServiceAppointmentRescheduleToken (token, appointmentId)
+	VALUES ("e4da3b7fbbce2345d7772b0674a318d5", @appointment_appointment5Id);
+-- end selfserviceappointmentrescheduletoken
 
 
 -- load testing for Appointments

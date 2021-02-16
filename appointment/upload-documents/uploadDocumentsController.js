@@ -49,13 +49,19 @@ define('uploadDocumentsController', [], function() {
 		const ACCEPTABLE_FILE_EXTENSIONS = ['.pdf', '.jpeg', '.jpg', '.png'];
 
 		$scope.submitConsent = () => {
+			const token = $scope.token;
+			const firstName = $scope.clientData.firstName || '';
+			const lastName = $scope.clientData.lastName || '';
+			const emailAddress = $scope.clientData.email || '';
+			const phoneNumber = $scope.clientData.phone || '';
+			
 			const reviewConsent = $scope.consentData.reviewConsent;
 			const virtualConsent = $scope.consentData.virtualConsent;
 			const signature = $scope.consentData.signature;
 			const appointmentId =  $scope.appointmentId;
 
 			if(virtualConsent === true && signature != null && signature.trim() !== '') {
-				UploadDocumentsDataService.submitConsent(reviewConsent, virtualConsent, signature, appointmentId).then((response) => {
+				UploadDocumentsDataService.submitConsent(token, firstName, lastName, emailAddress, phoneNumber, reviewConsent, virtualConsent, signature, appointmentId).then((response) => {
 					if (typeof response !== 'undefined' && response && response.success){
 						$scope.consentData.completedConsent = response.consented;
 						document.body.scrollTop = document.documentElement.scrollTop = 0;

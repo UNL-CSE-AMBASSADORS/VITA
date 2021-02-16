@@ -70,14 +70,19 @@ define('uploadDocumentsDataService', [], function($http) {
 					return null;
 				});
 			},
-			submitConsent: function(reviewConsent, virtualConsent, signature, appointmentId) {
+			submitConsent: function(token, firstName, lastName, emailAddress, phoneNumber, reviewConsent, virtualConsent, signature, appointmentId) {
 				return $http({
 					url: '/server/appointment/upload-documents/uploadDocuments.php',
 					method: 'POST',
 					data: 'action=submitConsent' +
+						`&token=${token}` +
+						`&firstName=${firstName}` +
+						`&lastName=${lastName}` +
+						`&emailAddress=${emailAddress}` + 
+						`&phoneNumber=${phoneNumber}` +
 						`&reviewConsent=${reviewConsent}` +
-						`&virtualConsent=${virtualConsent}`+
-						`&signature=${signature}`+
+						`&virtualConsent=${virtualConsent}` +
+						`&signature=${signature}` +
 						`&appointmentId=${appointmentId}`,
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded'
