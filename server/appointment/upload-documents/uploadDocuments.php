@@ -6,7 +6,6 @@ require_once "$root/server/config.php";
 require_once "$root/vendor/autoload.php";
 require_once "$root/server/utilities/emailUtilities.class.php";
 require_once "$root/server/utilities/appointmentTypeUtilities.class.php";
-require_once "$root/server/accessors/appointmentAccessor.class.php";
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 
@@ -18,13 +17,13 @@ if (isset($_REQUEST['action'])) {
 		case 'validateClientInformation': isClientInformationValid($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'upload': uploadDocument($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'markAppointmentAsReady': markAppointmentAsReady($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
-		case 'storeConsent': storeConsent($_POST['reviewConsent'], $_POST['virtualConsent'], $_POST['signature'], $_POST['appointmentId']); break;
+		case 'submitConsent': submitConsent($_POST['reviewConsent'], $_POST['virtualConsent'], $_POST['signature'], $_POST['appointmentId']); break;
+		case 'isAppointmentValid': isAppointmentValid($_GET['appointmentId']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
 	}
 }
-
 
 function doesTokenExist($token) {
 	GLOBAL $DB_CONN;
@@ -64,7 +63,11 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 			$response['appointmentTimeStr'] = $clientInformation['appointmentTimeStr'];
 			$response['uploadDeadlineStr'] = $clientInformation['uploadDeadlineStr'];
 			$response['appointmentId'] = $clientInformation['appointmentId'];
-			$response['consented'] = $clientInformation['consented'];
+			
+			$reviewConsent = $clientInformation['reviewConsent'];
+			$virtualConsent  = $clientInformation['virtualConsent'];
+			$signature  = $clientInformation['signature'];
+			$response['consented'] = validateConsent($reviewConsent, $virtualConsent, $signature, $response['appointmentId']);
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -211,31 +214,56 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 	echo json_encode($response);
 }
 
-function storeConsent($reviewConsent, $virtualConsent, $signature, $appointmentId) {
+function submitConsent($reviewConsent, $virtualConsent, $signature, $appointmentId) {
 	GLOBAL $DB_CONN;
 
 	$response = array();
 	$response['success'] = false;
-	
-	if($virtualConsent === 'true' && $virtualConsent !== null && $signature !== null && $signature !== '' && $appointmentId !== null) {
+	$response['consented'] = false;
+
+	if($virtualConsent != null && $virtualConsent === 'true' && $signature != null && trim($signature) !== '' && $appointmentId != null) {
 		$reviewConsent = $reviewConsent === 'true' ? 1 : 0;
 		$virtualConsent = $virtualConsent === 'true' ? 1 : 0;
 		try {
-			$DB_CONN->beginTransaction();
-
 			insertConsent($reviewConsent, $virtualConsent, $signature, $appointmentId);
 			$DB_CONN->commit();
 
 			$response['success'] = true;
+			$response['consented'] = true;
 		} catch (Exception $e) {
-			$DB_CONN->rollback();
 			$response['message'] = 'An error occurred while trying to record your consent. Please try again in a few minutes.';
 		}
 	} else {
-		$response['message'] = 'Your consent information was not found to be valid. Please try again in a few minutes.';
+		$response['message'] = 'Your consent information was not found to be valid. Please check your information and try again.';
 	}
 
 	print json_encode($response);
+}
+
+function isAppointmentValid($appointmentId) {
+	GLOBAL $DB_CONN;
+
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		$query = 'SELECT archived
+			FROM Appointment
+			WHERE appointmentId = ?';
+
+		$stmt = $DB_CONN->prepare($query);
+		$stmt->execute(array($appointmentId));
+		$row = $stmt->fetch();
+
+		$appointmentExists = (bool)$row !== false;
+		$response['exists'] = $appointmentExists;
+		$response['archived'] = $appointmentExists ? $row['archived'] : null;
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = 'There was an error on the server validating the appointment. Please refresh the page and try again';
+	}
+
+	echo json_encode($response);
 }
 
 /* 
@@ -253,6 +281,9 @@ function insertConsent($reviewConsent, $virtualConsent, $signature, $appointment
 	if(!$stmt->execute($consentParams)){
 		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
 	}
+}
+function validateConsent($reviewConsent, $virtualConsent, $signature, $appointmentId) {
+	return ($virtualConsent != null && $virtualConsent === 'true' && $signature != null && trim($signature) !== '' && $appointmentId != null);
 }
 
 function validateForm14446HasChanged($uploadedFileTempName) {
@@ -332,8 +363,7 @@ function getClientInformationFromToken($token) {
 			DATE_FORMAT(DATE_SUB(AppointmentTime.scheduledTime, INTERVAL 7 DAY), "%W, %M %D") AS uploadDeadlineStr,
 			AppointmentTime.scheduledTime, Appointment.appointmentId, Appointment.language,
 			AppointmentTime.siteId, AppointmentType.lookupName AS appointmentType, Site.title,
-			(VirtualAppointmentConsent.virtualConsent = 1 AND NOT (VirtualAppointmentConsent.signature IS NULL OR /*column is set to NOT NULL. Left it to be sure*/
-			VirtualAppointmentConsent.signature = \'\')) as consented
+			VirtualAppointmentConsent.virtualConsent, VirtualAppointmentConsent.reviewConsent, VirtualAppointmentConsent.signature
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId

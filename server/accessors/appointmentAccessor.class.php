@@ -20,19 +20,6 @@ class AppointmentAccessor {
 			throw new Exception('Unable to cancel the appointment.', MY_EXCEPTION);
 		}
 	}
-	public function addVirtualAppointmentConsentId($appointmentId, $virtualAppointmentConsentId) {
-		GLOBAL $DB_CONN;
-
-		$query = "UPDATE Appointment
-			SET virtualAppointmentConsentId = ?
-			WHERE appointmentId = ?";
-
-		$stmt = $DB_CONN->prepare($query);
-		$success = $stmt->execute(array($virtualAppointmentConsentId, $appointmentId));
-		if ($success == false) {
-			throw new Exception('Unable to upload consent records.', MY_EXCEPTION);
-		}
-	}
 
 	public function rescheduleAppointment($appointmentId, $appointmentTimeId) {
 		GLOBAL $DB_CONN;

@@ -48,16 +48,25 @@ define('uploadDocumentsController', [], function() {
 		const ACCEPTABLE_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 		const ACCEPTABLE_FILE_EXTENSIONS = ['.pdf', '.jpeg', '.jpg', '.png'];
 
-		$scope.storeConsent = () => {
+		$scope.submitConsent = () => {
+			const appointmentId =  $scope.appointmentId;
+			//const appointmentIsValid = await $scope.isAppointmentValid(appointmentId);
+			//console.log("appointmentIsValid is " + response.appointmentIsValid);
+			if(!$scope.isAppointmentValid(appointmentId)) {
+				// NotificationUtilities.giveNotice('Success', 'Your consent has been recorded and you are now ready to upload your documents!');
+				console.log("not valid, returing."+appointmentId)
+				return;
+			}
+			console.log("valid, didn't return auto"+appointmentId)
+
 			const reviewConsent = $scope.consentData.reviewConsent;
 			const virtualConsent = $scope.consentData.virtualConsent;
 			const signature = $scope.consentData.signature;
-			const appointmentId =  $scope.appointmentId;
 
-			if(virtualConsent === true && signature != null) {
-				UploadDocumentsDataService.storeConsent(reviewConsent, virtualConsent, signature, appointmentId).then((response) => {
+			if(virtualConsent === true && signature != null && signature.trim() !== '') {
+				UploadDocumentsDataService.submitConsent(reviewConsent, virtualConsent, signature, appointmentId).then((response) => {
 					if (typeof response !== 'undefined' && response && response.success){
-						$scope.consentData.completedConsent = response.consented == 1;
+						$scope.consentData.completedConsent = response.consented;
 						document.body.scrollTop = document.documentElement.scrollTop = 0;
 						NotificationUtilities.giveNotice('Success', 'Your consent has been recorded and you are now ready to upload your documents!');
 					} else {
@@ -67,6 +76,35 @@ define('uploadDocumentsController', [], function() {
 			} else {
 				NotificationUtilities.giveNotice('Failure', 'Invalid input. Please make sure you have consented to virtual preparation and typed your signature.', false);
 			}
+		};
+
+		$scope.isAppointmentValid = function(appointmentId) {
+			console.log("Starting isAppointmentValid");
+			if (!appointmentId || appointmentId < 0) {
+				console.log("exiting valid function because null or less than 0"+appointmentId);
+				return false;
+			}
+
+			var appointmentIsValid = false;
+
+			UploadDocumentsDataService.isAppointmentValid(appointmentId).then((result) => {
+				if (result == null) {
+					console.log("SERVICE RESULT NULL, SHOULD GIVE NOTICE");
+					NotificationUtilities.giveNotice('Failure', 'There was an error loading appointment information. Please refresh and try again.', false);
+					appointmentIsValid = null;
+				} else if (result.archived == 1) {
+					console.log("SERVICE RESULT ARCHIVED, SHOULD GIVE NOTICE");
+					NotificationUtilities.giveNotice('Failure', 'Sorry, but your appointment appears to be canceled.', false);
+					appointmentIsValid = false;
+				} else {
+					console.log("returning result.exists is "+result.exists);
+					appointmentIsValid = result.exists || false;
+				}
+				console.log("end service.isAppointmentValid, appointmentIsValid is " +appointmentIsValid);
+			});
+			console.log("after service.isAppointmentValid, controller function to return appointmentIsValid is " +appointmentIsValid);
+
+			return appointmentIsValid;
 		};
 
 		$scope.doesTokenExist = function(token) {
@@ -117,7 +155,7 @@ define('uploadDocumentsController', [], function() {
 						$scope.appointmentTimeStr = response.appointmentTimeStr;
 						$scope.uploadDeadlineStr = response.uploadDeadlineStr.toUpperCase();
 						$scope.appointmentId = response.appointmentId;
-						$scope.consentData.completedConsent = response.consented == 1;
+						$scope.consentData.completedConsent = response.consented;
 					}
 				}
 

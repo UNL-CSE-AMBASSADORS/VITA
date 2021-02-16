@@ -70,11 +70,11 @@ define('uploadDocumentsDataService', [], function($http) {
 					return null;
 				});
 			},
-			storeConsent: function(reviewConsent, virtualConsent, signature, appointmentId) {
+			submitConsent: function(reviewConsent, virtualConsent, signature, appointmentId) {
 				return $http({
 					url: '/server/appointment/upload-documents/uploadDocuments.php',
 					method: 'POST',
-					data: 'action=storeConsent' +
+					data: 'action=submitConsent' +
 						`&reviewConsent=${reviewConsent}` +
 						`&virtualConsent=${virtualConsent}`+
 						`&signature=${signature}`+
@@ -83,6 +83,13 @@ define('uploadDocumentsDataService', [], function($http) {
 						'Content-Type': 'application/x-www-form-urlencoded'
 					}
 				}).then((response) => {
+					return response.data;
+				}, (error) => {
+					return null;
+				});
+			},
+			isAppointmentValid: function(appointmentId) {
+				return $http.get(`/server/appointment/upload-documents/uploadDocuments.php?action=isAppointmentValid&appointmentId=${appointmentId}`).then((response) => {
 					return response.data;
 				}, (error) => {
 					return null;

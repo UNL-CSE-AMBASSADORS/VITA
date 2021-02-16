@@ -114,7 +114,7 @@
 				</ol>
 				
 				<p class="dcf-txt-h5 dcf-bold">Part III: Taxpayer Consents:</p>
-				<form class="cmxform dcf-form" id="vitaConsentForm" name="consentForm" ng-submit="storeConsent()" autocomplete="off" novalidate>
+				<form class="cmxform dcf-form" id="vitaConsentForm" name="consentForm" ng-submit="submitConsent()" autocomplete="off" novalidate>
 					<p class="dcf-bold">Request to Review your Tax Return for Accuracy:</p>	
 					<p>To ensure you are receiving quality services and an accurately prepared tax return at the volunteer site,
 						IRS employees randomly select free tax preparation sites for review. If errors are identified, the site
@@ -204,7 +204,7 @@
 					<input type="submit" 
 						value="Submit" 
 						class="submit dcf-btn dcf-btn-primary dcf-mt-4" 
-						ng-disabled="!consentData.virtualConsent == true || consentData.reviewConsent == null || consentData.signature == null || consentData.signature == ''" />
+						ng-disabled="consentData.virtualConsent != true || consentData.reviewConsent == null || consentData.signature == null || consentData.signature.trim() == ''" />
 				</form>
 			</div>
 
