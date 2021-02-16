@@ -20,8 +20,12 @@ define('uploadDocumentsController', [], function() {
 			signature: null,
 			completedConsent: null // will be updated to T/F when client data is validated 
 		};
-
 		$scope.appointmentId = null;
+
+		// Ready button variables
+		$scope.readyCheckbox = {
+			checked: false
+		};
 		$scope.submittingAppointmentReady = false;
 		$scope.appointmentMarkedAsReadySuccessfully = false;
 

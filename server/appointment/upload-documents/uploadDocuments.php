@@ -200,7 +200,7 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 					<b>Site:</b> $siteName".(AppointmentTypeUtilities::isVirtualAppointmentType($appointmentType) ? " (Please do not show up to the site for your virtual appointment)" : "")."<br/>
 					<b>Your Phone Number:</b> $phoneNumber <br/>
 					<b>Your Chosen Best Time to Call:</b> $bestTimeToCall <br/> 
-					<b>Your Preferred Language:</b> $preferredLanguage <br/>";
+					<b>Your Preferred Language:</b> $preferredLanguage";
 				EmailUtilities::sendHtmlFormattedEmail($emailAddress, 'Your VITA Appointment is Marked as Ready', $clientMessage);
 			}
 		}
