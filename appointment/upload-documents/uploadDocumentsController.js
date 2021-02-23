@@ -13,11 +13,14 @@ define('uploadDocumentsController', [], function() {
 		$scope.invalidClientInformation = false;
 		$scope.isResidentialAppointment = true;
 
-		// Agree to virtual preparation variables
-		// For some reason, you can't bind the checkbox to a primitive boolean, it has to be in an object: https://stackoverflow.com/a/23943930
-		$scope.agreeToVirtualPreparationCheckbox = {
-			checked: false
+		// Consent variables
+		$scope.consentData = {
+			reviewConsent: null,
+			virtualConsent: null,
+			signature: null,
+			completedConsent: null // will be updated to T/F when client data is validated 
 		};
+		$scope.appointmentId = null;
 
 		// Ready button variables
 		$scope.readyCheckbox = {
@@ -49,6 +52,33 @@ define('uploadDocumentsController', [], function() {
 		const ACCEPTABLE_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 		const ACCEPTABLE_FILE_EXTENSIONS = ['.pdf', '.jpeg', '.jpg', '.png'];
 
+		$scope.submitConsent = () => {
+			const token = $scope.token;
+			const firstName = $scope.clientData.firstName || '';
+			const lastName = $scope.clientData.lastName || '';
+			const emailAddress = $scope.clientData.email || '';
+			const phoneNumber = $scope.clientData.phone || '';
+			
+			const reviewConsent = $scope.consentData.reviewConsent;
+			const virtualConsent = $scope.consentData.virtualConsent;
+			const signature = $scope.consentData.signature;
+			const appointmentId =  $scope.appointmentId;
+
+			if(virtualConsent === true && signature != null && signature.trim() !== '') {
+				UploadDocumentsDataService.submitConsent(token, firstName, lastName, emailAddress, phoneNumber, reviewConsent, virtualConsent, signature, appointmentId).then((response) => {
+					if (typeof response !== 'undefined' && response && response.success){
+						$scope.consentData.completedConsent = response.consented;
+						document.body.scrollTop = document.documentElement.scrollTop = 0;
+						NotificationUtilities.giveNotice('Success', 'Your consent has been recorded and you are now ready to upload your documents!');
+					} else {
+						NotificationUtilities.giveNotice('Failure', response.message, false);
+					}
+				});
+			} else {
+				NotificationUtilities.giveNotice('Failure', 'Invalid input. Please make sure you have consented to virtual preparation and typed your signature.', false);
+			}
+		};
+
 		$scope.doesTokenExist = function(token) {
 			if (!token || 0 === token.length || EXPECTED_TOKEN_LENGTH !== token.length) {
 				$scope.tokenExists = false;
@@ -76,7 +106,7 @@ define('uploadDocumentsController', [], function() {
 				return;
 			}
 			$scope.validatingClientInformation = true;
-			
+
 			const token = $scope.token;
 			const firstName = $scope.clientData.firstName || '';
 			const lastName = $scope.clientData.lastName || '';
@@ -96,6 +126,8 @@ define('uploadDocumentsController', [], function() {
 						$scope.isResidentialAppointment = response.residentialAppointment;
 						$scope.appointmentTimeStr = response.appointmentTimeStr;
 						$scope.uploadDeadlineStr = response.uploadDeadlineStr.toUpperCase();
+						$scope.appointmentId = response.appointmentId;
+						$scope.consentData.completedConsent = response.consented;
 					}
 				}
 

@@ -1,3 +1,14 @@
+.form-textfield,
+.form-radio,
+.form-select {
+	list-style-type: none;
+}
+
+.cant-help-text {
+	color: #d00000;
+	font-weight: bold;
+}
+
 .form-textfield .dcf-input-text {
 	width: 100%;
 }
