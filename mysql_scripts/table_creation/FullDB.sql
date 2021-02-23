@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS FilingStatus;
 DROP TABLE IF EXISTS ServicedAppointment;
 DROP TABLE IF EXISTS SelfServiceAppointmentRescheduleToken;
 DROP TABLE IF EXISTS Note;
+DROP TABLE IF EXISTS VirtualAppointmentConsent;
 DROP TABLE IF EXISTS Appointment;
 DROP TABLE IF EXISTS AppointmentTime;
 DROP TABLE IF EXISTS AppointmentType;
@@ -188,4 +189,15 @@ CREATE TABLE UserPermission (
 	permissionId INTEGER UNSIGNED NOT NULL,
 	FOREIGN KEY(permissionId) REFERENCES Permission(permissionId),
 	CONSTRAINT UNIQUE unique_permission (userId, permissionId)
+);
+
+CREATE TABLE VirtualAppointmentConsent (
+	virtualAppointmentConsentId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	createdAt DATETIME NOT NULL DEFAULT NOW(),
+	reviewConsent BOOLEAN NOT NULL,
+	virtualConsent BOOLEAN NOT NULL, /* virtual is a keyword */
+    signature VARCHAR(255) NOT NULL,
+    appointmentId INTEGER UNSIGNED NOT NULL,
+    CONSTRAINT UNIQUE unique_appointment_id (appointmentId),
+    FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId)
 );

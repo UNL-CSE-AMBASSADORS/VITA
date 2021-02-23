@@ -111,7 +111,6 @@ define('signupController', [], function() {
 					document.body.scrollTop = document.documentElement.scrollTop = 0;
 					$scope.appointmentId = response.appointmentId;
 					$scope.successMessage = $sce.trustAsHtml(response.message);
-					NotificationUtilities.giveNotice('Success', 'You have successfully scheduled an appointment!');
 
 					// Send the confirmation email
 					if ($scope.data.email != null && $scope.data.email.length > 0) {
@@ -133,7 +132,7 @@ define('signupController', [], function() {
 			SignupService.emailConfirmation(data).then(function(response) {
 				if (typeof response !== 'undefined' && response){
 					if (response.success) {
-						NotificationUtilities.giveNotice('Success', 'A confirmation email has been sent!');
+						NotificationUtilities.giveNotice('Success', 'A confirmation email for your scheduled appointment has been sent!');
 					} else {
 						NotificationUtilities.giveNotice('Failure', response.error, false);
 					}

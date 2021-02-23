@@ -69,6 +69,29 @@ define('uploadDocumentsDataService', [], function($http) {
 				}, (error) => {
 					return null;
 				});
+			},
+			submitConsent: function(token, firstName, lastName, emailAddress, phoneNumber, reviewConsent, virtualConsent, signature, appointmentId) {
+				return $http({
+					url: '/server/appointment/upload-documents/uploadDocuments.php',
+					method: 'POST',
+					data: 'action=submitConsent' +
+						`&token=${token}` +
+						`&firstName=${firstName}` +
+						`&lastName=${lastName}` +
+						`&emailAddress=${emailAddress}` + 
+						`&phoneNumber=${phoneNumber}` +
+						`&reviewConsent=${reviewConsent}` +
+						`&virtualConsent=${virtualConsent}` +
+						`&signature=${signature}` +
+						`&appointmentId=${appointmentId}`,
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}
+				}).then((response) => {
+					return response.data;
+				}, (error) => {
+					return null;
+				});
 			}
 		};
 	}

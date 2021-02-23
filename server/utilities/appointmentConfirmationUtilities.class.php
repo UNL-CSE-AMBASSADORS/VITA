@@ -30,9 +30,8 @@ class AppointmentConfirmationUtilities {
 				$message .= self::residentialInformation();
 			}
 			$message .= self::miscellaneousInformation();
-			$message .= self::selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken);
 		}
-	
+		$message .= self::selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken);
 		return $message;
 	}
 
@@ -75,7 +74,7 @@ class AppointmentConfirmationUtilities {
 				Please visit <a href='$uploadDocumentsLink' target='_blank'>the upload documents page</a> to upload the necessary documents to have your taxes prepared. 
 				If the link is not working, you can copy and paste this link into your browser: $uploadDocumentsLink";
 	}
-	
+
 	private static function introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber) {
 		return "<h2>Appointment Confirmation</h2>
 				$firstName, thank you for signing up! Your appointment will be located at the $siteTitle site ($siteAddress). 
@@ -148,6 +147,6 @@ class AppointmentConfirmationUtilities {
 		$selfServiceAppointmentRescheduleLink = "https://$serverName/appointment/reschedule?token=$selfServiceAppointmentRescheduleToken";
 		return "<h2>Rescheduling or Cancelling Your Appointment</h2>
 				You can reschedule or cancel your appointment by visiting 
-				<a href='$selfServiceAppointmentRescheduleLink' target='_blank'>the appointment reschedule page</a>";
+				<a href='$selfServiceAppointmentRescheduleLink' target='_blank'>the appointment reschedule page.</a>";
 	}
 }

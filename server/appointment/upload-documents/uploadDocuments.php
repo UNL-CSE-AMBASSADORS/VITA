@@ -17,12 +17,12 @@ if (isset($_REQUEST['action'])) {
 		case 'validateClientInformation': isClientInformationValid($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'upload': uploadDocument($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
 		case 'markAppointmentAsReady': markAppointmentAsReady($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber']); break;
+		case 'submitConsent': submitConsent($_POST['token'], $_POST['firstName'], $_POST['lastName'], $_POST['emailAddress'], $_POST['phoneNumber'], $_POST['reviewConsent'], $_POST['virtualConsent'], $_POST['signature'], $_POST['appointmentId']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
 	}
 }
-
 
 function doesTokenExist($token) {
 	GLOBAL $DB_CONN;
@@ -61,6 +61,11 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 			$response['residentialAppointment'] = AppointmentTypeUtilities::isResidentialAppointmentType($clientInformation['appointmentType']);
 			$response['appointmentTimeStr'] = $clientInformation['appointmentTimeStr'];
 			$response['uploadDeadlineStr'] = $clientInformation['uploadDeadlineStr'];
+			$response['appointmentId'] = $clientInformation['appointmentId'];
+
+			$virtualConsent = $clientInformation['virtualConsent'];
+			$signature = $clientInformation['signature'];
+			$response['consented'] = hasConsentedToVirtualPreparation($virtualConsent, $signature, $response['appointmentId']);
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -172,12 +177,12 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 		$preferredLanguage = $clientInformation['language'];
 		$siteName = $clientInformation['title'];
 
-		// Email volunteers saying it's ready to go
 		if (PROD) {
+			// Email volunteers saying it's ready to go
 			$siteId = $clientInformation['siteId'];
 			$toEmailString = getToEmailString($siteId);
 
-			$readyMessage = "A client has marked their appointment as ready: <br/>
+			$volunteerMessage = "A client has marked their appointment as ready: <br/>
 				<b>First Name:</b> $firstName <br/>
 				<b>Last Name:</b> $lastName <br/>
 				<b>Site:</b> $siteName <br/>
@@ -187,7 +192,17 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 				<b>Preferred Language:</b> $preferredLanguage <br/>
 				<b>Email (if provided):</b> $emailAddress <br/>
 				<b>Type:</b> $appointmentType";
-			EmailUtilities::sendHtmlFormattedEmail($toEmailString, 'VITA -- Appointment Ready', $readyMessage);
+			EmailUtilities::sendHtmlFormattedEmail($toEmailString, 'VITA -- Appointment Ready', $volunteerMessage);
+
+			if(!empty($emailAddress)) {
+				// Email client confirmation
+				$clientMessage = "Congratulations, $firstName $lastName, you have successfully marked your appointment as ready!<br/>
+					<b>Site:</b> $siteName".(AppointmentTypeUtilities::isVirtualAppointmentType($appointmentType) ? " (Please do not show up to the site for your virtual appointment)" : "")."<br/>
+					<b>Your Phone Number:</b> $phoneNumber <br/>
+					<b>Your Chosen Best Time to Call:</b> $bestTimeToCall <br/> 
+					<b>Your Preferred Language:</b> $preferredLanguage";
+				EmailUtilities::sendHtmlFormattedEmail($emailAddress, 'Your VITA Appointment is Marked as Ready', $clientMessage);
+			}
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -197,9 +212,52 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 	echo json_encode($response);
 }
 
+function submitConsent($token, $firstName, $lastName, $emailAddress, $phoneNumber, $reviewConsent, $virtualConsent, $signature, $appointmentId) {	
+	$response = array();
+	$response['success'] = false;
+	$response['consented'] = false;
+
+	try {
+		$clientInformation = validateClientInformation($token, $firstName, $lastName, $emailAddress, $phoneNumber);
+
+		if($virtualConsent != null && $virtualConsent === 'true' && $signature != null && trim($signature) !== '' && $appointmentId != null) {
+			$reviewConsent = $reviewConsent === 'true' ? 1 : 0;
+			$virtualConsent = $virtualConsent === 'true' ? 1 : 0;
+			insertConsent($reviewConsent, $virtualConsent, $signature, $appointmentId);
+
+			$response['success'] = true;
+			$response['consented'] = true;
+		} else {
+			$response['message'] = 'Your consent input was not found to be valid. Please check your information and try again.';
+		}
+	} catch (exception $e) {
+		$response['success'] = false;
+		$response['message'] = $e->getCode() === MY_EXCEPTION ? $e->getMessage() : 'There was an error on the server submitting your consent. Please refresh the page and try again. If you believe
+			have already submitted your consent, please reach out to vita@cse.unl.edu.';
+	}
+
+	print json_encode($response);
+}
+
 /* 
  * Private functions
  */
+
+function insertConsent($reviewConsent, $virtualConsent, $signature, $appointmentId) {
+	GLOBAL $DB_CONN;
+
+	$consentInsert = 'INSERT INTO VirtualAppointmentConsent (reviewConsent, virtualConsent, signature, appointmentId)
+		VALUES (?, ?, ?, ?)';
+	$consentParams = array($reviewConsent, $virtualConsent, $signature, $appointmentId);
+
+	$stmt = $DB_CONN->prepare($consentInsert);
+	if(!$stmt->execute($consentParams)){
+		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
+	}
+}
+function hasConsentedToVirtualPreparation($virtualConsent, $signature, $appointmentId) {
+	return ($virtualConsent != null && $virtualConsent === "1" && $signature != null && trim($signature) !== '' && $appointmentId != null);
+}
 
 function validateForm14446HasChanged($uploadedFileTempName) {
 	GLOBAL $root;
@@ -272,17 +330,20 @@ function validateClientInformation($token, $firstName, $lastName, $emailAddress,
 function getClientInformationFromToken($token) {
 	GLOBAL $DB_CONN;
 
+	// LEFT JOIN consent so that if consent isn't found, it still returns the rest of the info
 	$query = 'SELECT Client.firstName, Client.lastName, Client.emailAddress, Client.phoneNumber, Client.bestTimeToCall, 
 			DATE_FORMAT(AppointmentTime.scheduledTime, "%W, %M %D at %l:%i %p") AS appointmentTimeStr, 
 			DATE_FORMAT(DATE_SUB(AppointmentTime.scheduledTime, INTERVAL 7 DAY), "%W, %M %D") AS uploadDeadlineStr,
 			AppointmentTime.scheduledTime, Appointment.appointmentId, Appointment.language,
-			AppointmentTime.siteId, AppointmentType.lookupName AS appointmentType, Site.title
+			AppointmentTime.siteId, AppointmentType.lookupName AS appointmentType, Site.title,
+			VirtualAppointmentConsent.reviewConsent, VirtualAppointmentConsent.virtualConsent, VirtualAppointmentConsent.signature
 		FROM SelfServiceAppointmentRescheduleToken
 			JOIN Appointment ON SelfServiceAppointmentRescheduleToken.appointmentId = Appointment.appointmentId
 			JOIN Client ON Appointment.clientId = Client.clientId
 			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
 			JOIN AppointmentType ON AppointmentTime.appointmentTypeId = AppointmentType.appointmentTypeId
 			JOIN Site ON AppointmentTime.siteId = Site.siteId
+			LEFT JOIN VirtualAppointmentConsent ON Appointment.appointmentId = VirtualAppointmentConsent.appointmentId
 		WHERE token = ?';
 
 	$stmt = $DB_CONN->prepare($query);
@@ -310,31 +371,31 @@ function doesClientInformationMatch($clientInformation, $firstName, $lastName, $
 
 // container/blob naming rules here https://docs.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
 function getContainerName($siteId) {
-	if($siteId === 1) {
+	if($siteId == 1) {
 		return 'nebraska-east-union';
-	} else if ($siteId === 2) {
+	} else if ($siteId == 2) {
 		return 'victor-e-anderson-library';
-	} else if ($siteId === 3) {
+	} else if ($siteId == 3) {
 		return 'jackie-gaughan-multicultural-center';
-	} else if ($siteId === 4) {
+	} else if ($siteId == 4) {
 		return 'international-student-scholar';
-	} else if ($siteId === 5) {
+	} else if ($siteId == 5) {
 		return 'center-for-people-in-need';
-	} else if ($siteId === 6) {
+	} else if ($siteId == 6) {
 		return 'loren-eiseley-library';
-	} else if ($siteId === 7) {
+	} else if ($siteId == 7) {
 		return 'bennett-martin-library';
-	} else if ($siteId === 8) {
+	} else if ($siteId == 8) {
 		return 'f-street-community-center';
-	} else if ($siteId === 9) {
+	} else if ($siteId == 9) {
 		return 'community-hope-federal-credit';
-	} else if ($siteId === 10) {
+	} else if ($siteId == 10) {
 		return 'southeast-community-college';
-	} else if ($siteId === 11) {
+	} else if ($siteId == 11) {
 		return 'nebraska-union';
-	} else if ($siteId === 12) {
+	} else if ($siteId == 12) {
 		return 'virtual-vita';
-	} else if ($siteId === 13) {
+	} else if ($siteId == 13) {
 		return 'student-athlete-virtual-site';
 	} else if ($siteId == 14) {
 		return 'asian-community-and-cultural-center';
@@ -343,33 +404,33 @@ function getContainerName($siteId) {
 }
 
 function getToEmailString($siteId) {
-	if($siteId === 1) {
+	if($siteId == 1) {
 		return 'vita@unl.edu';
-	} else if ($siteId === 2) {
+	} else if ($siteId == 2) {
 		return 'anderson-vita@unl.edu';
-	} else if ($siteId === 3) {
+	} else if ($siteId == 3) {
 		return 'vita@unl.edu';
-	} else if ($siteId === 4) {
+	} else if ($siteId == 4) {
 		return 'international-vita@unl.edu';
-	} else if ($siteId === 5) {
+	} else if ($siteId == 5) {
 		return 'cpn-vita@unl.edu';
-	} else if ($siteId === 6) {
+	} else if ($siteId == 6) {
 		return 'eiseley-vita@unl.edu';
-	} else if ($siteId === 7) {
+	} else if ($siteId == 7) {
 		return 'bm-vita@unl.edu';
-	} else if ($siteId === 8) {
+	} else if ($siteId == 8) {
 		return 'fstreet-vita@unl.edu';
-	} else if ($siteId === 9) {
+	} else if ($siteId == 9) {
 		return 'vita@unl.edu';
-	} else if ($siteId === 10) {
+	} else if ($siteId == 10) {
 		return 'scc-vita@unl.edu';
-	} else if ($siteId === 11) {
+	} else if ($siteId == 11) {
 		return 'vita@unl.edu';
-	} else if ($siteId === 12) {
+	} else if ($siteId == 12) {
 		return 'vita@unl.edu';
-	} else if ($siteId === 13) {
+	} else if ($siteId == 13) {
 		return 'international-vita@unl.edu';
-	} else if ($siteId === 14) {
+	} else if ($siteId == 14) {
 		return 'accc-vita@unl.edu';
 	}
 	return 'vita@unl.edu';
