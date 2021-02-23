@@ -65,7 +65,7 @@ function isClientInformationValid($token, $firstName, $lastName, $emailAddress, 
 
 			$virtualConsent = $clientInformation['virtualConsent'];
 			$signature = $clientInformation['signature'];
-			$response['consented'] = validateConsent($virtualConsent, $signature, $response['appointmentId']);
+			$response['consented'] = hasConsentedToVirtualPreparation($virtualConsent, $signature, $response['appointmentId']);
 		}
 	} catch (Exception $e) {
 		$response['success'] = false;
@@ -255,7 +255,7 @@ function insertConsent($reviewConsent, $virtualConsent, $signature, $appointment
 		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
 	}
 }
-function validateConsent($virtualConsent, $signature, $appointmentId) {
+function hasConsentedToVirtualPreparation($virtualConsent, $signature, $appointmentId) {
 	return ($virtualConsent != null && $virtualConsent === "1" && $signature != null && trim($signature) !== '' && $appointmentId != null);
 }
 

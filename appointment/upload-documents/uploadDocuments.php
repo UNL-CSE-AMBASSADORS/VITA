@@ -103,8 +103,8 @@
 				<ol>
 					<li><b>Scheduling the appointment:</b> Client schedules appointment at vita.unl.edu/signup and receives an email with a secure, unique link to verify information.</li>
 					<li><b>Securing Taxpayer Consent Agreement:</b>	Client agrees by checking a box on the scheduling app, agreeing to participate in the virtual return preparation process. Clients read and electronically sign Form 14446 with a completed and signed Form 13614, Intake, Interview & Quality Review Sheet when uploading documents.</li>				
-					<li><b>Performing the Intake Process (secure all documents):</b>  The site administrator will review the Client's uploaded documents ensuring receipt of signed Forms 14446 and 13614. When all documents are ready for review the Client will check the ready for tax preparation box on the secured link provided to them. The site coordinator will assign the Client to a certified return preparer who will then call the Client to review Form 13614.</li>
-					<li><b>Validating taxpayer's authentication (Reviewing photo identification & Social Security Cards/ITINS:</b> The site administrator will review the Client's uploaded documents ensuring receipt of signed Forms 14446 and 13614. When all documents are ready for review the Client will check the ready for tax preparation box on the secured link provided to them. The site coordinator will assign the Client to a certified return preparer who will then call the Client to review Form 13614.</li>
+					<li><b>Performing the Intake Process (secure all documents):</b>  The site administrator will review the Client's uploaded documents ensuring receipt of Form 13614. When all documents are ready for review the Client will check the ready for tax preparation box on the secured link provided to them. The site coordinator will assign the Client to a certified return preparer who will then call the Client to review Form 13614.</li>
+					<li><b>Validating taxpayer's authentication (Reviewing photo identification & Social Security Cards/ITINS):</b> The site administrator will review the Client's uploaded documents ensuring receipt of Form 13614. When all documents are ready for review the Client will check the ready for tax preparation box on the secured link provided to them. The site coordinator will assign the Client to a certified return preparer who will then call the Client to review Form 13614.</li>
 					<li><b>Performing the interview with the taxpayer(s):</b> The Return Preparer will contact the Client by phone to discuss Form 13614 and review all photo identification, social security cards/ITIN letter and income documents that have been uploaded.</li>
 					<li><b>Preparing the tax return:</b> An IRS tax law certified return preparer will be assigned to the Client by the Site Coordinator. The Site Coordinator will assign a Client to a Return Prepare based upon the certification level of the Return Preparer.</li>
 					<li><b>Performing the quality review:</b> The Site Coordinator will review the Client's return.</li>
@@ -125,7 +125,7 @@
 						to having your return reviewed for accuracy, by an IRS employee?
 					</p>
 					<li class="form-radio" id="consentReview">
-						<label class="form-required"></label>
+						<label class="form-required">The IRS may quality review my tax return prepared by Lincoln VITA (optional).</label>
 						<div>
 							<div class="dcf-btn-group" data-toggle="buttons">
 								<label class="dcf-btn dcf-btn-secondary" 
@@ -193,8 +193,9 @@
 					</li>
 
 					<li class="dcf-form-group form-textfield">
-						<label class="dcf-label form-label form-required" for="signature">TYPE YOUR NAME HERE</label>
+						<label class="dcf-label form-label form-required" for="signature">Signature (type/print)</label>
 						<input type="text" class="dcf-input-text form-control" name="signature" id="signature" ng-model="consentData.signature" required>
+						<p class="dcf-txt-xs">If you are filing jointly, please include the signature of both taxpayer and spouse, or both Married Filed Jointly (MFJ) clients.</p>
 						<div ng-show="consentForm.$submitted || consentForm.signature.$touched">
 							<label class="error" ng-show="consentForm.signature.$error.required">This field is required.</label>
 						</div>
@@ -211,7 +212,7 @@
 			<div ng-if="consentData.completedConsent === true">
 				<p>
 					You may now upload your <b>Form 13614-C</b> and other documents below. 
-					<b>Your documents need to be uploaded by {{uploadDeadlineStr}}.</b> 
+					<b>Your documents need to be uploaded by {{uploadDeadlineStr}}</b> (one week in advance).
 					See the bottom of this page for a list of relevant documents you should upload as applicable. 
 					After your documents have been uploaded, a tax preparer will begin preparing your taxes and 
 					you will be contacted by a quality reviewer prior to your taxes being submitted.

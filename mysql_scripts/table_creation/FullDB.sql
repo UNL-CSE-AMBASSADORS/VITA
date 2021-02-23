@@ -196,8 +196,8 @@ CREATE TABLE VirtualAppointmentConsent (
 	createdAt DATETIME NOT NULL DEFAULT NOW(),
 	reviewConsent BOOLEAN NOT NULL,
 	virtualConsent BOOLEAN NOT NULL, /* virtual is a keyword */
-    signature VARCHAR(355) NOT NULL,
+    signature VARCHAR(255) NOT NULL,
     appointmentId INTEGER UNSIGNED NOT NULL,
-    UNIQUE (appointmentId),
-    FOREIGN KEY(appointmentId) REFERENCES appointment(appointmentId)
+    CONSTRAINT UNIQUE unique_appointment_id (appointmentId),
+    FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId)
 );
