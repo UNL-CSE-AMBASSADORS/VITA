@@ -40,23 +40,32 @@ function getAppointments($date, $siteId) {
 		$canViewClientInformation = $USER->hasPermission('view_client_information');
 
 		$query = 'SELECT Appointment.appointmentId, TIME_FORMAT(AppointmentTime.scheduledTime, "%l:%i %p") AS scheduledTime, 
-					firstName, lastName, timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded, 
-					completed, cancelled, language, Client.clientId, 
-					(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 30 MINUTE) < NOW() AND timeIn IS NULL) AS noShow,
-					(AppointmentTime.scheduledTime < Appointment.createdAt) AS walkIn ';
+			firstName, lastName, timeIn, timeReturnedPapers, timeAppointmentStarted, timeAppointmentEnded,
+			completed, cancelled, language, Client.clientId,
+			(DATE_ADD(AppointmentTime.scheduledTime, INTERVAL 30 MINUTE) < NOW() AND timeIn IS NULL) AS noShow,
+			(AppointmentTime.scheduledTime < Appointment.createdAt) AS walkIn, AppointmentType.name as appointmentType,
+			VisaAnswer.visa';
 		if ($canViewClientInformation) {
-			$query .= ', phoneNumber, emailAddress ';
+			$query .= ', phoneNumber, emailAddress';
 		}
-		$query .= 'FROM Appointment
-					LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
-					JOIN Client ON Appointment.clientId = Client.clientId
-					JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
-				WHERE DATE(AppointmentTime.scheduledTime) = ?
-					AND AppointmentTime.siteId = ?
-					AND (cancelled IS NULL OR cancelled = FALSE)
-					AND (completed IS NULL OR completed != FALSE)
-					AND Appointment.archived = FALSE
-				ORDER BY AppointmentTime.scheduledTime, firstName, lastName';
+		$query .= ' FROM Appointment
+			LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
+			JOIN Client ON Appointment.clientId = Client.clientId
+			JOIN AppointmentTime ON Appointment.appointmentTimeId = AppointmentTime.appointmentTimeId
+			JOIN AppointmentType ON AppointmentTime.appointmentTypeId = AppointmentType.appointmentTypeId
+			LEFT JOIN
+				(SELECT Answer.appointmentId, PossibleAnswer.text as visa
+				FROM Answer
+				JOIN Question ON Answer.questionId = Question.questionId
+				JOIN PossibleAnswer ON Answer.possibleAnswerId = PossibleAnswer.possibleAnswerId
+				WHERE Question.lookupName = \'visa\'
+				) VisaAnswer
+			ON Appointment.appointmentId = VisaAnswer.appointmentId
+			WHERE DATE(scheduledTime) = ?
+				AND siteId = ?
+				AND (cancelled IS NULL OR cancelled = FALSE)
+				AND (completed IS NULL OR completed != FALSE)
+				AND Appointment.archived = FALSE;';
 		$stmt = $DB_CONN->prepare($query);
 		$stmt->execute(array($date, $siteId));
 		$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);

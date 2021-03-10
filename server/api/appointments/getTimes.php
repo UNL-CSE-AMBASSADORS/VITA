@@ -45,7 +45,8 @@ function getAppointmentTimesFromDatabase($year, $after, $appointmentType) {
 	GLOBAL $DB_CONN;
 
 	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate,
-		TIME(scheduledTime) AS scheduledTime, COUNT(DISTINCT a.appointmentId) AS numberOfAppointmentsAlreadyScheduled,
+		TIME(scheduledTime) AS scheduledTime,
+		SUM(IF(a.appointmentId IS NOT NULL AND (sa.cancelled IS NULL OR sa.cancelled = FALSE),1,0)) AS numberOfAppointmentsAlreadyScheduled,
 		apt.numberOfAppointments, AppointmentType.name, AppointmentType.lookupName AS appointmentType
 	FROM AppointmentTime apt
 		LEFT JOIN Site s ON s.siteId = apt.siteId
@@ -55,7 +56,6 @@ function getAppointmentTimesFromDatabase($year, $after, $appointmentType) {
 	WHERE YEAR(apt.scheduledTime) = ?
 		AND apt.scheduledTime > ?
 		AND AppointmentType.lookupName = ?
-		AND (sa.cancelled IS NULL OR sa.cancelled = FALSE)
 	GROUP BY apt.appointmentTimeId
 	ORDER BY apt.scheduledTime;';
 
@@ -111,5 +111,3 @@ class DateSiteTimeMap {
 		}
 	}
 }
-
-
