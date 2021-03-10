@@ -127,7 +127,7 @@
 			<div ng-cloak>
 				<span><b>Visa Type:</b> {{(selectedAppointment.visa || "None").trim()}}</span>
 			</div>
-			<div ng-if="selectedAppointment.appointmentType != null" ng-cloak>
+			<div ng-cloak>
 				<span><b>Appointment Type:</b> {{selectedAppointment.appointmentType}}</span>
 			</div>
 		</div>
