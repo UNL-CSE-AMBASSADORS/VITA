@@ -128,7 +128,7 @@ return readfile($documentRoot . $path);
 			</div>
 		</div>
 
-		<div class="dcf-bleed unl-bg-lighter-gray">
+		<div class="dcf-bleed unl-bg-light-gray">
 			<div class="dcf-wrapper">
 				<div class="dcf-grid-halves@md dcf-pt-8 dcf-pb-8">
 					<div>
@@ -138,6 +138,40 @@ return readfile($documentRoot . $path);
 						The UNL Tax Credit Campaign prepares tax returns for low-income, working families and students for free.
 						It is sponsored by the University of Nebraska&ndash;Lincoln's Center for Civic Engagement in conjunction
 						with the Lincoln EITC Coalition.
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="dcf-bleed unl-bg-lighter-gray">
+			<div class="dcf-wrapper">
+				<div class="dcf-grid-halves@md dcf-pt-8 dcf-pb-8">
+					<div>
+						<h2>How does Volunteer Income Tax Assistance (VITA) Program Protect My Civil Rights?</h2>
+					</div>
+					<div>
+						In accordance with federal law and the Department of the Treasury – Internal Revenue Service policy,
+						discrimination against taxpayers on the basis of race, color, national origin (including limited
+						English proficiency), disability, sex (in education programs or activities), age or reprisal is
+						prohibited in programs and activities receiving federal financial assistance. Each and every
+						taxpayer has a set of fundamental rights they should be aware of when dealing with the IRS. Explore
+						your rights and our obligations to protect them.
+						<br><br>The Right to Be Informed
+						<br>The Right to Quality Service
+						<br>The Right to Pay No More than the Correct Amount of Tax
+						<br>The Right to Challenge the IRS’s Position and Be Heard
+						<br>The Right to Appeal an IRS Decision in an Independent Forum
+						<br>The Right to Finality
+						<br>The Right to Privacy
+						<br>The Right to Confidentiality
+						<br>The Right to Retain Representation
+						<br>The Right to a Fair and Just Tax System
+						<br><br>Your Civil Rights are Protected:
+						<br><a href="https://www.irs.gov/pub/irs-pdf/p4053esp.pdf">https://www.irs.gov/pub/irs-pdf/p4053esp.pdf</a>
+						<br><a href="https://www.irs.gov/pub/irs-pdf/p4053csp.pdf">https://www.irs.gov/pub/irs-pdf/p4053csp.pdf</a>
+						<br>
+						<br><br>Taxpayer Bill of Rights:
+						<br><a href="https://www.irs.gov/pub/irs-pdf/p5169.pdf">https://www.irs.gov/pub/irs-pdf/p5169.pdf</a>
 					</div>
 				</div>
 			</div>

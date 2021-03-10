@@ -124,6 +124,12 @@
 			<div ng-if="selectedAppointment.phoneNumber != null" ng-cloak>
 				<span><b>Phone Number:</b> {{selectedAppointment.phoneNumber}}</span>
 			</div>
+			<div ng-cloak>
+				<span><b>Visa Type:</b> {{(selectedAppointment.visa || "None").trim()}}</span>
+			</div>
+			<div ng-cloak>
+				<span><b>Appointment Type:</b> {{selectedAppointment.appointmentType}}</span>
+			</div>
 		</div>
 
 
