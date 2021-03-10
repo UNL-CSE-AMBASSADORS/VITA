@@ -82,7 +82,9 @@ function getAppointmentTimesForSite($siteId, $year = null) {
 		FROM AppointmentTime
 		JOIN AppointmentType ON AppointmentTime.appointmentTypeId = AppointmentType.appointmentTypeId
 		LEFT JOIN Appointment ON AppointmentTime.appointmentTimeId = Appointment.appointmentTimeId
+        LEFT JOIN ServicedAppointment ON Appointment.appointmentId = ServicedAppointment.appointmentId
 		WHERE siteId = ?
+			AND (cancelled IS NULL OR cancelled = FALSE)
 			AND YEAR(scheduledTime) = ?
 		GROUP BY AppointmentTime.appointmentTimeId
 		ORDER BY AppointmentTime.scheduledTime;';
