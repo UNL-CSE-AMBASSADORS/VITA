@@ -5,6 +5,7 @@ define('signupController', [], function() {
 		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
 		$scope.successMessage = null;
 		$scope.appointmentId = null; // The id of the client's appointment once they successfully sign up
+		$scope.hasExistingAppointment = null;
 		$scope.data = {
 			language: 'eng'
 		};
@@ -105,21 +106,24 @@ define('signupController', [], function() {
 				"appointmentTimeId": $scope.sharedProperties.selectedAppointmentTimeId,
 				"siteId": $scope.sharedProperties.selectedSite
 			};
+			$scope.hasExistingAppointment();
 
-			SignupService.storeAppointments(data).then((response) => {
-				if (typeof response !== 'undefined' && response && response.success){
-					document.body.scrollTop = document.documentElement.scrollTop = 0;
-					$scope.appointmentId = response.appointmentId;
-					$scope.successMessage = $sce.trustAsHtml(response.message);
+			if(!$scope.hasExistingAppointment) {
+				SignupService.storeAppointments(data).then((response) => {
+					if (typeof response !== 'undefined' && response && response.success){
+						document.body.scrollTop = document.documentElement.scrollTop = 0;
+						$scope.appointmentId = response.appointmentId;
+						$scope.successMessage = $sce.trustAsHtml(response.message);
 
-					// Send the confirmation email
-					if ($scope.data.email != null && $scope.data.email.length > 0) {
-						$scope.emailConfirmation();
+						// Send the confirmation email
+						if ($scope.data.email != null && $scope.data.email.length > 0) {
+							$scope.emailConfirmation();
+						}
+					} else {
+						NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
 					}
-				} else {
-					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
-				}
-			});
+				});
+			}
 		};
 
 		$scope.emailConfirmation = () => {
@@ -146,6 +150,40 @@ define('signupController', [], function() {
 			if ($scope.isVirtualAppointmentRequested() && !$scope.sharedProperties.appointmentType.includes('virtual-')) {
 				$scope.sharedProperties.appointmentType = 'virtual-' + $scope.sharedProperties.appointmentType;
 			}
+		};
+
+		$scope.hasExistingAppointment = () => {
+
+			const firstName = $scope.data.firstName || '';
+			const lastName = $scope.data.lastName || '';
+			console.log('checking existing appt');
+			console.log(firstName);
+			console.log(lastName);
+			SignupService.getExistingClientAppointments(firstName, lastName).then((response) => {
+				console.log("after checking");
+				if (typeof response !== 'undefined' && response){
+					if (response.success) {
+						console.log("success");
+						if(response.numberExistingAppointments == 0) {
+							$scope.hasExistingAppointment = false;
+							console.log('no existing appts');
+						} else {
+							console.log('there are existing appts');
+							NotificationUtilities.giveNotice('Failure', "You may not sign up for an appointment if you already have an existing one.", false);
+							$scope.hasExistingAppointment = true;
+							window.location.replace("./");
+							//redirect to cancel/reschedule page here
+						}
+					} else {
+						console.log("failure");
+
+						NotificationUtilities.giveNotice('Failure', response.error, false);
+					}
+				} else {
+					console.log("resopnse undefined");
+					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
+				}
+			})
 		};
 
 		$scope.intStudentChanged = () => {
