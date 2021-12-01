@@ -34,8 +34,10 @@ return readfile($documentRoot . $path);
 <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-wrapper dcf-pt-3 dcf-pb-3 dcf-bold dcf-txt-decor-none unl-font-sans unl-cream" style="background-color: #007197;">
 	<span class="dcf-txt-xs">
 		<span class="dcf-d-inline-block dcf-mt-2 dcf-mb-2 dcf-mr-4">
-			In response to COVID-19, all Lincoln VITA tax appointments will be conducted virtually. 
-			You may schedule a virtual appointment under the 'Need Assistance' tab. The virtual site will be taking appointments through Thursday, April 8th.
+			In response to COVID-19 and local health requirements, Lincoln VITA will be holding face-to-face
+			return preparation in 2022. In addition, Lincoln VITA will have their virtual site (remote preparation)
+			and Facilitated Self Assistance (FSA) available. You may schedule a virtual appointment under the
+			'Need Assistance' tab. The scheduling site will open in mid-January.
 		</span>
 	</span>
 </div>
