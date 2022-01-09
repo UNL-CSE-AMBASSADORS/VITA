@@ -171,7 +171,7 @@ define('signupController', [], function() {
 							console.log('there are existing appts');
 							NotificationUtilities.giveNotice('Failure', "You may not sign up for an appointment if you already have an existing one.", false);
 							$scope.hasExistingAppointment = true;
-							window.location.replace("./");
+							window.location.replace("./cancel/index.php");
 							//redirect to cancel/reschedule page here
 						}
 					} else {
