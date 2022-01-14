@@ -63,44 +63,24 @@ define('signupController', [], function() {
 		];
 
 		$scope.findExistingAppointment = () => {
-			//var deferred = $q.defer();
-			// TODO remove this later
-			console.log("Has appt?");
-			console.log($scope.hasExistingAppointment);
-			$scope.hasExistingAppointment = true;
-			console.log($scope.hasExistingAppointment);
-			//return defer.promise;
-			//return true;
-
 			const firstName = $scope.data.firstName || '';
 			const lastName = $scope.data.lastName || '';
-			console.log('checking existing appt');
-			console.log(firstName);
-			console.log(lastName);
 			SignupService.getExistingClientAppointments(firstName, lastName).then((response) => {
-				console.log("after checking");
 				if (typeof response !== 'undefined' && response && response.success){
 					console.log("success, num appointments is:");
 					console.log(response.numberExistingAppointments);
-					console.log("printed");
-					if(response.numberExistingAppointments === "0") {
-						$scope.hasExistingAppointment = false;
+					if(response.numberExistingAppointments === 0) {
 						console.log('no existing appts');
-						return false;
+						$scope.hasExistingAppointment = false;
 					} else {
 						console.log("appts exist, num appointments is:");
 						console.log(response.numberExistingAppointments);	
-						// NotificationUtilities.giveNotice('Failure', "You may not sign up for an appointment if you already have an existing one.", false);
 						$scope.hasExistingAppointment = true;
-						return true;
 					}
 				} else {
 					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
-					return null;
-					// for if there is no reseposne, or we just get null back from data service because of error
 				}
 			})
-			return $scope.hasExistingAppointment;
 		};
 		
 		$scope.storeAppointments = () => {
@@ -150,22 +130,23 @@ define('signupController', [], function() {
 
 			console.log("to store appt, first check for existing");
 			$scope.findExistingAppointment();
-				if(!$scope.hasExistingAppointment) {
-					console.log("found no exising");
-					SignupService.storeAppointments(data).then((response) => {
-						if (typeof response !== 'undefined' && response && response.success){
-							document.body.scrollTop = document.documentElement.scrollTop = 0;
-							$scope.appointmentId = response.appointmentId;
-							$scope.successMessage = $sce.trustAsHtml(response.message);
-	
-							// Send the confirmation email
-							if ($scope.data.email != null && $scope.data.email.length > 0) {
-								$scope.emailConfirmation();
-							}
-						} else {
-							NotificationUtilities.giveNotice('Failure', 'There was an error on the server while storing your appointment. Please refresh the page in a few minutes and try again.', false);
+			if(!$scope.hasExistingAppointment) {
+				console.log("found no existing appts, hasExistingAppointment is:");
+				console.log($scope.hasExistingAppointment);
+				SignupService.storeAppointments(data).then((response) => {
+					if (typeof response !== 'undefined' && response && response.success){
+						document.body.scrollTop = document.documentElement.scrollTop = 0;
+						$scope.appointmentId = response.appointmentId;
+						$scope.successMessage = $sce.trustAsHtml(response.message);
+
+						// Send the confirmation email
+						if ($scope.data.email != null && $scope.data.email.length > 0) {
+							$scope.emailConfirmation();
 						}
-					});
+					} else {
+						NotificationUtilities.giveNotice('Failure', 'There was an error on the server while storing your appointment. Please refresh the page in a few minutes and try again.', false);
+					}
+				});
 				} else {
 					// TODO finExistingAppoitnment has already thrown an error, do we need that one?
 					// TODO can i notify after changing lcoation? need to makme this a next?
@@ -232,7 +213,6 @@ define('signupController', [], function() {
 		};
 
 		$scope.isEmailRequired = () => {
-			console.log("is email rquired?");
 			return $scope.isVirtualAppointmentRequested();
 		};
 
