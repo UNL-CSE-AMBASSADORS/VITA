@@ -181,7 +181,9 @@ function getExistingClientAppointments($firstName, $lastName) {
 			FROM vita.appointment apt
 			LEFT JOIN client ON apt.clientId = client.clientId
 			LEFT JOIN servicedappointment sa ON apt.appointmentId = sa.appointmentId
+			LEFT JOIN appointmenttime at on apt.appointmentTimeId = at.appointmentTimeId
 			WHERE firstName = ? AND lastName = ?
+			AND scheduledTime >= NOW()
 			GROUP BY firstName, lastName';
 
 		$stmt = $DB_CONN->prepare($query);

@@ -107,8 +107,6 @@ define('signupController', [], function() {
 				"siteId": $scope.sharedProperties.selectedSite
 			};
 
-			//$scope.findExistingAppointment();
-
 			const firstName = $scope.data.firstName || '';
 			const lastName = $scope.data.lastName || '';
 			SignupService.getExistingClientAppointments(firstName, lastName).then((response) => {
@@ -119,31 +117,31 @@ define('signupController', [], function() {
 					} else {
 						$scope.hasExistingAppointment = true;
 					}
-				} else {
-					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
-				}
 
-				// Only allow the client to sign up for an appointment if they don't currently have any uncancelled appointments
-				if(!$scope.hasExistingAppointment) {
-					SignupService.storeAppointments(data).then((response) => {
-						if (typeof response !== 'undefined' && response && response.success){
-							document.body.scrollTop = document.documentElement.scrollTop = 0;
-							$scope.appointmentId = response.appointmentId;
-							$scope.successMessage = $sce.trustAsHtml(response.message);
-	
-							// Send the confirmation email
-							if ($scope.data.email != null && $scope.data.email.length > 0) {
-								$scope.emailConfirmation();
+					// Only allow the client to sign up for an appointment if they don't currently have any uncancelled appointments
+					if(!$scope.hasExistingAppointment) {
+						SignupService.storeAppointments(data).then((response) => {
+							if (typeof response !== 'undefined' && response && response.success){
+								document.body.scrollTop = document.documentElement.scrollTop = 0;
+								$scope.appointmentId = response.appointmentId;
+								$scope.successMessage = $sce.trustAsHtml(response.message);
+		
+								// Send the confirmation email
+								if ($scope.data.email != null && $scope.data.email.length > 0) {
+									$scope.emailConfirmation();
+								}
+							} else {
+								NotificationUtilities.giveNotice('Failure', 'There was an error on the server while storing your appointment. Please refresh the page in a few minutes and try again.', false);
 							}
-						} else {
-							NotificationUtilities.giveNotice('Failure', 'There was an error on the server while storing your appointment. Please refresh the page in a few minutes and try again.', false);
-						}
-					});
+						});
+					} else {
+						// TODO finExistingAppoitnment has already thrown an error, do we need that one?
+						NotificationUtilities.giveNotice('Failure', "You may not sign up for an appointment if you already have an existing one.", false);
+						window.location.replace("../cancel/index.php");
+					}
 				} else {
-					// TODO finExistingAppoitnment has already thrown an error, do we need that one?
-					NotificationUtilities.giveNotice('Failure', "You may not sign up for an appointment if you already have an existing one.", false);
-					window.location.replace("../cancel/index.php");
-				}				
+					NotificationUtilities.giveNotice('Failure', 'There was an error on the server retrieving information regarding potential existing appointments. Please refresh the page in a few minutes and try again.', false);
+				}	
 			});
 		};
 
