@@ -62,27 +62,6 @@ define('signupController', [], function() {
 			{ 'name': 'Other', 'appointmentType': 'non-treaty' }
 		];
 
-		$scope.findExistingAppointment = () => {
-			const firstName = $scope.data.firstName || '';
-			const lastName = $scope.data.lastName || '';
-			SignupService.getExistingClientAppointments(firstName, lastName).then((response) => {
-				if (typeof response !== 'undefined' && response && response.success){
-					console.log("success, num appointments is:");
-					console.log(response.numberExistingAppointments);
-					if(response.numberExistingAppointments === 0) {
-						console.log('no existing appts');
-						$scope.hasExistingAppointment = false;
-					} else {
-						console.log("appts exist, num appointments is:");
-						console.log(response.numberExistingAppointments);	
-						$scope.hasExistingAppointment = true;
-					}
-				} else {
-					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
-				}
-			})
-		};
-		
 		$scope.storeAppointments = () => {
 			let questions = [];
 			Object.keys($scope.questions).forEach((key) => {
@@ -128,40 +107,24 @@ define('signupController', [], function() {
 				"siteId": $scope.sharedProperties.selectedSite
 			};
 
-			console.log("1, before geting existing appts from service");
 			//$scope.findExistingAppointment();
 
 			const firstName = $scope.data.firstName || '';
 			const lastName = $scope.data.lastName || '';
 			SignupService.getExistingClientAppointments(firstName, lastName).then((response) => {
-				console.log("type of response");
-				console.log(typeof response);
-				console.log(response.success);
-				if (typeof response !== 'undefined' && response && response.success){
-					console.log("2, success, num appointments is:");
-					console.log(response.numberExistingAppointments);
-					// response.numberExistingAppointments === false when none exist
-					console.log("Results check. first false:");
-					console.log(response.numberExistingAppointments === false);
-					console.log(response.numberExistingAppointments['numberExistingAppointments'] === '0');					
-					console.log(typeof response.numberExistingAppointments['numberExistingAppointments']);	
-
+				if (typeof response !== 'undefined' && response && response.success) {
+					// response.numberExistingAppointments === false when query is empty because none exist
 					if(response.numberExistingAppointments === false || response.numberExistingAppointments['numberExistingAppointments'] === '0') {
-						console.log('3, no existing appts');
 						$scope.hasExistingAppointment = false;
 					} else {
-						console.log("3, appts exist, num appointments is:");
-						console.log(response.numberExistingAppointments['numberExistingAppointments']);	
 						$scope.hasExistingAppointment = true;
 					}
 				} else {
-					// TODO delete this 2
-					NotificationUtilities.giveNotice('Failure', '2, There was an error on the server! Please refresh the page in a few minutes and try again.', false);
+					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
 				}
 
+				// Only allow the client to sign up for an appointment if they don't currently have any uncancelled appointments
 				if(!$scope.hasExistingAppointment) {
-					console.log("4, found no existing appts, hasExistingAppointment is:");
-					console.log($scope.hasExistingAppointment);
 					SignupService.storeAppointments(data).then((response) => {
 						if (typeof response !== 'undefined' && response && response.success){
 							document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -177,12 +140,9 @@ define('signupController', [], function() {
 						}
 					});
 				} else {
-					console.log("4, appts exist so redirecting");
 					// TODO finExistingAppoitnment has already thrown an error, do we need that one?
-					// TODO can i notify after changing lcoation? need to makme this a next?
-					NotificationUtilities.giveNotice('Failure', "1You may not sign up for an appointment if you already have an existing one.", false);
+					NotificationUtilities.giveNotice('Failure', "You may not sign up for an appointment if you already have an existing one.", false);
 					window.location.replace("../cancel/index.php");
-					NotificationUtilities.giveNotice('Failure', "2You may not sign up for an appointment if you already have an existing one.", false);
 				}				
 			});
 		};
