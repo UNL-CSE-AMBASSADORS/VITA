@@ -62,6 +62,49 @@ define('signupController', [], function() {
 			{ 'name': 'Other', 'appointmentType': 'non-treaty' }
 		];
 
+		$scope.findExistingAppointment = () => {
+			//var deferred = $q.defer();
+			// TODO remove this later
+			console.log("Has appt?");
+			console.log($scope.hasExistingAppointment);
+			$scope.hasExistingAppointment = true;
+			console.log($scope.hasExistingAppointment);
+			//return defer.promise;
+			//return true;
+
+			const firstName = $scope.data.firstName || '';
+			const lastName = $scope.data.lastName || '';
+			console.log('checking existing appt');
+			console.log(firstName);
+			console.log(lastName);
+			SignupService.getExistingClientAppointments(firstName, lastName).then((response) => {
+				console.log("after checking");
+				if (typeof response !== 'undefined' && response && response.success){
+					console.log("success, num appointments is:");
+					console.log(response.numberExistingAppointments);
+					console.log("printed");
+					if(response.numberExistingAppointments == 0) {
+						$scope.hasExistingAppointment = false;
+						console.log('no existing appts');
+						return false;
+					} else {
+						console.log("appts exist, num appointments is:");
+						console.log(response.numberExistingAppointments);	
+						console.log("Printed");						
+						// NotificationUtilities.giveNotice('Failure', "You may not sign up for an appointment if you already have an existing one.", false);
+						$scope.hasExistingAppointment = true;
+						return true;
+						// window.location.replace("../cancel/index.php");
+					}
+				} else {
+					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
+					return null;
+					// for if there is no reseposne, or we just get null back from data service because of error
+				}
+			})
+			return $scope.hasExistingAppointment;
+		};
+		
 		$scope.storeAppointments = () => {
 			let questions = [];
 			Object.keys($scope.questions).forEach((key) => {
@@ -106,24 +149,33 @@ define('signupController', [], function() {
 				"appointmentTimeId": $scope.sharedProperties.selectedAppointmentTimeId,
 				"siteId": $scope.sharedProperties.selectedSite
 			};
-			$scope.hasExistingAppointment();
 
-			if(!$scope.hasExistingAppointment) {
-				SignupService.storeAppointments(data).then((response) => {
-					if (typeof response !== 'undefined' && response && response.success){
-						document.body.scrollTop = document.documentElement.scrollTop = 0;
-						$scope.appointmentId = response.appointmentId;
-						$scope.successMessage = $sce.trustAsHtml(response.message);
-
-						// Send the confirmation email
-						if ($scope.data.email != null && $scope.data.email.length > 0) {
-							$scope.emailConfirmation();
+			console.log("to store appt, first check for existing");
+			$scope.findExistingAppointment().then(function(response) {
+				if(!$scope.hasExistingAppointment) {
+					console.log("found no exising");
+					SignupService.storeAppointments(data).then((response) => {
+						if (typeof response !== 'undefined' && response && response.success){
+							document.body.scrollTop = document.documentElement.scrollTop = 0;
+							$scope.appointmentId = response.appointmentId;
+							$scope.successMessage = $sce.trustAsHtml(response.message);
+	
+							// Send the confirmation email
+							if ($scope.data.email != null && $scope.data.email.length > 0) {
+								$scope.emailConfirmation();
+							}
+						} else {
+							NotificationUtilities.giveNotice('Failure', 'There was an error on the server while storing your appointment. Please refresh the page in a few minutes and try again.', false);
 						}
-					} else {
-						NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
-					}
-				});
-			}
+					});
+				} else {
+					// TODO finExistingAppoitnment has already thrown an error, do we need that one?
+					// TODO can i notify after changing lcoation? need to makme this a next?
+					NotificationUtilities.giveNotice('Failure', "1You may not sign up for an appointment if you already have an existing one.", false);
+					window.location.replace("../cancel/index.php");
+					NotificationUtilities.giveNotice('Failure', "2You may not sign up for an appointment if you already have an existing one.", false);
+				}
+			});
 		};
 
 		$scope.emailConfirmation = () => {
@@ -150,40 +202,6 @@ define('signupController', [], function() {
 			if ($scope.isVirtualAppointmentRequested() && !$scope.sharedProperties.appointmentType.includes('virtual-')) {
 				$scope.sharedProperties.appointmentType = 'virtual-' + $scope.sharedProperties.appointmentType;
 			}
-		};
-
-		$scope.hasExistingAppointment = () => {
-
-			const firstName = $scope.data.firstName || '';
-			const lastName = $scope.data.lastName || '';
-			console.log('checking existing appt');
-			console.log(firstName);
-			console.log(lastName);
-			SignupService.getExistingClientAppointments(firstName, lastName).then((response) => {
-				console.log("after checking");
-				if (typeof response !== 'undefined' && response){
-					if (response.success) {
-						console.log("success");
-						if(response.numberExistingAppointments == 0) {
-							$scope.hasExistingAppointment = false;
-							console.log('no existing appts');
-						} else {
-							console.log('there are existing appts');
-							NotificationUtilities.giveNotice('Failure', "You may not sign up for an appointment if you already have an existing one.", false);
-							$scope.hasExistingAppointment = true;
-							window.location.replace("./cancel/index.php");
-							//redirect to cancel/reschedule page here
-						}
-					} else {
-						console.log("failure");
-
-						NotificationUtilities.giveNotice('Failure', response.error, false);
-					}
-				} else {
-					console.log("resopnse undefined");
-					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
-				}
-			})
 		};
 
 		$scope.intStudentChanged = () => {
@@ -222,7 +240,7 @@ define('signupController', [], function() {
 
 		$scope.isVirtualAppointmentRequested = () => {
 			// TODO: This is hard-coded to true right now since all appointments are virtual, should eventually be replaced with a question
-			return true;
+			return false;
 		};
 
 		$scope.downloadForm14446 = () => {
