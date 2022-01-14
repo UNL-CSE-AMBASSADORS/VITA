@@ -83,18 +83,16 @@ define('signupController', [], function() {
 					console.log("success, num appointments is:");
 					console.log(response.numberExistingAppointments);
 					console.log("printed");
-					if(response.numberExistingAppointments == 0) {
+					if(response.numberExistingAppointments === "0") {
 						$scope.hasExistingAppointment = false;
 						console.log('no existing appts');
 						return false;
 					} else {
 						console.log("appts exist, num appointments is:");
 						console.log(response.numberExistingAppointments);	
-						console.log("Printed");						
 						// NotificationUtilities.giveNotice('Failure', "You may not sign up for an appointment if you already have an existing one.", false);
 						$scope.hasExistingAppointment = true;
 						return true;
-						// window.location.replace("../cancel/index.php");
 					}
 				} else {
 					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
@@ -151,7 +149,7 @@ define('signupController', [], function() {
 			};
 
 			console.log("to store appt, first check for existing");
-			$scope.findExistingAppointment().then(function(response) {
+			$scope.findExistingAppointment();
 				if(!$scope.hasExistingAppointment) {
 					console.log("found no exising");
 					SignupService.storeAppointments(data).then((response) => {
@@ -175,7 +173,6 @@ define('signupController', [], function() {
 					window.location.replace("../cancel/index.php");
 					NotificationUtilities.giveNotice('Failure', "2You may not sign up for an appointment if you already have an existing one.", false);
 				}
-			});
 		};
 
 		$scope.emailConfirmation = () => {
@@ -235,6 +232,7 @@ define('signupController', [], function() {
 		};
 
 		$scope.isEmailRequired = () => {
+			console.log("is email rquired?");
 			return $scope.isVirtualAppointmentRequested();
 		};
 
