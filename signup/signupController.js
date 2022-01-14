@@ -6,6 +6,9 @@ define('signupController', [], function() {
 		$scope.successMessage = null;
 		$scope.appointmentId = null; // The id of the client's appointment once they successfully sign up
 		$scope.hasExistingAppointment = null;
+		$scope.virtualToggle = {
+			virtual: null
+		};
 		$scope.data = {
 			language: 'eng'
 		};
@@ -168,6 +171,10 @@ define('signupController', [], function() {
 		$scope.updateAppointmentType = () => {
 			if ($scope.isVirtualAppointmentRequested() && !$scope.sharedProperties.appointmentType.includes('virtual-')) {
 				$scope.sharedProperties.appointmentType = 'virtual-' + $scope.sharedProperties.appointmentType;
+			} else if (!$scope.isVirtualAppointmentRequested() && $scope.sharedProperties.appointmentType.includes('virtual-')) {
+				// https://stackoverflow.com/questions/9928679/remove-the-string-on-the-beginning-of-an-url
+				$scope.sharedProperties.appointmentType = $scope.sharedProperties.appointmentType.replace(/^(virtual-)/,"");
+
 			}
 		};
 
@@ -206,8 +213,7 @@ define('signupController', [], function() {
 		};
 
 		$scope.isVirtualAppointmentRequested = () => {
-			// TODO: This is hard-coded to true right now since all appointments are virtual, should eventually be replaced with a question
-			return false;
+			return $scope.virtualToggle.virtual;
 		};
 
 		$scope.downloadForm14446 = () => {
