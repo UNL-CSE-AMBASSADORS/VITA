@@ -26,7 +26,7 @@
 
 			<ul class="dcf-pl-0">
 				<li class="dcf-form-group form-textfield">
-					<label class="dcf-label form-label form-required" for="firstName">First Name</label>
+					<label class="dcf-label form-label form-required" for="firstName">Legal First Name</label>
 					<input type="text" class="dcf-input-text form-control" name="firstName" id="firstName" ng-model="data.firstName" required>
 					<div ng-show="form.$submitted || form.firstName.$touched">
 						<label class="error" ng-show="form.firstName.$error.required">This field is required.</label>
@@ -34,7 +34,7 @@
 				</li>
 
 				<li class="form-textfield">
-					<label class="dcf-label form-label form-required" for="lastName">Last Name</label>
+					<label class="dcf-label form-label form-required" for="lastName">Legal Last Name</label>
 					<input type="text" class="dcf-input-text form-control" name="lastName" id="lastName" ng-model="data.lastName" required>
 					<div ng-show="form.$submitted || form.lastName.$touched">
 						<label class="error" ng-show="form.lastName.$error.required">This field is required.</label>
