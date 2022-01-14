@@ -128,32 +128,58 @@ define('signupController', [], function() {
 				"siteId": $scope.sharedProperties.selectedSite
 			};
 
-			console.log("to store appt, first check for existing");
-			$scope.findExistingAppointment();
-			if(!$scope.hasExistingAppointment) {
-				console.log("found no existing appts, hasExistingAppointment is:");
-				console.log($scope.hasExistingAppointment);
-				SignupService.storeAppointments(data).then((response) => {
-					if (typeof response !== 'undefined' && response && response.success){
-						document.body.scrollTop = document.documentElement.scrollTop = 0;
-						$scope.appointmentId = response.appointmentId;
-						$scope.successMessage = $sce.trustAsHtml(response.message);
+			console.log("1, before geting existing appts from service");
+			//$scope.findExistingAppointment();
 
-						// Send the confirmation email
-						if ($scope.data.email != null && $scope.data.email.length > 0) {
-							$scope.emailConfirmation();
-						}
+			const firstName = $scope.data.firstName || '';
+			const lastName = $scope.data.lastName || '';
+			SignupService.getExistingClientAppointments(firstName, lastName).then((response) => {
+				console.log("type of response");
+				console.log(typeof response);
+				console.log(response.success);
+				if (typeof response !== 'undefined' && response && response.success){
+					console.log("2, success, num appointments is:");
+					console.log(response.numberExistingAppointments);
+					// response.numberExistingAppointments === false when none exist
+					if(response.numberExistingAppointments !== false && response.numberExistingAppointments === 0) {
+						console.log('3, no existing appts');
+						$scope.hasExistingAppointment = false;
 					} else {
-						NotificationUtilities.giveNotice('Failure', 'There was an error on the server while storing your appointment. Please refresh the page in a few minutes and try again.', false);
+						console.log("3, appts exist, num appointments is:");
+						console.log(response.numberExistingAppointments);	
+						$scope.hasExistingAppointment = true;
 					}
-				});
 				} else {
+					// TODO delete this 2
+					NotificationUtilities.giveNotice('Failure', '2, There was an error on the server! Please refresh the page in a few minutes and try again.', false);
+				}
+
+				if(!$scope.hasExistingAppointment) {
+					console.log("4, found no existing appts, hasExistingAppointment is:");
+					console.log($scope.hasExistingAppointment);
+					SignupService.storeAppointments(data).then((response) => {
+						if (typeof response !== 'undefined' && response && response.success){
+							document.body.scrollTop = document.documentElement.scrollTop = 0;
+							$scope.appointmentId = response.appointmentId;
+							$scope.successMessage = $sce.trustAsHtml(response.message);
+	
+							// Send the confirmation email
+							if ($scope.data.email != null && $scope.data.email.length > 0) {
+								$scope.emailConfirmation();
+							}
+						} else {
+							NotificationUtilities.giveNotice('Failure', 'There was an error on the server while storing your appointment. Please refresh the page in a few minutes and try again.', false);
+						}
+					});
+				} else {
+					console.log("4, appts exist so redirecting");
 					// TODO finExistingAppoitnment has already thrown an error, do we need that one?
 					// TODO can i notify after changing lcoation? need to makme this a next?
 					NotificationUtilities.giveNotice('Failure', "1You may not sign up for an appointment if you already have an existing one.", false);
 					window.location.replace("../cancel/index.php");
 					NotificationUtilities.giveNotice('Failure', "2You may not sign up for an appointment if you already have an existing one.", false);
-				}
+				}				
+			});
 		};
 
 		$scope.emailConfirmation = () => {
