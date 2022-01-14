@@ -141,12 +141,17 @@ define('signupController', [], function() {
 					console.log("2, success, num appointments is:");
 					console.log(response.numberExistingAppointments);
 					// response.numberExistingAppointments === false when none exist
-					if(response.numberExistingAppointments !== false && response.numberExistingAppointments === 0) {
+					console.log("Results check. first false:");
+					console.log(response.numberExistingAppointments === false);
+					console.log(response.numberExistingAppointments['numberExistingAppointments'] === '0');					
+					console.log(typeof response.numberExistingAppointments['numberExistingAppointments']);	
+
+					if(response.numberExistingAppointments === false || response.numberExistingAppointments['numberExistingAppointments'] === '0') {
 						console.log('3, no existing appts');
 						$scope.hasExistingAppointment = false;
 					} else {
 						console.log("3, appts exist, num appointments is:");
-						console.log(response.numberExistingAppointments);	
+						console.log(response.numberExistingAppointments['numberExistingAppointments']);	
 						$scope.hasExistingAppointment = true;
 					}
 				} else {
