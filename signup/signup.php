@@ -26,7 +26,7 @@
 
 			<ul class="dcf-pl-0">
 				<li class="dcf-form-group form-textfield">
-					<label class="dcf-label form-label form-required" for="firstName">First Name</label>
+					<label class="dcf-label form-label form-required" for="firstName">Legal First Name</label>
 					<input type="text" class="dcf-input-text form-control" name="firstName" id="firstName" ng-model="data.firstName" required>
 					<div ng-show="form.$submitted || form.firstName.$touched">
 						<label class="error" ng-show="form.firstName.$error.required">This field is required.</label>
@@ -34,7 +34,7 @@
 				</li>
 
 				<li class="form-textfield">
-					<label class="dcf-label form-label form-required" for="lastName">Last Name</label>
+					<label class="dcf-label form-label form-required" for="lastName">Legal Last Name</label>
 					<input type="text" class="dcf-input-text form-control" name="lastName" id="lastName" ng-model="data.lastName" required>
 					<div ng-show="form.$submitted || form.lastName.$touched">
 						<label class="error" ng-show="form.lastName.$error.required">This field is required.</label>
@@ -107,7 +107,6 @@
 						<label class="error" ng-show="form.language.$error.required">This field is required.</label>
 					</div>
 				</li>
-					
 
 				<li class="form-radio" id="studentUNL">
 					<label for="1" class="form-required">Are you a University of Nebraska-Lincoln or Nebraska Wesleyan student?</label>
@@ -293,6 +292,33 @@
 					<p class="dcf-txt-xs">This information is for the purpose of having a specific tax preparer available to assist with your China, India, Treaty, or Non-Treaty tax return and is stored as one of those four values.</p>
 					<div ng-show="form.$submitted || form.studentCountry.$touched">
 						<label class="error" ng-show="form.studentCountry.$error.required">This field is required.</label>
+					</div>
+				</li>
+
+				<li class="form-radio" id="isVirtualId">
+					<label for="1" class="form-required">Would you like a virtual or in-person appointment?</label>
+					<div>
+						<div class="dcf-btn-group" data-toggle="buttons">
+							<label class="dcf-btn dcf-btn-secondary" 
+								name="isVirtualName" 
+								ng-model="virtualToggle.virtual" 
+								ng-change="updateAppointmentType()"
+								uib-btn-radio="true" 
+								type="radio" 
+								required>Virtual
+							</label>
+							<label class="dcf-btn dcf-btn-secondary" 
+								name="isVirtualName" 
+								ng-model="virtualToggle.virtual" 
+								ng-change="updateAppointmentType()"
+								uib-btn-radio="false" 
+								type="radio" 
+								required>In-Person
+							</label>
+						</div>
+					</div>
+					<div ng-show="form.$submitted || form.isVirtualName.$touched">
+						<label class="error" ng-show="form.isVirtualName.$error.required">This field is required.</label>
 					</div>
 				</li>
 			</ul>
