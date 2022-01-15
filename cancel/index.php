@@ -90,7 +90,7 @@ return readfile($documentRoot . $path);
 			</div>
 			<header class="dcf-page-title" id="dcf-page-title">
 				<!-- TemplateBeginEditable name="pagetitle" -->
-				<h1>Cancel/Reschedule</h1>
+				<h1>Cancel/Reschedule Appointment</h1>
 				<!-- TemplateEndEditable -->
 			</header>
 			<!-- TemplateBeginEditable name="herogroup1" -->

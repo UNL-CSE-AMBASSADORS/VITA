@@ -108,7 +108,7 @@ return readfile($documentRoot . $path);
 		<div class="dcf-bleed">
 			<div class="dcf-wrapper dcf-pb-8">
 			<p>Children living in poverty need your help. The American Rescue Plan of 2021 has increased the dollar amount of
-			 child tax credits and set the income limit to $0. There are 38,000 non-filers in Nebraska which include 9.600
+			 child tax credits and set the income limit to $0. There are 38,000 non-filers in Nebraska which include 9,600
 			 households and 11,000 children under the age of 17. By becoming an IRS certified return preparer or greeter,
 			 you are assisting our low income working families in filing their 2021 federal and state income tax returns
 			 for free. More importantly you are assuring our children will receive their child tax credits and earned
