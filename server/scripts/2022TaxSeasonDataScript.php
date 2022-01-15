@@ -112,10 +112,10 @@ function insertCenterForPeopleInNeedData() {
 
 		$siteId = 5; // Manually obtained from PROD DB
 
-		// Feb 2-Mar 30, Tuesdays 11-1
-		$tuesdayDates = getWeeklyDatesFromRange('2022-02-02', '2022-03-30');
+		// Feb 2-Mar 30, Wednesdays 11-1
+		$wednesdayDates = getWeeklyDatesFromRange('2022-02-02', '2022-03-30');
 
-		foreach ($tuesdayDates as $date) {
+		foreach ($wednesdayDates as $date) {
 
 			$firstAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 2, 1, $siteId);
 			$secondAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 2, 1, $siteId);
@@ -254,15 +254,15 @@ function insertSoutheastCommunityCollegeData() {
 	}
 }
 
-function insertNebraskaUnionData() {
+function insertNebraskaEastUnionData() {
 	GLOBAL $DB_CONN;
 	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
-		die('The Nebraska Union data has already been inserted');
+		die('The Nebraska East Union data has already been inserted');
 	}
 
-	$siteId = 11; // Manually obtained from PROD DB
+	$siteId = 1; // Manually obtained from PROD DB
 
 	try {
 		$DB_CONN->beginTransaction();

@@ -176,7 +176,7 @@ function markAppointmentAsReady($token, $firstName, $lastName, $emailAddress, $p
 		$appointmentType = $clientInformation['appointmentType'];
 		$preferredLanguage = $clientInformation['language'];
 		$siteName = $clientInformation['title'];
-		// TODO this will only be sent if the appointment is virtual, correct? Docs aren't uploaded for other appointments.
+
 		if (PROD) {
 			// Email volunteers saying it's ready to go
 			$siteId = $clientInformation['siteId'];

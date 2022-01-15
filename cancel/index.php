@@ -105,8 +105,8 @@ return readfile($documentRoot . $path);
 		<!-- TemplateBeginEditable name="maincontentarea" -->
 		<div class="dcf-bleed">
 			<div class="dcf-wrapper dcf-pb-8">
-				<p>If you have been redirected to this page, it may be because you have attempted to
-					schedule an appointment even though you have a future appointment already scheduled.
+				<p>If you have been redirected to this page, it may be because you attempted to
+					schedule an appointment even though you already have a future appointment scheduled.
 					Unfortunately VITA Lincoln has limited capacity, so we cannot reserve multiple
 					appointments for individuals. To help us serve as much of the Lincoln community
 					as possible, we kindly ask you to cancel or reschedule your currently scheduled appointment.

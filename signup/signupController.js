@@ -5,7 +5,6 @@ define('signupController', [], function() {
 		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
 		$scope.successMessage = null;
 		$scope.appointmentId = null; // The id of the client's appointment once they successfully sign up
-		$scope.hasExistingAppointment = null;
 		$scope.virtualToggle = {
 			virtual: null
 		};
@@ -114,34 +113,35 @@ define('signupController', [], function() {
 			const lastName = $scope.data.lastName || '';
 			SignupService.getExistingClientAppointments(firstName, lastName).then((response) => {
 				if (typeof response !== 'undefined' && response && response.success) {
+					let hasExistingAppointment = null;
 					// response.numberExistingAppointments === false when query is empty because none exist
 					if(response.numberExistingAppointments === false || response.numberExistingAppointments['numberExistingAppointments'] === '0') {
-						$scope.hasExistingAppointment = false;
+						hasExistingAppointment = false;
 					} else {
-						$scope.hasExistingAppointment = true;
+						hasExistingAppointment = true;
 					}
 
 					// Only allow the client to sign up for an appointment if they don't currently have any uncancelled appointments
-					if(!$scope.hasExistingAppointment) {
-						SignupService.storeAppointments(data).then((response) => {
-							if (typeof response !== 'undefined' && response && response.success){
-								document.body.scrollTop = document.documentElement.scrollTop = 0;
-								$scope.appointmentId = response.appointmentId;
-								$scope.successMessage = $sce.trustAsHtml(response.message);
-		
-								// Send the confirmation email
-								if ($scope.data.email != null && $scope.data.email.length > 0) {
-									$scope.emailConfirmation();
-								}
-							} else {
-								NotificationUtilities.giveNotice('Failure', 'There was an error on the server while storing your appointment. Please refresh the page in a few minutes and try again.', false);
-							}
-						});
-					} else {
-						// TODO finExistingAppoitnment has already thrown an error, do we need that one?
+					if(hasExistingAppointment) {
 						NotificationUtilities.giveNotice('Failure', "You may not sign up for an appointment if you already have an existing one.", false);
 						window.location.replace("../cancel/index.php");
+						return;
 					}
+					
+					SignupService.storeAppointments(data).then((response) => {
+						if (typeof response !== 'undefined' && response && response.success){
+							document.body.scrollTop = document.documentElement.scrollTop = 0;
+							$scope.appointmentId = response.appointmentId;
+							$scope.successMessage = $sce.trustAsHtml(response.message);
+	
+							// Send the confirmation email
+							if ($scope.data.email != null && $scope.data.email.length > 0) {
+								$scope.emailConfirmation();
+							}
+						} else {
+							NotificationUtilities.giveNotice('Failure', 'There was an error on the server while storing your appointment. Please refresh the page in a few minutes and try again.', false);
+						}
+					});
 				} else {
 					NotificationUtilities.giveNotice('Failure', 'There was an error on the server retrieving information regarding potential existing appointments. Please refresh the page in a few minutes and try again.', false);
 				}	
