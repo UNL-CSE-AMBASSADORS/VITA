@@ -5,6 +5,9 @@ define('signupController', [], function() {
 		$scope.sharedProperties = sharedPropertiesService.getSharedProperties();
 		$scope.successMessage = null;
 		$scope.appointmentId = null; // The id of the client's appointment once they successfully sign up
+		$scope.virtualToggle = {
+			virtual: null
+		};
 		$scope.data = {
 			language: 'eng'
 		};
@@ -106,19 +109,42 @@ define('signupController', [], function() {
 				"siteId": $scope.sharedProperties.selectedSite
 			};
 
-			SignupService.storeAppointments(data).then((response) => {
-				if (typeof response !== 'undefined' && response && response.success){
-					document.body.scrollTop = document.documentElement.scrollTop = 0;
-					$scope.appointmentId = response.appointmentId;
-					$scope.successMessage = $sce.trustAsHtml(response.message);
-
-					// Send the confirmation email
-					if ($scope.data.email != null && $scope.data.email.length > 0) {
-						$scope.emailConfirmation();
+			const firstName = $scope.data.firstName || '';
+			const lastName = $scope.data.lastName || '';
+			SignupService.getExistingClientAppointments(firstName, lastName).then((response) => {
+				if (typeof response !== 'undefined' && response && response.success) {
+					let hasExistingAppointment = null;
+					// response.numberExistingAppointments === false when query is empty because none exist
+					if(response.numberExistingAppointments === false || response.numberExistingAppointments['numberExistingAppointments'] === '0') {
+						hasExistingAppointment = false;
+					} else {
+						hasExistingAppointment = true;
 					}
+
+					// Only allow the client to sign up for an appointment if they don't currently have any uncancelled appointments
+					if(hasExistingAppointment) {
+						NotificationUtilities.giveNotice('Failure', "You may not sign up for an appointment if you already have an existing one.", false);
+						window.location.replace("../cancel/index.php");
+						return;
+					}
+					
+					SignupService.storeAppointments(data).then((response) => {
+						if (typeof response !== 'undefined' && response && response.success){
+							document.body.scrollTop = document.documentElement.scrollTop = 0;
+							$scope.appointmentId = response.appointmentId;
+							$scope.successMessage = $sce.trustAsHtml(response.message);
+	
+							// Send the confirmation email
+							if ($scope.data.email != null && $scope.data.email.length > 0) {
+								$scope.emailConfirmation();
+							}
+						} else {
+							NotificationUtilities.giveNotice('Failure', 'There was an error on the server while storing your appointment. Please refresh the page in a few minutes and try again.', false);
+						}
+					});
 				} else {
-					NotificationUtilities.giveNotice('Failure', 'There was an error on the server! Please refresh the page in a few minutes and try again.', false);
-				}
+					NotificationUtilities.giveNotice('Failure', 'There was an error on the server retrieving information regarding potential existing appointments. Please refresh the page in a few minutes and try again.', false);
+				}	
 			});
 		};
 
@@ -145,6 +171,10 @@ define('signupController', [], function() {
 		$scope.updateAppointmentType = () => {
 			if ($scope.isVirtualAppointmentRequested() && !$scope.sharedProperties.appointmentType.includes('virtual-')) {
 				$scope.sharedProperties.appointmentType = 'virtual-' + $scope.sharedProperties.appointmentType;
+			} else if (!$scope.isVirtualAppointmentRequested() && $scope.sharedProperties.appointmentType.includes('virtual-')) {
+				// https://stackoverflow.com/questions/9928679/remove-the-string-on-the-beginning-of-an-url
+				$scope.sharedProperties.appointmentType = $scope.sharedProperties.appointmentType.replace(/^(virtual-)/,"");
+
 			}
 		};
 
@@ -183,8 +213,7 @@ define('signupController', [], function() {
 		};
 
 		$scope.isVirtualAppointmentRequested = () => {
-			// TODO: This is hard-coded to true right now since all appointments are virtual, should eventually be replaced with a question
-			return true;
+			return $scope.virtualToggle.virtual;
 		};
 
 		$scope.downloadForm14446 = () => {

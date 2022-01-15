@@ -1,7 +1,5 @@
 <?php
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
-require_once "$root/server/user.class.php";
-$USER = new User();
 function wdnInclude($path)
 {
 $documentRoot = 'https://unlcms.unl.edu';
@@ -20,13 +18,11 @@ return readfile($documentRoot . $path);
 		$Id: php.fixed.dwt.php | cf0a670a0fd8db9e20a169941c55c838d7c2ba10 | Wed Dec 12 16:54:41 2018 -0600 | Eric Rasmussen	$
 	-->
 	<!-- TemplateBeginEditable name="doctitle" -->
-	<title>Sign Up for a VITA Appointment | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+	<title>Cancel | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
-	<link rel="stylesheet" href="/dist/assets/css/form.css">
-	<link rel="stylesheet" href="/dist/assets/css/printAppointmentConfirmation.css">
-	<link rel="stylesheet" href="/dist/signup/signup.css">
+	<!-- Place optional header elements here -->
 	<!-- TemplateEndEditable -->
 	<!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -87,15 +83,14 @@ return readfile($documentRoot . $path);
 					<ol>
 						<li><a href="https://www.unl.edu/">Nebraska</a></li>
 						<li><a href="/">VITA Lincoln</a></li>
-						<li>Need Assistance</li>
-						<li><span aria-current="page">Sign Up for a VITA Appointment</span></li>
+						<li><span aria-current="page">Cancel/Reschedule</span></li>
 					</ol>
 					<!-- TemplateEndEditable -->
 				</nav>
 			</div>
 			<header class="dcf-page-title" id="dcf-page-title">
 				<!-- TemplateBeginEditable name="pagetitle" -->
-				<h1>Sign Up for a VITA Appointment</h1>
+				<h1>Cancel/Reschedule Appointment</h1>
 				<!-- TemplateEndEditable -->
 			</header>
 			<!-- TemplateBeginEditable name="herogroup1" -->
@@ -108,7 +103,23 @@ return readfile($documentRoot . $path);
 	</div>
 	<div class="dcf-main-content dcf-wrapper">
 		<!-- TemplateBeginEditable name="maincontentarea" -->
-		<sign-up id="signupApp"></sign-up>
+		<div class="dcf-bleed">
+			<div class="dcf-wrapper dcf-pb-8">
+				<p>If you have been redirected to this page, it may be because you attempted to
+					schedule an appointment even though you already have a future appointment scheduled.
+					Unfortunately VITA Lincoln has limited capacity, so we cannot reserve multiple
+					appointments for individuals. To help us serve as much of the Lincoln community
+					as possible, we kindly ask you to cancel or reschedule your currently scheduled appointment.
+					<br><br>
+					<b>To cancel or reschedule a previously scheduled appointment, you must find your
+					confirmation email titled "VITA Appointment Confirmation".</b> At the bottom of the email,
+					under the bolded title "Rescheduling or Cancelling your Appointment", you will find a link
+					to rechedule or cancel your appointment.<b> There is no other way to reschedule or cancel an appointment.</b>
+					<br><br>
+					If you have any questions, please contact vita@unl.edu.
+				</p>
+			</div>
+		</div>
 		<!-- TemplateEndEditable -->
 	</div>
 </main>
@@ -125,7 +136,7 @@ return readfile($documentRoot . $path);
 <?php wdnInclude("/wdn/templates_5.1/includes/global/js-body.html"); ?>
 <!-- TemplateBeginEditable name="jsbody" -->
 <?php require_once "$root/server/global_includes.php"; ?>
-<script src="/dist/signup/signup.js"></script>
+<!-- put your custom javascript here -->
 <!-- TemplateEndEditable -->
 </body>
 </html>
