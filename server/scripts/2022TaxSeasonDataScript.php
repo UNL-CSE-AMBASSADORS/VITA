@@ -445,29 +445,29 @@ function insertInternationalStudentScholarSiteData() {
 		$tuesdayDates = getWeeklyDatesFromRange('2022-03-01', '2022-04-05');
 		foreach ($tuesdayDates as $date) {
 
-			// Virtual China
-			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 10, 7, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 10, 7, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 10, 7, $siteId);
-			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 5, 7, $siteId);
+			// China
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 10, 2, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 10, 2, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 10, 2, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 5, 2, $siteId);
 
-			// Virtual India
-			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 5, 8, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 5, 8, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 5, 8, $siteId);
-			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 2, 8, $siteId);			
+			// India
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 5, 3, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 5, 3, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 5, 3, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 2, 3, $siteId);			
 		
-			// Virtual Treaty
-			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 5, 9, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 5, 9, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 5, 9, $siteId);
-			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 2, 9, $siteId);			
+			// Treaty
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 5, 4, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 5, 4, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 5, 4, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 2, 4, $siteId);			
 		
-			// Virtual Non-Treaty
-			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 10, 10, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 10, 10, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 10, 10, $siteId);
-			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 5, 10, $siteId);
+			// Non-Treaty
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 10, 5, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 10, 5, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 10, 5, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 5, 5, $siteId);
 		}
 
 		$DB_CONN->commit();
