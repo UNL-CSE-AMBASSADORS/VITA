@@ -1,5 +1,7 @@
 <?php
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
+require_once "$root/server/user.class.php";
+$USER = new User();
 function wdnInclude($path)
 {
 $documentRoot = 'https://unlcms.unl.edu';
@@ -32,8 +34,10 @@ return readfile($documentRoot . $path);
 <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-wrapper dcf-pt-3 dcf-pb-3 dcf-bold dcf-txt-decor-none unl-font-sans unl-cream" style="background-color: #007197;">
 	<span class="dcf-txt-xs">
 		<span class="dcf-d-inline-block dcf-mt-2 dcf-mb-2 dcf-mr-4">
-			In response to COVID-19, all Lincoln VITA tax appointments will be conducted virtually. 
-			You may schedule a virtual appointment under the 'Need Assistance' tab. The virtual site will be taking appointments through Thursday, April 8th.
+		Lincoln VITA will be conducting in-person return preparation in 2022.
+		In addition, Lincoln VITA will have virtual site (remote preparation)
+		and Facilitated Self Assistance (FSA) appointments available. You may schedule an
+		appointment under the 'Need Assistance' tab when the scheduling site opens mid-January.
 		</span>
 	</span>
 </div>
@@ -186,7 +190,7 @@ return readfile($documentRoot . $path);
 					<div>
 						<div>
 							Lincoln VITA offers tax appointments for United States residents and for international visitors. 
-							Tax appointments begin late January and run through April 9th and are available at multiple 
+							Tax appointments begin late January and run through April 12th and are available at multiple 
 							sites in the Lincoln area. To see the days and times for all the locations, please download 
 							the site schedule. 
 						</div>

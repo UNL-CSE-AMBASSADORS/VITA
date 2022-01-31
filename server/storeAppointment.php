@@ -8,6 +8,7 @@ if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
 		case 'storeAppointment': storeAppointment($_POST); break;
 		case 'emailConfirmation': emailConfirmation($_REQUEST); break;
+		case 'getExistingClientAppointments': getExistingClientAppointments($_POST['firstName'], $_POST['lastName']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -165,4 +166,35 @@ function getClientInformationForAppointmentId($appointmentId) {
 	}
 
 	return $clientInformation;
+}
+
+
+function getExistingClientAppointments($firstName, $lastName) {
+	GLOBAL $DB_CONN;
+	
+	$response = array();
+	$response['success'] = true;
+	try {
+		// uses same cancelled logic from getTimes.php : getAppointmentTimesFromDatabase()
+		$query = 'SELECT
+			SUM(IF(apt.appointmentId IS NOT NULL AND (sa.cancelled IS NULL OR sa.cancelled = FALSE), 1, 0)) AS numberExistingAppointments
+			FROM vita.appointment apt
+			LEFT JOIN client ON apt.clientId = client.clientId
+			LEFT JOIN servicedappointment sa ON apt.appointmentId = sa.appointmentId
+			LEFT JOIN appointmenttime at on apt.appointmentTimeId = at.appointmentTimeId
+			WHERE firstName = ? AND lastName = ?
+			AND scheduledTime >= NOW()
+			GROUP BY firstName, lastName';
+
+		$stmt = $DB_CONN->prepare($query);
+		$stmt->execute(array($firstName, $lastName));
+		
+		$numberExistingAppointments = $stmt->fetch(PDO::FETCH_ASSOC);
+		$response['numberExistingAppointments'] = $numberExistingAppointments;
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = 'There was an error on the server retrieving appointment information. Please try again later.';
+	}
+
+	echo json_encode($response);
 }

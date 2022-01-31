@@ -44,6 +44,7 @@ function getAppointmentTimes($data, $isLoggedIn) {
 function getAppointmentTimesFromDatabase($year, $after, $appointmentType) {
 	GLOBAL $DB_CONN;
 
+	// selecting numberOfAppointmentsAlreadyScheduled avoids a bug--I think it avoids excluding appts w/o a ServicedAppointment
 	$query = 'SELECT apt.appointmentTimeId, apt.siteId, s.title, DATE(scheduledTime) AS scheduledDate,
 		TIME(scheduledTime) AS scheduledTime,
 		SUM(IF(a.appointmentId IS NOT NULL AND (sa.cancelled IS NULL OR sa.cancelled = FALSE),1,0)) AS numberOfAppointmentsAlreadyScheduled,
