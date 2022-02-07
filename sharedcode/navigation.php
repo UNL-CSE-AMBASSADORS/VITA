@@ -9,6 +9,7 @@
 			<li><a href="<?php $root ?>/questionnaire" title="VITA questionnaire">Can VITA help you?</a></li>
 			<li><a href="<?php $root ?>/signup" title="Signup for an Appointment">Sign Up for a VITA Appointment</a></li>
 			<li><a href="<?php $root ?>/cancel" title="Cancel/Reschedule an Appointment">Cancel/Reschedule an Appointment</a></li>
+			<li><a href="<?php $root ?>/self_assist" title="Facilitated Self-Assistance (FSA)">Facilitated Self-Assistance (FSA)</a></li>
 		</ul>
 	</li>
 
