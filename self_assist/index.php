@@ -105,13 +105,16 @@ return readfile($documentRoot . $path);
 		<!-- TemplateBeginEditable name="maincontentarea" -->
 		<div class="dcf-bleed">
 			<div class="dcf-wrapper dcf-pb-8">
-				<p>To do your return using the Facilitated Self Assistance (FSA) please email us
-					at <a href="mailto:vita@unl.edu" target="_blank">vita@unl.edu</a> for a link to the tax software to do your return."
+				<p>VITA Lincoln is required to send the Facilitated Self Assistance (FSA) link
+					individually to each interested client rather than post it here. To do your
+					return using FSA, please email us at
+					<a href="mailto:vita@unl.edu" target="_blank">vita@unl.edu</a> for a link to the
+					tax software to do your return.
 					<br><br>
 					If you have any questions while you are working on your return or would like
 					someone to review your return when you are finished, you can again email us
-					at <a href="mailto:vita@unl.edu" target="_blank">vita@unl.edu</a> to make an appointment to meet with one of our Certified Tax
-					Preparers.
+					at <a href="mailto:vita@unl.edu" target="_blank">vita@unl.edu</a> to make an
+					appointment to meet with one of our Certified Tax Preparers.
 				</p>
 			</div>
 		</div>
