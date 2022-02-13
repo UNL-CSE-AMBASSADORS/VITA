@@ -81,32 +81,32 @@
 				<p class="dcf-txt-h3 dcf-txt-center dcf-uppercase"><b>virtual VITA/TCE Taxpayer Consent</b></p>
 				<p>This form is required whenever the taxpayer’s tax return is completed and/or quality reviewed in a
 					non-face-to-face environment. The site must explain to the taxpayer the process this site will use
-					to prepare the taxpayer’s return. If applicable, taxpayers must also be advised of all procedures and
-					the associated risk if their data will be transferred from one site location to another site location.
+					to prepare the taxpayer’s return. If applicable, volunteers must advise taxpayers of the associated
+					risk of transferring their data from one site location to another site.
 				</p>
 				<p class="dcf-txt-h5 dcf-bold">PART I: Site Information</p>
 				<p>SITE NAME: <b>Lincoln Virtual VITA</b></p>
-				<p>SITE ADDRESS: <b>1400 R Street, 222 Nebraska Union, Lincoln, NE 68588-0444</b></p>
+				<p>SITE ADDRESS: <b>University of Nebraska-Lincoln, 1400 R Street, Lincoln, NE 68588-0144</b></p>
 				<p>SITE IDENTIFICATION NUMBER (SIDN): <b>S53017050</b></p>
-				<p>SITE COORDINATORS: <b>Linda, Kyla, or Tracy</b></p>
+				<p>SITE COORDINATORS: <b>Linda or Kyla</b></p>
 				<p>SITE CONTACT NAME: <b>UNL Tax Credit Campaign</b></p>
-				<p>SITE CONTACT TELEPHONE NUMBER: <b>VITA@UNL.EDU</b></p>
+				<p>SITE CONTACT TELEPHONE NUMBER: <b>402-472-0857 or  VITA@UNL.EDU</b></p>
 				<p class="dcf-bold">This site is using the following Virtual VITA/TCE method(s) to prepare your tax return:</p>
-				<p><b>100% Virtual VITA/TCE Process:</b> This method includes non face-to-face interactions with the taxpayer and
-					any of the VITA/TCE volunteers during the intake, interview, return preparation, quality review, and
-					signing the tax return. The taxpayer will be explained the full process and is required to consent to
-					step-by-step process used by the site. This includes the virtual procedures to send required documents
-					(social security numbers, Form W-2 and other documents) through a secured file sharing system to a
-					designated volunteer for review.
+				<p><b>100% Virtual VITA/TCE Process:</b> This method includes <b><i>non face-to-face</i></b> interactions
+					with the taxpayer and any of the VITA/TCE volunteers during the intake, interview, return preparation,
+					quality review, and signing the tax return. The site must explain the process and consent.  This includes
+					the virtual procedures to send required documents (social security numbers, Form W-2 and other documents)
+					through a secured file sharing system to a designated volunteer for review.
+
 				</p>
 				<p class="dcf-txt-h5 dcf-bold">PART II: The Sites Process</p>
 				<ol>
 					<li><b>Scheduling the appointment:</b> Client schedules appointment at vita.unl.edu/signup and receives an email with a secure, unique link to verify information.</li>
 					<li><b>Securing Taxpayer Consent Agreement:</b>	Client agrees by checking a box on the scheduling app, agreeing to participate in the virtual return preparation process. Clients read and electronically sign Form 14446 with a completed and signed Form 13614, Intake, Interview & Quality Review Sheet when uploading documents.</li>				
-					<li><b>Performing the Intake Process (secure all documents):</b>  The site administrator will review the Client's uploaded documents ensuring receipt of Form 13614. When all documents are ready for review the Client will check the ready for tax preparation box on the secured link provided to them. The site coordinator will assign the Client to a certified return preparer who will then call the Client to review Form 13614.</li>
-					<li><b>Validating taxpayer's authentication (Reviewing photo identification & Social Security Cards/ITINS):</b> The site administrator will review the Client's uploaded documents ensuring receipt of Form 13614. When all documents are ready for review the Client will check the ready for tax preparation box on the secured link provided to them. The site coordinator will assign the Client to a certified return preparer who will then call the Client to review Form 13614.</li>
+					<li><b>Performing the Intake Process <i>(secure all documents)</i>:</b> The site administrator will review the Client's uploaded documents ensuring receipt of signed Forms 14446 and 13614. When all documents are ready for review the Client will check the ready for tax preparation box on the secured link provided to them. The site coordinator will assign the Client to a certified return preparer who will then call the Client to review Form 13614.</li>
+					<li><b>Validating taxpayer's authentication <i>(Reviewing photo identification & Social Security Cards/ITINS)</i>:</b> The site administrator will review the Client's uploaded documents ensuring receipt of signed Forms 14446 and 13614. When all documents are ready for review the Client will check the ready for tax preparation box on the secured link provided to them. The site coordinator will assign the Client to a certified return preparer who will then call the Client to review Form 13614.</li>
 					<li><b>Performing the interview with the taxpayer(s):</b> The Return Preparer will contact the Client by phone to discuss Form 13614 and review all photo identification, social security cards/ITIN letter and income documents that have been uploaded.</li>
-					<li><b>Preparing the tax return:</b> An IRS tax law certified return preparer will be assigned to the Client by the Site Coordinator. The Site Coordinator will assign a Client to a Return Prepare based upon the certification level of the Return Preparer.</li>
+					<li><b>Preparing the tax return:</b> An IRS tax law certified return preparer will be assigned to the Client by the Site Coordinator. The Site Coordinator will assign a Client to a Return Preparer based upon the certification level of the Return Preparer.</li>
 					<li><b>Performing the quality review:</b> The Site Coordinator will review the Client's return.</li>
 					<li><b>Sharing the completed return:</b> The quality reviewed tax return will be uploaded and sent via secured link to the Client. The Return Preparer will call the Client to review the finished return, making any needed edits to the return, and asking the Client to sign Form 8879.</li>
 					<li><b>Signing the return:</b> The Client will upload on a secure link a signed and dated copy of their Form 8879.</li>
@@ -155,7 +155,7 @@
 						you are agreeing to the procedures stated above for preparing a tax return for you. (If this
 						is a Married Filing Joint return both spouses must sign and date this document.) If you choose
 						not to sign this form, we may not be able to prepare your tax return using this process. Since
-						we are preparing your tax return virtually, we have to secure your consent agreeing to this 
+						we are preparing your tax return virtually, we have to secure your consent agreeing to this
 						process. If you consent to use these non-IRS virtual systems to disclose or use your tax return
 						information, Federal law may not protect your tax return information from further use or distribution
 						in the event these systems are hacked or breached without our knowledge. If you agree to the disclosure
@@ -164,10 +164,11 @@
 						of signature. If you believe your tax return information has been disclosed or used improperly in a
 						manner unauthorized by law or without your permission, you may contact the Treasury Inspector General
 						for Tax Administration (TIGTA) by telephone at 1-800-366-4484, or by e-mail at complaints@tigta.treas.gov .
-						While the IRS is responsible for providing oversight requirements to Volunteer Income Tax Assistance (VITA) 
+						While the IRS is responsible for providing oversight requirements to Volunteer Income Tax Assistance (VITA)
 						and Tax Counseling for the Elderly (TCE) programs, these sites are operated by IRS sponsored partners who
-						manage IRS site operations requirements and volunteer ethical standards. In addition, the locations of these 
-						sites may not be in or on federal property. </p>
+						manage IRS site operations requirements and volunteer ethical standards. In addition, the locations of these
+						sites may not be in or on federal Property.
+					</p>
 					<li class="form-radio" id="consentVirtual">
 						<label class="form-required">I am agreeing to use this site's Virtual VITA/TCE Process</label>
 						<div>
@@ -193,7 +194,7 @@
 					</li>
 
 					<li class="dcf-form-group form-textfield">
-						<label class="dcf-label form-label form-required" for="signature">Signature (type/print)</label>
+						<label class="dcf-label form-label form-required" for="signature">TYPE YOUR NAME HERE</label>
 						<input type="text" class="dcf-input-text form-control" name="signature" id="signature" ng-model="consentData.signature" required>
 						<p class="dcf-txt-xs">If you are filing jointly, please include the signature of both taxpayer and spouse, or both Married Filed Jointly (MFJ) clients.</p>
 						<div ng-show="consentForm.$submitted || consentForm.signature.$touched">

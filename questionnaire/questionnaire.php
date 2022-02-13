@@ -325,6 +325,29 @@
 		</div>
 	</div>
 
+	<div class="form-radio">
+		<p class="form-required dcf-mb-0">Will your return involve sold cryptocurrency?</p>
+		<div>
+			<div class="dcf-btn-group" data-toggle="buttons">
+				<label class="dcf-btn dcf-btn-secondary"
+					name="15"
+					ng-model="responses[15]"
+					uib-btn-radio="'1'"
+					type="radio"
+					required>Yes
+				</label>
+				<label class="dcf-btn dcf-btn-secondary"
+					name="15"
+					ng-model="responses[15]"
+					uib-btn-radio="'2'"
+					type="radio"
+					required>No
+				</label>
+			</div>
+		</div>
+		<p class="cant-help-text" ng-show="responses[15] == 1">Sorry, VITA can't prepare taxes that involve sold cryptocurrency.</p>
+	</div>
+
 	<div class="dcf-mt-6 dcf-mb-6">
 		<p class="can-help-text" ng-show="appointmentIsInScope()">Yes, VITA should be able to prepare your taxes!</p>
 		<p class="cant-help-text" ng-show="!appointmentIsInScope()">Sorry, VITA cannot prepare your taxes.</p>
