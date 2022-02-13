@@ -11,7 +11,7 @@ define('questionnaireController', [], function() {
 			return false;
 		};
 
-		$scope.appointmentIsInScope = function() {			
+		$scope.appointmentIsInScope = function() {
 			const outOfScope = $scope.responses[1] == 1
 							|| $scope.responses[2] == 1
 							|| $scope.responses[4] == 1
@@ -20,6 +20,7 @@ define('questionnaireController', [], function() {
 							|| $scope.responses[7] == 1
 							|| $scope.responses[8] == 1
 							|| $scope.responses[9] == 1
+							|| $scope.responses[15] == 1;
 			
 			return !outOfScope;
 		}

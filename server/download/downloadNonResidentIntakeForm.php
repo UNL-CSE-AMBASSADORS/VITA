@@ -1,6 +1,6 @@
 <?php
 
-downloadFile('2020_F13614NR.pdf');
+downloadFile('2021_F13614NR.pdf');
 
 function downloadFile($fileName) {
 	$root = realpath($_SERVER['DOCUMENT_ROOT']);

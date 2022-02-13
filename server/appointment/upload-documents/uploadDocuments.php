@@ -119,22 +119,22 @@ function uploadDocument($token, $firstName, $lastName, $emailAddress, $phoneNumb
 		}
 
 		// Check if file is Fillable Form 14446 and, if so, that it has changed
-		if (preg_match('/(.*)2020_F14446(.*)\.pdf(.*)/i', $uploadedFileName)) {
+		if (preg_match('/(.*)2021_F14446(.*)\.pdf(.*)/i', $uploadedFileName)) {
 			validateForm14446HasChanged($uploadedFileTempName);
 		}
 
 		// Check if file is Fillable Intake Form 13614C (Residential) and, if so, that it has changed
-		if (preg_match('/(.*)2020_F13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
+		if (preg_match('/(.*)2021_F13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
 			validateForm13614CHasChanged($uploadedFileTempName);
 		}
 
 		// Check if file is Spanish Fillable Intake Form 13614C (SP) (Residential) and, if so, that it has changed
-		if (preg_match('/(.*)2020_SP_F13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
+		if (preg_match('/(.*)2021_SP_F13614C(.*)\.pdf(.*)/i', $uploadedFileName)) {
 			validateForm13614C_SPHasChanged($uploadedFileTempName);
 		}
 
 		// Check if file is Fillable Intake Form 13614NR (Non-Residential) and, if so, that it has changed
-		if (preg_match('/(.*)2020_F13614NR(.*)\.pdf(.*)/i', $uploadedFileName)) {
+		if (preg_match('/(.*)2021_F13614NR(.*)\.pdf(.*)/i', $uploadedFileName)) {
 			validateForm13614NRHasChanged($uploadedFileTempName);
 		}
 		
@@ -264,7 +264,7 @@ function validateForm14446HasChanged($uploadedFileTempName) {
 
 	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
 	$uploadedFileHash = md5($uploadedFileContentAsString);
-	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2020_F14446.pdf");
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2021_F14446.pdf");
 	$originalFileHash = md5($originalFileContentAsString);
 
 	if ($uploadedFileHash === $originalFileHash) {
@@ -277,7 +277,7 @@ function validateForm13614CHasChanged($uploadedFileTempName) {
 
 	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
 	$uploadedFileHash = md5($uploadedFileContentAsString);
-	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2020_F13614C.pdf");
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2021_F13614C.pdf");
 	$originalFileHash = md5($originalFileContentAsString);
 
 	if ($uploadedFileHash === $originalFileHash) {
@@ -290,7 +290,7 @@ function validateForm13614C_SPHasChanged($uploadedFileTempName) {
 
 	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
 	$uploadedFileHash = md5($uploadedFileContentAsString);
-	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2020_SP_F13614C.pdf");
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2021_SP_F13614C.pdf");
 	$originalFileHash = md5($originalFileContentAsString);
 
 	if ($uploadedFileHash === $originalFileHash) {
@@ -303,7 +303,7 @@ function validateForm13614NRHasChanged($uploadedFileTempName) {
 
 	$uploadedFileContentAsString = file_get_contents($uploadedFileTempName);
 	$uploadedFileHash = md5($uploadedFileContentAsString);
-	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2020_F13614NR.pdf");
+	$originalFileContentAsString = file_get_contents("$root/server/download/documents/2021_F13614NR.pdf");
 	$originalFileHash = md5($originalFileContentAsString);
 
 	if ($uploadedFileHash === $originalFileHash) {
