@@ -22,8 +22,9 @@
 			novalidate>
 			<p class="dcf-mt-2 dcf-mb-3">Unsure if VITA can help you? <a href="/questionnaire" target="_blank">Click here to find out.</a></p>
 			<p><b>NOTE: Please create a separate appointment for every tax return (i.e. multiple years or multiple individuals) that needs to be done.</b></p>
-			<p>Appointments are for tax return preparation only. Please direct any questions relating to already prepared tax returns or other questions by email to <a href="mailto:vita@unl.edu" target="_blank">vita@unl.edu</a></p>
-
+			<p>Appointments are for tax return preparation only. For already prepared tax returns or other questions, please email <a href="mailto:vita@unl.edu" target="_blank">vita@unl.edu</a>.
+				<br>For Facilited Self-Assistance (FSA), please visit the FSA page by clicking <a href="/self_assist/" target="_blank">here</a> or clicking its link under the "Need Assistance" tab above.
+			</p>
 			<ul class="dcf-pl-0">
 				<li class="dcf-form-group form-textfield">
 					<label class="dcf-label form-label form-required" for="firstName">Legal First Name</label>
