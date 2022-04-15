@@ -230,6 +230,20 @@ define('signupController', [], function() {
 			iframe.src = fileUrl;
 		};
 
+		$scope.downloadForm4868 = () => {
+			const fileUrl = '/server/download/downloadForm4868.php';
+			let iframe = document.getElementById('hiddenDownloader');
+			if (iframe == null) {
+				iframe = document.createElement('iframe');
+				iframe.id = 'hiddenDownloader';
+				iframe.style.visibility = 'hidden';
+				iframe.style.display = 'none';
+				document.body.appendChild(iframe);
+			}
+		
+			iframe.src = fileUrl;
+		};
+
 		// TODO This makes sure getTimes calls for virtual-residential appointments instead of residential so the DatePicker shows up.
 		// This should be removed once we have a button that toggles virtual/in-person.
 		$scope.updateAppointmentType();

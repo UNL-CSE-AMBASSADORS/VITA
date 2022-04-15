@@ -178,10 +178,10 @@ function getExistingClientAppointments($firstName, $lastName) {
 		// uses same cancelled logic from getTimes.php : getAppointmentTimesFromDatabase()
 		$query = 'SELECT
 			SUM(IF(apt.appointmentId IS NOT NULL AND (sa.cancelled IS NULL OR sa.cancelled = FALSE), 1, 0)) AS numberExistingAppointments
-			FROM vita.appointment apt
-			LEFT JOIN client ON apt.clientId = client.clientId
-			LEFT JOIN servicedappointment sa ON apt.appointmentId = sa.appointmentId
-			LEFT JOIN appointmenttime at on apt.appointmentTimeId = at.appointmentTimeId
+			FROM vita.Appointment apt
+			LEFT JOIN Client ON apt.clientId = Client.clientId
+			LEFT JOIN ServicedAppointment sa ON apt.appointmentId = sa.appointmentId
+			LEFT JOIN AppointmentTime at on apt.appointmentTimeId = at.appointmentTimeId
 			WHERE firstName = ? AND lastName = ?
 			AND scheduledTime >= NOW()
 			GROUP BY firstName, lastName';
