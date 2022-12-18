@@ -9,8 +9,8 @@ define('queueDataService', [], ($http) => {
 					return null;
 				});
 			},
-			getAppointments: (date, siteId) => {
-				return $http.get(`/server/queue/queue.php?action=getAppointments&date=${date}&siteId=${siteId}`).then((response) => {
+			getProgressionSteps: (date, siteId) => {
+				return $http.get(`/server/queue/queue.php?action=getProgressionSteps&date=${date}&siteId=${siteId}`).then((response) => {
 					return response.data;
 				}, (error) => {
 					return null;

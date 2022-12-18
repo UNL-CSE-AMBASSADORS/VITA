@@ -20,6 +20,14 @@ define('queueController', [], function() {
 		$scope.paperworkCompletedAppointments = [];
 		$scope.beingPreparedAppointments = [];
 		$scope.completedAppointments = [];
+		$scope.progressionSteps = [
+			"Awaiting1",
+			"Checked In",
+			"Paperwork Done",
+			"Preparing",
+			"Complete"			
+		]
+
 
 		$scope.appointmentNotesAreaSharedProperties = AppointmentNotesAreaSharedPropertiesService.getSharedProperties();
 
@@ -63,7 +71,7 @@ define('queueController', [], function() {
 			}
 		});
 
-		$scope.getAppointments = () => {
+		$scope.getProgressionSteps = () => {
 			let year = $scope.currentYear,
 				month = $scope.currentMonth + 1,
 				day = $scope.currentDay;
@@ -75,22 +83,38 @@ define('queueController', [], function() {
 			}
 			const siteId = $scope.selectedSite.siteId;
 
-			QueueDataService.getAppointments(isoFormattedDate, siteId)
+			QueueDataService.getProgressionSteps(isoFormattedDate, siteId)
 				.then($scope.checkResponseForError)
 				.catch($scope.notifyOfError)
 				.then((response) => {
-					const appointments = response.appointments.map((appointment) => {
-						appointment.name = appointment.firstName + ' ' + appointment.lastName;
-						appointment.checkedIn = appointment.timeIn != null;
-						appointment.paperworkComplete = appointment.timeReturnedPapers != null;
-						appointment.preparing = appointment.timeAppointmentStarted != null;
-						appointment.ended = appointment.timeAppointmentEnded != null;
-						return appointment;
+					const progressionSteps = response.progressionSteps.map((step) => {
+						step.clientName = step.firstName + ' ' + step.lastName;
+						// step.stepTimestamp = step.stepTimestampappointment.timeIn != null;
+						// appointment.paperworkComplete = appointment.timeReturnedPapers != null;
+						// appointment.preparing = appointment.timeAppointmentStarted != null;
+						// appointment.ended = appointment.timeAppointmentEnded != null;
+						return step;
 					});
 					
+					// fill the progression steps into appointment objects
+					$scope.appointments = {};
+					progressionSteps.forEach((step) => {
+						if (step.appointmentId in progressionSteps) {
+							appointments[step.appointmentId] = {}
+						}
+						
+						if (step.progressionStepName !== null) {
+							appointments[step.appointmentId][step.progressionStepName] = step.stepTimestamp					
+						} else if (step.progressionSubStepName !== null) {
+							appointments[step.appointmentId][step.progressionSubStepName] = step.stepTimestamp							
+						}
+
+
+					});
+
 					// Only add appointments if 1) they don't exist in any swimlane, or 2) they've been moved/removed already (by another volunteer)
 					// I've ignored case 2 however, as I don't think it'll happen all too often, so it's not worth the extra logic
-					appointments.forEach((appointment) => {
+					progressionSteps.forEach((step) => {
 						const exists = $scope.appointments.some((appointment2) => appointment.appointmentId === appointment2.appointmentId);
 						if (exists) return;
 
