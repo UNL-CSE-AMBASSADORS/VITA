@@ -13,29 +13,21 @@ define('queueController', [], function() {
 
 		$scope.clientSearchString = '';
 
+		$scope.pools = {}
 		// Swimlane arrays
-		$scope.appointments = []; // All references to an appointment are stored in this array, and each swimlane array contains a shallow reference to the object.
-		$scope.awaitingAppointments = [];
-		$scope.checkedInAppointments = [];
-		$scope.paperworkCompletedAppointments = [];
-		$scope.beingPreparedAppointments = [];
-		$scope.completedAppointments = [];
-		$scope.progressionSteps = [
-			"Awaiting1",
-			"Checked In",
-			"Paperwork Done",
-			"Preparing",
-			"Complete"			
-		]
+		//$scope.appointments = []; // All references to an appointment are stored in this array, and each swimlane array contains a shallow reference to the object.
+	
 
 
 		$scope.appointmentNotesAreaSharedProperties = AppointmentNotesAreaSharedPropertiesService.getSharedProperties();
 
 		// Configure dragula options
 		DragulaService.options($scope, 'queue-bag', { // Dragula call a collection of "swimlanes/containers" a "bag"
-			accepts: (element, targetContainer, sourceContainer, sibling) => {
+			//accepts: (element, targetContainer, sourceContainer, sibling) => {
+			accepts: (element, targetIndex, sourceIndex, sibling) => {
 				// Make it so elements can only be dropped in adjacent containers				
 				const containerOrder = ['awaitingAppointmentsContainer', 'checkedInAppointmentsContainer', 'paperworkCompletedAppointmentsContainer', 'beingPreparedAppointmentsContainer', 'completedAppointmentsContainer'];
+				// targetContainer is now a swimlane, or a step
 				if (targetContainer != null && sourceContainer != null) {
 					const sourceIndex = containerOrder.indexOf(sourceContainer.id);
 					const targetIndex = containerOrder.indexOf(targetContainer.id);
@@ -71,7 +63,54 @@ define('queueController', [], function() {
 			}
 		});
 
+		// have to pull these upfront because for instance, if no appointments in progressionType 1
+		// have reached the last step, then there won't be a row for that step and it won't show up in getProgressionSteps
+		$scope.getPossibleSwimlanes = () => {
+			QueueDataService.getPossibleSwimlanes()
+			.then($scope.checkResponseForError)
+			.catch($scope.notifyOfError)
+			.then((response) => {
+				if (response === null) {
+					const errorMessage = result.error || 'There was an error retrieving the appointment times. Please refresh the page.';
+					console.log(errorMessage);
+					//NotificationUtilities.giveNotice('Failure', errorMessage, false);
+				} else {
+					console.log('not null, is it undefined?');
+					//should probably put rest of logic in here. do same for getProgressionSteps
+				}
+				const possibleSwimlanes = response.potentialProgressionSteps.map((step) => {
+					return step;
+				});
+				possibleSwimlanes.forEach((step) => {
+					// if progType (a set of specific swimlanes, or a "pool")
+					// is new, make new entry for it here doesn't exist, add new dict to pools{} with progTypeName
+					if(!(step.progressionTypeId in $scope.pools)) { // this could be changed to PoolTypeID, or just PoolID
+						$scope.pools[step.progressionTypeId] = {
+							progressionTypeName: step.progressionTypeName,
+							swimlanes: {
+								0: {
+									stepName: 'Awaiting',
+									appointments: []
+								},
+								[step.progressionStepOrdinal] : {
+									stepName: step.stepName,
+									appointments: [] // will add appointments once we pull their steps in getProgressionSteps
+								}
+							}
+						};
+					} else {
+						$scope.pools[step.progressionTypeId]['swimlanes'][step.progressionStepOrdinal] =
+							{
+								stepName: step.stepName,
+								appointments: []
+							};
+					}
+				});
+			});	
+		};
+
 		$scope.getProgressionSteps = () => {
+			// TODO need to clear work here so when date or site changes, we start tabula rasa. looks like that's done in resetSwimlanes
 			let year = $scope.currentYear,
 				month = $scope.currentMonth + 1,
 				day = $scope.currentDay;
@@ -82,53 +121,66 @@ define('queueController', [], function() {
 				return;
 			}
 			const siteId = $scope.selectedSite.siteId;
-
+			// 1. Get progression steps
 			QueueDataService.getProgressionSteps(isoFormattedDate, siteId)
 				.then($scope.checkResponseForError)
 				.catch($scope.notifyOfError)
 				.then((response) => {
-					const progressionSteps = response.progressionSteps.map((step) => {
+					if(response === undefined) {
+						console.log("We had a problem accessing the appointment information.")
+					}
+					const progressionSteps = response.progressionSteps.map((step) => { //todo need to error handle this, can't access .map if progSteps doesn't exist. throw a banner and return out of this function.
+						// this is not done in sql because we don't concat so we can hide last name if wanted
 						step.clientName = step.firstName + ' ' + step.lastName;
-						// step.stepTimestamp = step.stepTimestampappointment.timeIn != null;
-						// appointment.paperworkComplete = appointment.timeReturnedPapers != null;
-						// appointment.preparing = appointment.timeAppointmentStarted != null;
-						// appointment.ended = appointment.timeAppointmentEnded != null;
 						return step;
 					});
-					
-					// fill the progression steps into appointment objects
-					$scope.appointments = {};
+					// 2. Fill the progression steps into appointment objects before adding them
+					// to the correct swimlanes in the correct pools in $scope.pools
+					const appointments = {};
 					progressionSteps.forEach((step) => {
-						if (step.appointmentId in progressionSteps) {
-							appointments[step.appointmentId] = {}
-						}
-						
-						if (step.progressionStepName !== null) {
-							appointments[step.appointmentId][step.progressionStepName] = step.stepTimestamp					
-						} else if (step.progressionSubStepName !== null) {
-							appointments[step.appointmentId][step.progressionSubStepName] = step.stepTimestamp							
-						}
-
-
-					});
-
-					// Only add appointments if 1) they don't exist in any swimlane, or 2) they've been moved/removed already (by another volunteer)
-					// I've ignored case 2 however, as I don't think it'll happen all too often, so it's not worth the extra logic
-					progressionSteps.forEach((step) => {
-						const exists = $scope.appointments.some((appointment2) => appointment.appointmentId === appointment2.appointmentId);
-						if (exists) return;
-
-						$scope.appointments.push(appointment);
-						if (appointment.timeAppointmentEnded != null || appointment.completed) {
-							$scope.completedAppointments.push(appointment);
-						} else if (appointment.timeAppointmentStarted != null) {
-							$scope.beingPreparedAppointments.push(appointment);
-						} else if (appointment.timeReturnedPapers != null) {
-							$scope.paperworkCompletedAppointments.push(appointment);
-						} else if (appointment.timeIn != null) {
-							$scope.checkedInAppointments.push(appointment);
+						if (!(step.appointmentId in appointments)) {
+							appointments[step.appointmentId] = {
+								scheduledTime: step.scheduledTime,
+								clientName: step.clientName,
+								steps: [{
+									stepOrdinal: step.progressionStepOrdinal,
+									stepName: step.progressionStepName,
+									stepTimeStamp: step.timestamp,
+									subStep: step.progressionSubStepName
+								}],
+								cancelled: step.cancelled,
+								language: step.language,
+								walkin: step.walkin,
+								visa: step.visa,
+								// TODO need to add noshow logic here, and make sure phone number/name is handled on front end
+								phoneNumber: step.phoneNumber,
+								emailAddress: step.emailAddress
+							}
 						} else {
-							$scope.awaitingAppointments.push(appointment);
+							// if the appointment object is already made, we only need to add to its list of steps
+							// (first might be checked-in, then here we add the timestamp for the "paperwork complete" step)
+							appointments[step.appointmentId]['steps'].push(
+								{
+									stepOrdinal: step.progressionStepOrdinal,
+									stepName: step.progressionStepName,
+									stepTimeStamp: step.timestamp,
+									subStep:step.progressionSubStepName
+								}
+							)
+						}
+						// we sort in sql so that the most recent step is advancement_rank = 1 and comes last.
+						// So if advancement_rank = 1, this is the step in the database for this appointment,
+						// and we can proceed to use this appointment's object, now that it's complete
+						// TODO write data contract specifying that we always delete when a thing is moved backwards,
+						// and don't make a step entry unless it's moved forwards in the swimlanes.
+						if(step.advancement_rank == 1) {
+							// if timestamp if null, then this is the default beginning progressionStep made in
+							// storeAppointment.php, insertNullProgressionStepTimestamp().
+
+							const ordinal = ((step.timestamp === null) ? 0 : step.advancement_rank);
+							$scope.pools[step.progressionTypeId]["swimlanes"][ordinal]["appointments"].push(
+								appointments[step.appointmentId]
+							)
 						}
 					});
 				});
@@ -231,12 +283,12 @@ define('queueController', [], function() {
 
 		$scope.siteChanged = () => {
 			$scope.resetSwimlanes();
-			$scope.getAppointments();
+			$scope.getProgressionSteps();
 		};
 
 		$scope.dateChanged = () => {
 			$scope.resetSwimlanes();
-			$scope.getAppointments();
+			$scope.getProgressionSteps();
 		};
 
 		$scope.resetSwimlanes = () => {
@@ -293,7 +345,7 @@ define('queueController', [], function() {
 
 		// Create interval to update appointment information every 15 seconds
 		const appointmentInterval = $interval((() => {
-			$scope.getAppointments();
+			$scope.getProgressionSteps();
 		}).bind(this), 15000);
 
 		// Destroy the intervals when we leave this page
@@ -304,6 +356,10 @@ define('queueController', [], function() {
 
 		// Invoke initially
 		$scope.getSites();
+		// get info to render groups of swimlanes, i.e., pools.
+		// These are called "progressionType"s in the database.
+		// They are different queue sequences.
+		$scope.getPossibleSwimlanes();
 	};
 
 	queueController.$inject = ['$scope', '$interval', 'queueDataService', 'appointmentNotesAreaSharedPropertiesService', 'dragulaService', 'notificationUtilities'];

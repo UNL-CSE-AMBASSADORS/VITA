@@ -71,6 +71,14 @@ define('queueDataService', [], ($http) => {
 					data: `action=cancelAppointment&appointmentId=${appointmentId}`,
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				}).then((response) => response.data, (error) => null);
+			},
+			getPossibleSwimlanes: () => {
+				return $http({
+					url: '/server/queue/queue.php',
+					method: 'POST',
+					data: `action=getPossibleSwimlanes`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
 			}
 		};
 	}

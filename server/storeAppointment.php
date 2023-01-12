@@ -34,6 +34,7 @@ function storeAppointment($data){
 		$appointmentId = insertAppointment($clientId, $data['appointmentTimeId'], $data['language'], $_SERVER['REMOTE_ADDR']);
 		$selfServiceAppointmentRescheduleTokenId = insertSelfServiceAppointmentRescheduleToken($appointmentId);
 		insertAnswers($appointmentId, $data['questions']);
+		insertNullProgressionStepTimestamp($appointmentId);
 		$DB_CONN->commit();
 
 		$response['success'] = true;
@@ -71,6 +72,47 @@ function insertAppointment($clientId, $appointmentTimeId, $language, $ipAddress)
 
 	$stmt = $DB_CONN->prepare($appointmentInsert);
 	if(!$stmt->execute($appointmentParams)){
+		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
+	}
+
+	return $DB_CONN->lastInsertId();
+}
+
+// Insert a starter row into progressiontimestamp with the progression type determined by the site or appointment type.
+// Then when it comes to display the appointment in the various groups of swimlanes (pools, aka progression types),
+// we will be able to tell which pool an appointment belongs to, even if it is only awaiting. 
+function insertNullProgressionStepTimestamp($appointmentId) {
+	GLOBAL $DB_CONN;
+
+	$progressionStepInsert = 'INSERT INTO progressiontimestamp (appointmentId, progressionStepId, progressionSubStepId, timestamp)
+	select
+		app.appointmentId,
+		progStep.progressionStepId as progressionStepId,
+		null as progressionSubStepId,
+		null as timestamp
+	from appointment app
+	left join appointmenttime atime
+		on app.appointmentTimeId = atime.appointmentTimeId
+	left join site
+		on atime.siteId = site.siteId
+	left join appointmenttype atype
+		on atime.appointmentTypeId = atype.appointmentTypeId
+	left join progressionType progType
+		on case
+			when site.title = \'International Student Scholar\' then \'International Student\'
+			when atype.lookupName = \'residential\' then \'In-Person Residential\'
+			when atype.lookupName = \'virtual-residential\' or atype.lookupName = \'virtual-china\' or atype.lookupName = \'virtual-india\' or atype.lookupName = \'virtual-treaty\' or atype.lookupName = \'virtual-non-treaty\' then \'Virtual\'
+			when atype.lookupName = \'china\' or atype.lookupName = \'india\' or atype.lookupName = \'treaty\' or atype.lookupName = \'non-treaty\' then \'Legacy\'
+			else \'Legacy\'
+		end = progType.progressionTypeName
+	left join progressionStep progStep
+		on progType.progressionTypeId = progStep.progressionTypeId
+	where appointmentId = ?
+	and progStep.progressionStepOrdinal = 1;';
+	$progressionStepParams = array($appointmentId);
+
+	$stmt = $DB_CONN->prepare($progressionStepInsert);
+	if(!$stmt->execute($progressionStepParams)){
 		throw new Exception("There was an issue on the server. Please refresh the page and try again.", MY_EXCEPTION);
 	}
 
