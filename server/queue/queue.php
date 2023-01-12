@@ -151,7 +151,12 @@ function getProgressionSteps($date, $siteId) {
 			AND siteId = ?
 			AND (cancelled IS NULL OR cancelled = FALSE)
 			AND (completed IS NULL OR completed != FALSE)
-			AND app.archived = FALSE;';
+			AND app.archived = FALSE
+			AND (a.timestamp IS NOT NULL OR a.advancement_rank = 1)
+			;';
+		// If advancement rank = 1, we want to send it through so that we can add it to that step's swimlane
+		// If an appointment is new, currently we have it set up so that they will have an ordinalRank = 0 and timestamp = null
+		// so we want to pass those through, too, so the front end can know which pool to put the appt in.
 		$stmt = $DB_CONN->prepare($query);
 		$stmt->execute(array($date, $siteId));
 		$progressionSteps = $stmt->fetchAll(PDO::FETCH_ASSOC);

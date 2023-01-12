@@ -14,6 +14,7 @@ define('queueController', [], function() {
 		$scope.clientSearchString = '';
 
 		$scope.pools = {}
+		$scope.previousAppointmentIds = []
 		// Swimlane arrays
 		//$scope.appointments = []; // All references to an appointment are stored in this array, and each swimlane array contains a shallow reference to the object.
 	
@@ -90,10 +91,10 @@ define('queueController', [], function() {
 							swimlanes: {
 								0: {
 									stepName: 'Awaiting',
-									appointments: []
+									appointments: [] //TODO arrays are just special objects in javascript i think. when i log pools, it comes out looking like a normal object. i think it inherits the key/val from the appointments object.
 								},
 								[step.progressionStepOrdinal] : {
-									stepName: step.stepName,
+									stepName: step.progressionStepName,
 									appointments: [] // will add appointments once we pull their steps in getProgressionSteps
 								}
 							}
@@ -101,7 +102,7 @@ define('queueController', [], function() {
 					} else {
 						$scope.pools[step.progressionTypeId]['swimlanes'][step.progressionStepOrdinal] =
 							{
-								stepName: step.stepName,
+								stepName: step.progressionStepName,
 								appointments: []
 							};
 					}
@@ -174,15 +175,24 @@ define('queueController', [], function() {
 						// TODO write data contract specifying that we always delete when a thing is moved backwards,
 						// and don't make a step entry unless it's moved forwards in the swimlanes.
 						if(step.advancement_rank == 1) {
-							// if timestamp if null, then this is the default beginning progressionStep made in
-							// storeAppointment.php, insertNullProgressionStepTimestamp().
-
-							const ordinal = ((step.timestamp === null) ? 0 : step.advancement_rank);
-							$scope.pools[step.progressionTypeId]["swimlanes"][ordinal]["appointments"].push(
-								appointments[step.appointmentId]
-							)
+							// Only add appointments if 1) they don't exist in any swimlane, or 2) they've been moved/removed already (by another volunteer)
+							// I've ignored case 2 however, as I don't think it'll happen all too often, so it's not worth the extra logic
+							// TODO could store previousAppointmentIds with their previous Ordinal step and see if it changed here.
+							const exists = $scope.previousAppointmentIds.some((apptId) => apptId = step.appointmentId);
+							if (!exists) {
+								// if timestamp if null, then this is the default beginning progressionStep made in
+								// storeAppointment.php, insertNullProgressionStepTimestamp().
+	
+								const ordinal = ((step.timestamp === null) ? 0 : step.advancement_rank);
+								$scope.pools[step.progressionTypeId]["swimlanes"][ordinal]["appointments"].push(
+									appointments[step.appointmentId]
+								)
+							}
 						}
 					});
+					 // this is so at auto-refresh every 15 seconds, we can skip an appointment if it's already been added.
+					$scope.previousAppointmentIds = Object.keys(appointments); //TODO can we totally reset it like this, or do we need to add on? an appt shouldn't go away so this should be okay.
+					console.log($scope.pools);
 				});
 		};
 
@@ -292,12 +302,13 @@ define('queueController', [], function() {
 		};
 
 		$scope.resetSwimlanes = () => {
-			$scope.appointments = [];
-			$scope.awaitingAppointments = [];
-			$scope.checkedInAppointments = [];
-			$scope.paperworkCompletedAppointments = [];
-			$scope.beingPreparedAppointments = [];
-			$scope.completedAppointments = [];
+			for (const [key, pool] of Object.entries($scope.pools)) {
+				for (const [key, swimlane] of Object.entries(pool.swimlanes)) {
+					if (swimlane.appointments.length > 0) {
+						swimlane.appointments = [];
+					}
+				}
+			}
 		};
 
 		$scope.removeAppointmentFromSwimlanes = (appointmentId) => {
@@ -308,6 +319,8 @@ define('queueController', [], function() {
 			$scope.beingPreparedAppointments = $scope.beingPreparedAppointments.filter((appointment) => appointment.appointmentId != appointmentId);
 			$scope.completedAppointments = $scope.completedAppointments.filter((appointment) => appointment.appointmentId != appointmentId);
 		};
+		//todo make this smarter, pass in appointment id but also figure out what pool, swimlane the appointment is in
+		// and delete the appt from that specific swimlane.
 
 		$scope.passesSearchFilter = (appointment) => {
 			const searchString = $scope.clientSearchString.toLowerCase();
@@ -328,6 +341,12 @@ define('queueController', [], function() {
 			NotificationUtilities.giveNotice('Failure', errorMessage, false)
 		};
 
+		// get info to render groups of swimlanes, i.e., pools.
+		// These are called "progressionType"s in the database.
+		// They are different queue sequences.
+		// Do this first so the pools data structure is ready. todo might be able to move it to the bottom.
+		$scope.getPossibleSwimlanes();
+		
 		// Initialize the date picker plugin
 		WDN.initializePlugin('jqueryui', [() => {
 			require(['jquery'], ($) => {
@@ -356,10 +375,6 @@ define('queueController', [], function() {
 
 		// Invoke initially
 		$scope.getSites();
-		// get info to render groups of swimlanes, i.e., pools.
-		// These are called "progressionType"s in the database.
-		// They are different queue sequences.
-		$scope.getPossibleSwimlanes();
 	};
 
 	queueController.$inject = ['$scope', '$interval', 'queueDataService', 'appointmentNotesAreaSharedPropertiesService', 'dragulaService', 'notificationUtilities'];

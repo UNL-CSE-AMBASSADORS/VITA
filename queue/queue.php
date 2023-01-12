@@ -42,6 +42,30 @@
 			Select a site and date.
 		</div>
 
+
+		<div ng-repeat="(key, progressionType) in pools">
+			<div class="dcf-d-flex dcf-jc-center"><h5>{{progressionType['progressionTypeName']}} Queue</h5></div>
+			<!-- Swimlane headers -->
+			<div class="dcf-grid dcf-grid-fifths@md dcf-col-gap-2">
+				<div ng-repeat="(key, swimlane) in progressionType['swimlanes']" class="dcf-d-flex dcf-jc-center">
+					<h5>{{swimlane['stepName']}} ({{swimlane.appointments.length}})</h5>
+				</div>			
+			</div>
+
+			<!-- Swimlanes -->
+			<div class="dcf-grid dcf-grid-fifths@md dcf-col-gap-2">
+				<div ng-repeat="(key, swimlane) in progressionType['swimlanes']" class="container" id="awaitingAppointmentsContainer" dragula="'queue-bag'" dragula-model="swimlane.stepName">
+					<div ng-repeat="(appointmentId, appointment) in swimlane['appointments']"
+						data-appointment-id="{{appointmentId}}"
+						ng-show="passesSearchFilter(appointment)"
+						ng-click="selectAppointment(appointment)">{{appointment.clientName}} ({{appointment.scheduledTime}})
+									<!-- TODO here need to add substep, if possible. -->
+					</div>
+				</div>				
+			</div>
+		</div>
+
+
 		<!-- Shown if there are appointments -->
 		<div ng-if="appointments.length > 0" ng-cloak>
 			<!-- Swimlane headers -->
