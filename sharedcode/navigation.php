@@ -13,7 +13,7 @@
 		</ul>
 	</li>
 
-	<li><a href="<?php $root ?>/volunteer" title="Volunteer">Volunteer</a>
+	<li><a href="<?php $root ?>/volunteer" title="Volunteer">Staff</a>
 		<ul>
 
 			<?php if ($USER->isLoggedIn()): ?>

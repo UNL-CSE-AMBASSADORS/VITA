@@ -371,7 +371,7 @@ function doesClientInformationMatch($clientInformation, $firstName, $lastName, $
 
 // container/blob naming rules here https://docs.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
 function getContainerName($siteId) {
-	return 'ty2021';
+	return 'ty2022';
 }
 
 function getToEmailString($siteId) {
