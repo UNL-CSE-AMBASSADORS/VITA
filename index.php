@@ -20,7 +20,7 @@ return readfile($documentRoot . $path);
 		$Id: php.fixed.dwt.php | cf0a670a0fd8db9e20a169941c55c838d7c2ba10 | Wed Dec 12 16:54:41 2018 -0600 | Eric Rasmussen	$
 	-->
 	<!-- TemplateBeginEditable name="doctitle" -->
-	<title>VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+	<title>TCAN / VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
@@ -34,8 +34,8 @@ return readfile($documentRoot . $path);
 <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-wrapper dcf-pt-3 dcf-pb-3 dcf-bold dcf-txt-decor-none unl-font-sans unl-cream" style="background-color: #007197;">
 	<span class="dcf-txt-xs">
 		<span class="dcf-d-inline-block dcf-mt-2 dcf-mb-2 dcf-mr-4">
-		Lincoln VITA will be conducting in-person return preparation in 2022.
-		In addition, Lincoln VITA will have virtual site (remote preparation)
+		TCAN will be conducting in-person return preparation in 2023.
+		In addition, TCAN will have virtual site (remote preparation)
 		and Facilitated Self Assistance (FSA) appointments available. You may schedule an
 		appointment under the 'Need Assistance' tab when the scheduling site opens mid-January.
 		</span>
@@ -70,7 +70,7 @@ return readfile($documentRoot . $path);
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/site-affiliation-2.html"); ?>
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/site-title-1.html"); ?>
 	<!-- TemplateBeginEditable name="titlegraphic" -->
-	<a class="unl-site-title-medium" href="/">VITA Lincoln</a>
+	<a class="unl-site-title-medium" href="/">TCAN / VITA Lincoln</a>
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/site-title-2.html"); ?>
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/logo-lockup-2.html"); ?>
@@ -96,7 +96,7 @@ return readfile($documentRoot . $path);
 					<!-- TemplateBeginEditable name="breadcrumbs" -->
 					<ol>
 						<li><a href="https://www.unl.edu/">Nebraska</a></li>
-						<li><a href="/">VITA Lincoln</a></li>
+						<li><a href="/">TCAN / VITA Lincoln</a></li>
 						<li><span aria-current="page">Home</span></li>
 					</ol>
 					<!-- TemplateEndEditable -->
@@ -104,7 +104,7 @@ return readfile($documentRoot . $path);
 			</div>
 			<header class="dcf-page-title" id="dcf-page-title">
 				<!-- TemplateBeginEditable name="pagetitle" -->
-				<h1>VITA Lincoln</h1>
+				<h1>TCAN / VITA Lincoln</h1>
 				<!-- TemplateEndEditable -->
 			</header>
 			<!-- TemplateBeginEditable name="herogroup1" -->
@@ -119,7 +119,8 @@ return readfile($documentRoot . $path);
 		<!-- TemplateBeginEditable name="maincontentarea" -->
 		<div class="dcf-bleed unl-bg-light-gray">
 			<div class="hero-picture-container">
-				<img src="assets/res/VITA-Coalition-Web-Banner.png" alt="Lincoln VITA Coalition">
+				<img class = "tcan-img" src="assets/res/Tax_Credit_Alliance_of_Nebraska.png" alt="Tax Credit Alliance of Nebraska">
+				<img class = "vita-img" src="assets/res/VITA-Coalition-Web-Banner.png" alt="Lincoln VITA Coalition">
 			</div>
 		</div>
 
@@ -127,7 +128,7 @@ return readfile($documentRoot . $path);
 			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
 				<p>
 					Qualified students and community members can have their tax return prepared AT NO CHARGE 
-					by trained student and community volunteers.
+					by trained student and community volunteers in Lincoln and other Nebraska cities.
 				</p>
 			</div>
 		</div>
@@ -136,12 +137,13 @@ return readfile($documentRoot . $path);
 			<div class="dcf-wrapper">
 				<div class="dcf-grid-halves@md dcf-pt-8 dcf-pb-8">
 					<div>
-						<h2>What is the UNL Tax Credit Campaign?</h2>
+						<h2>What is the Tax Credit Alliance of Nebraska (TCAN)?</h2>
 					</div>
 					<div>
-						The UNL Tax Credit Campaign prepares tax returns for low-income, working families and students for free.
-						It is sponsored by the University of Nebraska&ndash;Lincoln's Center for Civic Engagement in conjunction
-						with the Lincoln EITC Coalition.
+						The Tax Credit Alliance of Nebraska provides free tax credit clinics
+						and prepares for free federal and state income taxes for underserved populations.
+						We are sponsored by the Internal Revenue Services and a member of the University of
+						Nebraska&ndash;Lincoln's Center on Children, Families, and the Law.
 					</div>
 				</div>
 			</div>
@@ -151,7 +153,7 @@ return readfile($documentRoot . $path);
 			<div class="dcf-wrapper">
 				<div class="dcf-grid-halves@md dcf-pt-8 dcf-pb-8">
 					<div>
-						<h2>How does Volunteer Income Tax Assistance (VITA) Program Protect My Civil Rights?</h2>
+						<h2>How does TCAN Protect My Civil Rights?</h2>
 					</div>
 					<div>
 						In accordance with federal law and the Department of the Treasury – Internal Revenue Service policy,
@@ -189,9 +191,9 @@ return readfile($documentRoot . $path);
 					</div>
 					<div>
 						<div>
-							Lincoln VITA offers tax appointments for United States residents and for international visitors. 
+							TCAN offers tax appointments for United States residents and for international visitors. 
 							Tax appointments begin late January and run through April 12th and are available at multiple 
-							sites in the Lincoln area. To see the days and times for all the locations, please download 
+							sites in Lincoln and other Nebraska cities. To see the days and times for all the locations, please download 
 							the site schedule. 
 						</div>
 						<div class="dcf-grid-halves@md dcf-mt-3">

@@ -20,7 +20,7 @@ return readfile($documentRoot . $path);
 		$Id: php.fixed.dwt.php | cf0a670a0fd8db9e20a169941c55c838d7c2ba10 | Wed Dec 12 16:54:41 2018 -0600 | Eric Rasmussen	$
 	-->
 	<!-- TemplateBeginEditable name="doctitle" -->
-	<title>Volunteer | VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+	<title>Staff | TCAN / VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
@@ -58,7 +58,7 @@ return readfile($documentRoot . $path);
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/site-affiliation-2.html"); ?>
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/site-title-1.html"); ?>
 	<!-- TemplateBeginEditable name="titlegraphic" -->
-	<a class="unl-site-title-medium" href="/">VITA Lincoln</a>
+	<a class="unl-site-title-medium" href="/">TCAN / VITA Lincoln</a>
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/site-title-2.html"); ?>
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/logo-lockup-2.html"); ?>
@@ -84,15 +84,15 @@ return readfile($documentRoot . $path);
 					<!-- TemplateBeginEditable name="breadcrumbs" -->
 					<ol>
 						<li><a href="https://www.unl.edu/">Nebraska</a></li>
-						<li><a href="/">VITA Lincoln</a></li>
-						<li><span aria-current="page">Volunteer</span></li>
+						<li><a href="/">TCAN / VITA Lincoln</a></li>
+						<li><span aria-current="page">Staff</span></li>
 					</ol>
 					<!-- TemplateEndEditable -->
 				</nav>
 			</div>
 			<header class="dcf-page-title" id="dcf-page-title">
 				<!-- TemplateBeginEditable name="pagetitle" -->
-				<h1>Volunteer</h1>
+				<h1>Staff</h1>
 				<!-- TemplateEndEditable -->
 			</header>
 			<!-- TemplateBeginEditable name="herogroup1" -->
@@ -117,7 +117,7 @@ return readfile($documentRoot . $path);
 			<br>  
 			Start today, by <a href="https://www.givepulse.com/event/244585">registering.</a>
 			<br>
-			Training information and volunteer activities are forthcoming.
+			Training information and staff/volunteer activities are forthcoming.
 			</p>
 
 			</div>
