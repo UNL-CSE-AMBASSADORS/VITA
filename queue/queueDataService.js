@@ -16,6 +16,30 @@ define('queueDataService', [], ($http) => {
 					return null;
 				});
 			},
+			deleteTimestamp: (appointmentId, stepId) => {
+				return $http({
+					url: '/server/queue/queue.php',
+					method: 'POST',
+					data: `action=deleteTimestamp&appointmentId=${appointmentId}&stepId=${stepId}`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
+			},
+			insertStepTimestamp: (appointmentId, stepId, setTimeStampToNull) => {
+				return $http({
+					url: '/server/queue/queue.php',
+					method: 'POST',
+					data: `action=insertStepTimestamp&appointmentId=${appointmentId}&stepId=${stepId}&setTimeStampToNull=${setTimeStampToNull}`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
+			},
+			insertSubStepTimestamp: (appointmentId, subStepId) => {
+				return $http({
+					url: '/server/queue/queue.php',
+					method: 'POST',
+					data: `action=insertSubStepTimestamp&appointmentId=${appointmentId}&stepId=${subStepId}`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
+			},
 			markAppointmentAsAwaiting: (appointmentId) => {
 				return $http({
 					url: '/server/queue/queue.php',

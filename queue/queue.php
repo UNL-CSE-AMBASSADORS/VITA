@@ -43,47 +43,24 @@
 		</div>
 
 
-		<div ng-repeat="(key, progressionType) in pools">
-			<div class="dcf-d-flex dcf-jc-center"><h5>{{progressionType['progressionTypeName']}} Queue</h5></div>
+		<div ng-repeat="(key, progressionType) in pools" ng-show="hasAppointments(progressionType)">
+			<div class="dcf-d-flex dcf-jc-center"><h2>{{progressionType['progressionTypeName']}} Queue</h2></div>
 			<!-- Swimlane headers -->
 			<div class="dcf-grid dcf-grid-fifths@md dcf-col-gap-2">
 				<div ng-repeat="(key, swimlane) in progressionType['swimlanes']" class="dcf-d-flex dcf-jc-center">
-					<h5>{{swimlane['stepName']}} ({{swimlane.appointments.length}})</h5>
+					<h5>{{swimlane['stepName']}} ({{objectLengthHelper(swimlane.appointments)}})</h5>
 				</div>			
 			</div>
 
 			<!-- Swimlanes -->
 			<div class="dcf-grid dcf-grid-fifths@md dcf-col-gap-2">
-				<div ng-repeat="(key, swimlane) in progressionType['swimlanes']" class="container" id="awaitingAppointmentsContainer" dragula="'queue-bag'" dragula-model="swimlane.stepName">
+				<!--<div ng-repeat="(key, swimlane) in progressionType['swimlanes']" class="container" id="awaitingAppointmentsContainer" dragula="'queue-bag'" dragula-model="swimlane.stepName">Swimlane headers -->
+				<div ng-repeat="(key, swimlane) in progressionType['swimlanes']" class="container" id="{{progressionType.progressionTypeId+'*_*'+swimlane.stepId+'*_*'+swimlane.stepOrdinal}}" dragula="'queue-bag'" dragula-model="Object.values(swimlane['appointments'])"> <!-- TODO I think dragula-model needs an array (when I moved appts, I was getting error "a.splice is not a function"), should check if I can just pass in an object. -->
 					<div ng-repeat="(appointmentId, appointment) in swimlane['appointments']"
 						data-appointment-id="{{appointmentId}}"
 						ng-show="passesSearchFilter(appointment)"
 						ng-click="selectAppointment(appointment)">{{appointment.clientName}} ({{appointment.scheduledTime}})
-									<!-- TODO here need to add substep, if possible. -->
-					</div>
-				</div>				
-			</div>
-		</div>
-
-
-		<!-- Shown if there are appointments -->
-		<div ng-if="appointments.length > 0" ng-cloak>
-			<!-- Swimlane headers -->
-			<div class="dcf-grid dcf-grid-fifths@md dcf-col-gap-2">
-				<div class="dcf-d-flex dcf-jc-center"><h5>Awaiting ({{awaitingAppointments.length}})</h5></div>
-				<div class="dcf-d-flex dcf-jc-center"><h5>Checked-In ({{checkedInAppointments.length}})</h5></div>
-				<div class="dcf-d-flex dcf-jc-center"><h5>Paperwork Done ({{paperworkCompletedAppointments.length}})</h5></div>
-				<div class="dcf-d-flex dcf-jc-center"><h5>Preparing ({{beingPreparedAppointments.length}})</h5></div>
-				<div class="dcf-d-flex dcf-jc-center"><h5>Complete ({{completedAppointments.length}})</h5></div>
-			</div>
-
-			<!-- Swimlanes -->
-			<div class="dcf-grid dcf-grid-fifths@md dcf-col-gap-2">
-				<div ng-repeat="step in progressionSteps" class="container" id="awaitingAppointmentsContainer" dragula="'queue-bag'" dragula-model="awaitingAppointments">
-					<div ng-repeat="appointment in awaitingAppointments"
-						data-appointment-id="{{appointment.appointmentId}}"
-						ng-show="passesSearchFilter(appointment)"
-						ng-click="selectAppointment(appointment)">{{step}} ({{appointment.scheduledTime}})
+									<!-- TODO here need to add substep, if it exists. dropdown prob only when clicked. -->
 					</div>
 				</div>				
 			</div>

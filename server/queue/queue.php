@@ -17,14 +17,13 @@ date_default_timezone_set('America/Chicago');
 if (isset($_REQUEST['action'])) {
 	switch($_REQUEST['action']) {
 		case 'getProgressionSteps': getProgressionSteps($_GET['date'], $_GET['siteId']); break;
-		case 'awaiting': markAppointmentAsAwaiting($_POST['appointmentId']); break;
-		case 'checkIn': markAppointmentAsCheckedIn($_POST['appointmentId']); break;
-		case 'paperworkCompleted': markAppointmentAsPaperworkCompleted($_POST['appointmentId']); break;
-		case 'startAppointment': markAppointmentAsBeingPrepared($_POST['appointmentId']); break;
-		case 'completeAppointment': markAppointmentAsCompleted($_POST['appointmentId']); break;
+		case 'completeAppointment': markAppointmentAsCompleted($_POST['appointmentId']); break; //todo check which ones to delete/keep
 		case 'incompleteAppointment': markAppointmentAsIncomplete($_POST['appointmentId']); break;
 		case 'cancelAppointment': markAppointmentAsCancelled($_POST['appointmentId']); break;
 		case 'getPossibleSwimlanes': getPossibleSwimlanes(); break;
+		case 'deleteTimestamp': deleteTimestamp($_POST['appointmentId'], $_POST['stepId']); break;
+		case 'insertStepTimestamp': insertStepTimestamp($_POST['appointmentId'], $_POST['stepId'], $_POST['setTimeStampToNull']); break;
+		case 'insertSubStepTimestamp': insertSubStepTimestamp($_POST['appointmentId'], $_POST['subSepId']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -186,46 +185,56 @@ function getProgressionSteps($date, $siteId) {
 	echo json_encode($response);
 }
 
-function markAppointmentAsAwaiting($appointmentId) {
+function deleteTimestamp($appointmentId, $progressionStepId) {
 	GLOBAL $DB_CONN;
 
 	$response = array();
 	$response['success'] = true;
 
 	try {
-		$query = 'UPDATE ServicedAppointment
-			SET timeIn = NULL
-			WHERE appointmentId = ?;';
+		$query = 'DELETE a FROM progressionTimeStamp a
+			left join progressionstep stepWithoutSubStep
+				on a.progressionstepid = stepWithoutSubStep.progressionstepid
+			left join progressionsubstep substep
+				on a.progressionsubstepid = substep.progressionsubstepid
+			left join progressionStep stepFromSubStep
+				on stepFromSubStep.progressionStepId = substep.progressionStepId
+			WHERE a.appointmentId = ?
+			and case when a.progressionStepId is not null then stepWithoutSubStep.progressionStepId else stepFromSubStep.progressionStepId end = ?;
+		';
 
 		$stmt = $DB_CONN->prepare($query);
-		$stmt->execute(array($appointmentId));
+		$stmt->execute(array($appointmentId, $progressionStepId));
 	} catch (Exception $e) {
 		$response['success'] = false;
-		$response['error'] = 'There was an error on the server marking the appointment as paperwork completed. Please refresh the page and try again';
+		$response['error'] = "There was an error on the server changing this appointment's records. Please refresh the page and try again";
 	}
 
 	echo json_encode($response);
 }
 
-function markAppointmentAsCheckedIn($appointmentId) {
+function insertStepTimestamp($appointmentId, $stepId, $setTimeStampToNull) {
 	GLOBAL $DB_CONN;
 
 	$response = array();
 	$response['success'] = true;
-
+	
 	try {
-		$time = date("Y-m-d H:i:s");
+		// $stepId = null when step was moved to "Awaiting", step 0. there is no stepId for this, we just make the
+		// first ordinal step have a null timestamp
+		$time = ($setTimeStampToNull == 'true') ? NULL : date("Y-m-d H:i:s");
 
-		$query = 'INSERT INTO ServicedAppointment (servicedAppointmentId, appointmentId, timeIn)
-			VALUES (
-				(SELECT sa2.servicedAppointmentId FROM ServicedAppointment sa2 WHERE appointmentId = ?),
-				?, ?
-			) ON DUPLICATE KEY UPDATE 
-				timeIn = ?, 
-				timeReturnedPapers = NULL;';
+		// don't have to insert subStepId because it is null by default.
+		// syntax for https://stackoverflow.com/questions/15383852/sql-if-exists-update-else-insert-into
+		$query = 'INSERT INTO progressionTimeStamp
+		(appointmentId, progressionStepId, timestamp) 
+	  VALUES
+		(?, ?, ?)
+	  ON DUPLICATE KEY UPDATE
+	  timestamp = VALUES(timestamp);';
 
 		$stmt = $DB_CONN->prepare($query);
-		$stmt->execute(array($appointmentId, $appointmentId, $time, $time));
+		$stmt->execute(array($appointmentId, $stepId, $time));
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error on the server marking the appointment as checked in. Please refresh the page and try again';
@@ -234,7 +243,7 @@ function markAppointmentAsCheckedIn($appointmentId) {
 	echo json_encode($response);
 }
 
-function markAppointmentAsPaperworkCompleted($appointmentId) {
+function insertSubStepTimestamp($appointmentId, $progressionSubStepId) {
 	GLOBAL $DB_CONN;
 
 	$response = array();
@@ -242,17 +251,23 @@ function markAppointmentAsPaperworkCompleted($appointmentId) {
 
 	try {
 		$time = date("Y-m-d H:i:s");
-
-		$query = 'UPDATE ServicedAppointment
-			SET timeReturnedPapers = ?,
-				timeAppointmentStarted = NULL
-			WHERE appointmentId = ?;';
+		// don't have to insert subStepId because it is null by default.
+		// syntax for https://stackoverflow.com/questions/15383852/sql-if-exists-update-else-insert-into
+		// looks like this syntax might throw a warning? can update TODO https://dev.mysql.com/doc/refman/8.0/en/insert-on-duplicate.html
+		
+		$query = 'INSERT INTO progressionTimeStamp (appointmentId, progressionStepId, progressionSubStepId, timestamp)
+			SELECT ?, ss.progressionStepId, ?, ?
+			FROM progressionSubStep ss
+			WHERE progressionSubStepId = ?
+	 		ON DUPLICATE KEY UPDATE
+			progressionSubStepId = VALUES(progressionSubStepId),
+			timestamp = VALUES(timestamp);'; // this is for if the (appointmentId, progressionStepId) unique constraint is triggered.
 
 		$stmt = $DB_CONN->prepare($query);
-		$stmt->execute(array($time, $appointmentId));
+		$stmt->execute(array($appointmentId, $progressionSubStepId, $time, $progressionSubStepId));
 	} catch (Exception $e) {
 		$response['success'] = false;
-		$response['error'] = 'There was an error on the server marking the appointment as paperwork completed. Please refresh the page and try again';
+		$response['error'] = 'There was an error on the server marking the appointment as checked in. Please refresh the page and try again';
 	}
 
 	echo json_encode($response);
