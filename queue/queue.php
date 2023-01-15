@@ -29,7 +29,7 @@
 
 				<!-- Message if there are no appointments that match the search -->
 				<p class="dcf-txt-center" 
-					ng-show="clientSearchString && !appointments.some(passesSearchFilter)"
+					ng-show="clientSearchString && !parseAppointments('doSomePassSearchFilter')"
 					ng-cloak>
 					No results for "{{clientSearchString}}".
 				</p>
@@ -63,7 +63,7 @@
 					<div ng-repeat="(appointmentId, appointment) in swimlane['appointments']"
 						data-appointment-id="{{appointmentId}}"
 						ng-show="passesSearchFilter(appointment)"
-						ng-click="selectAppointment(appointment, stepOrdinal, progressionType.progressionTypeId)">{{appointment.clientName}} ({{appointment.scheduledTime}})
+						ng-click="selectAppointment(appointment, progressionType.progressionTypeId, stepOrdinal, (stepOrdinal===progressionType.progressionTypeMaxOrdinal))">{{appointment.clientName}} ({{appointment.scheduledTime}})
 									<!-- TODO here need to add substep, if it exists. dropdown prob only when clicked. -->
 					</div>
 				</div>				
@@ -71,7 +71,7 @@
 		</div>
 
 		<!-- Shown if there are no appointments -->
-		<div class="dcf-txt-center" ng-if="appointments.length === 0">
+		<div class="dcf-txt-center" ng-if="!(selectedSite == null) && !parseAppointments('areThereAnyAppointments')">
 			There are no appointments on this day at this site.
 		</div>
 	</div>
@@ -117,15 +117,15 @@
 		<div class="dcf-mb-2">
 			<h4>Appointment Not Completed:</h4>
 			<button class="dcf-btn dcf-btn-primary" 
-				ng-show="!selectedAppointment.checkedIn" 
-				ng-disabled="selectedAppointment.ended" 
+				ng-show="selectedAppointmentOrdinal == 0" 
+				ng-disabled="selectedAppointmentOnLastStep" 
 				ng-click="markAppointmentAsCancelled()">
 				Cancel Appointment
 			</button>
 
 			<button class="dcf-btn dcf-btn-primary" 
-				ng-show="selectedAppointment.checkedIn" 
-				ng-disabled="selectedAppointment.ended" 
+				ng-show="selectedAppointmentOrdinal > 0" 
+				ng-disabled="selectedAppointmentOnLastStep" 
 				ng-click="markAppointmentAsIncomplete()">
 				Mark as Incomplete
 			</button>

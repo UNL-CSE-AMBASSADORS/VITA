@@ -9,6 +9,8 @@ define('queueController', [], function() {
 
 		$scope.sites = [];
 		$scope.selectedAppointment = null;
+		$scope.selectedAppointmentOrdinal = null;
+		$scope.selectedAppointmentOnLastStep = null;
 		$scope.selectedSite = null;
 
 		$scope.clientSearchString = '';
@@ -200,7 +202,7 @@ define('queueController', [], function() {
 								}
 							};
 						} else {
-							$scope.pools[step.progressionTypeId]['progressionTypeMaxOrdinal'] = Math.max($scope.pools[step.progressionTypeId]['progressionTypeMaxOrdinal'], step.progressionStepOrdinal);
+							$scope.pools[step.progressionTypeId]['progressionTypeMaxOrdinal'] = Math.max($scope.pools[step.progressionTypeId]['progressionTypeMaxOrdinal'], step.progressionStepOrdinal).toString();
 							$scope.pools[step.progressionTypeId]['swimlanes'][step.progressionStepOrdinal] =
 							{
 								stepId: step.progressionStepId,
@@ -407,10 +409,12 @@ define('queueController', [], function() {
 				});
 		};
 
-		$scope.selectAppointment = (appointment, currentStepOrdinal, progressionTypeId) => {
+		$scope.selectAppointment = (appointment, progressionTypeId, currentStepOrdinal, appointmentOnLastStep) => {
 			$scope.selectedAppointment = appointment;
 			$scope.selectedAppointment.stepsForPills = $scope.getAppointmentPills(currentStepOrdinal, progressionTypeId);
 			$scope.appointmentNotesAreaSharedProperties.appointmentId = $scope.selectedAppointment.appointmentId;
+			$scope.selectedAppointmentOrdinal = Number(currentStepOrdinal);
+			$scope.selectedAppointmentOnLastStep = appointmentOnLastStep;
 		};
 
 		$scope.getAppointmentPills = (currentStepOrdinal, progressionTypeId) => {
@@ -468,15 +472,39 @@ define('queueController', [], function() {
 								swimlane[id].appointment.ended = false;
 							}
 							break;
+						case 'areThereAnyAppointments':
+							if (!(Object.keys(swimlane.appointments).length === 0)) {
+								return true;
+							}
+							break;
+						case 'doSomePassSearchFilter':
+							for (const [appointmentId, appointment] of Object.entries(swimlane.appointments)) {	
+								if ($scope.passesSearchFilter(appointment)) {
+										return true;
+								}
+							}
+							break;
 						default:
 							// todo error handle here
 							console.log("something went wrong");
 					}
 				}
 			}
+			if(action === 'areThereAnyAppointments' || action === 'doSomePassSearchFilter') {
+				return false;
+			}
 		};
 		
 		$scope.hasAppointments = (pool) => {
+			for (const [key, swimlane] of Object.entries(pool.swimlanes)) {
+				if (!(Object.keys(swimlane.appointments).length === 0)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		$scope.anyAppointments = () => {
 			for (const [key, swimlane] of Object.entries(pool.swimlanes)) {
 				if (!(Object.keys(swimlane.appointments).length === 0)) {
 					return true;
