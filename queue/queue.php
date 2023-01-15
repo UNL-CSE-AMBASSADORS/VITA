@@ -90,7 +90,10 @@
 				<span class="pill pill-red" ng-if="selectedAppointment.noShow">No-show</span>
 				<span ng-if="!selectedAppointment.noShow">
 					<span class="pill pill-walk-in" ng-if="selectedAppointment.walkIn">Walk-In</span>
-					<span class="pill" ng-repeat="step in selectedAppointment.stepsForPills" ng-class="step.stepCompleted ? 'pill-complete': 'pill-incomplete'">{{step.stepName}}</span>
+					<div class="pill" ng-repeat="step in selectedAppointment.stepsForPills">
+						<span class="pill" ng-class="step.stepCompleted ? 'pill-complete': 'pill-incomplete'">{{step.stepName}}</span>
+						<select ng-show="objectLengthHelper(step.substeps) > 0" ng-model="selectedName" ng-options="substep for substep in step.substeps"></select>
+					</div>
 				</span>
 			</div>
 			<div><b>Scheduled Appointment Time: </b>{{selectedAppointment.scheduledTime}}</div>

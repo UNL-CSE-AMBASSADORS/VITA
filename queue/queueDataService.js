@@ -40,38 +40,6 @@ define('queueDataService', [], ($http) => {
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				}).then((response) => response.data, (error) => null);
 			},
-			markAppointmentAsAwaiting: (appointmentId) => {
-				return $http({
-					url: '/server/queue/queue.php',
-					method: 'POST',
-					data: `action=awaiting&appointmentId=${appointmentId}`,
-					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-				}).then((response) => response.data, (error) => null);
-			},
-			markAppointmentAsCheckedIn: (appointmentId) => {
-				return $http({
-					url: '/server/queue/queue.php',
-					method: 'POST',
-					data: `action=checkIn&appointmentId=${appointmentId}`,
-					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-				}).then((response) => response.data, (error) => null);
-			},
-			markAppointmentAsPaperworkCompleted: (appointmentId) => {
-				return $http({
-					url: '/server/queue/queue.php',
-					method: 'POST',
-					data: `action=paperworkCompleted&appointmentId=${appointmentId}`,
-					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-				}).then((response) => response.data, (error) => null);
-			},
-			markAppointmentAsBeingPrepared: (appointmentId) => {
-				return $http({
-					url: '/server/queue/queue.php',
-					method: 'POST',
-					data: `action=startAppointment&appointmentId=${appointmentId}`,
-					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-				}).then((response) => response.data, (error) => null);
-			},
 			markAppointmentAsCompleted: (appointmentId) => {
 				return $http({
 					url: '/server/queue/queue.php',
@@ -101,6 +69,14 @@ define('queueDataService', [], ($http) => {
 					url: '/server/queue/queue.php',
 					method: 'POST',
 					data: `action=getPossibleSwimlanes`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
+			},
+			getPossibleSubsteps: () => {
+				return $http({
+					url: '/server/queue/queue.php',
+					method: 'POST',
+					data: `action=getPossibleSubsteps`,
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				}).then((response) => response.data, (error) => null);
 			}

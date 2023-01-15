@@ -21,6 +21,7 @@ if (isset($_REQUEST['action'])) {
 		case 'incompleteAppointment': markAppointmentAsIncomplete($_POST['appointmentId']); break;
 		case 'cancelAppointment': markAppointmentAsCancelled($_POST['appointmentId']); break;
 		case 'getPossibleSwimlanes': getPossibleSwimlanes(); break;
+		case 'getPossibleSubsteps': getPossibleSubsteps(); break;
 		case 'deleteTimestamp': deleteTimestamp($_POST['appointmentId'], $_POST['stepId']); break;
 		case 'insertStepTimestamp': insertStepTimestamp($_POST['appointmentId'], $_POST['stepId'], $_POST['setTimeStampToNull']); break;
 		case 'insertSubStepTimestamp': insertSubStepTimestamp($_POST['appointmentId'], $_POST['subSepId']); break;
@@ -49,6 +50,33 @@ function getPossibleSwimlanes() {
 	
 		$potentialProgressionSteps = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		$response['potentialProgressionSteps'] = $potentialProgressionSteps;
+	} catch (Exception $e) {
+		$response['success'] = false;
+		$response['error'] = 'There was an error on the server retrieving appointment times. Please try again later.';
+	}
+
+	echo json_encode($response);
+}
+
+// get all the steps to render the swimlanes before we fill them in
+function getPossibleSubsteps() {
+	GLOBAL $DB_CONN;
+
+	$response = array();
+	$response['success'] = true;
+
+	try {
+		$query = 'select a.progressionSubStepId, a.progressionSubStepName,
+		b.progressionStepOrdinal, b.progressionTypeId
+        from progressionsubstep a
+        left join progressionstep b
+        on a.progressionStepId = b.progressionStepId
+		order by a.progressionSubStepName;';
+		$stmt = $DB_CONN->prepare($query);
+		$stmt->execute();
+	
+		$possibleSubsteps = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$response['possibleSubsteps'] = $possibleSubsteps;
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = 'There was an error on the server retrieving appointment times. Please try again later.';
@@ -269,31 +297,6 @@ function insertSubStepTimestamp($appointmentId, $progressionSubStepId) {
 	echo json_encode($response);
 }
 
-function markAppointmentAsBeingPrepared($appointmentId) {
-	GLOBAL $DB_CONN;
-
-	$response = array();
-	$response['success'] = true;
-
-	try {
-		$time = date("Y-m-d H:i:s");
-
-		$query = 'UPDATE ServicedAppointment
-			SET timeAppointmentStarted = ?,
-				timeAppointmentEnded = NULL,
-				completed = NULL
-			WHERE appointmentId = ?;';
-
-		$stmt = $DB_CONN->prepare($query);
-		$stmt->execute(array($time, $appointmentId));
-	} catch (Exception $e) {
-		$response['success'] = false;
-		$response['error'] = 'There was an error on the server marking the appointment as being prepared. Please refresh the page and try again';
-	}
-
-	echo json_encode($response);
-}
-
 function markAppointmentAsCompleted($appointmentId) {
 	GLOBAL $DB_CONN;
 
@@ -303,6 +306,7 @@ function markAppointmentAsCompleted($appointmentId) {
 	try {
 		$time = date("Y-m-d H:i:s");
 
+		// just leaving the timeAppointmentEnded for now, doesn't hurt.
 		$query = 'UPDATE ServicedAppointment
 			SET timeAppointmentEnded = ?,
 				completed = TRUE

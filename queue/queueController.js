@@ -128,14 +128,29 @@ define('queueController', [], function() {
 						const errorMessage = response ? response.error : 'There was an error on the server altering queue records. Please refresh the page and try again.';
 						NotificationUtilities.giveNotice('Failure', errorMessage, false);
 					} else {
-						// if we are going left from the last step, remove complete status
-						if(source.stepOrdinal === source.maxOrdinal) {
-							//$scope.markAppointmentAsIncomplete();
-							//TODO do i need to do this? was this even being used before?
-							const a = 1;
-						}
-						$scope.enterTimestamp(appointmentId, source, target);
-					}//TODO put an else here and give some kind of confirmation
+						$scope.enterTimestamp(appointmentId, source, target)
+						.then($scope.checkResponseForError)
+						.catch($scope.notifyOfError)
+						.then((response) => {
+							if (response == null || !response.success) {
+								const errorMessage = response ? response.error : 'There was an error on the server entering updates. Please refresh the page and try again.';
+								NotificationUtilities.giveNotice('Failure', errorMessage, false);
+							} else {
+								// if we are going left from the last step, remove complete status
+								if(source.stepOrdinal === source.maxOrdinal) {
+									$scope.markAppointmentAsIncomplete()
+									.then($scope.checkResponseForError)
+									.catch($scope.notifyOfError)
+									.then((response) => {
+										if (response == null || !response.success) {
+											const errorMessage = response ? response.error : 'There was an error on the server marking the appointment as incomplete. Please refresh the page and try again.';
+											NotificationUtilities.giveNotice('Failure', errorMessage, false);
+										}
+									});
+								}
+							}
+						});
+					}
 				}
 			);
 		}
@@ -169,7 +184,7 @@ define('queueController', [], function() {
 		// have to pull these upfront because for instance, if no appointments in progressionType 1
 		// have reached the last step, then there won't be a row for that step and it won't show up in getProgressionSteps
 		$scope.getPossibleSwimlanes = () => {
-			QueueDataService.getPossibleSwimlanes()
+			return QueueDataService.getPossibleSwimlanes()
 			.then($scope.checkResponseForError)
 			.catch($scope.notifyOfError)
 			.then((response) => {
@@ -191,13 +206,15 @@ define('queueController', [], function() {
 										stepId: null,
 										stepOrdinal: "0",
 										stepName: 'Awaiting',
-										appointments: {}
+										appointments: {},
+										substeps: {}
 									},
 									[step.progressionStepOrdinal] : {
 										stepId: step.progressionStepId,
 										stepOrdinal: step.progressionStepOrdinal,
 										stepName: step.progressionStepName,
-										appointments: {} // will add appointments once we pull their steps in getProgressionSteps
+										appointments: {}, // will add appointments once we pull their steps in getProgressionSteps
+										substeps: {}
 									}
 								}
 							};
@@ -208,9 +225,29 @@ define('queueController', [], function() {
 								stepId: step.progressionStepId,
 								stepOrdinal: step.progressionStepOrdinal,
 								stepName: step.progressionStepName,
-								appointments: {}
+								appointments: {},
+								substeps: {}
 							};
 						}
+					});
+				}
+				return {success: true};
+			});	
+		};
+
+		$scope.getPossibleSubsteps = () => {
+			QueueDataService.getPossibleSubsteps()
+			.then($scope.checkResponseForError)
+			.catch($scope.notifyOfError)
+			.then((response) => {
+				if (response == null || !response.success) {
+					const errorMessage = response ? response.error : 'There was an error on the server accessing appointment subcategories. Please refresh the page and try again.';
+					NotificationUtilities.giveNotice('Failure', errorMessage, false);
+				} else {
+					const possibleSubsteps = response.possibleSubsteps.map((substep) => {return substep;});
+					possibleSubsteps.forEach((substep) => {
+						$scope.pools[substep.progressionTypeId]['swimlanes'][substep.progressionStepOrdinal]
+							['substeps'][substep.progressionSubStepId] = substep.progressionSubStepName;
 					});
 				}
 			});	
@@ -249,6 +286,7 @@ define('queueController', [], function() {
 							if (!(step.appointmentId in appointments)) {
 								appointments[step.appointmentId] = {
 									appointmentId: step.appointmentId,
+									appointmentType: step.appointmentType,
 									scheduledTime: step.scheduledTime,
 									clientName: step.clientName,
 									steps: [{
@@ -354,29 +392,6 @@ define('queueController', [], function() {
 				});
 		};
 
-		$scope.markAppointmentAsPaperworkCompleted = (appointmentId) => {
-			QueueDataService.markAppointmentAsPaperworkCompleted(appointmentId)
-				.then($scope.checkResponseForError)
-				.catch($scope.notifyOfError)
-				.then((response) => {
-					const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
-					appointment.paperworkComplete = true;
-					appointment.preparing = false;
-				});
-		};
-
-		$scope.markAppointmentAsBeingPrepared = (appointmentId) => {
-			QueueDataService.markAppointmentAsBeingPrepared(appointmentId)
-				.then($scope.checkResponseForError)
-				.catch($scope.notifyOfError)
-				.then((response) => {
-					const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
-					appointment.preparing = true;
-					appointment.ended = false;
-					$scope.parseAppointments('markAppointmentAsBeingPrepared');
-				});
-		};
-
 		$scope.markAppointmentAsCompleted = (appointmentId) => {
 			QueueDataService.markAppointmentAsCompleted(appointmentId)
 				.then($scope.checkResponseForError)
@@ -412,6 +427,7 @@ define('queueController', [], function() {
 		$scope.selectAppointment = (appointment, progressionTypeId, currentStepOrdinal, appointmentOnLastStep) => {
 			$scope.selectedAppointment = appointment;
 			$scope.selectedAppointment.stepsForPills = $scope.getAppointmentPills(currentStepOrdinal, progressionTypeId);
+			console.log($scope.selectedAppointment.stepsForPills);
 			$scope.appointmentNotesAreaSharedProperties.appointmentId = $scope.selectedAppointment.appointmentId;
 			$scope.selectedAppointmentOrdinal = Number(currentStepOrdinal);
 			$scope.selectedAppointmentOnLastStep = appointmentOnLastStep;
@@ -424,7 +440,8 @@ define('queueController', [], function() {
 				stepsForPills.push(
 					{
 						stepName: val.stepName,
-						stepCompleted: val.stepOrdinal <= currentStepOrdinal
+						stepCompleted: val.stepOrdinal <= currentStepOrdinal,
+						substeps: val.substeps
 					}
 				)
 			}
@@ -551,7 +568,17 @@ define('queueController', [], function() {
 		// These are called "progressionType"s in the database.
 		// They are different queue sequences.
 		// Do this first so the pools data structure is ready. todo might be able to move it to the bottom.
-		$scope.getPossibleSwimlanes();
+		$scope.getPossibleSwimlanes()
+			.then($scope.checkResponseForError)
+			.catch($scope.notifyOfError)
+			.then((response) => {
+				if (response == null || !response.success) {
+					const errorMessage = response ? response.error : 'There was an error on the server accessing appointment queue types. Please refresh the page and try again.';
+					NotificationUtilities.giveNotice('Failure', errorMessage, false);
+				} else {
+					$scope.getPossibleSubsteps();
+				}
+			});
 		
 		// Initialize the date picker plugin
 		WDN.initializePlugin('jqueryui', [() => {
