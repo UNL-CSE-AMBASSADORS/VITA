@@ -25,24 +25,27 @@ define('queueController', [], function() {
 				// Make it so elements can only be dropped in adjacent containers				
 				// targetContainer is now a swimlane, or a step
 				if (targetContainer != null && sourceContainer != null) {
-					const sourceSplit = sourceContainer.id.split("*_*");
-					const sourceProgressionTypeId = sourceSplit[0], sourceStepOrdinal = sourceSplit[2];
-
-
-					const targetSplit = targetContainer.id.split("*_*");
-					const targetProgressionTypeId = targetSplit[0], targetStepOrdinal = targetSplit[2];
-
-
-					 // can NOT allow an appointment to move from one queue/pool to another.
-					 // this is very important because our sql architecture and logic isn't built to handle this yet.
-					if(sourceProgressionTypeId !== targetProgressionTypeId) {
-						return false;
+					const sourceProgressionTypeId = sourceContainer.dataset.progTypeId;
+					const sourceStepId = sourceContainer.dataset.stepId;
+					const sourceStepOrdinal = sourceContainer.dataset.stepOrdinal;
+		
+					const targetProgressionTypeId = targetContainer.dataset.progTypeId;
+					const targetStepId = targetContainer.dataset.stepId;
+					const targetStepOrdinal = targetContainer.dataset.stepOrdinal;
+		
+					// Checks we want to run before we write or delete from the database:
+					// 1. Check if it's in same pool. Very important! b/c we don't have logic for changing an appt's queue type.
+					if (sourceProgressionTypeId !== targetProgressionTypeId) {
+						return;
+					}
+					// 2. Else if it is the same pool, ignore the move if it's within a container
+					else if (sourceStepId === targetStepId) {
+						return;
 					} else {
 						// don't allow them to move them more than one column over at a time.
 						return Math.abs(targetStepOrdinal - sourceStepOrdinal) <= 1;
 					}
 				}
-
 				return true; // Default to allowing the move
 			},
 		});
@@ -53,56 +56,101 @@ define('queueController', [], function() {
 				return;
 			}
 
-			const sourceContainerId = sourceContainer[0].id;
-			const targetContainerId = targetContainer[0].id; // different way of accessing as the "accepts", not sure why.
-			
-			// Checks we want to run before we write or delete from the database:
-			// 1. Check if it's in same pool (this is disallowed in DragulaService "accepts")
-			// 2. Ignore the move if it's within a container (looks like unecessary because this doesn't even trigger a "drop event")
-			if (sourceContainerId === targetContainerId) {
-				return;
+			const source = {
+				progressionTypeId: sourceContainer[0].dataset.progTypeId,
+				stepId: sourceContainer[0].dataset.stepId,
+				stepOrdinal: sourceContainer[0].dataset.stepOrdinal,
+				maxOrdinal: sourceContainer[0].dataset.maxOrdinal
 			}
 
-			const sourceSplit = sourceContainer[0].id.split("*_*");
-			const sourceProgressionTypeId = sourceSplit[0], sourceStepId = sourceSplit[1], sourceStepOrdinal = sourceSplit[2];
+			const target = {
+				progressionTypeId: targetContainer[0].dataset.progTypeId,
+				stepId: targetContainer[0].dataset.stepId,
+				stepOrdinal: targetContainer[0].dataset.stepOrdinal,
+				maxOrdinal: targetContainer[0].dataset.maxOrdinal
+			}
 
-			const targetSplit = targetContainer[0].id.split("*_*");
-			const targetProgressionTypeId = targetSplit[0], targetStepId = targetSplit[1], targetStepOrdinal = targetSplit[2];
-			
-			// don't have to know if it's a substep or step. can figure it out in the schema.
-			// if ordinal increased, insert timestamp.
-			//if ordinal decreased, delete entry where step or stepfromsubstep = soucestepid
+			// move the appointment to the correct swimlane
+			$scope.pools[target.progressionTypeId]['swimlanes'][target.stepOrdinal]['appointments'][appointmentId] = $scope.pools[source.progressionTypeId]['swimlanes'][source.stepOrdinal]['appointments'][appointmentId];
+			// delete from the source swimlane (TODO would this be done automatically by dragula if we used arrays for dragula-model?)
+			delete $scope.pools[source.progressionTypeId]['swimlanes'][source.stepOrdinal]['appointments'][appointmentId];
 
-			//todo put moveforward and movebackward in their own function
-			//send over only appointmentId and targetProgressionStepId (or substepid) here.
-			if(targetStepOrdinal - sourceStepOrdinal == -1) {
-				// if we went back in the queue, we need to delete the previous entry.
-				const response = $scope.deleteTimestamp(appointmentId, sourceStepId)
-					.then($scope.checkResponseForError)
-					.catch($scope.notifyOfError)
-					.then((response) => {
-						if (response == null || !response.success) {
-							const errorMessage = response ? response.error : 'There was an error on the server altering queue records. Please refresh the page and try again.';
-							NotificationUtilities.giveNotice('Failure', errorMessage, false);
-						} //TODO put an else here and give some kind of confirmation
+			// consider client not a noShow, no matter how late they are, if they have started their appointment.
+			// easier to just set to false than it is to check if true, then set to false.
+			if (target.stepOrdinal == 1) {
+				$scope.pools[target.progressionTypeId]['swimlanes'][target.stepOrdinal]['appointments'][appointmentId].noShow = false;
+			}
+			// we only need to remove a row in progressionTimeStamp if an appointment was moved back (left) a swimlane. 
+			if(target.stepOrdinal - source.stepOrdinal == -1) {
+				$scope.regressAppointment(appointmentId, source, target);
+			} else {
+				$scope.advanceAppointment(appointmentId, source, target);
+			}
+		});
+
+		
+		$scope.advanceAppointment = (appointmentId, source, target) => {
+			// if appt moved back, we are going to update the timestamp in an exiting row
+			// if appt moved forward, we are going to insert a new row
+			// MySQL "ON DUPLICATE KEY UPDATE" statement handles this logic
+			$scope.enterTimestamp(appointmentId, source, target)
+				.then($scope.checkResponseForError)
+				.catch($scope.notifyOfError)
+				.then((response) => { //TODO above is for when we don't even get this far?
+					if (response == null || !response.success) {
+						const errorMessage = response ? response.error : 'There was an error on the server entering timestamps. Please refresh the page and try again.';
+						// NotificationUtilities.giveNotice('Failure', errorMessage, false); //TODO need to clean up errors
+					} else {
+						if(target.stepOrdinal === target.maxOrdinal) {
+							$scope.markAppointmentAsCompleted(appointmentId)
+								.then($scope.checkResponseForError)
+								.catch($scope.notifyOfError)
+								.then((response) => {
+									if (response == null || !response.success) {
+										const errorMessage = response ? response.error : 'There was an error on the server marking your appointment as completed. Please refresh the page and try again.';
+										// NotificationUtilities.giveNotice('Failure', errorMessage, false);
+									}
+							});
+						}
 					}
-				);
-			}
+				});
+		}
+
+		$scope.regressAppointment = (appointmentId, source, target) => {
+			// if we went back in the queue, we need to delete the previous entry.
+			$scope.deleteTimestamp(appointmentId, source.stepId)
+				.then($scope.checkResponseForError)
+				.catch($scope.notifyOfError)
+				.then((response) => {
+					if (response == null || !response.success) {
+						const errorMessage = response ? response.error : 'There was an error on the server altering queue records. Please refresh the page and try again.';
+						NotificationUtilities.giveNotice('Failure', errorMessage, false);
+					} else {
+						// if we are going left from the last step, remove complete status
+						if(source.stepOrdinal === source.maxOrdinal) {
+							//$scope.markAppointmentAsIncomplete();
+							//TODO do i need to do this? was this even being used before?
+							const a = 1;
+						}
+						$scope.enterTimestamp(appointmentId, source, target);
+					}//TODO put an else here and give some kind of confirmation
+				}
+			);
+		}
+
+		$scope.enterTimestamp = (appointmentId, source, target) => {
 			// if we dropped an appt in the leftmost swimlane (Awaiting), that would be represented in the database
 			// by a null timestamp for the first ordinal step in the database, which is the second left most swimlane on the UI.
 			// This is the default because an appointment starts off as "Awaiting" so there can't/shouldn't be a timestamp for it.
 			var setTimeStampToNull, stepId;
-			if(targetStepId == 'null') { // THIS IS BASED ON THE FRONT-END RESTRICTION OF ONLY MOVING ONE SWIMLANE AT A TIME! If that changes, so must this.
+			if(target.stepOrdinal === '0') { // THIS IS BASED ON THE FRONT-END RESTRICTION OF ONLY MOVING ONE SWIMLANE AT A TIME! If that changes, so must this.
 				setTimeStampToNull = true;
-				stepId = sourceStepId;
+				stepId = source.stepId;
 			} else {
 				setTimeStampToNull = false;
-				stepId = targetStepId;
+				stepId = target.stepId;
 			}
-			console.log(stepId);
-			console.log(setTimeStampToNull);
-			// MySQL "ON DUPLICATE KEY UPDATE" statement will update timestamp if regressing, insert if advancing in queue.
-			$scope.insertStepTimestamp(appointmentId, stepId, setTimeStampToNull)
+			return $scope.insertStepTimestamp(appointmentId, stepId, setTimeStampToNull)
 				.then($scope.checkResponseForError)
 				.catch($scope.notifyOfError)
 				.then((response) => {
@@ -110,16 +158,11 @@ define('queueController', [], function() {
 						const errorMessage = response ? response.error : "There was an error on the server updating the appointment's timestamps. Please refresh the page and try again.";
 						NotificationUtilities.giveNotice('Failure', errorMessage, false);
 					} else {
-						// move the appointment to the correct swimlane
-						$scope.pools[targetProgressionTypeId]['swimlanes'][targetStepOrdinal]['appointments'][appointmentId] = $scope.pools[sourceProgressionTypeId]['swimlanes'][sourceStepOrdinal]['appointments'][appointmentId];
-						// delete from the source swimlane (TODO would this be done automatically by dragula if we used arrays for dragula-model?)
-						delete $scope.pools[sourceProgressionTypeId]['swimlanes'][sourceStepOrdinal]['appointments'][appointmentId];
-						//const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
-						//appointment.checkedIn = false; //TODO have to handle the pills and other things. that might have to wait unless ben can handle it with the general popup/formatting task.
 					}
+					return response;
 				}
 			);
-		});
+		};
 
 		// have to pull these upfront because for instance, if no appointments in progressionType 1
 		// have reached the last step, then there won't be a row for that step and it won't show up in getProgressionSteps
@@ -136,10 +179,11 @@ define('queueController', [], function() {
 					possibleSwimlanes.forEach((step) => {
 						// if progType (a set of specific swimlanes, or a "pool")
 						// is new, make new entry for it here doesn't exist, add new dict to pools{} with progTypeName
-						if(!(step.progressionTypeId in $scope.pools)) { // this could be changed to PoolTypeID, or just PoolID
+						if(!(step.progressionTypeId in $scope.pools)) {
 							$scope.pools[step.progressionTypeId] = {
 								progressionTypeId: step.progressionTypeId,
 								progressionTypeName: step.progressionTypeName,
+								progressionTypeMaxOrdinal: step.progressionStepOrdinal,
 								swimlanes: {
 									0: {
 										stepId: null,
@@ -156,6 +200,7 @@ define('queueController', [], function() {
 								}
 							};
 						} else {
+							$scope.pools[step.progressionTypeId]['progressionTypeMaxOrdinal'] = Math.max($scope.pools[step.progressionTypeId]['progressionTypeMaxOrdinal'], step.progressionStepOrdinal);
 							$scope.pools[step.progressionTypeId]['swimlanes'][step.progressionStepOrdinal] =
 							{
 								stepId: step.progressionStepId,
@@ -180,7 +225,7 @@ define('queueController', [], function() {
 				return;
 			}
 			const siteId = $scope.selectedSite.siteId;
-			// 1. Get progression steps
+			// 1. Get filtered rows of appointments and their progressionStep info
 			QueueDataService.getProgressionSteps(isoFormattedDate, siteId)
 				.then($scope.checkResponseForError)
 				.catch($scope.notifyOfError)
@@ -198,10 +243,8 @@ define('queueController', [], function() {
 						// 2. Fill the progression steps into appointment objects before adding them
 						// to the correct swimlanes in the correct pools in $scope.pools
 						const appointments = {};
-						progressionSteps.forEach((step) => {
+							progressionSteps.forEach((step) => {
 							if (!(step.appointmentId in appointments)) {
-								const noShowDeadline = new Date(step.scheduledDatetime + 30*60000); // 30 minutes to show up
-								const noShow = noShowDeadline < new Date(); // TODO need to test this
 								appointments[step.appointmentId] = {
 									appointmentId: step.appointmentId,
 									scheduledTime: step.scheduledTime,
@@ -216,7 +259,6 @@ define('queueController', [], function() {
 									language: step.language,
 									walkin: step.walkin,
 									visa: step.visa,
-									noShow: noShow,
 									phoneNumber: step.phoneNumber,
 									emailAddress: step.emailAddress
 								}
@@ -241,17 +283,30 @@ define('queueController', [], function() {
 								// TODO could store previousAppointmentIds with their previous Ordinal step and see if it changed here.
 								const exists = $scope.previousAppointmentIds.some((apptId) => apptId = step.appointmentId);
 								if (!exists) {
-									// if timestamp if null, then this is the default beginning progressionStep made in
-									// storeAppointment.php, insertNullProgressionStepTimestamp().
-		
-									const ordinal = ((step.timestamp === null) ? 0 : step.advancement_rank);
+									// if we are adding it, last thing to add to the appt object is no-show status
+									// Appt is no-show if they are 30 minutes late and they haven't started their appt
+									// Since we are on the most recent step for this appointment (see comment above),
+									// if this step is the first with a null timestamp, they haven't started their appt
+									var noShow = false; // default to false;
+									var ordinal = null;
+									if (step.timestamp === null) {
+										const noShowDeadline = new Date(step.scheduledDatetime + 30*60000); // 30 minutes to show up
+										noShow = noShowDeadline < new Date(); // TODO need to test this
+										// (unrelated to noShow) if timestamp if null, then this is the default beginning
+										// progressionStep made in storeAppointment.php, insertNullProgressionStepTimestamp().
+										ordinal = 0;
+									} else {
+										ordinal = step.progressionStepOrdinal
+									}
+
+									appointments[step.appointmentId].noShow = noShow;
 									// ex: in the pool or progression type 'Virtual', in the second ordinal swimlane,
 									// we are going to add this appointment object with the appt id as the key.
 									$scope.pools[step.progressionTypeId]["swimlanes"][ordinal]["appointments"][step.appointmentId] = appointments[step.appointmentId];
 								}
 							}
 						});
-						// this is so at auto-refresh every 15 seconds, we can skip an appointment if it's already been added.
+						// at auto-refresh every 15 seconds, we can skip an appointment if it's already been added.
 						$scope.previousAppointmentIds = Object.keys(appointments);
 						console.log($scope.pools);
 					}

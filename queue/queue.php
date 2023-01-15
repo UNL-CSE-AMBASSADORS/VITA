@@ -55,7 +55,11 @@
 			<!-- Swimlanes -->
 			<div class="dcf-grid dcf-grid-fifths@md dcf-col-gap-2">
 				<!--<div ng-repeat="(key, swimlane) in progressionType['swimlanes']" class="container" id="awaitingAppointmentsContainer" dragula="'queue-bag'" dragula-model="swimlane.stepName">Swimlane headers -->
-				<div ng-repeat="(stepOrdinal, swimlane) in progressionType['swimlanes']" class="container" id="{{progressionType.progressionTypeId+'*_*'+swimlane.stepId+'*_*'+stepOrdinal}}" dragula="'queue-bag'" dragula-model="Object.values(swimlane['appointments'])"> <!-- TODO I think dragula-model needs an array (when I moved appts, I was getting error "a.splice is not a function"), should check if I can just pass in an object. -->
+				<div ng-repeat="(stepOrdinal, swimlane) in progressionType['swimlanes']" class="container" 
+					id="{{progressionType.progressionTypeId+'_'+swimlane.stepOrdinal}}"
+					data-prog-type-id="{{progressionType.progressionTypeId}}" data-step-id="{{swimlane.stepId}}" 
+					data-step-ordinal="{{stepOrdinal}}" data-max-ordinal="{{stepOrdinal===progressionType.progressionTypeMaxOrdinal}}" 
+					dragula="'queue-bag'" dragula-model="Object.values(swimlane['appointments'])"> <!-- TODO I think dragula-model needs an array (when I moved appts, I was getting error "a.splice is not a function"), should check if I can just pass in an object. -->
 					<div ng-repeat="(appointmentId, appointment) in swimlane['appointments']"
 						data-appointment-id="{{appointmentId}}"
 						ng-show="passesSearchFilter(appointment)"

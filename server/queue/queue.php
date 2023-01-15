@@ -238,7 +238,7 @@ function insertStepTimestamp($appointmentId, $stepId, $setTimeStampToNull) {
 		$stmt->execute(array($appointmentId, $stepId, $time));
 	} catch (Exception $e) {
 		$response['success'] = false;
-		$response['error'] = 'There was an error on the server marking the appointment as checked in. Please refresh the page and try again';
+		$response['error'] = "There was an error on the server updating the appointment's queue status. Please refresh the page and try again";
 	}
 
 	echo json_encode($response);
@@ -268,7 +268,7 @@ function insertSubStepTimestamp($appointmentId, $progressionSubStepId) {
 		$stmt->execute(array($appointmentId, $progressionSubStepId, $time, $progressionSubStepId));
 	} catch (Exception $e) {
 		$response['success'] = false;
-		$response['error'] = 'There was an error on the server marking the appointment as checked in. Please refresh the page and try again';
+		$response['error'] = "There was an error on the server saving the appointment's queue subcategory. Please refresh the page and try again";
 	}
 
 	echo json_encode($response);
