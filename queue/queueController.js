@@ -9,7 +9,8 @@ define('queueController', [], function() {
 
 		$scope.sites = [];
 		$scope.selectedAppointment = null;
-		$scope.selectedAppointmentOrdinal = null;
+		// These are things we don't need to store inside the object tnen worry about updating, we can just pull them when we click on one. 
+		$scope.selectedAppointmentOrdinal = null; //TODO should i put these in the appointment object?
 		$scope.selectedAppointmentOnLastStep = null;
 		$scope.selectedSite = null;
 
@@ -23,7 +24,7 @@ define('queueController', [], function() {
 
 		// Configure dragula options
 		DragulaService.options($scope, 'queue-bag', { // Dragula call a collection of "swimlanes/containers" a "bag"
-			 accepts: (element, targetContainer, sourceContainer, sibling) => { // todo look into sibling.
+			 accepts: (element, targetContainer, sourceContainer, sibling) => {
 				// Make it so elements can only be dropped in adjacent containers				
 				// targetContainer is now a swimlane, or a step
 				if (targetContainer != null && sourceContainer != null) {
@@ -84,6 +85,16 @@ define('queueController', [], function() {
 			}
 			// we only need to remove a row in progressionTimeStamp if an appointment was moved back (left) a swimlane. 
 			if(target.stepOrdinal - source.stepOrdinal == -1) {
+				// we don't really make updates to the appointments on the front end, we just move the appointments themselves in the pool
+				// this is an exception, so if the appointment is moved from a substep, if it's moved back it will start blank
+				// If an appointment starts as awaiting, then moves to Complete and is given a substep, it will only have a full object
+				// for the awaiting step, plus a skeleton object with just a subStepId for the complete step (no intermediate steps).
+				// So if the appt isn't given a substep in complete, it will only have an awaiting step, which is why we check if exists here.
+				// If you leave the appointment on a step and refresh the page, then it will have a full step object for each one.
+				// TODO could update objects every 15 sec, but risk overriding local changes made. Probably shouldn't do that.
+				if ([source.stepOrdinal] in $scope.pools[target.progressionTypeId]['swimlanes'][target.stepOrdinal]['appointments'][appointmentId]['steps']) {
+					$scope.pools[target.progressionTypeId]['swimlanes'][target.stepOrdinal]['appointments'][appointmentId]['steps'][source.stepOrdinal].subStepId = null;
+				}
 				$scope.regressAppointment(appointmentId, source, target);
 			} else {
 				$scope.advanceAppointment(appointmentId, source, target);
@@ -92,6 +103,8 @@ define('queueController', [], function() {
 
 		
 		$scope.advanceAppointment = (appointmentId, source, target) => {
+			// not updating appointments steps' object here. could get datetime back from sql and input it, seems unecessary. will update in 15 sec
+
 			// if appt moved back, we are going to update the timestamp in an exiting row
 			// if appt moved forward, we are going to insert a new row
 			// MySQL "ON DUPLICATE KEY UPDATE" statement handles this logic
@@ -119,6 +132,7 @@ define('queueController', [], function() {
 		}
 
 		$scope.regressAppointment = (appointmentId, source, target) => {
+			// not updating appointments' steps object here.			
 			// if we went back in the queue, we need to delete the previous entry.
 			$scope.deleteTimestamp(appointmentId, source.stepId)
 				.then($scope.checkResponseForError)
@@ -207,14 +221,14 @@ define('queueController', [], function() {
 										stepOrdinal: "0",
 										stepName: 'Awaiting',
 										appointments: {},
-										substeps: {}
+										possibleSubsteps: {}
 									},
 									[step.progressionStepOrdinal] : {
 										stepId: step.progressionStepId,
 										stepOrdinal: step.progressionStepOrdinal,
 										stepName: step.progressionStepName,
 										appointments: {}, // will add appointments once we pull their steps in getProgressionSteps
-										substeps: {}
+										possibleSubsteps: {}
 									}
 								}
 							};
@@ -226,7 +240,7 @@ define('queueController', [], function() {
 								stepOrdinal: step.progressionStepOrdinal,
 								stepName: step.progressionStepName,
 								appointments: {},
-								substeps: {}
+								possibleSubsteps: {}
 							};
 						}
 					});
@@ -247,7 +261,7 @@ define('queueController', [], function() {
 					const possibleSubsteps = response.possibleSubsteps.map((substep) => {return substep;});
 					possibleSubsteps.forEach((substep) => {
 						$scope.pools[substep.progressionTypeId]['swimlanes'][substep.progressionStepOrdinal]
-							['substeps'][substep.progressionSubStepId] = substep.progressionSubStepName;
+							['possibleSubsteps'][substep.progressionSubStepId] = substep.progressionSubStepName;
 					});
 				}
 			});	
@@ -289,12 +303,15 @@ define('queueController', [], function() {
 									appointmentType: step.appointmentType,
 									scheduledTime: step.scheduledTime,
 									clientName: step.clientName,
-									steps: [{
+									steps: {[step.progressionStepOrdinal]: {
 										stepOrdinal: step.progressionStepOrdinal,
 										stepName: step.progressionStepName,
 										stepTimeStamp: step.timestamp,
-										subStep: step.progressionSubStepName
-									}],
+										subStepId: step.progressionSubStepId
+										// subStepName: step.progressionSubStepName // not sure how to easily tie the both the dropdown key and value to the model,
+										// and the key is what's needed for the database, so just doing the subStepId for now. https://stackoverflow.com/questions/21734524/key-value-pairs-in-ng-options
+										// Can get the name from the possibleSubSteps, if you really need it. but I'd prob change things before i tried that.
+									}},
 									cancelled: step.cancelled,
 									language: step.language,
 									walkin: step.walkin,
@@ -305,14 +322,14 @@ define('queueController', [], function() {
 							} else {
 								// if the appointment object is already made, we only need to add to its list of steps
 								// (first might be checked-in, then here we add the timestamp for the "paperwork complete" step)
-								appointments[step.appointmentId]['steps'].push(
+								appointments[step.appointmentId]['steps'][step.progressionStepOrdinal] =
 									{
 										stepOrdinal: step.progressionStepOrdinal,
 										stepName: step.progressionStepName,
 										stepTimeStamp: step.timestamp,
-										subStep:step.progressionSubStepName
-									}
-								)
+										subStepId: step.progressionSubStepId
+										// subStepName: step.progressionSubStepName
+									};
 							}
 							// we sort in sql so that the most recent step (advancement_rank = 1) comes last.
 							// So if advancement_rank = 1, we are on the last database entry for this appointment,
@@ -380,16 +397,29 @@ define('queueController', [], function() {
 				});
 		};
 
+		$scope.updateSubStep = () => {
+			const appointmentId = $scope.selectedAppointment.appointmentId;
+			// The appt won't have a full step object here
+			const subStepId = $scope.selectedAppointment.steps[$scope.selectedAppointmentOrdinal]['subStepId']
+			// TODO could figure out a way to add subStepName to appointment in pools, for clarity.
+			$scope.insertSubStepTimestamp(appointmentId, subStepId)
+				.then($scope.checkResponseForError)
+				.catch($scope.notifyOfError)
+				.then((response) => {
+					if (response == null || !response.success) {
+						const errorMessage = response ? response.error : "There was an error on the server updating the appointment's sub-category. Please refresh the page and try again.";
+						NotificationUtilities.giveNotice('Failure', errorMessage, false); //todo i belive this will pop up and say "undefined" if the session ends. that should be falsy, look into it.
+					}
+				});
+		};
+
 		$scope.insertSubStepTimestamp = (appointmentId, subStepId) => {
 			return QueueDataService.insertSubStepTimestamp(appointmentId, subStepId)
 				.then($scope.checkResponseForError)
 				.catch($scope.notifyOfError)
 				.then((response) => {
-					const appointment = $scope.appointments.find((appointment) => appointment.appointmentId === appointmentId);
-					appointment.checkedIn = true;
-					appointment.paperworkComplete = false;
-					appointment.noShow = false;
 				});
+				//TODO how to check rows affected?
 		};
 
 		$scope.markAppointmentAsCompleted = (appointmentId) => {
@@ -425,9 +455,9 @@ define('queueController', [], function() {
 		};
 
 		$scope.selectAppointment = (appointment, progressionTypeId, currentStepOrdinal, appointmentOnLastStep) => {
+			// TODO does this make the pool appt change when selected changes? substepID looks to update in both...
 			$scope.selectedAppointment = appointment;
 			$scope.selectedAppointment.stepsForPills = $scope.getAppointmentPills(currentStepOrdinal, progressionTypeId);
-			console.log($scope.selectedAppointment.stepsForPills);
 			$scope.appointmentNotesAreaSharedProperties.appointmentId = $scope.selectedAppointment.appointmentId;
 			$scope.selectedAppointmentOrdinal = Number(currentStepOrdinal);
 			$scope.selectedAppointmentOnLastStep = appointmentOnLastStep;
@@ -441,7 +471,7 @@ define('queueController', [], function() {
 					{
 						stepName: val.stepName,
 						stepCompleted: val.stepOrdinal <= currentStepOrdinal,
-						substeps: val.substeps
+						possibleSubsteps: val.possibleSubsteps
 					}
 				)
 			}
@@ -450,6 +480,8 @@ define('queueController', [], function() {
 
 		$scope.deselectAppointment = () => {
 			$scope.selectedAppointment = null;
+			$scope.selectedAppointmentOrdinal = null;
+			$scope.selectedAppointmentOnLastStep = null;
 		};
 
 		$scope.siteChanged = () => {

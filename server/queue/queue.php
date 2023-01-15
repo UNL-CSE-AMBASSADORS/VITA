@@ -24,7 +24,7 @@ if (isset($_REQUEST['action'])) {
 		case 'getPossibleSubsteps': getPossibleSubsteps(); break;
 		case 'deleteTimestamp': deleteTimestamp($_POST['appointmentId'], $_POST['stepId']); break;
 		case 'insertStepTimestamp': insertStepTimestamp($_POST['appointmentId'], $_POST['stepId'], $_POST['setTimeStampToNull']); break;
-		case 'insertSubStepTimestamp': insertSubStepTimestamp($_POST['appointmentId'], $_POST['subSepId']); break;
+		case 'insertSubStepTimestamp': insertSubStepTimestamp($_POST['appointmentId'], $_POST['subStepId']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -103,7 +103,7 @@ function getProgressionSteps($date, $siteId) {
 				case when a.progressionStepId is not null then stepWithoutSubStep.progressionStepId else stepFromSubStep.progressionStepId end as progressionStepId,
 				case when a.progressionStepId is not null then stepWithoutSubStep.progressionStepName else stepFromSubStep.progressionStepName end as progressionStepName,
 				case when a.progressionStepId is not null then stepWithoutSubStep.progressionStepOrdinal else stepFromSubStep.progressionStepOrdinal end as progressionStepOrdinal,	
-				substep.progressionSubStepName,
+				substep.progressionSubStepId, substep.progressionSubStepName,
 				timestamp
 			from progressiontimestamp a
 			# a given row in progressiontimestamp will have either a step ID or a substep ID. The other ID will be null.
@@ -112,7 +112,7 @@ function getProgressionSteps($date, $siteId) {
 			left join progressionType typeFromStep
 				on stepWithoutSubStep.progressionTypeId = typeFromStep.progressionTypeId
 			left join progressionsubstep substep # join substeps directly
-				on a.progressionsubstepid = substep.progressionsubstepid
+				on a.progressionSubStepId = substep.progressionSubStepId
 			left join progressionStep stepFromSubStep # the substep from the timestamp table is derived from a step, we want to show that step for clarity here. we just leave stepId null in progressionTimestamp because it would be redundant and could potentially result in erroneous insertions (what if substep "FSA" only exists for stepId 13, but we accientally inserted 12 into progressionTimeStamps stepID field? Could probably impose some restraint to avoid this, but it would still be redundant data.
 				on stepFromSubStep.progressionStepId = substep.progressionStepId
 			left join progressionType typeFromSubStep
@@ -143,7 +143,7 @@ function getProgressionSteps($date, $siteId) {
 		');
 		
 		$query = 'select
-			a.appointmentId, a.progressionTypeId, a.progressionTypeName, a.progressionStepName, a.progressionSubStepName,
+			a.appointmentId, a.progressionTypeId, a.progressionTypeName, a.progressionStepName, a.progressionSubStepId, a.progressionSubStepName,
 			a.timestamp, a.progressionStepOrdinal, a.advancement_rank,
 			TIME_FORMAT(atime.scheduledTime, "%l:%i %p") AS scheduledTime,
 			client.firstName, client.lastName, 
@@ -191,8 +191,6 @@ function getProgressionSteps($date, $siteId) {
 			# $appointment['noShow'] = (boolean)$appointment['noShow'];
 			$step['walkIn'] = (boolean)$step['walkIn'];
 			$step['cancelled'] = (boolean)$step['cancelled'];
-
-			// TODO determine if appointment is a noshow in controller
 
 			// Shorten last name to only the initial if user doesn't have permission to view entire last name
 			if (!$canViewClientInformation) {
@@ -267,7 +265,7 @@ function insertStepTimestamp($appointmentId, $stepId, $setTimeStampToNull) {
 	echo json_encode($response);
 }
 
-function insertSubStepTimestamp($appointmentId, $progressionSubStepId) {
+function insertSubStepTimestamp($appointmentId, $subStepId) {
 	GLOBAL $DB_CONN;
 
 	$response = array();
@@ -278,7 +276,7 @@ function insertSubStepTimestamp($appointmentId, $progressionSubStepId) {
 		// don't have to insert subStepId because it is null by default.
 		// syntax for https://stackoverflow.com/questions/15383852/sql-if-exists-update-else-insert-into
 		// looks like this syntax might throw a warning? can update TODO https://dev.mysql.com/doc/refman/8.0/en/insert-on-duplicate.html
-		
+
 		$query = 'INSERT INTO progressionTimeStamp (appointmentId, progressionStepId, progressionSubStepId, timestamp)
 			SELECT ?, ss.progressionStepId, ?, ?
 			FROM progressionSubStep ss
@@ -288,7 +286,7 @@ function insertSubStepTimestamp($appointmentId, $progressionSubStepId) {
 			timestamp = VALUES(timestamp);'; // this is for if the (appointmentId, progressionStepId) unique constraint is triggered.
 
 		$stmt = $DB_CONN->prepare($query);
-		$stmt->execute(array($appointmentId, $progressionSubStepId, $time, $progressionSubStepId));
+		$stmt->execute(array($appointmentId, $subStepId, $time, $subStepId));
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = "There was an error on the server saving the appointment's queue subcategory. Please refresh the page and try again";

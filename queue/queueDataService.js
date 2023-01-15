@@ -36,7 +36,7 @@ define('queueDataService', [], ($http) => {
 				return $http({
 					url: '/server/queue/queue.php',
 					method: 'POST',
-					data: `action=insertSubStepTimestamp&appointmentId=${appointmentId}&stepId=${subStepId}`,
+					data: `action=insertSubStepTimestamp&appointmentId=${appointmentId}&subStepId=${subStepId}`,
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				}).then((response) => response.data, (error) => null);
 			},
