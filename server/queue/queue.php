@@ -121,6 +121,7 @@ function getProgressionSteps($date, $siteId) {
 			client.firstName, client.lastName, 
 			sa.cancelled, app.language, app.clientId,
 			# (DATE_ADD(at.scheduledTime, INTERVAL 30 MINUTE) < NOW() AND timeIn IS NULL) AS noShow, #this isnt able to be done on one line anymore.
+			atime.scheduledTime as scheduledDatetime,
 			(atime.scheduledTime < app.createdAt) AS walkIn, atype.name as appointmentType,
 			VisaAnswer.visa';
 		if ($canViewClientInformation) {

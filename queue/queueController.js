@@ -200,6 +200,8 @@ define('queueController', [], function() {
 						const appointments = {};
 						progressionSteps.forEach((step) => {
 							if (!(step.appointmentId in appointments)) {
+								const noShowDeadline = new Date(step.scheduledDatetime + 30*60000); // 30 minutes to show up
+								const noShow = noShowDeadline < new Date(); // TODO need to test this
 								appointments[step.appointmentId] = {
 									appointmentId: step.appointmentId,
 									scheduledTime: step.scheduledTime,
@@ -214,7 +216,7 @@ define('queueController', [], function() {
 									language: step.language,
 									walkin: step.walkin,
 									visa: step.visa,
-									// TODO need to add noshow logic here, and make sure phone number/name is handled on front end
+									noShow: noShow,
 									phoneNumber: step.phoneNumber,
 									emailAddress: step.emailAddress
 								}
@@ -350,9 +352,24 @@ define('queueController', [], function() {
 				});
 		};
 
-		$scope.selectAppointment = (appointment) => {
+		$scope.selectAppointment = (appointment, currentStepOrdinal, progressionTypeId) => {
 			$scope.selectedAppointment = appointment;
+			$scope.selectedAppointment.stepsForPills = $scope.getAppointmentPills(currentStepOrdinal, progressionTypeId);
 			$scope.appointmentNotesAreaSharedProperties.appointmentId = $scope.selectedAppointment.appointmentId;
+		};
+
+		$scope.getAppointmentPills = (currentStepOrdinal, progressionTypeId) => {
+			// want to return [{stepName, done or not}]
+			const stepsForPills = []
+			for (const [key, val] of Object.entries($scope.pools[progressionTypeId]['swimlanes'])) {
+				stepsForPills.push(
+					{
+						stepName: val.stepName,
+						stepCompleted: val.stepOrdinal <= currentStepOrdinal
+					}
+				)
+			}
+			return stepsForPills;
 		};
 
 		$scope.deselectAppointment = () => {

@@ -55,11 +55,11 @@
 			<!-- Swimlanes -->
 			<div class="dcf-grid dcf-grid-fifths@md dcf-col-gap-2">
 				<!--<div ng-repeat="(key, swimlane) in progressionType['swimlanes']" class="container" id="awaitingAppointmentsContainer" dragula="'queue-bag'" dragula-model="swimlane.stepName">Swimlane headers -->
-				<div ng-repeat="(key, swimlane) in progressionType['swimlanes']" class="container" id="{{progressionType.progressionTypeId+'*_*'+swimlane.stepId+'*_*'+swimlane.stepOrdinal}}" dragula="'queue-bag'" dragula-model="Object.values(swimlane['appointments'])"> <!-- TODO I think dragula-model needs an array (when I moved appts, I was getting error "a.splice is not a function"), should check if I can just pass in an object. -->
+				<div ng-repeat="(stepOrdinal, swimlane) in progressionType['swimlanes']" class="container" id="{{progressionType.progressionTypeId+'*_*'+swimlane.stepId+'*_*'+stepOrdinal}}" dragula="'queue-bag'" dragula-model="Object.values(swimlane['appointments'])"> <!-- TODO I think dragula-model needs an array (when I moved appts, I was getting error "a.splice is not a function"), should check if I can just pass in an object. -->
 					<div ng-repeat="(appointmentId, appointment) in swimlane['appointments']"
 						data-appointment-id="{{appointmentId}}"
 						ng-show="passesSearchFilter(appointment)"
-						ng-click="selectAppointment(appointment)">{{appointment.clientName}} ({{appointment.scheduledTime}})
+						ng-click="selectAppointment(appointment, stepOrdinal, progressionType.progressionTypeId)">{{appointment.clientName}} ({{appointment.scheduledTime}})
 									<!-- TODO here need to add substep, if it exists. dropdown prob only when clicked. -->
 					</div>
 				</div>				
@@ -86,10 +86,7 @@
 				<span class="pill pill-red" ng-if="selectedAppointment.noShow">No-show</span>
 				<span ng-if="!selectedAppointment.noShow">
 					<span class="pill pill-walk-in" ng-if="selectedAppointment.walkIn">Walk-In</span>
-					<span class="pill" ng-class="selectedAppointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
-					<span class="pill" ng-class="selectedAppointment.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
-					<span class="pill" ng-class="selectedAppointment.preparing ? 'pill-complete': 'pill-incomplete'">Preparing</span>
-					<span class="pill" ng-class="selectedAppointment.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
+					<span class="pill" ng-repeat="step in selectedAppointment.stepsForPills" ng-class="step.stepCompleted ? 'pill-complete': 'pill-incomplete'">{{step.stepName}}</span>
 				</span>
 			</div>
 			<div><b>Scheduled Appointment Time: </b>{{selectedAppointment.scheduledTime}}</div>
