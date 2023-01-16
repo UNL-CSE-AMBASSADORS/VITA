@@ -10,8 +10,11 @@ define('queueController', [], function() {
 		$scope.sites = [];
 		$scope.selectedAppointment = null;
 		// These are things we don't need to store inside the object tnen worry about updating, we can just pull them when we click on one. 
-		$scope.selectedAppointmentOrdinal = null; //TODO should i put these in the appointment object?
+		$scope.selectedAppointmentOrdinal = null;
 		$scope.selectedAppointmentOnLastStep = null;
+		$scope.selectedAppointmentStepsForPills = null;
+		$scope.selectedAppointmentSubStepId = null;
+		
 		$scope.selectedSite = null;
 
 		$scope.clientSearchString = '';
@@ -94,6 +97,7 @@ define('queueController', [], function() {
 				// TODO could update objects every 15 sec, but risk overriding local changes made. Probably shouldn't do that.
 				if ([source.stepOrdinal] in $scope.pools[target.progressionTypeId]['swimlanes'][target.stepOrdinal]['appointments'][appointmentId]['steps']) {
 					$scope.pools[target.progressionTypeId]['swimlanes'][target.stepOrdinal]['appointments'][appointmentId]['steps'][source.stepOrdinal].subStepId = null;
+					$scope.pools[target.progressionTypeId]['swimlanes'][target.stepOrdinal]['appointments'][appointmentId]['steps'][source.stepOrdinal].subStepName = null;
 				}
 				$scope.regressAppointment(appointmentId, source, target);
 			} else {
@@ -307,10 +311,8 @@ define('queueController', [], function() {
 										stepOrdinal: step.progressionStepOrdinal,
 										stepName: step.progressionStepName,
 										stepTimeStamp: step.timestamp,
-										subStepId: step.progressionSubStepId
-										// subStepName: step.progressionSubStepName // not sure how to easily tie the both the dropdown key and value to the model,
-										// and the key is what's needed for the database, so just doing the subStepId for now. https://stackoverflow.com/questions/21734524/key-value-pairs-in-ng-options
-										// Can get the name from the possibleSubSteps, if you really need it. but I'd prob change things before i tried that.
+										subStepId: step.progressionSubStepId,
+										subStepName: step.progressionSubStepName
 									}},
 									cancelled: step.cancelled,
 									language: step.language,
@@ -327,8 +329,8 @@ define('queueController', [], function() {
 										stepOrdinal: step.progressionStepOrdinal,
 										stepName: step.progressionStepName,
 										stepTimeStamp: step.timestamp,
-										subStepId: step.progressionSubStepId
-										// subStepName: step.progressionSubStepName
+										subStepId: step.progressionSubStepId,
+										subStepName: step.progressionSubStepName
 									};
 							}
 							// we sort in sql so that the most recent step (advancement_rank = 1) comes last.
@@ -397,11 +399,16 @@ define('queueController', [], function() {
 				});
 		};
 
-		$scope.updateSubStep = () => {
+		// need appointmentId and subStepId for SQL, subStepName for front end to show in queue.
+		// name comes through ng-model 
+		$scope.selectSubStep = () => {
 			const appointmentId = $scope.selectedAppointment.appointmentId;
 			// The appt won't have a full step object here
-			const subStepId = $scope.selectedAppointment.steps[$scope.selectedAppointmentOrdinal]['subStepId']
-			// TODO could figure out a way to add subStepName to appointment in pools, for clarity.
+			const subStepId = $scope.selectedAppointment.steps[$scope.selectedAppointmentOrdinal]['subStepId'];
+			// get the substep name through the temporary pills object // TODO is there a way to pass key/val straight to here?
+			const subStepName = $scope.selectedAppointmentStepsForPills[$scope.selectedAppointmentOrdinal]['possibleSubsteps'][subStepId];
+			$scope.selectedAppointment.steps[$scope.selectedAppointmentOrdinal].subStepName = subStepName;
+
 			$scope.insertSubStepTimestamp(appointmentId, subStepId)
 				.then($scope.checkResponseForError)
 				.catch($scope.notifyOfError)
@@ -418,6 +425,7 @@ define('queueController', [], function() {
 				.then($scope.checkResponseForError)
 				.catch($scope.notifyOfError)
 				.then((response) => {
+					return response;
 				});
 				//TODO how to check rows affected?
 		};
@@ -455,9 +463,8 @@ define('queueController', [], function() {
 		};
 
 		$scope.selectAppointment = (appointment, progressionTypeId, currentStepOrdinal, appointmentOnLastStep) => {
-			// TODO does this make the pool appt change when selected changes? substepID looks to update in both...
 			$scope.selectedAppointment = appointment;
-			$scope.selectedAppointment.stepsForPills = $scope.getAppointmentPills(currentStepOrdinal, progressionTypeId);
+			$scope.selectedAppointmentStepsForPills = $scope.getAppointmentPills(currentStepOrdinal, progressionTypeId);
 			$scope.appointmentNotesAreaSharedProperties.appointmentId = $scope.selectedAppointment.appointmentId;
 			$scope.selectedAppointmentOrdinal = Number(currentStepOrdinal);
 			$scope.selectedAppointmentOnLastStep = appointmentOnLastStep;
@@ -465,15 +472,14 @@ define('queueController', [], function() {
 
 		$scope.getAppointmentPills = (currentStepOrdinal, progressionTypeId) => {
 			// want to return [{stepName, done or not}]
-			const stepsForPills = []
+			const stepsForPills = {}
 			for (const [key, val] of Object.entries($scope.pools[progressionTypeId]['swimlanes'])) {
-				stepsForPills.push(
+				stepsForPills[val.stepOrdinal] = // "key" is ordinal, this is more future-proof.
 					{
 						stepName: val.stepName,
 						stepCompleted: val.stepOrdinal <= currentStepOrdinal,
 						possibleSubsteps: val.possibleSubsteps
-					}
-				)
+					};
 			}
 			return stepsForPills;
 		};
@@ -482,6 +488,7 @@ define('queueController', [], function() {
 			$scope.selectedAppointment = null;
 			$scope.selectedAppointmentOrdinal = null;
 			$scope.selectedAppointmentOnLastStep = null;
+			$scope.selectedAppointmentStepsForPills = null;
 		};
 
 		$scope.siteChanged = () => {
