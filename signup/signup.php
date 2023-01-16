@@ -324,6 +324,31 @@
 						<label class="error" ng-show="form.isVirtualName.$error.required">This field is required.</label>
 					</div>
 				</li>
+				<li class="form-radio" id="cryptoLi">
+					<label for="2" class="form-required">Will your return involve sold cryptocurrency?</label>
+					<div>
+						<div class="dcf-btn-group" data-toggle="buttons">
+							<label class="dcf-btn dcf-btn-secondary" 
+								name="crypto" 
+								ng-model="crypto" 
+								uib-btn-radio="'1'" 
+								ng-change="cryptoChanged()" 
+								required>Yes
+							</label>
+							<label class="dcf-btn dcf-btn-secondary" 
+								name="crypto" 
+								ng-model="crypto" 
+								uib-btn-radio="'2'" 
+								ng-change="cryptoChanged()" 
+								required>No
+							</label>
+						</div>
+					</div>
+					<div ng-show="form.$submitted || form.crypto.$touched">
+						<label class="error" ng-show="form.crypto.$error.required">This field is required.</label>
+					</div>
+					<p class="cant-help-text" ng-show="crypto == 1">Sorry, VITA can't prepare taxes that involve sold cryptocurrency.</p>
+				</li>
 			</ul>
 
 
@@ -341,7 +366,7 @@
 			<input type="submit" 
 				value="Submit" 
 				class="submit dcf-btn dcf-btn-primary dcf-mt-4"
-				ng-disabled="isVirtualAppointmentRequested() && !agreeToVirtualPreparationCheckbox.checked" />
+				ng-disabled="isVirtualAppointmentRequested() && !agreeToVirtualPreparationCheckbox.checked || crypto == 1" />
 		</form>
 	<?php } ?>
 </div>
