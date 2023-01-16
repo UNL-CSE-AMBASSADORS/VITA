@@ -63,8 +63,10 @@
 					<div ng-repeat="(appointmentId, appointment) in swimlane['appointments']"
 						data-appointment-id="{{appointmentId}}"
 						ng-show="passesSearchFilter(appointment)"
-						ng-click="selectAppointment(appointment, progressionType.progressionTypeId, stepOrdinal, (stepOrdinal===progressionType.progressionTypeMaxOrdinal))">{{appointment.clientName}} ({{appointment.scheduledTime}})
-									<!-- TODO here need to add substep, if it exists. dropdown prob only when clicked. -->
+						ng-click="selectAppointment(appointment, progressionType.progressionTypeId, 
+							stepOrdinal, (stepOrdinal===progressionType.progressionTypeMaxOrdinal))">
+							{{appointment.clientName}} ({{appointment.scheduledTime}})
+							<i ng-show="appointment.steps[stepOrdinal]['subStepName']">{{appointment.steps[stepOrdinal]['subStepName']}}</i>
 					</div>
 				</div>				
 			</div>
@@ -90,10 +92,14 @@
 				<span class="pill pill-red" ng-if="selectedAppointment.noShow">No-show</span>
 				<span ng-if="!selectedAppointment.noShow">
 					<span class="pill pill-walk-in" ng-if="selectedAppointment.walkIn">Walk-In</span>
-					<div class="pill" ng-repeat="step in selectedAppointment.stepsForPills">
+					<div class="pill" ng-repeat="(stepOrdinal, step) in selectedAppointmentStepsForPills">
 						<span class="pill" ng-class="step.stepCompleted ? 'pill-complete': 'pill-incomplete'">{{step.stepName}}</span>
 						<!-- https://stackoverflow.com/questions/21734524/key-value-pairs-in-ng-options -->
-						<select ng-show="objectLengthHelper(step.possibleSubsteps) > 0" ng-change="updateSubStep()" ng-model="selectedAppointment.steps[selectedAppointmentOrdinal].subStepId" ng-options="subStepId as subStepName for (subStepId , subStepName) in step.possibleSubsteps"></select>
+						<select ng-show="objectLengthHelper(step.possibleSubsteps) > 0"
+							ng-change="selectSubStep()"
+							ng-model="selectedAppointment.steps[selectedAppointmentOrdinal].subStepId"
+							ng-options="subStepId as subStepName for (subStepId, subStepName) in step.possibleSubsteps">
+						</select>
 					</div>
 				</span>
 			</div>

@@ -17,7 +17,7 @@
 
 	<h4>Add a Note</h4>
 	<textarea ng-model="noteToAddText" 
-		placeholder="-- Expanation --" 
+		placeholder="-- Explanation --" 
 		class="form-control note-textarea dcf-input-text" 
 		cols="300" 
 		rows="3" 
