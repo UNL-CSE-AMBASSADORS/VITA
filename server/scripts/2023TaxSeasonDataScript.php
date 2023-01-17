@@ -102,7 +102,7 @@ function insertMuslimCommunityVITAData() {
 		$DB_CONN->beginTransaction();
 
 		// Saturdays (Jan 28-Apr 8 except Feb 25, Mar 1, 18 and 25)
-		$wednesdayDates = ['2023-01-28', '2023-02-04', '2023-02-11', '2023-02-18', '2023-03-04', '2023-04-01', '2023-04-08']; // doing march 11 (not the 1st) per the poster
+		$wednesdayDates = ['2023-01-28', '2023-02-04', '2023-02-11', '2023-02-18', '2023-03-04', '2023-04-01', '2023-04-08']; // TODO doing march 11 (not the 1st) per the poster. asked for confirmation in email.
 		foreach ($wednesdayDates as $date) {
 
 			/*
