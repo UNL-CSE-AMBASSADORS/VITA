@@ -35,7 +35,7 @@ function insert2023Data() {
 function insertAndersonLibraryData() {
 	GLOBAL $DB_CONN;
 
-	$siteId = 20;
+	$siteId = 2;
 
 	try {
 		$DB_CONN->beginTransaction();
