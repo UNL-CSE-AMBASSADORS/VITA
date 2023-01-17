@@ -14,19 +14,20 @@ insert2023Data();
 
 function insert2023Data() {	
 	insertAndersonLibraryData();
-//  insertIndianCenterData();
-//	insertCenterForPeopleInNeedData();
-//	insertLorenEiseleyLibraryData();
-//	insertBennettMartinLibraryData();
-//	insertFStreetCommunityCenterData();
-//	insertSoutheastCommunityCollegeData();
-//	insertNebraskaUnionData();
-//	insertGoodNeighborCenterData();
-//	insertVeteranAdministrationData();
-//  insertLincolnRegionalCenterData();
-//  insertCretePublicLibraryData();
-//	insertInternationalStudentScholarSiteData();
-//  insertVirtualVITAData();
+	insertNativeAmericanVITAData();
+	insertMuslimCommunityVITAData();
+	insertCenterForPeopleInNeedData();
+	insertAmericanJobCenterData();
+	insertAsianCulturalCommunityCenterData();
+	insertLorenEiseleyLibraryData();
+	insertBennettMartinLibraryData();
+	insertFStreetCommunityCenterData();
+	insertSoutheastCommunityCollegeData();
+	insertNebraskaUnionData();
+	insertGoodNeighborCenterData();
+	insertVeteranAdministrationData();
+	insertInternationalStudentScholarSiteData();
+	insertVirtualVITAData();
 
 	die('SUCCESS');
 }
@@ -40,16 +41,16 @@ function insertAndersonLibraryData() {
 		$DB_CONN->beginTransaction();
 
 		// Wednesdays (Feb 1-Apr 12)
-		$wednesdayDates = getWeeklyDatesFromRange('2022-02-01', '2022-04-12');
+		$wednesdayDates = getWeeklyDatesFromRange('2023-02-01', '2023-04-12');
 		foreach ($wednesdayDates as $date) {
 
 			//4:30pm-5:30pm
 			//5:30pm-6:30pm
 			//6:30pm-7:30pm
 			// 1 is Residential
-			$firstAppointmentTimeId = insertAppointmentTime("$date 16:30:00", 5, 1, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 17:30:00", 5, 1, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 18:30:00", 5, 1, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 16:30:00", 4, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 17:30:00", 4, 1, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 18:30:00", 4, 1, $siteId);
 		}
 
 		$DB_CONN->commit();
@@ -60,32 +61,81 @@ function insertAndersonLibraryData() {
 	}
 }
 
-function insertIndianCenterData() {
+function insertNativeAmericanVITAData() {
 	GLOBAL $DB_CONN;
-	
-	$dataAlreadyInserted = true;
-	if ($dataAlreadyInserted) {
-		die('The Indian Center data has already been inserted');
-	}
 
-	$siteId = insertSite("Indian Center", "1100 Military Rd, Lincoln, NE 68508", "");
+	$siteId = 28;
 
 	try {
 		$DB_CONN->beginTransaction();
 
-		// Jan 31-Apr 11, Mondays 4:30-7:30
-		$wednesdayDates = getWeeklyDatesFromRange('2022-01-31', '2022-04-11');
+		// Sundays  (Jan 29-Apr 9 except Mar 5 & 12)
+
+		$wednesdayDates = ['2023-01-29', '2023-02-05', '2023-02-12', '2023-02-19', '2023-02-26', '2023-03-19', '2023-03-26', '2023-04-02', '2023-04-09'];
 		foreach ($wednesdayDates as $date) {
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 16:30:00", 5, 1, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 17:30:00", 5, 1, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 18:30:00", 5, 1, $siteId);
+			// 1pm-2pm
+			// 2pm-3pm
+			// 3pm-4pm
+			// 4pm-5pm
+			// 1 is Residential
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 4, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 4, 1, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 4, 1, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 4, 1, $siteId);
 		}
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
-		throw new Exception('Failed inserting Indian Center data', MY_EXCEPTION);
+		throw new Exception('Failed inserting Native American VITA data', MY_EXCEPTION);
+		die();
+	}
+}
+
+function insertMuslimCommunityVITAData() {
+	GLOBAL $DB_CONN;
+
+	$siteId = 32;
+
+	try {
+		$DB_CONN->beginTransaction();
+
+		// Saturdays (Jan 28-Apr 8 except Feb 25, Mar 1, 18 and 25)
+		$wednesdayDates = ['2023-01-28', '2023-02-04', '2023-02-11', '2023-02-18', '2023-03-04', '2023-04-01', '2023-04-08']; // doing march 11 (not the 1st) per the poster
+		foreach ($wednesdayDates as $date) {
+
+			/*
+			9am-10am
+			10am-11am
+			11am-12pm
+			12pm-1pm
+			1pm-2pm
+			2pm-3pm
+			3pm-4pm
+			4pm-5pm
+			5pm-6pm
+			6pm-7pm
+			7pm-8pm
+			*/
+			// 1 is Residential
+			$firstAppointmentTimeId = insertAppointmentTime("$date 09:00:00", 2, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 10:00:00", 2, 1, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 2, 1, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 2, 1, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 2, 1, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 2, 1, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 2, 1, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 2, 1, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 2, 1, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 2, 1, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 19:00:00", 2, 1, $siteId);
+		}
+
+		$DB_CONN->commit();
+	} catch (Exception $e) {
+		$DB_CONN->rollback();
+		throw new Exception('Failed inserting Muslim Community data', MY_EXCEPTION);
 		die();
 	}
 }
@@ -103,13 +153,17 @@ function insertCenterForPeopleInNeedData() {
 
 		$siteId = 5; // Manually obtained from PROD DB
 
-		// Feb 2-Mar 30, Wednesdays 11-1
-		$wednesdayDates = getWeeklyDatesFromRange('2022-02-02', '2022-03-30');
+		// Wednesdays (Feb 1-Mar 29)
+		$wednesdayDates = getWeeklyDatesFromRange('2023-02-01', '2023-03-29');
 
 		foreach ($wednesdayDates as $date) {
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 2, 1, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 2, 1, $siteId);
+			// 11am-12pm
+			// 12pm-1pm
+			// 1pm-2pm
+			$firstAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 4, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 4, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 4, 1, $siteId);
 		}
 		$DB_CONN->commit();
 	} catch (Exception $e) {
@@ -118,6 +172,74 @@ function insertCenterForPeopleInNeedData() {
 		die();
 	}
 }
+
+function insertAmericanJobCenterData() {
+	GLOBAL $DB_CONN;
+	
+	$dataAlreadyInserted = true;
+	if ($dataAlreadyInserted) {
+		die('The Center for People in Need data has already been inserted');
+	}
+
+	try {
+		$DB_CONN->beginTransaction();
+
+		$siteId = 24; // Manually obtained from PROD DB
+
+		// Mondays (Jan 30-Apr 10 except Feb 20)
+		$wednesdayDates = ['2023-01-30', '2023-02-06', '2023-02-13', '2023-02-27', '2023-03-06', '2023-03-13', '2023-03-20', '2023-03-27', '2023-04-03', '2023-04-10'];
+
+		foreach ($wednesdayDates as $date) {
+
+			// 10am-11pm
+			// 11pm-12pm
+			// 12pm-1pm
+			// 1pm-2pm
+			$firstAppointmentTimeId = insertAppointmentTime("$date 10:00:00", 3, 1, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 3, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 3, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 3, 1, $siteId);
+		}
+		$DB_CONN->commit();
+	} catch (Exception $e) {
+		$DB_CONN->rollback();
+		throw new Exception('Failed inserting Center for People in Need data', MY_EXCEPTION);
+		die();
+	}
+}
+
+function insertAsianCulturalCommunityCenterData() {
+	GLOBAL $DB_CONN;
+	
+	$dataAlreadyInserted = true;
+	if ($dataAlreadyInserted) {
+		die('The Asian CCC data has already been inserted');
+	}
+
+	try {
+		$DB_CONN->beginTransaction();
+
+		$siteId = 14; // Manually obtained from PROD DB. TODO there are multiple of these in the DB now
+
+		// Wednesdays (Feb 1-Mar 29)
+		$wednesdayDates = getWeeklyDatesFromRange('2023-02-01', '2023-03-29');
+
+		foreach ($wednesdayDates as $date) {
+			// 1pm-2pm
+			// 2pm-3pm
+			// 3pm-4pm
+			$secondAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 2, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 2, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 2, 1, $siteId);
+		}
+		$DB_CONN->commit();
+	} catch (Exception $e) {
+		$DB_CONN->rollback();
+		throw new Exception('Failed inserting Asian CCC data', MY_EXCEPTION);
+		die();
+	}
+}
+
 
 function insertLorenEiseleyLibraryData() {
 	GLOBAL $DB_CONN;
@@ -132,12 +254,16 @@ function insertLorenEiseleyLibraryData() {
 
 		$siteId = 6; // Manually obtained from PROD DB
 
-		// Feb 3-Apr 7, Thursdays 5:30-7
-		$thursdayDates = getWeeklyDatesFromRange('2022-02-03', '2022-04-07');
+		// Thursdays (Feb 2-Apr 13)
+		$thursdayDates = getWeeklyDatesFromRange('2023-02-02', '2023-04-13');
 		foreach ($thursdayDates as $date) {
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 17:30:00", 4, 1, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 4, 1, $siteId);
+			// 4:30pm-5:30pm
+			// 5:30pm-6:30pm
+			// 6:30pm-7:30pm
+			$firstAppointmentTimeId = insertAppointmentTime("$date 16:30:00", 4, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 17:30:00", 4, 1, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 18:30:00", 4, 1, $siteId);
 		}
 
 		$DB_CONN->commit();
@@ -161,13 +287,14 @@ function insertBennettMartinLibraryData() {
 
 		$siteId = 7; // Manually obtained from PROD DB
 
-		// Feb 6-Mar 27, Sundays 1-4
-		$sundayDates = getWeeklyDatesFromRange('2022-02-06', '2022-03-27');
+		// Feb 5-Mar 26, Sundays 1-4 starting time
+		$sundayDates = getWeeklyDatesFromRange('2023-02-05', '2023-03-26');
 		foreach ($sundayDates as $date) {
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 4, 1, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 4, 1, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 4, 1, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 5, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 5, 1, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 5, 1, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 5, 1, $siteId);
 		}
 
 		$DB_CONN->commit();
@@ -191,12 +318,14 @@ function insertFStreetCommunityCenterData() {
 
 		$siteId = 8; // Manually obtained from PROD DB
 
-		// Jan 25-Apr 11, Tuesdays 430-630
-		$tuesdayDates = getWeeklyDatesFromRange('2022-01-25', '2022-04-12');
+		// Tuesdays (Jan 31-Mar 28)
+		$tuesdayDates = getWeeklyDatesFromRange('2023-01-31', '2023-03-28');
 		foreach ($tuesdayDates as $date) {
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 16:30:00", 4, 1, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 17:30:00", 4, 1, $siteId);
+			// 5-6pm
+			// 6-7pm
+			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 2, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 2, 1, $siteId);
 		}
 
 		$DB_CONN->commit();
@@ -220,19 +349,24 @@ function insertSoutheastCommunityCollegeData() {
 
 		$siteId = 10; // Manually obtained from PROD DB
 
-		// Feb 2-Apr 6, closed March 16th, Wednesdays 5-7
-		$wednesdayDates = array('2022-02-02', '2022-02-09', '2022-02-16', '2022-02-23', '2022-03-02', '2022-03-09', '2022-03-23', '2022-03-30', '2022-04-06');
+		// Thurdays (Feb 2-Apr 13 except Mar 16)
+		$wednesdayDates = array('2023-02-02', '2023-02-09', '2023-02-16', '2023-02-23', '2023-03-02', '2023-03-09', '2023-03-23', '2023-03-30', '2023-04-06', '2023-04-13');
 		foreach ($wednesdayDates as $date) {
 
+			// 4-5 pm
+			// 5-6 pm
+			// 6-7 pm
+			$firstAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 4, 1, $siteId);
 			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 4, 1, $siteId);
 			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 4, 1, $siteId);
 		}
 
-		// Jan 31-Apr 11, closed feb7, mar7, apr4; Mondays 5-7
-		$mondayDates = array('2022-01-31', '2022-02-14', '2022-02-21', '2022-02-28', '2022-03-14', '2022-03-21', '2022-03-28', '2022-04-11');
+		// Mondays (Jan 30-Apr 10 except Feb 6, Mar 6 & Apr 3)
+		$mondayDates = array('2023-01-30', '2023-02-13', '2023-02-20', '2023-02-27', '2023-03-13', '2023-03-20', '2023-03-27', '2023-04-10');
 
 		foreach ($mondayDates as $date) {
-
+			// 5-6 pm
+			// 6-7 pm
 			$firstAppointmentTimeId = insertAppointmentTime("$date 17:00:00", 4, 1, $siteId);
 			$secondAppointmentTimeId = insertAppointmentTime("$date 18:00:00", 4, 1, $siteId);
 		}
@@ -245,28 +379,31 @@ function insertSoutheastCommunityCollegeData() {
 	}
 }
 
-function insertNebraskaEastUnionData() {
+function insertNebraskaUnionData() {
 	GLOBAL $DB_CONN;
 	
 	$dataAlreadyInserted = true;
 	if ($dataAlreadyInserted) {
-		die('The Nebraska East Union data has already been inserted');
+		die('The Nebraska Union data has already been inserted');
 	}
 
-	$siteId = 1; // Manually obtained from PROD DB
+	$siteId = 11; // Manually obtained from PROD DB
 
 	try {
 		$DB_CONN->beginTransaction();
 
-		// Jan 22-Mar 5, Saturdays
-		$saturdayDates = getWeeklyDatesFromRange('2022-01-22', '2022-03-05');
+		// Saturdays (Jan 28-Mar 4)
+		$saturdayDates = getWeeklyDatesFromRange('2023-01-28', '2023-03-04');
 		foreach ($saturdayDates as $date) {
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 10:00:00", 10, 1, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 10, 1, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 10, 1, $siteId);
+			//10am-11am first
+			//3pm-4pm last
+			$firstAppointmentTimeId = insertAppointmentTime("$date 10:00:00", 15, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 15, 1, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 15, 1, $siteId);
 			$fourthAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 10, 1, $siteId);
-			$fifthAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 5, 1, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 10, 1, $siteId);
+			$fifthAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 5, 1, $siteId);
 		}
 
 		$DB_CONN->commit();
@@ -285,19 +422,21 @@ function insertGoodNeighborCenterData() {
 		die('The Good Neighbor Center data has already been inserted');
 	}
 
-	$siteId = insertSite("Good Neighbor Center", "617 Y St", "");
+	$siteId = 16; // Good Neighbor site id from db
 
 	try {
 		$DB_CONN->beginTransaction();
 
-		// Jan 30-Feb 20, Sundays 1-5
-		$sundayDates = getWeeklyDatesFromRange('2022-01-30', '2022-02-20');
+		// Sundays (Jan 29-Feb 19)
+		$sundayDates = getWeeklyDatesFromRange('2023-01-29', '2023-02-19');
 		foreach ($sundayDates as $date) {
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 5, 1, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 5, 1, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 5, 1, $siteId);
-			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 5, 1, $siteId);
+			//1-2pm
+			//2-3pm
+			//3-4pm
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 3, 1, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 3, 1, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 3, 1, $siteId);
 		}
 
 		$DB_CONN->commit();
@@ -316,105 +455,29 @@ function insertVeteranAdministrationData() {
 		die('The Veteran Administration data has already been inserted');
 	}
 
-	$siteId = insertSite("Veterans Affairs", "", "");
+	$siteId = 17; // VA id from DB
 
 	try {
 		$DB_CONN->beginTransaction();
 
-		$fridayDates = array('2022-02-04', '2022-02-11', '2022-02-25', '2022-03-04', '2022-03-25', '2022-04-01');
+		// Fridays (Feb 3; Feb 10; Feb 24; Mar 4; Mar 10; Mar 24) //TODO should this be march 3rd?
+		$fridayDates = array('2023-02-03', '2023-02-10', '2023-02-24', '2023-03-03', '2023-03-10', '2023-03-24');
 		foreach ($fridayDates as $date) {
 
             // 0 because these are "hidden" appointments
+			//10-11am first
+			//2-3pm last
 			$firstAppointmentTimeId = insertAppointmentTime("$date 10:00:00", 0, 1, $siteId);
 			$secondAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 0, 1, $siteId);
 			$thirdAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 0, 1, $siteId);
 			$fourthAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 0, 1, $siteId);
+			$fourthAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 0, 1, $siteId);
 		}
 
 		$DB_CONN->commit();
 	} catch (Exception $e) {
 		$DB_CONN->rollback();
 		throw new Exception('Failed inserting first VA data', MY_EXCEPTION);
-		die();
-	}
-
-    try {
-		$DB_CONN->beginTransaction();
-
-        // Apr 1, Friday 10-12
-		$fridayDate = array('2022-04-01');
-		foreach ($fridayDate as $date) {
-
-            // 0 because these are "hidden" appointments
-			$firstAppointmentTimeId = insertAppointmentTime("$date 10:00:00", 0, 1, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 11:00:00", 0, 1, $siteId);
-		}
-
-		$DB_CONN->commit();
-	} catch (Exception $e) {
-		$DB_CONN->rollback();
-		throw new Exception('Failed inserting second VA data', MY_EXCEPTION);
-		die();
-	}
-}
-
-
-function insertLincolnRegionalCenterData() {
-	GLOBAL $DB_CONN;
-	
-	$dataAlreadyInserted = true;
-	if ($dataAlreadyInserted) {
-		die('The Lincoln Regional Center data has already been inserted');
-	}
-
-	$siteId = insertSite("Lincoln Regional Center", "", "");
-
-	try {
-		$DB_CONN->beginTransaction();
-
-        // 10/week for 5 weeks starting january 31 (Mondays)
-		$mondayDates = getWeeklyDatesFromRange('2022-01-31', '2022-02-28');
-		foreach ($mondayDates as $date) {
-
-            // 0 because these are "hidden" appointments
-			$firstAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 0, 6, $siteId);
-		}
-
-		$DB_CONN->commit();
-	} catch (Exception $e) {
-		$DB_CONN->rollback();
-		throw new Exception('Failed inserting Lincoln Regional Center data', MY_EXCEPTION);
-		die();
-	}
-}
-
-function insertCretePublicLibraryData() {
-	GLOBAL $DB_CONN;
-	
-	$dataAlreadyInserted = true;
-	if ($dataAlreadyInserted) {
-		die('The Crete Public Library data has already been inserted');
-	}
-
-	$siteId = insertSite("Crete Public Library", "1515 Forest Ave, Crete, NE 68333", "");
-
-	try {
-		$DB_CONN->beginTransaction();
-
-        // Feb 1-Mar 31, 10-5
-        // Hidden and drop-off, so they are looking to take 10/week feb1-mar 29
-        // These will likely have to be manually created upon reception of drop-offs (all hidden will be manually created)
-		$fridayDates = getWeeklyDatesFromRange('2022-02-01', '2022-03-29'); // weekly on Tuesdays at noon
-		foreach ($fridayDates as $date) {
-
-            // 0 because these are "hidden" appointments
-			$firstAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 0, 1, $siteId);
-		}
-
-		$DB_CONN->commit();
-	} catch (Exception $e) {
-		$DB_CONN->rollback();
-		throw new Exception('Failed inserting Crete Public Library data', MY_EXCEPTION);
 		die();
 	}
 }
@@ -432,33 +495,33 @@ function insertInternationalStudentScholarSiteData() {
 	try {
 		$DB_CONN->beginTransaction();
 
-		// March 1-Apr 5, 1-5
-		$tuesdayDates = getWeeklyDatesFromRange('2022-03-01', '2022-04-05');
+		// Tuesdays (Mar 7, Mar 14, Mar 21, Mar 28, Apr 4, Apr 11) ALL APPOINTMENT ONLY
+		$tuesdayDates = getWeeklyDatesFromRange('2023-03-07', '2023-04-11');
 		foreach ($tuesdayDates as $date) {
+			//times for all appt types:
+			//1-2pm
+			//2-3pm
+			//3-4pm
 
 			// China
-			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 10, 2, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 10, 2, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 10, 2, $siteId);
-			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 5, 2, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 15, 2, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 15, 2, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 15, 2, $siteId);
 
 			// India
-			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 5, 3, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 5, 3, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 5, 3, $siteId);
-			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 2, 3, $siteId);			
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 10, 3, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 10, 3, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 10, 3, $siteId);
 		
 			// Treaty
-			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 5, 4, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 5, 4, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 5, 4, $siteId);
-			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 2, 4, $siteId);			
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 10, 4, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 10, 4, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 10, 4, $siteId);
 		
 			// Non-Treaty
-			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 10, 5, $siteId);
-			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 10, 5, $siteId);
-			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 10, 5, $siteId);
-			$fourthAppointmentTimeId = insertAppointmentTime("$date 16:00:00", 5, 5, $siteId);
+			$firstAppointmentTimeId = insertAppointmentTime("$date 13:00:00", 15, 5, $siteId);
+			$secondAppointmentTimeId = insertAppointmentTime("$date 14:00:00", 15, 5, $siteId);
+			$thirdAppointmentTimeId = insertAppointmentTime("$date 15:00:00", 15, 5, $siteId);
 		}
 
 		$DB_CONN->commit();
@@ -477,16 +540,17 @@ function insertVirtualVITAData() {
 		die('The Virtual VITA data has already been inserted');
 	}
 
-	$siteId = 12;
+	$siteId = 12; //TODO make sure she wants us to upload these.
 
 	try {
 		$DB_CONN->beginTransaction();
 
-        // Jan 31-Apr 4, 10/week
-		$fridayDates = getWeeklyDatesFromRange('2022-01-31', '2022-04-04');
+        // JAN 30th to APR 10th
+		$fridayDates = getWeeklyDatesFromRange('2023-01-31', '2023-04-04');
 		foreach ($fridayDates as $date) {
 
-			$firstAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 10, 6, $siteId);
+			//15/day
+			$firstAppointmentTimeId = insertAppointmentTime("$date 12:00:00", 15, 6, $siteId);
 		}
 
 		$DB_CONN->commit();
