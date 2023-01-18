@@ -95,9 +95,9 @@
 					<div class="pill" ng-repeat="(stepOrdinal, step) in selectedAppointmentStepsForPills">
 						<span class="pill" ng-class="step.stepCompleted ? 'pill-complete': 'pill-incomplete'">{{step.stepName}}</span>
 						<!-- https://stackoverflow.com/questions/21734524/key-value-pairs-in-ng-options -->
-						<select ng-show="objectLengthHelper(step.possibleSubsteps) > 0"
-							ng-change="selectSubStep()"
-							ng-model="selectedAppointment.steps[selectedAppointmentOrdinal].subStepId"
+						<select ng-show="objectLengthHelper(step.possibleSubsteps) > 0 && stepOrdinal <= selectedAppointmentOrdinal"
+							ng-change="selectSubStep(stepOrdinal)"
+							ng-model="selectedAppointment.steps[stepOrdinal].subStepId"
 							ng-options="subStepId as subStepName for (subStepId, subStepName) in step.possibleSubsteps">
 						</select>
 					</div>

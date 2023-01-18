@@ -336,7 +336,7 @@ define('queueController', [], function() {
 							// we sort in sql so that the most recent step (advancement_rank = 1) comes last.
 							// So if advancement_rank = 1, we are on the last database entry for this appointment,
 							// and we can proceed to use this appointment's object now that it's complete.
-							if(step.advancement_rank == 1) {
+							if(step.advancement_rank == 1) { // TODO could move this check above and skip the step (break out of the loop) completely if it's already included.
 								// Only add appointments if 1) they don't exist in any swimlane, or 2) they've been moved/removed already (by another volunteer)
 								// I've ignored case 2 however, as I don't think it'll happen all too often, so it's not worth the extra logic
 								// TODO could store previousAppointmentIds with their previous Ordinal step and see if it changed here.
@@ -349,7 +349,7 @@ define('queueController', [], function() {
 									var noShow = false; // default to false;
 									var ordinal = null;
 									if (step.timestamp === null) {
-										const noShowDeadline = new Date(step.scheduledDatetime + 30*60000); // 30 minutes to show up
+										const noShowDeadline = new Date(new Date(step.scheduledDatetime).getTime() + 30*60000); // 30 minutes to show up
 										noShow = noShowDeadline < new Date(); // TODO need to test this
 										// (unrelated to noShow) if timestamp if null, then this is the default beginning
 										// progressionStep made in storeAppointment.php, insertNullProgressionStepTimestamp().
@@ -401,13 +401,14 @@ define('queueController', [], function() {
 
 		// need appointmentId and subStepId for SQL, subStepName for front end to show in queue.
 		// name comes through ng-model 
-		$scope.selectSubStep = () => {
+		$scope.selectSubStep = (stepOrdinal) => {
 			const appointmentId = $scope.selectedAppointment.appointmentId;
 			// The appt won't have a full step object here
-			const subStepId = $scope.selectedAppointment.steps[$scope.selectedAppointmentOrdinal]['subStepId'];
+			// store it in the ordinal of the step the dropdown belongs to, not the current ordinal of the appt.
+			const subStepId = $scope.selectedAppointment.steps[stepOrdinal]['subStepId'];
 			// get the substep name through the temporary pills object // TODO is there a way to pass key/val straight to here?
-			const subStepName = $scope.selectedAppointmentStepsForPills[$scope.selectedAppointmentOrdinal]['possibleSubsteps'][subStepId];
-			$scope.selectedAppointment.steps[$scope.selectedAppointmentOrdinal].subStepName = subStepName;
+			const subStepName = $scope.selectedAppointmentStepsForPills[stepOrdinal]['possibleSubsteps'][subStepId];
+			$scope.selectedAppointment.steps[stepOrdinal].subStepName = subStepName;
 
 			$scope.insertSubStepTimestamp(appointmentId, subStepId)
 				.then($scope.checkResponseForError)
@@ -571,6 +572,7 @@ define('queueController', [], function() {
 
 		$scope.resetSwimlanes = () => {
 			$scope.parseAppointments('resetSwimlanes', null);
+			$scope.previousAppointmentIds = [];
 		};
 
 		$scope.removeAppointmentFromSwimlanes = (appointmentId) => {

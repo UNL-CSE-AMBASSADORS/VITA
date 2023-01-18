@@ -175,7 +175,11 @@ function getProgressionSteps($date, $siteId) {
 				WHERE Question.lookupName = \'visa\'
 				) VisaAnswer
 			ON app.appointmentId = VisaAnswer.appointmentId
-
+			WHERE DATE(scheduledTime) = ?
+				AND siteId = ?
+				AND (cancelled IS NULL OR cancelled = FALSE)
+				AND (completed IS NULL OR completed != FALSE)
+				AND app.archived = FALSE
 			;';
 		// If advancement rank = 1, we want to send it through so that we can add it to that step's swimlane
 		// If an appointment is new, currently we have it set up so that they will have an ordinalRank = 0 and timestamp = null
