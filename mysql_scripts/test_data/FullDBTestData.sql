@@ -632,3 +632,318 @@ DELIMITER ;
 
 CALL sp_CreateAppointments(200, @site_site1Id, @site_site2Id);
 -- end load testing for Appointments
+
+
+-- Queue
+insert into progressionType (progressionTypeId, progressionTypeName)
+values
+(1, 'Legacy'),
+(2, 'In-Person Residential'), 
+(3, 'Virtual'),
+(4, 'International Student');
+
+insert into progressionStep (progressionStepId, progressionTypeId, progressionStepOrdinal, progressionStepName)
+values
+# Legacy
+(1, 1, 1, 'Checked-In'),
+(2, 1, 2, 'Paperwork Done'),
+(3, 1, 3, 'Preparing'),
+(4, 1, 4, 'Complete'),
+# In-Person Residential
+(5, 2, 1, 'Checked-In'),
+(6, 2, 2, 'Paperwork Done'),
+(7, 2, 3, 'Preparing'),
+(8, 2, 4, 'Complete'), #has sub-steps
+# Virtual
+(9, 3, 1, 'Received Information'), #has sub-steps
+(10, 3, 2, 'Ready'),
+(11, 3, 3, 'Preparing'),
+(12, 3, 4, 'Complete'), #has sub-steps
+# International Student
+(13, 4, 1, 'Checked-In'),
+(14, 4, 2, 'Paperwork Done'),
+(15, 4, 3, 'Preparing'),
+(16, 4, 4, 'Complete'); #has sub-steps
+
+insert into progressionSubStep (progressionStepId, progressionSubStepName)
+values
+# 8: In-Person Residential Complete
+(8, 'N/A'),
+(8, 'Ready to E-File'),
+(8, 'Transmitted'),
+(8, 'Accepted'),
+(8, 'Rejected'),
+(8, 'Paper'),
+(8, 'Deleted'),
+(8, 'Amended'),
+(8, 'Prior Years'),
+# 9: Virtual Received Information
+(9, 'Sufficient Information'),
+(9, 'Need More Information'),
+# 12: Virtual Complete
+(12, 'N/A'),
+(12, 'Ready to E-File'),
+(12, 'Transmitted'),
+(12, 'Accepted'),
+(12, 'Rejected'),
+(12, 'Paper'),
+(12, 'Deleted'),
+(12, 'Amended'),
+(12, 'Prior Years'),
+#16: International Student Complete
+(16, 'N/A'),
+(16, 'FSA'),
+(16, 'Paper'),
+(16, 'Resident');
+
+# 2. Migrate old appointments onto new system
+insert into progressionTimestamp (appointmentId, progressionStepId, progressionSubStepId, timestamp)
+select
+	appointmentId,
+    c.progressionStepId,
+    Null as progressionSubStepId,
+    timeIn as timestamp
+from servicedappointment a
+left join progressionType b
+	on b.progressionTypeName = 'Legacy'
+left join progressionStep c
+	on c.progressionTypeId = b.progressionTypeId and c.progressionStepName = 'Checked-In'
+UNION
+select
+	appointmentId,
+    c.progressionStepId,
+    Null as progressionSubStepId,
+    timeReturnedPapers as timestamp
+from servicedappointment a
+left join progressionType b
+	on b.progressionTypeName = 'Legacy'
+left join progressionStep c
+	on c.progressionTypeId = b.progressionTypeId and c.progressionStepName = 'Paperwork Done'
+UNION
+select
+	appointmentId,
+    c.progressionStepId,
+    Null as progressionSubStepId,
+    timeAppointmentStarted as timestamp
+from servicedappointment a
+left join progressionType b
+	on b.progressionTypeName = 'Legacy'
+left join progressionStep c
+	on c.progressionTypeId = b.progressionTypeId and c.progressionStepName = 'Preparing'
+UNION
+select
+	appointmentId,
+    c.progressionStepId,
+    Null as progressionSubStepId,
+    timeAppointmentEnded as timestamp
+from servicedappointment a
+left join progressionType b
+	on b.progressionTypeName = 'Legacy'
+left join progressionStep c
+	on c.progressionTypeId = b.progressionTypeId and c.progressionStepName = 'Complete';
+
+# 3. Insert dummy data
+# Queue (Site)
+INSERT INTO Site (title, address, phoneNumber, createdBy, lastModifiedBy)
+	VALUES ("Queue Test Site", "Queue testing address", "555-202-2062", @user_siteAdmin1Id, @user_siteAdmin1Id);
+SET @site_QueueId = LAST_INSERT_ID();
+
+# Queue (Client)
+INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
+	VALUES ("ResQueue", "Awaiting", "402-555-3422", "ResQueueAwaiting@test.test");
+SET @client_ResQueueAwaitingId = LAST_INSERT_ID();
+
+INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
+	VALUES ("ResQueue", "CompleteRejected", "402-555-3422", "ResQueueCompleteRejected@test.test");
+SET @client_ResQueueCompleteRejectedId = LAST_INSERT_ID();
+
+INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
+	VALUES ("ResQueue", "CheckedIn", "402-555-3422", "ResQueueCheckedIn@test.test");
+SET @client_ResQueueCheckedInId = LAST_INSERT_ID();
+
+INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
+	VALUES ("VirtualQueue", "Awaiting", "402-545-3422", "VirtualQueueAwaiting@test.test");
+SET @client_VirtualQueueAwaitingId = LAST_INSERT_ID();
+
+INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
+	VALUES ("VirtualQueue", "SuffInformation", "431-555-2222", "VirtualQueueSuffInformation@test.test");
+SET @client_VirtualQueueSuffInfoId = LAST_INSERT_ID();
+
+INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
+	VALUES ("InternationalQueue", "Awaiting", "492-545-3422", "InternationalQueueAwaiting@test.test");
+SET @client_InternationalQueueAwaitingId = LAST_INSERT_ID();
+
+INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
+	VALUES ("InternationalQueue", "CompleteFSA", "402-555-2299", "InternationalQueueCompleteFSA@test.test");
+SET @client_InternationalQueueCompleteFSAId = LAST_INSERT_ID();
+
+INSERT INTO Client (firstName, lastName, phoneNumber, emailAddress)
+	VALUES ("InPersonResQueue", "NoShow", "772-555-2299", "InPersonResQueueNoShow@test.test");
+SET @client_ResNoShowId = LAST_INSERT_ID();
+
+# Queue (AppointmentTime)
+SET @appointmentTime = DATE_ADD(NOW(), INTERVAL 0 DAY); # can move this to future for long-term development.
+INSERT INTO AppointmentTime (scheduledTime, numberOfAppointments, siteId, appointmentTypeId)
+	VALUES (@appointmentTime, 30, @site_QueueId, @appointmentType_residentialId);
+SET @appointmentTime_site2ResQueueId = LAST_INSERT_ID();
+
+# SET @appointmentTime = @appointmentTime; # Let these be the same time/site so we can see all queues on one page
+INSERT INTO AppointmentTime (scheduledTime, numberOfAppointments, siteId, appointmentTypeId)
+	VALUES (@appointmentTime, 20, @site_QueueId, @appointmentType_chinaId);
+SET @appointmentTime_site2InternationalQueueId = LAST_INSERT_ID();
+
+INSERT INTO AppointmentTime (scheduledTime, numberOfAppointments, siteId, appointmentTypeId)
+	VALUES (@appointmentTime, 20, @site_QueueId, @appointmentType_virtualResidentialId);
+SET @appointmentTime_siteVirtualandVirtualQueueId = LAST_INSERT_ID();
+
+SET @noShowAppointmentTime = DATE_ADD(NOW(), INTERVAL -31 MINUTE);
+INSERT INTO AppointmentTime (scheduledTime, numberOfAppointments, siteId, appointmentTypeId)
+	VALUES (@noShowAppointmentTime, 20, @site_QueueId, @appointmentType_residentialId);
+SET @appointmentTime_ResQueueForNoShowId = LAST_INSERT_ID();
+
+
+# Queue (Appointment)
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site2ResQueueId, @client_ResQueueAwaitingId, "eng", "localhost");
+SET @appointment_ResQueueAwaitingId = LAST_INSERT_ID();
+
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site2ResQueueId, @client_ResQueueCompleteRejectedId, "eng", "localhost");
+SET @appointment_ResQueueCompleteRejectedId = LAST_INSERT_ID();
+    
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site2ResQueueId, @client_ResQueueCheckedInId, "eng", "localhost");
+SET @appointment_ResQueueCheckedInId = LAST_INSERT_ID();
+    
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_siteVirtualandVirtualQueueId, @client_VirtualQueueAwaitingId, "eng", "localhost");
+SET @appointment_VirtualQueueAwaitingId = LAST_INSERT_ID();
+
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_siteVirtualandVirtualQueueId, @client_VirtualQueueSuffInfoId, "eng", "localhost");
+SET @appointment_VirtualQueueSuffInfoId = LAST_INSERT_ID();
+
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site2InternationalQueueId, @client_InternationalQueueAwaitingId, "eng", "localhost");
+SET @appointment_InternationalQueueAwaitingId = LAST_INSERT_ID();
+
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_site2InternationalQueueId, @client_InternationalQueueCompleteFSAId, "eng", "localhost");
+SET @appointment_InternationalQueueCompleteFSAId = LAST_INSERT_ID();
+
+INSERT INTO Appointment (appointmentTimeId, clientId, language, ipAddress)
+	VALUES (@appointmentTime_ResQueueForNoShowId, @client_ResNoShowId, "eng", "localhost");
+SET @appointment_ResNoShowId = LAST_INSERT_ID();
+
+# Queue (Add progression steps to progressionTimeStamp)
+# @client_ResQueueAwaitingId will be handled by script
+# appointment_ResQueueAwaitingId
+INSERT INTO progressionTimeStamp
+	(appointmentId, progressionStepId, progressionSubStepId, timestamp)
+select @appointment_ResQueueAwaitingId, a.progressionStepId, null, null
+from progressionStep a
+left join progressionType b
+	on a.progressionTypeId = b.progressionTypeId
+left join progressionSubStep c
+on a.progressionStepId = c.progressionStepId
+where progressionStepName = 'Checked-In' and progressionTypeName = 'In-Person Residential'; #for awaiting, take first ordinal step and make timestamp null
+
+# @client_ResQueueCompleteRejectedId
+# appointment_ResQueueCompleteRejectedId
+# First add preceding steps
+INSERT INTO progressionTimeStamp
+	(appointmentId, progressionStepId, progressionSubStepId, timestamp)
+VALUES
+ (@appointment_ResQueueCompleteRejectedId, 5, NULL, DATE_ADD(@appointmentTime, INTERVAL 15 MINUTE)),
+ (@appointment_ResQueueCompleteRejectedId, 6, NULL, DATE_ADD(@appointmentTime, INTERVAL 30 MINUTE)),
+ (@appointment_ResQueueCompleteRejectedId, 7, NULL, DATE_ADD(@appointmentTime, INTERVAL 45 MINUTE));
+# Then add final step
+INSERT INTO progressionTimeStamp
+	(appointmentId, progressionStepId, progressionSubStepId, timestamp)
+select @appointment_ResQueueCompleteRejectedId, a.progressionStepId, c.progressionSubStepid, DATE_ADD(@appointmentTime, INTERVAL 45 MINUTE)
+from progressionStep a
+left join progressionType b
+	on a.progressionTypeId = b.progressionTypeId
+left join progressionSubStep c
+on a.progressionStepId = c.progressionStepId
+where progressionStepName = 'Complete' and progressionTypeName = 'In-Person Residential' and progressionSubStepName = 'Rejected';
+
+# @client_ResQueueCheckedInId
+# appointment_ResQueueCheckedInId
+INSERT INTO progressionTimeStamp
+	(appointmentId, progressionStepId, progressionSubStepId, timestamp)
+select @appointment_ResQueueCheckedInId, a.progressionStepId, null, DATE_ADD(@appointmentTime, INTERVAL 10 MINUTE)
+from progressionStep a
+left join progressionType b
+	on a.progressionTypeId = b.progressionTypeId
+left join progressionSubStep c
+on a.progressionStepId = c.progressionStepId
+where progressionStepName = 'Checked-In' and progressionTypeName = 'In-Person Residential';
+
+# @client_VirtualQueueAwaitingId
+# appointment_VirtualQueueAwaitingId
+INSERT INTO progressionTimeStamp
+	(appointmentId, progressionStepId, progressionSubStepId, timestamp)
+select @appointment_VirtualQueueAwaitingId, a.progressionStepId, null, null # null so it's awaiting.
+from progressionStep a
+left join progressionType b
+	on a.progressionTypeId = b.progressionTypeId
+left join progressionSubStep c
+on a.progressionStepId = c.progressionStepId
+where progressionStepName = 'Received Information' and progressionTypeName = 'Virtual'
+limit 1;
+
+# @client_VirtualQueueSuffInformationId
+# appointment_VirtualQueueSuffInfoId
+INSERT INTO progressionTimeStamp
+	(appointmentId, progressionStepId, progressionSubStepId, timestamp)
+select @appointment_VirtualQueueSuffInfoId, a.progressionStepId, c.progressionSubStepId, DATE_ADD(@appointmentTime, INTERVAL 20 MINUTE)
+from progressionStep a
+left join progressionType b
+	on a.progressionTypeId = b.progressionTypeId
+left join progressionSubStep c
+on a.progressionStepId = c.progressionStepId
+where progressionSubStepName = 'Sufficient Information' and progressionTypeName = 'Virtual';
+
+# @client_InternationalQueueAwaitingId
+# appointment_InternationalQueueAwaitingId
+INSERT INTO progressionTimeStamp
+	(appointmentId, progressionStepId, progressionSubStepId, timestamp)
+select @appointment_VirtualQueueAwaitingId, a.progressionStepId, c.progressionSubStepId, null
+from progressionStep a
+left join progressionType b
+	on a.progressionTypeId = b.progressionTypeId
+left join progressionSubStep c
+on a.progressionStepId = c.progressionStepId
+where progressionStepName = 'Checked-In' and progressionTypeName = 'International Student';
+
+# @client_InternationalQueueCompleteFSAId
+# appointment_InternationalQueueCompleteFSAId
+# First add preceding steps
+INSERT INTO progressionTimeStamp
+	(appointmentId, progressionStepId, progressionSubStepId, timestamp)
+VALUES
+ (@appointment_InternationalQueueCompleteFSAId, 13, NULL, DATE_ADD(@appointmentTime, INTERVAL 10 MINUTE)),
+ (@appointment_InternationalQueueCompleteFSAId, 14, NULL, DATE_ADD(@appointmentTime, INTERVAL 25 MINUTE)),
+ (@appointment_InternationalQueueCompleteFSAId, 15, NULL, DATE_ADD(@appointmentTime, INTERVAL 45 MINUTE));
+# Then add final step
+INSERT INTO progressionTimeStamp
+	(appointmentId, progressionStepId, progressionSubStepId, timestamp)
+select @appointment_InternationalQueueCompleteFSAId, a.progressionStepId, c.progressionSubStepId, DATE_ADD(@appointmentTime, INTERVAL 55 MINUTE)
+from progressionStep a
+left join progressionType b
+	on a.progressionTypeId = b.progressionTypeId
+left join progressionSubStep c
+on a.progressionStepId = c.progressionStepId
+where progressionSubStepName = 'FSA' and progressionTypeName = 'International Student';
+
+# @appointment_ResNoShowId
+INSERT INTO progressionTimeStamp
+	(appointmentId, progressionStepId, progressionSubStepId, timestamp)
+select @appointment_ResNoShowId, a.progressionStepId, null, null
+from progressionStep a
+left join progressionType b
+	on a.progressionTypeId = b.progressionTypeId
+left join progressionSubStep c
+on a.progressionStepId = c.progressionStepId
+where progressionStepName = 'Checked-In' and progressionTypeName = 'In-Person Residential'; 
