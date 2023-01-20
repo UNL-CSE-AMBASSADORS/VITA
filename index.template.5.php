@@ -20,7 +20,7 @@ return readfile($documentRoot . $path);
 		$Id: php.fixed.dwt.php | cf0a670a0fd8db9e20a169941c55c838d7c2ba10 | Wed Dec 12 16:54:41 2018 -0600 | Eric Rasmussen	$
 	-->
 	<!-- TemplateBeginEditable name="doctitle" -->
-	<title>VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
+	<title>TCAN / VITA Lincoln | University of Nebraska&ndash;Lincoln</title>
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/head-2.html"); ?>
 	<!-- TemplateBeginEditable name="head" -->
@@ -58,7 +58,7 @@ return readfile($documentRoot . $path);
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/site-affiliation-2.html"); ?>
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/site-title-1.html"); ?>
 	<!-- TemplateBeginEditable name="titlegraphic" -->
-	<a class="unl-site-title-medium" href="/">VITA Lincoln</a>
+	<a class="unl-site-title-medium" href="/">TCAN / VITA Lincoln</a>
 	<!-- TemplateEndEditable -->
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/site-title-2.html"); ?>
 		<?php wdnInclude("/wdn/templates_5.1/includes/global/logo-lockup-2.html"); ?>
@@ -84,7 +84,7 @@ return readfile($documentRoot . $path);
 					<!-- TemplateBeginEditable name="breadcrumbs" -->
 					<ol>
 						<li><a href="https://www.unl.edu/">Nebraska</a></li>
-						<li><a href="/">VITA Lincoln</a></li>
+						<li><a href="/">TCAN / VITA Lincoln</a></li>
 						<li><span aria-current="page">Home</span></li>
 					</ol>
 					<!-- TemplateEndEditable -->
@@ -92,7 +92,7 @@ return readfile($documentRoot . $path);
 			</div>
 			<header class="dcf-page-title" id="dcf-page-title">
 				<!-- TemplateBeginEditable name="pagetitle" -->
-				<h1>VITA Lincoln</h1>
+				<h1>TCAN / VITA Lincoln</h1>
 				<!-- TemplateEndEditable -->
 			</header>
 			<!-- TemplateBeginEditable name="herogroup1" -->
