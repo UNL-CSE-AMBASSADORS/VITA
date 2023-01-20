@@ -1,5 +1,10 @@
 USE vita;
 
+drop table if exists ProgressionTimestamp;
+drop table if exists ProgressionSubstep;
+drop table if exists ProgressionStep;
+drop table if exists ProgressionType;
+
 DROP TABLE IF EXISTS Answer;
 -- TODO: FilingStatus tables can be removed once this script has been run by all dev members
 DROP TABLE IF EXISTS AppointmentFilingStatus;
@@ -30,11 +35,6 @@ DROP TABLE IF EXISTS Login;
 DROP TABLE IF EXISTS PasswordReset;
 DROP TABLE IF EXISTS LoginHistory;
 DROP TABLE IF EXISTS User;
-
-drop table if exists ProgressionTimestamp;
-drop table if exists ProgressionSubstep;
-drop table if exists ProgressionStep;
-drop table if exists ProgressionType;
 
 
 CREATE TABLE User (

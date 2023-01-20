@@ -41,8 +41,8 @@ function getPossibleSwimlanes() {
 
 	try {
 		$query = 'select *
-		from progressionType progType
-		left join progressionstep progStep
+		from ProgressionType progType
+		left join ProgressionStep progStep
 			on progType.progressionTypeId = progStep.progressionTypeId
 		order by progType.progressionTypeId, progStep.progressionStepOrdinal;';
 		$stmt = $DB_CONN->prepare($query);
@@ -66,12 +66,12 @@ function getPossibleSubsteps() {
 	$response['success'] = true;
 
 	try {
-		$query = 'select a.progressionSubStepId, a.progressionSubStepName,
+		$query = 'select a.progressionSubstepId, a.progressionSubstepName,
 		b.progressionStepOrdinal, b.progressionTypeId
-        from progressionsubstep a
-        left join progressionstep b
+        from ProgressionSubstep a
+        left join ProgressionStep b
         on a.progressionStepId = b.progressionStepId
-		order by a.progressionSubStepName;';
+		order by a.progressionSubstepName;';
 		$stmt = $DB_CONN->prepare($query);
 		$stmt->execute();
 	
@@ -105,17 +105,17 @@ function getProgressionSteps($date, $siteId) {
 				case when a.progressionStepId is not null then stepWithoutSubStep.progressionStepOrdinal else stepFromSubStep.progressionStepOrdinal end as progressionStepOrdinal,	
 				substep.progressionSubStepId, substep.progressionSubStepName,
 				timestamp
-			from progressiontimestamp a
-			# a given row in progressiontimestamp will have either a step ID or a substep ID. The other ID will be null.
-			left join progressionstep stepWithoutSubStep # join steps directly (this is for steps like legacy without substeps)
+			from ProgressionTimestamp a
+			# a given row in ProgressionTimestamp will have either a step ID or a substep ID. The other ID will be null.
+			left join ProgressionStep stepWithoutSubStep # join steps directly (this is for steps like legacy without substeps)
 				on a.progressionstepid = stepWithoutSubStep.progressionstepid
-			left join progressionType typeFromStep
+			left join ProgressionType typeFromStep
 				on stepWithoutSubStep.progressionTypeId = typeFromStep.progressionTypeId
-			left join progressionsubstep substep # join substeps directly
+			left join ProgressionSubstep substep # join substeps directly
 				on a.progressionSubStepId = substep.progressionSubStepId
-			left join progressionStep stepFromSubStep # the substep from the timestamp table is derived from a step, we want to show that step for clarity here. we just leave stepId null in progressionTimestamp because it would be redundant and could potentially result in erroneous insertions (what if substep "FSA" only exists for stepId 13, but we accientally inserted 12 into progressionTimeStamps stepID field? Could probably impose some restraint to avoid this, but it would still be redundant data.
+			left join ProgressionStep stepFromSubStep # the substep from the timestamp table is derived from a step, we want to show that step for clarity here. we just leave stepId null in ProgressionTimestamp because it would be redundant and could potentially result in erroneous insertions (what if substep "FSA" only exists for stepId 13, but we accientally inserted 12 into ProgressionTimestamps stepID field? Could probably impose some restraint to avoid this, but it would still be redundant data.
 				on stepFromSubStep.progressionStepId = substep.progressionStepId
-			left join progressionType typeFromSubStep
+			left join ProgressionType typeFromSubStep
 				on stepWithoutSubStep.progressionTypeId = typeFromSubStep.progressionTypeId
 			order by appointmentId
 		');
@@ -125,7 +125,7 @@ function getProgressionSteps($date, $siteId) {
 		$DB_CONN->query('create temporary table rankedGroups
 			select a.appointmentId, a.progressionTypeId, a.progressionStepOrdinal, count(b.progressionStepOrdinal)+1 as advancement_rank
 			from stepTimestamps a
-			left join stepTimeStamps2 b
+			left join stepTimestamps2 b
 			on a.progressionStepOrdinal < b.progressionStepOrdinal
 			and a.appointmentId = b.appointmentId
 			and a.progressionTypeId = b.progressionTypeId
@@ -146,26 +146,26 @@ function getProgressionSteps($date, $siteId) {
 			a.appointmentId, a.progressionTypeId, a.progressionTypeName, a.progressionStepName, a.progressionSubStepId, a.progressionSubStepName,
 			a.timestamp, a.progressionStepOrdinal, a.advancement_rank,
 			TIME_FORMAT(atime.scheduledTime, "%l:%i %p") AS scheduledTime,
-			client.firstName, client.lastName, 
+			Client.firstName, Client.lastName, 
 			sa.cancelled, app.language, app.clientId,
 			# (DATE_ADD(at.scheduledTime, INTERVAL 30 MINUTE) < NOW() AND timeIn IS NULL) AS noShow, #this isnt able to be done on one line anymore.
 			atime.scheduledTime as scheduledDatetime,
 			(atime.scheduledTime < app.createdAt) AS walkIn, atype.name as appointmentType,
 			VisaAnswer.visa';
 		if ($canViewClientInformation) {
-			$query .= ', client.phoneNumber, client.emailAddress';
+			$query .= ', Client.phoneNumber, Client.emailAddress';
 		}
-		// appointment_step_timestamp is a view that makes it easier to query progressionTimeStamps
-		$query .= ' from appointment app
+		// appointment_step_timestamp is a view that makes it easier to query ProgressionTimestamps
+		$query .= ' from Appointment app
 			left join appointment_step_timestamp a
 				on a.appointmentId = app.appointmentId
-			left join appointmenttime atime
+			left join AppointmentTime atime
 				on app.appointmentTimeId = atime.appointmentTimeId
-			left join client
-				on app.clientId = client.clientId
-			left join servicedappointment sa
+			left join Client
+				on app.clientId = Client.clientId
+			left join ServicedAppointment sa
 				on a.appointmentId = sa.appointmentId
-			left join appointmenttype atype
+			left join AppointmentType atype
 				on atime.appointmentTypeId = atype.appointmentTypeId
 			LEFT JOIN
 				(SELECT Answer.appointmentId, PossibleAnswer.text as visa
@@ -218,15 +218,15 @@ function deleteTimestamp($appointmentId, $progressionStepId) {
 	$response['success'] = true;
 
 	try {
-		$query = 'DELETE a FROM progressionTimeStamp a
-			left join progressionstep stepWithoutSubStep
-				on a.progressionstepid = stepWithoutSubStep.progressionstepid
-			left join progressionsubstep substep
-				on a.progressionsubstepid = substep.progressionsubstepid
-			left join progressionStep stepFromSubStep
-				on stepFromSubStep.progressionStepId = substep.progressionStepId
+		$query = 'DELETE a FROM ProgressionTimestamp a
+			left join ProgressionStep stepWithoutSubStep
+				on a.progressionStepId = stepWithoutSubStep.progressionstepId
+			left join ProgressionSubstep substep
+				on a.progressionSubstepId = substep.progressionSubstepId
+			left join ProgressionStep stepFromSubstep
+				on stepFromSubstep.progressionStepId = substep.progressionStepId
 			WHERE a.appointmentId = ?
-			and case when a.progressionStepId is not null then stepWithoutSubStep.progressionStepId else stepFromSubStep.progressionStepId end = ?;
+			and case when a.progressionStepId is not null then stepWithoutSubstep.progressionStepId else stepFromSubstep.progressionStepId end = ?;
 		';
 
 		$stmt = $DB_CONN->prepare($query);
@@ -250,9 +250,9 @@ function insertStepTimestamp($appointmentId, $stepId, $setTimeStampToNull) {
 		// first ordinal step have a null timestamp
 		$time = ($setTimeStampToNull == 'true') ? NULL : date("Y-m-d H:i:s");
 
-		// don't have to insert subStepId because it is null by default.
+		// don't have to insert substepId because it is null by default.
 		// syntax for https://stackoverflow.com/questions/15383852/sql-if-exists-update-else-insert-into
-		$query = 'INSERT INTO progressionTimeStamp
+		$query = 'INSERT INTO ProgressionTimestamp
 		(appointmentId, progressionStepId, timestamp) 
 	  VALUES
 		(?, ?, ?)
@@ -281,12 +281,12 @@ function insertSubStepTimestamp($appointmentId, $subStepId) {
 		// syntax for https://stackoverflow.com/questions/15383852/sql-if-exists-update-else-insert-into
 		// looks like this syntax might throw a warning? can update TODO https://dev.mysql.com/doc/refman/8.0/en/insert-on-duplicate.html
 
-		$query = 'INSERT INTO progressionTimeStamp (appointmentId, progressionStepId, progressionSubStepId, timestamp)
+		$query = 'INSERT INTO ProgressionTimestamp (appointmentId, progressionStepId, progressionSubstepId, timestamp)
 			SELECT ?, ss.progressionStepId, ?, ?
-			FROM progressionSubStep ss
-			WHERE progressionSubStepId = ?
+			FROM ProgressionSubstep ss
+			WHERE progressionSubstepId = ?
 	 		ON DUPLICATE KEY UPDATE
-			progressionSubStepId = VALUES(progressionSubStepId),
+			progressionSubstepId = VALUES(progressionSubstepId),
 			timestamp = VALUES(timestamp);'; // this is for if the (appointmentId, progressionStepId) unique constraint is triggered.
 
 		$stmt = $DB_CONN->prepare($query);

@@ -84,28 +84,28 @@ function insertAppointment($clientId, $appointmentTimeId, $language, $ipAddress)
 function insertNullProgressionStepTimestamp($appointmentId) {
 	GLOBAL $DB_CONN;
 
-	$progressionStepInsert = 'INSERT INTO progressiontimestamp (appointmentId, progressionStepId, progressionSubStepId, timestamp)
+	$progressionStepInsert = 'INSERT INTO ProgressionTimestamp (appointmentId, progressionStepId, progressionSubstepId, timestamp)
 	select
 		app.appointmentId,
 		progStep.progressionStepId as progressionStepId,
-		null as progressionSubStepId,
+		null as progressionSubstepId,
 		null as timestamp
-	from appointment app
-	left join appointmenttime atime
+	from Appointment app
+	left join AppointmentTime atime
 		on app.appointmentTimeId = atime.appointmentTimeId
-	left join site
-		on atime.siteId = site.siteId
-	left join appointmenttype atype
+	left join Site
+		on atime.siteId = Site.siteId
+	left join AppointmentType atype
 		on atime.appointmentTypeId = atype.appointmentTypeId
-	left join progressionType progType
+	left join ProgressionType progType
 		on case
-			when site.title = \'International Student Scholar\' then \'International Student\'
+			when Site.title = \'International Student Scholar\' then \'International Student\'
 			when atype.lookupName = \'residential\' then \'In-Person Residential\'
 			when atype.lookupName = \'virtual-residential\' or atype.lookupName = \'virtual-china\' or atype.lookupName = \'virtual-india\' or atype.lookupName = \'virtual-treaty\' or atype.lookupName = \'virtual-non-treaty\' then \'Virtual\'
 			when atype.lookupName = \'china\' or atype.lookupName = \'india\' or atype.lookupName = \'treaty\' or atype.lookupName = \'non-treaty\' then \'Legacy\'
 			else \'Legacy\'
 		end = progType.progressionTypeName
-	left join progressionStep progStep
+	left join ProgressionStep progStep
 		on progType.progressionTypeId = progStep.progressionTypeId
 	where appointmentId = ?
 	and progStep.progressionStepOrdinal = 1;';
