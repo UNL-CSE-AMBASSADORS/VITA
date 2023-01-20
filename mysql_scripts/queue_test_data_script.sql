@@ -382,8 +382,6 @@ INSERT INTO ServicedAppointment (timeIn, appointmentId)
 	VALUES (@timeIn, @appointment_appointment5Id);
 -- end serviced appointment
 
-
-
 -- questions
 INSERT INTO Question (text, lookupName)
 	VALUES ("Are you a University of Nebraska - Lincoln student?", "unl_student");
@@ -634,13 +632,42 @@ CALL sp_CreateAppointments(200, @site_site1Id, @site_site2Id);
 -- end load testing for Appointments
 
 
--- Queue
+
+
+# NEW QUEUE SYSTEM--you can run the script and look 2 at appts today in "Queue Test Site". 
+# 1. Drop and create new tables
+drop table if exists progressiontimestamp;
+drop table if exists progressionsubstep;
+drop table if exists progressionstep;
+drop table if exists progressionType;
+
+create table progressionType (
+	progressionTypeId int(10) unsigned, #want this to be UN AI PK like other tables
+    progressionTypeName varchar(255) not null,
+	PRIMARY KEY (progressionTypeId)
+);
+
 insert into progressionType (progressionTypeId, progressionTypeName)
 values
 (1, 'Legacy'),
+# would like to avoid adding "site" to the name because these shouldn't be tied to sites,
+# or necessarily even appointment types or appointment times--
+# each individual appointment should be able to have its own progression
 (2, 'In-Person Residential'), 
 (3, 'Virtual'),
 (4, 'International Student');
+
+
+drop table if exists progressionStep;
+create table progressionStep (
+	progressionStepId int(10) unsigned,
+    progressionTypeId int(10) unsigned not null,
+    progressionStepOrdinal int(10) not null, # want the steps' original values to follow a logical order/sequence
+    progressionStepName varchar(255) not null,
+	PRIMARY KEY (progressionStepId),
+	FOREIGN KEY (progressionTypeId) REFERENCES progressionType(progressionTypeId),
+	unique key (progressionTypeId, progressionStepOrdinal)
+);
 
 insert into progressionStep (progressionStepId, progressionTypeId, progressionStepOrdinal, progressionStepName)
 values
@@ -665,43 +692,74 @@ values
 (15, 4, 3, 'Preparing'),
 (16, 4, 4, 'Complete'); #has sub-steps
 
-insert into progressionSubStep (progressionStepId, progressionSubStepName)
+
+drop table if exists progressionSubStep;
+create table progressionSubStep (
+	progressionSubStepId int(10) unsigned auto_increment,
+    progressionStepId int(10) unsigned not null,
+    # progressionStepOrdinal int(10) not null, # substeps don't have a logical sequence--if they do, they should be abstracted to their own step
+    progressionSubStepName varchar(255) null,
+	PRIMARY KEY (progressionSubStepId),
+	FOREIGN KEY (progressionStepId) REFERENCES progressionStep(progressionStepId)
+);
+
+insert into progressionSubStep (progressionStepId, progressionSubStepName) # don't need to insert PK Ids since it isn't referenced by another FK
 values
 # 8: In-Person Residential Complete
-(8, 'N/A'),
+(8, 'N/A'), # added this in case they want to just show plain complete.
 (8, 'Ready to E-File'),
 (8, 'Transmitted'),
 (8, 'Accepted'),
 (8, 'Rejected'),
 (8, 'Paper'),
-(8, 'Deleted'),
+(8, 'Deleted'), # supposed to be delete like the email?
 (8, 'Amended'),
 (8, 'Prior Years'),
 # 9: Virtual Received Information
 (9, 'Sufficient Information'),
 (9, 'Need More Information'),
 # 12: Virtual Complete
-(12, 'N/A'),
+(12, 'N/A'), # added this in case they want to just show plain complete.
 (12, 'Ready to E-File'),
 (12, 'Transmitted'),
 (12, 'Accepted'),
 (12, 'Rejected'),
 (12, 'Paper'),
-(12, 'Deleted'),
+(12, 'Deleted'), # supposed to be "delete" like the email?
 (12, 'Amended'),
 (12, 'Prior Years'),
 #16: International Student Complete
-(16, 'N/A'),
+(16, 'N/A'), # added this in case they want to just show plain complete.
 (16, 'FSA'),
 (16, 'Paper'),
 (16, 'Resident');
+
+
+drop table if exists progressionTimestamp;
+create table progressionTimestamp (
+	progressionTimeStampId int(10) unsigned auto_increment,
+    appointmentId int(10) unsigned not null,
+    progressionStepId int(10) unsigned not null,
+	progressionSubStepId int(10),
+    timestamp datetime,
+	PRIMARY KEY (progressionTimeStampId),
+	FOREIGN KEY (appointmentId) REFERENCES appointment(appointmentId), # changed this to reference appointment instead of serviced appointment. only problem then is that we have to update complete in both tables.
+	FOREIGN KEY (progressionStepId) REFERENCES progressionStep(progressionStepId),
+    UNIQUE KEY (appointmentId, progressionStepId)#,
+  #  unique key (appointmentId, progressionSubStepId)
+);
+#if we are storing stepIds, i don't think we need a unique key on the substep or the set of three of them.
+# the above unique keys shouldn't be a problem because https://stackoverflow.com/questions/3712222/does-mysql-ignore-null-values-on-unique-constraints
+# still need to decide whether I'm going to stick to that weird only-step-or-substep-entry thing
+# For on duplicate key https://stackoverflow.com/questions/15383852/sql-if-exists-update-else-insert-into
+#ALTER TABLE `progressionTimestamp` ADD UNIQUE `unique_index_`(`appointmentId`, `progressionStepId`, `progressionSubStepId`);
 
 # 2. Migrate old appointments onto new system
 insert into progressionTimestamp (appointmentId, progressionStepId, progressionSubStepId, timestamp)
 select
 	appointmentId,
     c.progressionStepId,
-    Null as progressionSubStepId,
+    Null as progressionSubStepId, # only including here to be explicit
     timeIn as timestamp
 from servicedappointment a
 left join progressionType b
@@ -947,3 +1005,35 @@ left join progressionType b
 left join progressionSubStep c
 on a.progressionStepId = c.progressionStepId
 where progressionStepName = 'Checked-In' and progressionTypeName = 'In-Person Residential'; 
+
+
+
+
+/*
+# Query to insert beginning progressionTimeStamp for a single appointment
+INSERT INTO progressiontimestamp (appointmentId, progressionStepId, progressionSubStepId, timestamp)
+	select
+		app.appointmentId,
+		progStep.progressionStepId as progressionStepId,
+		null as progressionSubStepId,
+		null as timestamp
+	from appointment app
+	left join appointmenttime atime
+		on app.appointmentTimeId = atime.appointmentTimeId
+	left join site
+		on atime.siteId = site.siteId
+	left join appointmenttype atype
+		on atime.appointmentTypeId = atype.appointmentTypeId
+	left join progressionType progType
+		on case
+			when site.title = 'International Student Scholar' then 'International Student'
+			when atype.lookupName = 'residential' then 'In-Person Residential'
+			when atype.lookupName = 'virtual-residential' or atype.lookupName = 'virtual-china' or atype.lookupName = 'virtual-india' or atype.lookupName = 'virtual-treaty' or atype.lookupName = 'virtual-non-treaty' then 'Virtual'
+			when atype.lookupName = 'china' or atype.lookupName = 'india' or atype.lookupName = 'treaty' or atype.lookupName = 'non-treaty' then 'Legacy'
+			else 'Legacy'
+		end = progType.progressionTypeName
+	left join progressionStep progStep
+		on progType.progressionTypeId = progStep.progressionTypeId
+	where appointmentId = 258
+	and progStep.progressionStepOrdinal = 1;
+*/

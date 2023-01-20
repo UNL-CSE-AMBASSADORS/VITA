@@ -1,5 +1,10 @@
 USE vita;
 
+drop table if exists ProgressionTimestamp;
+drop table if exists ProgressionSubstep;
+drop table if exists ProgressionStep;
+drop table if exists ProgressionType;
+
 DROP TABLE IF EXISTS Answer;
 -- TODO: FilingStatus tables can be removed once this script has been run by all dev members
 DROP TABLE IF EXISTS AppointmentFilingStatus;
@@ -30,6 +35,7 @@ DROP TABLE IF EXISTS Login;
 DROP TABLE IF EXISTS PasswordReset;
 DROP TABLE IF EXISTS LoginHistory;
 DROP TABLE IF EXISTS User;
+
 
 CREATE TABLE User (
 	userId INTEGER UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -200,4 +206,41 @@ CREATE TABLE VirtualAppointmentConsent (
     appointmentId INTEGER UNSIGNED NOT NULL,
     CONSTRAINT UNIQUE unique_appointment_id (appointmentId),
     FOREIGN KEY(appointmentId) REFERENCES Appointment(appointmentId)
+);
+
+create table progressionType (
+	progressionTypeId int(10) unsigned, #want this to be UN AI PK like other tables
+    progressionTypeName varchar(255) not null,
+	PRIMARY KEY (progressionTypeId)
+);
+
+create table progressionStep (
+	progressionStepId int(10) unsigned,
+    progressionTypeId int(10) unsigned not null,
+    progressionStepOrdinal int(10) not null, # want the steps' original values to follow a logical order/sequence
+    progressionStepName varchar(255) not null,
+	PRIMARY KEY (progressionStepId),
+	FOREIGN KEY (progressionTypeId) REFERENCES progressionType(progressionTypeId),
+	unique key (progressionTypeId, progressionStepOrdinal)
+);
+
+create table progressionSubStep (
+	progressionSubStepId int(10) unsigned auto_increment,
+    progressionStepId int(10) unsigned not null,
+    # progressionStepOrdinal int(10) not null, # substeps don't have a logical sequence--if they do, they should be abstracted to their own step
+    progressionSubStepName varchar(255) null,
+	PRIMARY KEY (progressionSubStepId),
+	FOREIGN KEY (progressionStepId) REFERENCES progressionStep(progressionStepId)
+);
+
+create table progressionTimestamp (
+	progressionTimeStampId int(10) unsigned auto_increment,
+    appointmentId int(10) unsigned not null,
+    progressionStepId int(10) unsigned not null,
+	progressionSubStepId int(10),
+    timestamp datetime,
+	PRIMARY KEY (progressionTimeStampId),
+	FOREIGN KEY (appointmentId) REFERENCES appointment(appointmentId),
+	FOREIGN KEY (progressionStepId) REFERENCES progressionStep(progressionStepId),
+    UNIQUE KEY (appointmentId, progressionStepId)#,
 );

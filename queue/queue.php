@@ -29,7 +29,7 @@
 
 				<!-- Message if there are no appointments that match the search -->
 				<p class="dcf-txt-center" 
-					ng-show="clientSearchString && !appointments.some(passesSearchFilter)"
+					ng-show="clientSearchString && !parseAppointments('doSomePassSearchFilter')"
 					ng-cloak>
 					No results for "{{clientSearchString}}".
 				</p>
@@ -42,54 +42,38 @@
 			Select a site and date.
 		</div>
 
-		<!-- Shown if there are appointments -->
-		<div ng-if="appointments.length > 0" ng-cloak>
+
+		<div ng-repeat="(key, progressionType) in pools" ng-show="hasAppointments(progressionType)">
+			<div class="dcf-d-flex dcf-jc-center"><h2>{{progressionType['progressionTypeName']}} Queue</h2></div>
 			<!-- Swimlane headers -->
 			<div class="dcf-grid dcf-grid-fifths@md dcf-col-gap-2">
-				<div class="dcf-d-flex dcf-jc-center"><h5>Awaiting ({{awaitingAppointments.length}})</h5></div>
-				<div class="dcf-d-flex dcf-jc-center"><h5>Checked-In ({{checkedInAppointments.length}})</h5></div>
-				<div class="dcf-d-flex dcf-jc-center"><h5>Paperwork Done ({{paperworkCompletedAppointments.length}})</h5></div>
-				<div class="dcf-d-flex dcf-jc-center"><h5>Preparing ({{beingPreparedAppointments.length}})</h5></div>
-				<div class="dcf-d-flex dcf-jc-center"><h5>Complete ({{completedAppointments.length}})</h5></div>
+				<div ng-repeat="(key, swimlane) in progressionType['swimlanes']" class="dcf-d-flex dcf-jc-center">
+					<h5>{{swimlane['stepName']}} ({{objectLengthHelper(swimlane.appointments)}})</h5>
+				</div>			
 			</div>
 
 			<!-- Swimlanes -->
 			<div class="dcf-grid dcf-grid-fifths@md dcf-col-gap-2">
-				<div class="container" id="awaitingAppointmentsContainer" dragula="'queue-bag'" dragula-model="awaitingAppointments">
-					<div ng-repeat="appointment in awaitingAppointments"
-						data-appointment-id="{{appointment.appointmentId}}"
+				<!--<div ng-repeat="(key, swimlane) in progressionType['swimlanes']" class="container" id="awaitingAppointmentsContainer" dragula="'queue-bag'" dragula-model="swimlane.stepName">Swimlane headers -->
+				<div ng-repeat="(stepOrdinal, swimlane) in progressionType['swimlanes']" class="container" 
+					id="{{progressionType.progressionTypeId+'_'+swimlane.stepOrdinal}}"
+					data-prog-type-id="{{progressionType.progressionTypeId}}" data-step-id="{{swimlane.stepId}}" 
+					data-step-ordinal="{{stepOrdinal}}" data-max-ordinal="{{stepOrdinal===progressionType.progressionTypeMaxOrdinal}}" 
+					dragula="'queue-bag'" dragula-model="Object.values(swimlane['appointments'])"> <!-- TODO I think dragula-model needs an array (when I moved appts, I was getting error "a.splice is not a function"), should check if I can just pass in an object. -->
+					<div ng-repeat="(appointmentId, appointment) in swimlane['appointments']"
+						data-appointment-id="{{appointmentId}}"
 						ng-show="passesSearchFilter(appointment)"
-						ng-click="selectAppointment(appointment)">{{appointment.name}} ({{appointment.scheduledTime}})</div>
-				</div>
-				<div class="container" id="checkedInAppointmentsContainer" dragula="'queue-bag'" dragula-model="checkedInAppointments">
-					<div ng-repeat="appointment in checkedInAppointments" 
-						data-appointment-id="{{appointment.appointmentId}}"
-						ng-show="passesSearchFilter(appointment)"
-						ng-click="selectAppointment(appointment)">{{appointment.name}}</div>
-				</div>
-				<div class="container" id="paperworkCompletedAppointmentsContainer" dragula="'queue-bag'" dragula-model="paperworkCompletedAppointments">
-					<div ng-repeat="appointment in paperworkCompletedAppointments" 
-						data-appointment-id="{{appointment.appointmentId}}"
-						ng-show="passesSearchFilter(appointment)"
-						ng-click="selectAppointment(appointment)">{{appointment.name}}</div>
-				</div>
-				<div class="container" id="beingPreparedAppointmentsContainer" dragula="'queue-bag'" dragula-model="beingPreparedAppointments">
-					<div ng-repeat="appointment in beingPreparedAppointments" 
-						data-appointment-id="{{appointment.appointmentId}}"
-						ng-show="passesSearchFilter(appointment)"
-						ng-click="selectAppointment(appointment)">{{appointment.name}}</div>
-				</div>
-				<div class="container" id="completedAppointmentsContainer" dragula="'queue-bag'" dragula-model="completedAppointments">
-					<div ng-repeat="appointment in completedAppointments" 
-						data-appointment-id="{{appointment.appointmentId}}"
-						ng-show="passesSearchFilter(appointment)"
-						ng-click="selectAppointment(appointment)">{{appointment.name}}</div>
-				</div>
+						ng-click="selectAppointment(appointment, progressionType.progressionTypeId, 
+							stepOrdinal, (stepOrdinal===progressionType.progressionTypeMaxOrdinal))">
+							{{appointment.clientName}} ({{appointment.scheduledTime}})
+							<i ng-show="appointment.steps[stepOrdinal]['subStepName']">{{appointment.steps[stepOrdinal]['subStepName']}}</i>
+					</div>
+				</div>				
 			</div>
 		</div>
 
 		<!-- Shown if there are no appointments -->
-		<div class="dcf-txt-center" ng-if="appointments.length === 0">
+		<div class="dcf-txt-center" ng-if="!(selectedSite == null) && !parseAppointments('areThereAnyAppointments')">
 			There are no appointments on this day at this site.
 		</div>
 	</div>
@@ -108,10 +92,15 @@
 				<span class="pill pill-red" ng-if="selectedAppointment.noShow">No-show</span>
 				<span ng-if="!selectedAppointment.noShow">
 					<span class="pill pill-walk-in" ng-if="selectedAppointment.walkIn">Walk-In</span>
-					<span class="pill" ng-class="selectedAppointment.checkedIn ? 'pill-complete': 'pill-incomplete'">Checked In</span>
-					<span class="pill" ng-class="selectedAppointment.paperworkComplete ? 'pill-complete': 'pill-incomplete'">Completed Paperwork</span>
-					<span class="pill" ng-class="selectedAppointment.preparing ? 'pill-complete': 'pill-incomplete'">Preparing</span>
-					<span class="pill" ng-class="selectedAppointment.ended ? 'pill-complete': 'pill-incomplete'">Appointment Complete</span>
+					<div class="pill" ng-repeat="(stepOrdinal, step) in selectedAppointmentStepsForPills">
+						<span class="pill" ng-class="step.stepCompleted ? 'pill-complete': 'pill-incomplete'">{{step.stepName}}</span>
+						<!-- https://stackoverflow.com/questions/21734524/key-value-pairs-in-ng-options -->
+						<select ng-show="objectLengthHelper(step.possibleSubsteps) > 0 && stepOrdinal <= selectedAppointmentOrdinal"
+							ng-change="selectSubStep(stepOrdinal)"
+							ng-model="selectedAppointment.steps[stepOrdinal].subStepId"
+							ng-options="subStepId as subStepName for (subStepId, subStepName) in step.possibleSubsteps">
+						</select>
+					</div>
 				</span>
 			</div>
 			<div><b>Scheduled Appointment Time: </b>{{selectedAppointment.scheduledTime}}</div>
@@ -138,15 +127,15 @@
 		<div class="dcf-mb-2">
 			<h4>Appointment Not Completed:</h4>
 			<button class="dcf-btn dcf-btn-primary" 
-				ng-show="!selectedAppointment.checkedIn" 
-				ng-disabled="selectedAppointment.ended" 
+				ng-show="selectedAppointmentOrdinal == 0" 
+				ng-disabled="selectedAppointmentOnLastStep" 
 				ng-click="markAppointmentAsCancelled()">
 				Cancel Appointment
 			</button>
 
 			<button class="dcf-btn dcf-btn-primary" 
-				ng-show="selectedAppointment.checkedIn" 
-				ng-disabled="selectedAppointment.ended" 
+				ng-show="selectedAppointmentOrdinal > 0" 
+				ng-disabled="selectedAppointmentOnLastStep" 
 				ng-click="markAppointmentAsIncomplete()">
 				Mark as Incomplete
 			</button>

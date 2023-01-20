@@ -9,42 +9,34 @@ define('queueDataService', [], ($http) => {
 					return null;
 				});
 			},
-			getAppointments: (date, siteId) => {
-				return $http.get(`/server/queue/queue.php?action=getAppointments&date=${date}&siteId=${siteId}`).then((response) => {
+			getProgressionSteps: (date, siteId) => {
+				return $http.get(`/server/queue/queue.php?action=getProgressionSteps&date=${date}&siteId=${siteId}`).then((response) => {
 					return response.data;
 				}, (error) => {
 					return null;
 				});
 			},
-			markAppointmentAsAwaiting: (appointmentId) => {
+			deleteTimestamp: (appointmentId, stepId) => {
 				return $http({
 					url: '/server/queue/queue.php',
 					method: 'POST',
-					data: `action=awaiting&appointmentId=${appointmentId}`,
+					data: `action=deleteTimestamp&appointmentId=${appointmentId}&stepId=${stepId}`,
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				}).then((response) => response.data, (error) => null);
 			},
-			markAppointmentAsCheckedIn: (appointmentId) => {
+			insertStepTimestamp: (appointmentId, stepId, setTimeStampToNull) => {
 				return $http({
 					url: '/server/queue/queue.php',
 					method: 'POST',
-					data: `action=checkIn&appointmentId=${appointmentId}`,
+					data: `action=insertStepTimestamp&appointmentId=${appointmentId}&stepId=${stepId}&setTimeStampToNull=${setTimeStampToNull}`,
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				}).then((response) => response.data, (error) => null);
 			},
-			markAppointmentAsPaperworkCompleted: (appointmentId) => {
+			insertSubStepTimestamp: (appointmentId, subStepId) => {
 				return $http({
 					url: '/server/queue/queue.php',
 					method: 'POST',
-					data: `action=paperworkCompleted&appointmentId=${appointmentId}`,
-					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-				}).then((response) => response.data, (error) => null);
-			},
-			markAppointmentAsBeingPrepared: (appointmentId) => {
-				return $http({
-					url: '/server/queue/queue.php',
-					method: 'POST',
-					data: `action=startAppointment&appointmentId=${appointmentId}`,
+					data: `action=insertSubStepTimestamp&appointmentId=${appointmentId}&subStepId=${subStepId}`,
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				}).then((response) => response.data, (error) => null);
 			},
@@ -69,6 +61,22 @@ define('queueDataService', [], ($http) => {
 					url: '/server/queue/queue.php',
 					method: 'POST',
 					data: `action=cancelAppointment&appointmentId=${appointmentId}`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
+			},
+			getPossibleSwimlanes: () => {
+				return $http({
+					url: '/server/queue/queue.php',
+					method: 'POST',
+					data: `action=getPossibleSwimlanes`,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				}).then((response) => response.data, (error) => null);
+			},
+			getPossibleSubsteps: () => {
+				return $http({
+					url: '/server/queue/queue.php',
+					method: 'POST',
+					data: `action=getPossibleSubsteps`,
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				}).then((response) => response.data, (error) => null);
 			}
