@@ -66,7 +66,7 @@
 						ng-click="selectAppointment(appointment, progressionType.progressionTypeId, 
 							stepOrdinal, (stepOrdinal===progressionType.progressionTypeMaxOrdinal))">
 							{{appointment.clientName}} ({{appointment.scheduledTime}})
-							<i ng-show="appointment.steps[stepOrdinal]['subStepName']">{{appointment.steps[stepOrdinal]['subStepName']}}</i>
+							<i ng-show="appointment.steps[stepOrdinal]['substepName']">{{appointment.steps[stepOrdinal]['substepName']}}</i>
 					</div>
 				</div>				
 			</div>
@@ -96,9 +96,9 @@
 						<span class="pill" ng-class="step.stepCompleted ? 'pill-complete': 'pill-incomplete'">{{step.stepName}}</span>
 						<!-- https://stackoverflow.com/questions/21734524/key-value-pairs-in-ng-options -->
 						<select ng-show="objectLengthHelper(step.possibleSubsteps) > 0 && stepOrdinal <= selectedAppointmentOrdinal"
-							ng-change="selectSubStep(stepOrdinal)"
-							ng-model="selectedAppointment.steps[stepOrdinal].subStepId"
-							ng-options="subStepId as subStepName for (subStepId, subStepName) in step.possibleSubsteps">
+							ng-change="selectSubstep(stepOrdinal)"
+							ng-model="selectedAppointment.steps[stepOrdinal].substepId"
+							ng-options="substepId as substepName for (substepId, substepName) in step.possibleSubsteps">
 						</select>
 					</div>
 				</span>

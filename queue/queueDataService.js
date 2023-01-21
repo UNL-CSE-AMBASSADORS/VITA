@@ -32,11 +32,11 @@ define('queueDataService', [], ($http) => {
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				}).then((response) => response.data, (error) => null);
 			},
-			insertSubStepTimestamp: (appointmentId, subStepId) => {
+			insertSubstepTimestamp: (appointmentId, substepId) => {
 				return $http({
 					url: '/server/queue/queue.php',
 					method: 'POST',
-					data: `action=insertSubStepTimestamp&appointmentId=${appointmentId}&subStepId=${subStepId}`,
+					data: `action=insertSubstepTimestamp&appointmentId=${appointmentId}&substepId=${substepId}`,
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				}).then((response) => response.data, (error) => null);
 			},

@@ -24,7 +24,7 @@ if (isset($_REQUEST['action'])) {
 		case 'getPossibleSubsteps': getPossibleSubsteps(); break;
 		case 'deleteTimestamp': deleteTimestamp($_POST['appointmentId'], $_POST['stepId']); break;
 		case 'insertStepTimestamp': insertStepTimestamp($_POST['appointmentId'], $_POST['stepId'], $_POST['setTimeStampToNull']); break;
-		case 'insertSubStepTimestamp': insertSubStepTimestamp($_POST['appointmentId'], $_POST['subStepId']); break;
+		case 'insertSubstepTimestamp': insertSubstepTimestamp($_POST['appointmentId'], $_POST['substepId']); break;
 		default:
 			die('Invalid action function. This instance has been reported.');
 			break;
@@ -143,7 +143,7 @@ function getProgressionSteps($date, $siteId) {
 		');
 		
 		$query = 'select
-			a.appointmentId, a.progressionTypeId, a.progressionTypeName, a.progressionStepName, a.progressionSubStepId, a.progressionSubStepName,
+			a.appointmentId, a.progressionTypeId, a.progressionTypeName, a.progressionStepName, a.progressionSubstepId, a.progressionSubstepName,
 			a.timestamp, a.progressionStepOrdinal, a.advancement_rank,
 			TIME_FORMAT(atime.scheduledTime, "%l:%i %p") AS scheduledTime,
 			Client.firstName, Client.lastName, 
@@ -269,7 +269,7 @@ function insertStepTimestamp($appointmentId, $stepId, $setTimeStampToNull) {
 	echo json_encode($response);
 }
 
-function insertSubStepTimestamp($appointmentId, $subStepId) {
+function insertSubstepTimestamp($appointmentId, $substepId) {
 	GLOBAL $DB_CONN;
 
 	$response = array();
@@ -290,7 +290,7 @@ function insertSubStepTimestamp($appointmentId, $subStepId) {
 			timestamp = VALUES(timestamp);'; // this is for if the (appointmentId, progressionStepId) unique constraint is triggered.
 
 		$stmt = $DB_CONN->prepare($query);
-		$stmt->execute(array($appointmentId, $subStepId, $time, $subStepId));
+		$stmt->execute(array($appointmentId, $substepId, $time, $substepId));
 	} catch (Exception $e) {
 		$response['success'] = false;
 		$response['error'] = "There was an error on the server saving the appointment's queue subcategory. Please refresh the page and try again";

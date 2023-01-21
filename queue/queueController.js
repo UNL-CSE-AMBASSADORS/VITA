@@ -13,7 +13,7 @@ define('queueController', [], function() {
 		$scope.selectedAppointmentOrdinal = null;
 		$scope.selectedAppointmentOnLastStep = null;
 		$scope.selectedAppointmentStepsForPills = null;
-		$scope.selectedAppointmentSubStepId = null;
+		$scope.selectedAppointmentSubstepId = null;
 		
 		$scope.selectedSite = null;
 
@@ -91,13 +91,13 @@ define('queueController', [], function() {
 				// we don't really make updates to the appointments on the front end, we just move the appointments themselves in the pool
 				// this is an exception, so if the appointment is moved from a substep, if it's moved back it will start blank
 				// If an appointment starts as awaiting, then moves to Complete and is given a substep, it will only have a full object
-				// for the awaiting step, plus a skeleton object with just a subStepId for the complete step (no intermediate steps).
+				// for the awaiting step, plus a skeleton object with just a substepId for the complete step (no intermediate steps).
 				// So if the appt isn't given a substep in complete, it will only have an awaiting step, which is why we check if exists here.
 				// If you leave the appointment on a step and refresh the page, then it will have a full step object for each one.
 				// TODO could update objects every 15 sec, but risk overriding local changes made. Probably shouldn't do that.
 				if ([source.stepOrdinal] in $scope.pools[target.progressionTypeId]['swimlanes'][target.stepOrdinal]['appointments'][appointmentId]['steps']) {
-					$scope.pools[target.progressionTypeId]['swimlanes'][target.stepOrdinal]['appointments'][appointmentId]['steps'][source.stepOrdinal].subStepId = null;
-					$scope.pools[target.progressionTypeId]['swimlanes'][target.stepOrdinal]['appointments'][appointmentId]['steps'][source.stepOrdinal].subStepName = null;
+					$scope.pools[target.progressionTypeId]['swimlanes'][target.stepOrdinal]['appointments'][appointmentId]['steps'][source.stepOrdinal].substepId = null;
+					$scope.pools[target.progressionTypeId]['swimlanes'][target.stepOrdinal]['appointments'][appointmentId]['steps'][source.stepOrdinal].substepName = null;
 				}
 				$scope.regressAppointment(appointmentId, source, target);
 			} else {
@@ -265,7 +265,7 @@ define('queueController', [], function() {
 					const possibleSubsteps = response.possibleSubsteps.map((substep) => {return substep;});
 					possibleSubsteps.forEach((substep) => {
 						$scope.pools[substep.progressionTypeId]['swimlanes'][substep.progressionStepOrdinal]
-							['possibleSubsteps'][substep.progressionSubStepId] = substep.progressionSubStepName;
+							['possibleSubsteps'][substep.progressionSubstepId] = substep.progressionSubstepName;
 					});
 				}
 			});	
@@ -311,8 +311,8 @@ define('queueController', [], function() {
 										stepOrdinal: step.progressionStepOrdinal,
 										stepName: step.progressionStepName,
 										stepTimeStamp: step.timestamp,
-										subStepId: step.progressionSubStepId,
-										subStepName: step.progressionSubStepName
+										substepId: step.progressionSubstepId,
+										substepName: step.progressionSubstepName
 									}},
 									cancelled: step.cancelled,
 									language: step.language,
@@ -329,8 +329,8 @@ define('queueController', [], function() {
 										stepOrdinal: step.progressionStepOrdinal,
 										stepName: step.progressionStepName,
 										stepTimeStamp: step.timestamp,
-										subStepId: step.progressionSubStepId,
-										subStepName: step.progressionSubStepName
+										substepId: step.progressionSubstepId,
+										substepName: step.progressionSubstepName
 									};
 							}
 							// we sort in sql so that the most recent step (advancement_rank = 1) comes last.
@@ -367,6 +367,7 @@ define('queueController', [], function() {
 						});
 						// at auto-refresh every 15 seconds, we can skip an appointment if it's already been added.
 						$scope.previousAppointmentIds = Object.keys(appointments);
+						console.log('pools');
 						console.log($scope.pools);
 					}
 				});	
@@ -399,18 +400,18 @@ define('queueController', [], function() {
 				});
 		};
 
-		// need appointmentId and subStepId for SQL, subStepName for front end to show in queue.
+		// need appointmentId and substepId for SQL, substepName for front end to show in queue.
 		// name comes through ng-model 
-		$scope.selectSubStep = (stepOrdinal) => {
+		$scope.selectSubstep = (stepOrdinal) => {
 			const appointmentId = $scope.selectedAppointment.appointmentId;
 			// The appt won't have a full step object here
 			// store it in the ordinal of the step the dropdown belongs to, not the current ordinal of the appt.
-			const subStepId = $scope.selectedAppointment.steps[stepOrdinal]['subStepId'];
+			const substepId = $scope.selectedAppointment.steps[stepOrdinal]['substepId'];
 			// get the substep name through the temporary pills object // TODO is there a way to pass key/val straight to here?
-			const subStepName = $scope.selectedAppointmentStepsForPills[stepOrdinal]['possibleSubsteps'][subStepId];
-			$scope.selectedAppointment.steps[stepOrdinal].subStepName = subStepName;
+			const substepName = $scope.selectedAppointmentStepsForPills[stepOrdinal]['possibleSubsteps'][substepId];
+			$scope.selectedAppointment.steps[stepOrdinal].substepName = substepName;
 
-			$scope.insertSubStepTimestamp(appointmentId, subStepId)
+			$scope.insertSubstepTimestamp(appointmentId, substepId)
 				.then($scope.checkResponseForError)
 				.catch($scope.notifyOfError)
 				.then((response) => {
@@ -421,12 +422,16 @@ define('queueController', [], function() {
 				});
 		};
 
-		$scope.insertSubStepTimestamp = (appointmentId, subStepId) => {
-			return QueueDataService.insertSubStepTimestamp(appointmentId, subStepId)
+		$scope.insertSubstepTimestamp = (appointmentId, substepId) => {
+			console.log('substeps are ' + appointmentId + ' and ' + substepId);
+			return QueueDataService.insertSubstepTimestamp(appointmentId, substepId)
 				.then($scope.checkResponseForError)
 				.catch($scope.notifyOfError)
 				.then((response) => {
+					console.log('here is response:');
+					console.log(response);
 					return response;
+
 				});
 				//TODO how to check rows affected?
 		};

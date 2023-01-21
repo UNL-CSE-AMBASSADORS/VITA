@@ -213,7 +213,7 @@ return readfile($documentRoot . $path);
 			<div class="dcf-wrapper">
 				<div class="dcf-grid-halves@md dcf-pt-8 dcf-pb-8">
 					<div class="dcf-col-50%">
-						<h2>Documents to Upload</h2>
+						<h2>Documents to Bring/Upload</h2>
 					</div>
 					<ul class="dcf-col-50%">
 						<li>Social Security Card and photo identification</li>
