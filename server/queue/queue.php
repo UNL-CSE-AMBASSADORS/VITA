@@ -219,8 +219,8 @@ function deleteTimestamp($appointmentId, $progressionStepId) {
 
 	try {
 		$query = 'DELETE a FROM ProgressionTimestamp a
-			left join ProgressionStep stepWithoutSubStep
-				on a.progressionStepId = stepWithoutSubStep.progressionstepId
+			left join ProgressionStep stepWithoutSubstep
+				on a.progressionStepId = stepWithoutSubstep.progressionstepId
 			left join ProgressionSubstep substep
 				on a.progressionSubstepId = substep.progressionSubstepId
 			left join ProgressionStep stepFromSubstep
