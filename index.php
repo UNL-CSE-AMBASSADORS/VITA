@@ -34,10 +34,10 @@ return readfile($documentRoot . $path);
 <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-wrapper dcf-pt-3 dcf-pb-3 dcf-bold dcf-txt-decor-none unl-font-sans unl-cream" style="background-color: #007197;">
 	<span class="dcf-txt-xs">
 		<span class="dcf-d-inline-block dcf-mt-2 dcf-mb-2 dcf-mr-4">
-		TCAN will be conducting in-person return preparation in 2023.
+		TCAN will be conducting in-person return preparation in 2024.
 		In addition, TCAN will have virtual site (remote preparation)
 		and Facilitated Self Assistance (FSA) appointments available. You may schedule an
-		appointment under the 'Need Assistance' tab when the scheduling site opens mid-January.
+		appointment under the 'Need Assistance' tab when the scheduling site opens mid-to-late January.
 		</span>
 	</span>
 </div>
@@ -128,7 +128,8 @@ return readfile($documentRoot . $path);
 			<div class="dcf-wrapper dcf-pt-8 dcf-pb-8">
 				<p>
 					Qualified students and community members can have their tax return prepared AT NO CHARGE 
-					by trained student and community volunteers in Lincoln and other Nebraska cities.
+					by trained student and community volunteers in Lincoln and other Nebraska communities. 
+					You can check on other VITA/TCE locations in Nebraska at https://tcan.unl.edu/find-site.
 				</p>
 			</div>
 		</div>
@@ -178,6 +179,12 @@ return readfile($documentRoot . $path);
 						<br>
 						<br><br>Taxpayer Bill of Rights:
 						<br><a href="https://www.irs.gov/pub/irs-pdf/p5169.pdf">https://www.irs.gov/pub/irs-pdf/p5169.pdf</a>
+						<br>
+						<br><br>Privacy, Confidentiality, and Civil Rights – A Public Trust
+						<br><a href="https://www.irs.gov/pub/irs-pdf/p4299.pdf">https://www.irs.gov/pub/irs-pdf/p4299.pdf</a>						
+
+
+
 					</div>
 				</div>
 			</div>
@@ -216,13 +223,15 @@ return readfile($documentRoot . $path);
 						<h2>Documents to Bring/Upload</h2>
 					</div>
 					<ul class="dcf-col-50%">
-						<li>Social Security Card and photo identification</li>
-						<li>Social Security numbers and birth dates for all dependents</li>
+						<li>Social security Cards or ITIN Letters for everyone who will be included on the tax return</li>
+						<li>Photo Identification for all tax return signers (Both spouses must sign if filing married filing jointly)</li>
+						<li>Records of revenue from self-employment, home-based businesses, and/or side hustles</li>
 						<li>Forms W-2 and all other income forms (ex: 1099-MISC, 1099-R, etc.)</li>
 						<li>Banking information for deposit/debit, routing number and account number</li>
-						<li>Tax identification numbers for any and all daycare providers</li>
+						<li>Childcare receipts, including tax ID, phone number and street address for childcare provider</li>
 						<li>If filing jointly, both you and your spouse must be present to sign the return</li>
 						<li>If a college student, you must bring your 1098T and student account information showing payment of tuition and qualified fees</li>
+						<li>If you have health insurance through the marketplace, bring Form 1095A</li>
 					</ul>
 				</div>
 			</div>
