@@ -17,10 +17,14 @@ class AppointmentConfirmationUtilities {
 		$selfServiceAppointmentRescheduleToken = $data['token'];
 		$isInternationalAppointment = AppointmentTypeUtilities::isInternationalAppointmentType($data['appointmentType']);
 		$isVirtualAppointment = AppointmentTypeUtilities::isVirtualAppointmentType($data['appointmentType']);
+		$isFsaAppointment = AppointmentTypeUtilities::isFsaAppointment($data['title']);
 
 		if ($isVirtualAppointment) {
 			$message = self::virtualAppointmentIntroductionInformation($firstName, $dateStr);
 			$message .= self::virtualAppointmentUploadDocumentsInformation($selfServiceAppointmentRescheduleToken);
+			if ($isFsaAppointment) {
+				$message .= self::fsaInformation();
+			}
 		} else {
 			$message = self::introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber);
 			if ($isInternationalAppointment) {
@@ -73,6 +77,14 @@ class AppointmentConfirmationUtilities {
 		return "<h2 class='dcf-mt-2'>Uploading Your Documents</h2>
 				Please visit <a href='$uploadDocumentsLink' target='_blank'>the upload documents page</a> to upload the necessary documents to have your taxes prepared. 
 				If the link is not working, you can copy and paste this link into your browser: $uploadDocumentsLink";
+	}
+
+	private static function fsaInformation() {
+		$serverName = $_SERVER['SERVER_NAME'];
+		$instructionsPdfLink = "https://$serverName/server/download/documents/2024_1040_IRS_Instructions.pdf";
+		$howtoPdfLink = "https://$serverName/server/download/documents/2024_1040_How_to_Guide.pdf";
+		return "<h2 class='dcf-mt-2'>Additional Documents for FSA</h2>
+				Please see the <a href='$instructionsPdfLink'>Instruction PDF</a> and the <a href='$howtoPdfLink'>How to Guide.</a>";
 	}
 
 	private static function introductionInformation($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber) {
