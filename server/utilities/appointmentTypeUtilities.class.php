@@ -15,4 +15,8 @@ class AppointmentTypeUtilities {
 	public static function isVirtualAppointmentType($appointmentTypeString) {
 		return strpos($appointmentTypeString, 'virtual') !== false;
 	}
+
+	public static function isFsaAppointment($appointmentTitleString) {
+		return strpos($appointmentTitleString, 'Lincoln VITA FSA') !== false;
+	}
 }
