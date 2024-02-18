@@ -18,7 +18,27 @@ class AppointmentConfirmationUtilities {
 		$isInternationalAppointment = AppointmentTypeUtilities::isInternationalAppointmentType($data['appointmentType']);
 		$isVirtualAppointment = AppointmentTypeUtilities::isVirtualAppointmentType($data['appointmentType']);
 		$isFsaAppointment = AppointmentTypeUtilities::isFsaAppointment($data['title']);
+		$isInternationalFSA = AppointmentTypeUtilities::isInternationalFsaAppointment($data['title'], $data['appointmentType']);
+		$isDomesticFSA = AppointmentTypeUtilities::isDomesticFsaAppointment($data['title']);
+		$isDropoff = AppointmentTypeUtilities::isDropoffAppointment($data['title']);
 
+		if ($isInternationalFSA) {
+			$message =  self::internationalFSATemplate($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber, $selfServiceAppointmentRescheduleToken);
+		  $message .= self::selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken);
+			$message .= self::fsaInformation();
+			return $message;
+		}
+		if ($isDomesticFSA) {
+			$message =  self::domesticFSATemplate($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber, $selfServiceAppointmentRescheduleToken);
+		  $message .= self::selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken);
+			$message .= self::fsaInformation();
+			return $message;
+		}
+		if ($isDropoff) {
+			$message =  self::dropoffTemplate($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber, $selfServiceAppointmentRescheduleToken);
+		  $message .= self::selfServiceAppointmentRescheduleInformation($selfServiceAppointmentRescheduleToken);
+			return $message;
+		}
 		if ($isVirtualAppointment) {
 			$message = self::virtualAppointmentIntroductionInformation($firstName, $dateStr);
 			$message .= self::virtualAppointmentUploadDocumentsInformation($selfServiceAppointmentRescheduleToken);
@@ -161,4 +181,105 @@ class AppointmentConfirmationUtilities {
 				You can reschedule or cancel your appointment by visiting 
 				<a href='$selfServiceAppointmentRescheduleLink' target='_blank'>the appointment reschedule page.</a>";
 	}
+
+	private static function domesticFSATemplate($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber, $selfServiceAppointmentRescheduleToken) {
+		$serverName = $_SERVER['SERVER_NAME'];
+		$uploadDocumentsLink = "https://$serverName/appointment/upload-documents/?token=$selfServiceAppointmentRescheduleToken";
+		return "$firstName, thank you for signing up! You have selected to do your return through Facilitated Self Assistance (FSA). 
+				You will prepare your return yourself using the following link $uploadDocumentsLink. A do-it yourself instruction packet is attached. 
+				If you would like one of our preparers to quality review your return or if you have questions, please contact us via email.  VITA Volunteers are looking forward to serving with you.
+				<h4>To Prepare your taxes you will need the following:</h4>
+				<h5>Identification:</h5>
+				<ul>
+					<li>Social Security Numbers or ITIN Numbers for EVERYONE who will be included on the return</li>
+					<li>Drivers License or State ID if you have one for ALL tax return signers (BOTH spouses must sign if filing jointly)</li>
+				</ul>
+				<h5>Income:</h5>
+				<ul>
+					<li>W-2s for wages, W-2Gs for gambling income</li>
+					<li>1099s for interest, dividends, unemployment, state tax refunds, pension or 401-K distributions, and other income</li>
+					<li>Records of revenue from self-employment or home-based businesses</li>
+				</ul>
+				<h5>Expenses:</h5>
+				<ul>
+					<li>1098s for mortgage interest, student loan interest (1098-E), or tuition (1098-T), statement of property tax paid</li>
+					<li>Statement of college student account showing all charges and payments for each student on the return</li>
+					<li>Childcare receipts, including tax ID and address for childcare provider</li>
+					<li>1095s showing creditable health insurance coverage</li>
+					<li>Records of expenses for self-employment or home-based businesses</li>
+				</ul>
+				<h5>Miscellaneous:</h5>
+				<ul>
+					<li>Checking or savings account information for direct deposit/direct debit</li>
+					<li>If you own property in Nebraska, bring you real estate tax statement</li>
+					<li>Last year's tax return</li>
+				</ul>";
+	}
+
+	private static function internationalFSATemplate($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber, $selfServiceAppointmentRescheduleToken) {
+		$serverName = $_SERVER['SERVER_NAME'];
+		$uploadDocumentsLink = "https://$serverName/appointment/upload-documents/?token=$selfServiceAppointmentRescheduleToken";
+		return "$firstName, thank you for signing up! You have selected to do your return through Facilitated Self Assistance (FSA). 
+				You will prepare your federal return yourself using the following link $uploadDocumentsLink. 
+				A do-it yourself instruction packet is attached. Your state return will need to be completed at the Nebraska Department of Revenue. 
+				If you plan to attend your appointment, you must have your return completed to have it reviewed or minimally started to ask questions. 
+				Please attend your scheduled appointment at $siteAddress. VITA Volunteers are looking forward to serving with you.
+				<h4>To Prepare your taxes you will need the following:</h4>
+				<h5>Identification:</h5>
+				<ul>
+					<li>Social Security Number or ITIN Number</li>
+					<li>Drivers License, State ID or Passport</li>
+				</ul>
+				<h5>Income:</h5>
+				<ul>
+					<li>W-2s for wages, W-2Gs for gambling income</li>
+					<li>1099s for interest, dividends, unemployment, state tax refunds, pension or 401-K distributions, and other income</li>
+					<li>Records of revenue from self-employment or home-based businesses</li>
+					<li>1042-S for Scholarship/Income</li>
+				</ul>
+				<h5>Expenses:</h5>
+				<ul>
+					<li>1098s student loan interest (1098-E)</li>
+					<li>Records of expenses for self-employment or home-based businesses</li>
+				</ul>
+				<h5>Miscellaneous:</h5>
+				<ul>
+					<li>Checking or savings account information for direct deposit/direct debit</li>
+					<li>Last year's tax return/Pin Number</li>
+				</ul>";
+	}
+
+	private static function dropoffTemplate($firstName, $siteTitle, $siteAddress, $timeStr, $dateStr, $sitePhoneNumber, $selfServiceAppointmentRescheduleToken) {
+		return "$firstName, thank you for signing up! This is a drop-off appointment.  You will drop your documents off at $siteTitle ($siteAddress). 
+				Please drop your documents off no later than $timeStr on $dateStr, with all necessary materials (listed below). 
+				If all of your documents are complete, your return will be ready for review and pick the following Friday after 10am. Please call or email if you have any questions. 
+				VITA Volunteers are looking forward to serving with you.
+				<h4>To Have Your Taxes Prepared, Please Include:</h4>
+				<h5>Identification:</h5>
+				<ul>
+					<li>Copies of Social Security Cards or ITIN Letters for EVERYONE who will be included on the return</li>
+					<li>Copies of Photo ID for ALL tax return signers (BOTH spouses must sign if filing jointly)</li>
+				</ul>
+				<h5>Income:</h5>
+				<ul>
+					<li>W-2s for wages, W-2Gs for gambling income</li>
+					<li>1099s for interest, dividends, unemployment, state tax refunds, pension or 401-K distributions, and other income</li>
+					<li>Records of revenue from self-employment or home-based businesses</li>
+				</ul>
+				<h5>Expenses:</h5>
+				<ul>
+					<li>1098s for mortgage interest, student loan interest (1098-E), or tuition (1098-T), statement of property tax paid</li>
+					<li>Statement of college student account showing all charges and payments for each student on the return</li>
+					<li>Childcare receipts, including tax ID and address for childcare provider</li>
+					<li>1095s showing creditable health insurance coverage</li>
+					<li>Records of expenses for self-employment or home-based businesses</li>
+				</ul>
+				<h5>Miscellaneous:</h5>
+				<ul>
+					<li>Checking or savings account information for direct deposit/direct debit</li>
+					<li>If you own property in Nebraska, bring you real estate tax statement</li>
+					<li>Last year's tax return</li>
+				</ul>";
+	}
+
 }
